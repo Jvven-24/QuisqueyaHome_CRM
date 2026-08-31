@@ -1,0 +1,28 @@
+# Normaliza los finales de línea en el repositorio.
+#
+# Sin esto, trabajar en Windows con core.autocrlf=true hace que Git marque
+# archivos como modificados aunque no se les haya tocado una sola línea. El
+# efecto aparece en la revisión de código: un archivo cambia por completo y no
+# se distingue el cambio real del ruido.
+#
+# Regla: LF dentro del repositorio, siempre, sin importar el sistema operativo
+# de quien trabaje.
+
+* text=auto eol=lf
+
+# Binarios: nunca convertir.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+
+# Scripts de shell: LF obligatorio o no ejecutan.
+*.sh text eol=lf

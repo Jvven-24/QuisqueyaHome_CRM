@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quisqueya Home Academy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#3d3c3e",
+                    "on-background": "#e2e2e5",
+                    "on-tertiary-fixed": "#1c1b1c",
+                    "inverse-surface": "#e2e2e5",
+                    "secondary": "#c8c6c8",
+                    "tertiary-fixed-dim": "#c8c6c7",
+                    "primary-container": "#c9a24b",
+                    "inverse-on-surface": "#2f3033",
+                    "gold-dark": "#9E7B31",
+                    "on-secondary-fixed-variant": "#474649",
+                    "on-tertiary-fixed-variant": "#474647",
+                    "on-tertiary": "#313031",
+                    "surface-container-low": "#1a1c1e",
+                    "tertiary": "#c8c6c7",
+                    "surface-container": "#1e2022",
+                    "status-success": "#22C55E",
+                    "on-error-container": "#ffdad6",
+                    "status-warning": "#F59E0B",
+                    "surface-dim": "#121416",
+                    "primary": "#ebc166",
+                    "on-surface-variant": "#d1c5b2",
+                    "surface-container-highest": "#333537",
+                    "surface-tint": "#ebc166",
+                    "surface-container-lowest": "#0c0e11",
+                    "on-primary-fixed-variant": "#5b4300",
+                    "surface-bright": "#37393c",
+                    "status-danger": "#EF4444",
+                    "on-secondary": "#303032",
+                    "tertiary-fixed": "#e5e2e3",
+                    "error-container": "#93000a",
+                    "on-surface": "#e2e2e5",
+                    "on-primary": "#402d00",
+                    "background": "#121416",
+                    "error": "#ffb4ab",
+                    "surface": "#121416",
+                    "tertiary-container": "#a9a7a8",
+                    "gold-light": "#E5C17D",
+                    "on-error": "#690005",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "outline-variant": "#4e4637",
+                    "secondary-container": "#474649",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "surface-elevated": "#141416",
+                    "on-primary-container": "#4f3900",
+                    "surface-container-high": "#282a2c",
+                    "inverse-primary": "#795902",
+                    "outline": "#9a8f7e",
+                    "on-primary-fixed": "#261a00",
+                    "secondary-fixed": "#e5e1e4",
+                    "primary-fixed-dim": "#ebc166",
+                    "background-base": "#0A0A0B",
+                    "surface-variant": "#333537",
+                    "primary-fixed": "#ffdf9e",
+                    "on-secondary-container": "#b7b4b7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container-max-width": "1440px",
+                    "margin-desktop": "40px",
+                    "base": "8px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "title-md": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+            color: #e2e2e5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(20, 20, 22, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(201, 162, 75, 0.1);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #ebc166 0%, #c9a24b 100%);
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .circular-progress {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+        .circular-progress svg {
+            transform: rotate(-90deg);
+        }
+        .circular-progress circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+        .circular-progress circle.bg {
+            stroke: #27272A;
+        }
+        .circular-progress circle.fg {
+            stroke: #ebc166;
+            stroke-dasharray: 251.2;
+            stroke-dashoffset: 75.36; /* 70% of 251.2 */
+            transition: stroke-dashoffset 1s ease;
+        }
+    </style>
+</head>
+<body class="font-body-md overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated border-r border-outline-variant/10 shadow-sm flex flex-col py-base z-50">
+<div class="px-6 mb-10 pt-4">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">Quisqueya Home</h1>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest opacity-60">Elite Real Estate</p>
+</div>
+<nav class="flex-1 px-4 space-y-1 overflow-y-auto scrollbar-hide">
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-md text-label-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Contactos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Agenda</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md text-label-md">Propiedades</span>
+</a>
+<!-- Active Tab: Academy -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-high scale-[0.98] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-label-md text-label-md">Academy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Comisiones</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+</nav>
+<div class="p-6 mt-auto border-t border-outline-variant/10">
+<button class="w-full py-4 gold-gradient text-on-primary font-bold rounded-lg shadow-lg shadow-primary/10 hover:opacity-90 transition-opacity">
+                Nueva Propiedad
+            </button>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-4 w-1/2">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">search</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-full py-2 pl-11 pr-4 text-sm focus:outline-none focus:border-primary transition-colors" placeholder="Buscar capacitaciones, recursos..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors">ES</button>
+<span class="opacity-20">|</span>
+<button class="hover:text-primary transition-colors opacity-50">EN</button>
+</div>
+<button class="relative hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 border-l border-outline-variant/10 pl-6">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface">Yostar Medina</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-semibold">Elite Broker</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a confident Hispanic real estate broker in his late 40s, wearing a tailored navy suit and a warm smile. The background is a soft-focus luxury penthouse interior with warm evening lighting. The overall mood is sophisticated, trustworthy, and premium, aligned with a high-end real estate brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeqESZc9XiAizUSvPJXr9C3_fZHrCFA1yTIzAMMzSa75k3JVUezyuhKAvCqsMSDMecRtQpyX1O_oTUSKOkC0-qQ4UTPKXUmHKlHHiKTR7mKVeYwxmb_Dx7kzjJv1tW_Oam_YmJVyfazY5G4zDFSgnteRq1jVw7QYG1E4D0QSoElF18QWED8A3xOD0NzagQjBGgJyapGDJ8CO3FsFc_AgD20lKYapQ7FRA5fvAzThBHTu2uwVpQvGkADeSYEwFeaAnmy45y-QNi1LE"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-24 pb-12 px-margin-desktop flex gap-8 h-screen overflow-y-auto">
+<!-- Content Area -->
+<div class="flex-1 max-w-5xl">
+<!-- Elegant Notification Banner -->
+<div class="mb-8 p-6 rounded-xl glass-card flex items-center gap-6 relative overflow-hidden">
+<div class="absolute left-0 top-0 w-1 h-full gold-gradient"></div>
+<div class="bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">campaign</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1">Nota importante de Quisqueya Home Academy</h3>
+<p class="text-on-surface-variant font-body-md">Las sesiones de los lunes quedan grabadas y disponibles siempre — ya no se pierden si no asistes en vivo.</p>
+</div>
+</div>
+<!-- Header & Filters -->
+<div class="flex flex-col gap-6 mb-10">
+<div class="flex items-end justify-between">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Explora el Academy</h2>
+<p class="text-on-surface-variant">Domina las herramientas de élite para el mercado inmobiliario.</p>
+</div>
+</div>
+<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary font-bold text-sm shadow-md transition-all">Todas</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high border border-outline-variant/20 text-on-surface-variant font-medium text-sm hover:border-primary/50 transition-all">Sesiones de lunes</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high border border-outline-variant/20 text-on-surface-variant font-medium text-sm hover:border-primary/50 transition-all">Checklists</button>
+<button class="px-6 py-2 rounded-full bg-surface-container-high border border-outline-variant/20 text-on-surface-variant font-medium text-sm hover:border-primary/50 transition-all">Pendientes</button>
+</div>
+</div>
+<!-- Video Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Card 1 -->
+<div class="group relative bg-surface-elevated rounded-2xl overflow-hidden shadow-xl border border-outline-variant/10 hover:border-primary/30 transition-all cursor-pointer">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A cinematic cinematic wide shot showing a professional negotiation training session in a glass-walled conference room overlooking a modern Caribbean skyline at twilight. Warm indoor lighting contrasts with the deep blue outdoor tones. The image exudes professionalism, success, and high-level business strategy typical of the elite real estate world." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPpbLwiFpkO_F9QnQdCiNz7kCecN8KwfcN1-857r442b_bjEBZNOM1s7CE2hXgYbkMk5-ET8bOgYKvanT2i_K0Q9vv1N8oHcMINFi1X-i2tKgvbGuXo_2ktK9zeM_XUZSYuCJoPudUtoSOs-lWU8zNe2cVO524ZOlJXHl_S2BCQpn0MvSYMVJK4WR3eLjyH_hr5eBdDX5U9ikFhmEM9j6Bkq8oTBPjcklDy9FaJf3zD2lN3H26NJaduD7ayIWZxBoaqjWUbdAJ9Cc"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary text-6xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute top-4 left-4 bg-primary/90 text-on-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Sesión de lunes</div>
+<div class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white text-xs px-2 py-1 rounded">45 min</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-3">
+<h4 class="font-title-md text-on-surface group-hover:text-primary transition-colors leading-tight pr-4">Capacitación lunes 13 jul — Manejo de objeciones</h4>
+<span class="text-on-surface-variant text-sm whitespace-nowrap">13 Jul</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-status-success w-full"></div>
+</div>
+<span class="text-[10px] font-bold text-status-success uppercase">100%</span>
+</div>
+<div class="flex items-center justify-between mt-4 pt-4 border-t border-outline-variant/10">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">visibility</span> 142 Vistas
+                            </span>
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">download</span> Material PDF
+                            </span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative bg-surface-elevated rounded-2xl overflow-hidden shadow-xl border border-outline-variant/10 hover:border-primary/30 transition-all cursor-pointer">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Close up architectural visualization of a luxury residential floor plan being presented on a large digital touch screen in a sleek dark-themed office. Gold-tinted highlights pick out the details of the blueprint. The lighting is low and focused, creating a high-tech, exclusive wealth management atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpTriKynNQmcd82x3nGkqzo4XtE0WpDf79xxXhRMnACPQ4iIaahtWZ_Qb_xdNG_5BcimycGYvcwui3BlA54Ba-fuLUxlbIlVu8YWFOgAIHZyYoWFQKzD_MW3SmuiIa5XUlBfAfZv6A7sRIRYrCvcBwkMD5_8mMIUVB3Q7VV-Ir-PEoA5XiWu9xYSTPyyt82QID612n3qE5_xqUGjUXoJXL108TCqj0yvLm-lrmAYOBEtH4o9rvGT2GpyCwqcTiWvyBBf1pXSJ7Qyo"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary text-6xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute top-4 left-4 bg-primary/90 text-on-primary text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Sesión de lunes</div>
+<div class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white text-xs px-2 py-1 rounded">52 min</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-3">
+<h4 class="font-title-md text-on-surface group-hover:text-primary transition-colors leading-tight pr-4">Capacitación lunes 6 jul — Presentación de proyectos en planos</h4>
+<span class="text-on-surface-variant text-sm whitespace-nowrap">6 Jul</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[40%]"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">40%</span>
+</div>
+<div class="flex items-center justify-between mt-4 pt-4 border-t border-outline-variant/10">
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">visibility</span> 98 Vistas
+                            </span>
+<span class="text-xs text-primary font-bold">Continuar viendo</span>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative bg-surface-elevated rounded-2xl overflow-hidden shadow-xl border border-outline-variant/10 hover:border-primary/30 transition-all cursor-pointer">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Flat lay of a luxury office desk with a gold pen, a leather-bound notebook, and a tablet displaying a real estate listing interface. The scene is lit with warm, soft sunlight streaming through a window. The style is minimalist and high-end dark-mode, focusing on organizational efficiency and premium quality tools." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX2NNMWtBRdKDXzjiaTWVHgMH7zDHUSnKxuoairPTypj7RS2ysfP0p-1NBFpA3VRohQHu2zYuxUop1bBQWFFWRXgycVfQREgfzw8mwuA5eh1qOenRKAAL0UkUTQcjnF6AOLk3lncenUdDhKqndy_yzf0Az2SkpuBcHRJszDOfUfZYI4u6Q82qeizp3mmqFC5oL5WPYZMm1B8lUZl0GACEKM5qjtvGSVw7xk9qxfMgXf-XnY2wF-YfAqmtvU_Jv7Sy6mwnbtB9S_jI"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary text-6xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute top-4 left-4 bg-surface-container-highest text-on-surface text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Checklist operativo</div>
+<div class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white text-xs px-2 py-1 rounded">12 min</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-3">
+<h4 class="font-title-md text-on-surface group-hover:text-primary transition-colors leading-tight pr-4">Cómo dar de alta un alquiler (checklist)</h4>
+<span class="text-on-surface-variant text-sm whitespace-nowrap">2 Jul</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-status-success w-full"></div>
+</div>
+<span class="text-[10px] font-bold text-status-success uppercase">Completado</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative bg-surface-elevated rounded-2xl overflow-hidden shadow-xl border border-outline-variant/10 hover:border-primary/30 transition-all cursor-pointer">
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-60 grayscale group-hover:grayscale-0 transition-all" data-alt="A stylized 3D render of a gold key and a signed digital contract on a glowing podium, representing a successful real estate reservation. Dark background with gold refractive lighting effects and deep blue shadows. The atmosphere is celebratory yet deeply professional and secure." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFVtNQYhe8Oemm71aWqd7naWjmFIqHBYnivaKleny38Xl3PLW9vpGxMT4mOzsWfjtPv_vy4MlDQrCGWUoYEs1xrjCNsQjMQ1vpgkHjfVYZImEMDiaTVkfzFnRmx2DU5ffYEKIMTzgyNtw3kyOyJMa2Mwctj7L6jx_jdhBv_C9JAljRtxwuVT1VLz84EmbQ9t9lkLnHb23GkqYmh1o0Ns6TJdP9kRc9w9Cigs_yVKsa8zQPxcExvv-bGPf4IurbJSWJA38slFtblp0"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary text-6xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div class="absolute top-4 left-4 bg-surface-container-highest text-on-surface text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Checklist operativo</div>
+<div class="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md text-white text-xs px-2 py-1 rounded">15 min</div>
+</div>
+<div class="p-6 opacity-60 group-hover:opacity-100 transition-opacity">
+<div class="flex justify-between items-start mb-3">
+<h4 class="font-title-md text-on-surface group-hover:text-primary transition-colors leading-tight pr-4">Proceso de reserva y separación</h4>
+<span class="text-on-surface-variant text-sm whitespace-nowrap">28 Jun</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-status-danger w-0"></div>
+</div>
+<span class="text-[10px] font-bold text-status-danger uppercase">Pendiente</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar Derecho: Progreso -->
+<aside class="w-80 h-fit space-y-6">
+<!-- Progress Card -->
+<section class="glass-card p-8 rounded-2xl flex flex-col items-center text-center">
+<h3 class="font-headline-lg text-title-md text-on-surface mb-8">Tu progreso</h3>
+<div class="circular-progress mb-6">
+<svg height="120" viewbox="0 0 100 100" width="120">
+<circle class="bg" cx="50" cy="50" r="40"></circle>
+<circle class="fg" cx="50" cy="50" r="40"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-extrabold text-primary">70%</span>
+<span class="text-[10px] uppercase tracking-tighter text-on-surface-variant">General</span>
+</div>
+</div>
+<div class="space-y-4 w-full text-left">
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<p class="text-xs text-on-surface-variant mb-1">Cursos finalizados</p>
+<p class="text-lg font-bold text-on-surface">14 de 20</p>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
+<p class="text-xs text-on-surface-variant mb-1">Tiempo de estudio</p>
+<p class="text-lg font-bold text-on-surface">12h 45m</p>
+</div>
+</div>
+</section>
+<!-- Active Checklists Card -->
+<section class="glass-card p-6 rounded-2xl">
+<h4 class="font-title-md text-on-surface mb-4 flex items-center justify-between">
+                    Checklists activos
+                    <span class="material-symbols-outlined text-primary text-xl">assignment_turned_in</span>
+</h4>
+<div class="space-y-6">
+<!-- Item 1 -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-sm font-semibold text-on-surface">Alta de alquiler</span>
+<span class="text-xs text-on-surface-variant">5 de 8</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[62.5%]"></div>
+</div>
+<div class="space-y-2 mt-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20 bg-surface" type="checkbox"/>
+<span class="text-xs text-on-surface-variant group-hover:text-on-surface transition-colors">Solicitar cédula del inquilino</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20 bg-surface" type="checkbox"/>
+<span class="text-xs text-on-surface-variant group-hover:text-on-surface transition-colors">Verificar estados de cuenta</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20 bg-surface" type="checkbox"/>
+<span class="text-xs text-on-surface group-hover:text-primary transition-colors font-medium">Validación con propietario</span>
+</label>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="pt-4 border-t border-outline-variant/10 space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-sm font-semibold text-on-surface">Reserva Luxury Loft</span>
+<span class="text-xs text-on-surface-variant">1 de 4</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-status-warning w-[25%]"></div>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-3 border border-primary/30 text-primary hover:bg-primary/5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all">
+                    Ver todos los recursos
+                </button>
+</section>
+</aside>
+</main>
+<script>
+        // Micro-interactions and Lightweight atmospheric effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.bg-surface-elevated');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-4px)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body></html>

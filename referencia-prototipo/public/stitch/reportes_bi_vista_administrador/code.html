@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reportes y Analítica | Quisqueya Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#1e2022",
+                    "on-primary": "#402d00",
+                    "surface-bright": "#37393c",
+                    "tertiary-fixed": "#e5e2e3",
+                    "surface": "#121416",
+                    "on-tertiary": "#313031",
+                    "on-tertiary-fixed-variant": "#474647",
+                    "tertiary": "#c8c6c7",
+                    "on-tertiary-fixed": "#1c1b1c",
+                    "on-primary-container": "#4f3900",
+                    "error": "#ffb4ab",
+                    "outline": "#9a8f7e",
+                    "on-error": "#690005",
+                    "primary-fixed": "#ffdf9e",
+                    "surface-container-lowest": "#0c0e11",
+                    "error-container": "#93000a",
+                    "secondary-container": "#474649",
+                    "inverse-surface": "#e2e2e5",
+                    "background": "#121416",
+                    "surface-container-high": "#282a2c",
+                    "tertiary-fixed-dim": "#c8c6c7",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "on-secondary": "#303032",
+                    "surface-variant": "#333537",
+                    "on-primary-fixed-variant": "#5b4300",
+                    "on-surface-variant": "#d1c5b2",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed": "#261a00",
+                    "inverse-on-surface": "#2f3033",
+                    "primary-container": "#c9a24b",
+                    "secondary": "#c8c6c8",
+                    "tertiary-container": "#a9a7a8",
+                    "on-background": "#e2e2e5",
+                    "surface-tint": "#ebc166",
+                    "surface-container-highest": "#333537",
+                    "secondary-fixed": "#e5e1e4",
+                    "surface-dim": "#121416",
+                    "on-surface": "#e2e2e5",
+                    "background-base": "#0A0A0B",
+                    "status-warning": "#F59E0B",
+                    "surface-container-low": "#1a1c1e",
+                    "outline-variant": "#4e4637",
+                    "gold-light": "#E5C17D",
+                    "surface-elevated": "#141416",
+                    "on-tertiary-container": "#3d3c3e",
+                    "on-secondary-fixed-variant": "#474649",
+                    "primary-fixed-dim": "#ebc166",
+                    "primary": "#ebc166",
+                    "status-success": "#22C55E",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "inverse-primary": "#795902",
+                    "on-secondary-container": "#b7b4b7",
+                    "gold-dark": "#9E7B31",
+                    "status-danger": "#EF4444"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "40px",
+                    "base": "8px",
+                    "gutter": "24px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "title-md": ["Hanken Grotesk"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+            font-family: 'Inter', sans-serif;
+            color: #e2e2e5;
+        }
+        .font-display { font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-card {
+            background: #141416;
+            border: 1px solid rgba(201, 162, 75, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(201, 162, 75, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(201, 162, 75, 0.08);
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #E5C17D 0%, #C9A24B 100%);
+        }
+        .gold-pulse {
+            animation: pulse-gold 2s infinite;
+        }
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(201, 162, 75, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(201, 162, 75, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(201, 162, 75, 0); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #27272A; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-base overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated border-r border-outline-variant/10 flex flex-col py-base z-50">
+<div class="px-6 py-8 flex flex-col items-start gap-1">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">Quisqueya Home</h1>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Elite Real Estate</p>
+</div>
+<nav class="flex-1 overflow-y-auto px-4 space-y-1 custom-scrollbar">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Leads -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-md text-label-md">Leads</span>
+</a>
+<!-- Contactos -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Contactos</span>
+</a>
+<!-- Pipeline -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<!-- Agenda -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Agenda</span>
+</a>
+<!-- Propiedades -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md text-label-md">Propiedades</span>
+</a>
+<!-- Avances de obra -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Avances de obra</span>
+</a>
+<!-- Brokers -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="font-label-md text-label-md">Brokers</span>
+</a>
+<!-- Metas -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">ads_click</span>
+<span class="font-label-md text-label-md">Metas</span>
+</a>
+<!-- Academy -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">Academy</span>
+</a>
+<!-- Comisiones -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Comisiones</span>
+</a>
+<!-- Reportes (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-high transition-transform duration-200 scale-[0.98]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-md text-label-md">Reportes</span>
+</a>
+<!-- Configuración -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</nav>
+<div class="p-6">
+<button class="w-full gold-gradient text-on-primary font-bold py-4 rounded-xl font-label-md flex items-center justify-center gap-2 shadow-lg shadow-primary/10 transition-transform active:scale-95">
+<span class="material-symbols-outlined">add_circle</span>
+                Nueva Propiedad
+            </button>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant/10 rounded-full px-4 py-2 w-96">
+<span class="material-symbols-outlined text-on-surface-variant mr-3">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full p-0 placeholder:text-outline/50" placeholder="Buscar analíticas o brokers..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 px-3 py-1.5 rounded-full bg-surface-container">
+<span class="font-label-md text-primary font-bold">ES</span>
+<span class="text-outline-variant text-xs">|</span>
+<span class="font-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer">EN</span>
+</div>
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-6 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="font-label-md text-on-surface leading-none">Ismael Rosario</p>
+<p class="text-[10px] text-primary uppercase font-bold tracking-tighter">Administrador</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-primary/30 object-cover" data-alt="A professional portrait of a senior real estate administrator in a dark bespoke suit, captured with shallow depth of field in a luxury corporate setting. The lighting is sophisticated, with warm highlights reflecting the gold accents of the brand's aesthetic. High-end, premium quality with a modern corporate feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrL41spBdzbMMiVpO6RiJLeutfcPqmAT8vvglmwHwttBxwKfFReMd8cJxinuDJepbDNmXnB87jupslKfPop3vOkKVaNLpRN-V8qbwc47kgr_UlFq5819JQG6-AnyEskPG5AV652SkcYHeb8fazMx_EvrXc4T92UeKwghbOzx_nJqxk3fw4vPyaN3s2UWC1XtW3dCnmQu79FswA5zwlA45XB2VD-ax9UV7IpRL3SYb-oIpddezg3wW3mNvMice9jDnVbu3Fo-Eq24k"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-16 min-h-screen bg-background-base p-margin-desktop">
+<!-- Header & Action Bar -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg font-display text-on-surface">Reportes y Analítica</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Métricas de rendimiento global y salud del negocio inmobiliario.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-surface-elevated border border-outline-variant/10 rounded-xl px-4 py-3 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">calendar_month</span>
+<select class="bg-transparent border-none focus:ring-0 font-label-md text-on-surface p-0 pr-8">
+<option>Últimos 30 días</option>
+<option>Último trimestre</option>
+<option>Año 2024</option>
+<option>Histórico</option>
+</select>
+</div>
+<button class="flex items-center gap-2 px-6 py-3 bg-surface-elevated border border-primary/20 rounded-xl text-primary font-bold hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">description</span>
+<span>Exportar a Excel</span>
+</button>
+</div>
+</div>
+<!-- Privacy Banner -->
+<div class="mb-8 p-4 bg-primary/5 border border-primary/10 rounded-xl flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">lock</span>
+<p class="text-sm font-medium text-on-surface-variant">Esta vista es privada y solo accesible para usuarios con rol de <span class="text-primary font-bold">Administrador</span>.</p>
+</div>
+<!-- Dashboard Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- 1. Funnel de Conversión (Large) -->
+<div class="md:col-span-8 glass-card rounded-2xl p-6 relative overflow-hidden">
+<div class="flex justify-between items-start mb-8">
+<h3 class="font-title-md text-title-md font-display text-on-surface">Conversión del Embudo</h3>
+<span class="text-xs text-primary bg-primary/10 px-3 py-1 rounded-full font-bold uppercase tracking-widest">Global</span>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Funnel Stage: Nuevo -->
+<div class="relative group">
+<div class="h-14 gold-gradient rounded-xl flex items-center justify-between px-8 relative z-10">
+<span class="font-label-md text-on-primary flex items-center gap-2">
+<span class="material-symbols-outlined">new_releases</span> Nuevo
+                            </span>
+<span class="font-display text-lg font-extrabold text-on-primary">1,240 Leads</span>
+</div>
+<div class="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded border border-outline-variant/10 z-20">100% Retención</div>
+</div>
+<!-- Funnel Stage: Contactado -->
+<div class="relative w-[90%] mx-auto">
+<div class="h-14 bg-primary/80 rounded-xl flex items-center justify-between px-8">
+<span class="font-label-md text-on-primary flex items-center gap-2">
+<span class="material-symbols-outlined">call</span> Contactado
+                            </span>
+<span class="font-display text-lg font-extrabold text-on-primary">892 Leads</span>
+</div>
+<div class="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] font-bold text-status-danger bg-surface-container px-2 py-0.5 rounded border border-outline-variant/10 z-20">28% Caída</div>
+</div>
+<!-- Funnel Stage: Presentación -->
+<div class="relative w-[75%] mx-auto">
+<div class="h-14 bg-primary/60 rounded-xl flex items-center justify-between px-8">
+<span class="font-label-md text-on-primary flex items-center gap-2">
+<span class="material-symbols-outlined">video_chat</span> Presentación
+                            </span>
+<span class="font-display text-lg font-extrabold text-on-primary">540 Leads</span>
+</div>
+<div class="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] font-bold text-status-danger bg-surface-container px-2 py-0.5 rounded border border-outline-variant/10 z-20">39% Caída</div>
+</div>
+<!-- Funnel Stage: Negociación -->
+<div class="relative w-[50%] mx-auto">
+<div class="h-14 bg-primary/40 rounded-xl flex items-center justify-between px-8 border border-primary/30 gold-pulse">
+<span class="font-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined">handshake</span> Negociación
+                            </span>
+<span class="font-display text-lg font-extrabold text-on-surface">124 Leads</span>
+</div>
+<div class="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] font-bold text-status-danger bg-surface-container px-2 py-0.5 rounded border border-outline-variant/10 z-20">77% Caída</div>
+</div>
+<!-- Funnel Stage: Cierre -->
+<div class="relative w-[30%] mx-auto">
+<div class="h-14 bg-primary/20 rounded-xl flex items-center justify-between px-8 border border-primary/20">
+<span class="font-label-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">verified</span> Cierre
+                            </span>
+<span class="font-display text-lg font-extrabold text-primary">42</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. Leads por Canal -->
+<div class="md:col-span-4 glass-card rounded-2xl p-6">
+<h3 class="font-title-md text-title-md font-display text-on-surface mb-8">Leads por Canal</h3>
+<div class="flex flex-col items-center justify-center gap-6">
+<!-- Circular Progress Simulation -->
+<div class="relative w-48 h-48 rounded-full border-[14px] border-surface-container flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-[14px] border-primary border-r-transparent border-b-transparent rotate-45"></div>
+<div class="text-center">
+<p class="text-3xl font-display font-extrabold text-on-surface">58%</p>
+<p class="text-[10px] font-bold text-primary uppercase tracking-widest">YouTube</p>
+</div>
+</div>
+<div class="w-full space-y-3 pt-4 border-t border-outline-variant/10">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span> <span class="text-xs text-on-surface-variant">YouTube</span></div>
+<span class="text-xs font-bold text-on-surface">58%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary/60"></span> <span class="text-xs text-on-surface-variant">Web</span></div>
+<span class="text-xs font-bold text-on-surface">22%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary/40"></span> <span class="text-xs text-on-surface-variant">WhatsApp</span></div>
+<span class="text-xs font-bold text-on-surface">14%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary/20"></span> <span class="text-xs text-on-surface-variant">Referidos</span></div>
+<span class="text-xs font-bold text-on-surface">6%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. Zonas Calientes -->
+<div class="md:col-span-4 glass-card rounded-2xl p-6">
+<h3 class="font-title-md text-title-md font-display text-on-surface mb-6">Zonas Calientes</h3>
+<div class="space-y-5">
+<div class="space-y-1">
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Punta Cana</span>
+<span class="text-primary font-bold">142 Consultas</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full gold-gradient w-[92%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Bávaro</span>
+<span class="text-primary font-bold">98 Consultas</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full gold-gradient w-[65%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Cap Cana</span>
+<span class="text-primary font-bold">74 Consultas</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full gold-gradient w-[50%]"></div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Las Terrenas</span>
+<span class="text-primary font-bold">32 Consultas</span>
+</div>
+<div class="h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full gold-gradient w-[25%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<div class="w-full h-32 rounded-xl overflow-hidden opacity-50 grayscale hover:grayscale-0 transition-all cursor-pointer">
+<div class="w-full h-full" data-alt="A stylized minimalist digital map of the Dominican Republic coastline, featuring glowing heat map points in gold over a deep dark blue and charcoal background. Modern UI aesthetic with subtle geographic details and high-end tech feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdZzFqbuHKu4HHfF7Sii0pZeZbM6YILBN0O5_KUx5w4XrFgJnccnsSMqTh-6rdFvJ4frMJcGAGDYFyhmrZEF1igBpGyh7tpD_Erm1kzmB8ByNkn6n_6snpKHf84_CvWsMGZiaDYveshPBqBOGyyJb3nqPk9P28_UvyFsJlaDJUDFVvqth007_QsaupS8dNgbDOyQrRbubHzF0HdO7MaV4xwvK1toy1uvfMhKhRhjMeLE4Y-jZwUVIt-fKMvOw_FEz-dnFdeTJiZq0')"></div>
+</div>
+</div>
+</div>
+<!-- 4. Proyectos más consultados -->
+<div class="md:col-span-4 glass-card rounded-2xl p-6 flex flex-col">
+<h3 class="font-title-md text-title-md font-display text-on-surface mb-6">Proyectos destacados</h3>
+<div class="space-y-4 flex-1">
+<div class="flex items-center gap-4 p-2 rounded-xl hover:bg-surface-container transition-colors cursor-pointer group">
+<img class="w-12 h-12 rounded-lg object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="High-end luxury architectural visualization of Praderas de Punta Cana, featuring modern white villas with infinity pools at dusk. Golden warm lighting illuminating the interiors, tropical landscaping, and a pristine, elite atmosphere in a dark UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlRQUfCZzywo0_bhKiJL64yeTyOeLtGCaLqdF-VnXrSYx_e2wEn9S69CrmG2-7RGqiI5NYySQdW2LiFlTH5Dr8F0KWVO9rjOyqq7De48FH4o4VVkoGn3ojrQqkq_CZm3D4-IpP-ZgWk3HoXh9r9DanAGqpMNnjQtXtKF42qkQ4sSAWZ_ofXA8jb-MTufQGDIkFUMUFLg510SDFuorkBuidPAm15dy_f02nLK5X26fZoGcAtcrrhjTp5bktYaRCCdJeqE6zVN0lhZ4"/>
+<div class="flex-1">
+<p class="text-sm font-bold text-on-surface">Praderas de Punta Cana</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Residencial Luxury</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-extrabold text-primary">245</p>
+<p class="text-[10px] text-on-surface-variant">leads</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-2 rounded-xl hover:bg-surface-container transition-colors cursor-pointer group">
+<img class="w-12 h-12 rounded-lg object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Luxury beachfront condo development 'Jardín del Orquídeo' with sleek glass balconies overlooking a turquoise ocean. Dramatic sunset lighting, elegant palm trees, and premium real estate photography style consistent with a dark high-end CRM." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6DLZ-9GpnRbNT9lSwIfC7sdlnBjEbS6lTRnehds66T49Eumg7NiU3k9sUig9bNIawg4MaQZJUMdgKC26zleJ2tbLhxI7vs8ROfHc1F1nvEGOUYgeFI3Bm4DIou9K8mJPZsHQlc1gz8-mVuwIjBQ2FJQ0i9_lu0_Ly4csDnq859FNg1Vr_QhLQtjX_lEPj6gboIOaATgWaoQU9ixZrCbv9c2a5Ugq7bhuQAXb7dvhGJbN0p3MDuObg83Jz1cvEOSLJuILXEGgpLpQ"/>
+<div class="flex-1">
+<p class="text-sm font-bold text-on-surface">Jardín del Orquídeo</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Apartamentos Vista Mar</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-extrabold text-primary">189</p>
+<p class="text-[10px] text-on-surface-variant">leads</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-2 rounded-xl hover:bg-surface-container transition-colors cursor-pointer group">
+<img class="w-12 h-12 rounded-lg object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Contemporary golf-front estate 'The Reserve Cap Cana' with minimalist stone walls and wide wooden decks. High contrast lighting at twilight, creating an exclusive and private atmosphere for elite property seekers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVcs07IgXLTJY4geb9Pfmz2JbKfeiQISHr47eVueWZahEtZevZXIE0cZYpOKXaZ7hgID9Ye3Q_ZzhN5lHAB3u3e91S3Ho3D2o_WhFG2FtliNXXToAWtqtLPgsZHcxCfH2KKjh-gB0NtCYJi489bdtdFmI6ULK-4cy5QGepPaaCtpUAwbHYN1BXzSOs90rvrb8s7KD8bD987Hjh5akY6UrXI2NFRdE3_UjOl4XxSx3IehyLyfmXN8faVJv-tLkYMl8rkDviWnVllaE"/>
+<div class="flex-1">
+<p class="text-sm font-bold text-on-surface">The Reserve Cap Cana</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Villas de Golf</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-extrabold text-primary">156</p>
+<p class="text-[10px] text-on-surface-variant">leads</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 text-xs font-bold text-on-surface-variant hover:text-primary uppercase tracking-widest pt-4 border-t border-outline-variant/10">Ver todos los proyectos</button>
+</div>
+<!-- 5. Motivos de pérdida -->
+<div class="md:col-span-4 glass-card rounded-2xl p-6">
+<h3 class="font-title-md text-title-md font-display text-on-surface mb-6">Motivos de pérdida</h3>
+<div class="flex items-end justify-between h-48 gap-3 pt-6">
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 85%">
+<div class="absolute inset-0 gold-gradient rounded-t-lg opacity-40"></div>
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-on-surface">42%</span>
+</div>
+<span class="text-[10px] text-on-surface-variant text-center">Precio</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 60%">
+<div class="absolute inset-0 gold-gradient rounded-t-lg opacity-30"></div>
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-on-surface">28%</span>
+</div>
+<span class="text-[10px] text-on-surface-variant text-center">No resp.</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 45%">
+<div class="absolute inset-0 gold-gradient rounded-t-lg opacity-20"></div>
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-on-surface">18%</span>
+</div>
+<span class="text-[10px] text-on-surface-variant text-center">Otro</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 30%">
+<div class="absolute inset-0 gold-gradient rounded-t-lg opacity-10"></div>
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-on-surface">12%</span>
+</div>
+<span class="text-[10px] text-on-surface-variant text-center">Financ.</span>
+</div>
+</div>
+</div>
+<!-- 6. Desempeño por Broker (Wide) -->
+<div class="md:col-span-8 glass-card rounded-2xl p-6 overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md font-display text-on-surface">Desempeño por Broker</h3>
+<div class="flex gap-2">
+<button class="p-2 bg-surface-container rounded-lg text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">filter_list</span></button>
+<button class="p-2 bg-surface-container rounded-lg text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline-variant/10">
+<th class="pb-4 font-label-md text-on-surface-variant text-[12px] uppercase">Broker</th>
+<th class="pb-4 font-label-md text-on-surface-variant text-[12px] uppercase text-center">Leads</th>
+<th class="pb-4 font-label-md text-on-surface-variant text-[12px] uppercase text-center">Conversión</th>
+<th class="pb-4 font-label-md text-on-surface-variant text-[12px] uppercase text-right">Ventas Totales</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="py-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full" data-alt="Headshot of a professional real estate broker, male, elegant attire, soft studio lighting with warm tones, high-end corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-9tFqEPtKCR5il3hb0E3zeRgFHurRMVi7S4UddRCbX-DYqTvpWvo6ocI-oO4NRAEPKvLD-qgBqEp7s1reLUn9sqP2RSRfOXbi9ZtsU9hSiE1AaLZVcD8kRfEpYdhMF_UnyUGtn8e_WLiPfO1DZ5yp9k6_CzMNkSUjNQP-PwGcy5QjSdYiGTKsgnp-uQhjsY8GXlPbRKv5gItLeBtAGAR1a3HjxZ7l0CF5wI50zvzfw2UBy4wkilXoBcaCgBfuT0olXpM9P6JIEt8"/>
+<span class="text-sm font-medium text-on-surface">Carlos Méndez</span>
+</div>
+</td>
+<td class="py-4 text-center text-sm">124</td>
+<td class="py-4 text-center">
+<span class="px-2 py-1 bg-status-success/10 text-status-success rounded text-[10px] font-bold">12.4%</span>
+</td>
+<td class="py-4 text-right font-display font-bold text-primary">$4.2M</td>
+</tr>
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="py-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full" data-alt="Headshot of a professional real estate broker, female, luxury business style, warm lighting, sophisticated dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwoMEEzHSElyKFGgLS9csJ_E7CJFUx3h-cKWbPn8DR_kK614GkLB5CwmwI9SDXl2MdKgq1GqxtMS7OjSTfpxWr9SaIqIi97gDUEPKgVYw-fZYXtpkbxwcF9JK7OJJaLPpPtCkHrIffpXb0gfODEDlVYod8kwMyPsNXo-2DEdwfAooW0PPEZEjfVoGSy2hfnvgHHYc27KkI312PO5XKqdg3rSRXMkERnvLbzgUGvKXrJ3MHuyidqVrwuJn1L68nzm6yYcW_wruk13w"/>
+<span class="text-sm font-medium text-on-surface">Lucía Ferreyra</span>
+</div>
+</td>
+<td class="py-4 text-center text-sm">98</td>
+<td class="py-4 text-center">
+<span class="px-2 py-1 bg-status-success/10 text-status-success rounded text-[10px] font-bold">10.2%</span>
+</td>
+<td class="py-4 text-right font-display font-bold text-primary">$3.8M</td>
+</tr>
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="py-4">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full" data-alt="Headshot of an experienced real estate agent, professional smile, charcoal suit, premium lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAKHjGAD6AjqxtU49yxKAF7TVfENcAnNE1BbI7gtRXBoCdJA7m1lPmX1xo_EMb0wZXryo94a6qHYIbZXkE2pZRLP-f0_W0nTqhBFsnzj1o463I4P_36vwo1OsI2ITACJwCT-UrhHqyAHTGCO1fn8Sk_e0WnehvUPnEu8BD_uN28BJRe_p07kKf2DzRn5CZnAp-AGaVtHMo3n2Ris32J_2h_JfK9s2Fzf9AxE3x-v24TDPsGGpe_nLv1miP2tU3DgQIC9G8lcOGfg0"/>
+<span class="text-sm font-medium text-on-surface">Roberto Santo</span>
+</div>
+</td>
+<td class="py-4 text-center text-sm">145</td>
+<td class="py-4 text-center">
+<span class="px-2 py-1 bg-status-warning/10 text-status-warning rounded text-[10px] font-bold">6.8%</span>
+</td>
+<td class="py-4 text-right font-display font-bold text-primary">$2.9M</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 7. Proyección de Cierre (Full Width) -->
+<div class="md:col-span-4 glass-card rounded-2xl p-6">
+<h3 class="font-title-md text-title-md font-display text-on-surface mb-2">Proyección Q2</h3>
+<p class="text-xs text-on-surface-variant mb-6">Tendencia del pipeline ponderado</p>
+<div class="h-40 flex items-end gap-1 relative">
+<!-- Fake Line Chart -->
+<svg class="absolute inset-0 w-full h-full preserve-3d" viewbox="0 0 400 100">
+<path d="M0,80 Q50,70 100,50 T200,60 T300,30 T400,10" fill="none" stroke="#C9A24B" stroke-linecap="round" stroke-width="3"></path>
+<path d="M0,80 Q50,70 100,50 T200,60 T300,30 T400,10 V100 H0 Z" fill="url(#goldGradient)" opacity="0.1"></path>
+<defs>
+<lineargradient id="goldGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#C9A24B"></stop>
+<stop offset="100%" stop-color="transparent"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute top-2 right-2 text-right">
+<p class="text-2xl font-display font-extrabold text-primary">$12.4M</p>
+<p class="text-[10px] text-status-success font-bold">+18.5% vs Q1</p>
+</div>
+</div>
+<div class="mt-4 flex justify-between text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+<span>Abril</span>
+<span>Mayo</span>
+<span>Junio</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

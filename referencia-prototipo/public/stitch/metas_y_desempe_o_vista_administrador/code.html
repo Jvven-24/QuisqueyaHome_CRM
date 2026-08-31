@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Metas y Desempeño | Quisqueya Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration Verbatim -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#e2e2e5",
+                    "on-tertiary-container": "#3d3c3e",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "status-danger": "#EF4444",
+                    "surface-bright": "#37393c",
+                    "secondary-container": "#474649",
+                    "inverse-primary": "#795902",
+                    "surface-container-low": "#1a1c1e",
+                    "on-primary-fixed": "#261a00",
+                    "inverse-surface": "#e2e2e5",
+                    "gold-dark": "#9E7B31",
+                    "on-primary-container": "#4f3900",
+                    "tertiary-fixed-dim": "#c8c6c7",
+                    "surface-variant": "#333537",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "on-secondary-fixed-variant": "#474649",
+                    "on-secondary": "#303032",
+                    "primary-fixed": "#ffdf9e",
+                    "on-tertiary-fixed": "#1c1b1c",
+                    "error": "#ffb4ab",
+                    "primary-container": "#c9a24b",
+                    "outline-variant": "#4e4637",
+                    "surface-container": "#1e2022",
+                    "surface": "#121416",
+                    "secondary-fixed": "#e5e1e4",
+                    "primary-fixed-dim": "#ebc166",
+                    "primary": "#ebc166",
+                    "outline": "#9a8f7e",
+                    "on-error": "#690005",
+                    "background": "#121416",
+                    "on-secondary-container": "#b7b4b7",
+                    "on-error-container": "#ffdad6",
+                    "tertiary-fixed": "#e5e2e3",
+                    "status-warning": "#F59E0B",
+                    "background-base": "#0A0A0B",
+                    "surface-tint": "#ebc166",
+                    "on-tertiary-fixed-variant": "#474647",
+                    "surface-elevated": "#141416",
+                    "on-primary-fixed-variant": "#5b4300",
+                    "tertiary": "#c8c6c7",
+                    "surface-container-lowest": "#0c0e11",
+                    "secondary": "#c8c6c8",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#282a2c",
+                    "surface-dim": "#121416",
+                    "on-primary": "#402d00",
+                    "tertiary-container": "#a9a7a8",
+                    "on-surface": "#e2e2e5",
+                    "inverse-on-surface": "#2f3033",
+                    "status-success": "#22C55E",
+                    "surface-container-highest": "#333537",
+                    "on-tertiary": "#313031"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "container-max-width": "1440px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "title-md": ["Hanken Grotesk"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+            color: #e2e2e5;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(20, 20, 22, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(201, 162, 75, 0.1);
+        }
+        .gold-glow {
+            text-shadow: 0 0 15px rgba(201, 162, 75, 0.3);
+        }
+        .progress-donut {
+            transition: stroke-dashoffset 1s ease-out;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- SideNavBar (Fixed) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated border-r border-outline-variant/10 flex flex-col py-base z-50">
+<div class="px-6 mb-10">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">Quisqueya Home</h1>
+<p class="text-on-surface-variant font-label-md text-[12px] uppercase tracking-widest">Elite Real Estate</p>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto px-3">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md">Contactos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md">Agenda</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md">Propiedades</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md">Avances de obra</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="font-label-md">Brokers</span>
+</a>
+<!-- ACTIVE TAB: Metas -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-high scale-[0.98] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">ads_click</span>
+<span class="font-label-md">Metas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md">Academy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md">Comisiones</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Configuración</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-3 rounded-lg hover:opacity-90 transition-opacity">
+                Nueva Propiedad
+            </button>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="bg-surface-container-lowest border-none rounded-full pl-10 pr-4 py-1.5 text-body-md focus:ring-1 focus:ring-primary w-64 transition-all" placeholder="Buscar broker o métrica..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="font-label-md hover:text-primary">ES</button>
+<button class="font-label-md hover:text-primary">EN</button>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary">notifications</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="font-label-md text-on-surface leading-tight">Ismael Rosario</p>
+<p class="text-[10px] text-primary uppercase font-bold tracking-tighter">Administrador Elite</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-primary/20 object-cover" data-alt="A professional studio portrait of a real estate executive, middle-aged male, looking confident with a friendly smile. He is wearing a tailored charcoal suit against a clean, dark minimalist background. The lighting is soft and cinematic, highlighting sophisticated features. High-end editorial photography style with rich tones and professional finish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsVtUqV29VfUaVCN13KQmPwuR6APwUYxdyhVVAvKR9Jinlyafn1yMrPLiCkLbT2nyrqarEW2PYe1UOelakaNIexaa-luIS_R-rPg6bRfJew580fdn0eBb6JH4i3liYuyxjzLfuwS7ZgWYz0zc3tTDWPRMM0sTofWDHgzJVC2GurdPXU7cCceRMOsZMbPpvr8huu20RTBEjiA55VpSMUh-FA0NRDPWoIhf2MDx0AJ8A7cNTGnd47LGC-xcTypnUdbO5cidY6S_kVVs"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-[280px] pt-24 px-margin-desktop pb-12 min-h-screen">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+<div>
+<p class="text-primary font-bold tracking-widest uppercase text-[12px] mb-2">CRM Performance Hub</p>
+<h2 class="font-display-lg text-headline-lg text-on-surface">Metas y Desempeño</h2>
+</div>
+<div class="flex items-center gap-4">
+<!-- Month Selector -->
+<div class="flex items-center gap-2 bg-surface-elevated p-1 rounded-xl border border-outline-variant/10 shadow-sm">
+<button class="p-2 hover:bg-surface-container hover:text-primary rounded-lg transition-all"><span class="material-symbols-outlined">chevron_left</span></button>
+<span class="px-4 font-title-md text-on-surface">Julio 2026</span>
+<button class="p-2 hover:bg-surface-container hover:text-primary rounded-lg transition-all"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+<!-- Toggle -->
+<div class="flex bg-surface-elevated rounded-xl p-1 border border-outline-variant/10">
+<button class="px-6 py-2 rounded-lg bg-primary-container text-on-primary-container font-bold text-label-md shadow-lg transition-all">Meta del equipo</button>
+<button class="px-6 py-2 rounded-lg text-on-surface-variant font-medium text-label-md hover:text-on-surface transition-all">Por broker</button>
+</div>
+</div>
+</div>
+<!-- Hero Bento Grid -->
+<div class="grid grid-cols-12 gap-gutter mb-gutter">
+<!-- Major Hero: Team Goal Donut -->
+<div class="col-span-12 lg:col-span-8 glass-card rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between relative overflow-hidden group">
+<!-- Background ambient glow -->
+<div class="absolute -right-20 -top-20 w-80 h-80 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="space-y-6 z-10 max-w-sm text-center md:text-left mb-8 md:mb-0">
+<h3 class="text-primary-fixed-dim font-display-lg text-title-md uppercase tracking-widest">Meta del negocio</h3>
+<div class="space-y-2">
+<p class="text-on-surface font-display-lg text-[48px] font-bold leading-tight">10 negocios <span class="text-on-surface-variant font-medium text-headline-lg">/ mes</span></p>
+<p class="text-gold-light font-title-md flex items-center justify-center md:justify-start gap-2">
+<span class="material-symbols-outlined">check_circle</span>
+                            logrados 7 este mes
+                        </p>
+</div>
+<div class="pt-4">
+<button class="group inline-flex items-center gap-2 text-primary border-b border-primary/20 hover:border-primary pb-1 transition-all">
+                            Ver desglose de cierres <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="relative w-64 h-64 z-10">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<!-- Background Circle -->
+<circle class="text-surface-container-high" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<!-- Progress Circle -->
+<circle class="text-primary progress-donut drop-shadow-[0_0_12px_rgba(235,193,102,0.4)]" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="75.36" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-display-lg font-bold text-on-surface gold-glow">70%</span>
+<span class="text-label-md text-on-surface-variant uppercase tracking-widest">Cumplido</span>
+</div>
+</div>
+</div>
+<!-- Side Metric: Key insights -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<div class="glass-card rounded-2xl p-6 flex-1 flex flex-col justify-center border-l-4 border-l-primary">
+<p class="text-on-surface-variant font-label-md mb-1 uppercase tracking-widest text-[10px]">Venta Proyectada</p>
+<p class="text-headline-lg font-bold text-on-surface">$12.4M</p>
+<div class="flex items-center gap-1 text-status-success text-label-md mt-2">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+14.2% vs Junio</span>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 flex-1 flex flex-col justify-center">
+<p class="text-on-surface-variant font-label-md mb-1 uppercase tracking-widest text-[10px]">Pipeline Activo</p>
+<p class="text-headline-lg font-bold text-on-surface">42 Leads</p>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-4 overflow-hidden">
+<div class="bg-primary-container h-full w-[85%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Annual History Chart -->
+<div class="glass-card rounded-2xl p-gutter mb-gutter">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-title-md text-on-surface">Histórico Anual de Negocios</h3>
+<div class="flex items-center gap-4 text-label-md">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-sm bg-primary"></span>
+<span class="text-on-surface-variant">Meta superada</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-sm bg-surface-variant"></span>
+<span class="text-on-surface-variant">Bajo la meta</span>
+</div>
+</div>
+</div>
+<div class="relative h-64 w-full flex items-end justify-between px-4 pb-8">
+<!-- Goal Line -->
+<div class="absolute bottom-[70%] left-0 w-full border-t border-dashed border-primary/50 z-10 flex justify-end">
+<span class="text-[10px] text-primary -mt-4 bg-background-base px-2 uppercase font-bold tracking-widest">Meta Mensual (10)</span>
+</div>
+<!-- Bars -->
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group">
+<div class="w-full bg-primary h-[85%] rounded-t-sm transition-all group-hover:brightness-110 shadow-[0_0_15px_rgba(235,193,102,0.1)]"></div>
+<span class="text-label-md text-on-surface-variant">Ene</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group">
+<div class="w-full bg-primary h-[95%] rounded-t-sm transition-all group-hover:brightness-110 shadow-[0_0_15px_rgba(235,193,102,0.1)]"></div>
+<span class="text-label-md text-on-surface-variant">Feb</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group">
+<div class="w-full bg-surface-variant h-[50%] rounded-t-sm transition-all group-hover:bg-surface-container-highest"></div>
+<span class="text-label-md text-on-surface-variant">Mar</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group">
+<div class="w-full bg-primary h-[75%] rounded-t-sm transition-all group-hover:brightness-110 shadow-[0_0_15px_rgba(235,193,102,0.1)]"></div>
+<span class="text-label-md text-on-surface-variant">Abr</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group">
+<div class="w-full bg-primary h-[100%] rounded-t-sm transition-all group-hover:brightness-110 shadow-[0_0_15px_rgba(235,193,102,0.1)]"></div>
+<span class="text-label-md text-on-surface-variant">May</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group">
+<div class="w-full bg-primary h-[80%] rounded-t-sm transition-all group-hover:brightness-110 shadow-[0_0_15px_rgba(235,193,102,0.1)]"></div>
+<span class="text-label-md text-on-surface-variant">Jun</span>
+</div>
+<!-- Highlight July (Active) -->
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group relative">
+<div class="w-full bg-primary h-[70%] rounded-t-sm transition-all group-hover:brightness-110 shadow-[0_0_20px_rgba(235,193,102,0.3)]"></div>
+<div class="absolute -top-8 bg-primary text-on-primary text-[10px] font-bold px-2 py-0.5 rounded-sm whitespace-nowrap">7 ACTUAL</div>
+<span class="text-label-md text-primary font-bold">Jul</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group opacity-40">
+<div class="w-full bg-surface-variant h-[10%] rounded-t-sm"></div>
+<span class="text-label-md text-on-surface-variant">Ago</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group opacity-40">
+<div class="w-full bg-surface-variant h-[10%] rounded-t-sm"></div>
+<span class="text-label-md text-on-surface-variant">Sep</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group opacity-40">
+<div class="w-full bg-surface-variant h-[10%] rounded-t-sm"></div>
+<span class="text-label-md text-on-surface-variant">Oct</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group opacity-40">
+<div class="w-full bg-surface-variant h-[10%] rounded-t-sm"></div>
+<span class="text-label-md text-on-surface-variant">Nov</span>
+</div>
+<div class="flex flex-col items-center gap-2 w-full max-w-[40px] group opacity-40">
+<div class="w-full bg-surface-variant h-[10%] rounded-t-sm"></div>
+<span class="text-label-md text-on-surface-variant">Dic</span>
+</div>
+</div>
+</div>
+<!-- Broker Performance Table -->
+<div class="glass-card rounded-2xl overflow-hidden mb-gutter">
+<div class="px-gutter py-6 flex items-center justify-between border-b border-outline-variant/10">
+<h3 class="font-title-md text-on-surface">Desempeño por Broker</h3>
+<button class="text-primary font-label-md flex items-center gap-2 hover:underline">
+                    Ver reporte detallado <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-on-surface-variant uppercase text-[11px] font-bold tracking-widest">
+<tr>
+<th class="px-gutter py-4">Broker</th>
+<th class="px-gutter py-4">Meta Mensual</th>
+<th class="px-gutter py-4 text-center">Logrados</th>
+<th class="px-gutter py-4">% Cumplimiento</th>
+<th class="px-gutter py-4">Tendencia</th>
+<th class="px-gutter py-4">Nivel Actual</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-gutter py-5">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a sharp, stylish female real estate agent in her 30s. Professional corporate attire, warm lighting, blurred luxury office background. Golden jewelry accents to match the brand identity. High contrast dark mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNQKaMCrxgixeATvAb5SCpA7fijPrVRmCJhxQ9hfRqqF9NTwqdIaQnAYZSpMPiyeyGMwxG2KuSIKowNMrJu0g1cg3YoPpr53D-xWKUnvkjhhpPfpVuyoVb5qUXuJRuIvJhTBv9-R0tl128KFxxmVoWL5jo0Fzr7RM6YxFYaTBysbohoIF5PtctkjNjnF7AB7QKLmiphsCQrE3gu3mQr13A3uD42xsG9Gx5cepGFMDqatRXlblz1IrET8ygVGeqRfNjZkL7Br8AcSo"/>
+<div>
+<p class="font-label-md text-on-surface">Ana Victoria García</p>
+<p class="text-[12px] text-on-surface-variant">Ventas Premium</p>
+</div>
+</div>
+</td>
+<td class="px-gutter py-5 font-title-md text-on-surface">3 Negocios</td>
+<td class="px-gutter py-5 text-center font-bold text-primary">3</td>
+<td class="px-gutter py-5">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full rounded-full"></div>
+</div>
+<span class="text-label-md text-on-surface">100%</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<svg class="w-16 h-8" viewbox="0 0 100 40">
+<path d="M0,35 Q20,30 40,25 T80,10 T100,5" fill="none" stroke="#ebc166" stroke-width="2"></path>
+</svg>
+</td>
+<td class="px-gutter py-5">
+<span class="px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold rounded-full uppercase tracking-widest">Top Producer</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-gutter py-5">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a male real estate professional in his late 40s. Sophisticated look, refined features, wearing a blue bespoke blazer. Soft interior lighting from a high-end luxury property. Dark mode corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOGEoAU4kXiVNWK27_PMNtEGnq6RVAozWtgKkjS9ZYUSpPatpUUHl6KWMLC4mPaH3nW0lfYpLK8TUHavqLIg668HAxNHZQWn89JFR12B_SkInu1Xm9LivXMbyrr9SDzs-vfkM_92nNpAnno13MzdG6b4S2OhoCCNWts9yMXsSIGFSX-rUW_Vc7lVmigjix4HFg62r57wTBNAIGJ8B_YAnkbsIhV4LsHaf2cGDWNzUjd1SNW72sHucXx8wPljwqs5t-_lWgNiwURbc"/>
+<div>
+<p class="font-label-md text-on-surface">Carlos Mendoza</p>
+<p class="text-[12px] text-on-surface-variant">Comercial</p>
+</div>
+</div>
+</td>
+<td class="px-gutter py-5 font-title-md text-on-surface">2 Negocios</td>
+<td class="px-gutter py-5 text-center font-bold text-on-surface">1</td>
+<td class="px-gutter py-5">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[50%] rounded-full"></div>
+</div>
+<span class="text-label-md text-on-surface">50%</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<svg class="w-16 h-8" viewbox="0 0 100 40">
+<path d="M0,35 Q20,38 40,32 T80,35 T100,30" fill="none" stroke="#ebc166" stroke-width="2"></path>
+</svg>
+</td>
+<td class="px-gutter py-5">
+<span class="px-3 py-1 bg-surface-variant/20 border border-surface-variant/40 text-on-surface-variant text-[10px] font-bold rounded-full uppercase tracking-widest">Senior</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-gutter py-5">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A young energetic female broker, early 20s, smiling warmly. Modern tech-focused real estate office backdrop with slight blur. Soft, flattering warm lighting. Cohesive dark mode visual style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDZYwX8m1QSRVISxnAjYmmYQPgV-qiREvwfpB912RkYeVvT0LCy2xpNoDXf34rxPCfi5TmDqJqNH1FYUa9bAnhI8SO6F4q12vZi0TNs2AUafrEy2regxTl6v3P-pdM8eXBYvpC56E5SAaF9EmDGE88Y-UnSRJVCurERFLloRZT2plkbu0x1gFteZNp6uMN-B5mU9TDh9ovwgEr9HZXksZQf5qtBtUTXMFx8xH3GOASKxdBVMSLTqH8nGRTMraxy7pPg_G92AdANHU"/>
+<div>
+<p class="font-label-md text-on-surface">Lucía Rivera</p>
+<p class="text-[12px] text-on-surface-variant">Residencial</p>
+</div>
+</div>
+</td>
+<td class="px-gutter py-5 font-title-md text-on-surface">2 Negocios</td>
+<td class="px-gutter py-5 text-center font-bold text-primary">2</td>
+<td class="px-gutter py-5">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full rounded-full"></div>
+</div>
+<span class="text-label-md text-on-surface">100%</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<svg class="w-16 h-8" viewbox="0 0 100 40">
+<path d="M0,38 Q25,35 50,20 T80,10 T100,2" fill="none" stroke="#ebc166" stroke-width="2"></path>
+</svg>
+</td>
+<td class="px-gutter py-5">
+<span class="px-3 py-1 bg-surface-variant/20 border border-surface-variant/40 text-on-surface-variant text-[10px] font-bold rounded-full uppercase tracking-widest">Junior</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-gutter py-5">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of an experienced male real estate broker, mid-50s, looking professional. Grey-toned studio lighting, minimalist dark background. Premium corporate headshot style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5OCaNKWwxtPxTlrwiEDaqczrSJLbj3ga9L2VYbzJhSqcO_ORYefKk1ItwWMj1iaMmrJY2VOXRQo9nU0lJt-SCBX7TuL59kgOLNvjqcWEMzhrUS9AyFbhljV3T8pZmQk9ZaFta205358VtHkMrcIMDcO8Vim-ZSBRtsf_c_n6gXTB4-NnzKi13k5Q185FslH8ECrzdMsH5c86LeLr9pz5pfvCjP2NJuvQfa-r8n0vpDg0yS4VsS_j9fZXZmr-rCUQFoPHH2p6vkEU"/>
+<div>
+<p class="font-label-md text-on-surface">Roberto Mejía</p>
+<p class="text-[12px] text-on-surface-variant">Luxury Estates</p>
+</div>
+</div>
+</td>
+<td class="px-gutter py-5 font-title-md text-on-surface">3 Negocios</td>
+<td class="px-gutter py-5 text-center font-bold text-on-surface">1</td>
+<td class="px-gutter py-5">
+<div class="flex items-center gap-3">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[33%] rounded-full"></div>
+</div>
+<span class="text-label-md text-on-surface">33%</span>
+</div>
+</td>
+<td class="px-gutter py-5">
+<svg class="w-16 h-8" viewbox="0 0 100 40">
+<path d="M0,5 Q20,10 40,15 T80,30 T100,38" fill="none" stroke="#EF4444" stroke-width="2"></path>
+</svg>
+</td>
+<td class="px-gutter py-5">
+<span class="px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold rounded-full uppercase tracking-widest">Top Producer</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Footer Note -->
+<footer class="mt-8 flex items-center justify-center gap-2 text-on-surface-variant font-label-md opacity-60">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<p>Los cierres del pipeline alimentan las metas automáticamente — sin doble captura</p>
+</footer>
+</main>
+<script>
+        // Micro-interactions for the donut chart
+        window.addEventListener('load', () => {
+            const donut = document.querySelector('.progress-donut');
+            if (donut) {
+                // Already set in the attribute, but we could animate it here if needed
+            }
+        });
+
+        // Search bar interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.classList.add('w-80');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.classList.remove('w-80');
+        });
+    </script>
+</body></html>

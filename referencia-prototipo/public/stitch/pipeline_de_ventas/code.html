@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pipeline de Ventas - Quisqueya Home</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#c8c6c7",
+                      "surface-bright": "#37393c",
+                      "background": "#121416",
+                      "primary-fixed": "#ffdf9e",
+                      "primary-container": "#c9a24b",
+                      "secondary-fixed": "#e5e1e4",
+                      "surface-container-highest": "#333537",
+                      "on-primary": "#402d00",
+                      "on-secondary-fixed-variant": "#474649",
+                      "inverse-primary": "#795902",
+                      "on-primary-fixed": "#261a00",
+                      "primary-fixed-dim": "#ebc166",
+                      "background-base": "#0A0A0B",
+                      "on-secondary-fixed": "#1b1b1d",
+                      "surface-container-lowest": "#0c0e11",
+                      "surface": "#121416",
+                      "on-error": "#690005",
+                      "on-surface": "#e2e2e5",
+                      "surface-tint": "#ebc166",
+                      "on-tertiary-fixed-variant": "#474647",
+                      "on-primary-fixed-variant": "#5b4300",
+                      "primary": "#ebc166",
+                      "inverse-surface": "#e2e2e5",
+                      "on-primary-container": "#4f3900",
+                      "status-warning": "#F59E0B",
+                      "status-danger": "#EF4444",
+                      "surface-container": "#1e2022",
+                      "error": "#ffb4ab",
+                      "on-surface-variant": "#d1c5b2",
+                      "on-background": "#e2e2e5",
+                      "tertiary-container": "#a9a7a8",
+                      "surface-dim": "#121416",
+                      "on-secondary-container": "#b7b4b7",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary": "#303032",
+                      "outline": "#9a8f7e",
+                      "tertiary-fixed": "#e5e2e3",
+                      "on-tertiary-container": "#3d3c3e",
+                      "secondary-fixed-dim": "#c8c6c8",
+                      "outline-variant": "#4e4637",
+                      "surface-container-low": "#1a1c1e",
+                      "surface-container-high": "#282a2c",
+                      "on-tertiary": "#313031",
+                      "error-container": "#93000a",
+                      "on-tertiary-fixed": "#1c1b1c",
+                      "gold-dark": "#9E7B31",
+                      "tertiary": "#c8c6c7",
+                      "inverse-on-surface": "#2f3033",
+                      "secondary-container": "#474649",
+                      "status-success": "#22C55E",
+                      "secondary": "#c8c6c8",
+                      "surface-variant": "#333537",
+                      "surface-elevated": "#141416",
+                      "gold-light": "#E5C17D"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "container-max-width": "1440px",
+                      "gutter": "24px",
+                      "margin-mobile": "16px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "title-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for Kanban */
+        .kanban-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .kanban-scroll::-webkit-scrollbar-track {
+            background: #141416;
+            border-radius: 4px;
+        }
+        .kanban-scroll::-webkit-scrollbar-thumb {
+            background: #282a2c;
+            border-radius: 4px;
+        }
+        .kanban-scroll::-webkit-scrollbar-thumb:hover {
+            background: #333537;
+        }
+        
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(20, 20, 22, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(201, 162, 75, 0.1);
+        }
+        
+        /* Gold Gradient */
+        .bg-gold-gradient {
+            background: linear-gradient(135deg, #E5C17D 0%, #9E7B31 100%);
+        }
+        
+        /* Dropzone visual hint */
+        .drag-over {
+            background-color: rgba(201, 162, 75, 0.05);
+            border: 1px dashed rgba(201, 162, 75, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background-base text-on-surface h-screen overflow-hidden flex font-body-md">
+<!-- Sidebar Component (from JSON) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated dark:bg-surface-elevated border-r border-outline-variant/10 shadow-sm flex flex-col h-full py-base z-50">
+<!-- Brand Header -->
+<div class="px-gutter mb-8 mt-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">real_estate_agent</span>
+</div>
+<div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-primary text-[24px] leading-tight tracking-tight">Quisqueya Home</h1>
+<p class="font-label-md text-label-md text-on-surface-variant/70 text-[11px] uppercase tracking-wider">Elite Real Estate</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-md text-label-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Contactos</span>
+</a>
+<!-- Active State Navigation -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-low shadow-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Agenda</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md text-label-md">Propiedades</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Avances de obra</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="font-label-md text-label-md">Brokers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">ads_click</span>
+<span class="font-label-md text-label-md">Metas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">Academy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Comisiones</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</nav>
+<!-- CTA -->
+<div class="px-4 mt-4">
+<button class="w-full py-3 px-4 rounded-lg bg-gold-gradient text-on-primary font-label-md text-label-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-[0_4px_14px_rgba(201,162,75,0.25)]">
+<span class="material-symbols-outlined text-lg">add</span>
+                Nueva Propiedad
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] flex-1 flex flex-col h-full relative overflow-hidden bg-background">
+<!-- Top Navigation Bar (from JSON) -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 flex justify-between items-center px-margin-desktop z-40">
+<!-- Left: Page Title / Breadcrumbs -->
+<div class="flex items-center gap-2">
+<h2 class="font-title-md text-title-md text-on-surface">Pipeline</h2>
+<span class="text-on-surface-variant/50 material-symbols-outlined text-sm">chevron_right</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Ventas Activas</span>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center gap-6">
+<!-- Search -->
+<div class="relative hidden lg:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/70 text-[20px]">search</span>
+<input class="w-full bg-surface-elevated border border-outline-variant/30 rounded-full py-2 pl-10 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all" placeholder="Buscar negocio..." type="text"/>
+</div>
+<!-- Lang Switch -->
+<div class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+<span class="text-primary font-bold">ES</span>
+<span class="text-outline-variant/50">|</span>
+<span class="hover:text-primary transition-colors cursor-pointer">EN</span>
+</div>
+<!-- Notifications -->
+<button class="relative text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-status-danger rounded-full"></span>
+</button>
+<!-- Profile -->
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20 cursor-pointer">
+<img alt="Ismael Rosario" class="w-8 h-8 rounded-full object-cover border border-primary/20" data-alt="A professional headshot of an elite real estate broker, sharp corporate attire, dark dramatic lighting with a subtle gold rim light, modern and premium aesthetic, close up." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA55KYPpmFo8QpbRdAg78Cmo_hYvfVk__tFmMRFIUHoOaEt-v9Vu9cI3X9wICKIIjRkTbg9w0BodOI_bEXcVq4gc29rRvGYQTIcKgycaVlMg88zyDlKObH_2dEdubc4FL998LvvblEvn6i3JZNPh2-cLa2_6emat_YT_xjO0C_D331TFVkTzTrxKR3aO469BrkQbbRJhjmfMrwOOzEJflDBwv5yoZKYwu3U2X4xU72VTf0oBJ0lM5shG4SyAN0nfYLtUiCCMQ0ssl0"/>
+<div class="hidden md:block text-right">
+<p class="font-label-md text-label-md text-on-surface text-[13px]">Ismael Rosario</p>
+<p class="text-xs text-on-surface-variant">Senior Broker</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Pipeline View Tools -->
+<div class="pt-24 px-margin-desktop pb-6 flex items-center justify-between z-10 relative">
+<div class="flex items-center gap-4">
+<!-- Filters -->
+<div class="flex gap-2">
+<button class="glass-panel px-4 py-2 rounded-lg text-sm text-on-surface-variant flex items-center gap-2 hover:bg-surface-container-high hover:text-on-surface transition-colors border border-outline-variant/20">
+<span class="material-symbols-outlined text-[18px]">person</span>
+                        Broker
+                        <span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</button>
+<button class="glass-panel px-4 py-2 rounded-lg text-sm text-on-surface-variant flex items-center gap-2 hover:bg-surface-container-high hover:text-on-surface transition-colors border border-outline-variant/20">
+<span class="material-symbols-outlined text-[18px]">domain</span>
+                        Proyecto
+                        <span class="material-symbols-outlined text-[16px]">arrow_drop_down</span>
+</button>
+</div>
+<!-- Toggle -->
+<div class="flex items-center gap-3 ml-4 pl-4 border-l border-outline-variant/20">
+<span class="text-sm text-on-surface-variant">Solo mis negocios</span>
+<button class="w-10 h-6 rounded-full bg-primary flex items-center p-1 cursor-pointer transition-colors" id="toggle-own">
+<div class="w-4 h-4 bg-background-base rounded-full shadow-md transform translate-x-4 transition-transform"></div>
+</button>
+</div>
+</div>
+<!-- Secondary Actions -->
+<button class="px-4 py-2 rounded-lg border border-primary/30 text-primary font-label-md text-label-md hover:bg-primary/5 transition-colors flex items-center gap-2 shadow-[0_0_10px_rgba(201,162,75,0.05)]" onclick="document.getElementById('lost-panel').classList.remove('translate-x-full')">
+<span class="material-symbols-outlined text-[18px]">visibility_off</span>
+                Ver perdidos (8)
+            </button>
+</div>
+<!-- Kanban Board Container -->
+<div class="flex-1 overflow-x-auto kanban-scroll px-margin-desktop pb-8 flex gap-6 z-10 relative items-start">
+<!-- Column 1: Nuevo (3) -->
+<div class="w-[320px] shrink-0 flex flex-col max-h-full">
+<!-- Column Header -->
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></div>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Nuevo</h3>
+<span class="bg-surface-container-high text-on-surface-variant text-xs px-2 py-0.5 rounded-full">3</span>
+</div>
+<span class="text-on-surface-variant/50 text-xs font-medium">US$450k</span>
+</div>
+<!-- Column Content -->
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2 pb-4">
+<!-- Card 1 -->
+<div class="bg-surface-elevated rounded-xl p-5 border border-outline-variant/10 shadow-sm cursor-grab hover:border-primary/30 transition-colors group relative">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary-fixed-dim rounded-l-xl opacity-50"></div>
+<div class="flex justify-between items-start mb-3">
+<span class="bg-surface-container-high text-on-surface-variant text-[10px] uppercase px-2 py-1 rounded font-bold tracking-wider">Web Lead</span>
+<span class="text-on-surface-variant/50 text-xs flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> 1d</span>
+</div>
+<h4 class="font-title-md text-[16px] text-on-surface font-semibold mb-1">Roberto Gómez</h4>
+<p class="text-sm text-on-surface-variant mb-4 line-clamp-1">Torre Albo, Penthouse C</p>
+<div class="flex items-end justify-between mt-4 pt-4 border-t border-outline-variant/10">
+<div>
+<p class="text-on-surface font-bold">US$285,000</p>
+<p class="text-xs text-status-warning font-medium mt-1">10% Prob.</p>
+</div>
+<div class="flex -space-x-2">
+<img alt="Broker" class="w-7 h-7 rounded-full border-2 border-surface-elevated object-cover" data-alt="Headshot of a female real estate agent, dark corporate background, modern lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_vxbNqfyx9mtQaADpTlunThMo0rHglijynw3Sb2psmtBNVkxJS7nop0hGgTWwoln73DIUSZ72PvCFeZI4AbCpCG6T1T_-TdQ78xwpUFH8obLjp4nOdkEckgMDU5ytg0h1SP9RzChD9PGCePE4vGcw9E96pHgQ_K8BkfqXcE9dDTMj4d0caA9eaXloxkgftQL5hpBDjD72Xfkj9oqFHxVdoDN0x_RSs-4S1Pz6FZtzrQpNDsS8rkFh6oJyi2dC-sU3Sal58MJU3JU"/>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-elevated rounded-xl p-5 border border-outline-variant/10 shadow-sm cursor-grab hover:border-primary/30 transition-colors group relative">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary-fixed-dim rounded-l-xl opacity-50"></div>
+<div class="flex justify-between items-start mb-3">
+<span class="bg-surface-container-high text-on-surface-variant text-[10px] uppercase px-2 py-1 rounded font-bold tracking-wider">Referido</span>
+<span class="text-on-surface-variant/50 text-xs flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> 2d</span>
+</div>
+<h4 class="font-title-md text-[16px] text-on-surface font-semibold mb-1">Elena Mota</h4>
+<p class="text-sm text-on-surface-variant mb-4 line-clamp-1">Vista del Mar, Apto 402</p>
+<div class="flex items-end justify-between mt-4 pt-4 border-t border-outline-variant/10">
+<div>
+<p class="text-on-surface font-bold">US$190,000</p>
+<p class="text-xs text-status-warning font-medium mt-1">15% Prob.</p>
+</div>
+<div class="flex -space-x-2">
+<img alt="Ismael" class="w-7 h-7 rounded-full border-2 border-surface-elevated object-cover" data-alt="Professional headshot of a male broker." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJt5KsN3uZLfCe6XrktCToJeEqcY7-S1D-29iJvCXpZpWQg8VyjP51CLqOVtH9Mmn1sgB7UodHlGSOT2UjLSZ7-1NqccpavQcgi1UrXXGsu3lQHduuSYyyNgoqGb2RvBNnTg_S19aGO068VSg23kMMt-IvuKT6RUkkNSGey2yVrSMmFqwrtH1pLypEmJ3xBf93vohuarV1aNBD7IXzxpP6jHUk6wAFDxG8w7ssgdPaj_g8vZnUgrYwxjx5Pog31IeA_DQVb9FfPF4"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2: Contactado (4) -->
+<div class="w-[320px] shrink-0 flex flex-col max-h-full">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-surface-tint opacity-50"></div>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Contactado</h3>
+<span class="bg-surface-container-high text-on-surface-variant text-xs px-2 py-0.5 rounded-full">4</span>
+</div>
+<span class="text-on-surface-variant/50 text-xs font-medium">US$720k</span>
+</div>
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2 pb-4">
+<!-- Cards omitted for brevity in this minimal effort pass, assuming standard layout -->
+<div class="bg-surface-elevated rounded-xl p-5 border border-outline-variant/10 shadow-sm opacity-50 flex items-center justify-center h-24 border-dashed">
+<span class="text-on-surface-variant/50 text-sm">4 tarjetas en esta etapa</span>
+</div>
+</div>
+</div>
+<!-- Column 3: Presentación (3) -->
+<div class="w-[320px] shrink-0 flex flex-col max-h-full">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary opacity-70"></div>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Presentación</h3>
+<span class="bg-surface-container-high text-on-surface-variant text-xs px-2 py-0.5 rounded-full">3</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2 pb-4">
+<!-- Specific Example Card -->
+<div class="bg-surface-elevated rounded-xl p-5 border border-outline-variant/10 shadow-sm cursor-grab hover:border-primary/50 transition-colors group relative">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary rounded-l-xl opacity-70"></div>
+<div class="flex justify-between items-start mb-3">
+<span class="bg-surface-container-high text-on-surface-variant text-[10px] uppercase px-2 py-1 rounded font-bold tracking-wider">Campaña FB</span>
+<span class="text-on-surface-variant/50 text-xs flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> 5d</span>
+</div>
+<h4 class="font-title-md text-[16px] text-on-surface font-semibold mb-1">María Fernández</h4>
+<p class="text-sm text-on-surface-variant mb-4 line-clamp-1">Praderas PC, Unidad B4</p>
+<div class="flex items-end justify-between mt-4 pt-4 border-t border-outline-variant/10">
+<div>
+<p class="text-on-surface font-bold text-lg">US$165,000</p>
+<div class="flex items-center gap-2 mt-1">
+<p class="text-xs text-primary font-medium">60% Prob.</p>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<p class="text-xs text-on-surface-variant">5% Com.</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<img alt="Ismael" class="w-8 h-8 rounded-full border-2 border-surface-elevated object-cover shadow-sm" data-alt="Professional headshot of male real estate broker Ismael." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDatBSfFiHIzwfbayluYLigrtn3vVvrnyQWuPy_t8tLVn8Ve8shyMs5xPFWDc_rzIOWyuJXlRY5jo1kMxdaCu_r6GSB2jl23xGLA3DG7SjCt4N42CXmBrMyECQkmclXuRdKWEMyboypo-gRb4eo2ePmAsS9BPf5n_hB1ei89leEJj9I_FwyW0ndJ1Zx3ioAMDtgehF6XyU10xwYVsbtW0Z_H2iVZ8CUkvGLGTqvpBkPS8T5QszFsPDGT4nUmUlRaezjfW49YkhFO88"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 4 & 5 Omitted for brevity, skipping to Cierre -->
+<!-- Column 6: Cierre (1) -->
+<div class="w-[320px] shrink-0 flex flex-col max-h-full">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-status-success"></div>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider text-primary">Cierre</h3>
+<span class="bg-surface-container-high text-on-surface-variant text-xs px-2 py-0.5 rounded-full">1</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2 pb-4">
+<!-- Highlighted Closure Card -->
+<div class="bg-surface-elevated rounded-xl p-5 border border-primary shadow-[0_0_20px_rgba(201,162,75,0.15)] cursor-pointer hover:shadow-[0_0_25px_rgba(201,162,75,0.25)] transition-all relative overflow-hidden">
+<!-- Subtle Gold Glow Background -->
+<div class="absolute inset-0 bg-gold-gradient opacity-[0.03] pointer-events-none"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-primary/20 text-primary text-[10px] uppercase px-2 py-1 rounded font-bold tracking-wider">Yostar</span>
+<span class="text-primary/70 text-xs flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">task_alt</span> 12d</span>
+</div>
+<h4 class="font-title-md text-[18px] text-primary font-semibold mb-1">Carlos Then</h4>
+<p class="text-sm text-on-surface-variant mb-4 line-clamp-1">Jardín del Orquídeo</p>
+<div class="flex items-end justify-between mt-4 pt-4 border-t border-primary/20">
+<div>
+<p class="text-on-surface font-display-lg text-[20px] font-bold">US$142,000</p>
+<div class="flex items-center gap-2 mt-1">
+<p class="text-xs text-status-success font-medium">95% Prob.</p>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<p class="text-xs text-primary font-bold">6% Com.</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-2">
+<img alt="Broker" class="w-8 h-8 rounded-full border-2 border-primary object-cover" data-alt="Headshot of female broker." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdbpL8PBBuRezjzXkO8g3uQ_6bbzIE00S2ojCv7rOPpXeTCgp-y1UNO4c5KwEw4axgqvjOHVU3gWywE57Yj1JQy9txKyAm-Bl86nZBvCdLNVrwDv-Kd6UA9gE6zJcqeHItTQLtrv2d80HyNByRVWOvROPMXYeKgCLAQm5MV0K-ModdL58fAOgacv8XEAzzJayfd1qS5WZc6O0nyODA09FcbA7-rfUrhKbWMaLS35SEVf2wKOtFJLznlXF7QnM3aTEOdcD0Z_VE180"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Side Panel: Negocios Perdidos -->
+<div class="fixed inset-y-0 right-0 w-[400px] glass-panel z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-[-10px_0_30px_rgba(0,0,0,0.5)] flex flex-col" id="lost-panel">
+<div class="p-6 flex items-center justify-between border-b border-outline-variant/10">
+<h2 class="font-title-md text-[20px] text-on-surface font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-status-danger">visibility_off</span>
+                Motivos de Pérdida
+            </h2>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors" onclick="document.getElementById('lost-panel').classList.add('translate-x-full')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-6 flex-1 overflow-y-auto">
+<div class="mb-8">
+<p class="text-sm text-on-surface-variant mb-6">Análisis de 8 negocios perdidos en el último trimestre.</p>
+<!-- Stats Bars -->
+<div class="space-y-6">
+<!-- Item 1 -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="text-on-surface font-medium">Precio muy alto</span>
+<span class="text-on-surface-variant">3 negocios (37.5%)</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-status-danger h-2 rounded-full" style="width: 37.5%"></div>
+</div>
+</div>
+<!-- Item 2 -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="text-on-surface font-medium">No responde / Fantasma</span>
+<span class="text-on-surface-variant">2 negocios (25%)</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-outline text-outline h-2 rounded-full" style="width: 25%; background-color: #9a8f7e;"></div>
+</div>
+</div>
+<!-- Item 3 -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="text-on-surface font-medium">Compró otro proyecto</span>
+<span class="text-on-surface-variant">2 negocios (25%)</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-outline h-2 rounded-full" style="width: 25%; background-color: #4e4637;"></div>
+</div>
+</div>
+<!-- Item 4 -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="text-on-surface font-medium">Sin financiamiento</span>
+<span class="text-on-surface-variant">1 negocio (12.5%)</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-outline h-2 rounded-full" style="width: 12.5%; background-color: #333537;"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg border border-outline-variant/30 text-on-surface-variant font-medium hover:bg-surface-container-high transition-colors">
+                Descargar Reporte Detallado
+            </button>
+</div>
+</div>
+<!-- Script for subtle interactions -->
+<script>
+        document.getElementById('toggle-own').addEventListener('click', function() {
+            const circle = this.querySelector('div');
+            if (this.classList.contains('bg-primary')) {
+                this.classList.remove('bg-primary');
+                this.classList.add('bg-surface-container-high');
+                circle.classList.remove('translate-x-4');
+                circle.classList.add('translate-x-0', 'bg-on-surface-variant');
+            } else {
+                this.classList.add('bg-primary');
+                this.classList.remove('bg-surface-container-high');
+                circle.classList.add('translate-x-4');
+                circle.classList.remove('translate-x-0', 'bg-on-surface-variant');
+            }
+        });
+    </script>
+</body></html>

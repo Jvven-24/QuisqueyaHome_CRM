@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestión de Avance de Obra - Quisqueya Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-container": "#474649",
+                "secondary-fixed-dim": "#c8c6c8",
+                "on-tertiary-container": "#3d3c3e",
+                "primary": "#ebc166",
+                "background-base": "#0A0A0B",
+                "outline-variant": "#4e4637",
+                "outline": "#9a8f7e",
+                "on-background": "#e2e2e5",
+                "tertiary-fixed": "#e5e2e3",
+                "secondary": "#c8c6c8",
+                "on-error": "#690005",
+                "on-primary-fixed-variant": "#5b4300",
+                "on-error-container": "#ffdad6",
+                "tertiary": "#c8c6c7",
+                "tertiary-container": "#a9a7a8",
+                "surface-container-low": "#1a1c1e",
+                "primary-fixed": "#ffdf9e",
+                "error-container": "#93000a",
+                "on-secondary-fixed": "#1b1b1d",
+                "status-success": "#22C55E",
+                "inverse-primary": "#795902",
+                "status-warning": "#F59E0B",
+                "secondary-fixed": "#e5e1e4",
+                "on-surface": "#e2e2e5",
+                "tertiary-fixed-dim": "#c8c6c7",
+                "on-tertiary-fixed": "#1c1b1c",
+                "surface-dim": "#121416",
+                "on-primary-fixed": "#261a00",
+                "surface-container-lowest": "#0c0e11",
+                "on-tertiary-fixed-variant": "#474647",
+                "inverse-surface": "#e2e2e5",
+                "gold-light": "#E5C17D",
+                "surface-container-highest": "#333537",
+                "surface-container-high": "#282a2c",
+                "on-secondary-container": "#b7b4b7",
+                "error": "#ffb4ab",
+                "surface": "#121416",
+                "on-tertiary": "#313031",
+                "surface-container": "#1e2022",
+                "on-surface-variant": "#d1c5b2",
+                "on-secondary-fixed-variant": "#474649",
+                "inverse-on-surface": "#2f3033",
+                "surface-tint": "#ebc166",
+                "surface-bright": "#37393c",
+                "on-primary": "#402d00",
+                "surface-elevated": "#141416",
+                "surface-variant": "#333537",
+                "primary-fixed-dim": "#ebc166",
+                "on-primary-container": "#4f3900",
+                "background": "#121416",
+                "gold-dark": "#9E7B31",
+                "status-danger": "#EF4444",
+                "primary-container": "#c9a24b",
+                "on-secondary": "#303032"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin-desktop": "40px",
+                "base": "8px",
+                "margin-mobile": "16px",
+                "gutter": "24px",
+                "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                "title-md": ["Hanken Grotesk"],
+                "display-lg": ["Hanken Grotesk"],
+                "label-md": ["Inter"],
+                "headline-lg-mobile": ["Hanken Grotesk"],
+                "body-md": ["Inter"],
+                "headline-lg": ["Hanken Grotesk"],
+                "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        display: inline-block;
+        line-height: 1;
+      }
+      .gold-pulse {
+        animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse-gold {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.7; transform: scale(1.1); }
+      }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #4e4637; border-radius: 10px; }
+      
+      .glass-card {
+        background: rgba(20, 20, 22, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(201, 162, 75, 0.1);
+      }
+    </style>
+</head>
+<body class="bg-background-base text-on-background font-body-md text-body-md overflow-hidden h-screen">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated border-r border-outline-variant/10 shadow-sm flex flex-col py-base z-50">
+<div class="px-6 py-8 flex flex-col gap-1">
+<h1 class="font-display-lg text-[24px] font-bold text-primary">Quisqueya Home</h1>
+<p class="text-on-surface-variant font-label-md text-[12px] tracking-widest uppercase">Elite Real Estate</p>
+</div>
+<nav class="flex-1 px-4 space-y-1 overflow-y-auto custom-scrollbar">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-label-md">Propiedades</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="construction">construction</span>
+<span class="font-label-md">Avances de obra</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="font-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md">Agenda</span>
+</a>
+<div class="pt-4 pb-2 px-4">
+<p class="text-[10px] font-bold text-outline uppercase tracking-widest">Administración</p>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-md">Comisiones</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">Configuración</span>
+</a>
+</nav>
+<div class="px-4 py-4 mt-auto">
+<button class="w-full py-4 rounded-xl bg-gradient-to-r from-primary-container to-gold-dark text-on-primary font-bold shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Nueva Propiedad
+            </button>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="bg-surface-container-lowest border-none rounded-full pl-10 pr-4 py-2 w-80 text-on-surface font-label-md focus:ring-1 focus:ring-primary transition-all" placeholder="Buscar expedientes, contratos..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full">
+<span class="text-[12px] font-bold text-primary">ES</span>
+<span class="w-[1px] h-3 bg-outline-variant"></span>
+<span class="text-[12px] font-medium text-on-surface-variant cursor-pointer hover:text-primary">EN</span>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-status-danger rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="font-label-md text-on-surface leading-none">Ismael Rosario</p>
+<p class="text-[10px] text-outline uppercase font-bold tracking-tighter">Director de Obra</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-primary/30 object-cover" data-alt="A professional portrait of a successful real estate director in a dark suit, positioned against a blurred luxury office background with golden lighting accents. The lighting is soft and cinematic, emphasizing authority and premium service quality. Dark, rich color palette with warm golden highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRuY1USa9jKf1y1A-qKi378r5BhCWs2cwA18X1WUG71VfqYTogqL_n-QspPqRztPxESpiX9FE0gqnCCtWNQSs9U-LHcszxQyO3EWnQC-WkHcuEm276mj1mUFqqTvtVs9wk-wncC6lBsk_iKiJyRJaSwI9gzAWg0ytnioaKnqTYF0vaaeIbS9CdmbRjOCDI1dpYYwLMqOPjyUhNuU-P6ub2HiHYHgkU9f3MylUE-6LFQFeI6ZU6ythPOb_Qqw7mK0a4JsZn1LOXCqw"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] mt-16 p-margin-desktop h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar flex flex-col gap-gutter">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 text-[12px] font-medium text-outline">
+<span class="hover:text-primary cursor-pointer">Propiedades</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="hover:text-primary cursor-pointer">Praderas de Punta Cana</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-bold">Avance de obra</span>
+</nav>
+<!-- Header -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Gestión de Avance de Obra</h2>
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded text-[10px] font-bold uppercase tracking-widest">En Construcción</span>
+<p class="text-on-surface-variant font-title-md text-title-md">Proyecto: Praderas de Punta Cana <span class="text-outline text-body-md ml-2">(24 meses)</span></p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 rounded-lg border border-outline-variant text-on-surface-variant font-label-md hover:bg-surface-container-high transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                    Exportar Reporte
+                </button>
+</div>
+</div>
+<!-- Horizontal Timeline -->
+<div class="glass-card rounded-2xl p-8 shadow-xl">
+<div class="flex justify-between items-center mb-10">
+<h3 class="font-title-md text-on-surface">Cronograma de Ejecución</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-[12px] text-on-surface-variant">Completado</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary ring-2 ring-primary/30 gold-pulse"></span>
+<span class="text-[12px] text-on-surface-variant">En curso</span>
+</div>
+</div>
+</div>
+<!-- Timeline visualization -->
+<div class="relative px-8">
+<!-- Connectors -->
+<div class="absolute top-6 left-16 right-16 h-[2px] bg-surface-container-highest z-0">
+<!-- Progress line -->
+<div class="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-primary/40" style="width: 33%"></div>
+</div>
+<div class="flex justify-between relative z-10">
+<!-- Phase 1 -->
+<div class="flex flex-col items-center gap-3 w-32">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-[0_0_20px_rgba(201,162,75,0.3)]">
+<span class="material-symbols-outlined font-bold" data-icon="check">check</span>
+</div>
+<div class="text-center">
+<p class="text-primary font-bold text-[13px]">Fase 1</p>
+<p class="text-on-surface-variant text-[11px] font-medium leading-tight">Movimiento de tierra</p>
+</div>
+</div>
+<!-- Phase 2 -->
+<div class="flex flex-col items-center gap-3 w-32">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-[0_0_20px_rgba(201,162,75,0.3)]">
+<span class="material-symbols-outlined font-bold" data-icon="check">check</span>
+</div>
+<div class="text-center">
+<p class="text-primary font-bold text-[13px]">Fase 2</p>
+<p class="text-on-surface-variant text-[11px] font-medium leading-tight">Cimientos</p>
+</div>
+</div>
+<!-- Phase 3 (Selected/Active) -->
+<div class="flex flex-col items-center gap-3 w-32">
+<div class="w-14 h-14 -mt-1 rounded-full border-2 border-primary bg-surface-container flex items-center justify-center shadow-[0_0_30px_rgba(201,162,75,0.4)] gold-pulse relative">
+<span class="text-primary font-bold text-lg">3</span>
+<div class="absolute -top-1 -right-1 bg-primary px-1.5 py-0.5 rounded text-[9px] text-on-primary font-black">60%</div>
+</div>
+<div class="text-center">
+<p class="text-primary font-bold text-[13px]">Fase 3</p>
+<p class="text-on-surface text-[11px] font-bold leading-tight underline decoration-primary underline-offset-4">Estructura</p>
+</div>
+</div>
+<!-- Phases 4 to 8 (Pending) -->
+<div class="flex flex-col items-center gap-3 w-32 opacity-50">
+<div class="w-12 h-12 rounded-full border border-outline-variant bg-surface-container flex items-center justify-center">
+<span class="text-outline font-medium">4</span>
+</div>
+<div class="text-center">
+<p class="text-outline font-bold text-[13px]">Fase 4</p>
+<p class="text-outline text-[11px] font-medium leading-tight">Mampostería</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3 w-32 opacity-50">
+<div class="w-12 h-12 rounded-full border border-outline-variant bg-surface-container flex items-center justify-center">
+<span class="text-outline font-medium">5</span>
+</div>
+<div class="text-center">
+<p class="text-outline font-bold text-[13px]">Fase 5</p>
+<p class="text-outline text-[11px] font-medium leading-tight">Instalaciones</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3 w-32 opacity-50">
+<div class="w-12 h-12 rounded-full border border-outline-variant bg-surface-container flex items-center justify-center">
+<span class="text-outline font-medium">6</span>
+</div>
+<div class="text-center">
+<p class="text-outline font-bold text-[13px]">Fase 6</p>
+<p class="text-outline text-[11px] font-medium leading-tight">Acabados</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3 w-32 opacity-50">
+<div class="w-12 h-12 rounded-full border border-outline-variant bg-surface-container flex items-center justify-center">
+<span class="text-outline font-medium">7</span>
+</div>
+<div class="text-center">
+<p class="text-outline font-bold text-[13px]">Fase 7</p>
+<p class="text-outline text-[11px] font-medium leading-tight">Exteriores</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3 w-32 opacity-50">
+<div class="w-12 h-12 rounded-full border border-outline-variant bg-surface-container flex items-center justify-center">
+<span class="text-outline font-medium">8</span>
+</div>
+<div class="text-center">
+<p class="text-outline font-bold text-[13px]">Fase 8</p>
+<p class="text-outline text-[11px] font-medium leading-tight">Entrega</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Editor Panel -->
+<div class="grid grid-cols-12 gap-gutter mb-10">
+<!-- Left Panel: Controls -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+<div class="glass-card rounded-2xl p-8 border-l-4 border-l-primary shadow-2xl">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="font-headline-lg text-[24px] text-on-surface">Detalle de Fase 3: Estructura</h3>
+<p class="text-on-surface-variant font-body-md">Configuración técnica y visual del avance para inversionistas.</p>
+</div>
+<div class="flex items-center gap-2 text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="history">history</span>
+<span class="text-[12px] font-medium italic">Última actualización: 21 de Octubre, 2023</span>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Status & Slider -->
+<div class="col-span-12 md:col-span-6 space-y-8">
+<div class="space-y-3">
+<label class="text-[12px] font-bold text-outline uppercase tracking-wider">Estado Actual</label>
+<div class="relative">
+<select class="w-full bg-background border border-outline-variant rounded-xl py-4 px-4 text-on-surface appearance-none focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+<option>Pendiente</option>
+<option selected="">En curso</option>
+<option>Completado</option>
+<option>Retrasado</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<label class="text-[12px] font-bold text-outline uppercase tracking-wider">Porcentaje de Avance</label>
+<span class="text-primary font-black text-xl">60%</span>
+</div>
+<div class="relative pt-2">
+<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="60"/>
+<div class="absolute top-2 left-0 h-2 bg-primary rounded-l-lg pointer-events-none" style="width: 60%"></div>
+</div>
+</div>
+</div>
+<!-- Video Link -->
+<div class="col-span-12 md:col-span-6 space-y-4">
+<div class="space-y-3">
+<label class="text-[12px] font-bold text-outline uppercase tracking-wider">Enlace de Obra (YouTube)</label>
+<div class="flex gap-2">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="link">link</span>
+<input class="w-full bg-background border border-outline-variant rounded-xl py-3 pl-12 pr-4 text-on-surface-variant font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="text" value="https://youtube.com/watch?v=praderas_pc_phase3"/>
+</div>
+<button class="bg-surface-container-highest p-3 rounded-xl hover:bg-outline-variant transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="refresh">refresh</span>
+</button>
+</div>
+</div>
+<!-- Video Preview -->
+<div class="relative aspect-video rounded-xl overflow-hidden group cursor-pointer border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A cinematic aerial drone view of a massive construction site in Punta Cana at sunset. Dozens of steel structural columns are visible against a tropical landscape. The golden hour lighting casts long shadows and glints off the construction equipment. Highly detailed architectural photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCttFHpwVBOhVI8hQsZqSzGEp4XyGPj7N_EHJAKWQEAEV6_iNcb4Xf8W_JPhZLshPcMJjm84d6nHfnbXZofHT_E-JOv96hMATQ0t7zGW9EsiYFOdxvViTb0krQ69d0m0FjzBlSsKoTuZDtEvTLSBl7f7MbdvMSlUn3ne5SIU-azwY-BwrQS9vWTR4er7UNXdUkDY_tGFsK6aFP4p6XSeevIKCOlAhp0gOmSdbJVyCoD7DmF4YrMXM3iRDeJD8VtjBWU9NXdrdw_WQ4"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/20 transition-all">
+<div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40">
+<span class="material-symbols-outlined text-white" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded text-[10px] font-bold text-white uppercase tracking-tighter">Live Preview</div>
+</div>
+</div>
+<!-- Photo Upload Grid -->
+<div class="col-span-12 space-y-4">
+<div class="flex justify-between items-center">
+<label class="text-[12px] font-bold text-outline uppercase tracking-wider">Registro Fotográfico</label>
+<button class="text-primary font-bold text-[12px] flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[16px]" data-icon="upload">upload</span>
+                                    Subir más
+                                </button>
+</div>
+<div class="grid grid-cols-4 gap-4">
+<div class="aspect-square rounded-xl overflow-hidden border border-outline-variant/30 hover:border-primary transition-all cursor-pointer relative group">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Macro detail of concrete foundation reinforcements with steel rebars. High contrast architectural photography, dark mode aesthetic, with industrial textures and sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA6WMh4_59a6HOewX8JVsAQip7rwdWTklDvQQe1eooCVdNXqoobiRP_dkHeANZBT9wlqN6ZwfjQPLeT9xhL6WINkcvAcimYpUs2wHu4xiF5a_vHw6sLu6hngzbGqCKgibSa3kCIL0g6bk_8By9aXpKkMN7Qwaz55TxnFOI60TJW8zmvDefZI_e-liKb4LYV9Gnl-umfPIcWumr259m4fLUoIhK5k-nzo7yq2XvTFykFZCItpkrF9KlpnpyLbxssQTY9t_LeJE7STc"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-white" data-icon="visibility">visibility</span>
+</div>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden border border-outline-variant/30 hover:border-primary transition-all cursor-pointer relative group">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Professional construction workers wearing safety gear and helmets on a high-end Caribbean construction site. Clear blue sky, bright sun, focused on teamwork and safety standards. Gold and dark accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoKMRpIGUPoxtmy48-nlSLWNzSyICvnxRkNB3Er6r7FwV1bQKEG0gp7oWvEz8wBqitHph68GRJ0J-ZJL3Qi-_8pm-NmTY1T8Lhy9KSsZfqJagGgtJfTkzozo51BiDwoIYAx0pRkErTl-G2w8yIDf-4tL1wKD_kH6GZkk1f1DbvtIky4nK9jYaxv8J-H8geI3DLVa8Cd--D67F2ORXO3-bSsHChfFxoZqsc35DGRCNT5s6hLw9-sIKxuaIn37KF_oIhYNMZ411JuTA"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-white" data-icon="visibility">visibility</span>
+</div>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden border border-outline-variant/30 hover:border-primary transition-all cursor-pointer relative group">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Detailed view of architectural steel beams being hoisted by a crane against a twilight sky in Punta Cana. Modern construction technology, elite real estate vibes, elegant lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAq8-l0trU-sto_crXFMsNMVdpUU1MKWSfmOqr98oGvdeGToR0IE42zbskLOwnyzEhvP3dIgCWwZ1Xx-OG_hXLjakxIlLUEBU6OxKsYQU9fqgNttx30aL5WFni5ARKRryEuelY3NIF9VX6ruPPPqIgpl2fF3lS_Qno8zVHf8RpiZSl9XLlluD9hN7D2qJnhrlzhbjlJxfDje-aN6j6kY16I-KWf8bIB1oTXI3FpiDjpQDKBsOzqs61nUXy45E3E5QXPdXgKval4aVI"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-white" data-icon="visibility">visibility</span>
+</div>
+</div>
+<div class="aspect-square rounded-xl border-2 border-dashed border-outline-variant flex flex-col items-center justify-center gap-2 hover:bg-surface-container-high transition-colors cursor-pointer text-outline hover:text-primary">
+<span class="material-symbols-outlined text-[32px]" data-icon="add_a_photo">add_a_photo</span>
+<span class="text-[10px] font-bold uppercase">Añadir</span>
+</div>
+</div>
+</div>
+<!-- Public Note -->
+<div class="col-span-12 space-y-3">
+<label class="text-[12px] font-bold text-outline uppercase tracking-wider">Nota Pública para Inversionistas</label>
+<textarea class="w-full bg-background border border-outline-variant rounded-xl p-4 text-on-surface-variant font-body-md focus:border-primary focus:ring-1 focus:ring-primary outline-none resize-none" placeholder="Describe los avances de esta fase..." rows="4">Se ha finalizado el vaciado de la losa del segundo nivel y la instalación de columnas maestras del bloque A. Se procede con el encofrado del tercer nivel según cronograma previsto.</textarea>
+<div class="flex items-center gap-2 py-2 px-3 bg-surface-container rounded-lg w-fit">
+<img class="w-6 h-6 rounded-full" data-alt="Close-up headshot of a professional young woman with glasses, smiling confidently. She is the operations assistant. High-end professional lighting, blurred modern office background with golden tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCERy5rpyBz55WCULWMjtQbiiU-n59H6q09XPPsyGejtCOiY66LkYOkNRhVKy0IvfyRoh9bWtpH_jSNbaHamj_rw-XeI8E-S95MDucUYijXCaZl2GG7_6DB_w8DSNIY0WYANX4i4BgMzsVOdse8QplWgQb01HTfzBh2Nwk5Qo-1p0D6oKxTRV_bgdCVOI5Qd0zbBLzLDw67vfdId4Iha_XujFvaPUzhyuaS6LEURD35AzktKUlDLLhORyAgr5nm6GL7o0uNrh2Z5Gg"/>
+<span class="text-[11px] text-outline">Actualizado por: <span class="text-on-surface font-bold">Alexandra (Asistente de Operaciones)</span></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Summary & Publish -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<div class="glass-card rounded-2xl p-8 shadow-2xl flex flex-col h-full">
+<div class="mb-8">
+<h4 class="font-title-md text-on-surface mb-2">Resumen de Publicación</h4>
+<div class="h-[1px] w-full bg-outline-variant/30"></div>
+</div>
+<div class="flex-1 space-y-6">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Visibilidad Inmediata</p>
+<p class="text-[12px] text-on-surface-variant">El avance será visible para 142 compradores activos en Praderas de Punta Cana.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="mail">mail</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Notificaciones Push</p>
+<p class="text-[12px] text-on-surface-variant">Se enviará una alerta automática a la App móvil de los propietarios.</p>
+</div>
+</div>
+<div class="mt-12 p-6 bg-surface-container-high rounded-xl border border-outline-variant/30 border-dashed">
+<p class="text-[11px] font-bold text-outline uppercase tracking-widest mb-4">Métricas de Fase</p>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-[12px] text-on-surface-variant">Presupuesto Ejecutado</span>
+<span class="text-[12px] font-bold text-primary">72%</span>
+</div>
+<div class="w-full h-1 bg-background rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 72%"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-[12px] text-on-surface-variant">Días Transcurridos</span>
+<span class="text-[12px] font-bold text-on-surface">45 / 90</span>
+</div>
+<div class="w-full h-1 bg-background rounded-full overflow-hidden">
+<div class="h-full bg-on-surface-variant" style="width: 50%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8">
+<button class="w-full py-4 rounded-xl bg-gradient-to-r from-primary-container to-gold-dark text-on-primary font-bold shadow-[0_10px_20px_rgba(201,162,75,0.2)] flex items-center justify-center gap-3 hover:shadow-[0_15px_30px_rgba(201,162,75,0.3)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="publish">publish</span>
+                            Publicar avance en el portal
+                        </button>
+<p class="text-[11px] text-center text-outline mt-4 italic">
+                            El comprador verá este avance en tiempo real desde su perfil en la web pública.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions for sliders and pulses
+        document.querySelectorAll('input[type="range"]').forEach(range => {
+            range.addEventListener('input', (e) => {
+                const value = e.target.value;
+                const parent = e.target.closest('.space-y-3');
+                const indicator = parent.querySelector('.text-primary');
+                if(indicator) indicator.textContent = value + '%';
+                
+                // Update fill
+                const fill = e.target.nextElementSibling;
+                if(fill) fill.style.width = value + '%';
+            });
+        });
+
+        // Hover animation logic for timeline nodes
+        const nodes = document.querySelectorAll('.timeline-node');
+        nodes.forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                node.classList.add('scale-110');
+            });
+            node.addEventListener('mouseleave', () => {
+                node.classList.remove('scale-110');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quisqueya Home - Bandeja de leads</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#c8c6c7",
+                    "surface-bright": "#37393c",
+                    "background": "#121416",
+                    "primary-fixed": "#ffdf9e",
+                    "primary-container": "#c9a24b",
+                    "secondary-fixed": "#e5e1e4",
+                    "surface-container-highest": "#333537",
+                    "on-primary": "#402d00",
+                    "on-secondary-fixed-variant": "#474649",
+                    "inverse-primary": "#795902",
+                    "on-primary-fixed": "#261a00",
+                    "primary-fixed-dim": "#ebc166",
+                    "background-base": "#0A0A0B",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "surface-container-lowest": "#0c0e11",
+                    "surface": "#121416",
+                    "on-error": "#690005",
+                    "on-surface": "#e2e2e5",
+                    "surface-tint": "#ebc166",
+                    "on-tertiary-fixed-variant": "#474647",
+                    "on-primary-fixed-variant": "#5b4300",
+                    "primary": "#ebc166",
+                    "inverse-surface": "#e2e2e5",
+                    "on-primary-container": "#4f3900",
+                    "status-warning": "#F59E0B",
+                    "status-danger": "#EF4444",
+                    "surface-container": "#1e2022",
+                    "error": "#ffb4ab",
+                    "on-surface-variant": "#d1c5b2",
+                    "on-background": "#e2e2e5",
+                    "tertiary-container": "#a9a7a8",
+                    "surface-dim": "#121416",
+                    "on-secondary-container": "#b7b4b7",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary": "#303032",
+                    "outline": "#9a8f7e",
+                    "tertiary-fixed": "#e5e2e3",
+                    "on-tertiary-container": "#3d3c3e",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "outline-variant": "#4e4637",
+                    "surface-container-low": "#1a1c1e",
+                    "surface-container-high": "#282a2c",
+                    "on-tertiary": "#313031",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#1c1b1c",
+                    "gold-dark": "#9E7B31",
+                    "tertiary": "#c8c6c7",
+                    "inverse-on-surface": "#2f3033",
+                    "secondary-container": "#474649",
+                    "status-success": "#22C55E",
+                    "secondary": "#c8c6c8",
+                    "surface-variant": "#333537",
+                    "surface-elevated": "#141416",
+                    "gold-light": "#E5C17D"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "container-max-width": "1440px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "label-md": ["Inter"],
+                    "title-md": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                    "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                    "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                    "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "500" }]
+            }
+          },
+        },
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { background-color: #0A0A0B; color: #e2e2e5; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+        
+        /* Custom scrollbar for dark UI */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #282a2c; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #333537; }
+
+        .drawer-open { transform: translateX(0); }
+        .drawer-closed { transform: translateX(100%); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
+<!-- JSON Component: SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated dark:bg-surface-elevated flex flex-col py-base border-r border-outline-variant/10 shadow-sm z-50">
+<div class="px-6 py-8">
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-primary leading-tight tracking-tight">Quisqueya Home</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Elite Real Estate</p>
+</div>
+<div class="flex-1 overflow-y-auto px-4 space-y-1">
+<!-- Active Tab: Leads -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-surface-container-high text-primary font-bold border-r-2 border-primary scale-[0.98] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined icon-fill">person_search</span>
+<span class="font-label-md text-label-md">Leads</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Contactos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Agenda</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md text-label-md">Propiedades</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Avances de obra</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="font-label-md text-label-md">Brokers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">ads_click</span>
+<span class="font-label-md text-label-md">Metas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">Academy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Comisiones</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+<div class="p-4 mt-auto border-t border-outline-variant/10">
+<button class="w-full bg-transparent border border-outline-variant text-on-surface hover:border-primary hover:text-primary transition-colors font-label-md text-label-md py-3 rounded-lg flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                Nueva Propiedad
+            </button>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-[280px] flex flex-col h-screen relative bg-background-base">
+<!-- JSON Component: TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl flex justify-between items-center px-margin-desktop z-40 border-b border-outline-variant/10">
+<!-- Search Bar (Left) -->
+<div class="flex items-center bg-surface-container-low rounded-full px-4 py-2 border border-outline-variant/20 focus-within:border-primary/50 transition-colors w-96">
+<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md text-on-surface w-full placeholder-on-surface-variant/50" placeholder="Buscar leads, propiedades..." type="text"/>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant font-label-md text-label-md">
+<span class="text-primary font-bold cursor-pointer hover:opacity-80 transition-opacity">ES</span>
+<span class="w-px h-4 bg-outline-variant/30"></span>
+<span class="cursor-pointer hover:text-primary transition-colors">EN</span>
+</div>
+<button class="relative text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-status-danger rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full border border-primary/30 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+<img alt="Ismael Rosario" class="w-full h-full object-cover" data-alt="A professional headshot of an elite real estate broker, male, warm studio lighting, subtle dark background, corporate premium aesthetic, 8k resolution, photorealistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIbh4w4cgtHCIyQrmDbgfAI1w1hkK8EffZF3AiC6BEl9YldrHBxFyzfAkPi8eeyEq4XYQLJerCltAm4wkEjkOWfHIm50qEE9IXzsUFz2VqhA7DzuL2AGl_QZLjXs9K94YVep9XPiTtNqkREAx2ZOEz6O1Ho7KLG1ZDaYLc0UnddHn8-Wq43eObe9EvgOcEMRiiSwwJa46lXz422aFB4qNdCWuvI53h_M3EiBaVb1Uarumv5sJVI6ItHh1nd9Vp9lQWhldHloOG9mQ"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="flex-1 overflow-y-auto pt-24 px-margin-desktop pb-12">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Bandeja de leads</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Gestiona y asigna oportunidades de negocio entrantes.</p>
+</div>
+<button class="bg-gradient-to-r from-primary to-primary-fixed-dim text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg shadow-[0_0_15px_rgba(201,162,75,0.2)] hover:shadow-[0_0_20px_rgba(201,162,75,0.4)] transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                    Registrar lead manual
+                </button>
+</div>
+<!-- Filters (Glassmorphic) -->
+<div class="bg-surface-elevated/80 backdrop-blur-md border border-outline-variant/10 rounded-xl p-4 mb-6 flex flex-wrap gap-4 items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Filtros:</span>
+</div>
+<select %23d1c5b2\"="" 0="" 24="" 24\"="" class="bg-surface-container border border-outline-variant/20 text-body-md text-on-surface rounded-lg px-4 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none cursor-pointer pr-10 relative" height='\"24\"' style="background-image: url('data:image/svg+xml;utf8,&lt;svg fill=\" viewbox='\"0' width='\"24\"' xmlns='\"http://www.w3.org/2000/svg\"'>'); background-repeat: no-repeat; background-position-x: 100%; background-position-y: 5px;"&gt;
+                    <option value="">Fuente (Todas)</option>
+<option value="youtube">YouTube</option>
+<option value="web">Sitio web</option>
+<option value="whatsapp">WhatsApp</option>
+<option value="referido">Referido</option>
+</select>
+<select %23d1c5b2\"="" 0="" 24="" 24\"="" class="bg-surface-container border border-outline-variant/20 text-body-md text-on-surface rounded-lg px-4 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none cursor-pointer pr-10 relative" height='\"24\"' style="background-image: url('data:image/svg+xml;utf8,&lt;svg fill=\" viewbox='\"0' width='\"24\"' xmlns='\"http://www.w3.org/2000/svg\"'>'); background-repeat: no-repeat; background-position-x: 100%; background-position-y: 5px;"&gt;
+                    <option value="">Proyecto (Todos)</option>
+<option value="praderas">Praderas de Punta Cana</option>
+<option value="jardin">Jardín del Orquídeo</option>
+<option value="alquiler">Alquileres</option>
+</select>
+<select %23d1c5b2\"="" 0="" 24="" 24\"="" class="bg-surface-container border border-outline-variant/20 text-body-md text-on-surface rounded-lg px-4 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none cursor-pointer pr-10 relative" height='\"24\"' style="background-image: url('data:image/svg+xml;utf8,&lt;svg fill=\" viewbox='\"0' width='\"24\"' xmlns='\"http://www.w3.org/2000/svg\"'>'); background-repeat: no-repeat; background-position-x: 100%; background-position-y: 5px;"&gt;
+                    <option value="">Estado (Todos)</option>
+<option value="sin_asignar">Sin asignar</option>
+<option value="asignado">Asignado</option>
+<option value="contactado">Contactado</option>
+</select>
+<select %23d1c5b2\"="" 0="" 24="" 24\"="" class="bg-surface-container border border-outline-variant/20 text-body-md text-on-surface rounded-lg px-4 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none appearance-none cursor-pointer pr-10 relative" height='\"24\"' style="background-image: url('data:image/svg+xml;utf8,&lt;svg fill=\" viewbox='\"0' width='\"24\"' xmlns='\"http://www.w3.org/2000/svg\"'>'); background-repeat: no-repeat; background-position-x: 100%; background-position-y: 5px;"&gt;
+                    <option value="">Fecha (Cualquiera)</option>
+<option value="hoy">Hoy</option>
+<option value="ayer">Ayer</option>
+<option value="semana">Esta semana</option>
+</select>
+<div class="ml-auto flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-high transition-colors text-on-surface-variant border border-outline-variant/20">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-primary transition-colors border border-primary/20">
+<span class="material-symbols-outlined icon-fill">view_list</span>
+</button>
+</div>
+</div>
+<!-- Leads Data Table -->
+<div class="bg-surface-elevated border border-outline-variant/10 rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container/50 border-b border-outline-variant/20">
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider font-medium">Nombre &amp; Teléfono</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider font-medium">Fuente</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider font-medium">Interés</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider font-medium">Fecha</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider font-medium">Estado / Broker</th>
+<th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider font-medium text-right">Acción</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md divide-y divide-outline-variant/10">
+<!-- Row 1: Unassigned (Blinking Gold Badge) -->
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer" onclick="document.getElementById('lead-drawer').classList.remove('drawer-closed'); document.getElementById('lead-drawer').classList.add('drawer-open');">
+<td class="py-6 px-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold border border-outline-variant/10">
+                                            MF
+                                        </div>
+<div>
+<div class="text-on-surface font-semibold group-hover:text-primary transition-colors">María Fernández</div>
+<div class="text-on-surface-variant text-sm mt-0.5">+1 917 555 0182</div>
+</div>
+</div>
+</td>
+<td class="py-6 px-6">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ff0000]/10 text-[#ff0000] border border-[#ff0000]/20 font-label-md text-[12px]">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+                                        YouTube
+                                    </span>
+</td>
+<td class="py-6 px-6">
+<div class="text-on-surface">Praderas de Punta Cana</div>
+<div class="text-primary font-medium text-sm mt-0.5">US$150-300K</div>
+</td>
+<td class="py-6 px-6 text-on-surface-variant">hoy 10:32</td>
+<td class="py-6 px-6">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/40 font-label-md text-[12px] font-bold animate-pulse shadow-[0_0_10px_rgba(201,162,75,0.2)]">
+                                        SIN ASIGNAR
+                                    </span>
+</td>
+<td class="py-6 px-6 text-right">
+<button class="text-primary hover:text-primary-fixed font-label-md text-label-md flex items-center justify-end w-full gap-1 transition-colors">
+                                        Contactar
+                                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Assigned -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 px-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold border border-outline-variant/10">
+                                            JR
+                                        </div>
+<div>
+<div class="text-on-surface font-semibold group-hover:text-primary transition-colors">José Reyes</div>
+<div class="text-on-surface-variant text-sm mt-0.5">+34 612 334 455</div>
+</div>
+</div>
+</td>
+<td class="py-6 px-6">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant border border-outline-variant/30 font-label-md text-[12px]">
+<span class="material-symbols-outlined text-[16px]">language</span>
+                                        Sitio web
+                                    </span>
+</td>
+<td class="py-6 px-6">
+<div class="text-on-surface">Jardín del Orquídeo</div>
+<div class="text-on-surface-variant text-sm mt-0.5">US$120K</div>
+</td>
+<td class="py-6 px-6 text-on-surface-variant">ayer</td>
+<td class="py-6 px-6">
+<div class="flex items-center gap-2 text-on-surface">
+<img alt="Avatar" class="w-6 h-6 rounded-full border border-outline-variant/30 object-cover" data-alt="A very small thumbnail portrait of an elite real estate broker, male, warm lighting, professional dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2v9KJeif2oV9EUbw2Vy4XvF0t5xcN9kTU6RFC-XIQvCV95uuCQhP_0tCZM9SXZ42oZjkLIt55Pnzr9vpumuDkRCaBRMpB-mOGLCUXutH9wPnXhMwf_J7KHJoSPFJFwqgteJZL-S5o-z26p-gAtjQBGpWHAC_E_GeDCwYhPaGvONgMTn-DgQdy0dqiloz8BXI_Z-efi3JXEb5Thu_XBIWggwHnopxRO0ZKn1sMUYTx0cfr-U92VuzrYqgMqAd_WVlw9SfOmx7QU00"/>
+                                        Ismael Rosario
+                                    </div>
+</td>
+<td class="py-6 px-6 text-right">
+<span class="text-status-success font-label-md text-label-md flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                        Cita agendada
+                                    </span>
+</td>
+</tr>
+<!-- Row 3: Suggested Assignment -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="py-6 px-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold border border-outline-variant/10">
+                                            AP
+                                        </div>
+<div>
+<div class="text-on-surface font-semibold group-hover:text-primary transition-colors">Ana Peralta</div>
+<div class="text-on-surface-variant text-sm mt-0.5">+1 809 555 7712</div>
+</div>
+</div>
+</td>
+<td class="py-6 px-6">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/20 font-label-md text-[12px]">
+<span class="material-symbols-outlined text-[16px]">chat</span>
+                                        WhatsApp
+                                    </span>
+</td>
+<td class="py-6 px-6">
+<div class="text-on-surface">Alquiler - Bávaro</div>
+<div class="text-on-surface-variant text-sm mt-0.5">—</div>
+</td>
+<td class="py-6 px-6 text-on-surface-variant">ayer</td>
+<td class="py-6 px-6">
+<div class="flex flex-col gap-2 items-start">
+<span class="text-on-surface-variant text-sm">SUGERIDO: Yostar <span class="text-outline text-[11px]">(esp. alquiler)</span></span>
+<button class="border border-primary text-primary hover:bg-primary/10 transition-colors font-label-md text-[12px] px-3 py-1 rounded-md">
+                                            Aceptar sugerencia
+                                        </button>
+</div>
+</td>
+<td class="py-6 px-6 text-right">
+<button class="text-on-surface hover:text-primary font-label-md text-label-md flex items-center justify-end w-full gap-1 transition-colors">
+                                        Revisar
+                                        <span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="mt-6 flex justify-between items-center text-on-surface-variant font-body-md text-sm">
+<span>Mostrando 3 de 145 leads activos</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-surface-container-high transition-colors opacity-50 cursor-not-allowed"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<button class="w-8 h-8 rounded border border-primary text-primary bg-primary/5 flex items-center justify-center font-medium">1</button>
+<button class="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-surface-container-high transition-colors">2</button>
+<button class="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-surface-container-high transition-colors">3</button>
+<button class="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</div>
+</div>
+</main>
+</div>
+<!-- Right Drawer: Lead Detail (Simulated active via click on row 1) -->
+<!-- Added fixed z-50 to ensure it floats above everything -->
+<div class="drawer-closed fixed top-0 right-0 h-full w-[450px] bg-surface-elevated/95 backdrop-blur-3xl border-l border-outline-variant/20 shadow-[-20px_0_40px_rgba(0,0,0,0.5)] z-[60] transition-transform duration-300 ease-out flex flex-col" id="lead-drawer">
+<!-- Drawer Header -->
+<div class="p-6 border-b border-outline-variant/10 flex justify-between items-center bg-surface-elevated">
+<div>
+<h3 class="font-headline-lg text-title-md text-on-surface">Detalle del Lead</h3>
+<p class="font-body-md text-sm text-on-surface-variant mt-1">Recibido hoy a las 10:32 AM</p>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant transition-colors" onclick="document.getElementById('lead-drawer').classList.remove('drawer-open'); document.getElementById('lead-drawer').classList.add('drawer-closed');">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Drawer Content (Scrollable) -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Context Header -->
+<div class="flex items-center gap-4 pb-4 border-b border-outline-variant/10">
+<div class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface font-headline-lg text-2xl border-2 border-outline-variant/20">
+                    MF
+                </div>
+<div>
+<h4 class="font-title-md text-xl text-on-surface">María Fernández</h4>
+<div class="flex items-center gap-2 text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[16px]">call</span>
+<span class="font-body-md">+1 917 555 0182</span>
+</div>
+</div>
+</div>
+<!-- Amber Alert: Duplicate -->
+<div class="bg-status-warning/10 border border-status-warning/30 rounded-xl p-4 flex gap-3 items-start shadow-[0_0_15px_rgba(245,158,11,0.05)]">
+<span class="material-symbols-outlined text-status-warning mt-0.5">warning</span>
+<div>
+<h5 class="font-label-md text-status-warning font-bold">Posible duplicado</h5>
+<p class="font-body-md text-sm text-status-warning/80 mt-1">Ya existe un contacto con este número en el pipeline de "Cierre". ¿Deseas fusionarlos?</p>
+</div>
+</div>
+<!-- Context: What they saw -->
+<div>
+<h5 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-3">Contexto de Origen</h5>
+<div class="rounded-xl overflow-hidden border border-outline-variant/20 relative group">
+<div class="w-full h-48 bg-cover bg-center" data-alt="A cinematic, high-end architectural rendering of a luxury tropical villa in Punta Cana at sunset, warm glowing lights from inside, modern design, glass walls, infinity pool, 8k resolution, photorealistic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApknW7M5W73TSnj4zbo_nW8BkAulY2SoLibn_p7QxiHBnJA0p6POcbSmJriw6v1DhazOx7d7EbxX__gKcNhonJCP9ivWrFJ9uYK8hs3wNhfeCIKFujAwSV04PpT4oNbCEI7m183xRqEwVksO1FVgeRPds-OhvIKXoT8Yf_OSlzcezCJXPIdeCKsH0Y_NMIlvmoItqm5rbFAn-os6dNWZflbBYmVCdXxBvLqtkGCOlS99RlOWR1OeUVxSk2ZeEtMs0Fx8P5XNE0ayQ')"></div>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/20 transition-all cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-md">
+<span class="material-symbols-outlined text-on-primary icon-fill">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+<p class="text-white font-title-md text-sm">Tour Virtual: Praderas de Punta Cana - Villa tipo A</p>
+<p class="text-white/70 font-body-md text-xs mt-1">Visto por 2m 14s</p>
+</div>
+</div>
+</div>
+<!-- Context: Message -->
+<div>
+<h5 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-3">Mensaje Original</h5>
+<div class="bg-surface-container rounded-xl p-5 border border-outline-variant/10 relative before:absolute before:top-4 before:-left-2 before:w-4 before:h-4 before:bg-surface-container before:rotate-45 before:border-l before:border-b before:border-outline-variant/10">
+<p class="font-body-md text-on-surface italic text-sm leading-relaxed">
+                        "Hola, vi el video de la villa en Punta Cana en YouTube y me encantó. Estoy buscando algo de inversión con presupuesto de hasta 300K. ¿Tienen disponibilidad para visitas este fin de semana? Saludos desde NY."
+                    </p>
+</div>
+</div>
+</div>
+<!-- Drawer Footer Actions -->
+<div class="p-6 border-t border-outline-variant/10 bg-surface-elevated space-y-3">
+<button class="w-full bg-gradient-to-r from-primary to-primary-fixed-dim text-on-primary font-label-md text-label-md py-4 rounded-xl shadow-[0_0_20px_rgba(201,162,75,0.2)] hover:shadow-[0_0_30px_rgba(201,162,75,0.4)] transition-all flex items-center justify-center gap-2">
+                Convertir a negocio
+                <span class="material-symbols-outlined text-[18px]">trending_flat</span>
+</button>
+<button class="w-full bg-transparent border border-outline-variant/30 text-on-surface hover:border-primary hover:text-primary transition-colors font-label-md text-label-md py-3 rounded-xl flex items-center justify-center gap-2">
+                Descartar lead
+            </button>
+</div>
+</div>
+</body></html>

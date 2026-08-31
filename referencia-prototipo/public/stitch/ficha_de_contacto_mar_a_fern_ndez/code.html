@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>María Fernández | Quisqueya Home CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "surface-container": "#1e2022",
+                        "background": "#121416",
+                        "surface-variant": "#333537",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#ebc166",
+                        "surface-container-low": "#1a1c1e",
+                        "surface": "#121416",
+                        "on-secondary": "#303032",
+                        "inverse-on-surface": "#2f3033",
+                        "tertiary-fixed": "#e5e2e3",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#474649",
+                        "surface-container-highest": "#333537",
+                        "on-tertiary-container": "#3d3c3e",
+                        "on-error": "#690005",
+                        "on-surface-variant": "#d1c5b2",
+                        "tertiary-fixed-dim": "#c8c6c7",
+                        "on-tertiary": "#313031",
+                        "surface-container-high": "#282a2c",
+                        "tertiary-container": "#a9a7a8",
+                        "status-success": "#22C55E",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "status-danger": "#EF4444",
+                        "surface-bright": "#37393c",
+                        "on-primary": "#402d00",
+                        "secondary-container": "#474649",
+                        "on-tertiary-fixed": "#1c1b1c",
+                        "outline": "#9a8f7e",
+                        "status-warning": "#F59E0B",
+                        "on-background": "#e2e2e5",
+                        "on-secondary-container": "#b7b4b7",
+                        "primary-fixed": "#ffdf9e",
+                        "secondary": "#c8c6c8",
+                        "on-primary-fixed-variant": "#5b4300",
+                        "gold-dark": "#9E7B31",
+                        "on-tertiary-fixed-variant": "#474647",
+                        "background-base": "#0A0A0B",
+                        "primary-container": "#c9a24b",
+                        "inverse-surface": "#e2e2e5",
+                        "outline-variant": "#4e4637",
+                        "primary": "#ebc166",
+                        "surface-tint": "#ebc166",
+                        "surface-dim": "#121416",
+                        "tertiary": "#c8c6c7",
+                        "surface-elevated": "#141416",
+                        "on-primary-fixed": "#261a00",
+                        "inverse-primary": "#795902",
+                        "surface-container-lowest": "#0c0e11",
+                        "on-primary-container": "#4f3900",
+                        "on-surface": "#e2e2e5",
+                        "secondary-fixed": "#e5e1e4",
+                        "gold-light": "#E5C17D"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "container-max-width": "1440px",
+                        "margin-mobile": "16px",
+                        "base": "8px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(20, 20, 22, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(201, 162, 75, 0.1);
+        }
+        .timeline-line {
+            background: linear-gradient(to bottom, #c9a24b33 0%, #c9a24b33 100%);
+            width: 2px;
+        }
+        .gold-pulse {
+            box-shadow: 0 0 0 0 rgba(201, 162, 75, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(201, 162, 75, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(201, 162, 75, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(201, 162, 75, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background-base text-on-surface font-body-md selection:bg-primary/30">
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated border-r border-outline-variant/10 shadow-sm flex flex-col py-base z-50">
+<div class="px-6 py-8 mb-6">
+<h1 class="font-display-lg text-[24px] font-bold text-primary tracking-tight">Quisqueya Home</h1>
+<p class="text-on-surface-variant text-[12px] uppercase tracking-widest font-semibold mt-1">Elite Real Estate</p>
+</div>
+<nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Contactos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">calendar_today</span>
+<span class="font-label-md text-label-md">Agenda</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">domain</span>
+<span class="font-label-md text-label-md">Propiedades</span>
+</a>
+<div class="pt-4 pb-2 px-4">
+<span class="text-[10px] font-bold text-outline uppercase tracking-widest">Soporte y Herramientas</span>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">school</span>
+<span class="font-label-md text-label-md">Academy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">analytics</span>
+<span class="font-label-md text-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add_circle</span>
+<span>Nueva Propiedad</span>
+</button>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-4 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/20 w-96">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full placeholder:text-outline/50" placeholder="Buscar contactos, propiedades o negocios..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="text-primary font-bold text-label-md">ES</button>
+<span class="text-outline/30">|</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors text-label-md">EN</button>
+</div>
+<button class="relative text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-status-danger rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-6 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="text-label-md font-bold text-on-surface">Ismael Rosario</p>
+<p class="text-[11px] text-primary">Senior Broker</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary-container p-0.5 overflow-hidden">
+<img class="w-full h-full object-cover rounded-full" data-alt="A professional portrait of a male real estate broker in his 40s wearing a tailored dark navy suit and a subtle gold tie. He has a warm, confident expression and is positioned against a blurry, high-end office interior with warm lighting. The aesthetic is clean, sophisticated, and represents elite wealth management style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcAITT721bMUFfhSdHzshYmX3RNngu1mS_Hw1tzkcAm4pcSzFsMxPn2jWO8U1DktiloZYhd8BigodUWL_JX7fbZ7tpCxx6tXWrId9-v9U0ND4RcYJKTzl5V_5E85tGvu_SD7m5Oi4MnmK6Fu9Q2l49HDpRNRjvWHT0emb4GWuUfnJf-TOqvx7fZl_pVgYFCGSiGI5cD5HkY3UfeEEFDX-2D2bGj5Ygks7XZFPDj3TkbXhHDZkiB0L3c40cTGer48QNqTU1Yaqp9dc"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[280px] pt-16 min-h-screen">
+<div class="max-w-[1440px] mx-auto p-margin-desktop">
+<!-- Contact Header Section -->
+<div class="glass-card rounded-2xl p-8 mb-8 flex flex-col md:flex-row items-center md:items-start gap-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+<div class="relative">
+<div class="w-32 h-32 rounded-full border-4 border-primary/20 p-1">
+<img class="w-full h-full object-cover rounded-full" data-alt="Close-up portrait of Maria Fernandez, a professional woman in her early 50s with an elegant and approachable look. She has light-colored hair styled neatly and is wearing professional business attire. The background is a soft, out-of-focus tropical garden setting with warm, golden hour lighting that aligns with the premium real estate theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6pB7ATO_FOwxVZ6J5CZjSubQQ8U5k6HPVgOKXM8QZf5iMNu9Zba64rUX-fPJaK-k2vyyx1HgCyJ2rzmAfp7TTjuNMKczNboVEEuyMbf_fyfd_9awOhmE8pVFfxa2K0e4A8n3NKbS3tEFHv83_tp2d2L-qA75ROpB-rs0HTE6kcA3HASEnJLU0peaVuAx8SpBkMl55wPuRIAmDe4kn1R58Fnx-8UDTke0LlD3NEdcyjXwQEyO9OkYx6kymD6IviFkRnH8HTWJBERQ"/>
+</div>
+<div class="absolute bottom-1 right-1 bg-status-success w-6 h-6 rounded-full border-4 border-surface-elevated flex items-center justify-center" title="En línea"></div>
+</div>
+<div class="flex-1 space-y-4 text-center md:text-left">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">María Fernández</h2>
+<div class="flex flex-wrap justify-center md:justify-start items-center gap-4 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="text-body-md">EE.UU. 🇺🇸</span>
+</div>
+<span class="text-outline/30">•</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">smart_display</span>
+<span class="text-body-md">Origen: YouTube</span>
+</div>
+<span class="text-outline/30">•</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">badge</span>
+<span class="text-body-md">Broker: Ismael Rosario</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
+<div class="flex items-center gap-3 bg-surface-container px-4 py-2 rounded-xl border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary">mail</span>
+<span class="text-body-md">m.fernandez@email.com</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container px-4 py-2 rounded-xl border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary">call</span>
+<span class="text-body-md">+1 917 555 0182</span>
+<button class="ml-2 bg-[#25D366] text-white p-1.5 rounded-lg flex items-center justify-center hover:opacity-80 transition-opacity">
+<img alt="WA" class="w-4 h-4 invert brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzOTJt1h9CeqUPRw0FKPTO5evHCao0sEwV94XrA-5TFiH9wrQDus5DiUOx_6RN5lOoyTN9sDnpm7ZuUxmYul30t_MwSnBc0Oyx5zU7ce0Ai_EvtESS4QRUkskGJ9KxIzw60ZkaURxOaeoO4H3x0mHovup_APVHEDZopJDgBqnYfKqwVBQR7MOMbF1rVWS2ve9fUagQElCvaaMSVLzBHcE3NSc407O4xefrWekhTpAjd01L9EH2tZO-c89j-kbINV_hr1j9FuV0sx8"/>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2 min-w-[200px]">
+<button class="w-full bg-primary text-on-primary font-bold py-3 rounded-xl hover:bg-primary-fixed-dim transition-colors">Editar Perfil</button>
+<button class="w-full bg-transparent border border-primary/30 text-primary font-bold py-3 rounded-xl hover:bg-primary/5 transition-colors">Enviar Propuesta</button>
+</div>
+</div>
+<!-- Tabs Navigation -->
+<div class="flex border-b border-outline-variant/10 mb-8 gap-8 overflow-x-auto">
+<button class="pb-4 text-primary font-bold border-b-2 border-primary px-2 transition-colors">Resumen</button>
+<button class="pb-4 text-on-surface-variant font-medium hover:text-primary px-2 transition-colors">Actividades</button>
+<button class="pb-4 text-on-surface-variant font-medium hover:text-primary px-2 transition-colors">Negocios</button>
+<button class="pb-4 text-on-surface-variant font-medium hover:text-primary px-2 transition-colors">Comunicaciones</button>
+<button class="pb-4 text-on-surface-variant font-medium hover:text-primary px-2 transition-colors">Documentos</button>
+</div>
+<!-- Dashboard Layout (65/35) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column (65%) -->
+<div class="lg:col-span-8 space-y-gutter">
+<!-- Intereses Block -->
+<div class="glass-card rounded-2xl p-6">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-weight="fill">interests</span>
+<h3 class="font-title-md text-title-md text-on-surface">Intereses y Perfil</h3>
+</div>
+<div class="grid md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<div>
+<p class="text-[11px] font-bold text-outline uppercase tracking-widest mb-3">Proyectos de Interés</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full text-label-md">Praderas de Punta Cana</span>
+<span class="bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-full text-label-md">Jardín del Orquídeo</span>
+</div>
+</div>
+<div>
+<p class="text-[11px] font-bold text-outline uppercase tracking-widest mb-3">Zonas Preferidas</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-high text-on-surface-variant border border-outline-variant/20 px-3 py-1.5 rounded-full text-label-md">Punta Cana</span>
+<span class="bg-surface-container-high text-on-surface-variant border border-outline-variant/20 px-3 py-1.5 rounded-full text-label-md">Bávaro</span>
+</div>
+</div>
+</div>
+<div class="space-y-4 border-l border-outline-variant/10 pl-8">
+<div>
+<p class="text-[11px] font-bold text-outline uppercase tracking-widest mb-1">Presupuesto</p>
+<p class="text-body-lg font-semibold text-primary">US$ 150,000 - 300,000</p>
+</div>
+<div>
+<p class="text-[11px] font-bold text-outline uppercase tracking-widest mb-1">Especificaciones</p>
+<p class="text-body-md text-on-surface">2-3 habitaciones</p>
+</div>
+<div>
+<p class="text-[11px] font-bold text-outline uppercase tracking-widest mb-1">Objetivo del Cliente</p>
+<p class="text-body-md text-on-surface">Inversión para renta corta vía Airbnb. Busca alta rentabilidad y plusvalía.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Vertical Block -->
+<div class="glass-card rounded-2xl p-6">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">history</span>
+<h3 class="font-title-md text-title-md text-on-surface">Historial de Actividad</h3>
+</div>
+<button class="text-primary text-label-md font-bold hover:underline">Ver todo el log</button>
+</div>
+<div class="relative pl-8 space-y-10">
+<div class="absolute left-[7px] top-2 bottom-2 timeline-line"></div>
+<!-- Timeline Item 4 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-primary border-4 border-surface-elevated z-10"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div>
+<p class="font-bold text-on-surface">Presentación realizada</p>
+<p class="text-body-md text-on-surface-variant">Reunión zoom detallando Master Plan y ROI.</p>
+<div class="flex items-center gap-2 mt-1">
+<span class="text-[12px] text-outline">Responsable:</span>
+<span class="text-[12px] font-semibold text-primary">Ismael Rosario</span>
+</div>
+</div>
+<span class="text-label-md text-outline">Hoy, 18 Jul</span>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-primary/40 border-4 border-surface-elevated z-10"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div>
+<p class="font-bold text-on-surface">Cita agendada</p>
+<p class="text-body-md text-on-surface-variant">Alexandra coordinó primer encuentro virtual.</p>
+</div>
+<span class="text-label-md text-outline">18 Jul</span>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-primary/40 border-4 border-surface-elevated z-10"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div>
+<p class="font-bold text-on-surface">Escribió por WhatsApp</p>
+<p class="text-body-md text-on-surface-variant">Consulta automática sobre disponibilidad inmediata.</p>
+<span class="inline-block mt-1 px-2 py-0.5 rounded bg-surface-container text-[10px] text-outline uppercase font-bold tracking-tighter">SISTEMA</span>
+</div>
+<span class="text-label-md text-outline">13 Jul</span>
+</div>
+</div>
+<!-- Timeline Item 1 -->
+<div class="relative">
+<div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-primary/20 border-4 border-surface-elevated z-10"></div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div>
+<p class="font-bold text-on-surface">Vio video de YouTube</p>
+<p class="text-body-md text-on-surface-variant">Interés captado en: "Top 5 Inversiones en Punta Cana".</p>
+<span class="inline-block mt-1 px-2 py-0.5 rounded bg-surface-container text-[10px] text-outline uppercase font-bold tracking-tighter">SISTEMA</span>
+</div>
+<span class="text-label-md text-outline">12 Jul</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (35%) -->
+<div class="lg:col-span-4 space-y-gutter">
+<!-- Próxima Acción Card -->
+<div class="bg-surface-elevated border-2 border-primary/30 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
+<div class="flex items-start gap-3 mb-6 relative">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary gold-pulse rounded-full">alarm</span>
+</div>
+<div>
+<p class="text-[11px] font-bold text-primary uppercase tracking-widest">PRÓXIMA ACCIÓN</p>
+<h4 class="font-title-md text-title-md text-on-surface">Llamada de seguimiento</h4>
+</div>
+</div>
+<div class="space-y-4 mb-6 relative">
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+<span class="text-body-md">Mañana, 19 de Julio</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-body-md">3:00 PM (Hora local)</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 relative">
+<button class="bg-primary text-on-primary font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">Completar</button>
+<button class="bg-transparent border border-outline-variant/30 text-on-surface font-bold py-3 rounded-xl hover:bg-surface-container transition-colors">Reprogramar</button>
+</div>
+</div>
+<!-- Negocio Activo Card -->
+<div class="glass-card rounded-2xl p-6 overflow-hidden">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-title-md text-title-md text-on-surface">Negocio Activo</h3>
+<span class="bg-primary/20 text-primary px-3 py-1 rounded-full text-[12px] font-bold">Preselección</span>
+</div>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Luxurious architectural rendering of a modern residential complex in Punta Cana. The design features sleek white lines, large glass balconies, and lush tropical landscaping with infinity pools and palm trees under a clear blue sky. The lighting is bright and summery, emphasizing the premium quality of the property." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqTQwuJwmfLNBmFOD7qwY5j8-KsqBw4z4TjWr3uuh6JosQihwcH32ggoLPphea_3neDVrQvxUfzwOmKSfwTL1Nkxob-9oeu0xF2BSqhHVWNbhKWf3rpijiYvKx8-i5nLWgo5xRUSM4DXTXqgm2z7OI0xMGMO59pwjTInd07EexnASYtCY3dEW03Ul2q8aa-ozVn17Vcgz3ZpQArj8yZGqd6R5tAzpd45ljT6K__NslcO_6zdcb7jq7BIGhK_al87Lngstg2A_gpys"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">Praderas de Punta Cana</p>
+<p class="text-body-md text-on-surface-variant">Unidad B-402, 2 Hab.</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-low rounded-xl border border-outline-variant/5">
+<div class="flex justify-between items-end">
+<div>
+<p class="text-[11px] font-bold text-outline uppercase tracking-widest mb-1">Monto de Operación</p>
+<p class="text-headline-lg text-[28px] font-bold text-primary">US$ 165,000</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] font-bold text-outline uppercase tracking-widest mb-1">Comisión Est.</p>
+<p class="text-body-md font-bold text-status-success">US$ 8,250</p>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[12px]">
+<span class="text-on-surface-variant">Progreso del Pipeline</span>
+<span class="text-primary font-bold">40%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 40%"></div>
+</div>
+</div>
+<button class="w-full text-center text-primary font-bold text-label-md py-2 border-t border-outline-variant/10 mt-2 block">
+                                Ver detalles del Negocio
+                            </button>
+</div>
+</div>
+<!-- Rapid Actions Panel -->
+<div class="glass-card rounded-2xl p-6">
+<h3 class="font-title-md text-title-md text-on-surface mb-6">Acciones Rápidas</h3>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex flex-col items-center justify-center p-4 rounded-xl border border-outline-variant/10 hover:bg-surface-container transition-colors group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">note_add</span>
+<span class="text-[12px] font-semibold">Nota</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl border border-outline-variant/10 hover:bg-surface-container transition-colors group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">task</span>
+<span class="text-[12px] font-semibold">Tarea</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl border border-outline-variant/10 hover:bg-surface-container transition-colors group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">event</span>
+<span class="text-[12px] font-semibold">Cita</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl border border-outline-variant/10 hover:bg-surface-container transition-colors group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform">folder_shared</span>
+<span class="text-[12px] font-semibold">Archivos</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions for tab switching and hover effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('button[class*="pb-4"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        t.classList.remove('text-primary', 'font-bold', 'border-b-2', 'border-primary');
+                        t.classList.add('text-on-surface-variant', 'font-medium');
+                    });
+                    tab.classList.remove('text-on-surface-variant', 'font-medium');
+                    tab.classList.add('text-primary', 'font-bold', 'border-b-2', 'border-primary');
+                });
+            });
+
+            // Parallax-ish effect for glass cards
+            const glassCards = document.querySelectorAll('.glass-card');
+            document.addEventListener('mousemove', (e) => {
+                const { clientX, clientY } = e;
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const moveX = (clientX - centerX) / 100;
+                const moveY = (clientY - centerY) / 100;
+
+                glassCards.forEach(card => {
+                    card.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                });
+            });
+        });
+    </script>
+</body></html>

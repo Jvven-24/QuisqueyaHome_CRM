@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quisqueya Home - CRM Access</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-primary": "#402d00",
+                "surface-bright": "#37393c",
+                "secondary": "#c8c6c8",
+                "on-secondary-fixed-variant": "#474649",
+                "surface-variant": "#333537",
+                "outline-variant": "#4e4637",
+                "on-tertiary-container": "#3d3c3e",
+                "background": "#0A0A0B",
+                "secondary-fixed-dim": "#c8c6c8",
+                "surface-container-high": "#282a2c",
+                "primary-fixed-dim": "#ebc166",
+                "error-container": "#93000a",
+                "surface-container-highest": "#333537",
+                "on-secondary-fixed": "#1b1b1d",
+                "surface-container": "#1e2022",
+                "inverse-primary": "#795902",
+                "gold-dark": "#9E7B31",
+                "background-base": "#0A0A0B",
+                "surface": "#121416",
+                "tertiary": "#c8c6c7",
+                "surface-container-lowest": "#0c0e11",
+                "primary": "#ebc166",
+                "status-danger": "#EF4444",
+                "gold-light": "#E5C17D",
+                "on-surface-variant": "#d1c5b2",
+                "on-surface": "#e2e2e5",
+                "on-error-container": "#ffdad6",
+                "on-tertiary": "#313031",
+                "on-primary-fixed-variant": "#5b4300",
+                "secondary-container": "#474649",
+                "error": "#ffb4ab",
+                "on-tertiary-fixed": "#1c1b1c",
+                "primary-fixed": "#ffdf9e",
+                "secondary-fixed": "#e5e1e4",
+                "surface-tint": "#ebc166",
+                "surface-dim": "#121416",
+                "primary-container": "#c9a24b",
+                "tertiary-fixed-dim": "#c8c6c7",
+                "on-secondary-container": "#b7b4b7",
+                "surface-container-low": "#1a1c1e",
+                "on-primary-fixed": "#261a00",
+                "inverse-on-surface": "#2f3033",
+                "status-warning": "#F59E0B",
+                "tertiary-fixed": "#e5e2e3",
+                "status-success": "#22C55E",
+                "on-background": "#e2e2e5",
+                "on-secondary": "#303032",
+                "inverse-surface": "#e2e2e5",
+                "surface-elevated": "#141416",
+                "outline": "#9a8f7e",
+                "on-error": "#690005",
+                "on-tertiary-fixed-variant": "#474647",
+                "on-primary-container": "#4f3900",
+                "tertiary-container": "#a9a7a8"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "base": "8px",
+                "gutter": "24px",
+                "margin-desktop": "40px",
+                "margin-mobile": "16px",
+                "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                "display-lg": ["Hanken Grotesk"],
+                "body-md": ["Inter"],
+                "label-md": ["Inter"],
+                "headline-lg": ["Hanken Grotesk"],
+                "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+            color: #e2e2e5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #ebc166 0%, #c9a24b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-button {
+            background: linear-gradient(135deg, #ebc166 0%, #c9a24b 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gold-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(201, 162, 75, 0.25);
+            filter: brightness(1.1);
+        }
+
+        .gold-button:active {
+            transform: scale(0.98);
+        }
+
+        .glass-card {
+            background: #141416;
+            border: 1px solid rgba(201, 162, 75, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-focus-effect:focus {
+            border-color: #ebc166;
+            box-shadow: 0 0 0 1px rgba(235, 193, 102, 0.3);
+            outline: none;
+        }
+
+        .background-texture {
+            background-image: radial-gradient(circle at 50% 50%, rgba(201, 162, 75, 0.05) 0%, transparent 80%);
+            pointer-events: none;
+        }
+
+        .animated-grain {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.02;
+            z-index: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-hidden min-h-screen flex flex-col items-center justify-center">
+<!-- Background Texture/Animation -->
+<div class="fixed inset-0 z-0">
+
+<div class="absolute inset-0 background-texture"></div>
+<div class="animated-grain" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8TBe-F7yMIF8bwkwEbOQ-7b8Ye0MzwdBLm8YCjGJKmrt5QOAGUiiyOC3AcN_7sQ98mUwMYNo9IR3onnRZSGOP0iyJW0B_kCt3KWc_pspSt5bf3Ouak0c41VhYrEzckQaYki12_65fiIEo34FqhITb-JQT8OKBmWQowjJ_KyUOL9-bPhYbnPCiFAZDLrbWg98IJwgq3ECTk2UVGH9aIgvyFxLcnhKLcoicDpU55tc26quF-uex6zW67gLxTzOTTIeoxAG6V7qpD7A');"></div>
+</div>
+<!-- Main Content Wrapper -->
+<main class="relative z-10 w-full max-w-md px-margin-mobile md:px-0">
+<!-- Center Login Card -->
+<div class="glass-card rounded-lg p-10 flex flex-col items-center w-full">
+<!-- Branding -->
+<div class="mb-8 text-center">
+<h1 class="font-display-lg text-display-lg gold-gradient-text tracking-tighter leading-none mb-2">
+                    Quisqueya Home
+                </h1>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-[0.2em]">
+                    Elite Real Estate
+                </p>
+</div>
+<!-- Header -->
+<div class="w-full mb-8">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Acceso al CRM</h2>
+<div class="h-1 w-12 bg-primary rounded-full"></div>
+</div>
+<!-- Form -->
+<form class="w-full space-y-6" onsubmit="event.preventDefault()">
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="email">Email</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">mail</span>
+<input class="w-full bg-background-base border border-outline-variant/30 rounded-lg py-4 pl-12 pr-4 text-on-surface input-focus-effect transition-all placeholder:text-outline-variant/50" id="email" placeholder="nombre@quisqueyahome.com" type="email"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="password">Contraseña</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">lock</span>
+<input class="w-full bg-background-base border border-outline-variant/30 rounded-lg py-4 pl-12 pr-4 text-on-surface input-focus-effect transition-all placeholder:text-outline-variant/50" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- 2FA Info -->
+<div class="bg-surface-container-low/50 border border-outline-variant/10 rounded-lg p-4 flex gap-3">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0">verified_user</span>
+<p class="font-label-md text-label-md text-on-surface-variant leading-relaxed">
+                        Este acceso requiere autenticación en dos pasos (2FA) para perfiles administrativos.
+                    </p>
+</div>
+<!-- Submit Button -->
+<button class="gold-button w-full rounded-lg h-14 font-label-md text-on-primary flex items-center justify-center gap-2 group" type="submit">
+<span>Iniciar sesión</span>
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+<!-- Forgot Password -->
+<div class="text-center pt-2">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors inline-flex items-center gap-1 group" href="#">
+                        ¿Olvidaste tu contraseña?
+                        <span class="w-0 group-hover:w-full h-[1px] bg-primary transition-all absolute bottom-0 left-0"></span>
+</a>
+</div>
+</form>
+<!-- Card Footer -->
+<div class="mt-10 pt-8 border-t border-outline-variant/10 w-full text-center">
+<p class="font-label-md text-label-md text-outline-variant italic">
+                    Acceso exclusivo del equipo — Quisqueya Home CRM
+                </p>
+</div>
+</div>
+<!-- External Footer Badge -->
+<footer class="mt-12 flex flex-col items-center gap-4">
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-elevated/80 border border-outline-variant/10 rounded-full backdrop-blur-md">
+<div class="w-1.5 h-1.5 rounded-full bg-status-success animate-pulse"></div>
+<span class="font-label-md text-[10px] uppercase tracking-widest text-on-surface-variant/80">Sistema de seguridad activo</span>
+</div>
+<div class="flex items-center gap-2 group">
+<span class="font-label-md text-label-md text-outline-variant/60">Desarrollado por</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-bold group-hover:text-primary transition-colors cursor-default tracking-wider">Viltrum Tek</span>
+</div>
+</footer>
+</main>
+<!-- Micro-interactions Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input');
+            
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.parentElement.querySelector('label').classList.add('text-primary');
+                });
+                
+                input.addEventListener('blur', () => {
+                    input.parentElement.parentElement.querySelector('label').classList.remove('text-primary');
+                });
+            });
+
+            // Gentle parallax movement for the login card
+            window.addEventListener('mousemove', (e) => {
+                const amount = 5;
+                const x = (window.innerWidth / 2 - e.pageX) / amount;
+                const y = (window.innerHeight / 2 - e.pageY) / amount;
+                
+                const card = document.querySelector('.glass-card');
+                if (card) {
+                    card.style.transform = `translate(${x/15}px, ${y/15}px)`;
+                }
+            });
+        });
+    </script>
+</body></html>

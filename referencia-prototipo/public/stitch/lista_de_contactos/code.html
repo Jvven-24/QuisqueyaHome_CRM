@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contactos | Quisqueya Home CRM</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-surface-variant": "#d1c5b2",
+                "on-secondary-fixed": "#1b1b1d",
+                "surface-dim": "#121416",
+                "tertiary-fixed": "#e5e2e3",
+                "surface-container-lowest": "#0c0e11",
+                "surface-container": "#1e2022",
+                "primary-fixed-dim": "#ebc166",
+                "surface-elevated": "#141416",
+                "secondary-container": "#474649",
+                "inverse-primary": "#795902",
+                "inverse-surface": "#e2e2e5",
+                "primary-fixed": "#ffdf9e",
+                "secondary-fixed-dim": "#c8c6c8",
+                "secondary-fixed": "#e5e1e4",
+                "outline-variant": "#4e4637",
+                "on-secondary": "#303032",
+                "secondary": "#c8c6c8",
+                "on-primary-fixed-variant": "#5b4300",
+                "on-tertiary-container": "#3d3c3e",
+                "primary": "#ebc166",
+                "on-primary": "#402d00",
+                "tertiary-container": "#a9a7a8",
+                "status-warning": "#F59E0B",
+                "on-secondary-container": "#b7b4b7",
+                "error": "#ffb4ab",
+                "primary-container": "#c9a24b",
+                "outline": "#9a8f7e",
+                "on-error-container": "#ffdad6",
+                "on-tertiary-fixed-variant": "#474647",
+                "background": "#121416",
+                "on-error": "#690005",
+                "gold-light": "#E5C17D",
+                "error-container": "#93000a",
+                "on-surface": "#e2e2e5",
+                "surface-container-highest": "#333537",
+                "surface-container-low": "#1a1c1e",
+                "on-primary-container": "#4f3900",
+                "status-danger": "#EF4444",
+                "status-success": "#22C55E",
+                "surface-tint": "#ebc166",
+                "gold-dark": "#9E7B31",
+                "on-tertiary": "#313031",
+                "surface-container-high": "#282a2c",
+                "on-background": "#e2e2e5",
+                "inverse-on-surface": "#2f3033",
+                "tertiary": "#c8c6c7",
+                "tertiary-fixed-dim": "#c8c6c7",
+                "surface": "#121416",
+                "background-base": "#0A0A0B",
+                "surface-bright": "#37393c",
+                "on-secondary-fixed-variant": "#474649",
+                "on-tertiary-fixed": "#1c1b1c",
+                "surface-variant": "#333537",
+                "on-primary-fixed": "#261a00"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "container-max-width": "1440px",
+                "margin-mobile": "16px",
+                "base": "8px",
+                "margin-desktop": "40px",
+                "gutter": "24px"
+            },
+            "fontFamily": {
+                "display-lg": ["Hanken Grotesk"],
+                "label-md": ["Inter"],
+                "headline-lg": ["Hanken Grotesk"],
+                "title-md": ["Hanken Grotesk"],
+                "body-md": ["Inter"],
+                "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0A0B;
+            color: #e2e2e5;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(20, 20, 22, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(201, 162, 75, 0.1);
+        }
+        .gold-glow {
+            box-shadow: 0 0 15px rgba(201, 162, 75, 0.2);
+        }
+        .gold-pulse {
+            animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-gold {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0A0A0B;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4e4637;
+            border-radius: 10px;
+        }
+        .active-tab-indicator {
+            position: absolute;
+            right: 0;
+            width: 3px;
+            height: 100%;
+            background-color: #ebc166;
+            box-shadow: -2px 0 8px rgba(235, 193, 102, 0.4);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- SIDEBAR NAVIGATION -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated flex flex-col py-base border-r border-outline-variant/10 shadow-sm z-50">
+<div class="px-6 py-8 flex flex-col gap-1">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">Quisqueya Home</h1>
+<p class="font-label-md text-label-md text-on-surface-variant/60 tracking-widest uppercase">Elite Real Estate</p>
+</div>
+<div class="px-4 mb-8">
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-4 px-6 rounded-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] gold-glow">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                Nueva Propiedad
+            </button>
+</div>
+<nav class="flex-1 overflow-y-auto custom-scrollbar px-2 space-y-1">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-md">Leads</span>
+</a>
+<!-- Active State: Contactos -->
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-primary font-bold bg-surface-container-high relative transition-colors group" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-md">Contactos</span>
+<div class="active-tab-indicator"></div>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md">Agenda</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md">Propiedades</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md">Avances de obra</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="font-label-md">Brokers</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">ads_click</span>
+<span class="font-label-md">Metas</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md">Academy</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md">Comisiones</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Configuración</span>
+</a>
+</nav>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="ml-[280px] min-h-screen flex flex-col">
+<!-- TOP NAV BAR -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 backdrop-blur-xl flex justify-between items-center px-margin-desktop z-40 border-b border-outline-variant/10">
+<div class="flex items-center gap-6 w-full max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
+<input class="bg-surface-container-lowest border-none ring-1 ring-outline-variant/20 rounded-full pl-10 pr-4 py-2 w-full focus:ring-primary focus:bg-surface-container transition-all text-body-md placeholder:text-on-surface-variant/40" placeholder="Buscar en el ecosistema..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-label-md">
+<button class="text-primary font-bold hover:opacity-80 transition-opacity">ES</button>
+<span class="text-outline-variant/30">|</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors">EN</button>
+</div>
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="font-label-md text-on-surface leading-tight">Ismael Rosario</p>
+<p class="text-[10px] text-primary uppercase tracking-tighter">Elite Partner</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a Hispanic male real estate executive in his late 40s. He is wearing a tailored charcoal suit and a crisp white shirt, exuding success and trustworthiness. The background is a blurred high-end penthouse interior with warm evening lighting. The overall image has a cinematic, premium feel with rich shadows and gold-toned highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTQoIbzuI5eYPfqrXN3hlZebQqiIHM-9QMWf9rvaMmaBFcL1R4KtlwuFrAmEnp-C-DYDkT_VInEqWJOZiwUBr-3hJE7nTUB7BlbkJDaVfKqgK7csWbrz47kFywHbGIJzb1h7eFHBCNBa1ZRQYrW1PW5EqHvqjXqn92rSwquOFyl2863Xm6veLFZ460jSR2aiZlIsBm2DXnanZZt6M2M_APVUUGd6Ns2iJZB3cHRtmSy4CHpupLsf6ert7jkJ2QvILp_CWWd2-RMlc"/>
+</div>
+</div>
+</div>
+</header>
+<!-- CANVAS CONTENT -->
+<div class="mt-16 p-margin-desktop flex-1 overflow-y-auto">
+<!-- HEADER SECTION -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Contactos</h2>
+<p class="font-body-md text-on-surface-variant mt-1">312 contactos registrados en tu cartera</p>
+</div>
+<button class="bg-primary-container text-on-primary-container font-bold py-3 px-8 rounded-lg flex items-center gap-2 hover:bg-primary transition-all gold-glow">
+<span class="material-symbols-outlined">person_add</span>
+                    + Nuevo contacto
+                </button>
+</div>
+<!-- TOOLBAR / FILTERS -->
+<div class="glass-card rounded-xl p-6 mb-8 flex flex-wrap items-center gap-6">
+<div class="relative w-[40%]">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/40">search</span>
+<input class="w-full bg-background-base border border-outline-variant/20 rounded-lg pl-12 pr-4 py-3 text-body-md focus:border-primary focus:ring-0 transition-all" placeholder="Buscar por nombre, correo o ID..." type="text"/>
+</div>
+<div class="flex gap-3 flex-1">
+<button class="bg-surface-container-high px-4 py-3 rounded-lg border border-outline-variant/10 text-label-md flex items-center gap-2 text-on-surface-variant hover:border-primary/40 transition-all">
+                        Canal de origen
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="bg-surface-container-high px-4 py-3 rounded-lg border border-outline-variant/10 text-label-md flex items-center gap-2 text-on-surface-variant hover:border-primary/40 transition-all">
+                        Broker responsable
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="bg-surface-container-high px-4 py-3 rounded-lg border border-outline-variant/10 text-label-md flex items-center gap-2 text-on-surface-variant hover:border-primary/40 transition-all">
+                        Zona de interés
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<div class="flex items-center gap-3 pl-6 border-l border-outline-variant/20">
+<span class="font-label-md text-on-surface-variant">Con negocio activo</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-container"></div>
+</label>
+</div>
+</div>
+<!-- PREMIUM TABLE -->
+<div class="overflow-hidden rounded-xl glass-card">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/10 bg-surface-container-low">
+<th class="px-6 py-5 font-label-md text-on-surface-variant/60 uppercase tracking-widest text-[11px]">Nombre</th>
+<th class="px-6 py-5 font-label-md text-on-surface-variant/60 uppercase tracking-widest text-[11px]">Teléfono</th>
+<th class="px-6 py-5 font-label-md text-on-surface-variant/60 uppercase tracking-widest text-[11px]">Email</th>
+<th class="px-6 py-5 font-label-md text-on-surface-variant/60 uppercase tracking-widest text-[11px]">País</th>
+<th class="px-6 py-5 font-label-md text-on-surface-variant/60 uppercase tracking-widest text-[11px]">Origen</th>
+<th class="px-6 py-5 font-label-md text-on-surface-variant/60 uppercase tracking-widest text-[11px]">Proyectos</th>
+<th class="px-6 py-5 font-label-md text-on-surface-variant/60 uppercase tracking-widest text-[11px]">Último Contacto</th>
+<th class="px-6 py-5"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Row 1 -->
+<tr class="group hover:bg-surface-container-high/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-2 h-2 bg-primary rounded-full absolute -left-4 top-1/2 -translate-y-1/2 gold-pulse"></div>
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold border border-primary/20">MF</div>
+</div>
+<div>
+<p class="font-title-md text-on-surface">María Fernández</p>
+<span class="text-[10px] text-primary font-bold uppercase">Negocio Activo</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">+1 917 555 0123</td>
+<td class="px-6 py-6 text-on-surface-variant">m.fernandez@email.com</td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇺🇸</span>
+<span class="text-on-surface-variant">EE.UU.</span>
+</div>
+</td>
+<td class="px-6 py-6">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 bg-red-900/20 text-red-400 rounded text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]">smart_display</span>
+                                    YouTube
+                                </span>
+</td>
+<td class="px-6 py-6">
+<span class="inline-block px-3 py-1 bg-surface-container-highest rounded-full text-[12px] text-on-surface border border-outline-variant/20">Praderas de Punta Cana</span>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">Hoy, 10:45 AM</td>
+<td class="px-6 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-surface-container-high/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold border border-outline-variant/20">JR</div>
+<div>
+<p class="font-title-md text-on-surface">José Reyes</p>
+<span class="text-[10px] text-on-surface-variant/40 uppercase">Venta Directa</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">+34 612 90 88 11</td>
+<td class="px-6 py-6 text-on-surface-variant">jose.reyes@domain.es</td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇪🇸</span>
+<span class="text-on-surface-variant">España</span>
+</div>
+</td>
+<td class="px-6 py-6">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 bg-blue-900/20 text-blue-400 rounded text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]">language</span>
+                                    Sitio web
+                                </span>
+</td>
+<td class="px-6 py-6">
+<span class="inline-block px-3 py-1 bg-surface-container-highest rounded-full text-[12px] text-on-surface border border-outline-variant/20">Jardín del Orquídeo</span>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">Ayer, 4:20 PM</td>
+<td class="px-6 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-surface-container-high/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-2 h-2 bg-primary rounded-full absolute -left-4 top-1/2 -translate-y-1/2 gold-pulse"></div>
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold border border-primary/20">AP</div>
+</div>
+<div>
+<p class="font-title-md text-on-surface">Ana Peralta</p>
+<span class="text-[10px] text-primary font-bold uppercase">Negocio Activo</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">+1 809 555 4321</td>
+<td class="px-6 py-6 text-on-surface-variant">ana.peralta@gmail.com</td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇩🇴</span>
+<span class="text-on-surface-variant">Rep. Dom.</span>
+</div>
+</td>
+<td class="px-6 py-6">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 bg-green-900/20 text-green-400 rounded text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]">chat</span>
+                                    WhatsApp
+                                </span>
+</td>
+<td class="px-6 py-6">
+<span class="inline-block px-3 py-1 bg-surface-container-highest rounded-full text-[12px] text-on-surface border border-outline-variant/20">Alquiler - Bávaro</span>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">24 May, 09:15 AM</td>
+<td class="px-6 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-surface-container-high/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold border border-outline-variant/20">CT</div>
+<div>
+<p class="font-title-md text-on-surface">Carlos Then</p>
+<span class="text-[10px] text-on-surface-variant/40 uppercase">Prospecto</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">+1 305 222 3344</td>
+<td class="px-6 py-6 text-on-surface-variant">cthen@miami-realty.com</td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇺🇸</span>
+<span class="text-on-surface-variant">EE.UU.</span>
+</div>
+</td>
+<td class="px-6 py-6">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 bg-red-900/20 text-red-400 rounded text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]">smart_display</span>
+                                    YouTube
+                                </span>
+</td>
+<td class="px-6 py-6">
+<span class="inline-block px-3 py-1 bg-surface-container-highest rounded-full text-[12px] text-on-surface border border-outline-variant/20">Vista Cana</span>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">22 May, 02:00 PM</td>
+<td class="px-6 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="group hover:bg-surface-container-high/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-2 h-2 bg-primary rounded-full absolute -left-4 top-1/2 -translate-y-1/2 gold-pulse"></div>
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary font-bold border border-primary/20">EM</div>
+</div>
+<div>
+<p class="font-title-md text-on-surface">Elena Mota</p>
+<span class="text-[10px] text-primary font-bold uppercase">Negocio Activo</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">+1 829 444 8877</td>
+<td class="px-6 py-6 text-on-surface-variant">elena.mota@outlook.com</td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇩🇴</span>
+<span class="text-on-surface-variant">Rep. Dom.</span>
+</div>
+</td>
+<td class="px-6 py-6">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 bg-purple-900/20 text-purple-400 rounded text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]">groups</span>
+                                    Referido
+                                </span>
+</td>
+<td class="px-6 py-6">
+<span class="inline-block px-3 py-1 bg-surface-container-highest rounded-full text-[12px] text-on-surface border border-outline-variant/20">Torre Albo</span>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">21 May, 11:30 AM</td>
+<td class="px-6 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="group hover:bg-surface-container-high/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold border border-outline-variant/20">RG</div>
+<div>
+<p class="font-title-md text-on-surface">Roberto Gómez</p>
+<span class="text-[10px] text-on-surface-variant/40 uppercase">Prospecto</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">+1 718 123 4567</td>
+<td class="px-6 py-6 text-on-surface-variant">rgomez.realtor@web.com</td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇺🇸</span>
+<span class="text-on-surface-variant">EE.UU.</span>
+</div>
+</td>
+<td class="px-6 py-6">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 bg-blue-900/20 text-blue-400 rounded text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]">language</span>
+                                    Sitio web
+                                </span>
+</td>
+<td class="px-6 py-6">
+<span class="inline-block px-3 py-1 bg-surface-container-highest rounded-full text-[12px] text-on-surface border border-outline-variant/20">Bávaro Beach</span>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">19 May, 03:50 PM</td>
+<td class="px-6 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 7 -->
+<tr class="group hover:bg-surface-container-high/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold border border-outline-variant/20">LM</div>
+<div>
+<p class="font-title-md text-on-surface">Lucía Méndez</p>
+<span class="text-[10px] text-on-surface-variant/40 uppercase">Interesado</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">+507 6677 8899</td>
+<td class="px-6 py-6 text-on-surface-variant">lucia.m@panama-realestate.com</td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇵🇦</span>
+<span class="text-on-surface-variant">Panamá</span>
+</div>
+</td>
+<td class="px-6 py-6">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 bg-pink-900/20 text-pink-400 rounded text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]">camera_alt</span>
+                                    Instagram
+                                </span>
+</td>
+<td class="px-6 py-6">
+<span class="inline-block px-3 py-1 bg-surface-container-highest rounded-full text-[12px] text-on-surface border border-outline-variant/20">Praderas</span>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">18 May, 05:10 PM</td>
+<td class="px-6 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 8 -->
+<tr class="group hover:bg-surface-container-high/50 transition-colors">
+<td class="px-6 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold border border-outline-variant/20">RE</div>
+<div>
+<p class="font-title-md text-on-surface">Ricardo Espinal</p>
+<span class="text-[10px] text-on-surface-variant/40 uppercase">Prospecto</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">+1 212 999 1122</td>
+<td class="px-6 py-6 text-on-surface-variant">r.espinal@nyc-broker.com</td>
+<td class="px-6 py-6">
+<div class="flex items-center gap-2">
+<span class="text-xl">🇺🇸</span>
+<span class="text-on-surface-variant">EE.UU.</span>
+</div>
+</td>
+<td class="px-6 py-6">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 bg-red-900/20 text-red-400 rounded text-[12px] font-bold">
+<span class="material-symbols-outlined text-[14px]">smart_display</span>
+                                    YouTube
+                                </span>
+</td>
+<td class="px-6 py-6">
+<span class="inline-block px-3 py-1 bg-surface-container-highest rounded-full text-[12px] text-on-surface border border-outline-variant/20">Jardín del Orquídeo</span>
+</td>
+<td class="px-6 py-6 text-on-surface-variant">15 May, 10:00 AM</td>
+<td class="px-6 py-6 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- PAGINATION -->
+<div class="px-6 py-4 flex items-center justify-between bg-surface-container-low/50 border-t border-outline-variant/10">
+<p class="text-label-md text-on-surface-variant">Mostrando 8 de 312 contactos</p>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant/20 text-on-surface-variant hover:border-primary/40 transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-container text-on-primary-container font-bold text-xs">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant/20 text-on-surface-variant hover:border-primary/40 transition-colors text-xs">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant/20 text-on-surface-variant hover:border-primary/40 transition-colors text-xs">3</button>
+<span class="text-on-surface-variant/40 px-1">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant/20 text-on-surface-variant hover:border-primary/40 transition-colors text-xs">39</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg border border-outline-variant/20 text-on-surface-variant hover:border-primary/40 transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- FOOTER INFO (Optional/Status) -->
+<footer class="mt-auto px-margin-desktop py-6 border-t border-outline-variant/10 flex justify-between items-center text-[11px] text-on-surface-variant/40 uppercase tracking-widest">
+<p>© 2024 Quisqueya Home - Elite Real Estate Management</p>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-status-success rounded-full"></span> Sistema Operativo</span>
+<span>v3.4.2 Premium</span>
+</div>
+</footer>
+</main>
+<!-- MICRO-INTERACTION SCRIPT -->
+<script>
+        // Simple search highlight simulation
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('gold-glow');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('gold-glow');
+        });
+
+        // Add subtle parallax to rows on mouse move
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('mousemove', (e) => {
+                const rect = row.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                row.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(235, 193, 102, 0.03) 0%, transparent 70%)`;
+            });
+            row.addEventListener('mouseleave', () => {
+                row.style.background = 'transparent';
+            });
+        });
+    </script>
+</body></html>

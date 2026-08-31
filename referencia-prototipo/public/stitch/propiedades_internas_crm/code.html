@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quisqueya Home - Propiedades Internas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0B;
+            color: #e2e2e5;
+        }
+        .font-display { font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-card {
+            background: rgba(20, 20, 22, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(201, 162, 75, 0.1);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #ebc166 0%, #c9a24b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-button-gradient {
+            background: linear-gradient(135deg, #ebc166 0%, #c9a24b 100%);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0B; }
+        ::-webkit-scrollbar-thumb { background: #333537; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "status-danger": "#EF4444",
+                      "background": "#121416",
+                      "surface-container-lowest": "#0c0e11",
+                      "tertiary": "#c8c6c7",
+                      "on-secondary-fixed": "#1b1b1d",
+                      "on-primary-fixed": "#261a00",
+                      "secondary-container": "#474649",
+                      "on-surface-variant": "#d1c5b2",
+                      "primary-fixed-dim": "#ebc166",
+                      "tertiary-fixed-dim": "#c8c6c7",
+                      "on-secondary-container": "#b7b4b7",
+                      "background-base": "#0A0A0B",
+                      "surface-container-highest": "#333537",
+                      "surface-elevated": "#141416",
+                      "surface-tint": "#ebc166",
+                      "on-tertiary-container": "#3d3c3e",
+                      "surface-container-high": "#282a2c",
+                      "tertiary-container": "#a9a7a8",
+                      "on-secondary-fixed-variant": "#474649",
+                      "on-error": "#690005",
+                      "inverse-surface": "#e2e2e5",
+                      "surface-dim": "#121416",
+                      "secondary": "#c8c6c8",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-low": "#1a1c1e",
+                      "gold-light": "#E5C17D",
+                      "on-tertiary": "#313031",
+                      "error-container": "#93000a",
+                      "surface-bright": "#37393c",
+                      "surface": "#121416",
+                      "surface-variant": "#333537",
+                      "on-tertiary-fixed-variant": "#474647",
+                      "gold-dark": "#9E7B31",
+                      "inverse-primary": "#795902",
+                      "tertiary-fixed": "#e5e2e3",
+                      "inverse-on-surface": "#2f3033",
+                      "on-primary-fixed-variant": "#5b4300",
+                      "on-primary": "#402d00",
+                      "surface-container": "#1e2022",
+                      "primary": "#ebc166",
+                      "outline-variant": "#4e4637",
+                      "error": "#ffb4ab",
+                      "status-success": "#22C55E",
+                      "on-primary-container": "#4f3900",
+                      "on-surface": "#e2e2e5",
+                      "status-warning": "#F59E0B",
+                      "on-tertiary-fixed": "#1c1b1c",
+                      "primary-fixed": "#ffdf9e",
+                      "outline": "#9a8f7e",
+                      "secondary-fixed-dim": "#c8c6c8",
+                      "on-background": "#e2e2e5",
+                      "on-secondary": "#303032",
+                      "secondary-fixed": "#e5e1e4",
+                      "primary-container": "#c9a24b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "container-max-width": "1440px",
+                      "gutter": "24px",
+                      "base": "8px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "body-lg": ["Inter"],
+                      "title-md": ["Hanken Grotesk"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background-base overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated border-r border-outline-variant/10 shadow-sm flex flex-col py-base z-50">
+<div class="px-6 py-8 flex flex-col gap-1">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">Quisqueya Home</h1>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Elite Real Estate</p>
+</div>
+<nav class="flex-1 overflow-y-auto px-4 mt-4 space-y-1">
+<!-- Navigation Items Mapping -->
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="font-label-md text-label-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Contactos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-md text-label-md">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md text-label-md">Agenda</span>
+</a>
+<!-- ACTIVE TAB -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-container-high/50 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">domain</span>
+<span class="font-label-md text-label-md">Propiedades</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Avances de obra</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">handshake</span>
+<span class="font-label-md text-label-md">Brokers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">ads_click</span>
+<span class="font-label-md text-label-md">Metas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-md text-label-md">Academy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Comisiones</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+</nav>
+<div class="p-6">
+<button class="w-full gold-button-gradient text-on-primary-fixed font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/10 transition-transform active:scale-[0.98]">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-label-md text-label-md">Nueva Propiedad</span>
+</button>
+</div>
+</aside>
+<!-- Main Wrapper -->
+<main class="ml-[280px] min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-6">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
+<input class="w-full bg-background-base/50 border border-outline-variant/20 rounded-full pl-10 pr-4 py-2 text-label-md focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Buscar propiedades, brokers o zonas..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="flex gap-4">
+<a class="text-primary font-bold font-label-md text-label-md" href="#">ES</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">EN</a>
+</nav>
+<button class="relative text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-status-danger rounded-full"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface">Ismael Rosario</p>
+<p class="text-[10px] text-on-surface-variant/70 uppercase tracking-tighter">Administrador Elite</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-primary/30 object-cover" data-alt="A professional portrait of a senior real estate broker with graying hair, wearing a high-end tailored dark blue suit. He is smiling warmly in a bright, modern corporate office environment with floor-to-ceiling glass windows and soft ambient light. The photography is high-contrast and minimalist, with a shallow depth of field focusing on his confident expression." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdTyk-P6HT2jFEbh0nkIT2_4R4_BpTbSVF7fu5w6ikhD_wvZJxSyaFmP5qA88SEp-zU9VdeddHXiAIQ-yqaKbKg54nb5s94hi2MFfaScokdNpWcWaCyD_hRupiImwsK1Vtc7g72TLFTdsp3c-xoLIhes8-R2VTwlKns7gqhvoNTib2djHJVO_3kz3RHC2MOUqGH737LokJtvUmIuTNPYA6Q74DqID-nTwNVLzgPluXtrSFC3WBGXax3q4SzvGb4ZD2mKh8VisBn90"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="mt-16 p-margin-desktop pb-20">
+<!-- Private Inventory Banner -->
+<div class="mb-8 glass-card rounded-xl p-4 flex items-center justify-between border-primary/20 bg-surface-container-low">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">lock</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+<span class="text-primary font-bold">Inventario interno</span> — visible solo para el equipo autorizado. Los datos de precios reales están restringidos.
+                    </p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase tracking-widest">Acceso Nivel 3</span>
+</div>
+</div>
+<!-- Page Header -->
+<div class="flex items-end justify-between mb-10">
+<div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">Propiedades Internas</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Gestión estratégica de proyectos en fase privada y preventa.</p>
+</div>
+<button class="gold-button-gradient px-8 py-4 rounded-xl text-on-primary-fixed font-bold flex items-center gap-3 shadow-xl transition-all hover:translate-y-[-2px] active:translate-y-0">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md text-label-md">Nuevo proyecto</span>
+</button>
+</div>
+<!-- Filters Bar -->
+<div class="glass-card p-6 rounded-2xl mb-10 flex flex-wrap items-center gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant/70 font-bold ml-1">Zona</label>
+<select class="bg-background-base border border-outline-variant/30 text-on-surface rounded-lg px-4 py-2.5 font-label-md min-w-[180px] focus:ring-primary">
+<option>Punta Cana</option>
+<option>Bávaro</option>
+<option>Cap Cana</option>
+<option>Santo Domingo</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant/70 font-bold ml-1">Tipo</label>
+<select class="bg-background-base border border-outline-variant/30 text-on-surface rounded-lg px-4 py-2.5 font-label-md min-w-[160px] focus:ring-primary">
+<option>En planos</option>
+<option>Alquiler</option>
+<option>Reventa</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant/70 font-bold ml-1">Estado comercial</label>
+<select class="bg-background-base border border-outline-variant/30 text-on-surface rounded-lg px-4 py-2.5 font-label-md min-w-[180px] focus:ring-primary">
+<option>Preventa</option>
+<option>En construcción</option>
+<option>Listo</option>
+<option>Vendido</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] uppercase tracking-widest text-on-surface-variant/70 font-bold ml-1">Broker asignado</label>
+<select class="bg-background-base border border-outline-variant/30 text-on-surface rounded-lg px-4 py-2.5 font-label-md min-w-[200px] focus:ring-primary">
+<option>Todos los brokers</option>
+<option>Ismael Rosario</option>
+<option>Yostar Medina</option>
+<option>Luis García</option>
+</select>
+</div>
+<div class="ml-auto self-end">
+<button class="p-3 border border-outline-variant/30 rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">tune</span>
+</button>
+</div>
+</div>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-gutter">
+<!-- Card 1: Praderas de Punta Cana -->
+<div class="glass-card rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/40 flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A futuristic residential development in Punta Cana with sleek white architectural lines and glass balconies. The buildings are surrounded by lush tropical landscaping and turquoise pools. The sun is setting, casting a warm golden glow over the high-end materials. The atmosphere is quiet luxury and exclusive elegance, reflecting a premium dark UI aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjW2dy2hvLEabSvjNH3S47uRO7BQ3qva5rjkO8d-fhjq-CixDQLV5R3B1e6THpP1wtBjG5xNSxknqaPtiN_lNCQmUdOU5FEXk92TvaP3z0CXpTfOf4UaIk7bhgaoSU5GSceAXz94pYe_byFy8QSUd7QTHmNYL2wdhoEm8JKfhk0_HTjH_4YqdevQ1ld3z--rlbSfF9_vA5RmcTIsYcdkZG-xfDez0MkVOwRhKOWLLVOE_weaZcYei2J8sjOtnMOE3uNTpN7yKWsNY')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#141416] via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary/20 backdrop-blur-md text-primary px-3 py-1 text-[10px] font-bold rounded-full border border-primary/30 uppercase tracking-widest">En construcción 35%</span>
+<span class="bg-black/40 backdrop-blur-md text-white px-3 py-1 text-[10px] font-bold rounded-full border border-white/20 uppercase tracking-widest">Punta Cana</span>
+</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="p-8 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-lg text-[22px] font-bold text-on-surface leading-tight">Praderas de Punta Cana</h3>
+<p class="text-on-surface-variant font-label-md mt-1">Tipo: <span class="text-on-surface">En planos</span></p>
+</div>
+<div class="text-right">
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest">Unidades</p>
+<p class="text-primary font-bold text-lg">12 / 40</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-surface-container-high rounded-full mb-8 overflow-hidden">
+<div class="h-full gold-button-gradient" style="width: 30%"></div>
+</div>
+<!-- Pricing Comparison -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-background-base/50 p-4 rounded-xl border border-outline-variant/10">
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest mb-1">Precio Interno Real</p>
+<p class="text-primary font-display text-xl font-extrabold leading-none">US$140,000</p>
+</div>
+<div class="bg-background-base/30 p-4 rounded-xl border border-outline-variant/5">
+<p class="text-on-surface-variant/50 text-[10px] uppercase font-bold tracking-widest mb-1">Rango Público</p>
+<p class="text-on-surface-variant font-label-md leading-none">US$150K - 180K</p>
+</div>
+</div>
+<!-- Footer -->
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover grayscale hover:grayscale-0 transition-all cursor-pointer border border-outline-variant" data-alt="A close-up professional portrait of a male real estate expert in his late 40s. He has short groomed hair and is wearing a crisp white dress shirt with a subtle texture. The background is a blurred high-end interior. Lighting is soft and cinematic, emphasizing authority and professionalism in a luxury real estate context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuzFeMClP9fOL9gm2EdCpF821QF-4661Hiz8_OXFnnLqei1qfLLKyVMP7G7phVxVGJtojvmew6H3eVlP0Qoz7m-Ym5FZDoyNWyocrUmhXSA8GJ7MMPSC7wHVsLp360UK0HgP1iWTmvDhMAQp7UeMjt8KhbjcMFkqoioeEP9bnCY4W8xgwQvHT6MJAk-mr1C1smirmC0zN-SmS4gtOzbZyV_JUPG0884icLRRYSf6g5NTuDUZIuuhu5m7E5LqlmEVhRijxaY1lmzrw"/>
+<span class="font-label-md text-label-md text-on-surface-variant">Ismael Rosario</span>
+</div>
+<button class="text-primary font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+<span class="font-label-md text-label-md">Ver detalles</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Jardín del Orquídeo -->
+<div class="glass-card rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/40 flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="An artistic architectural rendering of a boutique residential complex in Bávaro. The design features organic wooden textures, vertical gardens, and large minimalist glass windows. The setting is dawn with a soft lavender and orange sky reflected in a calm infinity pool. The aesthetic is ultra-modern, serene, and sophisticated, suited for an elite property inventory." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCR8pffBFsTP-PNZlY2tkZ91tZm4FFEcElpbobxloTxLGX_HidszwgclTwIYa8Vb0Ut7P6fadtFk7vj-Lt5upMd0oHIspDIOJmJXrqLvIkxVaXUesAw5zZl96p3t7WI2FtIQRgFF7Hw7Ku5q67bZ7x02wsUGOXFteqT6mftkJ1GWJrMDU1aNKf1Qhsb07_1BL8b5i8S8TvexxkUAkIrNRsUJq94QvU7aaRuh_r1rDYU5vEYZ0mJ_5FB3eMfLTYYncfC5Ep7ECHK5C4')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#141416] via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-status-warning/20 backdrop-blur-md text-status-warning px-3 py-1 text-[10px] font-bold rounded-full border border-status-warning/30 uppercase tracking-widest">Preventa</span>
+<span class="bg-black/40 backdrop-blur-md text-white px-3 py-1 text-[10px] font-bold rounded-full border border-white/20 uppercase tracking-widest">Bávaro</span>
+</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="p-8 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-lg text-[22px] font-bold text-on-surface leading-tight">Jardín del Orquídeo</h3>
+<p class="text-on-surface-variant font-label-md mt-1">Tipo: <span class="text-on-surface">En planos</span></p>
+</div>
+<div class="text-right">
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest">Unidades</p>
+<p class="text-primary font-bold text-lg">8 / 25</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-surface-container-high rounded-full mb-8 overflow-hidden">
+<div class="h-full gold-button-gradient" style="width: 32%"></div>
+</div>
+<!-- Pricing Comparison -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-background-base/50 p-4 rounded-xl border border-outline-variant/10">
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest mb-1">Precio Interno Real</p>
+<p class="text-primary font-display text-xl font-extrabold leading-none">US$115,000</p>
+</div>
+<div class="bg-background-base/30 p-4 rounded-xl border border-outline-variant/5">
+<p class="text-on-surface-variant/50 text-[10px] uppercase font-bold tracking-widest mb-1">Rango Público</p>
+<p class="text-on-surface-variant font-label-md leading-none">US$125K - 145K</p>
+</div>
+</div>
+<!-- Footer -->
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover grayscale hover:grayscale-0 transition-all cursor-pointer border border-outline-variant" data-alt="A professional headshot of a middle-aged female real estate broker with elegant style. She is wearing a dark grey tailored jacket and has her hair styled professionally. The setting is a bright, high-ceilinged modern atrium with architectural shadows. The image is polished, sharp, and reflects the premium brand identity of Quisqueya Home." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5BQ7Vgx_sazRWj30AJRkpbmg6I_yuumvpL6M0DqAI7I88nE4upfZRdQyQYwMJBBagsk_AJq6OzrmMg46IwrgBH16ZnomNQ4N0dxSNrdreXZlC-d-mCmJoUt73vpz1ykF1CQdvlc24Z0rASz35DqVfdu-3p5jfzLVjNxbg89ZHa3kwg-Pk_iFy4o8WzlAUqKdceQQP7xxaRq6eVgNpz2oTAJBkt3RqqWEyeejrJCz5SXj0IB-PnUq0dznh1keNAtgxRyeW7pfZCxE"/>
+<span class="font-label-md text-label-md text-on-surface-variant">Yostar Medina</span>
+</div>
+<button class="text-primary font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+<span class="font-label-md text-label-md">Ver detalles</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Vista Cana Residences -->
+<div class="glass-card rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/40 flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A wide-angle landscape visualization of a luxury housing community in Vista Cana. The scene includes modern villas with flat roofs, expansive glass walls, and private infinity pools. Families are seen in the distance by a clear artificial lagoon. The lighting is mid-afternoon bright sunshine with sharp shadows and vibrant colors. The style is ultra-high-definition architectural photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmJgM8JrbitSsTyoYnLJb2IoX_lgJfhlvKuEkKh6AgN-rE-ESskOpoa6itjcQhm_a3GmoHYY4dEewer8BiUtMBO9jOqeOpv963-4E52YgYRuie2Vgj-WWplCXXhOuEiP0TOQLYbGdswvcJKMuYOsIJ5sroEhuDTEUowQHe7NCcsEu6Y2yW95xQZfPFE6SsQnaVygp-Vi14omi_PQMZs-8srth5YIZK9P1oCaa6fuhgHpzVCrGndpCc6yx2faVfKgO_JU5JmP02VM8')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#141416] via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-blue-500/20 backdrop-blur-md text-blue-400 px-3 py-1 text-[10px] font-bold rounded-full border border-blue-500/30 uppercase tracking-widest">Entrega 2028</span>
+<span class="bg-black/40 backdrop-blur-md text-white px-3 py-1 text-[10px] font-bold rounded-full border border-white/20 uppercase tracking-widest">Punta Cana</span>
+</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="p-8 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-lg text-[22px] font-bold text-on-surface leading-tight">Vista Cana Residences</h3>
+<p class="text-on-surface-variant font-label-md mt-1">Tipo: <span class="text-on-surface">En planos</span></p>
+</div>
+<div class="text-right">
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest">Unidades</p>
+<p class="text-primary font-bold text-lg">30 / 100</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-surface-container-high rounded-full mb-8 overflow-hidden">
+<div class="h-full gold-button-gradient" style="width: 30%"></div>
+</div>
+<!-- Pricing Comparison -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-background-base/50 p-4 rounded-xl border border-outline-variant/10">
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest mb-1">Precio Interno Real</p>
+<p class="text-primary font-display text-xl font-extrabold leading-none">US$95,000</p>
+</div>
+<div class="bg-background-base/30 p-4 rounded-xl border border-outline-variant/5">
+<p class="text-on-surface-variant/50 text-[10px] uppercase font-bold tracking-widest mb-1">Rango Público</p>
+<p class="text-on-surface-variant font-label-md leading-none">US$105K - 130K</p>
+</div>
+</div>
+<!-- Footer -->
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center border border-outline-variant">
+<span class="text-[10px] font-bold text-primary">LG</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Luis García</span>
+</div>
+<button class="text-primary font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+<span class="font-label-md text-label-md">Ver detalles</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Bávaro Beach Lofts -->
+<div class="glass-card rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/40 flex flex-col">
+<div class="relative h-64 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A high-end interior photograph of a minimalist luxury loft in Bávaro. The space features polished concrete floors, floor-to-ceiling windows with views of the Caribbean Sea, and bespoke Italian furniture. The lighting is soft evening twilight, creating a moody, exclusive atmosphere. Deep shadows and gold lighting accents highlight the textures of the premium interior design." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD74ghaj4yVT9HrC2USjqtTeCHc6QTwWGjIDMlTRtda0lKnKqTTniuWzdDdA4pbjZ5zzU6Fv1y1YmAQuCoileMGsdakrECVM2dDMVccjgdg-KWmjZubgCCKb8CAEspKkiFEjLDNm8oMDOJkcvpVWxW3UsKSuDw52-Xl9aDvubc9EEvbr5NebOxKw-wWOGT-HjjY_-JU8MVvokGuDu_vrQH9s4NNSJMCNd77voqelH5CYZJMDFNlN3bDFfcWi1XReYAcj7O2Nqj0mNA')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#141416] via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-status-success/20 backdrop-blur-md text-status-success px-3 py-1 text-[10px] font-bold rounded-full border border-status-success/30 uppercase tracking-widest">Listo</span>
+<span class="bg-black/40 backdrop-blur-md text-white px-3 py-1 text-[10px] font-bold rounded-full border border-white/20 uppercase tracking-widest">Bávaro</span>
+</div>
+<button class="absolute top-4 right-4 w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="p-8 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-lg text-[22px] font-bold text-on-surface leading-tight">Bávaro Beach Lofts</h3>
+<p class="text-on-surface-variant font-label-md mt-1">Tipo: <span class="text-on-surface">Alquiler</span></p>
+</div>
+<div class="text-right">
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest">Disponibles</p>
+<p class="text-primary font-bold text-lg">5 / 12</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1 bg-surface-container-high rounded-full mb-8 overflow-hidden">
+<div class="h-full gold-button-gradient" style="width: 41%"></div>
+</div>
+<!-- Pricing Comparison -->
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-background-base/50 p-4 rounded-xl border border-outline-variant/10">
+<p class="text-on-surface-variant text-[10px] uppercase font-bold tracking-widest mb-1">Interno / Mes</p>
+<p class="text-primary font-display text-xl font-extrabold leading-none">US$1,200</p>
+</div>
+<div class="bg-background-base/30 p-4 rounded-xl border border-outline-variant/5">
+<p class="text-on-surface-variant/50 text-[10px] uppercase font-bold tracking-widest mb-1">Rango Público</p>
+<p class="text-on-surface-variant font-label-md leading-none">US$1.4K - 1.6K</p>
+</div>
+</div>
+<!-- Footer -->
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover grayscale hover:grayscale-0 transition-all cursor-pointer border border-outline-variant" data-alt="A high-end professional avatar of a senior real estate broker with a confident smile. She has styled dark hair and is wearing a sleek black blazer over a silk blouse. The lighting is flattering and studio-quality, emphasizing a premium and trustworthy persona within a luxury real estate CRM interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE8tN5kIzfbKjUH2Wt9CUsISYvtTmaEd9mlEkdEIdGKnlRbGBBAeYRNlGXwvB7reb4Yxlwn8EqtIYJpEbF3xxECxPJbMGq4WD4tEyWPyvjUci1teFLop83IsDbKqx1k6qvGGe6etgW4XxiurADH_uBGR9vAdXl-TUxA3rFGxzOP7qrGrfC--Je5KEAVaoqlxky1gFJ-LNQJNPi4awNJOulaGaTm-kT4MENA7RdkPDTeWcDPiXVATQs7mCwb2YGggJiG-f9z943uow"/>
+<span class="font-label-md text-label-md text-on-surface-variant">Yostar Medina</span>
+</div>
+<button class="text-primary font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+<span class="font-label-md text-label-md">Ver detalles</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Microinteractions script -->
+<script>
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quisqueya Home | Agenda y Citas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-card {
+            background: rgba(20, 20, 22, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(201, 162, 75, 0.1);
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: 80px repeat(7, 1fr);
+        }
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #C9A24B 0%, #ebc166 100%);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333537;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4e4637;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#b7b4b7",
+                        "gold-dark": "#9E7B31",
+                        "surface-elevated": "#141416",
+                        "background-base": "#0A0A0B",
+                        "primary": "#ebc166",
+                        "primary-container": "#c9a24b",
+                        "outline-variant": "#4e4637",
+                        "surface": "#121416",
+                        "on-surface": "#e2e2e5",
+                        "on-surface-variant": "#d1c5b2"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background-base text-on-surface font-body-md overflow-hidden h-screen flex">
+<!-- SideNavBar (from JSON) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-elevated flex flex-col py-8 border-r border-outline-variant/10 shadow-sm z-50">
+<div class="px-8 mb-10">
+<h1 class="font-display-lg text-[24px] font-bold text-primary">Quisqueya Home</h1>
+<p class="text-[12px] uppercase tracking-widest text-on-surface-variant/60 font-semibold">Elite Real Estate</p>
+</div>
+<nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+<!-- Agenda is active -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+<span class="font-label-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-2 border-primary bg-primary/5 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-md">Agenda</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-label-md">Propiedades</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="handshake">handshake</span>
+<span class="font-label-md">Brokers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md">Reportes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-medium hover:bg-surface-container-high hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">Configuración</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full gold-gradient-bg text-background-base font-bold py-3 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add_circle</span>
+<span>Nueva Propiedad</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] flex-1 flex flex-col h-full bg-background-base">
+<!-- TopNavBar (from JSON) -->
+<header class="h-16 flex justify-between items-center px-10 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 z-40">
+<div class="flex items-center gap-6 w-1/3">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-background-base border border-outline-variant/20 rounded-full py-2 pl-10 pr-4 text-sm focus:border-primary focus:ring-0 transition-all" placeholder="Buscar citas, leads o propiedades..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-xs font-bold text-on-surface-variant">
+<button class="text-primary">ES</button>
+<span class="opacity-20">|</span>
+<button class="hover:text-primary transition-colors">EN</button>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant/20">
+<div class="text-right">
+<p class="text-sm font-bold leading-none">Alexandra</p>
+<p class="text-[10px] text-on-surface-variant font-medium">Asistente de Operaciones</p>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a woman named Alexandra, an executive assistant in a high-end real estate office. She has a confident smile and is wearing professional corporate attire. The background is a soft-focus luxury office with gold accents and dark wood, matching the premium elite CRM aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBecHspFeJJNmU489KuF39uRwsSN-UCAFNQZkgvgk4QvBzw_KaQ_BH_0ms0zZTTVfWk1K7y69kTGKtxm7RfpDoiE_R9JUPeaCBZu3zqlCzSF_ghB6tj9zCTAHgC4-s2a84X57zH9Wdh532werBby5iqU3MggJwjO7zPEGPQcQZgZkBE_XX_RpLJ8DmnqdJYxybf5tEyjgo8FLugKaHF5A14oX9OoKGXKXdfv9Mci_mBCLhzXQNiM79rd-VZVERzdoAPoEifTVOSgU"/>
+</div>
+</div>
+</div>
+</header>
+<!-- View Controls & Filters -->
+<div class="px-10 py-6 flex flex-wrap items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-lg text-white">Agenda y Citas</h2>
+<p class="text-on-surface-variant text-sm">Gestiona tus presentaciones y seguimientos de la semana.</p>
+</div>
+<div class="flex items-center gap-6">
+<!-- Broker Avatars Filter -->
+<div class="flex -space-x-3 items-center">
+<div class="w-10 h-10 rounded-full border-2 border-background-base cursor-pointer hover:scale-110 transition-transform group relative" title="Ismael">
+<img class="w-full h-full rounded-full object-cover" data-alt="Close-up portrait of Ismael, a top real estate broker, with a modern professional look, dark hair, and a friendly expression. The image has warm, premium lighting consistent with a luxury brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpG6uYAbT4JGopq9qWTjluY2caNcf-2qc2sNga5vwHnaIbxBs0kP-nx9yJT5Umxj366coMdfvWbRJIMBWHdIbvH698jZ04C69VKnrmrVh-x1QCpViF9cWYV1uxFTecbi2VdCAHbD9nqWW4BzqFp0sHuW-LRyryvpIRIaX814-0_oS-Foc2r3Yk7W1vh1BYP0ZG2ErCRsf_-DeXgVJfskgIHHnAlzWqr8oid7hc-_ABRTospBY8kfeYp7FMCFLUc8lFF1qgDoKatEA"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background-base cursor-pointer hover:scale-110 transition-transform group relative" title="Yostar">
+<img class="w-full h-full rounded-full object-cover" data-alt="Portrait of Yostar, a real estate professional, looking sharp and elite. Studio lighting with subtle gold reflections, dark neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoGO5LagAySH5_ciTupIIYzGgHxQkZTXbHdOmJ-OcLxtn4AIYwoVdRIkw95gFlrUzEqJ6fbB6vTPhdQzWpt6qnG9iTuGB62WQkEKE6j-fqsJ9SnieiKGTi06gFrMFKGpB74aWgPF9wDTBTjzy9BFDVhVFj_MVMTw2wstfa9BHgoSmtCwfdYbvfCdZPSJvBrb1F1AIh_CWEon9aP9o766rmCUUHSrY5spy0vqccbLSohIMEHmewDaNrCXkAA2xVNtIVeu-mHvKAj_A"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background-base cursor-pointer hover:scale-110 transition-transform group relative" title="Luis">
+<img class="w-full h-full rounded-full object-cover" data-alt="Professional profile photo of Luis, a mature and experienced real estate agent. High contrast dark mode aesthetic with elegant soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOXmV0ZFjso5EyHWujSwLn-yRAji0qmvY8vZahkHSWVy26PJdy3JcSwDZht8O1RpLMNX9vdLJE6Hf49UrkuvL06grBD4Q9fLAAgi8VyC3xbnqw4_1S9uwH1hwdR9_gvyNZmZyaeGXxXX9EbxOz20y6NI-L2Obq1WmZpkBNpjQv8YkgCdoJ8t_URYVVUldRQ3XhXISxlyDVbGKP4pBnFEUXLZcOMQGmhPSB-UDdEvnUosABYhYoJl-DjDkAfbOMfooDQo94yf4rarg"/>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center border-2 border-background-base text-primary hover:bg-primary hover:text-background-base transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<!-- View Toggle -->
+<div class="bg-surface-elevated p-1 rounded-xl flex">
+<button class="px-4 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:text-white transition-colors">Día</button>
+<button class="px-4 py-2 rounded-lg text-sm font-bold bg-primary text-background-base shadow-sm">Semana</button>
+<button class="px-4 py-2 rounded-lg text-sm font-semibold text-on-surface-variant hover:text-white transition-colors">Mes</button>
+</div>
+<button class="gold-gradient-bg text-background-base px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined">event</span>
+                    + Nueva cita
+                </button>
+</div>
+</div>
+<div class="flex-1 flex overflow-hidden px-10 pb-8 gap-8">
+<!-- Calendar Grid Container -->
+<div class="flex-1 glass-card rounded-2xl overflow-hidden flex flex-col border border-outline-variant/10 shadow-2xl">
+<!-- Days Header -->
+<div class="calendar-grid border-b border-outline-variant/10 bg-surface-elevated/50">
+<div class="h-14 flex items-center justify-center border-r border-outline-variant/10">
+<span class="material-symbols-outlined text-on-surface-variant/40">schedule</span>
+</div>
+<div class="h-14 flex flex-col items-center justify-center border-r border-outline-variant/10">
+<span class="text-[10px] uppercase tracking-tighter text-on-surface-variant">Lun</span>
+<span class="text-lg font-bold">14</span>
+</div>
+<div class="h-14 flex flex-col items-center justify-center border-r border-outline-variant/10 bg-primary/5">
+<span class="text-[10px] uppercase tracking-tighter text-primary">Mar</span>
+<span class="text-lg font-bold text-primary">15</span>
+</div>
+<div class="h-14 flex flex-col items-center justify-center border-r border-outline-variant/10">
+<span class="text-[10px] uppercase tracking-tighter text-on-surface-variant">Mié</span>
+<span class="text-lg font-bold">16</span>
+</div>
+<div class="h-14 flex flex-col items-center justify-center border-r border-outline-variant/10">
+<span class="text-[10px] uppercase tracking-tighter text-on-surface-variant">Jue</span>
+<span class="text-lg font-bold">17</span>
+</div>
+<div class="h-14 flex flex-col items-center justify-center border-r border-outline-variant/10">
+<span class="text-[10px] uppercase tracking-tighter text-on-surface-variant">Vie</span>
+<span class="text-lg font-bold">18</span>
+</div>
+<div class="h-14 flex flex-col items-center justify-center border-r border-outline-variant/10 text-on-surface-variant/40">
+<span class="text-[10px] uppercase tracking-tighter">Sáb</span>
+<span class="text-lg font-bold">19</span>
+</div>
+<div class="h-14 flex flex-col items-center justify-center text-on-surface-variant/40">
+<span class="text-[10px] uppercase tracking-tighter">Dom</span>
+<span class="text-lg font-bold">20</span>
+</div>
+</div>
+<!-- Scrollable Body -->
+<div class="flex-1 overflow-y-auto relative bg-[#0e0e10]">
+<div class="calendar-grid min-h-[800px]">
+<!-- Time Column -->
+<div class="border-r border-outline-variant/10">
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">08:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">09:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">10:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">11:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">12:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">13:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">14:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">15:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">16:00</div>
+<div class="h-20 flex items-start justify-center pt-2 text-[10px] font-bold text-on-surface-variant/40">17:00</div>
+</div>
+<!-- Days Columns with Grid Lines -->
+<div class="border-r border-outline-variant/5 relative">
+<!-- Lunes Event: Capacitación -->
+<div class="absolute top-20 left-2 right-2 h-16 bg-surface-container-highest border-l-4 border-primary/40 rounded-md p-2 shadow-lg group hover:scale-[1.02] transition-transform cursor-pointer">
+<p class="text-[11px] font-bold text-primary flex items-center gap-1 leading-tight">
+<span class="material-symbols-outlined text-[14px]">sync</span>
+                                    Capacitación semanal de brokers
+                                </p>
+<p class="text-[9px] text-on-surface-variant mt-1">9:00 AM — Salón Principal</p>
+</div>
+</div>
+<div class="border-r border-outline-variant/5 relative bg-primary/[0.02]">
+<!-- Martes Event: Cita Destacada -->
+<div class="absolute top-[560px] left-2 right-2 h-24 gold-gradient-bg rounded-xl p-3 shadow-2xl shadow-primary/30 group hover:scale-[1.05] transition-transform cursor-pointer z-10">
+<div class="flex justify-between items-start">
+<p class="text-[12px] font-extrabold text-background-base uppercase tracking-tight">Presentación Praderas PC</p>
+<span class="material-symbols-outlined text-background-base text-lg">star</span>
+</div>
+<p class="text-[11px] font-bold text-background-base/80 mt-1">María Fernández — Ismael</p>
+<div class="flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-[14px] text-background-base/60">location_on</span>
+<span class="text-[10px] font-medium text-background-base/70">Showroom Central</span>
+</div>
+</div>
+</div>
+<div class="border-r border-outline-variant/5 relative">
+<!-- Miércoles Event: Seguimiento -->
+<div class="absolute top-[160px] left-2 right-2 h-16 bg-[#1C1C1E] border border-outline-variant/20 rounded-lg p-2 group hover:border-primary/50 transition-colors cursor-pointer">
+<p class="text-[11px] font-bold text-on-surface leading-tight">Llamada seguimiento: José Reyes</p>
+<div class="flex items-center justify-between mt-1">
+<p class="text-[9px] text-on-surface-variant">10:00 AM — Yostar</p>
+<span class="material-symbols-outlined text-[14px] text-primary">call</span>
+</div>
+</div>
+</div>
+<div class="border-r border-outline-variant/5 relative"></div>
+<div class="border-r border-outline-variant/5 relative"></div>
+<div class="border-r border-outline-variant/5 relative bg-black/20"></div>
+<div class="relative bg-black/20"></div>
+</div>
+<!-- Horizontal Grid Lines (Manual Overlay) -->
+<div class="absolute inset-0 pointer-events-none">
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+<div class="h-20 border-b border-outline-variant/10"></div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar Widgets -->
+<aside class="w-[320px] flex flex-col gap-6 h-full">
+<!-- Resumen de hoy -->
+<div class="glass-card rounded-2xl p-6 border-l-4 border-primary shadow-xl">
+<h3 class="font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                        Resumen de hoy
+                    </h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-elevated/50 rounded-xl p-4 border border-outline-variant/10">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">Citas</p>
+<p class="text-3xl font-display-lg text-primary">3</p>
+</div>
+<div class="bg-surface-elevated/50 rounded-xl p-4 border border-outline-variant/10">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold">Llamadas</p>
+<p class="text-3xl font-display-lg text-white">2</p>
+</div>
+</div>
+</div>
+<!-- Solicitudes por asignar -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<div class="flex justify-between items-center mb-4 px-1">
+<h3 class="font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">assignment_late</span>
+                            Por asignar
+                        </h3>
+<span class="bg-primary-container text-on-primary-container text-[10px] px-2 py-0.5 rounded-full font-bold">2 NUEVOS</span>
+</div>
+<div class="space-y-4 overflow-y-auto pr-2">
+<!-- Lead Card 1 -->
+<div class="bg-surface-elevated rounded-xl p-4 border border-outline-variant/10 hover:border-primary/30 transition-all group">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">AP</div>
+<div>
+<p class="text-sm font-bold text-white">Ana Peralta</p>
+<p class="text-[11px] text-on-surface-variant">Alquiler Bávaro</p>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-4 text-[10px] text-on-surface-variant">
+<span class="bg-surface-container-highest px-2 py-1 rounded">Prioridad: Alta</span>
+<span class="bg-surface-container-highest px-2 py-1 rounded">Origen: Instagram</span>
+</div>
+<button class="w-full py-2 rounded-lg border border-primary text-primary font-bold text-xs hover:bg-primary hover:text-background-base transition-all">Agendar</button>
+</div>
+<!-- Lead Card 2 -->
+<div class="bg-surface-elevated rounded-xl p-4 border border-outline-variant/10 hover:border-primary/30 transition-all group">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">CT</div>
+<div>
+<p class="text-sm font-bold text-white">Carlos Then</p>
+<p class="text-[11px] text-on-surface-variant">Venta Vista Cana</p>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-4 text-[10px] text-on-surface-variant">
+<span class="bg-surface-container-highest px-2 py-1 rounded">Prioridad: Media</span>
+<span class="bg-surface-container-highest px-2 py-1 rounded">Origen: Web</span>
+</div>
+<button class="w-full py-2 rounded-lg border border-primary text-primary font-bold text-xs hover:bg-primary hover:text-background-base transition-all">Agendar</button>
+</div>
+</div>
+</div>
+<!-- Footer/Mini Clock -->
+<div class="mt-auto pt-6 text-center border-t border-outline-variant/10">
+<p class="text-2xl font-display-lg text-on-surface-variant/40" id="clock">14:24</p>
+<p class="text-[10px] text-on-surface-variant/30 uppercase tracking-widest font-bold">Martes 15 Octubre</p>
+</div>
+</aside>
+</div>
+</main>
+<script>
+        // Simple micro-interaction for the clock
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Calendar scroll sync or micro-animations
+        document.querySelector('main').addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>
