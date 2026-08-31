@@ -1,0 +1,25 @@
+# Núcleo comercial
+/app/contactos/       @Jvven-24
+/app/leads/           @Jvven-24
+/app/pipeline/        @Jvven-24
+
+# Operación diaria
+/app/agenda/          @Jvven-24
+/app/tareas/          @Jvven-24
+/app/propiedades/     @Jvven-24
+/app/configuracion/   @Jvven-24
+
+# Inventario y equipo
+/app/avances/         @Jvven-24
+/app/brokers/         @Jvven-24
+/app/metas/           @Jvven-24
+/app/comisiones/      @Jvven-24
+
+# Contenido y dirección
+/app/academy/         @Jvven-24
+/app/comunicaciones/  @Jvven-24
+/app/reportes/        @Jvven-24
+/app/inicio/          @Jvven-24
+
+# Esquema — congelado, todo cambio por PR aparte (docs/contexto/convenciones.md)
+/db/schema.ts         @Jvven-24
