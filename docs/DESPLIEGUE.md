@@ -7,21 +7,23 @@ dice explícitamente en vez de inventar un procedimiento que nadie ha probado.
 
 | Entorno | Para qué | Base de datos | Aplicación |
 |---|---|---|---|
-| **Desarrollo** | Trabajo diario en la máquina de cada quien | **Supabase local** (Docker) | `npm run dev` |
+| **Desarrollo** | Trabajo diario en la máquina de cada quien | Proyecto de Supabase en la nube — ver [`SUPABASE.md`](SUPABASE.md) | `npm run dev` |
 | **Staging** | Verificar un cambio antes de que lo vea el cliente | Proyecto de Supabase en la nube | VPS de Hostinger — [PENDIENTE] |
 | **Producción** | El CRM que usa Quisqueya Home | Proyecto de Supabase en la nube | VPS de Hostinger — [PENDIENTE] |
 
-### Por qué local en desarrollo y en la nube en el resto
+### Por qué la nube también en desarrollo
 
-**Local** (Supabase CLI sobre Docker) da el mismo Postgres, el mismo Auth y el
-mismo GoTrue que la nube, corriendo en la máquina. Se puede borrar y rehacer
-entera en un minuto, no cuesta nada, no consume cuota y funciona sin internet.
-Para el desarrollo diario —donde uno rompe la base a propósito varias veces al
-día— es claramente mejor.
+Se evaluó Supabase local (CLI sobre Docker) y **se descartó para este proyecto**:
+exige Docker Desktop corriendo, y arrancarlo dio problemas en la máquina de
+desarrollo. La ventaja que ofrecía —poder borrar y rehacer la base en un minuto,
+sin cuota y sin internet— no compensa depender de una pieza que no arranca.
 
-**En la nube** hacen falta staging y producción de todos modos: el cliente no va
-a usar un Postgres que vive en un portátil. Esos dos proyectos se crean cuando
-se resuelva el despliegue (§5), no antes: hoy no habría dónde apuntarlos.
+Un proyecto de Supabase en la nube en plan Free cubre desarrollo de sobra, y es
+exactamente lo mismo que van a ser staging y producción, así que no hay
+diferencias de entorno que perseguir después.
+
+La configuración local sigue disponible por si algún día conviene: `npm run
+db:up` y `supabase/config.toml` están en el repositorio, listos para usarse.
 
 **Un proyecto de Supabase por entorno, nunca uno compartido.** Compartir
 proyecto significa compartir usuarios de Supabase Auth: una prueba en staging
