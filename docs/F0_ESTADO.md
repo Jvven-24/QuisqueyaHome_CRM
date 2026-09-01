@@ -4,7 +4,7 @@ Corte del **1 de septiembre de 2026**, tras verificar contra la base de datos
 real. Rama `dev/jvven`, [PR #11](https://github.com/Jvven-24/QuisqueyaHome_CRM/pull/11)
 contra `develop`.
 
-Milestone F0 cierra el **20 de septiembre de 2026**.
+Milestone F0 cierra el **20 de septiembre de 2026**. **Mergeada el 1 de septiembre** (PR #11, commit `4fb2e97`), con los issues #2–#6 cerrados.
 
 ---
 
