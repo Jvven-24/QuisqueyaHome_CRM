@@ -1,5 +1,14 @@
 import type { Config } from "drizzle-kit";
 
+// drizzle-kit no pasa por Next.js, así que nadie le carga el `.env`. Nativo
+// desde Node 21.7, sin dependencias. Falla en silencio si el archivo no existe:
+// `db:generate` no necesita conexión.
+try {
+  process.loadEnvFile(".env");
+} catch {
+  /* sin .env: solo importa para `migrate`, que fallará con un mensaje claro */
+}
+
 /**
  * Configuración de Drizzle Kit (T1).
  *

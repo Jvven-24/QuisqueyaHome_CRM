@@ -10,7 +10,7 @@ function required(name: string): string {
   const value = process.env[name];
   if (!value) {
     throw new Error(
-      `Falta la variable de entorno ${name}. Ver .env.example y docs/DESPLIEGUE.md.`,
+      `Falta la variable de entorno ${name}. Copia .env.example a .env. Ver docs/DESPLIEGUE.md.`,
     );
   }
   return value;

@@ -9,9 +9,16 @@
 import { readFileSync } from "node:fs";
 import postgres from "postgres";
 
+// Igual que drizzle.config.ts: este script no pasa por Next.js.
+try {
+  process.loadEnvFile(".env");
+} catch {
+  /* si no hay .env, la comprobación de abajo da el mensaje útil */
+}
+
 const url = process.env.DATABASE_URL;
 if (!url) {
-  console.error("Falta DATABASE_URL. Ver .env.example.");
+  console.error("Falta DATABASE_URL. Copia .env.example a .env. Ver docs/DESPLIEGUE.md.");
   process.exit(1);
 }
 

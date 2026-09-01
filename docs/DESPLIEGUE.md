@@ -7,38 +7,106 @@ dice explícitamente en vez de inventar un procedimiento que nadie ha probado.
 
 | Entorno | Para qué | Base de datos | Aplicación |
 |---|---|---|---|
-| **Desarrollo** | Trabajo diario en la máquina de cada quien | Proyecto de Supabase de desarrollo | `npm run dev` en local |
-| **Staging** | Verificar un cambio antes de que lo vea el cliente | Proyecto de Supabase aparte | VPS de Hostinger — [PENDIENTE] |
-| **Producción** | El CRM que usa Quisqueya Home | Proyecto de Supabase de producción | VPS de Hostinger — [PENDIENTE] |
+| **Desarrollo** | Trabajo diario en la máquina de cada quien | **Supabase local** (Docker) | `npm run dev` |
+| **Staging** | Verificar un cambio antes de que lo vea el cliente | Proyecto de Supabase en la nube | VPS de Hostinger — [PENDIENTE] |
+| **Producción** | El CRM que usa Quisqueya Home | Proyecto de Supabase en la nube | VPS de Hostinger — [PENDIENTE] |
 
-**Un proyecto de Supabase por entorno, no un esquema por entorno.** Compartir
+### Por qué local en desarrollo y en la nube en el resto
+
+**Local** (Supabase CLI sobre Docker) da el mismo Postgres, el mismo Auth y el
+mismo GoTrue que la nube, corriendo en la máquina. Se puede borrar y rehacer
+entera en un minuto, no cuesta nada, no consume cuota y funciona sin internet.
+Para el desarrollo diario —donde uno rompe la base a propósito varias veces al
+día— es claramente mejor.
+
+**En la nube** hacen falta staging y producción de todos modos: el cliente no va
+a usar un Postgres que vive en un portátil. Esos dos proyectos se crean cuando
+se resuelva el despliegue (§5), no antes: hoy no habría dónde apuntarlos.
+
+**Un proyecto de Supabase por entorno, nunca uno compartido.** Compartir
 proyecto significa compartir usuarios de Supabase Auth: una prueba en staging
 crearía sesiones en la misma base que producción.
 
 Cada entorno tiene su propio `.env` con las tres variables de
 [`.env.example`](../.env.example). Ninguna credencial se comitea.
 
-## 2. Poner en marcha una base de datos desde cero
+## 2. Levantar la base de datos
+
+### En local
+
+Requisito: **Docker Desktop instalado y arrancado**. Es lo único que hace falta;
+el CLI de Supabase se descarga solo con `npx` la primera vez.
 
 ```bash
-cp .env.example .env.local     # y rellenar los tres valores
-npm run db:migrate             # aplica drizzle/ sobre la base
-npm run db:seed                # roles, permisos, etapas, motivos y canales
+cp .env.example .env
+npm run db:up        # levanta Postgres, Auth y el panel (la 1ª vez tarda)
+                     # imprime el `anon key` → pégalo en .env
+npm run db:migrate   # aplica drizzle/
+npm run db:seed      # roles, permisos, etapas, motivos y canales
 ```
 
-`db:seed` es idempotente: correrlo dos veces no duplica nada y **reafirma la
-matriz de permisos**. Si alguien la cambió a mano en la base, la siguiente
-corrida la devuelve a lo que dice `db/seed.sql`, que es lo que se revisó en el
-PR. Es deliberado: la matriz de permisos es la seguridad del sistema.
+La URL (`http://127.0.0.1:54321`) y la cadena de conexión
+(`postgresql://postgres:postgres@127.0.0.1:54322/postgres`) son fijas, las define
+`supabase/config.toml`. Para volver a verlas: `npm run db:status`.
+
+| Qué | Dónde |
+|---|---|
+| Panel: ver tablas, datos y usuarios de Auth | http://127.0.0.1:54323 |
+| Correos de prueba (recuperación de contraseña) | http://127.0.0.1:54324 |
+
+**Empezar de cero** —después de romper algo, o al cambiar de rama con
+migraciones distintas:
+
+```bash
+npm run db:reset     # borra la base, migra y siembra de nuevo
+```
+
+**Al terminar la jornada:** `npm run db:down` libera la memoria de los
+contenedores.
+
+#### Quién gobierna las migraciones
+
+**Drizzle, no el CLI de Supabase.** Las migraciones viven en `drizzle/` y se
+aplican con `npm run db:migrate`. `supabase/migrations/` queda vacío a
+propósito, y el seed automático del CLI está apagado en `config.toml` — correría
+antes de que existan las tablas.
+
+Dos sistemas de migración sobre la misma base es la forma más fiable de que
+alguien aplique la mitad de los cambios sin enterarse. El CLI de Supabase aquí
+solo levanta los contenedores.
+
+`realtime` y `storage` también están apagados en `config.toml`: no se usan
+todavía y arrancan más rápido sin ellos. **Storage se vuelve a encender en M6**,
+que es cuando entran las fotos de avance de obra.
+
+### En la nube
+
+Idéntico, quitando el `db:up`: se crea el proyecto en el panel de Supabase, se
+copian las tres variables al `.env` de ese entorno y se corre `npm run db:migrate
+&& npm run db:seed` contra él.
+
+### El seed es idempotente y reafirma los permisos
+
+Correrlo dos veces no duplica nada. Y **reafirma la matriz de permisos**: si
+alguien la cambió a mano en la base, la siguiente corrida la devuelve a lo que
+dice `db/seed.sql`, que es lo que se revisó en el PR. Es deliberado — la matriz
+de permisos es la seguridad del sistema.
 
 ### Primer usuario
 
 Supabase Auth y la tabla `users` son dos cosas distintas, y el CRM exige las dos
 (ver `src/infrastructure/auth/actor.ts`). Para dar de alta a alguien:
 
-1. Crear el usuario en Supabase → Authentication → Users. Anotar su UUID.
+1. Crear el usuario en el panel → Authentication → Users. Anotar su UUID.
+   En local el panel es http://127.0.0.1:54323.
 2. Insertar la fila en `users` con ese UUID en `auth_user_id` y el `role_id` que
-   corresponda.
+   corresponda:
+
+```sql
+INSERT INTO users (role_id, auth_user_id, full_name, email, initials, job_title)
+SELECT r.id, 'EL-UUID-DE-SUPABASE', 'Nombre Apellido', 'correo@ejemplo.com', 'NA', 'Administrador'
+FROM roles r WHERE r.slug = 'admin';
+```
 
 Existir solo en Supabase Auth no da acceso: sin fila en `users`, o con la fila
 inactiva o en la papelera, no hay sesión utilizable. Un usuario dado de baja en
