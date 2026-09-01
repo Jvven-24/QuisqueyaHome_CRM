@@ -1,25 +1,41 @@
+# Dueño por carpeta de módulo (MAPEO_FRONTEND_CRM.md §18).
+#
+# Las rutas coinciden con las carpetas reales creadas por T7. Si un módulo se
+# renombra aquí y no allí (o al revés), GitHub deja de asignar revisores en
+# silencio — nadie recibe un error, simplemente el PR se queda sin dueño.
+#
+# `(crm)` es un grupo de rutas de Next.js: agrupa los 15 módulos bajo el shell
+# compartido sin aparecer en la URL.
+
 # Núcleo comercial
-/app/contactos/       @Jvven-24
-/app/leads/           @Jvven-24
-/app/pipeline/        @Jvven-24
+/src/app/(crm)/contactos/       @Jvven-24
+/src/app/(crm)/leads/           @Jvven-24
+/src/app/(crm)/pipeline/        @Jvven-24
 
 # Operación diaria
-/app/agenda/          @Jvven-24
-/app/tareas/          @Jvven-24
-/app/propiedades/     @Jvven-24
-/app/configuracion/   @Jvven-24
+/src/app/(crm)/agenda/          @Jvven-24
+/src/app/(crm)/tareas/          @Jvven-24
+/src/app/(crm)/propiedades/     @Jvven-24
+/src/app/(crm)/configuracion/   @Jvven-24
 
 # Inventario y equipo
-/app/avances/         @Jvven-24
-/app/brokers/         @Jvven-24
-/app/metas/           @Jvven-24
-/app/comisiones/      @Jvven-24
+/src/app/(crm)/avances/         @Jvven-24
+/src/app/(crm)/brokers/         @Jvven-24
+/src/app/(crm)/metas/           @Jvven-24
+/src/app/(crm)/comisiones/      @Jvven-24
 
 # Contenido y dirección
-/app/academy/         @Jvven-24
-/app/comunicaciones/  @Jvven-24
-/app/reportes/        @Jvven-24
-/app/inicio/          @Jvven-24
+/src/app/(crm)/academy/         @Jvven-24
+/src/app/(crm)/comunicaciones/  @Jvven-24
+/src/app/(crm)/reportes/        @Jvven-24
+/src/app/(crm)/inicio/          @Jvven-24
 
-# Esquema — congelado, todo cambio por PR aparte (docs/contexto/convenciones.md)
-/db/schema.ts         @Jvven-24
+# Recursos compartidos — un solo dueño por §18.1. Un cambio aquí afecta a los
+# 15 módulos a la vez, así que va en su propio PR.
+/src/infrastructure/db/schema.ts  @Jvven-24
+/drizzle/                         @Jvven-24
+/db/seed.sql                      @Jvven-24
+/src/domain/rbac.ts               @Jvven-24
+/src/infrastructure/rbac-filter.ts @Jvven-24
+/src/app/(crm)/layout.tsx         @Jvven-24
+/src/app/(crm)/modulos.ts         @Jvven-24

@@ -1,8 +1,8 @@
 # Config de github/labeler — etiqueta PRs según qué carpeta tocan.
 # Mapeo de carpetas → módulo/capa: MAPEO_FRONTEND_CRM.md §18.
-# Ojo: las rutas por módulo (app/contactos/, app/leads/, etc.) todavía no
-# existen — nacen con T7. Hasta entonces, la mayoría de estos patrones
-# simplemente no matchean nada, lo cual es correcto.
+# Las rutas por módulo viven bajo el grupo de rutas (crm), creado en T7: no
+# aparece en la URL, pero sí en la ruta del archivo. Si un módulo se renombra,
+# hay que tocarlo aquí, en .github/CODEOWNERS y en src/app/(crm)/modulos.ts.
 
 T0:
   - changed-files:
@@ -23,86 +23,105 @@ T2:
       - any-glob-to-any-file:
           - "src/infrastructure/auth/**"
 
+T3:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/domain/rbac.ts"
+          - "src/domain/rbac.test.ts"
+          - "src/infrastructure/rbac-filter.ts"
+
+T4:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/infrastructure/db/client.ts"
+          - "src/infrastructure/http.ts"
+          - "src/domain/errors.ts"
+          - "src/application/**"
+
 T7:
   - changed-files:
       - any-glob-to-any-file:
           - "src/app/**"
+          - "src/middleware.ts"
 
 T8:
   - changed-files:
       - any-glob-to-any-file:
           - ".github/workflows/**"
+          - ".env.example"
+          - "src/infrastructure/env.ts"
+          - "docs/DESPLIEGUE.md"
 
 M1:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/contactos/**"
+          - "src/app/(crm)/contactos/**"
 
 M2:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/leads/**"
+          - "src/app/(crm)/leads/**"
 
 M3:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/pipeline/**"
+          - "src/app/(crm)/pipeline/**"
 
 M4:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/agenda/**"
-          - "src/app/tareas/**"
+          - "src/app/(crm)/agenda/**"
+          - "src/app/(crm)/tareas/**"
 
 M5:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/propiedades/**"
+          - "src/app/(crm)/propiedades/**"
 
 M6:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/avances/**"
+          - "src/app/(crm)/avances/**"
 
 M7:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/brokers/**"
+          - "src/app/(crm)/brokers/**"
 
 M8:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/metas/**"
+          - "src/app/(crm)/metas/**"
 
 M9:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/comisiones/**"
+          - "src/app/(crm)/comisiones/**"
 
 M10:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/academy/**"
+          - "src/app/(crm)/academy/**"
 
 M11:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/comunicaciones/**"
+          - "src/app/(crm)/comunicaciones/**"
 
 M12:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/reportes/**"
+          - "src/app/(crm)/reportes/**"
 
 M13:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/configuracion/**"
+          - "src/app/(crm)/configuracion/**"
 
 M14:
   - changed-files:
       - any-glob-to-any-file:
-          - "src/app/inicio/**"
+          - "src/app/(crm)/inicio/**"
 
 "tipo: datos":
   - changed-files:

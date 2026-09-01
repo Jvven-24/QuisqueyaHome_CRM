@@ -63,5 +63,30 @@ Ver detalle de capas en arquitectura.md.
 **Autenticación:** confirmado — **Supabase Auth**, precisamente por venir integrado con la base de datos elegida.
 **Pendiente de decidir:** mecanismo de deploy hacia el VPS de Hostinger. El usuario lo está trabajando en otra sesión, como parte del cronograma general del proyecto — no forma parte de esta ronda de documentación.
 
+## 13. Fechas en Postgres: tipos nativos, no texto ISO-8601
+**Decisión (1 de septiembre de 2026, al portar el esquema en T1):** en el repositorio de producción los instantes se guardan en `timestamptz` y las fechas sin hora en `date`, no como texto ISO-8601.
+**Por qué:** la convención de texto (`MAPEO_FRONTEND_CRM.md` §20.1) existía por un defecto de SQLite — su `CURRENT_TIMESTAMP` escribe `"2026-08-30 12:00:00"` mientras la aplicación escribe `"2026-08-30T12:00:00.000Z"`, y en texto el espacio ordena antes que la `T`, así que mezclarlos rompía `ORDER BY` y los rangos por fecha en silencio. Postgres no tiene ese defecto y sí tiene tipos de fecha reales. Guardar fechas como texto en Postgres tira a la basura los rangos, los índices por fecha y la aritmética de intervalos, que es justo lo que necesitan la próxima acción obligatoria, las alertas de SLA, la agenda y los rangos de Reportes.
+**Lo que NO cambia:** todo se sigue guardando en UTC y la conversión a `America/Santo_Domingo` sigue ocurriendo en la capa de aplicación.
+**Nota:** §20.1 advierte de no "corregir" las convenciones a mitad del desarrollo. El port a Postgres es exactamente la ventana en la que el propio documento admite que la sintaxis no es portable; hacerlo después habría exigido migrar datos.
+
+## 14. Dinero en `bigint`, no en `integer`
+**Decisión (1 de septiembre de 2026, T1):** todas las columnas `*_cents` son `bigint`.
+**Por qué:** en centavos, un `integer` de Postgres desborda a partir de US$21.4 millones. Es alcanzable en `broker_profiles.annual_sales_cents` y en los acumulados de `goals`. El desbordamiento no avisa antes de ocurrir.
+
+## 15. La tabla `sessions` queda sin uso
+**Decisión (1 de septiembre de 2026, T2):** `sessions` se conserva en el esquema portado pero no se usa. Supabase Auth ya gestiona sesiones y refresh tokens, y "cerrar sesión remota" se resuelve con su API.
+**Por qué:** mantener dos registros de sesión en paralelo garantiza que se desincronicen. La tabla se conserva solo porque el esquema está congelado (§18.1) y borrarla merece su propio PR.
+
+## 16. Sin repositorios ni puertos hasta que exista un caso de uso
+**Decisión (1 de septiembre de 2026, T4):** F0 entrega el cliente de base de datos, la validación, los errores y el helper de transacción, pero **no** un puerto ni un repositorio por tabla. Nacen en F1, con el caso de uso que los consuma.
+**Por qué:** la arquitectura hexagonal (decisión #11) invita a escribir la interfaz antes que el consumidor. Un puerto con una sola implementación y ningún consumidor es código muerto con nombre elegante, y además fija una forma antes de saber qué forma hace falta.
+**Descartado:** generar los 28 repositorios junto al esquema.
+
 ## Estado de implementación de estas decisiones
-El esquema (`db/schema.ts`, 29 tablas) y la migración (`drizzle/0000_adorable_forge.sql`) **existen en disco pero no están comiteados** (`git status` los marca como modificado/untracked). Ninguna decisión #1–#8 está desplegada: D1 sigue `null` en `.openai/hosting.json`. Las decisiones #11 y #12 (hexagonal, Supabase/Hostinger) son aún más tempranas: ni siquiera existe todavía el repositorio de producción donde aplicarlas.
+**Actualizado el 1 de septiembre de 2026, al cerrar el grueso de F0.**
+
+Las decisiones #1–#8 (modelado) están implementadas en `src/infrastructure/db/schema.ts` — 29 tablas sobre Postgres — con su migración generada en `drizzle/`, y los catálogos que les dan sentido sembrados en `db/seed.sql`. La #2 (permisos por recurso + acción + alcance) está además implementada en código y probada: `src/domain/rbac.ts`.
+
+La #11 (hexagonal) y la #12 (Supabase/Hostinger) están implementadas en la mitad que no depende de credenciales: capas separadas, autenticación sobre Supabase Auth, RBAC en servidor, rutas por módulo. **Lo que falta de F0 no es código sino acceso:** no existe todavía un proyecto de Supabase con credenciales contra el que aplicar la migración, ni está decidido el mecanismo de despliegue al VPS (ver `docs/DESPLIEGUE.md`).
+
+Lo que sigue siendo cierto del prototipo (`referencia-prototipo/`): su `db/schema.ts` es SQLite, D1 nunca se enlazó, y nada de lo anterior está desplegado ahí. El prototipo es material de consulta, no la base del sistema.
