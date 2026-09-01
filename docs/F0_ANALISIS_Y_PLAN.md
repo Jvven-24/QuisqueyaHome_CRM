@@ -22,7 +22,7 @@ Lo que pasa si F0 sale mal está documentado y no es hipotético:
 | Capa | Issue | Estado | Evidencia |
 |---|---|---|---|
 | T0 Scaffold | ✅ **Hecho** | `src/domain`, `src/application`, `src/infrastructure`, Next 15 + React 19 + TS estricto, CI verde | commit `3df2316`, PR #8 |
-| T1 Datos | ❌ Pendiente | No existe esquema en el repo de producción. El de origen es `sqliteTable` (1090 líneas, 28 tablas) y vive en el prototipo | `referencia-prototipo/db/schema.ts` |
+| T1 Datos | ❌ Pendiente | No existe esquema en el repo de producción. El de origen es `sqliteTable` (1090 líneas, 29 tablas) y vive en el prototipo | `referencia-prototipo/db/schema.ts` |
 | T2 Auth | ❌ Pendiente | No hay dependencia de Supabase instalada, ni login, ni middleware | `package.json` |
 | T3 RBAC | ❌ Pendiente | No existe resolución de permisos | `src/application/` vacío salvo READMEs |
 | T4 Acceso | ❌ Pendiente | No hay cliente de base de datos ni patrón de validación | `src/infrastructure/db/` vacío |
@@ -35,7 +35,7 @@ Además, ya está resuelto todo lo de gobierno del repositorio: ramas `main`/`de
 
 ### T1 · Fundación de datos — `size: S` (el tamaño está mal, es M)
 
-**Lo que el issue pide:** portar 28 tablas de `sqliteTable` a `pgTable`, configurar Supabase, aplicar la migración inicial, y sembrar roles, permisos, etapas, motivos de pérdida y canales.
+**Lo que el issue pide:** portar 29 tablas de `sqliteTable` a `pgTable`, configurar Supabase, aplicar la migración inicial, y sembrar roles, permisos, etapas, motivos de pérdida y canales.
 
 **Lo que el análisis del esquema revela:** el port **no es un buscar-y-reemplazar**. Hay cinco puntos donde SQLite y Postgres divergen de verdad:
 
@@ -123,7 +123,7 @@ Es una cadena, no un abanico: T1→T2→T3→T4→T7 es la ruta crítica de §13
 Cada paso es un commit sobre `dev/jvven` → PR contra `develop`, siguiendo el flujo ya establecido.
 
 ### Paso 1 — T1a · Port del esquema a Postgres
-`src/infrastructure/db/schema.ts` — las 28 tablas y los 17 catálogos cerrados portados a `pgTable`, con los cinco cambios de tipo de la tabla de §3. Se conservan los comentarios de decisión (son la memoria de por qué el esquema es así) y se corrigen los que ya no aplican a Postgres. Drizzle configurado contra `postgres-js`.
+`src/infrastructure/db/schema.ts` — las 29 tablas y los 17 catálogos cerrados portados a `pgTable`, con los cinco cambios de tipo de la tabla de §3. Se conservan los comentarios de decisión (son la memoria de por qué el esquema es así) y se corrigen los que ya no aplican a Postgres. Drizzle configurado contra `postgres-js`.
 *Verificación:* `npm run typecheck`.
 
 ### Paso 2 — T1b · Migración y seeds

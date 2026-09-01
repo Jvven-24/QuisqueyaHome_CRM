@@ -85,7 +85,7 @@ Ver detalle de capas en arquitectura.md.
 ## Estado de implementación de estas decisiones
 **Actualizado el 1 de septiembre de 2026, al cerrar el grueso de F0.**
 
-Las decisiones #1–#8 (modelado) están implementadas en `src/infrastructure/db/schema.ts` — 28 tablas sobre Postgres — con su migración generada en `drizzle/`, y los catálogos que les dan sentido sembrados en `db/seed.sql`. La #2 (permisos por recurso + acción + alcance) está además implementada en código y probada: `src/domain/rbac.ts`.
+Las decisiones #1–#8 (modelado) están implementadas en `src/infrastructure/db/schema.ts` — 29 tablas sobre Postgres — con su migración generada en `drizzle/`, y los catálogos que les dan sentido sembrados en `db/seed.sql`. La #2 (permisos por recurso + acción + alcance) está además implementada en código y probada: `src/domain/rbac.ts`.
 
 La #11 (hexagonal) y la #12 (Supabase/Hostinger) están implementadas en la mitad que no depende de credenciales: capas separadas, autenticación sobre Supabase Auth, RBAC en servidor, rutas por módulo. **Lo que falta de F0 no es código sino acceso:** no existe todavía un proyecto de Supabase con credenciales contra el que aplicar la migración, ni está decidido el mecanismo de despliegue al VPS (ver `docs/DESPLIEGUE.md`).
 

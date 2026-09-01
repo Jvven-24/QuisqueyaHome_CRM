@@ -135,7 +135,7 @@ npm run db:migrate
 npm run db:seed
 ```
 
-`db:migrate` crea las 28 tablas. `db:seed` siembra 3 roles, la matriz de
+`db:migrate` crea las 29 tablas. `db:seed` siembra 3 roles, la matriz de
 permisos completa, 7 etapas del pipeline, 7 motivos de pérdida y 8 canales de
 captación.
 

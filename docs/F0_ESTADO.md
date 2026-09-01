@@ -1,136 +1,140 @@
 # F0 · Estado — qué quedó hecho y qué falta
 
-Corte del **1 de septiembre de 2026**. Rama `dev/jvven`, seis commits
-(`3d1bc06`…`ca67f00`), pendiente de PR contra `develop`.
+Corte del **1 de septiembre de 2026**, tras verificar contra la base de datos
+real. Rama `dev/jvven`, [PR #11](https://github.com/Jvven-24/QuisqueyaHome_CRM/pull/11)
+contra `develop`.
 
 Milestone F0 cierra el **20 de septiembre de 2026**.
 
 ---
 
-## Hecho
+## Estado por capa
 
-| Capa | Estado | Dónde |
+| Capa | Estado | Verificado con |
 |---|---|---|
-| **T0** Scaffold | ✅ Ya estaba | commit `3df2316` |
-| **T1** Datos | 🟡 Todo escrito, falta aplicarlo | ver abajo |
-| **T2** Auth | 🟡 Completo en código, sin probar contra la base | ver abajo |
-| **T3** RBAC | ✅ **Terminado y probado** | `src/domain/rbac.ts`, `src/infrastructure/rbac-filter.ts`, 8 pruebas |
-| **T4** Acceso a datos | ✅ Terminado | `src/infrastructure/db/client.ts`, `http.ts`, `src/domain/errors.ts` |
-| **T7** Rutas | ✅ Terminado | `src/app/(crm)/` — 15 módulos + shell |
-| **T8** Entorno | 🟡 Documentado, no ejecutado | `.env.example`, `docs/DESPLIEGUE.md` |
+| **T0** Scaffold | ✅ Terminado | CI |
+| **T1** Datos | ✅ **Terminado** | 29 tablas y catálogos aplicados en Supabase |
+| **T2** Auth | ✅ **Terminado** | Login real de punta a punta |
+| **T3** RBAC | ✅ **Terminado** | 14 pruebas + comprobación contra datos reales |
+| **T4** Acceso a datos | ✅ Terminado | Typecheck y uso real en T2 |
+| **T7** Rutas | ✅ Terminado | Build: 24 rutas |
+| **T8** Entorno | 🟡 Parcial — bloqueado | Ver «Lo que falta» |
 
-Verificación en verde: `npm run typecheck`, `npm run lint`, `npm test` (8/8) y
-`npm run build` (22 rutas + middleware).
-
-### Detalle
-
-**T1 · Datos**
-- 28 tablas portadas de `sqliteTable` a `pgTable` en `src/infrastructure/db/schema.ts`.
-- Migración inicial generada: `drizzle/0000_thankful_senator_kelly.sql`, 582 líneas.
-- Seeds en `db/seed.sql`: 3 roles, matriz de permisos completa de los tres roles,
-  7 etapas del pipeline, 7 motivos de pérdida, 8 canales de captación. Idempotente.
-- Los catálogos cerrados se movieron a `src/domain/catalogs.ts` para que la
-  dependencia vaya de infraestructura a dominio y no al revés.
-- Cinco cambios de tipo que no son sintaxis: `serial`, `boolean`,
-  `timestamptz`/`date` en vez de texto ISO-8601, `bigint` en los `*_cents`,
-  índices únicos parciales conservados. Justificados en `decisiones.md` #13–#14.
-
-**T2 · Auth**
-- `@supabase/ssr` con sesión en cookies: cliente de servidor y de navegador.
-- Middleware privado por defecto — se listan las rutas públicas, no las privadas.
-- Login, logout y recuperación de contraseña como route handlers.
-- `actor.ts` cruza `auth.users` con `users` y sus permisos, una vez por petición.
-  Sin fila activa en `users` no hay sesión utilizable.
-
-**T3 · RBAC**
-- `scopeFor` / `can` / `requireScope` / `reaches` / `stripRestrictedPrices` en el
-  dominio, sin dependencias.
-- `visibleRows` traduce el alcance a SQL en un único sitio.
-- 8 pruebas con `node --test` sobre los `.ts` directamente, sin compilar ni
-  instalar ningún framework.
-
-**T4 · Acceso a datos**
-- Una sola conexión, armada en la primera consulta y no al importar el módulo.
-- `transaction()` como único camino para operaciones que tocan más de una tabla.
-- Errores de dominio traducidos a HTTP en un solo lugar; validación con Zod.
-
-**T7 · Rutas**
-- 15 carpetas con los nombres exactos de `MAPEO_FRONTEND_CRM.md` §18, gobernadas
-  por una sola lista (`modulos.ts`) que también dibuja la navegación.
-- `.github/CODEOWNERS` actualizado a las rutas reales.
-- Cada página es la plantilla del patrón de lectura para quien construya F1.
+**Cinco de las siete capas de F0 están cerradas.** Lo único pendiente es T8, y
+está bloqueado por una decisión, no por trabajo.
 
 ---
 
-## Falta
+## Lo que se verificó, y cómo
 
-### 1. Aplicar la base de datos — **bloqueado por credenciales**
+### T1 · Datos — contra el proyecto real de Supabase
 
-No existe todavía un proyecto de Supabase. Cuando exista:
+| Comprobación | Resultado |
+|---|---|
+| Migración aplicada | 29 tablas en `public` |
+| Matriz de permisos | admin 126 · assistant 35 · broker 22 |
+| Catálogos | 7 etapas, 7 motivos de pérdida, 8 canales, 3 roles |
+| Etapas con su `kind` | 6 `open`, Cierre `won`, Perdido `lost` |
+| Idempotencia del seed | Corrido dos veces, sin duplicados |
 
-```bash
-cp .env.example .env.local   # rellenar los tres valores
-npm run db:migrate
-npm run db:seed
-```
+### T2 · Auth — flujo completo por HTTP
 
-Hasta entonces, la migración y los seeds están escritos y revisables pero no
-aplicados. Es lo único que separa a T1 de estar terminado.
+| Caso | Esperado | Resultado |
+|---|---|---|
+| `/`, `/inicio`, `/pipeline` sin sesión | Redirección a login | 307 → `/login?destino=…` |
+| `/login` sin sesión | Accesible | 200 |
+| Credenciales incorrectas | 401 sin revelar si el correo existe | 401, mensaje único |
+| Entrada inválida | 400 con error por campo | 400, en español |
+| Credenciales correctas | Sesión en cookies | 200 + cookie de Supabase |
+| Ruta privada con sesión | Contenido | 200 |
 
-### 2. Probar el login de punta a punta — **bloqueado por lo anterior**
+### T3 · RBAC — el criterio de terminado #1
 
-El código de T2 está completo, pero nadie ha iniciado sesión todavía. Falta:
-crear el primer usuario en Supabase Auth, insertar su fila en `users` con el
-`auth_user_id`, y comprobar que entra y que el shell muestra sus módulos. El
-procedimiento está en `docs/DESPLIEGUE.md` §2.
+Es el criterio que dice que un usuario no autorizado no puede leer ni modificar
+datos restringidos, **verificado en servidor y no ocultando botones** (§16).
 
-### 3. La prueba que cierra el criterio #1
+**Con un broker real, sesión real y datos reales:**
 
-`MAPEO_FRONTEND_CRM.md` §16 exige demostrar que un usuario no autorizado no lee
-datos ajenos. La lógica está probada en aislamiento (8 pruebas de T3), pero falta
-la prueba de punta a punta: un broker pidiendo el negocio de otro broker y
-recibiendo 404/403 desde el servidor. Necesita base de datos.
+| Comprobación | Resultado |
+|---|---|
+| Módulos que ve en la navegación | 13 de 15 — sin Reportes ni Configuración, exactamente lo que concede el seed |
+| `/reportes` y `/configuracion` | **403**, no 500 ni contenido |
+| Contactos de otro responsable | No aparecen en su consulta |
+| Registros en papelera | No aparecen, ni para el broker ni para el administrador |
+| Sus propios contactos | Sí aparecen |
 
-### 4. T8 · Entorno y despliegue — **bloqueado por decisión pendiente**
+**14 pruebas automáticas** (`npm test`), sin base de datos: 8 sobre la decisión
+de permiso y 6 sobre el filtro SQL que la aplica. Cubren que un recurso sin
+permiso nace cerrado, que `none` no devuelve nada aunque alguien se salte el
+403, y que la papelera se descarta también con alcance `all` — el caso que se
+olvida.
 
-- Mecanismo de despliegue al VPS de Hostinger: sin decidir (`decisiones.md` #12).
-- Entornos de staging y producción: no existen.
-- Prueba de restauración de respaldo: no ejecutada. Sin ella, el criterio de
-  terminado #10 no está cumplido.
+---
+
+## Tres cosas que solo aparecieron al conectar de verdad
+
+Ninguna se veía con typecheck, lint ni build. Las tres están corregidas.
+
+**1. La conexión directa de Supabase es solo IPv6.** `db.<ref>.supabase.co` no
+tiene registro A. En la máquina de desarrollo daba **1 conexión buena de cada
+8**, con `ENOTFOUND` en el resto. Se cambió al *session pooler*, que responde por
+IPv4: 10 de 10. Queda anotado en `DESPLIEGUE.md` como comprobación obligatoria
+antes de desplegar: **si el VPS de Hostinger no lleva IPv6, la conexión directa
+no funciona y el fallo no aparece hasta el primer despliegue.**
+
+**2. Una página sin permiso devolvía 500 en vez de 403.** El dato no se
+filtraba, pero la excepción escapaba y salía la pantalla de error genérica: ni el
+código de estado correcto ni una explicación para el usuario. Ahora responde 403
+con `forbidden()` de Next.
+
+**3. Un mensaje de validación salía en inglés.** `z.string().min(1, "…")` solo
+traduce el error de cadena vacía, no el de campo ausente.
+
+---
+
+## Lo que falta
+
+### T8 · Entorno y despliegue — bloqueado por una decisión, no por trabajo
+
+- **Mecanismo de despliegue al VPS de Hostinger: sin decidir** (`decisiones.md`
+  #12). Es el único bloqueo real de F0.
+- Entornos de staging y producción: no existen. Cada uno lleva su propio
+  proyecto de Supabase, y se crean cuando haya dónde apuntarlos.
+- **Prueba de restauración de respaldo: no ejecutada.** Sin ella el criterio de
+  terminado #10 no está cumplido. El procedimiento está escrito en
+  `DESPLIEGUE.md` §4.
 - Monitoreo y alertas: sin definir.
 
-El procedimiento y las condiciones que la decisión debe respetar están escritos
-en `docs/DESPLIEGUE.md` §5.
+Lo que no depende de esa decisión ya está hecho: contrato de configuración,
+procedimiento de respaldo y restauración, y las condiciones que la decisión debe
+respetar (`DESPLIEGUE.md` §5).
 
-### 5. Gestión de usuarios
+### Fricción conocida, no bloqueante
 
-Mientras M13 (fase F2) no exista, las altas se hacen a mano en Supabase + un
-`INSERT` en `users`. Está documentado, pero es fricción real para el arranque.
+- **Las altas de usuario son a mano** (crear en Supabase Auth + `INSERT` en
+  `users`) hasta que exista M13, en la fase F2. Documentado en `SUPABASE.md` §5.
+- **`scripts/crear-broker-prueba.mjs` es una fixture de desarrollo.** Crea el
+  usuario directamente en `auth.users` porque Supabase rechaza los dominios de
+  prueba y un `signUp` con dominio real le mandaría un correo a un tercero. No
+  se corre en producción.
 
-### 6. Nada de F1
+### Nada de F1
 
-T5 (estados de interfaz) y T6 (auditoría) pertenecen a F1 y no se tocaron, igual
-que M1, M2 y M3. Las carpetas de ruta existen con marcadores.
+T5 (estados de interfaz) y T6 (auditoría) son de F1 y no se tocaron, igual que
+M1, M2 y M3. Las carpetas de ruta existen con marcadores.
+
+La pantalla 403 que se añadió va **sin diseño a propósito**: maquetar los estados
+de interfaz es T5. Lo que corresponde a T3 es que el servidor responda 403.
 
 ---
 
 ## Lo siguiente, en orden
 
-1. Crear el proyecto de Supabase de desarrollo y aplicar migración + seeds.
-2. Crear el primer usuario admin y verificar el login de punta a punta.
-3. Escribir la prueba de punta a punta del criterio #1.
-4. Decidir el mecanismo de despliegue y levantar staging.
-5. Con eso F0 cierra, y F1 puede empezar por M1 Contactos.
+1. **Mergear el PR #11** a `develop`. De paso arregla el auto-labeler, que hoy no
+   corre porque `pull_request_target` lee el workflow desde la rama base.
+2. **Decidir el mecanismo de despliegue** al VPS. Es lo único que bloquea F0.
+3. Levantar staging y probar una restauración de respaldo → cierra T8 y el
+   criterio #10.
+4. **Empezar F1 por M1 Contactos**, que ya no depende de nada pendiente.
 
-Los pasos 1–3 desbloquean F1. El 4 no bloquea a nadie y puede ir en paralelo.
-
----
-
-## Riesgo a vigilar
-
-F0 cierra el 20 de septiembre y F1 el 18 de octubre. El código de F0 está hecho,
-pero **los tres bloqueos que quedan no se resuelven escribiendo código**: hacen
-falta una cuenta de Supabase, una decisión de despliegue y un VPS. Si esos tres
-tardan, lo que se retrasa no es F0 — es todo lo que cuelga de él
-(`MAPEO_FRONTEND_CRM.md` §19.1: «una fase F0 que se desborda arrastra todo lo
-demás»). Conviene resolver el punto 1 esta semana.
+Los pasos 2 y 3 no bloquean el 4: F1 puede empezar ya.
