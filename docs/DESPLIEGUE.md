@@ -175,11 +175,18 @@ de producción con datos, que todavía no existe.]
 
 ## 5. Despliegue de la aplicación
 
-[PENDIENTE — bloqueo abierto.] El mecanismo de despliegue hacia el VPS de
-Hostinger no está decidido; el usuario lo está definiendo en otra sesión
-(decisión #12 de `docs/contexto/decisiones.md`).
+**Se hace al final, en una sola operación** (decisión #17 de
+`docs/contexto/decisiones.md`): no se despliega nada al VPS hasta que el programa
+esté terminado y funcionando. Entonces se hacen el despliegue y la migración
+completos de una vez.
 
-Lo que sí condiciona la decisión, y conviene tener presente al tomarla:
+Mientras tanto el desarrollo corre contra el proyecto de Supabase en la nube y
+`npm run dev` en local. **No hay staging ni producción, y es deliberado.**
+
+### Lista de comprobación para ese día
+
+Repasarla **antes** de reservar el tiempo, no durante. Los problemas de entorno
+no aparecen hasta el primer despliegue, y aparecen todos juntos:
 
 - La aplicación es Next.js con componentes de servidor y middleware: necesita un
   proceso Node corriendo (`npm run build && npm start`), no un servidor de
@@ -189,7 +196,14 @@ Lo que sí condiciona la decisión, y conviene tener presente al tomarla:
 - `npm run db:migrate` tiene que correr **antes** de arrancar la versión nueva.
 - **Comprobar que el VPS tiene IPv6 antes de elegir la cadena de conexión.** La
   conexión directa de Supabase es solo IPv6; si el VPS no lo lleva, hay que usar
-  el pooler. Es un fallo que no aparece hasta el primer despliegue.
+  el pooler. Ya pasó en la máquina de desarrollo: 1 conexión buena de cada 8.
+- **Comprobar la versión de Node del VPS**: el proyecto exige `>=22.13.0`.
+- **Comprobar la memoria disponible para `next build`**, que es la fase que más
+  consume. Un VPS pequeño puede compilar bien y quedarse sin memoria al construir.
+- Crear los proyectos de Supabase de staging y producción, y correr
+  `db:migrate` + `db:seed` contra cada uno.
+- **Probar una restauración de respaldo** (§4). Es lo que cierra el criterio de
+  terminado #10, y hasta ese día no se puede cumplir.
 - Conviene que el despliegue sea reversible: poder volver a la versión anterior
   sin restaurar la base de datos. Eso implica que las migraciones sean
   compatibles hacia atrás — añadir columnas antes de usarlas, borrarlas en un

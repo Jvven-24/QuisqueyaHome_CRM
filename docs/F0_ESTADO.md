@@ -18,10 +18,16 @@ Milestone F0 cierra el **20 de septiembre de 2026**.
 | **T3** RBAC | ✅ **Terminado** | 14 pruebas + comprobación contra datos reales |
 | **T4** Acceso a datos | ✅ Terminado | Typecheck y uso real en T2 |
 | **T7** Rutas | ✅ Terminado | Build: 24 rutas |
-| **T8** Entorno | 🟡 Parcial — bloqueado | Ver «Lo que falta» |
+| **T8** Entorno | ➡️ **Movido fuera de F0** | Decisión #17 |
 
-**Cinco de las siete capas de F0 están cerradas.** Lo único pendiente es T8, y
-está bloqueado por una decisión, no por trabajo.
+**F0 está cerrada.** Las cinco capas que le quedaban —T1, T2, T3, T4 y T7— están
+terminadas y verificadas contra la base real.
+
+T8 ya no forma parte de F0: por decisión del 1 de septiembre de 2026 (#17 de
+`docs/contexto/decisiones.md`), el despliegue al VPS de Hostinger se hace al
+final, en una sola operación, cuando el programa esté terminado. Dejarlo dentro
+de F0 habría mantenido la fase abierta durante meses por un trabajo que se
+decidió no hacer todavía.
 
 ---
 
@@ -94,20 +100,25 @@ traduce el error de cadena vacía, no el de campo ausente.
 
 ## Lo que falta
 
-### T8 · Entorno y despliegue — bloqueado por una decisión, no por trabajo
+### T8 · Despliegue — aplazado a propósito, ya no es de F0
 
-- **Mecanismo de despliegue al VPS de Hostinger: sin decidir** (`decisiones.md`
-  #12). Es el único bloqueo real de F0.
-- Entornos de staging y producción: no existen. Cada uno lleva su propio
-  proyecto de Supabase, y se crean cuando haya dónde apuntarlos.
-- **Prueba de restauración de respaldo: no ejecutada.** Sin ella el criterio de
-  terminado #10 no está cumplido. El procedimiento está escrito en
-  `DESPLIEGUE.md` §4.
-- Monitoreo y alertas: sin definir.
+Por decisión #17: el despliegue y la migración al VPS se hacen **al final, en una
+sola operación**, con el programa ya terminado y funcionando. Hasta entonces no
+existen staging ni producción, y es deliberado.
 
-Lo que no depende de esa decisión ya está hecho: contrato de configuración,
-procedimiento de respaldo y restauración, y las condiciones que la decisión debe
-respetar (`DESPLIEGUE.md` §5).
+Queda pendiente, con fecha en la fase de entrega:
+
+- Despliegue de la aplicación al VPS de Hostinger.
+- Proyectos de Supabase de staging y producción.
+- **Prueba de restauración de respaldo.** Es lo que cierra el criterio de
+  terminado #10 (§16), y no se puede cumplir antes: no hay entorno de producción
+  sobre el que probarla. Pendiente explícitamente, no olvidado.
+- Monitoreo y alertas.
+
+Ya está hecho por adelantado lo que no dependía de desplegar: contrato de
+variables de entorno, procedimiento de respaldo y restauración, y la lista de
+comprobaciones para ese día (`DESPLIEGUE.md` §5) — versión de Node, memoria para
+el build, y si el VPS lleva IPv6.
 
 ### Fricción conocida, no bloqueante
 
@@ -132,9 +143,6 @@ de interfaz es T5. Lo que corresponde a T3 es que el servidor responda 403.
 
 1. **Mergear el PR #11** a `develop`. De paso arregla el auto-labeler, que hoy no
    corre porque `pull_request_target` lee el workflow desde la rama base.
-2. **Decidir el mecanismo de despliegue** al VPS. Es lo único que bloquea F0.
-3. Levantar staging y probar una restauración de respaldo → cierra T8 y el
-   criterio #10.
-4. **Empezar F1 por M1 Contactos**, que ya no depende de nada pendiente.
+2. **Empezar F1 por M1 Contactos.** No depende de nada pendiente.
 
-Los pasos 2 y 3 no bloquean el 4: F1 puede empezar ya.
+El despliegue queda para el final del proyecto, en su propia operación.

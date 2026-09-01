@@ -82,6 +82,14 @@ Ver detalle de capas en arquitectura.md.
 **Por qué:** la arquitectura hexagonal (decisión #11) invita a escribir la interfaz antes que el consumidor. Un puerto con una sola implementación y ningún consumidor es código muerto con nombre elegante, y además fija una forma antes de saber qué forma hace falta.
 **Descartado:** generar los 28 repositorios junto al esquema.
 
+## 17. El despliegue al VPS se hace al final, en una sola operación
+**Decisión (1 de septiembre de 2026):** no se despliega nada al VPS de Hostinger hasta que el programa esté terminado y funcionando. Cuando lo esté, se hace el despliegue y la migración completos en una sola operación.
+**Por qué:** decisión del responsable del proyecto. Evita mantener entornos desplegados durante los tres meses de construcción, y concentra el trabajo de infraestructura en un momento en que ya se sabe exactamente qué hay que desplegar.
+**Consecuencia sobre el cronograma:** **T8 sale de F0.** F0 se da por cerrada con T1, T2, T3, T4 y T7 —todas verificadas contra la base real—, y el issue de T8 se mueve a la fase de entrega. Sin esto, F0 quedaría abierta durante meses por un trabajo que se decidió no hacer todavía, y arrastraría la lectura de todo el cronograma.
+**Consecuencia sobre los criterios de terminado:** el #10 de `MAPEO_FRONTEND_CRM.md` §16 —*existe respaldo y una restauración probada*— **no se puede cumplir hasta ese momento**, porque no hay entorno de producción sobre el que probar la restauración. Queda pendiente explícitamente, no olvidado.
+**Riesgo asumido, para que esté escrito:** los problemas de entorno no aparecen hasta el primer despliegue, y aparecen todos juntos. Ya hay un ejemplo concreto de esta misma sesión: la conexión directa de Supabase resultó ser solo IPv6, y si el VPS no lleva IPv6 eso no se descubre hasta ese día. La lista de comprobaciones que hay que hacer entonces está en `docs/DESPLIEGUE.md` §5, y conviene repasarla antes de reservar el tiempo para esa operación, no durante.
+**Lo que sí queda hecho por adelantado:** contrato de variables de entorno (`.env.example`), procedimiento de respaldo y restauración, y las condiciones que el mecanismo de despliegue debe respetar. El desarrollo entretanto corre contra el proyecto de Supabase en la nube y `npm run dev` en local.
+
 ## Estado de implementación de estas decisiones
 **Actualizado el 1 de septiembre de 2026, al cerrar el grueso de F0.**
 
