@@ -1,0 +1,122 @@
+# Config de github/labeler — etiqueta PRs según qué carpeta tocan.
+# Mapeo de carpetas → módulo/capa: MAPEO_FRONTEND_CRM.md §18.
+# Ojo: las rutas por módulo (app/contactos/, app/leads/, etc.) todavía no
+# existen — nacen con T7. Hasta entonces, la mayoría de estos patrones
+# simplemente no matchean nada, lo cual es correcto.
+
+T0:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "package.json"
+          - "tsconfig.json"
+          - "next.config.ts"
+          - "eslint.config.mjs"
+          - ".gitignore"
+
+T1:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/infrastructure/db/**"
+
+T2:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/infrastructure/auth/**"
+
+T7:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/**"
+
+T8:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+
+M1:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/contactos/**"
+
+M2:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/leads/**"
+
+M3:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/pipeline/**"
+
+M4:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/agenda/**"
+          - "src/app/tareas/**"
+
+M5:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/propiedades/**"
+
+M6:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/avances/**"
+
+M7:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/brokers/**"
+
+M8:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/metas/**"
+
+M9:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/comisiones/**"
+
+M10:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/academy/**"
+
+M11:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/comunicaciones/**"
+
+M12:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/reportes/**"
+
+M13:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/configuracion/**"
+
+M14:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/inicio/**"
+
+"tipo: datos":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/infrastructure/db/**"
+          - "src/domain/**"
+
+"tipo: frontend":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/app/**"
+
+"tipo: backend":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/application/**"
+          - "src/infrastructure/**"
