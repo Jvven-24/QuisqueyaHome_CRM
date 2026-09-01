@@ -29,10 +29,18 @@ instalar ningún framework de pruebas. Es el pago concreto de la arquitectura
 hexagonal: las reglas de negocio se verifican sin base de datos, sin servidor y
 sin navegador.
 
-**Por eso los imports dentro de `domain/` llevan la extensión `.ts`** — Node la
-exige para resolver módulos, y TypeScript lo permite vía
-`allowImportingTsExtensions`. Es la única carpeta con esa regla; el resto del
-código usa el alias `@/`.
+### La regla de los imports
+
+**Todo archivo que tenga que poder cargarse fuera de Next.js importa con ruta
+relativa y extensión `.ts`.** Node exige la extensión para resolver módulos, y
+no entiende el alias `@/`, que lo resuelve el empaquetador.
+
+Hoy están en ese grupo: todo `domain/`, más `infrastructure/db/schema.ts` y
+`infrastructure/rbac-filter.ts` — los tres los cargan las pruebas y los scripts
+de mantenimiento. El resto del código usa `@/`, que es más cómodo de leer.
+
+Si un archivo nuevo tiene que correr en `npm test` o en un script de `scripts/`,
+entra en el grupo; si solo vive dentro de la aplicación, usa `@/`.
 
 Dos consecuencias de que el dominio corra con el borrado de tipos de Node:
 

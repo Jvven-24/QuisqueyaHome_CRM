@@ -14,6 +14,9 @@ Adaptadores concretos: lo que habla con Postgres, con Supabase y con HTTP.
 - `rbac-filter.ts` — traduce el alcance de T3 a condiciones SQL. **El único
   lugar donde se escribe el filtro por responsable** (§18.1): si un módulo
   escribe su propio `WHERE broker_id = ?`, la seguridad deja de ser auditable.
+- `page-guard.ts` — la misma autorización, pero para páginas: `forbidden()` de
+  Next produce un 403 real, mientras que dejar escapar la excepción produce un
+  500 con la pantalla de error genérica.
 - `http.ts` — traduce errores de dominio a códigos HTTP y valida la entrada.
 
 ## El patrón que sigue cada módulo
@@ -25,7 +28,7 @@ Leer (ver cualquier `src/app/(crm)/*/page.tsx`):
 
 ```ts
 const actor = await requireActor();
-const scope = requireScope(actor, "contacts", "view");
+const scope = requireScopeInPage(actor, "contacts", "view");
 const filas = await getDb()
   .select()
   .from(contacts)
@@ -45,6 +48,10 @@ try {
   return errorResponse(error);
 }
 ```
+
+`requireScopeInPage` en páginas, `requireScope` en route handlers: la decisión de
+permiso es la misma, cambia cómo se presenta la negativa (403 con pantalla vs.
+403 con JSON).
 
 **No hay repositorios ni puertos todavía, y es a propósito.** Un puerto con una
 implementación y ningún consumidor es código muerto con nombre elegante. Nacen

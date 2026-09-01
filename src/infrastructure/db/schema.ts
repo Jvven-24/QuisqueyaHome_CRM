@@ -78,7 +78,7 @@ import {
   ACADEMY_ITEM_TYPES,
   FILE_VISIBILITIES,
   SYNC_STATUSES,
-} from "@/domain/catalogs";
+} from "../../domain/catalogs.ts";
 
 export {
   STAGE_KINDS,
@@ -107,7 +107,7 @@ export type {
   PermissionScope,
   EntityType,
   StageKind,
-} from "@/domain/catalogs";
+} from "../../domain/catalogs.ts";
 
 /* -------------------------------------------------------------------------- */
 /* Columnas comunes                                                            */

@@ -9,7 +9,7 @@
 
 import { and, eq, isNull, sql, type SQL } from "drizzle-orm";
 import type { PgColumn } from "drizzle-orm/pg-core";
-import type { Actor, PermissionScope } from "@/domain/rbac";
+import type { Actor, PermissionScope } from "../domain/rbac.ts";
 
 /**
  * Condición que restringe un listado al alcance del actor.
