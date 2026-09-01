@@ -8,6 +8,9 @@
     "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    // El dominio se prueba con `node --test` sin compilar ni instalar nada, y
+    // Node exige la extensión en el import. Ver src/domain/README.md.
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
