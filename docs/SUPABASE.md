@@ -1,6 +1,6 @@
 # Configurar Supabase — guía de una sola sesión
 
-Todo lo necesario para pasar de "no hay base de datos" a "el CRM tiene sus 28
+Todo lo necesario para pasar de "no hay base de datos" a "el CRM tiene sus 29
 tablas, sus permisos sembrados y un usuario que puede entrar".
 
 Está escrito para hacerse de una sentada, en una sesión aparte. No hace falta
@@ -62,10 +62,18 @@ postgresql://postgres:[YOUR-PASSWORD]@db.abcdefghijkl.supabase.co:5432/postgres
 4. **Reemplaza `[YOUR-PASSWORD]`** (corchetes incluidos) por la contraseña del
    paso 1.
 
-**Usa "Direct connection" (puerto 5432), no el pooler.** El pooler en modo
-transacción no sostiene las sesiones largas que abren `drizzle-kit migrate` y
-`pg_dump`. Más adelante, cuando la aplicación esté desplegada, ahí sí conviene el
-pooler — está explicado en `docs/DESPLIEGUE.md`.
+**Usa "Session pooler", no "Direct connection".**
+
+La conexión directa (`db.<ref>.supabase.co`) **solo tiene registro IPv6**. Si tu
+red no lleva IPv6 bien, falla de forma intermitente y desconcertante: aquí dio 1
+conexión buena de cada 8, con `ENOTFOUND` en las otras siete. El *session
+pooler* (`aws-N-<region>.pooler.supabase.com:5432`) responde por IPv4 y aguanta
+igual las sesiones largas de `drizzle-kit migrate` y `pg_dump`.
+
+El *transaction pooler* (puerto 6543) también existe y escala mejor, pero no
+sostiene sesiones largas. Con 3–10 usuarios internos la diferencia no se nota, y
+una sola variable para todo evita que la aplicación y las migraciones apunten a
+sitios distintos.
 
 > Si tu contraseña tiene caracteres raros (`@`, `#`, `/`, `:`), hay que
 > codificarlos para URL. La forma fácil de evitarlo: en **Project Settings →
@@ -81,6 +89,12 @@ O por la ruta larga: **Project Settings** (el engranaje, abajo a la izquierda) �
 **Data API** → campo **Project URL**.
 
 Se parece a `https://abcdefghijkl.supabase.co`.
+
+> **Cuidado:** tiene que ser solo eso, sin nada después del `.co`. Si copias la
+> URL desde la pestaña **API** de Connect en vez de **App Frameworks**, a veces
+> trae `/rest/v1/` pegado al final — con eso el login siempre falla con "Correo
+> o contraseña incorrectos" aunque la contraseña esté bien, porque el cliente
+> nunca llega a la ruta de autenticación real.
 
 ### 2.3 · `NEXT_PUBLIC_SUPABASE_ANON_KEY` — la clave pública
 
@@ -107,7 +121,7 @@ Abre `D:\ViltrumTEK\Quisqueya_Home\QuisqueyaHome_CRM_clon-github\.env`
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://abcdefghijkl.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...
-DATABASE_URL=postgresql://postgres:TU_CONTRASENA@db.abcdefghijkl.supabase.co:5432/postgres
+DATABASE_URL=postgresql://postgres.abcdefghijkl:TU_CONTRASENA@aws-0-us-east-1.pooler.supabase.com:5432/postgres
 ```
 
 ---
@@ -132,7 +146,7 @@ seguridad del sistema.
 
 ### Comprobar que quedó bien
 
-En el panel de Supabase → **Table Editor** deberías ver las 28 tablas. Y en el
+En el panel de Supabase → **Table Editor** deberías ver las 29 tablas. Y en el
 **SQL Editor**:
 
 ```sql
@@ -203,9 +217,38 @@ vistas son de F1 en adelante.
 |---|---|
 | `Falta la variable de entorno …` | El `.env` no está en la raíz del proyecto, o la variable quedó vacía |
 | `password authentication failed` | La contraseña en `DATABASE_URL` está mal, o quedó el `[YOUR-PASSWORD]` sin reemplazar |
-| El login dice "Correo o contraseña incorrectos" con datos buenos | El usuario no está confirmado en Supabase Auth (faltó *Auto Confirm User*) |
+| `ENOTFOUND` o `EAI_AGAIN` intermitente contra `db.<ref>.supabase.co` | Estás usando *Direct connection*, que es solo IPv6. Cambia a *Session pooler* |
+| `ENOTFOUND` / `fetch failed` contra `<ref>.supabase.co` | Tu servidor DNS no resuelve el subdominio del proyecto. Ver abajo |
+| El login dice "Correo o contraseña incorrectos" con datos buenos | 1) El usuario no está confirmado en Supabase Auth (faltó *Auto Confirm User*), o 2) `NEXT_PUBLIC_SUPABASE_URL` tiene `/rest/v1/` de más al final — ver nota en el paso 2.2 |
 | Entra, pero rebota a `/login` una y otra vez | Falta la fila en `users`, o su `auth_user_id` no coincide con el UUID |
 | La navegación aparece vacía | Los permisos no se sembraron: vuelve a correr `npm run db:seed` |
+
+### Si el DNS no resuelve tu proyecto
+
+Síntoma: `npm run db:migrate` funciona pero el login falla con `fetch failed`, y
+esto devuelve `EAI_AGAIN`:
+
+```bash
+node -e "require('dns').promises.lookup('TU-REF.supabase.co').then(r=>console.log(r)).catch(e=>console.log(e.code))"
+```
+
+Comprueba si es tu resolvedor comparándolo con uno público:
+
+```powershell
+Resolve-DnsName -Name TU-REF.supabase.co -Server 1.1.1.1
+```
+
+Si 1.1.1.1 lo resuelve y tu red no, el problema es el DNS de tu router. La
+solución es poner un DNS público en el adaptador de red de Windows:
+
+**Configuración → Red e Internet → Wi-Fi → Propiedades del hardware →
+Asignación de servidor DNS → Editar → Manual → IPv4 activado**
+
+- DNS preferido: `1.1.1.1`
+- DNS alternativo: `8.8.8.8`
+
+Guardar y después `ipconfig /flushdns`. No cambia nada más de tu conexión: solo
+a quién le pregunta tu equipo por las direcciones.
 
 ---
 

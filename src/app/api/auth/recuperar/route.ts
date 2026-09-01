@@ -4,7 +4,9 @@ import { z } from "zod";
 import { serverClient } from "@/infrastructure/auth/supabase";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
-const RecoverInput = z.object({ email: z.email("Escribe un correo válido.") });
+const RecoverInput = z.object({
+  email: z.email({ error: "Escribe un correo válido." }),
+});
 
 export async function POST(request: Request) {
   try {

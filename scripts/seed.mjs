@@ -22,7 +22,9 @@ if (!url) {
   process.exit(1);
 }
 
-const sql = postgres(url, { prepare: false });
+// max: 1 porque db/seed.sql trae su propio BEGIN/COMMIT: postgres.js exige una
+// sola conexión (sin pool) para permitir control de transacción manual en sql.unsafe().
+const sql = postgres(url, { prepare: false, max: 1 });
 
 try {
   await sql.unsafe(readFileSync("db/seed.sql", "utf8"));

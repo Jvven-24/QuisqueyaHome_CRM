@@ -151,8 +151,13 @@ cubre el tiempo que el negocio necesita para darse cuenta de un borrado.
 pg_dump "$DATABASE_URL_DIRECTO" --clean --if-exists -f respaldo_$(date +%F).sql
 ```
 
-Usar la conexión directa (puerto 5432), no el pooler (6543): `pg_dump` abre una
-sesión larga y el pooler en modo transacción no la sostiene.
+Usar el **session pooler** (puerto 5432 en `aws-N-<region>.pooler.supabase.com`),
+no el transaction pooler (6543): `pg_dump` abre una sesión larga y el modo
+transacción no la sostiene.
+
+Y no la conexión directa (`db.<ref>.supabase.co`): **solo tiene registro IPv6**.
+En una red sin IPv6 fiable falla de forma intermitente — en la máquina de
+desarrollo dio 1 conexión buena de cada 8. El session pooler responde por IPv4.
 
 **Restauración:**
 
@@ -181,8 +186,10 @@ Lo que sí condiciona la decisión, y conviene tener presente al tomarla:
   archivos estáticos.
 - Necesita las tres variables de entorno del paso 2 en el proceso, no en el
   repositorio.
-- `npm run db:migrate` tiene que correr **antes** de arrancar la versión nueva,
-  y contra la conexión directa, no el pooler.
+- `npm run db:migrate` tiene que correr **antes** de arrancar la versión nueva.
+- **Comprobar que el VPS tiene IPv6 antes de elegir la cadena de conexión.** La
+  conexión directa de Supabase es solo IPv6; si el VPS no lo lleva, hay que usar
+  el pooler. Es un fallo que no aparece hasta el primer despliegue.
 - Conviene que el despliegue sea reversible: poder volver a la versión anterior
   sin restaurar la base de datos. Eso implica que las migraciones sean
   compatibles hacia atrás — añadir columnas antes de usarlas, borrarlas en un

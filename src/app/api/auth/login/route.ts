@@ -14,9 +14,14 @@ import { getDb } from "@/infrastructure/db/client";
 import { users } from "@/infrastructure/db/schema";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
+// El segundo mensaje no es redundante: `min` cubre la cadena vacía, `error`
+// cubre que el campo llegue ausente o con otro tipo. Sin él, Zod responde su
+// texto por defecto, en inglés, y eso acaba en la pantalla del usuario.
 const LoginInput = z.object({
   email: z.email("Escribe un correo válido."),
-  password: z.string().min(1, "Escribe tu contraseña."),
+  password: z
+    .string({ error: "Escribe tu contraseña." })
+    .min(1, "Escribe tu contraseña."),
 });
 
 export async function POST(request: Request) {
