@@ -1,0 +1,36 @@
+name: Guardia de ramas
+
+# Valida la convención de ramas del flujo de trabajo acordado
+# (docs/contexto/flujo-de-trabajo.md): dev/<persona> → PR → develop →
+# PR → main. La protección nativa de rama ya exige PR; esto exige,
+# además, que el PR venga de la rama correcta según su destino.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar rama de origen
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "$BASE_REF" = "develop" ]; then
+            if [[ ! "$HEAD_REF" =~ ^dev/ ]]; then
+              echo "::error::PRs contra develop deben venir de una rama dev/<persona>. Esta rama es '$HEAD_REF'."
+              exit 1
+            fi
+          elif [ "$BASE_REF" = "main" ]; then
+            if [ "$HEAD_REF" != "develop" ] && [[ ! "$HEAD_REF" =~ ^release/ ]]; then
+              echo "::error::PRs contra main solo deben venir de develop o de una rama release/*. Esta rama es '$HEAD_REF'."
+              exit 1
+            fi
+          fi
+          echo "Rama '$HEAD_REF' -> '$BASE_REF' respeta la convención."
