@@ -90,11 +90,41 @@ Ver detalle de capas en arquitectura.md.
 **Riesgo asumido, para que esté escrito:** los problemas de entorno no aparecen hasta el primer despliegue, y aparecen todos juntos. Ya hay un ejemplo concreto de esta misma sesión: la conexión directa de Supabase resultó ser solo IPv6, y si el VPS no lleva IPv6 eso no se descubre hasta ese día. La lista de comprobaciones que hay que hacer entonces está en `docs/DESPLIEGUE.md` §5, y conviene repasarla antes de reservar el tiempo para esa operación, no durante.
 **Lo que sí queda hecho por adelantado:** contrato de variables de entorno (`.env.example`), procedimiento de respaldo y restauración, y las condiciones que el mecanismo de despliegue debe respetar. El desarrollo entretanto corre contra el proyecto de Supabase en la nube y `npm run dev` en local.
 
+## 18. Los estilos se portan del prototipo, no se rediseñan
+**Decisión (6 de septiembre de 2026, T5):** `src/app/globals.css` se porta desde `referencia-prototipo/app/globals.css` — 478 líneas de CSS plano, sin la línea `@import "tailwindcss"` — y encima se añaden los cuatro estados que el prototipo nunca tuvo: cargando, sin resultados, error y deshabilitado por permiso.
+**Por qué:** es la interfaz que el cliente ya vio y aprobó, y es CSS plano que funciona tal cual: variables de color, `.button`, `.table-wrap`, `.split-view`, `.inspector`, `.kanban`, `.empty`. Rediseñar añadiría una semana y una discusión de diseño a la ruta crítica de F1 para llegar al mismo sitio.
+**Descartado:** instalar Tailwind y reescribir el port como utilidades — misma interfaz, dependencia nueva y todo el trabajo hecho dos veces.
+**Consecuencia:** los estados de carga y error se resuelven con `loading.tsx` y `error.tsx`, convención nativa de Next 15. No hay estado global de carga ni librería de UI.
+
+## 19. Los duplicados se avisan, no se bloquean
+**Decisión (6 de septiembre de 2026, M1):** al crear un contacto se consulta por teléfono en E.164 y por email; si hay candidatos, se responde 409 con la lista, y quien crea puede insistir con un `crear_igual: true` explícito. **No se toca el esquema.**
+**Por qué:** el criterio de terminado #5 dice «se detectan antes de crear», no «se impiden». En una inmobiliaria una pareja comparte teléfono, y el mismo número entra por WhatsApp y por el portal el mismo día: un índice único duro convertiría un caso real en un error irrecuperable para el usuario. Además exigiría una migración sobre un esquema congelado.
+**Consecuencia:** fusionar duplicados queda fuera de F1 — es una pantalla propia y §8.4 la lista sin diseño confirmado.
+**Nota:** la normalización a E.164 se escribe a mano (República Dominicana es `+1` con 809/829/849). `libphonenumber-js` son ~500 KB para cubrir 200 países que este CRM no usa.
+
+## 20. El endpoint público de leads lleva token compartido
+**Decisión (6 de septiembre de 2026, M2):** la captura externa de leads se autentica con un token compartido en cabecera, declarado en `src/infrastructure/env.ts`, más validación estricta de la entrada y `external_id` obligatorio.
+**Por qué:** es la única entrada del sistema sin sesión, y por tanto el único sitio donde el RBAC no aplica — no hay actor del que resolver permisos. Un endpoint de inserción abierto a internet no se deja para después.
+**Consecuencia:** la idempotencia la garantiza el índice `leads_external_id_unq`, que ya existe: `ON CONFLICT DO NOTHING` y devolver el lead existente. Sin tabla de idempotencia, sin cola, sin cabecera `Idempotency-Key`.
+
+## 21. El broker se sugiere, no se asigna solo
+**Decisión (6 de septiembre de 2026, M2):** la regla de especialidad escribe `leads.suggested_broker_id`, no `broker_id`. Alguien confirma la asignación.
+**Por qué:** es lo que pide §10.3 #1 («sugerir o asignar»), y el esquema ya separa las dos columnas justo para esto. Repartir trabajo en automático sin que nadie mire, en un equipo de tres personas, produce leads en el buzón equivocado y nadie se entera hasta que el cliente llama.
+**Descartado:** un motor de reglas configurable para una condición sobre dos columnas (`specialty`, `handles_rentals`).
+
+## 22. Se porta la interfaz completa del prototipo en T5, no solo la de F1
+**Decisión (6 de septiembre de 2026, T5):** los 15 módulos del prototipo (`referencia-prototipo/app/page.tsx`, hoy un único componente cliente) se portan todos ahora, cada uno a su carpeta de ruta creada por T7, y no solo los tres de F1 (Contactos, Leads, Pipeline). Los módulos que aún no tienen backend real muestran los datos de muestra del prototipo, marcados con `ponytail:` como mock explícito.
+**Por qué:** el frontend ya está construido y aprobado por el cliente — F0 y F1 no lo diseñan, lo conectan. Mantener 12 módulos con un texto de "pendiente de construir" mientras el prototipo ya tiene su interfaz completa es dejar trabajo terminado sin usar, y el CRM se percibe como más avanzado (y es más fácil de revisar con el cliente) si se ve completo desde ya, aunque detrás siga siendo mock hasta que le llegue su turno de construcción.
+**Consecuencia:** cada `page.tsx` de módulo sigue siendo componente de servidor con `requireActor` + `requireScopeInPage` — el guardia de permiso no se pierde por portar la vista. El JSX y la interactividad local del prototipo pasan a un componente cliente hijo (`vista.tsx`), sin tocar el guardia.
+**No cambia el orden de construcción de F1** (`docs/F1_ANALISIS_Y_PLAN.md` §5): M1→M2→M3 siguen siendo los únicos que reciben datos reales en esta fase. Los demás quedan visualmente completos y funcionalmente mock hasta su propia fase (F2–F5).
+
 ## Estado de implementación de estas decisiones
-**Actualizado el 1 de septiembre de 2026, al cerrar el grueso de F0.**
+**Actualizado el 6 de septiembre de 2026, al arrancar F1.**
 
 Las decisiones #1–#8 (modelado) están implementadas en `src/infrastructure/db/schema.ts` — 29 tablas sobre Postgres — con su migración generada en `drizzle/`, y los catálogos que les dan sentido sembrados en `db/seed.sql`. La #2 (permisos por recurso + acción + alcance) está además implementada en código y probada: `src/domain/rbac.ts`.
 
-La #11 (hexagonal) y la #12 (Supabase/Hostinger) están implementadas en la mitad que no depende de credenciales: capas separadas, autenticación sobre Supabase Auth, RBAC en servidor, rutas por módulo. **Lo que falta de F0 no es código sino acceso:** no existe todavía un proyecto de Supabase con credenciales contra el que aplicar la migración, ni está decidido el mecanismo de despliegue al VPS (ver `docs/DESPLIEGUE.md`).
+La #11 (hexagonal) y la #12 (Supabase/Hostinger) están implementadas: capas separadas, autenticación sobre Supabase Auth, RBAC en servidor, rutas por módulo, y la migración aplicada contra el proyecto real de Supabase. **F0 está cerrada** — ver `docs/F0_ESTADO.md` para qué se verificó y cómo. Lo único que sigue pendiente de acceso es el despliegue al VPS, aplazado a propósito por la #17.
+
+Las decisiones #18–#21 se toman al arrancar F1 y su implementación va en los pasos del plan de `docs/F1_ANALISIS_Y_PLAN.md` §7.
 
 Lo que sigue siendo cierto del prototipo (`referencia-prototipo/`): su `db/schema.ts` es SQLite, D1 nunca se enlazó, y nada de lo anterior está desplegado ahí. El prototipo es material de consulta, no la base del sistema.
