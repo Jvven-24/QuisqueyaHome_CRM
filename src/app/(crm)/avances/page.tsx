@@ -1,15 +1,15 @@
 /**
- * M6 · Avances de obra — carpeta de ruta creada por T7. La vista se construye en F3.
+ * M6 · Avances de obra — carpeta de ruta creada por T7. Datos reales en F3.
  *
- * Este archivo es la plantilla del patrón de lectura: componente de servidor,
- * actor resuelto una vez, permiso comprobado en servidor antes de consultar
- * nada. Sin permiso responde 403, no 500. El listado real filtra por el `scope`
- * que devuelve `requireScopeInPage` usando `visibleRows` — no con un `WHERE`
- * escrito a mano (§18.1).
+ * Componente de servidor: actor resuelto una vez, permiso comprobado antes de
+ * pintar nada. Sin permiso responde 403, no 500. El JSX visual vive en
+ * `./vista.tsx` (cliente), portado del prototipo con datos de muestra hasta
+ * que F3 lo conecte a `construction_phases`.
  */
 
 import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { requireActor } from "@/infrastructure/auth/actor";
+import { AvancesVista } from "./vista";
 
 export const metadata = { title: "Avances de obra · CRM Quisqueya Home" };
 
@@ -17,10 +17,5 @@ export default async function AvancesdeobraPage() {
   const actor = await requireActor();
   requireScopeInPage(actor, "construction_phases", "view");
 
-  return (
-    <section>
-      <h1>Avances de obra</h1>
-      <p>Módulo M6. Pendiente de construir en F3.</p>
-    </section>
-  );
+  return <AvancesVista />;
 }

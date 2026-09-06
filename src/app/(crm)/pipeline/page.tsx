@@ -1,15 +1,17 @@
 /**
- * M3 · Pipeline — carpeta de ruta creada por T7. La vista se construye en F1.
+ * M3 · Pipeline — carpeta de ruta creada por T7. Datos reales en F1.
  *
- * Este archivo es la plantilla del patrón de lectura: componente de servidor,
- * actor resuelto una vez, permiso comprobado en servidor antes de consultar
- * nada. Sin permiso responde 403, no 500. El listado real filtra por el `scope`
- * que devuelve `requireScopeInPage` usando `visibleRows` — no con un `WHERE`
- * escrito a mano (§18.1).
+ * Componente de servidor: actor resuelto una vez, permiso comprobado antes de
+ * pintar nada. Sin permiso responde 403, no 500. El JSX visual vive en
+ * `./vista.tsx` (cliente), portado del prototipo con datos de muestra — el
+ * listado real filtrará por el `scope` que devuelve `requireScopeInPage`
+ * usando `visibleRows`, no con un `WHERE` escrito a mano (§18.1), cuando M3
+ * entre en construcción.
  */
 
 import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { requireActor } from "@/infrastructure/auth/actor";
+import { PipelineVista } from "./vista";
 
 export const metadata = { title: "Pipeline · CRM Quisqueya Home" };
 
@@ -17,10 +19,5 @@ export default async function PipelinePage() {
   const actor = await requireActor();
   requireScopeInPage(actor, "deals", "view");
 
-  return (
-    <section>
-      <h1>Pipeline</h1>
-      <p>Módulo M3. Pendiente de construir en F1.</p>
-    </section>
-  );
+  return <PipelineVista roleSlug={actor.roleSlug} />;
 }
