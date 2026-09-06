@@ -77,6 +77,27 @@ export const ENTITY_TYPES = [
   "file",
 ] as const;
 
+/**
+ * Acciones que se registran en `audit_log` (T6). Lista corta y explícita a
+ * propósito — `MAPEO_FRONTEND_CRM.md` §4 pide «acción sensible», no «cualquier
+ * escritura»: crear/editar/eliminar/restaurar de un registro, más las cuatro
+ * transiciones de negocio que el mapeo señala aparte porque cambian estado de
+ * forma irreversible o casi (convertir un lead, cambiar de etapa, cerrar,
+ * marcar como perdido). Texto libre aquí repetiría el error que el resto de
+ * catálogos evita: un `"Editar"` frente a un `"editar"` deja de agruparse en
+ * el historial sin que nadie lo note.
+ */
+export const AUDIT_ACTIONS = [
+  "crear",
+  "editar",
+  "eliminar",
+  "restaurar",
+  "convertir",
+  "cambiar_etapa",
+  "cerrar",
+  "marcar_perdido",
+] as const;
+
 /** Estado del lead antes de convertirse en negocio. */
 export const LEAD_STATUSES = [
   "new",
@@ -152,3 +173,4 @@ export type PermissionAction = (typeof PERMISSION_ACTIONS)[number];
 export type PermissionScope = (typeof PERMISSION_SCOPES)[number];
 export type EntityType = (typeof ENTITY_TYPES)[number];
 export type StageKind = (typeof STAGE_KINDS)[number];
+export type AuditAction = (typeof AUDIT_ACTIONS)[number];
