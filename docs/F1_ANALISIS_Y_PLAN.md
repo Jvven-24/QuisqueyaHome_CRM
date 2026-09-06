@@ -382,3 +382,13 @@ antes.
   formulario y la regla de quién puede reasignar (¿solo `all`? ¿el propio
   broker cede a otro?). Candidato natural: cuando M13 (Configuración) dé de
   alta usuarios y haga falta mover cartera entre brokers.
+- **M2 · Leads:** el endpoint externo (`api/leads/externo`) reutiliza un
+  contacto existente por teléfono/email dentro de la transacción, en vez de
+  responder 409 como el alta manual — no hay un humano al otro lado de un
+  webhook al que preguntarle "¿de todas formas?". Eso deja una ventana de
+  condición de carrera **estrecha**: dos entregas verdaderamente concurrentes
+  (no reintentos secuenciales, que es el caso real de un webhook) del mismo
+  origen podrían cada una crear su propio contacto antes de que la otra
+  confirme, dejando uno huérfano sin lead que lo enlace. Se resuelve con un
+  índice único parcial sobre `contacts` si el proveedor de leads demuestra
+  enviar duplicados en paralelo real — hoy no hay evidencia de que ocurra.
