@@ -29,7 +29,7 @@ export function errorResponse(error: unknown): Response {
     return json(404, { error: error.message });
   }
   if (error instanceof ConflictError) {
-    return json(409, { error: error.message });
+    return json(409, { error: error.message, details: error.details });
   }
 
   // Un error no previsto no se le enseña al usuario: puede llevar la cadena de
