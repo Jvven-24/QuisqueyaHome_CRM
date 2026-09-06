@@ -24,3 +24,11 @@ export const supabaseUrl = () => required("NEXT_PUBLIC_SUPABASE_URL");
 
 /** Clave anónima de Supabase. Pública por diseño: la seguridad la da RLS + T3. */
 export const supabaseAnonKey = () => required("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+
+/**
+ * Token compartido del endpoint público de captura de leads (M2, decisión #20).
+ * `POST /api/leads/externo` no tiene sesión —es la única entrada del sistema
+ * sin actor— así que se autentica comparando este valor contra la cabecera
+ * `x-webhook-token`, en vez de con RBAC.
+ */
+export const leadsWebhookToken = () => required("LEADS_WEBHOOK_TOKEN");

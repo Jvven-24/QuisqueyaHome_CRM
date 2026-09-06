@@ -96,6 +96,12 @@ export const AUDIT_ACTIONS = [
   "cambiar_etapa",
   "cerrar",
   "marcar_perdido",
+  /**
+   * M2 · Leads: descartar un lead no es borrarlo (`eliminar` es borrado
+   * lógico del registro, `deleted_at`) ni convertirlo — es una transición de
+   * estado de negocio propia, igual que `marcar_perdido` lo es para negocios.
+   */
+  "descartar",
 ] as const;
 
 /** Estado del lead antes de convertirse en negocio. */
