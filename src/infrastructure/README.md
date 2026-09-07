@@ -18,6 +18,10 @@ Adaptadores concretos: lo que habla con Postgres, con Supabase y con HTTP.
   Next produce un 403 real, mientras que dejar escapar la excepción produce un
   500 con la pantalla de error genérica.
 - `http.ts` — traduce errores de dominio a códigos HTTP y valida la entrada.
+- `audit.ts` — escribe en `audit_log` (T6): `auditar(tx, actor, { accion,
+  entidad, entidadId, antes, despues })`. Recibe la transacción a propósito, no
+  abre la suya: la escritura de auditoría va **dentro** de la misma
+  transacción que el cambio, nunca después (§18.1 / criterio de terminado #2).
 
 ## El patrón que sigue cada módulo
 
@@ -47,6 +51,21 @@ try {
 } catch (error) {
   return errorResponse(error);
 }
+```
+
+Escribir con auditoría (T6), dentro de la misma transacción que el cambio:
+
+```ts
+await transaction(async (tx) => {
+  const [contacto] = await tx.insert(contacts).values(datos).returning();
+  await auditar(tx, actor, {
+    accion: "crear",
+    entidad: "contact",
+    entidadId: contacto.id,
+    despues: contacto,
+  });
+  return contacto;
+});
 ```
 
 `requireScopeInPage` en páginas, `requireScope` en route handlers: la decisión de

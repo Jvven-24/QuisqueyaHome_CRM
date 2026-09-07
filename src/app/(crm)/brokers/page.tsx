@@ -1,15 +1,15 @@
 /**
- * M7 · Brokers — carpeta de ruta creada por T7. La vista se construye en F3.
+ * M7 · Brokers — carpeta de ruta creada por T7. Datos reales en F3.
  *
- * Este archivo es la plantilla del patrón de lectura: componente de servidor,
- * actor resuelto una vez, permiso comprobado en servidor antes de consultar
- * nada. Sin permiso responde 403, no 500. El listado real filtra por el `scope`
- * que devuelve `requireScopeInPage` usando `visibleRows` — no con un `WHERE`
- * escrito a mano (§18.1).
+ * Componente de servidor: actor resuelto una vez, permiso comprobado antes de
+ * pintar nada. Sin permiso responde 403, no 500. El JSX visual vive en
+ * `./vista.tsx` (cliente), portado del prototipo con datos de muestra hasta
+ * que F3 lo conecte a `broker_profiles`.
  */
 
 import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { requireActor } from "@/infrastructure/auth/actor";
+import { BrokersVista } from "./vista";
 
 export const metadata = { title: "Brokers · CRM Quisqueya Home" };
 
@@ -17,10 +17,5 @@ export default async function BrokersPage() {
   const actor = await requireActor();
   requireScopeInPage(actor, "brokers", "view");
 
-  return (
-    <section>
-      <h1>Brokers</h1>
-      <p>Módulo M7. Pendiente de construir en F3.</p>
-    </section>
-  );
+  return <BrokersVista />;
 }

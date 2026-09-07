@@ -1,46 +1,111 @@
 # Errores conocidos / gotchas — CRM Quisqueya Home
 
-Todo lo listado aquí está confirmado en código o documentado explícitamente en `AUDITORIA_FUNCIONAL_CRM.md` / `MAPEO_FRONTEND_CRM.md`. No incluye especulación.
+Dos listas distintas, y conviene no confundirlas:
 
-## Persistencia y datos
-- **Nada persiste.** Leads, citas, avance de obra, permisos y progreso de Academy viven en `useState` del componente raíz. Recargar la página borra todo.
-- **`db/schema.ts` y su migración no están comiteados.** `git status` los marca como modificado/untracked (`db/schema.ts`, `drizzle/meta/_journal.json`, `drizzle/0000_adorable_forge.sql`, `drizzle/meta/0000_snapshot.json`). No asumir que reflejan lo desplegado.
-- **D1 no está enlazado.** `.openai/hosting.json` tiene `"d1": null`. Cualquier trabajo que dependa de la base de datos está bloqueado hasta resolver esto (marcado como riesgo de "primera semana").
-- **Mezclar formatos de fecha rompe el orden.** `CURRENT_TIMESTAMP` de SQLite escribe `"2026-08-30 12:00:00"` (espacio) y la aplicación escribe formato con `"T"` (`"2026-08-30T12:00:00.000Z"`). En texto, el espacio ordena antes que la `T` — mezclar ambos formatos rompe `ORDER BY` y rangos de fecha **sin lanzar error**. Ver convención de fechas en convenciones.md.
-- **`updated_at` se congela si no se usa `$onUpdate`.** SQLite no tiene `ON UPDATE` nativo.
+- **§1** son trampas del **repositorio de producción**, confirmadas al construirlo.
+- **§2** son defectos del **prototipo** que el repo de producción tiene que
+  arreglar. Están aquí porque son la lista de cosas que se olvidan al portar una
+  pantalla: si nadie las anota, se reproducen tal cual.
 
-## Auth y permisos (todo simulado hoy)
-- El login no valida nada: `setLoggedIn(true)` se llama directo al enviar el formulario.
-- El selector de rol es un dropdown en el header — cualquier usuario puede "ser" admin cambiando el selector. No hay identidad real detrás.
-- Los permisos solo **ocultan componentes en cliente**; no hay verificación en servidor. Precios reales, comisiones y métricas no están protegidos.
-- El filtrado por rol de broker compara **strings de nombre** (`broker === "Yostar Medina"`), no una referencia — frágil ante typos o cambios de nombre.
-- La matriz de permisos de Configuración cubre **8 filas de recurso frente a 15 módulos reales** — no hay fila para Agenda, Brokers, Academy, Metas, Tareas, Comunicaciones, Reportes ni Avances.
+---
 
-## Modal y flujos declarados pero no implementados
-- El modal tiene tipo `"lead" | "appointment" | "lost" | null`, pero **`"lost"` nunca se renderiza**. Marcar un negocio como `Perdido` no pide motivo en ninguna parte del flujo actual.
-- El Kanban de Pipeline **no tiene columna para `Perdido`** — un negocio marcado como perdido desaparece de la vista sin dejar rastro visual.
-- Filtros de Leads, Contactos, Pipeline, Propiedades, Comisiones, Academy: existen visualmente pero **son inertes**, no alteran los datos mostrados.
-- Botones sin acción real (solo disparan un `toast`): exportar reporte, exportar a Excel, nuevo contacto, nuevo proyecto, invitar broker, ver perfil, asignar propiedades, nueva tarea, nueva plantilla, "Abrir en WhatsApp" en Comunicaciones, "Publicar en el portal" en Avances.
-- El atajo `Ctrl K` se muestra en el buscador global pero no está implementado.
+## 1. Trampas del repositorio de producción (confirmadas)
 
-## Estructura y escalabilidad
-- **`app/page.tsx` es un único componente cliente sin rutas** (956 líneas). No hay URL por módulo — la navegación es un `useState`. Esto significa que dos personas trabajando en dos módulos distintos **van a chocar en el mismo archivo** hasta que se separe en rutas (T7).
-- `phaseProgress` (avance de obra) es **un único número compartido en el estado raíz** — todas las fases y todos los proyectos comparten el mismo porcentaje. Cada fase debería ser una fila independiente por proyecto.
-- Contacto y Lead son **el mismo objeto** — no hay forma de que un contacto tenga dos oportunidades ni de conservar su historial tras cerrarse un negocio.
-- Proyecto es un **campo de texto** en el lead, no una relación real con la tabla de proyectos. Broker es texto, no referencia.
-- Tareas y citas son **estructuras separadas sin vínculo** entre sí ni con un contacto/negocio.
-- No existen estados de carga, error ni "sin permiso" en la interfaz — solo existe un estado `Empty` (vacío).
+### Conexión a Supabase
 
-## Campos que la interfaz muestra pero no existen como dato real
-Motivo de pérdida (catálogo inexistente), probabilidad y fecha estimada de cierre, presupuesto con mínimo/máximo/moneda reales (hoy texto libre como `"Por definir"`), disponibilidad de unidades (`"12/40"` es literal, no calculado), última interacción (literal `"Hoy"`), zona del interés del lead (el lead solo guarda proyecto).
+- **La conexión directa de Supabase es solo IPv6.** `db.<ref>.supabase.co` no
+  tiene registro A. En una red sin IPv6 fiable daba **1 conexión buena de cada
+  8**, con `ENOTFOUND` en el resto — un fallo intermitente que parece un
+  problema del código. Se usa el **session pooler**, que responde por IPv4. Está
+  escrito en `.env.example` y es comprobación obligatoria antes de desplegar al
+  VPS (`docs/DESPLIEGUE.md` §5).
+- **PgBouncer en modo transacción no admite sentencias preparadas.** Por eso
+  `db/client.ts` construye el cliente con `prepare: false`. Quitarlo rompe en
+  producción, no en local.
+- **La conexión se arma en la primera consulta, no al importar el módulo.**
+  `next build` carga todos los módulos para descubrir las rutas y ahí todavía no
+  hay variables de entorno de base de datos.
 
-## Riesgos de calendario / integraciones
-- Las citas usan un índice de día (`1..5`) y hora entera, no fecha real — `appointmentDates()` construye la fecha con un offset fijo hardcodeado (`2026-07-{19+day}`, `-04:00`). Esto es solo para la demo; una agenda real necesita fechas reales.
-- El `UID` del evento `.ics` se genera como `{day}-{time}@quisqueyahome.com` — sirve como prueba de que se necesita un identificador estable por evento para no duplicar en sincronización futura con Google Calendar.
-- Nota explícita en la UI de Integraciones: "No se guardarán tokens OAuth en el navegador" — restricción de diseño a respetar cuando se implemente OAuth real.
+### Permisos y errores
 
-## Pruebas
-- El único archivo de test (`tests/rendered-html.test.mjs`) corre contra el **build compilado** (`dist/server/index.js`), no contra el código fuente directamente — si el build falla o está desactualizado, el test no refleja el estado real de `app/page.tsx` más allá del regex de módulos presentes.
-- No hay cobertura de los flujos críticos de negocio (cierre transaccional, validación por etapa) porque esos flujos **todavía no existen** en el backend.
+- **Una página sin permiso devolvía 500 en vez de 403.** El dato no se filtraba,
+  pero la excepción escapaba y salía la pantalla de error genérica. En páginas se
+  usa `requireScopeInPage` (que llama a `forbidden()` de Next); en route handlers
+  se deja lanzar y `errorResponse` traduce. **No los intercambies.**
+- **Un recurso sin fila en `permissions` queda cerrado**, no abierto. Es el fallo
+  correcto, pero significa que un módulo nuevo no se ve hasta que su permiso
+  entra en el seed.
+- **`scope=team` se comporta hoy como `own`** porque el esquema no tiene equipos.
+  Está anotado en `domain/rbac.ts` y en `rbac-filter.ts`, y en ningún otro sitio
+  habrá que tocarlo cuando exista el modelo de equipos.
+- **`deleted_at` se olvida y su olvido no da error**: devuelve registros borrados
+  como si existieran. Por eso el filtro de papelera va dentro de `visibleRows` y
+  no en cada consulta.
 
-[PENDIENTE: bugs de UI/CSS específicos (responsive, accesibilidad) — no se auditó visualmente `globals.css` línea por línea; solo se confirmó su tamaño (~478–635 líneas según el commit) y que carece de scoping por módulo].
+### Validación y pruebas
+
+- **`z.string().min(1, "…")` solo traduce el error de cadena vacía**, no el de
+  campo ausente. Un mensaje se coló en inglés por esto. Para campos obligatorios
+  hay que traducir también el error de tipo/requerido.
+- **`npm test` corre con el borrado de tipos de Node**, que no admite propiedades
+  de parámetro de TypeScript (`constructor(public x)`). Por eso `ValidationError`
+  declara `fields` aparte. Si una clase del dominio usa esa forma, las pruebas
+  fallan con un error que no menciona la causa.
+
+### Operación
+
+- **Las altas de usuario son manuales** (crear en Supabase Auth + `INSERT` en
+  `users`) hasta que exista M13, en F2. Documentado en `docs/SUPABASE.md` §5.
+- **`scripts/crear-broker-prueba.mjs` es una fixture de desarrollo.** Crea el
+  usuario directamente en `auth.users` porque Supabase rechaza los dominios de
+  prueba y un `signUp` con dominio real le mandaría un correo a un tercero. **No
+  se corre en producción.**
+- **`Closes #N` no cierra el issue al mergear a `develop`.** GitHub solo cierra
+  automáticamente contra la rama por defecto (`main`). Hay que cerrarlos a mano.
+
+---
+
+## 2. Defectos del prototipo que el repo de producción debe arreglar
+
+No son bugs de este código: son la lista de lo que **no** hay que reproducir al
+portar cada pantalla. Están catalogados en `MAPEO_FRONTEND_CRM.md` §8.
+
+### Interfaz (los arregla T5, en F1)
+
+- **No existen estados de carga, error ni «sin permiso».** Solo existe `Empty`.
+- **El Kanban no tiene columna para `Perdido`**: un negocio marcado como perdido
+  desaparece de la vista sin dejar rastro.
+- **El modal `"lost"` está declarado y nunca se renderiza.** Marcar un negocio
+  como perdido no pide motivo en ninguna parte.
+- **Los filtros son inertes** en Leads, Contactos, Pipeline, Propiedades,
+  Comisiones y Academy: existen visualmente y no alteran los datos.
+- **Botones que solo lanzan un aviso**: exportar reporte, exportar a Excel, nuevo
+  contacto, nuevo proyecto, invitar broker, ver perfil, asignar propiedades,
+  nueva tarea, nueva plantilla, publicar en el portal.
+
+### Modelo de datos (lo arregla el esquema, ya portado en F0)
+
+- Contacto y Lead eran **el mismo objeto**: un contacto no podía tener dos
+  oportunidades ni conservar historial tras cerrarse un negocio.
+- Broker y proyecto eran **texto**, no referencias. El filtrado por rol comparaba
+  nombres (`broker === "Yostar Medina"`).
+- Tareas y citas eran **estructuras separadas** sin vínculo a contacto ni a
+  negocio.
+- Las fases de obra compartían **un único porcentaje global** en el estado raíz.
+
+### Datos que la interfaz mostraba sin existir
+
+Motivo de pérdida, probabilidad y fecha estimada de cierre, presupuesto con
+mínimo/máximo/moneda, disponibilidad de unidades (`"12/40"` era literal), última
+interacción (`"Hoy"` literal) y zona de interés del lead. Todos existen ya como
+columnas; lo que falta es **calcularlos**, que es trabajo de F1 y F4.
+
+### Agenda e integraciones
+
+- Las citas usaban un índice de día (`1..5`) y hora entera, no fecha real, con un
+  offset fijo escrito a mano. Una agenda real necesita fechas reales (M4, F2).
+- El `UID` del `.ics` se generaba como `{day}-{time}@quisqueyahome.com`. Sirve de
+  prueba de que hace falta un identificador estable por evento para no duplicar
+  al sincronizar — para eso existe `activity_sync`.
+- Nota explícita de la UI de Integraciones: **no se guardan tokens OAuth en el
+  navegador.** Restricción a respetar cuando se implemente OAuth real.

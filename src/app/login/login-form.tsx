@@ -4,7 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 /**
- * Formulario de acceso (T2).
+ * Formulario de acceso (T2), maquetado en T5 con `.login-form` y las clases
+ * de `globals.css`.
  *
  * Cliente porque necesita estado de envío y de error. La credencial no se
  * comprueba aquí: se envía al route handler, que es quien habla con Supabase.
@@ -44,8 +45,11 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <label htmlFor="email">Correo</label>
+    <form className="login-form" onSubmit={onSubmit}>
+      <p className="eyebrow">Bienvenido</p>
+      <h2>Iniciar sesión</h2>
+
+      <label htmlFor="email">Correo electrónico</label>
       <input id="email" name="email" type="email" required autoComplete="email" />
 
       <label htmlFor="password">Contraseña</label>
@@ -54,16 +58,23 @@ export function LoginForm() {
         name="password"
         type="password"
         required
+        minLength={6}
         autoComplete="current-password"
       />
 
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p role="alert" style={{ color: "var(--danger)", fontWeight: 700 }}>
+          {error}
+        </p>
+      )}
 
-      <button type="submit" disabled={enviando}>
-        {enviando ? "Entrando…" : "Entrar"}
+      <button className="button primary wide" type="submit" disabled={enviando}>
+        {enviando ? "Entrando…" : "Entrar al CRM"}
       </button>
 
-      <a href="/recuperar">Olvidé mi contraseña</a>
+      <a className="text-button" href="/recuperar">
+        ¿Olvidaste tu contraseña?
+      </a>
     </form>
   );
 }

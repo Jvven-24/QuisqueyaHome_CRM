@@ -1,34 +1,102 @@
 # Flujo de trabajo — CRM Quisqueya Home
 
+Cómo se trabaja en el **repositorio de producción**. Si buscas cómo funcionaba
+el prototipo (vinext, Cloudflare Workers, D1), eso vive en
+`referencia-prototipo/` y ya no aplica a nada de aquí.
+
 ## Antes de tocar código
-1. Leer `MAPEO_FRONTEND_CRM.md` §18 para saber qué tablas y qué carpeta de ruta le pertenecen al módulo que vas a tocar (evita chocar con otro módulo).
-2. Si el cambio toca `db/schema.ts`: está **congelado** — entra por su propio PR con migración generada aparte, revisado por separado (regla explícita en el esquema y en §18.1).
-3. Si el cambio toca `app/page.tsx` mientras siga siendo un único componente cliente (957/956 líneas): cualquier trabajo en paralelo de otro módulo va a colisionar en el mismo archivo. La tarea T7 (separar en rutas) debe completarse antes de repartir módulos entre varias personas.
-4. Si el cambio toca `app/globals.css`: son estilos globales sin ámbito por módulo — solo tocar lo global por acuerdo explícito; estilos nuevos van por módulo.
+
+- `MAPEO_FRONTEND_CRM.md` es el documento vinculante: §10 tiene las reglas de
+  negocio, §12 el inventario por módulo, §18 las fronteras de cada uno.
+- `docs/contexto/decisiones.md` explica **por qué** el código es como es. Si algo
+  parece raro, probablemente hay una decisión ahí que lo explica.
+- `docs/SUPABASE.md` si todavía no tienes base de datos configurada.
+
+## Poner en marcha
+
+```bash
+npm install                # Node >=22.13.0
+cp .env.example .env       # y rellenar — ver docs/SUPABASE.md
+npm run db:migrate
+npm run db:seed
+npm run dev
+```
 
 ## Pasos para un cambio
-1. `npm install` (Node `>=22.13.0`).
-2. Editar bajo `app/` (frontend) o `db/schema.ts` + generar migración con `npm run db:generate` (backend/datos).
-3. Lint: `npm run lint` (ESLint 9 + `eslint-config-next`).
-4. Build: `npm run build` (`vinext build`).
-5. Test: `npm test` — corre `npm run build` y luego `node --test tests/rendered-html.test.mjs` contra el build generado.
-6. Dev local: `npm run dev` (`vinext dev`).
 
-## Checklist de "terminado" (derivado de `AUDITORIA_FUNCIONAL_CRM.md` §11 y `MAPEO_FRONTEND_CRM.md` §16)
-Para un módulo o funcionalidad concreta:
-- [ ] Cada control ejecuta una acción real (no solo un toast) y respeta permisos.
-- [ ] Los cambios persisten (no solo `useState`) y quedan con autor y fecha.
-- [ ] Existe prueba automática para el flujo (crear, asignar, contactar, mover, perder, cerrar, según aplique).
-- [ ] Un usuario sin permiso no puede leer ni modificar el dato **verificado en servidor**, no solo ocultando el botón en cliente.
-- [ ] Si el módulo agrega o cierra un negocio: la operación es transaccional (ver regla de cierre transaccional en `MAPEO_FRONTEND_CRM.md` §10.2 — 8 pasos en una sola transacción).
-- [ ] Se registra en `audit_log` cuando la acción modifica datos sensibles.
-- [ ] Las métricas mostradas provienen de una consulta real, no de una constante en el JSX.
+```bash
+git checkout develop && git pull
+git checkout dev/<tu-nombre>        # tu rama personal, creada desde develop
+# … trabajar …
+npm run typecheck && npm run lint && npm test && npm run build
+```
 
-## Deploy
-- Runtime: Cloudflare Workers vía `wrangler` (`worker/index.ts` es el entry point).
-- Antes de desplegar con datos reales: `.openai/hosting.json` debe tener `d1` (y `r2` si aplica) configurados — hoy están en `null`, lo que **bloquea cualquier persistencia real desde el día uno** (riesgo señalado explícitamente en `MAPEO_FRONTEND_CRM.md` §14).
-- [PENDIENTE: comando exacto de deploy (`wrangler deploy` u otro) y entorno(s) de destino — no se encontró script de deploy en `package.json` ni documentación de CI/CD en el repo].
-- [PENDIENTE: pipeline de CI — `MAPEO_FRONTEND_CRM.md` §19 menciona "Actions: Typecheck, `npm run build` y pruebas en cada PR" como algo por crear, no como algo existente. No hay carpeta `.github/workflows` verificada].
+Los cuatro comandos son los mismos que corre la CI en cada PR. Si pasan en
+local, pasan allí.
 
-## Orden de construcción recomendado (para no abrir todo a la vez)
-Ruta crítica documentada: **T1 Datos → T2 Auth → T3 RBAC → T4 Acceso → T7 Rutas → M1 Contactos → M2 Leads → M3 Negocios**. Todo lo demás cuelga de ahí o corre en paralelo (M5 Propiedades, M10 Academy, M13 Configuración pueden empezar temprano; M12 Reportes, M14 Inicio, M15 Notificaciones van al final porque agregan lo que producen los demás). Detalle completo en `MAPEO_FRONTEND_CRM.md` §13 y §19.1.
+Después: PR contra `develop`. Cuando `develop` esté estable, PR contra `main`.
+**`main` y `develop` están protegidas**: no se comitea directo a ninguna.
+
+### Cambios de esquema
+
+`src/infrastructure/db/schema.ts` está **congelado** (§18.1): todo cambio va en
+su propio PR, con su migración generada (`npm run db:generate`) y revisado
+aparte. Nunca dos migraciones en dos ramas a la vez — los conflictos en el
+journal de Drizzle son caros.
+
+### Detalle que muerde: `Closes #N` no cierra al mergear a `develop`
+
+GitHub solo cierra issues automáticamente cuando el PR se mergea a la **rama por
+defecto** (`main`). Como aquí se mergea a `develop`, hay que **cerrar los issues
+a mano** tras el merge. Escribir `Closes #N` en la descripción igualmente vale la
+pena: enlaza el issue con el PR y deja el rastro.
+
+## El patrón de código
+
+**Lecturas** desde componentes de servidor, **escrituras** por route handlers
+(§20.2). Los ejemplos vivos están en `src/infrastructure/README.md`.
+
+Tres reglas que no se negocian:
+
+1. **El permiso se comprueba en servidor, siempre.** `requireScopeInPage` en
+   páginas, `requireScope` en route handlers. Ocultar un botón no es seguridad.
+2. **Nadie escribe su propio filtro por responsable.** Se usa `visibleRows`. Si
+   cada módulo filtra a su manera, la seguridad deja de ser auditable (§18.1).
+3. **Nadie abre su propia conexión ni lee `process.env` por su cuenta.**
+   `getDb()` e `infrastructure/env.ts`.
+
+## Checklist de "terminado" para un módulo
+
+Derivado de `MAPEO_FRONTEND_CRM.md` §16 y `AUDITORIA_FUNCIONAL_CRM.md` §11:
+
+- [ ] Cada control ejecuta una acción real (no solo un aviso) y respeta permisos.
+- [ ] Los cambios persisten y quedan con autor y fecha.
+- [ ] Hay prueba automática del flujo (crear, asignar, contactar, mover, perder,
+      cerrar, según aplique).
+- [ ] Un usuario sin permiso no puede leer ni modificar el dato, **verificado en
+      servidor**.
+- [ ] Si agrega o cierra un negocio, la operación es transaccional: `transaction()`
+      de `infrastructure/db/client.ts`, con los 8 pasos de §10.2.
+- [ ] Se registra en `audit_log` cuando la acción modifica datos sensibles (T6).
+- [ ] Las métricas que muestra vienen de una consulta, no de una constante.
+
+## Entornos y despliegue
+
+Hoy: **desarrollo contra el proyecto de Supabase en la nube y `npm run dev` en
+local. No hay staging ni producción, y es deliberado.**
+
+El despliegue y la migración al VPS de Hostinger se hacen **al final, en una sola
+operación**, con el programa terminado y funcionando (decisión #17). El
+procedimiento y la lista de comprobación para ese día están en
+`docs/DESPLIEGUE.md` §5.
+
+## Orden de construcción
+
+Ruta crítica de §13: **T1 → T2 → T3 → T4 → T7 → M1 → M2 → M3**.
+
+F0 está cerrada (todo lo anterior a M1). Lo siguiente es **F1**: T5 estados de
+interfaz, T6 auditoría, M1 Contactos, M2 Leads, M3 Pipeline.
+
+Corre en paralelo sin depender del núcleo comercial: M5 Propiedades, M10 Academy
+y M13 Configuración. Van obligatoriamente al final, porque agregan lo que los
+demás producen: M12 Reportes, M14 Inicio y M15 Notificaciones.

@@ -52,9 +52,19 @@ export class NotFoundError extends DomainError {
   }
 }
 
-/** La operación choca con el estado actual: duplicado, transición de etapa inválida. */
+/**
+ * La operación choca con el estado actual: duplicado, transición de etapa
+ * inválida. `details` es opcional y libre a propósito: el primer caso (M1,
+ * duplicados de contacto) necesita devolver la lista de candidatos junto al
+ * mensaje, y M2 reutiliza esta misma clase para lo mismo con leads
+ * (`docs/contexto/decisiones.md` #19) — forzar aquí una forma fija de
+ * "candidatos" acoplaría el dominio a un solo caso de uso.
+ */
 export class ConflictError extends DomainError {
-  constructor(message: string) {
+  details?: unknown;
+
+  constructor(message: string, details?: unknown) {
     super(message);
+    this.details = details;
   }
 }

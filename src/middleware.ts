@@ -15,8 +15,17 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-/** Rutas accesibles sin sesión. Todo lo demás exige estar dentro. */
-const PUBLIC_PATHS = ["/login", "/recuperar", "/api/auth"];
+/**
+ * Rutas accesibles sin sesión. Todo lo demás exige estar dentro.
+ *
+ * `/api/leads/externo` se suma aquí por la decisión #20
+ * (`docs/contexto/decisiones.md`): es la única entrada pública del sistema, se
+ * autentica con un token compartido en cabecera (`infrastructure/env.ts`,
+ * `leadsWebhookToken`) y no con sesión de Supabase — sin esta excepción, el
+ * middleware la redirigiría a `/login` antes de que su propio código llegara
+ * a comprobar el token.
+ */
+const PUBLIC_PATHS = ["/login", "/recuperar", "/api/auth", "/api/leads/externo"];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });

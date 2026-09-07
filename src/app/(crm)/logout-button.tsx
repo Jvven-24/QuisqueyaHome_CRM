@@ -8,13 +8,15 @@ export function LogoutButton() {
   return (
     <button
       type="button"
+      className="icon-button"
+      aria-label="Cerrar sesión"
       onClick={async () => {
         await fetch("/api/auth/logout", { method: "POST" });
         router.replace("/login");
         router.refresh();
       }}
     >
-      Cerrar sesión
+      <span aria-hidden="true">↗</span>
     </button>
   );
 }

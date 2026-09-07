@@ -1,19 +1,29 @@
 /**
- * Pantalla 403 (T3). Lo que ve alguien con sesión válida pero sin permiso.
+ * Pantalla 403 (T3, maquetada en T5). Lo que ve alguien con sesión válida
+ * pero sin permiso.
  *
- * Deliberadamente sin diseño: la maquetación de los estados de interfaz —carga,
- * vacío, sin resultados, error, 403— es T5, en la fase F1. Lo que importa aquí
- * es que el servidor responda 403 y no 500, y que el usuario lea por qué.
+ * Se renderiza fuera del shell de `(crm)/layout.tsx` (Next resuelve el
+ * `forbidden.tsx` más cercano hacia arriba desde donde se llamó a
+ * `forbidden()`, y este es el único que existe), así que usa solo clases de
+ * `globals.css` que no dependen de ese shell: `.page` para el margen y
+ * `.empty`/`.button` para el contenido, las mismas que usan los estados de
+ * "sin resultados" dentro de los módulos.
  */
 export default function Forbidden() {
   return (
-    <main>
-      <h1>No tienes permiso</h1>
-      <p>
-        Tu rol no tiene acceso a esta sección. Si crees que deberías tenerlo,
-        pídeselo a un administrador.
-      </p>
-      <a href="/inicio">Volver al inicio</a>
+    <main className="page">
+      <div className="empty">
+        <strong>No tienes permiso</strong>
+        <p>
+          Tu rol no tiene acceso a esta sección. Si crees que deberías
+          tenerlo, pídeselo a un administrador.
+        </p>
+        <p>
+          <a className="button primary" href="/inicio">
+            Volver al inicio
+          </a>
+        </p>
+      </div>
     </main>
   );
 }
