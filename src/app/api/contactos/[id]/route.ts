@@ -14,7 +14,7 @@ import { requireScope } from "@/domain/rbac";
 import { normalizarTelefono } from "@/domain/telefono";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
-import { getDb, transaction } from "@/infrastructure/db/client";
+import { transaction, type Db } from "@/infrastructure/db/client";
 import { contacts } from "@/infrastructure/db/schema";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 import { visibleRows } from "@/infrastructure/rbac-filter";
@@ -46,8 +46,15 @@ function vaciosANull(cuerpo: unknown): unknown {
   return copia;
 }
 
-async function contactoVisible(id: number, actor: Awaited<ReturnType<typeof requireActor>>, scope: Parameters<typeof visibleRows>[1]) {
-  const [fila] = await getDb()
+type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
+
+async function contactoVisible(
+  tx: Tx,
+  id: number,
+  actor: Awaited<ReturnType<typeof requireActor>>,
+  scope: Parameters<typeof visibleRows>[1],
+) {
+  const [fila] = await tx
     .select()
     .from(contacts)
     .where(and(eq(contacts.id, id), visibleRows(actor, scope, contacts.brokerId, contacts.deletedAt)))
@@ -69,7 +76,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       // Se relee dentro de la transacción: el `NotFoundError` cubre a la vez
       // "no existe" y "existe pero fuera de tu alcance" (`domain/errors.ts`),
       // sin distinguir los dos casos al usuario.
-      const anterior = await contactoVisible(id, actor, scope);
+      const anterior = await contactoVisible(tx, id, actor, scope);
       if (!anterior) throw new NotFoundError();
 
       const cambios: Partial<typeof contacts.$inferInsert> = { updatedBy: actor.userId };
@@ -116,7 +123,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     const scope = requireScope(actor, "contacts", "delete");
 
     await transaction(async (tx) => {
-      const anterior = await contactoVisible(id, actor, scope);
+      const anterior = await contactoVisible(tx, id, actor, scope);
       if (!anterior) throw new NotFoundError();
 
       // Borrado lógico: nunca `DELETE` real (§9 del encargo). `visibleRows` ya
