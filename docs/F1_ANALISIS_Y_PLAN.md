@@ -392,3 +392,29 @@ antes.
   confirme, dejando uno huérfano sin lead que lo enlace. Se resuelve con un
   índice único parcial sobre `contacts` si el proveedor de leads demuestra
   enviar duplicados en paralelo real — hoy no hay evidencia de que ocurra.
+- **M3b · Pipeline y cierre transaccional:** el inspector del negocio
+  (`pipeline/inspector.tsx`) es de solo lectura salvo el cambio de etapa
+  (arrastre o `<select>`) — no hay formulario para editar `amountCents`,
+  `probability`, `commissionBasisPoints`, `expectedCloseDate` ni para asociar
+  `dealProperties` (unidades de interés / unidad principal). El encargo de
+  M3b pidió conectar el Kanban y el cierre, no el CRUD del negocio, así que
+  quedó fuera a propósito — pero sin esa pantalla, un negocio real solo puede
+  cumplir los requisitos de Preselección, Negociación y Cierre (§10.1) si
+  esos campos se cargan por otra vía (hoy, ninguna existe en la interfaz).
+  Candidato natural: una edición de negocio análoga al `PATCH` de M1/M2,
+  simple pero con más campos, cuando se retome el CRUD completo de `deals`.
+- **M3b · Umbrales de nivel de broker:** `domain/cierre-negocio.ts` fija los
+  cortes de `evaluarNivelBroker` (Senior+, Top Producer, Top Leader) sin una
+  fuente oficial — solo el corte Junior → Senior (US$500 000 anuales) está
+  confirmado por dos cifras consistentes del prototipo
+  (`referencia-prototipo/app/page.tsx`). Los otros tres están documentados en
+  el propio archivo como provisionales, con el criterio usado para elegirlos.
+  Hay que confirmarlos con el negocio antes de que afecten una comisión real.
+- **M3b · Actividad "de contacto":** el requisito de §10.1 para entrar a
+  "Contactado" (`api/pipeline/[id]/etapa/route.ts`, constante
+  `TIPOS_ACTIVIDAD_DE_CONTACTO`) se interpretó como una `activities` de tipo
+  `call`, `meeting`, `whatsapp` o `email` con `status: "completed"` — no
+  `task` (una tarea pendiente no es un contacto hecho) ni `note` (una nota no
+  confirma que se haya hablado con el cliente). Es una interpretación
+  razonable del texto de §10.1, no un dato que el mapeo fije con precisión;
+  queda documentada aquí por si el negocio la lee distinto.
