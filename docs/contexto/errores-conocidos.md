@@ -63,6 +63,50 @@ Dos listas distintas, y conviene no confundirlas:
 - **`Closes #N` no cierra el issue al mergear a `develop`.** GitHub solo cierra
   automáticamente contra la rama por defecto (`main`). Hay que cerrarlos a mano.
 
+### Auditoría de F1 del 12/09/2026 — defectos corregidos
+
+Ninguno de estos lo detectaban `typecheck`, `lint`, `build` ni las 57 pruebas
+que ya pasaban. Se arreglaron antes de empezar F2, uno por issue, cada uno con
+su PR contra `develop` (`docs/F1_ANALISIS_Y_PLAN.md` no los lista: son
+defectos de la auditoría, no pendientes anotados a propósito — ver §10 de ese
+documento para no confundirlos).
+
+- **#23 — pool de conexiones invertido en producción.** `getDb()` cacheaba en
+  `globalThis` solo fuera de producción (`if (process.env.NODE_ENV !==
+  "production")` al revés de lo que hacía falta): en producción cada petición
+  abría un pool nuevo (`max: 10`) que nadie cerraba. Corregido a `return
+  (globalForDb.crmDb ??= build())`.
+- **#23 — `/api/*` sin sesión redirigía en vez de responder 401.** El
+  middleware mandaba el mismo 302 a `/login` que las páginas; un `fetch` sigue
+  el redirect, recibe el HTML de login con 200 y `!respuesta.ok` nunca se
+  dispara — el formulario se cerraba como si hubiera guardado. Ahora responde
+  401 JSON cuando el path empieza con `/api`.
+- **#23 — doce módulos del grupo `(crm)` sin `error.tsx` propio.** Caían en la
+  pantalla genérica de Next. `src/app/(crm)/error.tsx` los cubre a todos;
+  contactos, leads y pipeline conservan el suyo, más específico.
+- **#23 — actividades pendientes sin fecha no se cancelaban al cerrar un
+  negocio.** El paso 7 del cierre usaba `gt(activities.startsAt, now)`;
+  `starts_at` es nulable, así que quedaban vivas para siempre. Ahora
+  `or(isNull(...), gt(...))`.
+- **#22 — nadie escribía `leads.broker_id`.** No existía `PATCH
+  /api/leads/[id]` ni un botón de asignación en el inspector: un broker con
+  `scope: "own"` nunca veía nada, y todo negocio convertido nacía con
+  `brokerId: null`. Arreglado con el endpoint (nuevo), un botón "Asignar" en
+  `leads/inspector.tsx`, `brokerId: lead.brokerId ?? actor.userId` en la
+  conversión, y `brokerId: actor.userId` en el contacto que crea el alta de
+  lead — igual que ya hacía `api/contactos/route.ts`.
+- **#24 — el cierre usaba la hora del servidor, no la de Santo Domingo.** En
+  un VPS en UTC, un cierre nocturno contaba en el día (o el mes) siguiente.
+  Nuevo helper `src/domain/zona-horaria.ts` (`fechaSantoDomingo`, con prueba)
+  — es la decisión #24 de F2 adelantada, y M4 la va a reutilizar.
+- **#24 — `broker_profiles.annual_sales_cents` acumulaba de por vida.** Nadie
+  lo reiniciaba, así que el nivel del broker solo podía subir. Ahora se
+  recalcula con un `SUM` de los negocios ganados del año en curso (en hora de
+  Santo Domingo) en vez de incrementar.
+
+**Pendiente:** el issue #25 (milestone F1 · Núcleo comercial) es una decisión
+de alcance y queda deliberadamente sin tocar — se retoma aparte.
+
 ---
 
 ## 2. Defectos del prototipo que el repo de producción debe arreglar
