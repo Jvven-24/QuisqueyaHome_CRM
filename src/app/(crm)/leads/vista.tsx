@@ -37,6 +37,9 @@ export type LeadFila = {
 
 export type Canal = { id: number; name: string };
 
+/** Candidato para el botón Asignar del inspector (issue #22). */
+export type BrokerOpcion = { userId: number; fullName: string };
+
 export const ETIQUETAS_ESTADO: Record<LeadFila["status"], string> = {
   new: "Nuevo",
   assigned: "Asignado",
@@ -76,6 +79,7 @@ function formatoPresupuesto(lead: LeadFila): string {
 export function LeadsVista({
   leads,
   canales,
+  brokers,
   total,
   tamanioPagina,
   pagina,
@@ -86,6 +90,7 @@ export function LeadsVista({
 }: {
   leads: LeadFila[];
   canales: Canal[];
+  brokers: BrokerOpcion[];
   total: number;
   tamanioPagina: number;
   pagina: number;
@@ -240,7 +245,12 @@ export function LeadsVista({
           )}
         </div>
         {leadSeleccionado && (
-          <LeadInspector lead={leadSeleccionado} historial={historial} onClose={() => irCon({ lead: undefined })} />
+          <LeadInspector
+            lead={leadSeleccionado}
+            brokers={brokers}
+            historial={historial}
+            onClose={() => irCon({ lead: undefined })}
+          />
         )}
       </div>
       {creando && <FormularioLead canales={canales} onClose={() => setCreando(false)} />}

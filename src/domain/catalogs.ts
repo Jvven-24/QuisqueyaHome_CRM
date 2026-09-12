@@ -102,6 +102,8 @@ export const AUDIT_ACTIONS = [
    * estado de negocio propia, igual que `marcar_perdido` lo es para negocios.
    */
   "descartar",
+  /** M2 · Leads: confirmar el responsable (`broker_id`), issue #22. */
+  "asignar",
 ] as const;
 
 /** Estado del lead antes de convertirse en negocio. */

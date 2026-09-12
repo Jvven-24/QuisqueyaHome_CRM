@@ -25,6 +25,7 @@ import {
   DEFAULT_AGENCY_SHARE_BASIS_POINTS,
   DEFAULT_BROKER_SHARE_BASIS_POINTS,
 } from "@/domain/cierre-negocio";
+import { fechaSantoDomingo } from "@/domain/zona-horaria";
 import { auditar } from "@/infrastructure/audit";
 import type { Db } from "@/infrastructure/db/client";
 import {
@@ -105,8 +106,10 @@ export async function cerrarNegocioGanado(
   }
 
   const now = new Date();
-  const anio = now.getFullYear();
-  const mes = now.getMonth() + 1;
+  // Hora de Santo Domingo, no la del servidor (issue #24): en un VPS en UTC,
+  // un cierre nocturno contaría en el día o el mes siguiente.
+  const fechaCierre = fechaSantoDomingo(now);
+  const [anio, mes] = fechaCierre.split("-").map(Number) as [number, number];
 
   // --- Paso 1: sellar closed_at y el monto final ---------------------------
   const [dealCerrado] = await tx
@@ -179,7 +182,28 @@ export async function cerrarNegocioGanado(
     // todos los `users`). No hay nada que recalcular en ese caso; el cierre
     // no debe fallar por la ausencia de un perfil que no le corresponde tener.
     if (perfil) {
-      const nuevoAnual = perfil.annualSalesCents + amountCentsFinal;
+      // Recalculado con un SUM en vez de incrementado (issue #24): nadie
+      // reiniciaba `annual_sales_cents`, así que acumulaba de por vida y el
+      // nivel del broker solo podía subir. El `SELECT` ya ve este negocio
+      // (paso 1 lo dejó `closedAt: now` dentro de esta misma transacción), así
+      // que no hace falta sumarle `amountCentsFinal` aparte.
+      const [fila] = await tx
+        .select({ total: sql<number>`coalesce(sum(${deals.amountCents}), 0)::bigint` })
+        .from(deals)
+        .innerJoin(pipelineStages, eq(pipelineStages.id, deals.stageId))
+        .where(
+          and(
+            eq(deals.brokerId, dealCerrado.brokerId),
+            eq(pipelineStages.kind, "won"),
+            isNull(deals.deletedAt),
+            sql`extract(year from ${deals.closedAt} at time zone 'America/Santo_Domingo') = ${anio}`,
+          ),
+        );
+      // `coalesce(sum(...), 0)` sin `GROUP BY` siempre trae una fila, aunque
+      // no haya negocios que sumar — `fila` nunca es `undefined` en la
+      // práctica, pero Drizzle tipa cualquier `select()` como posible arreglo
+      // vacío.
+      const nuevoAnual = Number(fila?.total ?? 0);
       await tx
         .update(brokerProfiles)
         .set({ annualSalesCents: nuevoAnual, level: evaluarNivelBroker(nuevoAnual) })
@@ -206,7 +230,7 @@ export async function cerrarNegocioGanado(
     brokerAmountCents,
     agencyAmountCents,
     status: "pending",
-    closedDate: now.toISOString().slice(0, 10),
+    closedDate: fechaCierre,
     createdBy: actor.userId,
     updatedBy: actor.userId,
   });
