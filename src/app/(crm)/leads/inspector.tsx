@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Avatar } from "../_ui/prototipo-ui";
-import { ETIQUETAS_ESTADO, type LeadFila } from "./vista";
+import { ETIQUETAS_ESTADO, type BrokerOpcion, type LeadFila } from "./vista";
 
 /**
  * Ficha lateral de un lead (M2).
@@ -20,10 +20,12 @@ import { ETIQUETAS_ESTADO, type LeadFila } from "./vista";
  */
 export function LeadInspector({
   lead,
+  brokers,
   historial,
   onClose,
 }: {
   lead: LeadFila;
+  brokers: BrokerOpcion[];
   historial: React.ReactNode;
   onClose: () => void;
 }) {
@@ -32,9 +34,31 @@ export function LeadInspector({
   const [descartando, setDescartando] = useState(false);
   const [motivoDescarte, setMotivoDescarte] = useState("");
   const [mostrarDescarte, setMostrarDescarte] = useState(false);
+  const [asignando, setAsignando] = useState(false);
+  const [brokerElegido, setBrokerElegido] = useState(
+    String(lead.brokerId ?? lead.suggestedBrokerId ?? ""),
+  );
   const [error, setError] = useState<string | null>(null);
 
   const puedeActuar = lead.status !== "converted" && lead.status !== "discarded";
+
+  async function asignar() {
+    if (!brokerElegido) return;
+    setAsignando(true);
+    setError(null);
+    const respuesta = await fetch(`/api/leads/${lead.id}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ brokerId: Number(brokerElegido) }),
+    });
+    const cuerpo = await respuesta.json().catch(() => ({}));
+    setAsignando(false);
+    if (!respuesta.ok) {
+      setError(cuerpo.error ?? "No se pudo asignar el responsable.");
+      return;
+    }
+    router.refresh();
+  }
 
   async function convertir() {
     if (!confirm(`¿Convertir a ${lead.contactName} en negocio? Se creará en la primera etapa del embudo.`)) return;
@@ -103,6 +127,31 @@ export function LeadInspector({
           <dd>
             {lead.brokerName ??
               (lead.suggestedBrokerName ? `Sugerido: ${lead.suggestedBrokerName}` : "Sin asignar")}
+            {puedeActuar && brokers.length > 0 && (
+              <span className="form-actions" style={{ marginTop: 8 }}>
+                <select
+                  aria-label="Elegir broker a asignar"
+                  value={brokerElegido}
+                  onChange={(event) => setBrokerElegido(event.target.value)}
+                >
+                  <option value="">Elegir broker…</option>
+                  {brokers.map((broker) => (
+                    <option key={broker.userId} value={broker.userId}>
+                      {broker.fullName}
+                      {broker.userId === lead.suggestedBrokerId ? " (sugerido)" : ""}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  className="button"
+                  type="button"
+                  disabled={asignando || !brokerElegido}
+                  onClick={asignar}
+                >
+                  {asignando ? "Asignando…" : "Asignar"}
+                </button>
+              </span>
+            )}
           </dd>
         </div>
         <div>

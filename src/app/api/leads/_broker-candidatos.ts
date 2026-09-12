@@ -11,6 +11,10 @@
  *
  * La decisión de a cuál sugerir es dominio puro (`domain/asignacion-lead.ts`);
  * esto solo arma la lista de candidatos que esa función recibe.
+ *
+ * También es la lista de brokers válidos para asignación manual (issue #22):
+ * `fullName` no lo usa `sugerirBroker`, pero evita una segunda consulta casi
+ * idéntica para el selector del inspector y para validar el `PATCH`.
  */
 
 import { and, eq, isNull } from "drizzle-orm";
@@ -20,13 +24,14 @@ import { brokerProfiles, users } from "@/infrastructure/db/schema";
 
 export async function candidatosBroker(
   db: Db = getDb(),
-): Promise<BrokerCandidato[]> {
+): Promise<(BrokerCandidato & { fullName: string })[]> {
   const filas = await db
     .select({
       userId: brokerProfiles.userId,
       specialty: brokerProfiles.specialty,
       handlesRentals: brokerProfiles.handlesRentals,
       annualSalesCents: brokerProfiles.annualSalesCents,
+      fullName: users.fullName,
     })
     .from(brokerProfiles)
     .innerJoin(users, eq(users.id, brokerProfiles.userId))
