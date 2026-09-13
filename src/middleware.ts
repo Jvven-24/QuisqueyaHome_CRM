@@ -61,6 +61,12 @@ export async function middleware(request: NextRequest) {
   );
 
   if (!user && !isPublic) {
+    // Un route handler de /api espera JSON, no un 302: si se le deja seguir el
+    // redirect, recibe el HTML de /login con 200 y `!respuesta.ok` nunca se
+    // dispara — el cliente sigue como si la petición hubiera tenido éxito.
+    if (path.startsWith("/api")) {
+      return NextResponse.json({ error: "No autenticado." }, { status: 401 });
+    }
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     // Para volver a donde iba después de entrar.

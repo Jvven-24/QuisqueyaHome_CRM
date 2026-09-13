@@ -34,9 +34,7 @@ function build() {
  * no hay variables de entorno de base de datos.
  */
 export function getDb() {
-  const existing = globalForDb.crmDb ?? build();
-  if (process.env.NODE_ENV !== "production") globalForDb.crmDb = existing;
-  return existing;
+  return (globalForDb.crmDb ??= build());
 }
 
 export type Db = ReturnType<typeof getDb>;

@@ -16,7 +16,7 @@
  * sitio de este archivo, y no debería hacer falta.
  */
 
-import { and, eq, gt, isNull, sql } from "drizzle-orm";
+import { and, eq, gt, isNull, or, sql } from "drizzle-orm";
 import { ConflictError, NotFoundError } from "@/domain/errors";
 import type { Actor } from "@/domain/rbac";
 import {
@@ -241,6 +241,8 @@ export async function cerrarNegocioGanado(
   // desactivar sin darse cuenta.
 
   // --- Paso 7: cancelar actividades futuras pendientes ---------------------
+  // `startsAt` es nulable: una pendiente sin fecha no es "pasada", así que
+  // `gt` sola la deja viva para siempre. `isNull` la trata como futura.
   await tx
     .update(activities)
     .set({ status: "cancelled", updatedBy: actor.userId })
@@ -248,7 +250,7 @@ export async function cerrarNegocioGanado(
       and(
         eq(activities.dealId, dealId),
         eq(activities.status, "pending"),
-        gt(activities.startsAt, now),
+        or(isNull(activities.startsAt), gt(activities.startsAt, now)),
       ),
     );
 
