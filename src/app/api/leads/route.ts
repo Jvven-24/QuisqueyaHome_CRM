@@ -165,6 +165,10 @@ export async function POST(request: Request) {
             phoneDisplay,
             email: datos.email ?? null,
             sourceId: datos.sourceId ?? null,
+            // Mismo criterio que `api/contactos/route.ts`: sin dueño por
+            // defecto, un broker con alcance `own` no vería el contacto que
+            // acaba de crear al dar de alta este lead (issue #22).
+            brokerId: actor.userId,
             createdBy: actor.userId,
             updatedBy: actor.userId,
           })

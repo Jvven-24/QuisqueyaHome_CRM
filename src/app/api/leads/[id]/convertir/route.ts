@@ -76,8 +76,10 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
           sourceId: lead.sourceId,
           // El broker confirmado del lead, nunca la sugerencia sin confirmar
           // (decisión #21) — `suggested_broker_id` es una propuesta, no una
-          // asignación.
-          brokerId: lead.brokerId,
+          // asignación. Si nadie lo asignó antes de convertir, el negocio se
+          // queda con quien convierte (issue #22): así no vuelve a nacer un
+          // negocio sin dueño.
+          brokerId: lead.brokerId ?? actor.userId,
           operationType: lead.operationType ?? "sale",
           currency: lead.currency,
           stageChangedAt: new Date(),

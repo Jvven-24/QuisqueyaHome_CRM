@@ -17,6 +17,7 @@ import { getDb } from "@/infrastructure/db/client";
 import { contacts, leadSources, leads, projects, users } from "@/infrastructure/db/schema";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { visibleRows } from "@/infrastructure/rbac-filter";
+import { candidatosBroker } from "@/app/api/leads/_broker-candidatos";
 import { Historial } from "../_ui/historial";
 import { LeadsVista } from "./vista";
 
@@ -97,7 +98,7 @@ export default async function LeadsPage({
     convertedDealId: leads.convertedDealId,
   };
 
-  const [filas, totales, canales] = await Promise.all([
+  const [filas, totales, canales, brokers] = await Promise.all([
     db
       .select(columnas)
       .from(leads)
@@ -120,6 +121,9 @@ export default async function LeadsPage({
       .from(leadSources)
       .where(eq(leadSources.isActive, true))
       .orderBy(leadSources.position),
+    // Candidatos válidos para el botón Asignar del inspector (issue #22):
+    // misma lista que arma la sugerencia, con el nombre para el selector.
+    candidatosBroker(db),
   ]);
 
   // La ficha lateral respeta el mismo alcance que el listado, igual que en
@@ -143,6 +147,7 @@ export default async function LeadsPage({
     <LeadsVista
       leads={filas}
       canales={canales}
+      brokers={brokers}
       total={totales[0]?.total ?? 0}
       tamanioPagina={TAMANIO_PAGINA}
       pagina={pagina}
