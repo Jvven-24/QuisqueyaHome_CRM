@@ -62,6 +62,13 @@ Dos listas distintas, y conviene no confundirlas:
   se corre en producción.**
 - **`Closes #N` no cierra el issue al mergear a `develop`.** GitHub solo cierra
   automáticamente contra la rama por defecto (`main`). Hay que cerrarlos a mano.
+- **Crear una rama nueva por cada fix rompe 2 workflows de GitHub Actions.**
+  Al corregir los defectos de la auditoría de F1 (12/09/2026) se crearon 3 ramas
+  `fix/*` (una por issue) y los workflows no recibieron el PR correctamente —
+  están configurados esperando el evento contra las ramas de trabajo
+  habituales, no contra ramas creadas al vuelo. Desde el 14/09/2026 está
+  **prohibido crear ramas nuevas para fixes puntuales** (decisión #30 en
+  `decisiones.md`); todo se trabaja sobre `dev/<tu-nombre>`.
 
 ### Auditoría de F1 del 12/09/2026 — defectos corregidos
 

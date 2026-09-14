@@ -152,6 +152,54 @@ Ver detalle de capas en arquitectura.md.
 **Decisión (12 de septiembre de 2026, M13):** la pantalla de etapas edita nombre, posición, probabilidad por defecto y activación. `slug` y `kind` son de solo lectura.
 **Por qué:** la decisión #1 pide que el nombre sea editable, y para eso las reglas cuelgan de `kind`. Cambiar `kind` reescribiría en silencio el significado de los negocios ya cerrados —y de ahí cuelgan el nivel del broker y la comisión—; el `slug` es la identidad que usa el código.
 
+## 30. Prohibido crear ramas nuevas para fixes puntuales
+**Decisión (14 de septiembre de 2026):** ya no se crean ramas `fix/<issue>` (ni
+`chore/<algo>` ni ninguna rama nueva) para arreglos de auditoría, regresiones o
+fixtures de prueba. Todo se trabaja sobre la rama personal ya existente
+(`dev/<tu-nombre>`) y se sube ahí, en commits separados si hace falta
+distinguirlos. Revierte la práctica descrita antes en `flujo-de-trabajo.md`
+("usa una rama `fix/<issue-o-descripcion>` contra `develop`").
+**Por qué:** al corregir los defectos de la auditoría de F1 (12/09/2026) se
+crearon 3 ramas (`fix/22-asignar-broker`, `fix/23-defectos-una-linea`,
+`fix/24-fecha-santo-domingo-ventas-anuales`), y eso causó que **2 workflows de
+GitHub Actions no recibieran el PR correctamente** — quedaron configurados
+esperando el evento contra las ramas de trabajo habituales, no contra ramas
+nuevas creadas al vuelo para cada fix.
+**Descartado:** seguir aceptando ramas `fix/*` porque "la guardia de ramas las
+acepta" — el hecho de que la guardia no las rechace no significa que el resto
+del pipeline (Actions) las maneje bien.
+**Excepción:** si hace falta de verdad una rama nueva y separada (ej. un cambio
+de esquema que exige su propio PR), **la pide el usuario explícitamente**; no
+es una decisión que tome el agente por su cuenta.
+
+## 31. Flujo de trabajo por fase, de punta a punta: orientación, issues, ponytail, commit por issue y PR bloqueado si algo falla
+**Decisión (14 de septiembre de 2026):** se formaliza el ciclo completo de
+trabajo por fase en `flujo-de-trabajo.md`:
+1. Al abrir sesión, orientación rápida (decisiones, errores conocidos, mapeo,
+   `git log`) — no una auditoría completa.
+2. Al recibir una fase, investigar todo lo que ya existe sobre ella, revisar el
+   repo real contra esos documentos, **crear los issues en GitHub** y **escribir
+   el plan de implementación** (`docs/F<n>_ANALISIS_Y_PLAN.md`) antes de tocar
+   código.
+3. Al construir, **ponytail es obligatorio**: la skill `ponytail` para escribir,
+   `ponytail-review` para revisar cada diff, y **`ponytail-audit` no se puede
+   omitir**.
+4. **Un commit por issue**, nunca varios issues agrupados en un commit.
+5. Al cerrar la fase (todos los issues comiteados): prueba unitaria
+   (`typecheck`/`lint`/`test`/`build`) **y** prueba manual desde interfaz. Un
+   error encontrado en cualquiera de las dos se anota y **se prioriza sobre
+   seguir avanzando**.
+6. **No se abre PR si algo falla.** Se puede seguir comiteando, pero el mensaje
+   del commit debe decir explícitamente qué está fallando.
+**Por qué:** hasta ahora estos pasos se seguían de facto (los planes
+`F0_ANALISIS_Y_PLAN.md`/`F1_ANALISIS_Y_PLAN.md` y los issues por defecto de la
+auditoría de F1 ya existían), pero no estaban escritos como regla — lo que deja
+margen para que una sesión nueva salte directo a codear sin plan, mezcle varios
+arreglos en un commit, o abra un PR con algo roto. Escribirlo evita que el
+criterio varíe de sesión a sesión.
+**Relacionado:** decisión #30 (no crear ramas nuevas), que ya tocaba el mismo
+documento por el mismo motivo — evitar que GitHub Actions reciba el PR mal.
+
 ## Estado de implementación de estas decisiones
 **Actualizado el 12 de septiembre de 2026, al arrancar F2.**
 
