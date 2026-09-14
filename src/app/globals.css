@@ -250,7 +250,7 @@ small { color: var(--muted); }
 .privacy-banner strong, .permission-note strong { color: #725400; }
 .privacy-banner span { color: #6f6446; }
 .property-grid { display: grid; gap: 18px; grid-template-columns: repeat(2, 1fr); }
-.property-card { background: white; border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; display: grid; grid-template-columns: 42% 58%; overflow: hidden; padding: 0; text-align: left; transition: border-color 140ms ease, box-shadow 140ms ease; }
+.property-card { background: white; border: 1px solid var(--line); border-radius: var(--radius); color: inherit; cursor: pointer; display: grid; grid-template-columns: 42% 58%; overflow: hidden; padding: 0; text-align: left; text-decoration: none; transition: border-color 140ms ease, box-shadow 140ms ease; }
 .property-card:hover { border-color: #b9c2d2; box-shadow: 0 10px 28px rgba(29,43,83,.1); }
 .property-visual { background: linear-gradient(145deg, #263762, #10172d); color: white; display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; overflow: hidden; padding: 20px; position: relative; }
 .property-visual::after { border: 35px solid rgba(199,153,14,.23); border-radius: 50%; content: ""; height: 220px; position: absolute; right: -90px; top: 8px; width: 220px; }
@@ -268,7 +268,7 @@ small { color: var(--muted); }
 .property-body dd { color: var(--navy-900); font-weight: 700; margin: 4px 0 0; }
 .property-body footer { align-items: center; border-top: 1px solid var(--line); display: grid; gap: 8px; grid-template-columns: auto 1fr auto; margin-top: 18px; padding-top: 14px; }
 .property-body footer b { color: var(--gold-700); font-size: 12px; }
-.back-button { background: transparent; border: 0; color: var(--navy-900); cursor: pointer; font-weight: 700; margin: 0 0 18px; }
+.back-button { background: transparent; border: 0; color: var(--navy-900); cursor: pointer; display: inline-block; font-weight: 700; margin: 0 0 18px; text-decoration: none; }
 .project-summary { display: grid; gap: 20px; grid-template-columns: 420px 1fr; margin-bottom: 20px; }
 .property-visual.large { border-radius: var(--radius); min-height: 260px; }
 

@@ -1,112 +1,82 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { properties } from "../_ui/datos-muestra";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { PROJECT_TYPES } from "@/domain/catalogs";
 import { Avatar, Badge, PageHeader } from "../_ui/prototipo-ui";
+import { SinResultados, Vacio } from "../_ui/estados";
+import { ETIQUETAS_TIPO, FormularioProyecto, type BrokerOpcion } from "./_formulario-proyecto";
+
+export type ProyectoFila = {
+  id: number;
+  slug: string;
+  name: string;
+  zone: string | null;
+  projectType: string;
+  progressPercent: number;
+  internalPriceCents: number | null;
+  publicRangeMinCents: number | null;
+  publicRangeMaxCents: number | null;
+  currency: string;
+  brokerId: number | null;
+  brokerName: string | null;
+  unidadesDisponibles: number;
+  unidadesTotal: number;
+};
+
+function formatoRango(minCents: number | null, maxCents: number | null, currency: string): string {
+  if (minCents == null && maxCents == null) return "Sin definir";
+  const fmt = (cents: number) => `${currency} ${(cents / 100).toLocaleString("es-DO")}`;
+  if (minCents != null && maxCents != null) return `${fmt(minCents)} - ${fmt(maxCents)}`;
+  return fmt((minCents ?? maxCents)!);
+}
 
 /**
- * ponytail: datos de muestra portados de `referencia-prototipo/app/page.tsx`
- * (`PropertiesView`). M5 · Propiedades se construye en F2
- * (`docs/F1_ANALISIS_Y_PLAN.md`); sustituye este arreglo local por `projects`
- * y `units` reales, con `stripRestrictedPrices` del dominio decidiendo qué
- * precio ve cada rol — aquí la restricción es solo visual (`roleSlug === "admin"`).
+ * M5 · Propiedades (F2). Rejilla real de `projects`/`units` — el look
+ * (`.property-grid`, `.property-card`, `.filter-bar`) es el mismo que portó
+ * T5, solo cambia de dónde vienen los datos y que cada tarjeta navega al
+ * detalle (`/propiedades/[slug]`) en vez de abrir un panel local.
+ *
+ * Zona y tipo viven en la URL (`searchParams`): cada cambio navega,
+ * `page.tsx` vuelve a consultar con `visibleRows`.
  */
-export function PropiedadesVista({ roleSlug }: { roleSlug: string }) {
-  const [selected, setSelected] = useState<(typeof properties)[number] | null>(null);
-  const isAdmin = roleSlug === "admin";
-  const visible = roleSlug === "broker" ? properties.filter((property) => property.broker === "Yostar Medina") : properties;
+export function PropiedadesVista({
+  proyectos,
+  brokers,
+  filtros,
+  puedeCrear,
+}: {
+  proyectos: ProyectoFila[];
+  brokers: BrokerOpcion[];
+  filtros: { zone: string; type?: string };
+  puedeCrear: boolean;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [creando, setCreando] = useState(false);
 
-  if (selected) {
-    const unidades = [
-      ["B4", "Apartamento", "2", "2", "85 m²", "US$165,000", "US$170K - 185K", "Disponible"],
-      ["C2", "Penthouse", "3", "2.5", "110 m²", "US$210,000", "US$220K - 240K", "Reservada"],
-      ["A1", "Apartamento", "1", "1", "60 m²", "US$118,000", "US$125K - 140K", "Vendida"],
-    ];
-    return (
-      <>
-        <button className="back-button" type="button" onClick={() => setSelected(null)}>
-          ← Volver a propiedades
-        </button>
-        <PageHeader
-          eyebrow="Inventario privado"
-          title={selected.name}
-          subtitle={`${selected.zone} · ${selected.type} · Entrega estimada diciembre 2027`}
-          action={
-            <Link className="button primary" href="/avances">
-              Actualizar avance
-            </Link>
-          }
-        />
-        <div className="project-summary">
-          <div className="property-visual large">
-            <span>QH</span>
-            <strong>{selected.progress}%</strong>
-          </div>
-          <dl className="detail-grid">
-            <div>
-              <dt>Desarrollador</dt>
-              <dd>Grupo Punta Cana Norte</dd>
-            </div>
-            <div>
-              <dt>Unidades disponibles</dt>
-              <dd>{selected.units}</dd>
-            </div>
-            <div>
-              <dt>Precio interno</dt>
-              <dd>{isAdmin ? selected.price : "Restringido"}</dd>
-            </div>
-            <div>
-              <dt>Rango público</dt>
-              <dd>{selected.public}</dd>
-            </div>
-          </dl>
-        </div>
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Unidad</th>
-                <th>Tipología</th>
-                <th>Hab.</th>
-                <th>Baños</th>
-                <th>Construcción</th>
-                {isAdmin && <th>Precio real</th>}
-                <th>Rango público</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {unidades.map((row) => (
-                <tr key={row[0]}>
-                  {row.slice(0, 5).map((cell) => (
-                    <td key={cell}>{cell}</td>
-                  ))}
-                  {isAdmin && <td>{row[5]}</td>}
-                  <td>{row[6]}</td>
-                  <td>
-                    <Badge tone={row[7] === "Disponible" ? "green" : row[7] === "Reservada" ? "gold" : "neutral"}>
-                      {row[7]}
-                    </Badge>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </>
-    );
+  function irCon(cambios: Record<string, string | undefined>) {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const [clave, valor] of Object.entries(cambios)) {
+      if (valor) params.set(clave, valor);
+      else params.delete(clave);
+    }
+    router.push(`${pathname}?${params.toString()}`);
   }
+
+  const hayFiltro = Boolean(filtros.zone || filtros.type);
 
   return (
     <>
       <PageHeader
         eyebrow="C5 · Inventario privado"
-        title={roleSlug === "broker" ? "Mis propiedades" : "Propiedades internas"}
+        title="Propiedades internas"
         subtitle="Inventario, disponibilidad y rangos comerciales del equipo."
         action={
-          isAdmin ? (
-            <button className="button primary" type="button">
+          puedeCrear ? (
+            <button className="button primary" type="button" onClick={() => setCreando(true)}>
               Nuevo proyecto
             </button>
           ) : undefined
@@ -117,57 +87,73 @@ export function PropiedadesVista({ roleSlug }: { roleSlug: string }) {
         <span>Visible únicamente según los permisos de cada perfil.</span>
       </div>
       <div className="filter-bar">
-        <select>
-          <option>Todas las zonas</option>
-          <option>Punta Cana</option>
-          <option>Bávaro</option>
-        </select>
-        <select>
-          <option>Todos los tipos</option>
-          <option>En planos</option>
-          <option>Alquiler</option>
-        </select>
-        <select>
-          <option>Todos los estados</option>
-          <option>Preventa</option>
-          <option>En construcción</option>
+        <input
+          type="search"
+          placeholder="Buscar por zona…"
+          defaultValue={filtros.zone}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") irCon({ zone: event.currentTarget.value.trim() || undefined });
+          }}
+        />
+        <select value={filtros.type ?? ""} onChange={(event) => irCon({ type: event.target.value || undefined })}>
+          <option value="">Todos los tipos</option>
+          {PROJECT_TYPES.map((tipo) => (
+            <option key={tipo} value={tipo}>
+              {ETIQUETAS_TIPO[tipo]}
+            </option>
+          ))}
         </select>
       </div>
-      <div className="property-grid">
-        {visible.map((property, index) => (
-          <button className="property-card" key={property.name} onClick={() => setSelected(property)}>
-            <div className={`property-visual visual-${index}`}>
-              <span>QH</span>
-              <div>
-                <small>Avance de obra</small>
-                <strong>{property.progress}%</strong>
-              </div>
-            </div>
-            <div className="property-body">
-              <div>
-                <Badge tone="blue">{property.type}</Badge>
-                <small>{property.zone}</small>
-              </div>
-              <h2>{property.name}</h2>
-              <dl>
+      {proyectos.length === 0 ? (
+        hayFiltro ? (
+          <SinResultados />
+        ) : (
+          <Vacio titulo="Sin proyectos todavía" texto="Registra el primero con “Nuevo proyecto”." />
+        )
+      ) : (
+        <div className="property-grid">
+          {proyectos.map((proyecto, index) => (
+            <Link className="property-card" key={proyecto.id} href={`/propiedades/${proyecto.slug}`}>
+              <div className={`property-visual visual-${index % 4}`}>
+                <span>QH</span>
                 <div>
-                  <dt>Disponibles</dt>
-                  <dd>{property.units}</dd>
+                  <small>Avance de obra</small>
+                  <strong>{proyecto.progressPercent}%</strong>
                 </div>
+              </div>
+              <div className="property-body">
                 <div>
-                  <dt>{isAdmin ? "Precio real" : "Rango asignado"}</dt>
-                  <dd>{isAdmin ? property.price : property.public}</dd>
+                  <Badge tone="blue">{ETIQUETAS_TIPO[proyecto.projectType] ?? proyecto.projectType}</Badge>
+                  <small>{proyecto.zone ?? "Sin zona"}</small>
                 </div>
-              </dl>
-              <footer>
-                <Avatar name={property.broker} small />
-                <span>{property.broker}</span>
-                <b>Ver detalle →</b>
-              </footer>
-            </div>
-          </button>
-        ))}
-      </div>
+                <h2>{proyecto.name}</h2>
+                <dl>
+                  <div>
+                    <dt>Disponibles</dt>
+                    <dd>
+                      {proyecto.unidadesDisponibles}/{proyecto.unidadesTotal}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>{proyecto.internalPriceCents != null ? "Precio real" : "Rango asignado"}</dt>
+                    <dd>
+                      {proyecto.internalPriceCents != null
+                        ? `${proyecto.currency} ${(proyecto.internalPriceCents / 100).toLocaleString("es-DO")}`
+                        : formatoRango(proyecto.publicRangeMinCents, proyecto.publicRangeMaxCents, proyecto.currency)}
+                    </dd>
+                  </div>
+                </dl>
+                <footer>
+                  <Avatar name={proyecto.brokerName ?? "Sin asignar"} small />
+                  <span>{proyecto.brokerName ?? "Sin asignar"}</span>
+                  <b>Ver detalle →</b>
+                </footer>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+      {creando && <FormularioProyecto brokers={brokers} onClose={() => setCreando(false)} />}
     </>
   );
 }
