@@ -33,15 +33,6 @@ export type Lead = {
   next: string;
 };
 
-export const stageOrder: Stage[] = [
-  "Nuevo",
-  "Contactado",
-  "Presentación",
-  "Preselección",
-  "Negociación",
-  "Cierre",
-];
-
 export const initialLeads: Lead[] = [
   {
     id: 1,
