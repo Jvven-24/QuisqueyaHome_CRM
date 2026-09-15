@@ -38,6 +38,7 @@ export function PropiedadDetalleVista({
   puedeCrearUnidad,
   puedeEditarUnidad,
   puedeEliminarUnidad,
+  puedeEditarPrecioReal,
 }: {
   proyecto: Proyecto;
   unidades: Unidad[];
@@ -46,6 +47,8 @@ export function PropiedadDetalleVista({
   puedeCrearUnidad: boolean;
   puedeEditarUnidad: boolean;
   puedeEliminarUnidad: boolean;
+  /** Hallazgo P1: sin esto, el precio real se ve y se envía en los formularios aunque el servidor lo descarte. */
+  puedeEditarPrecioReal: boolean;
 }) {
   const router = useRouter();
   const [editandoProyecto, setEditandoProyecto] = useState(false);
@@ -179,13 +182,13 @@ export function PropiedadDetalleVista({
       )}
 
       {editandoProyecto && (
-        <FormularioProyecto proyecto={proyecto} brokers={brokers} onClose={() => setEditandoProyecto(false)} />
+        <FormularioProyecto proyecto={proyecto} brokers={brokers} puedeEditarPrecioReal={puedeEditarPrecioReal} onClose={() => setEditandoProyecto(false)} />
       )}
       {creandoUnidad && (
-        <FormularioUnidad proyectoId={proyecto.id} onClose={() => setCreandoUnidad(false)} />
+        <FormularioUnidad proyectoId={proyecto.id} puedeEditarPrecioReal={puedeEditarPrecioReal} onClose={() => setCreandoUnidad(false)} />
       )}
       {editandoUnidad && (
-        <FormularioUnidad proyectoId={proyecto.id} unidad={editandoUnidad} onClose={() => setEditandoUnidad(null)} />
+        <FormularioUnidad proyectoId={proyecto.id} unidad={editandoUnidad} puedeEditarPrecioReal={puedeEditarPrecioReal} onClose={() => setEditandoUnidad(null)} />
       )}
     </>
   );
@@ -193,10 +196,12 @@ export function PropiedadDetalleVista({
 function FormularioUnidad({
   proyectoId,
   unidad,
+  puedeEditarPrecioReal,
   onClose,
 }: {
   proyectoId: number;
   unidad?: Unidad;
+  puedeEditarPrecioReal: boolean;
   onClose: () => void;
 }) {
   const router = useRouter();
@@ -281,10 +286,12 @@ function FormularioUnidad({
               ))}
             </select>
           </label>
-          <label>
-            Precio real
-            <input name="realPriceCents" type="number" min="0" defaultValue={unidad?.realPriceCents ?? ""} />
-          </label>
+          {puedeEditarPrecioReal && (
+            <label>
+              Precio real
+              <input name="realPriceCents" type="number" min="0" defaultValue={unidad?.realPriceCents ?? ""} />
+            </label>
+          )}
           <label>
             Rango público — mínimo
             <input name="publicRangeMinCents" type="number" min="0" defaultValue={unidad?.publicRangeMinCents ?? ""} />

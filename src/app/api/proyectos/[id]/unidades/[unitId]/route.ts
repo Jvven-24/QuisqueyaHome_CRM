@@ -7,7 +7,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
 import { NotFoundError } from "@/domain/errors";
-import { requireScope } from "@/domain/rbac";
+import { can, requireScope } from "@/domain/rbac";
 import { OPERATION_TYPES, PRICE_PERIODS, UNIT_STATUSES } from "@/domain/catalogs";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
@@ -66,6 +66,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const datos = parseInput(EditarUnidadInput, vaciosANull(await request.json().catch(() => ({}))));
     const actor = await requireActor();
     requireScope(actor, "units", "edit");
+
+    // Precio real, restringido por campo (decisión #26 / hallazgo P1): ver
+    // el mismo comentario en `api/proyectos/[id]/route.ts`.
+    if (!can(actor, "unit_real_price", "edit")) delete datos.realPriceCents;
 
     const unidad = await transaction(async (tx) => {
       const anterior = await unidadVisible(tx, projectId, unitId);

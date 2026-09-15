@@ -111,6 +111,7 @@ export default async function PropiedadesPage({
       brokers={brokers}
       filtros={{ zone, type: projectType }}
       puedeCrear={can(actor, "projects", "create")}
+      puedeEditarPrecioReal={can(actor, "unit_real_price", "edit")}
     />
   );
 }

@@ -14,7 +14,7 @@ import { and, isNull, like, or } from "drizzle-orm";
 import { z } from "zod";
 import { OPERATION_TYPES, PROJECT_TYPES } from "@/domain/catalogs";
 import { slugify } from "@/domain/slug";
-import { requireScope } from "@/domain/rbac";
+import { can, requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
 import { transaction } from "@/infrastructure/db/client";
@@ -57,6 +57,12 @@ export async function POST(request: Request) {
     const datos = parseInput(CrearProyectoInput, limpiarVacios(await request.json().catch(() => ({}))));
     const actor = await requireActor();
     requireScope(actor, "projects", "create");
+
+    // Precio real, restringido por campo (decisión #26 / hallazgo P1): quien
+    // puede crear un proyecto no necesariamente puede fijar su precio
+    // interno — el formulario siempre lo renderiza (no sabe distinguir), así
+    // que aquí se descarta en silencio en vez de rechazar el alta entera.
+    if (!can(actor, "unit_real_price", "edit")) delete datos.internalPriceCents;
 
     const resultado = await transaction(async (tx) => {
       // Slug único entre los no borrados (el índice es parcial, `WHERE

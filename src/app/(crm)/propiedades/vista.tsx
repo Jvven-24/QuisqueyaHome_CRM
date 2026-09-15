@@ -46,11 +46,14 @@ export function PropiedadesVista({
   brokers,
   filtros,
   puedeCrear,
+  puedeEditarPrecioReal,
 }: {
   proyectos: ProyectoFila[];
   brokers: BrokerOpcion[];
   filtros: { zone: string; type?: string };
   puedeCrear: boolean;
+  /** Hallazgo P1: sin esto, el campo de precio interno se ve y se envía aunque el servidor lo vaya a descartar. */
+  puedeEditarPrecioReal: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -153,7 +156,9 @@ export function PropiedadesVista({
           ))}
         </div>
       )}
-      {creando && <FormularioProyecto brokers={brokers} onClose={() => setCreando(false)} />}
+      {creando && (
+        <FormularioProyecto brokers={brokers} puedeEditarPrecioReal={puedeEditarPrecioReal} onClose={() => setCreando(false)} />
+      )}
     </>
   );
 }

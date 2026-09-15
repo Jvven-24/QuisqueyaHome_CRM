@@ -10,7 +10,7 @@
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { NotFoundError } from "@/domain/errors";
-import { requireScope } from "@/domain/rbac";
+import { can, requireScope } from "@/domain/rbac";
 import { OPERATION_TYPES, PROJECT_TYPES } from "@/domain/catalogs";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
@@ -67,6 +67,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const datos = parseInput(EditarProyectoInput, vaciosANull(await request.json().catch(() => ({}))));
     const actor = await requireActor();
     const scope = requireScope(actor, "projects", "edit");
+
+    // Precio real, restringido por campo (decisión #26 / hallazgo P1): un
+    // actor con `projects:edit` pero sin `unit_real_price:edit` no debe poder
+    // fijarlo ni borrarlo — el formulario siempre lo envía, así que se
+    // descarta en silencio en vez de rechazar el resto de la edición.
+    if (!can(actor, "unit_real_price", "edit")) delete datos.internalPriceCents;
 
     const proyecto = await transaction(async (tx) => {
       const anterior = await proyectoVisible(tx, id, actor, scope);

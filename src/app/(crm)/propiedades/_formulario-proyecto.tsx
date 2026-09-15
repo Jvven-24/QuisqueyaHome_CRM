@@ -26,10 +26,13 @@ export const ETIQUETAS_TIPO: Record<string, string> = {
 export function FormularioProyecto({
   proyecto,
   brokers,
+  puedeEditarPrecioReal,
   onClose,
 }: {
   proyecto?: Proyecto;
   brokers: BrokerOpcion[];
+  /** Hallazgo P1: el campo no se pinta si el actor no tiene `unit_real_price:edit` — el servidor lo descartaría igual, pero mostrarlo sin poder usarlo no es interfaz. */
+  puedeEditarPrecioReal: boolean;
   onClose: () => void;
 }) {
   const router = useRouter();
@@ -106,16 +109,18 @@ export function FormularioProyecto({
               <input name="progressPercent" type="number" min="0" max="100" defaultValue={proyecto!.progressPercent} />
             </label>
           )}
-          <label>
-            Precio interno (real)
-            <input
-              name="internalPriceCents"
-              type="number"
-              min="0"
-              placeholder="Centavos, ej. 14000000"
-              defaultValue={proyecto?.internalPriceCents ?? ""}
-            />
-          </label>
+          {puedeEditarPrecioReal && (
+            <label>
+              Precio interno (real)
+              <input
+                name="internalPriceCents"
+                type="number"
+                min="0"
+                placeholder="Centavos, ej. 14000000"
+                defaultValue={proyecto?.internalPriceCents ?? ""}
+              />
+            </label>
+          )}
           <label>
             Broker responsable
             <select name="brokerId" defaultValue={proyecto?.brokerId ?? ""}>
