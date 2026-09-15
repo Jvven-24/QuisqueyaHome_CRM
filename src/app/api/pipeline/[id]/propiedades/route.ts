@@ -12,6 +12,12 @@
  * esto, un `unitId` de otro proyecto pasaba tal cual, y el cierre transaccional
  * (`etapa/_cierre.ts` paso 3) marca esa unidad como vendida solo por su id —
  * cerraría un negocio contra el inventario equivocado.
+ *
+ * El proyecto además tiene que estar dentro del alcance del actor sobre
+ * `projects` (`visibleRows`, R6), no solo existir (hallazgo de la revisión
+ * del PR #29): `deals:edit` autoriza a tocar el negocio, no a usar
+ * proyectos ajenos — un broker con `projects:view own` no debe poder asociar
+ * a su negocio el proyecto de otro solo porque sabe su id.
  */
 
 import { and, eq, isNull } from "drizzle-orm";
@@ -23,6 +29,7 @@ import { auditar } from "@/infrastructure/audit";
 import { transaction } from "@/infrastructure/db/client";
 import { dealProperties, projects, units } from "@/infrastructure/db/schema";
 import { errorResponse, parseInput } from "@/infrastructure/http";
+import { visibleRows } from "@/infrastructure/rbac-filter";
 import { negocioAbiertoVisible } from "../_negocio-abierto";
 
 const AsociarPropiedadInput = z.object({
@@ -40,6 +47,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const datos = parseInput(AsociarPropiedadInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
+    // Alcance sobre `projects`, no sobre `deals`: son dos permisos distintos
+    // (ver comentario de arriba). `requireScope` y no `scopeFor` porque sin
+    // ningún alcance sobre proyectos no hay nada legítimo que asociar.
+    const projectScope = requireScope(actor, "projects", "view");
 
     const propiedad = await transaction(async (tx) => {
       await negocioAbiertoVisible(tx, dealId, actor, scope);
@@ -47,7 +58,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       const [proyecto] = await tx
         .select({ id: projects.id })
         .from(projects)
-        .where(and(eq(projects.id, datos.projectId), isNull(projects.deletedAt)))
+        .where(and(eq(projects.id, datos.projectId), visibleRows(actor, projectScope, projects.brokerId, projects.deletedAt)))
         .limit(1);
       if (!proyecto) throw new NotFoundError("El proyecto indicado no existe.");
 

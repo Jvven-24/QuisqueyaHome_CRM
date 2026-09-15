@@ -14,6 +14,7 @@
  */
 
 import { and, asc, eq, isNull } from "drizzle-orm";
+import { scopeFor } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
 import {
@@ -150,13 +151,20 @@ export default async function PipelinePage({
   // Solo se necesita para el formulario "Agregar propiedad de interés" del
   // inspector — no hay razón para traerlo en cada visita al Kanban, solo
   // cuando hay un negocio seleccionado (deuda de F1, issue #21).
+  //
+  // Mismo alcance que la rejilla de M5 (`propiedades/page.tsx`): un broker
+  // con `projects:view own` no debe poder asociar a su negocio un proyecto
+  // que no es suyo, aunque tenga `deals:edit` sobre el negocio — el permiso
+  // de "ver/usar el proyecto" y el de "editar el negocio" son dos cosas
+  // distintas (hallazgo de la revisión del PR #29).
   let proyectos: ProyectoOpcion[] = [];
-  if (negocioSeleccionado) {
+  const projectScope = scopeFor(actor, "projects", "view");
+  if (negocioSeleccionado && projectScope !== "none") {
     const filasProyecto = await db
       .select({ id: projects.id, name: projects.name, unitId: units.id, unitCode: units.code })
       .from(projects)
       .leftJoin(units, and(eq(units.projectId, projects.id), isNull(units.deletedAt)))
-      .where(and(isNull(projects.deletedAt), eq(projects.isActive, true)))
+      .where(and(visibleRows(actor, projectScope, projects.brokerId, projects.deletedAt), eq(projects.isActive, true)))
       .orderBy(projects.name, units.code);
     const proyectoPorId = new Map<number, ProyectoOpcion>();
     for (const fila of filasProyecto) {
