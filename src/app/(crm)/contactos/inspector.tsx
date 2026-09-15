@@ -19,11 +19,16 @@ import type { Canal, ContactoFila } from "./vista";
 export function ContactoInspector({
   contacto,
   canales,
+  brokers,
+  puedeReasignar,
   historial,
   onClose,
 }: {
   contacto: ContactoFila;
   canales: Canal[];
+  /** Deuda de F1 (issue #21): reasignar responsable, solo alcance `all`. */
+  brokers: { id: number; fullName: string }[];
+  puedeReasignar: boolean;
   historial: React.ReactNode;
   onClose: () => void;
 }) {
@@ -37,7 +42,11 @@ export function ContactoInspector({
     setGuardando(true);
     setErrores({});
 
-    const datos = Object.fromEntries(new FormData(event.currentTarget).entries());
+    const datos: Record<string, unknown> = Object.fromEntries(new FormData(event.currentTarget).entries());
+    // "" en brokerId significa "no lo tocó" (la placeholder deshabilitada
+    // sigue siendo el valor si el select nunca se abrió) — nunca "vaciar el
+    // responsable", que este control no ofrece.
+    if (datos.brokerId === "") delete datos.brokerId;
     const respuesta = await fetch(`/api/contactos/${contacto.id}`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
@@ -150,6 +159,21 @@ export function ContactoInspector({
               ))}
             </select>
           </label>
+          {puedeReasignar && (
+            <label className="span-2">
+              Responsable
+              <select name="brokerId" defaultValue={contacto.brokerId ?? ""}>
+                <option value="" disabled>
+                  Sin asignar — elige un broker
+                </option>
+                {brokers.map((broker) => (
+                  <option key={broker.id} value={broker.id}>
+                    {broker.fullName}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <label className="span-2">
             Notas
             <textarea name="notes" defaultValue={contacto.notes ?? ""} />

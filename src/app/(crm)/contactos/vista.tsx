@@ -44,6 +44,8 @@ export function ContactosVista({
   pagina,
   filtros,
   contactoSeleccionado,
+  brokers,
+  puedeReasignar,
   historial,
 }: {
   contactos: ContactoFila[];
@@ -53,6 +55,9 @@ export function ContactosVista({
   pagina: number;
   filtros: { q: string; sourceId?: number };
   contactoSeleccionado: ContactoFila | null;
+  /** Deuda de F1 (issue #21): reasignar responsable, solo alcance `all`. */
+  brokers: { id: number; fullName: string }[];
+  puedeReasignar: boolean;
   historial: ReactNode;
 }) {
   const router = useRouter();
@@ -178,6 +183,8 @@ export function ContactosVista({
           <ContactoInspector
             contacto={contactoSeleccionado}
             canales={canales}
+            brokers={brokers}
+            puedeReasignar={puedeReasignar}
             historial={historial}
             onClose={() => irCon({ contacto: undefined })}
           />

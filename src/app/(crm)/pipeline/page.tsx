@@ -13,7 +13,7 @@
  * modal de pérdida sin volver a consultar nada.
  */
 
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
 import {
@@ -28,6 +28,7 @@ import {
   units,
   users,
 } from "@/infrastructure/db/schema";
+import type { ProyectoOpcion } from "./vista";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { visibleRows } from "@/infrastructure/rbac-filter";
 import { Historial } from "../_ui/historial";
@@ -146,6 +147,26 @@ export default async function PipelinePage({
         .where(and(eq(dealProperties.dealId, negocioSeleccionado.id)))
     : [];
 
+  // Solo se necesita para el formulario "Agregar propiedad de interés" del
+  // inspector — no hay razón para traerlo en cada visita al Kanban, solo
+  // cuando hay un negocio seleccionado (deuda de F1, issue #21).
+  let proyectos: ProyectoOpcion[] = [];
+  if (negocioSeleccionado) {
+    const filasProyecto = await db
+      .select({ id: projects.id, name: projects.name, unitId: units.id, unitCode: units.code })
+      .from(projects)
+      .leftJoin(units, and(eq(units.projectId, projects.id), isNull(units.deletedAt)))
+      .where(and(isNull(projects.deletedAt), eq(projects.isActive, true)))
+      .orderBy(projects.name, units.code);
+    const proyectoPorId = new Map<number, ProyectoOpcion>();
+    for (const fila of filasProyecto) {
+      const proyecto = proyectoPorId.get(fila.id) ?? { id: fila.id, name: fila.name, unidades: [] };
+      if (fila.unitId) proyecto.unidades.push({ id: fila.unitId, code: fila.unitCode! });
+      proyectoPorId.set(fila.id, proyecto);
+    }
+    proyectos = Array.from(proyectoPorId.values());
+  }
+
   return (
     <PipelineVista
       negocios={negocios}
@@ -153,6 +174,7 @@ export default async function PipelinePage({
       motivos={motivos}
       negocioSeleccionado={negocioSeleccionado}
       propiedades={propiedadesSeleccionado}
+      proyectosDisponibles={proyectos}
       historial={negocioSeleccionado ? <Historial entidad="deal" entidadId={negocioSeleccionado.id} /> : null}
     />
   );

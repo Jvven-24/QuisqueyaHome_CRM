@@ -82,6 +82,8 @@ export const ENTITY_TYPES = [
   "pipeline_stage",
   "loss_reason",
   "lead_source",
+  // Deuda de F1 (F2, issue #21): unidades de interés de un negocio.
+  "deal_property",
 ] as const;
 
 /**

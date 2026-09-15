@@ -15,10 +15,11 @@
  * pedirlo por su cuenta ni reimplementar lo que `Historial` ya hace.
  */
 
-import { and, count, eq, ilike, or } from "drizzle-orm";
+import { and, count, eq, ilike, isNull, or } from "drizzle-orm";
+import { scopeFor } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
-import { contacts, leadSources, users } from "@/infrastructure/db/schema";
+import { contacts, leadSources, roles, users } from "@/infrastructure/db/schema";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { visibleRows } from "@/infrastructure/rbac-filter";
 import { Historial } from "../_ui/historial";
@@ -112,6 +113,20 @@ export default async function ContactosPage({
       )[0]
     : undefined;
 
+  // Reasignar el responsable es de la deuda de F1 (issue #21), limitada a
+  // alcance `all` (decisión de esa deuda): solo entonces vale la pena traer
+  // la lista de brokers — evita la consulta en cada visita de un broker con
+  // `own`, que nunca vería el selector.
+  const puedeReasignar = scopeFor(actor, "contacts", "edit") === "all";
+  const brokers = puedeReasignar
+    ? await db
+        .select({ id: users.id, fullName: users.fullName })
+        .from(users)
+        .innerJoin(roles, eq(roles.id, users.roleId))
+        .where(and(eq(roles.slug, "broker"), eq(users.isActive, true), isNull(users.deletedAt)))
+        .orderBy(users.fullName)
+    : [];
+
   return (
     <ContactosVista
       contactos={filas}
@@ -121,6 +136,8 @@ export default async function ContactosPage({
       pagina={pagina}
       filtros={{ q, sourceId }}
       contactoSeleccionado={contactoSeleccionado ?? null}
+      brokers={brokers}
+      puedeReasignar={puedeReasignar}
       historial={
         contactoSeleccionado ? <Historial entidad="contact" entidadId={contactoSeleccionado.id} /> : null
       }
