@@ -75,6 +75,13 @@ export const ENTITY_TYPES = [
   "message_template",
   "integration_account",
   "file",
+  // M13 (F2): catálogos editables que F0/F1 sembraron pero nadie editaba
+  // todavía. `entity_type` es `text` liso en el esquema —sin `CHECK` de
+  // Postgres, ver `drizzle/0000_thankful_senator_kelly.sql`—, así que sumar
+  // valores aquí no es un cambio de esquema ni pide migración.
+  "pipeline_stage",
+  "loss_reason",
+  "lead_source",
 ] as const;
 
 /**

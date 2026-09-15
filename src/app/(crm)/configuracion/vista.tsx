@@ -1,90 +1,56 @@
 "use client";
 
-import { useState } from "react";
-import { stageOrder } from "../_ui/datos-muestra";
-import { Badge, PageHeader } from "../_ui/prototipo-ui";
-import { Vacio } from "../_ui/estados";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { PageHeader } from "../_ui/prototipo-ui";
+import { UsuariosPanel, type RolOpcion, type UsuarioFila } from "./_usuarios";
+import { PermisosPanel, type PermisoCelda } from "./_permisos";
+import { EtapasPanel, type EtapaFila } from "./_etapas";
+import { CatalogosPanel, type CatalogoFila } from "./_catalogos";
+import { PapeleraPanel, type PapeleraFila } from "./_papelera";
+import { IntegracionesPanel, type IntegracionFila } from "./_integraciones";
+
+export type Tab = "usuarios" | "permisos" | "etapas" | "catalogos" | "papelera" | "integraciones";
+
+const ETIQUETAS_TAB: Record<Tab, string> = {
+  usuarios: "Usuarios y roles",
+  permisos: "Permisos",
+  etapas: "Etapas del pipeline",
+  catalogos: "Catálogos",
+  papelera: "Papelera",
+  integraciones: "Integraciones",
+};
 
 /**
- * ponytail: datos de muestra portados de `referencia-prototipo/app/page.tsx`
- * (`SettingsView` + `IntegrationCenter`). M13 · Configuración se construye en
- * F2 (`docs/F1_ANALISIS_Y_PLAN.md`); la tabla de permisos aquí es una maqueta
- * visual — el permiso real se decide en servidor con `permissions` y
- * `scopeFor` del dominio (`src/domain/rbac.ts`), nunca con este toggle de
- * cliente (criterio de terminado #1).
+ * M13 · Configuración (F2). Solo el shell y la navegación por pestaña — cada
+ * panel es su propio componente porque cada uno tiene su propio formulario y
+ * su propio estado local, y mezclarlos en un archivo de 700 líneas es más
+ * difícil de revisar que seis archivos de 100.
+ *
+ * Las cuatro pestañas que el prototipo tenía y que no le tocan a M13 (Metas,
+ * Comisiones, Plantillas de WhatsApp, Marca — `docs/F2_ANALISIS_Y_PLAN.md`
+ * §4.3) ya no aparecen en la barra: no hay nada que mostrar en ellas todavía,
+ * y un tab vacío con "listo para configurar" no es más honesto que no tenerlo.
  */
-const tabs = [
-  "Usuarios y roles",
-  "Etapas del pipeline",
-  "Metas",
-  "Comisiones",
-  "Plantillas de WhatsApp",
-  "Integraciones",
-  "Marca",
-];
+export function ConfiguracionVista(props: {
+  tab: Tab;
+  puedeEditar: boolean;
+  usuarios?: { lista: UsuarioFila[]; roles: RolOpcion[] };
+  permisos?: { roles: RolOpcion[]; rolSeleccionado: RolOpcion | null; permisos: PermisoCelda[] };
+  etapas?: EtapaFila[];
+  catalogos?: { motivos: CatalogoFila[]; canales: CatalogoFila[] };
+  papelera?: PapeleraFila[];
+  integraciones?: IntegracionFila[];
+}) {
+  const { tab, puedeEditar } = props;
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-const permissionLabels = ["Leads", "Contactos", "Pipeline", "Propiedades", "Precios reales", "Métricas globales", "Comisiones", "Configuración"];
-
-const integrations = [
-  { name: "Google Calendar", status: "Disponible", tone: "green" as const, text: "Cada cita puede abrirse en Google Calendar y toda la agenda puede exportarse como archivo .ics.", action: "Usar desde Agenda" },
-  { name: "WhatsApp Business", status: "Activo", tone: "green" as const, text: "El CRM abre conversaciones desde la ficha del lead y aplica plantillas con contexto.", action: "Click-to-chat" },
-  { name: "YouTube", status: "Preparado", tone: "gold" as const, text: "Los proyectos y avances aceptan URL de video. Falta guardar y validar el contenido en el backend.", action: "Enlace manual" },
-  { name: "Zoom / Google Meet", status: "Preparado", tone: "gold" as const, text: "La agenda puede almacenar enlaces de reunión cuando exista persistencia de citas.", action: "Enlace manual" },
-  { name: "Meta Lead Ads", status: "Fase siguiente", tone: "neutral" as const, text: "Requiere webhook, validación de firma, consentimiento y reglas de asignación.", action: "Requiere backend" },
-  { name: "Google Calendar 2 vías", status: "Fase siguiente", tone: "neutral" as const, text: "Requiere usuarios reales, OAuth 2.0, almacenamiento cifrado de tokens y webhooks HTTPS.", action: "Requiere OAuth" },
-];
-
-function IntegrationCenter() {
-  return (
-    <>
-      <p className="eyebrow">Conectividad</p>
-      <h2>Integraciones</h2>
-      <p className="section-intro">
-        Capacidades activas hoy y conexiones preparadas para la fase con autenticación y base de datos.
-      </p>
-      <div className="integration-grid">
-        {integrations.map((integration) => (
-          <article className="integration-card" key={integration.name}>
-            <div>
-              <strong>{integration.name}</strong>
-              <Badge tone={integration.tone}>{integration.status}</Badge>
-            </div>
-            <p>{integration.text}</p>
-            <small>{integration.action}</small>
-          </article>
-        ))}
-      </div>
-      <div className="integration-guard">
-        <strong>Seguridad primero</strong>
-        <p>
-          La sincronización bidireccional se habilita después de implementar identidad real, permisos de servidor y
-          almacenamiento cifrado. No se guardarán tokens OAuth en el navegador.
-        </p>
-      </div>
-    </>
-  );
-}
-
-export function ConfiguracionVista() {
-  const [tab, setTab] = useState("Usuarios y roles");
-  const [permissions, setPermissions] = useState([
-    [true, true, true],
-    [true, true, false],
-    [true, false, true],
-    [true, false, true],
-    [true, false, false],
-    [true, false, false],
-    [true, false, false],
-    [true, false, false],
-  ]);
-
-  function togglePermission(row: number, column: number) {
-    if (column === 0) return;
-    setPermissions((current) =>
-      current.map((values, rowIndex) =>
-        rowIndex === row ? values.map((value, columnIndex) => (columnIndex === column ? !value : value)) : values,
-      ),
-    );
+  function irATab(nuevoTab: Tab) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", nuevoTab);
+    if (nuevoTab !== "permisos") params.delete("rol");
+    router.push(`${pathname}?${params.toString()}`);
   }
 
   return (
@@ -93,114 +59,22 @@ export function ConfiguracionVista() {
         eyebrow="C14 · Administración"
         title="Configuración y permisos"
         subtitle="Controla quién puede ver y modificar cada área."
-        action={
-          <button className="button primary" type="button">
-            Guardar cambios
-          </button>
-        }
       />
       <div className="settings-layout">
         <nav className="settings-nav">
-          {tabs.map((item) => (
-            <button className={tab === item ? "active" : ""} onClick={() => setTab(item)} key={item} type="button">
-              {item}
+          {(Object.keys(ETIQUETAS_TAB) as Tab[]).map((item) => (
+            <button className={tab === item ? "active" : ""} onClick={() => irATab(item)} key={item} type="button">
+              {ETIQUETAS_TAB[item]}
             </button>
           ))}
         </nav>
         <section className="panel settings-content">
-          {tab === "Usuarios y roles" ? (
-            <>
-              <div className="panel-title">
-                <div>
-                  <p className="eyebrow">RBAC</p>
-                  <h2>Usuarios y roles</h2>
-                </div>
-                <button className="button secondary" type="button">
-                  Invitar usuario
-                </button>
-              </div>
-              <div className="table-wrap">
-                <table className="permission-table">
-                  <thead>
-                    <tr>
-                      <th>Módulo o dato</th>
-                      <th>Administrador</th>
-                      <th>Asistente</th>
-                      <th>Broker</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {permissionLabels.map((label, row) => (
-                      <tr key={label}>
-                        <td>{label}</td>
-                        {(permissions[row] ?? []).map((value, column) => (
-                          <td key={column}>
-                            <button
-                              className={value ? "toggle on" : "toggle"}
-                              aria-label={`${label} ${value ? "permitido" : "bloqueado"}`}
-                              aria-pressed={value}
-                              disabled={column === 0}
-                              onClick={() => togglePermission(row, column)}
-                              type="button"
-                            >
-                              <span />
-                            </button>
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="permission-note">
-                <strong>Protección del perfil Broker</strong>
-                <p>No puede ver métricas globales, precios reales ni datos de otros brokers.</p>
-              </div>
-            </>
-          ) : tab === "Integraciones" ? (
-            <IntegrationCenter />
-          ) : (
-            <>
-              <p className="eyebrow">{tab}</p>
-              <h2>Configuración de {tab.toLowerCase()}</h2>
-              <p className="section-intro">
-                Esta sección conserva el alcance definido para el CRM y permite ajustar sus valores operativos.
-              </p>
-              {tab === "Etapas del pipeline" && (
-                <div className="stage-settings">
-                  {stageOrder.map((stage, index) => (
-                    <div key={stage}>
-                      <span>{index + 1}</span>
-                      <strong>{stage}</strong>
-                      <button className="text-button" type="button">
-                        Editar
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {tab === "Marca" && (
-                <div className="brand-settings">
-                  <div>
-                    <span className="swatch navy" />
-                    <strong>Azul Quisqueya</strong>
-                    <small>#1D2B53</small>
-                  </div>
-                  <div>
-                    <span className="swatch gold" />
-                    <strong>Oro Quisqueya</strong>
-                    <small>#C7990E</small>
-                  </div>
-                </div>
-              )}
-              {!["Etapas del pipeline", "Marca"].includes(tab) && (
-                <Vacio
-                  titulo={`${tab} listo para configurar`}
-                  texto="Los valores de demostración permanecen activos y pueden modificarse aquí."
-                />
-              )}
-            </>
-          )}
+          {tab === "usuarios" && props.usuarios && <UsuariosPanel {...props.usuarios} puedeEditar={puedeEditar} />}
+          {tab === "permisos" && props.permisos && <PermisosPanel {...props.permisos} puedeEditar={puedeEditar} />}
+          {tab === "etapas" && props.etapas && <EtapasPanel etapas={props.etapas} puedeEditar={puedeEditar} />}
+          {tab === "catalogos" && props.catalogos && <CatalogosPanel {...props.catalogos} puedeEditar={puedeEditar} />}
+          {tab === "papelera" && props.papelera && <PapeleraPanel filas={props.papelera} puedeEditar={puedeEditar} />}
+          {tab === "integraciones" && props.integraciones && <IntegracionesPanel integraciones={props.integraciones} />}
         </section>
       </div>
     </>

@@ -6,9 +6,10 @@
  * consultar nada. La sesión viaja en cookies, no en `localStorage`.
  */
 
+import { createClient } from "@supabase/supabase-js";
 import { createBrowserClient, createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { supabaseAnonKey, supabaseUrl } from "../env";
+import { supabaseAnonKey, supabaseServiceRoleKey, supabaseUrl } from "../env";
 
 /** Cliente de navegador. Solo para componentes cliente. */
 export function browserClient() {
@@ -38,5 +39,22 @@ export async function serverClient() {
         }
       },
     },
+  });
+}
+
+/**
+ * Cliente administrativo (M13, decisión #28). Con la clave de servicio, no la
+ * anónima: es lo único que puede invitar usuarios por correo
+ * (`auth.admin.inviteUserByEmail`). Sin cookies ni sesión propia —cada
+ * llamada ya trae el permiso "de servidor completo" en la clave misma—, así
+ * que no comparte código con `serverClient`/`browserClient`.
+ *
+ * Solo se usa desde route handlers que ya comprobaron `requireScope(actor,
+ * "users", ...)"` primero: este cliente no sabe quién es el actor ni aplica
+ * RBAC por su cuenta.
+ */
+export function adminClient() {
+  return createClient(supabaseUrl(), supabaseServiceRoleKey(), {
+    auth: { autoRefreshToken: false, persistSession: false },
   });
 }
