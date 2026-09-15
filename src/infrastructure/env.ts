@@ -32,3 +32,13 @@ export const supabaseAnonKey = () => required("NEXT_PUBLIC_SUPABASE_ANON_KEY");
  * `x-webhook-token`, en vez de con RBAC.
  */
 export const leadsWebhookToken = () => required("LEADS_WEBHOOK_TOKEN");
+
+/**
+ * Clave de servicio de Supabase (M13, decisión #28). Solo servidor, **nunca**
+ * expuesta al navegador (a diferencia de `supabaseAnonKey`): concede acceso
+ * administrativo completo a Auth, es lo que permite invitar usuarios por
+ * correo (`auth.admin.inviteUserByEmail`) sin que ellos tengan que registrarse
+ * por su cuenta. `Project Settings → API Keys → service_role` en el panel de
+ * Supabase.
+ */
+export const supabaseServiceRoleKey = () => required("SUPABASE_SERVICE_ROLE_KEY");

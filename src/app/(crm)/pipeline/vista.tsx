@@ -32,6 +32,9 @@ export type PropiedadDeal = {
   isPrimary: boolean;
 };
 
+/** Proyectos activos con sus unidades, para el formulario "Agregar propiedad de interés" (deuda de F1). */
+export type ProyectoOpcion = { id: number; name: string; unidades: { id: number; code: string }[] };
+
 export type NegocioFila = {
   id: number;
   contactId: number;
@@ -89,6 +92,7 @@ export function PipelineVista({
   motivos,
   negocioSeleccionado,
   propiedades,
+  proyectosDisponibles,
   historial,
 }: {
   negocios: NegocioFila[];
@@ -96,6 +100,8 @@ export function PipelineVista({
   motivos: MotivoPerdida[];
   negocioSeleccionado: NegocioFila | null;
   propiedades: PropiedadDeal[];
+  /** Proyectos activos con sus unidades, para el formulario de propiedades de interés del inspector. */
+  proyectosDisponibles: ProyectoOpcion[];
   historial: ReactNode;
 }) {
   const router = useRouter();
@@ -264,6 +270,7 @@ export function PipelineVista({
               etapas={etapas}
               motivos={motivos}
               propiedades={propiedades}
+              proyectos={proyectosDisponibles}
               historial={historial}
               enviando={enviando}
               onCambiarEtapa={(etapaId) => {

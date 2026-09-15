@@ -9,7 +9,7 @@
 
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
-import { NotFoundError } from "@/domain/errors";
+import { ForbiddenError, NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
 import { normalizarTelefono } from "@/domain/telefono";
 import { requireActor } from "@/infrastructure/auth/actor";
@@ -34,6 +34,8 @@ const EditarContactoInput = z.object({
   email: z.union([z.email("Escribe un correo válido."), z.null()]).optional(),
   sourceId: z.union([z.coerce.number().int().positive(), z.null()]).optional(),
   notes: z.string().nullable().optional(),
+  /** Deuda de F1 (F2, issue #21): reasignar el responsable. Solo alcance `all` — ver el `if` en `PATCH`. */
+  brokerId: z.coerce.number().int().positive().optional(),
 });
 
 /** "" desde un formulario que se vació equivale a `null` (borrar el campo), no a un valor literal vacío. */
@@ -72,6 +74,15 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const actor = await requireActor();
     const scope = requireScope(actor, "contacts", "edit");
 
+    // Reasignar el responsable es una decisión de cartera, no de edición de
+    // ficha (decisión de la deuda de F1, issue #21): solo quien ve y edita
+    // toda la cartera (`scope: "all"`) puede mover un contacto de un broker a
+    // otro. Un broker con `own` podría, si no fuera por esto, "regalarse" el
+    // contacto de otro con la misma llamada que corrige un teléfono.
+    if (datos.brokerId !== undefined && scope !== "all") {
+      throw new ForbiddenError("Solo un administrador o asistente puede reasignar el responsable de un contacto.");
+    }
+
     const contacto = await transaction(async (tx) => {
       // Se relee dentro de la transacción: el `NotFoundError` cubre a la vez
       // "no existe" y "existe pero fuera de tu alcance" (`domain/errors.ts`),
@@ -89,6 +100,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       if ("email" in datos) cambios.email = datos.email;
       if ("sourceId" in datos) cambios.sourceId = datos.sourceId;
       if ("notes" in datos) cambios.notes = datos.notes;
+      if (datos.brokerId !== undefined) cambios.brokerId = datos.brokerId;
 
       const [fila] = await tx
         .update(contacts)

@@ -33,15 +33,6 @@ export type Lead = {
   next: string;
 };
 
-export const stageOrder: Stage[] = [
-  "Nuevo",
-  "Contactado",
-  "Presentación",
-  "Preselección",
-  "Negociación",
-  "Cierre",
-];
-
 export const initialLeads: Lead[] = [
   {
     id: 1,
@@ -117,60 +108,3 @@ export const properties = [
   { name: "Vista Cana Residences", zone: "Vista Cana", type: "En construcción", progress: 58, units: "8/24", price: "US$175,000", public: "US$185K - 230K", broker: "Ismael Rosario" },
   { name: "Bávaro Beach Lofts", zone: "Bávaro", type: "Alquiler", progress: 100, units: "6/18", price: "US$125,000", public: "US$130K - 165K", broker: "Yostar Medina" },
 ];
-
-export type Appointment = { time: string; title: string; owner: string; day: number };
-
-export const initialAppointments: Appointment[] = [
-  { time: "9:00", title: "Capacitación semanal de brokers", owner: "Equipo", day: 1 },
-  { time: "10:00", title: "Elisa Méndez - Vista Cana", owner: "Yostar", day: 2 },
-  { time: "11:30", title: "María Fernández - Praderas", owner: "Ismael", day: 3 },
-  { time: "15:00", title: "Seguimiento José Reyes", owner: "Alexandra", day: 4 },
-];
-
-export function appointmentDates(appointment: Appointment) {
-  const day = 19 + appointment.day;
-  const [hour, minute] = appointment.time.split(":").map(Number);
-  const start = new Date(
-    `2026-07-${String(day).padStart(2, "0")}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00-04:00`,
-  );
-  const end = new Date(start.getTime() + 60 * 60 * 1000);
-  return { start, end };
-}
-
-export function googleCalendarUrl(appointment: Appointment) {
-  const { start, end } = appointmentDates(appointment);
-  const format = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(".000", "");
-  const params = new URLSearchParams({
-    action: "TEMPLATE",
-    text: appointment.title,
-    dates: `${format(start)}/${format(end)}`,
-    details: `Actividad de Quisqueya Home CRM. Responsable: ${appointment.owner}.`,
-    ctz: "America/Santo_Domingo",
-  });
-  return `https://calendar.google.com/calendar/render?${params}`;
-}
-
-/** ponytail: exporta el `.ics` en el navegador (`Blob` + descarga). Portado tal cual del prototipo. */
-export function exportCalendar(appointments: Appointment[]) {
-  const format = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(".000", "");
-  const events = appointments.map((appointment) => {
-    const { start, end } = appointmentDates(appointment);
-    return [
-      "BEGIN:VEVENT",
-      `UID:${appointment.day}-${appointment.time.replace(":", "")}@quisqueyahome.com`,
-      `DTSTAMP:${format(new Date())}`,
-      `DTSTART:${format(start)}`,
-      `DTEND:${format(end)}`,
-      `SUMMARY:${appointment.title.replace(/[,;]/g, " ")}`,
-      `DESCRIPTION:Responsable: ${appointment.owner}`,
-      "END:VEVENT",
-    ].join("\r\n");
-  });
-  const content = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Quisqueya Home//CRM//ES", ...events, "END:VCALENDAR"].join("\r\n");
-  const url = URL.createObjectURL(new Blob([content], { type: "text/calendar;charset=utf-8" }));
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "agenda-quisqueya-home.ics";
-  link.click();
-  URL.revokeObjectURL(url);
-}

@@ -80,6 +80,15 @@ manda este documento: el prototipo corría sobre SQLite/D1 y ya no aplica.
 - Modificar `src/infrastructure/db/schema.ts` fuera de un PR dedicado con su
   migración generada — está **congelado** (ver `flujo-de-trabajo.md`).
 - Añadir una dependencia para lo que resuelven la plataforma o veinte líneas.
+- **Crear ramas nuevas en GitHub para fixes puntuales** (`fix/<algo>`,
+  `chore/<algo>`, etc.). Se trabaja sobre la rama personal ya existente
+  (`dev/<tu-nombre>`), salvo que el usuario pida explícitamente una rama aparte.
+  Ver "Prohibido: crear ramas nuevas para fixes puntuales" en
+  `flujo-de-trabajo.md` y decisión #30.
+- **Abrir un pull request con algo fallando**: typecheck, lint, test, build, o
+  un error sin resolver de la prueba de interfaz. Se puede comitear igual, pero
+  el commit debe decir explícitamente qué falla (ver "Cierre de fase" en
+  `flujo-de-trabajo.md` y decisión #31).
 
 ## Tests
 
@@ -107,5 +116,6 @@ fix(T1,T2): usa el session pooler y traduce el último mensaje de validación
 docs(F0): estado tras verificar contra la base real
 ```
 
-Un PR por paso del plan de fase, contra `develop`. `main` y `develop` están
+Un PR por paso del plan de fase, contra `develop`, con **un commit por issue**
+dentro de ese paso (ver `flujo-de-trabajo.md`). `main` y `develop` están
 protegidas.

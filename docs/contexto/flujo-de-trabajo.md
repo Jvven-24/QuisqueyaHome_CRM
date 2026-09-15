@@ -4,13 +4,40 @@ Cómo se trabaja en el **repositorio de producción**. Si buscas cómo funcionab
 el prototipo (vinext, Cloudflare Workers, D1), eso vive en
 `referencia-prototipo/` y ya no aplica a nada de aquí.
 
-## Antes de tocar código
+## 1. Al abrir una sesión: orientarse rápido
 
-- `MAPEO_FRONTEND_CRM.md` es el documento vinculante: §10 tiene las reglas de
-  negocio, §12 el inventario por módulo, §18 las fronteras de cada uno.
+Antes de tocar código, una lectura rápida de orientación (no una auditoría
+completa del repo — esa llega en el punto 2, cuando se recibe una fase
+concreta):
+
 - `docs/contexto/decisiones.md` explica **por qué** el código es como es. Si algo
   parece raro, probablemente hay una decisión ahí que lo explica.
+- `docs/contexto/errores-conocidos.md` — gotchas ya confirmados, para no
+  redescubrirlos.
+- `MAPEO_FRONTEND_CRM.md` es el documento vinculante: §10 tiene las reglas de
+  negocio, §12 el inventario por módulo, §18 las fronteras de cada uno.
+- `git status` y `git log --oneline -10` de la rama actual — en qué quedó la
+  sesión anterior, antes de asumir nada.
 - `docs/SUPABASE.md` si todavía no tienes base de datos configurada.
+
+## 2. Cuando se indica una fase de trabajo (ej. «trabaja en F2»)
+
+Antes de escribir una sola línea de código:
+
+1. **Buscar todo lo que ya existe sobre esa fase**: `MAPEO_FRONTEND_CRM.md`,
+   `AUDITORIA_FUNCIONAL_CRM.md`, cualquier `docs/F<n>_ANALISIS_Y_PLAN.md`
+   anterior, y las entradas de `decisiones.md` / `errores-conocidos.md` que la
+   mencionen.
+2. **Revisar el repo real** contra esos documentos: qué de lo que se supone que
+   existe ya está construido, qué falta, qué quedó a medias.
+3. **Crear los issues correspondientes en GitHub** (`gh issue create`, uno por
+   defecto o unidad de trabajo identificada) — no se empieza a codear sin
+   issue.
+4. **Escribir el plan de implementación de la fase**
+   (`docs/F<n>_ANALISIS_Y_PLAN.md`, mismo patrón que `F0_ANALISIS_Y_PLAN.md` y
+   `F1_ANALISIS_Y_PLAN.md`), antes de tocar código.
+
+Recién con issues y plan escritos se empieza a construir.
 
 ## Poner en marcha
 
@@ -21,6 +48,23 @@ npm run db:migrate
 npm run db:seed
 npm run dev
 ```
+
+## 3. Construcción: ponytail es obligatorio
+
+Todo el código de este repo se escribe y se revisa con ponytail, issue por
+issue:
+
+- **Al escribir código**: skill `ponytail` — evita sobre-ingeniería,
+  dependencias innecesarias, abstracciones especulativas.
+- **Al revisar el diff de cada issue**: skill `ponytail-review` antes de darlo
+  por cerrado.
+- **Auditoría del repo**: `ponytail-audit` **no es opcional ni se omite**,
+  aunque el cambio parezca chico — es lo que atrapa lo que `ponytail-review`,
+  por mirar solo el diff, no ve.
+
+Un atajo deliberado que ponytail deja a propósito se marca en el código con un
+comentario `ponytail:` (ya en uso, ver decisión #22 — mocks explícitos de
+módulos sin backend todavía), para que quede rastreable y no se pierda.
 
 ## Pasos para un cambio
 
@@ -34,8 +78,29 @@ npm run typecheck && npm run lint && npm test && npm run build
 Los cuatro comandos son los mismos que corre la CI en cada PR. Si pasan en
 local, pasan allí.
 
-Después: PR contra `develop`. Cuando `develop` esté estable, PR contra `main`.
+Después: PR contra `develop`, **siempre desde la misma rama `dev/<tu-nombre>`**
+en la que se trabajó. Cuando `develop` esté estable, PR contra `main`.
 **`main` y `develop` están protegidas**: no se comitea directo a ninguna.
+
+### Prohibido: crear ramas nuevas para fixes puntuales
+
+**No se crean ramas `fix/<issue-o-descripcion>`, `chore/<algo>` ni ninguna rama
+nueva para arreglos de auditoría, regresiones o fixtures de prueba**, aunque la
+guardia de ramas las acepte. Todo eso se trabaja y se sube **sobre la rama
+personal ya existente** (`dev/<tu-nombre>`), en commits separados si hace falta
+distinguirlos.
+
+**Por qué (14 de septiembre de 2026):** se crearon 3 ramas `fix/*` para
+corregir defectos puntuales de la auditoría de F1, y eso hizo que **2 workflows
+de GitHub Actions no recibieran el evento del PR correctamente** (los workflows
+están configurados esperando los PR contra `develop` desde las ramas de trabajo
+habituales, no desde ramas nuevas creadas al vuelo). Ver decisión #30 en
+`decisiones.md`.
+
+Si de verdad hace falta una rama nueva y separada (ej. un cambio de esquema que
+exige su propio PR, §"Cambios de esquema" más abajo), **se lo pide
+explícitamente el usuario primero** — no es una decisión que tome el agente por
+su cuenta.
 
 ### Cambios de esquema
 
@@ -50,6 +115,40 @@ GitHub solo cierra issues automáticamente cuando el PR se mergea a la **rama po
 defecto** (`main`). Como aquí se mergea a `develop`, hay que **cerrar los issues
 a mano** tras el merge. Escribir `Closes #N` en la descripción igualmente vale la
 pena: enlaza el issue con el PR y deja el rastro.
+
+## 4. Commits: uno por issue
+
+Cada issue de la fase se comitea por separado — no se agrupan varios issues en
+un mismo commit aunque se hayan resuelto en la misma sesión. Conventional
+Commits (ver `convenciones.md`), referenciando el issue en el mensaje.
+
+## 5. Cierre de fase: pruebas antes del PR
+
+Cuando todos los issues de la fase tienen su commit:
+
+1. **Prueba unitaria**: `npm run typecheck && npm run lint && npm test && npm run build` en verde.
+2. **Prueba desde interfaz**: recorrer el flujo a mano (o con el navegador de
+   la sesión) — una prueba unitaria no sustituye ver el módulo funcionando de
+   verdad.
+3. **Si se encuentra un error en cualquiera de las dos**, se anota (en el issue
+   correspondiente, o en `errores-conocidos.md` si es un gotcha reutilizable) y
+   se le da **prioridad sobre seguir avanzando**: se arregla antes de tocar el
+   siguiente issue o de pedir el PR.
+
+### Regla dura: no hay PR si algo falla
+
+**No se abre pull request mientras algo esté fallando** — typecheck, lint,
+test, build, o un error encontrado en la prueba de interfaz. El trabajo no se
+detiene por eso: **se puede seguir comiteando igual**, pero el mensaje del
+commit **debe decir explícitamente qué está fallando**, por ejemplo:
+
+```
+fix(M4): recalcula el rango semanal
+
+pendiente: la prueba de interfaz falla al cambiar de semana con el teclado
+```
+
+El PR se abre solo cuando la fase completa está en verde.
 
 ## El patrón de código
 

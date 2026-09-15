@@ -118,13 +118,97 @@ Ver detalle de capas en arquitectura.md.
 **Consecuencia:** cada `page.tsx` de módulo sigue siendo componente de servidor con `requireActor` + `requireScopeInPage` — el guardia de permiso no se pierde por portar la vista. El JSX y la interactividad local del prototipo pasan a un componente cliente hijo (`vista.tsx`), sin tocar el guardia.
 **No cambia el orden de construcción de F1** (`docs/F1_ANALISIS_Y_PLAN.md` §5): M1→M2→M3 siguen siendo los únicos que reciben datos reales en esta fase. Los demás quedan visualmente completos y funcionalmente mock hasta su propia fase (F2–F5).
 
+## 23. Agenda y tareas son dos vistas de `activities`, no dos módulos
+**Decisión (12 de septiembre de 2026, M4):** un solo grupo de route handlers (`/api/actividades`) y dos páginas que consultan distinto. `/agenda` lee por semana, `/tareas` lee la cola del día.
+**Por qué:** el esquema ya unificó cita y tarea en `activities` —con `contact_id`, `deal_id` y `assignee_id`, que es justo lo que el prototipo no tenía (§8.2)— y las dos rutas ya apuntan al mismo recurso de permisos (`modulos.ts:28-29`). Dos CRUD sobre la misma tabla se desincronizan.
+**Descartado:** reproducir la separación `Appointment`/`Task` del prototipo, catalogada como defecto del modelo.
+
+## 24. Fechas reales con `Intl`, sin librería de fechas
+**Decisión (12 de septiembre de 2026, M4):** `starts_at`/`ends_at` son `timestamptz`; la conversión a `America/Santo_Domingo` ocurre **solo al pintar**, con `Intl.DateTimeFormat`. La rejilla semanal se calcula con aritmética de `Date` sobre el lunes de la semana pedida por `searchParams`.
+**Por qué:** `Intl` está en Node y en el navegador. `date-fns-tz` o `luxon` son 20–70 KB para seis líneas.
+**Consecuencia:** desaparece el índice de día `1..5` y el offset `-04:00` escrito a mano del prototipo (R11).
+
+## 25. El `.ics` se genera en servidor; `activity_sync` no se toca en F2
+**Decisión (12 de septiembre de 2026, M4):** un route handler responde `text/calendar` con `UID = activity-{id}@quisqueyahome.com`, filtrado por permiso. Sin dependencia de iCalendar.
+**Por qué:** un `VEVENT` son ~15 líneas de texto, y la clave primaria **es** el identificador estable que pide R11 — el `{day}-{time}@…` del prototipo duplicaba eventos al resincronizar. Generarlo en servidor mantiene el filtro de permisos donde ya vive.
+**Consecuencia:** `activity_sync` queda intacta hasta que exista sincronización de dos vías con Google Calendar, que §14 clasifica como fase posterior. Escribir en ella ahora es mantener una tabla que nadie lee.
+
+## 26. El precio real se decide en el `SELECT`, no en el JSX
+**Decisión (12 de septiembre de 2026, M5):** `units.real_price_cents` y `projects.internal_price_cents` solo se incluyen en la consulta si el actor tiene permiso sobre `unit_real_price`.
+**Por qué:** el prototipo los ocultaba con `role === "admin"` en el render — el dato viajaba al navegador y cualquiera lo veía en el HTML (R7, §10.4). El dato que no se selecciona no se filtra, no se serializa y no se escapa.
+**Consecuencia:** es la primera restricción a nivel de campo del sistema, y M6, M7, M9 y M12 la repetirán.
+
+## 27. La matriz de permisos pinta el modelo real, no las 8 casillas del prototipo
+**Decisión (12 de septiembre de 2026, M13):** una fila por recurso, una columna por acción y, en cada celda, el alcance (`ninguno`/`propio`/`equipo`/`todos`). La columna del administrador queda bloqueada (R10).
+**Por qué:** la matriz aprobada tiene 8 filas × 3 columnas y describe un modelo que ya no existe — el propio mapeo señala que «cubre 8 alcances frente a 15 módulos». Traducir esas casillas a filas de `permissions` exige inventar reglas que nadie aprobó (¿«Leads ✓» concede `delete`?, ¿con qué alcance?) y concede permisos en silencio.
+**Consecuencia:** misma disposición visual y mismo CSS, datos honestos. El cambio surte efecto en la petición siguiente: `getActor` resuelve permisos por petición y su `cache` de React vive solo dentro de un render.
+
+## 28. El alta de usuario es invitación, con la fila de `users` primero
+**Decisión (12 de septiembre de 2026, M13):** `INSERT` en `users` con `auth_user_id` nulo, auditado y en transacción; después `auth.admin.inviteUserByEmail` con `SUPABASE_SERVICE_ROLE_KEY`, declarada en `env.ts` y solo servidor.
+**Por qué:** el esquema ya lo previó — el comentario de `auth_user_id` dice «nulo mientras el usuario existe en el CRM pero aún no ha sido invitado». Si la invitación falla, queda un usuario del CRM que no puede entrar, reparable con «reenviar invitación»; al revés quedaría una cuenta de Auth huérfana sin rol.
+**Consecuencia:** se acaban las altas manuales por SQL (`docs/contexto/errores-conocidos.md`, sección Operación). Hace falta la clave de servicio del proyecto de Supabase.
+
+## 29. Las etapas se renombran y se reordenan; su `slug` y su `kind` no
+**Decisión (12 de septiembre de 2026, M13):** la pantalla de etapas edita nombre, posición, probabilidad por defecto y activación. `slug` y `kind` son de solo lectura.
+**Por qué:** la decisión #1 pide que el nombre sea editable, y para eso las reglas cuelgan de `kind`. Cambiar `kind` reescribiría en silencio el significado de los negocios ya cerrados —y de ahí cuelgan el nivel del broker y la comisión—; el `slug` es la identidad que usa el código.
+
+## 30. Prohibido crear ramas nuevas para fixes puntuales
+**Decisión (14 de septiembre de 2026):** ya no se crean ramas `fix/<issue>` (ni
+`chore/<algo>` ni ninguna rama nueva) para arreglos de auditoría, regresiones o
+fixtures de prueba. Todo se trabaja sobre la rama personal ya existente
+(`dev/<tu-nombre>`) y se sube ahí, en commits separados si hace falta
+distinguirlos. Revierte la práctica descrita antes en `flujo-de-trabajo.md`
+("usa una rama `fix/<issue-o-descripcion>` contra `develop`").
+**Por qué:** al corregir los defectos de la auditoría de F1 (12/09/2026) se
+crearon 3 ramas (`fix/22-asignar-broker`, `fix/23-defectos-una-linea`,
+`fix/24-fecha-santo-domingo-ventas-anuales`), y eso causó que **2 workflows de
+GitHub Actions no recibieran el PR correctamente** — quedaron configurados
+esperando el evento contra las ramas de trabajo habituales, no contra ramas
+nuevas creadas al vuelo para cada fix.
+**Descartado:** seguir aceptando ramas `fix/*` porque "la guardia de ramas las
+acepta" — el hecho de que la guardia no las rechace no significa que el resto
+del pipeline (Actions) las maneje bien.
+**Excepción:** si hace falta de verdad una rama nueva y separada (ej. un cambio
+de esquema que exige su propio PR), **la pide el usuario explícitamente**; no
+es una decisión que tome el agente por su cuenta.
+
+## 31. Flujo de trabajo por fase, de punta a punta: orientación, issues, ponytail, commit por issue y PR bloqueado si algo falla
+**Decisión (14 de septiembre de 2026):** se formaliza el ciclo completo de
+trabajo por fase en `flujo-de-trabajo.md`:
+1. Al abrir sesión, orientación rápida (decisiones, errores conocidos, mapeo,
+   `git log`) — no una auditoría completa.
+2. Al recibir una fase, investigar todo lo que ya existe sobre ella, revisar el
+   repo real contra esos documentos, **crear los issues en GitHub** y **escribir
+   el plan de implementación** (`docs/F<n>_ANALISIS_Y_PLAN.md`) antes de tocar
+   código.
+3. Al construir, **ponytail es obligatorio**: la skill `ponytail` para escribir,
+   `ponytail-review` para revisar cada diff, y **`ponytail-audit` no se puede
+   omitir**.
+4. **Un commit por issue**, nunca varios issues agrupados en un commit.
+5. Al cerrar la fase (todos los issues comiteados): prueba unitaria
+   (`typecheck`/`lint`/`test`/`build`) **y** prueba manual desde interfaz. Un
+   error encontrado en cualquiera de las dos se anota y **se prioriza sobre
+   seguir avanzando**.
+6. **No se abre PR si algo falla.** Se puede seguir comiteando, pero el mensaje
+   del commit debe decir explícitamente qué está fallando.
+**Por qué:** hasta ahora estos pasos se seguían de facto (los planes
+`F0_ANALISIS_Y_PLAN.md`/`F1_ANALISIS_Y_PLAN.md` y los issues por defecto de la
+auditoría de F1 ya existían), pero no estaban escritos como regla — lo que deja
+margen para que una sesión nueva salte directo a codear sin plan, mezcle varios
+arreglos en un commit, o abra un PR con algo roto. Escribirlo evita que el
+criterio varíe de sesión a sesión.
+**Relacionado:** decisión #30 (no crear ramas nuevas), que ya tocaba el mismo
+documento por el mismo motivo — evitar que GitHub Actions reciba el PR mal.
+
 ## Estado de implementación de estas decisiones
-**Actualizado el 6 de septiembre de 2026, al arrancar F1.**
+**Actualizado el 12 de septiembre de 2026, al arrancar F2.**
 
 Las decisiones #1–#8 (modelado) están implementadas en `src/infrastructure/db/schema.ts` — 29 tablas sobre Postgres — con su migración generada en `drizzle/`, y los catálogos que les dan sentido sembrados en `db/seed.sql`. La #2 (permisos por recurso + acción + alcance) está además implementada en código y probada: `src/domain/rbac.ts`.
 
 La #11 (hexagonal) y la #12 (Supabase/Hostinger) están implementadas: capas separadas, autenticación sobre Supabase Auth, RBAC en servidor, rutas por módulo, y la migración aplicada contra el proyecto real de Supabase. **F0 está cerrada** — ver `docs/F0_ESTADO.md` para qué se verificó y cómo. Lo único que sigue pendiente de acceso es el despliegue al VPS, aplazado a propósito por la #17.
 
-Las decisiones #18–#21 se toman al arrancar F1 y su implementación va en los pasos del plan de `docs/F1_ANALISIS_Y_PLAN.md` §7.
+Las decisiones #18–#22 se tomaron al arrancar F1 y están implementadas en sus cinco pasos (`docs/F1_ANALISIS_Y_PLAN.md` §7): estilos portados, duplicados avisados, endpoint público con token, broker sugerido e interfaz completa portada. **F1 está cerrada** — `npm run typecheck` limpio y 57 pruebas en verde.
+
+Las decisiones #23–#29 se toman al arrancar F2 y su implementación va en los pasos del plan de `docs/F2_ANALISIS_Y_PLAN.md` §7.
 
 Lo que sigue siendo cierto del prototipo (`referencia-prototipo/`): su `db/schema.ts` es SQLite, D1 nunca se enlazó, y nada de lo anterior está desplegado ahí. El prototipo es material de consulta, no la base del sistema.
