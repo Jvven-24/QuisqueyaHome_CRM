@@ -271,9 +271,12 @@ export async function cerrarNegocioGanado(
  * (`brokerId` no nulo, índice `goals_broker_period_unq`) o para la compañía
  * (`brokerId` nulo, índice parcial `goals_company_period_unq` — de ahí el
  * `targetWhere`: sin él, Drizzle no sabría contra cuál de los dos índices
- * únicos de la tabla resolver el conflicto). Crea la fila con
- * `targetDeals`/`targetAmountCents` en 0 si el periodo no tiene meta fijada
- * todavía — un mes sin meta no debe bloquear un cierre real (encargo, punto 4).
+ * únicos de la tabla resolver el conflicto). Si el periodo no tiene fila
+ * todavía, nace con la meta del broker (`broker_profiles.monthly_target_deals`,
+ * 0 si no tiene perfil — hallazgo 5 de `F3_ANALISIS_Y_PLAN.md` §3) o, para la
+ * compañía, en 0 hasta que M8 la fije a mano (decisión #35): un mes sin meta
+ * no debe bloquear un cierre real (encargo, punto 4). El `ON CONFLICT` nunca
+ * toca `target_*`, solo `achieved_*` — M8 es quien escribe la meta.
  */
 async function incrementarMeta(
   tx: Tx,
@@ -281,11 +284,21 @@ async function incrementarMeta(
 ): Promise<void> {
   const { brokerId, anio, mes, amountCents, actor } = params;
 
+  let targetDeals = 0;
+  if (brokerId != null) {
+    const [perfil] = await tx
+      .select({ monthlyTargetDeals: brokerProfiles.monthlyTargetDeals })
+      .from(brokerProfiles)
+      .where(eq(brokerProfiles.userId, brokerId))
+      .limit(1);
+    targetDeals = perfil?.monthlyTargetDeals ?? 0;
+  }
+
   const valores = {
     brokerId,
     year: anio,
     month: mes,
-    targetDeals: 0,
+    targetDeals,
     targetAmountCents: 0,
     achievedDeals: 1,
     achievedAmountCents: amountCents,

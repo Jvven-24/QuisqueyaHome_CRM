@@ -126,3 +126,12 @@ export function evaluarNivelBroker(annualSalesCents: number): BrokerLevel {
   }
   return nivel;
 }
+
+/** Etiqueta en español de cada `BrokerLevel` (M7 Brokers, M8 Metas). */
+export const BROKER_LEVEL_LABELS: Record<BrokerLevel, string> = {
+  junior: "Junior",
+  senior: "Senior",
+  senior_plus: "Senior+",
+  top_producer: "Top Producer",
+  top_leader: "Top Leader",
+};
