@@ -1,20 +1,55 @@
 "use client";
 
-import { Avatar, Badge, PageHeader } from "../_ui/prototipo-ui";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import type { BrokerLevel } from "@/domain/catalogs";
+import { BROKER_LEVEL_LABELS } from "@/domain/cierre-negocio";
+import { FormularioUsuario, type RolOpcion } from "../configuracion/_usuarios";
+import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
+import { Vacio } from "../_ui/estados";
+
+export type BrokerFila = {
+  userId: number;
+  fullName: string;
+  jobTitle: string;
+  specialty: string | null;
+  level: BrokerLevel;
+  annualSalesCents: number;
+  negociosActivos: number;
+  /** `null` = sin meta fijada este mes (`domain/metas.ts#cumplimientoPorcentaje`). */
+  porcentajeMeta: number | null;
+};
+
+export type ProyectoAsignable = { id: number; name: string; brokerId: number | null; brokerName: string | null };
+
+function formatearMonto(cents: number): string {
+  return new Intl.NumberFormat("es-DO", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(cents / 100);
+}
 
 /**
- * ponytail: datos de muestra portados de `referencia-prototipo/app/page.tsx`
- * (`BrokersView`). M7 · Brokers se construye en F3
- * (`docs/F1_ANALISIS_Y_PLAN.md`); sustituye este arreglo local por
- * `broker_profiles` real.
+ * M7 · Brokers (`docs/F3_ANALISIS_Y_PLAN.md` §4.4, issue #33). Tarjetas con
+ * datos reales de `broker_profiles` — el mock y su comentario `ponytail:` de
+ * T7 se reemplazan aquí. `proyectosAsignables` y `roles` llegan vacíos cuando
+ * el actor no tiene el permiso correspondiente (decidido en `page.tsx`,
+ * nunca aquí: ocultar un botón no es el control de acceso, solo su reflejo).
  */
-const brokers = [
-  ["Ismael Rosario", "Administrador", "Proyectos en planos", "Top Producer", "US$1,240,000", "15", 82],
-  ["Yostar Medina", "Broker", "Alquileres", "Junior", "US$85,000", "5", 50],
-  ["Luis García", "Broker en formación", "General", "Junior", "US$0", "2", 20],
-] as const;
+export function BrokersVista({
+  brokers,
+  puedeAsignar,
+  puedeInvitar,
+  proyectosAsignables,
+  roles,
+}: {
+  brokers: BrokerFila[];
+  puedeAsignar: boolean;
+  puedeInvitar: boolean;
+  proyectosAsignables: ProyectoAsignable[];
+  roles: RolOpcion[];
+}) {
+  const [invitando, setInvitando] = useState(false);
+  const [asignando, setAsignando] = useState<BrokerFila | null>(null);
 
-export function BrokersVista() {
   return (
     <>
       <PageHeader
@@ -22,9 +57,11 @@ export function BrokersVista() {
         title="Brokers"
         subtitle="Asignación, especialidad y desarrollo del equipo comercial."
         action={
-          <button className="button primary" type="button">
-            Invitar broker
-          </button>
+          puedeInvitar && (
+            <button className="button primary" type="button" onClick={() => setInvitando(true)}>
+              Invitar broker
+            </button>
+          )
         }
       />
       <div className="level-scale">
@@ -38,49 +75,161 @@ export function BrokersVista() {
         <i />
         <span>Top Leader</span>
       </div>
-      <div className="broker-grid">
-        {brokers.map(([name, role, specialty, level, sales, deals, progress]) => (
-          <article className="broker-card" key={name}>
-            <div className="broker-card-head">
-              <Avatar name={name} />
-              <div>
-                <h2>{name}</h2>
-                <p>{role}</p>
+      {brokers.length === 0 ? (
+        <Vacio titulo="Sin brokers todavía" texto="No hay brokers activos con perfil para este alcance." />
+      ) : (
+        <div className="broker-grid">
+          {brokers.map((broker) => (
+            <article className="broker-card" key={broker.userId}>
+              <div className="broker-card-head">
+                <Avatar name={broker.fullName} />
+                <div>
+                  <h2>{broker.fullName}</h2>
+                  <p>{broker.jobTitle}</p>
+                </div>
+                <Badge tone={broker.level === "top_producer" || broker.level === "top_leader" ? "gold" : "blue"}>
+                  {BROKER_LEVEL_LABELS[broker.level]}
+                </Badge>
               </div>
-              <Badge tone={level === "Top Producer" ? "gold" : "blue"}>{level}</Badge>
-            </div>
-            <dl className="detail-grid">
-              <div>
-                <dt>Especialidad</dt>
-                <dd>{specialty}</dd>
+              <dl className="detail-grid">
+                <div>
+                  <dt>Especialidad</dt>
+                  <dd>{broker.specialty ?? "—"}</dd>
+                </div>
+                <div>
+                  <dt>Ventas del año</dt>
+                  <dd>{formatearMonto(broker.annualSalesCents)}</dd>
+                </div>
+                <div>
+                  <dt>Negocios activos</dt>
+                  <dd>{broker.negociosActivos}</dd>
+                </div>
+                <div>
+                  <dt>Meta mensual</dt>
+                  <dd>{broker.porcentajeMeta === null ? "Sin meta" : `${broker.porcentajeMeta}%`}</dd>
+                </div>
+              </dl>
+              <div className="progress-line">
+                <span style={{ width: `${Math.min(broker.porcentajeMeta ?? 0, 100)}%` }} />
               </div>
-              <div>
-                <dt>Ventas del año</dt>
-                <dd>{sales}</dd>
-              </div>
-              <div>
-                <dt>Negocios activos</dt>
-                <dd>{deals}</dd>
-              </div>
-              <div>
-                <dt>Meta mensual</dt>
-                <dd>{progress}%</dd>
-              </div>
-            </dl>
-            <div className="progress-line">
-              <span style={{ width: `${progress}%` }} />
-            </div>
-            <footer>
-              <button className="button secondary" type="button">
-                Ver perfil
-              </button>
-              <button className="text-button" type="button">
-                Asignar propiedades
-              </button>
-            </footer>
-          </article>
-        ))}
-      </div>
+              <footer>
+                <Link className="button secondary" href={`/brokers/${broker.userId}`}>
+                  Ver perfil
+                </Link>
+                {puedeAsignar && (
+                  <button className="text-button" type="button" onClick={() => setAsignando(broker)}>
+                    Asignar propiedades
+                  </button>
+                )}
+              </footer>
+            </article>
+          ))}
+        </div>
+      )}
+      {invitando && <FormularioUsuario roles={roles} onClose={() => setInvitando(false)} />}
+      {asignando && (
+        <AsignarPropiedadesModal broker={asignando} proyectos={proyectosAsignables} onClose={() => setAsignando(null)} />
+      )}
     </>
+  );
+}
+
+function AsignarPropiedadesModal({
+  broker,
+  proyectos,
+  onClose,
+}: {
+  broker: BrokerFila;
+  proyectos: ProyectoAsignable[];
+  onClose: () => void;
+}) {
+  const router = useRouter();
+  const [seleccionados, setSeleccionados] = useState(
+    () => new Set(proyectos.filter((p) => p.brokerId === broker.userId).map((p) => p.id)),
+  );
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  function alternar(id: number) {
+    setSeleccionados((actual) => {
+      const copia = new Set(actual);
+      if (copia.has(id)) copia.delete(id);
+      else copia.add(id);
+      return copia;
+    });
+  }
+
+  async function guardar() {
+    setEnviando(true);
+    setError(null);
+    try {
+      const respuesta = await fetch(`/api/brokers/${broker.userId}/proyectos`, {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ projectIds: Array.from(seleccionados) }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        setError(cuerpo.error ?? "No se pudo guardar la asignación.");
+        return;
+      }
+      router.refresh();
+      onClose();
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  return (
+    <Modal title={`Asignar propiedades a ${broker.fullName}`} onClose={onClose}>
+      {proyectos.length === 0 ? (
+        <Vacio titulo="Sin proyectos activos" texto="No hay proyectos para asignar todavía." />
+      ) : (
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Proyecto</th>
+                <th>Asignado a</th>
+              </tr>
+            </thead>
+            <tbody>
+              {proyectos.map((proyecto) => (
+                <tr key={proyecto.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={seleccionados.has(proyecto.id)}
+                      onChange={() => alternar(proyecto.id)}
+                      aria-label={`Asignar ${proyecto.name}`}
+                    />
+                  </td>
+                  <td>{proyecto.name}</td>
+                  <td>
+                    {proyecto.brokerId == null ? (
+                      "—"
+                    ) : proyecto.brokerId === broker.userId ? (
+                      <Badge tone="blue">Este broker</Badge>
+                    ) : (
+                      proyecto.brokerName
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {error && <small style={{ color: "#b42318" }}>{error}</small>}
+      <div className="form-actions">
+        <button className="button" type="button" onClick={onClose}>
+          Cancelar
+        </button>
+        <button className="button primary" type="button" disabled={enviando} onClick={() => void guardar()}>
+          {enviando ? "Guardando…" : "Guardar asignación"}
+        </button>
+      </div>
+    </Modal>
   );
 }
