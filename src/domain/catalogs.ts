@@ -191,5 +191,7 @@ export type PermissionScope = (typeof PERMISSION_SCOPES)[number];
 export type EntityType = (typeof ENTITY_TYPES)[number];
 export type StageKind = (typeof STAGE_KINDS)[number];
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
+/** M9 · Comisiones (`domain/comision-estado.ts`): `commissions.status`. */
+export type CommissionStatus = (typeof COMMISSION_STATUSES)[number];
 /** M3b (`domain/cierre-negocio.ts`): nivel de broker según `broker_profiles.level`. */
 export type BrokerLevel = (typeof BROKER_LEVELS)[number];
