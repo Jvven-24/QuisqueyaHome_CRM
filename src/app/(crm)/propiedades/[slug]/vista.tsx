@@ -39,6 +39,7 @@ export function PropiedadDetalleVista({
   puedeEditarUnidad,
   puedeEliminarUnidad,
   puedeEditarPrecioReal,
+  puedeVerAvances,
 }: {
   proyecto: Proyecto;
   unidades: Unidad[];
@@ -49,6 +50,8 @@ export function PropiedadDetalleVista({
   puedeEliminarUnidad: boolean;
   /** Hallazgo P1: sin esto, el precio real se ve y se envía en los formularios aunque el servidor lo descarte. */
   puedeEditarPrecioReal: boolean;
+  /** M6 (issue #32): sin `construction_phases:view` el enlace ni se pinta — igual criterio que el resto de acciones. */
+  puedeVerAvances: boolean;
 }) {
   const router = useRouter();
   const [editandoProyecto, setEditandoProyecto] = useState(false);
@@ -83,11 +86,18 @@ export function PropiedadDetalleVista({
           proyecto.estimatedDeliveryDate ? ` · Entrega estimada ${proyecto.estimatedDeliveryDate}` : ""
         }`}
         action={
-          puedeEditarProyecto ? (
-            <button className="button primary" type="button" onClick={() => setEditandoProyecto(true)}>
-              Editar proyecto
-            </button>
-          ) : undefined
+          <>
+            {puedeVerAvances && (
+              <Link className="button secondary" href={`/avances?proyecto=${proyecto.slug}`}>
+                Ver avances
+              </Link>
+            )}
+            {puedeEditarProyecto && (
+              <button className="button primary" type="button" onClick={() => setEditandoProyecto(true)}>
+                Editar proyecto
+              </button>
+            )}
+          </>
         }
       />
       <div className="project-summary">
