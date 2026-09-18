@@ -29,7 +29,7 @@ const CrearFaseInput = z.union([
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idParam } = await params;
-    const { projectId } = idsDeRuta(idParam);
+    const [projectId] = idsDeRuta(idParam);
 
     const datos = parseInput(CrearFaseInput, await request.json().catch(() => ({})));
     const actor = await requireActor();

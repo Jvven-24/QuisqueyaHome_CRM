@@ -16,7 +16,7 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
 import { transaction, type Db } from "@/infrastructure/db/client";
 import { contacts } from "@/infrastructure/db/schema";
-import { errorResponse, parseInput } from "@/infrastructure/http";
+import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
 import { visibleRows } from "@/infrastructure/rbac-filter";
 
 /**
@@ -37,16 +37,6 @@ const EditarContactoInput = z.object({
   /** Deuda de F1 (F2, issue #21): reasignar el responsable. Solo alcance `all` — ver el `if` en `PATCH`. */
   brokerId: z.coerce.number().int().positive().optional(),
 });
-
-/** "" desde un formulario que se vació equivale a `null` (borrar el campo), no a un valor literal vacío. */
-function vaciosANull(cuerpo: unknown): unknown {
-  if (typeof cuerpo !== "object" || cuerpo === null) return cuerpo;
-  const copia: Record<string, unknown> = { ...(cuerpo as Record<string, unknown>) };
-  for (const campo of ["phone", "email", "notes", "sourceId"]) {
-    if (copia[campo] === "") copia[campo] = null;
-  }
-  return copia;
-}
 
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
 
@@ -70,7 +60,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const id = Number(idParam);
     if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
 
-    const datos = parseInput(EditarContactoInput, vaciosANull(await request.json().catch(() => ({}))));
+    const datos = parseInput(
+      EditarContactoInput,
+      vaciosANull(await request.json().catch(() => ({})), ["phone", "email", "notes", "sourceId"]),
+    );
     const actor = await requireActor();
     const scope = requireScope(actor, "contacts", "edit");
 

@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { BrokerLevel } from "@/domain/catalogs";
 import { BROKER_LEVEL_LABELS } from "@/domain/cierre-negocio";
 import { FormularioUsuario, type RolOpcion } from "../configuracion/_usuarios";
+import { formatearMonto } from "../_ui/formato";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
 
@@ -22,10 +23,6 @@ export type BrokerFila = {
 };
 
 export type ProyectoAsignable = { id: number; name: string; brokerId: number | null; brokerName: string | null };
-
-function formatearMonto(cents: number): string {
-  return new Intl.NumberFormat("es-DO", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(cents / 100);
-}
 
 /**
  * M7 · Brokers (`docs/F3_ANALISIS_Y_PLAN.md` §4.4, issue #33). Tarjetas con

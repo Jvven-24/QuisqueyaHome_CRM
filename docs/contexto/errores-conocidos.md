@@ -56,10 +56,10 @@ Dos listas distintas, y conviene no confundirlas:
 
 - **Las altas de usuario son manuales** (crear en Supabase Auth + `INSERT` en
   `users`) hasta que exista M13, en F2. Documentado en `docs/SUPABASE.md` §5.
-- **`scripts/crear-broker-prueba.mjs` es una fixture de desarrollo.** Crea el
-  usuario directamente en `auth.users` porque Supabase rechaza los dominios de
-  prueba y un `signUp` con dominio real le mandaría un correo a un tercero. **No
-  se corre en producción.**
+- **`scripts/crear-usuario-prueba.mjs [admin|asistente|broker]` es una fixture
+  de desarrollo.** Crea el usuario directamente en `auth.users` porque Supabase
+  rechaza los dominios de prueba y un `signUp` con dominio real le mandaría un
+  correo a un tercero. **No se corre en producción.**
 - **`Closes #N` no cierra el issue al mergear a `develop`.** GitHub solo cierra
   automáticamente contra la rama por defecto (`main`). Hay que cerrarlos a mano.
 - **Crear una rama nueva por cada fix rompe 2 workflows de GitHub Actions.**

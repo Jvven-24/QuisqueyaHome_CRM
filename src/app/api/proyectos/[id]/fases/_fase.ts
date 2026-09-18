@@ -15,13 +15,15 @@
  */
 
 import { and, eq } from "drizzle-orm";
-import { NotFoundError } from "@/domain/errors";
 import { promedioAvance } from "@/domain/avance-obra";
 import type { Actor } from "@/domain/rbac";
 import type { PermissionScope } from "@/domain/catalogs";
 import type { Db } from "@/infrastructure/db/client";
 import { constructionPhases, projects } from "@/infrastructure/db/schema";
+import { idsDeRuta } from "@/infrastructure/http";
 import { visibleRows } from "@/infrastructure/rbac-filter";
+
+export { idsDeRuta };
 
 /**
  * `Pick<Db, "select" | "update">` y no `Db` completo ni el tipo estrecho de
@@ -36,15 +38,6 @@ import { visibleRows } from "@/infrastructure/rbac-filter";
  * vivir dentro de un `BEGIN` de Postgres).
  */
 type Consultable = Pick<Db, "select" | "update">;
-
-/** `id`/`faseId` de la URL, ya validados como enteros positivos. */
-export function idsDeRuta(idParam: string, faseIdParam?: string): { projectId: number; faseId: number } {
-  const projectId = Number(idParam);
-  const faseId = faseIdParam === undefined ? NaN : Number(faseIdParam);
-  if (!Number.isInteger(projectId) || projectId <= 0) throw new NotFoundError();
-  if (faseIdParam !== undefined && (!Number.isInteger(faseId) || faseId <= 0)) throw new NotFoundError();
-  return { projectId, faseId };
-}
 
 /**
  * El proyecto existe, no está borrado y el actor lo alcanza — mismo criterio

@@ -13,7 +13,7 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
 import { transaction, type Db } from "@/infrastructure/db/client";
 import { units } from "@/infrastructure/db/schema";
-import { errorResponse, parseInput } from "@/infrastructure/http";
+import { errorResponse, idsDeRuta, parseInput, vaciosANull } from "@/infrastructure/http";
 
 const EditarUnidadInput = z.object({
   code: z.string().min(1, "Escribe el código de la unidad.").optional(),
@@ -29,15 +29,6 @@ const EditarUnidadInput = z.object({
   status: z.enum(UNIT_STATUSES).optional(),
 });
 
-function vaciosANull(cuerpo: unknown): unknown {
-  if (typeof cuerpo !== "object" || cuerpo === null) return cuerpo;
-  const copia: Record<string, unknown> = { ...(cuerpo as Record<string, unknown>) };
-  for (const campo of ["unitType", "bedrooms", "bathrooms", "builtAreaM2", "realPriceCents", "publicRangeMinCents", "publicRangeMaxCents"]) {
-    if (copia[campo] === "") copia[campo] = null;
-  }
-  return copia;
-}
-
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
 
 async function unidadVisible(tx: Tx, projectId: number, unitId: number) {
@@ -49,21 +40,23 @@ async function unidadVisible(tx: Tx, projectId: number, unitId: number) {
   return fila;
 }
 
-function idsDeRuta(idParam: string, unitIdParam: string): { projectId: number; unitId: number } {
-  const projectId = Number(idParam);
-  const unitId = Number(unitIdParam);
-  if (!Number.isInteger(projectId) || projectId <= 0 || !Number.isInteger(unitId) || unitId <= 0) {
-    throw new NotFoundError();
-  }
-  return { projectId, unitId };
-}
-
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string; unitId: string }> }) {
   try {
     const { id: idParam, unitId: unitIdParam } = await params;
-    const { projectId, unitId } = idsDeRuta(idParam, unitIdParam);
+    const [projectId, unitId] = idsDeRuta(idParam, unitIdParam);
 
-    const datos = parseInput(EditarUnidadInput, vaciosANull(await request.json().catch(() => ({}))));
+    const datos = parseInput(
+      EditarUnidadInput,
+      vaciosANull(await request.json().catch(() => ({})), [
+        "unitType",
+        "bedrooms",
+        "bathrooms",
+        "builtAreaM2",
+        "realPriceCents",
+        "publicRangeMinCents",
+        "publicRangeMaxCents",
+      ]),
+    );
     const actor = await requireActor();
     requireScope(actor, "units", "edit");
 
@@ -104,7 +97,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string; unitId: string }> }) {
   try {
     const { id: idParam, unitId: unitIdParam } = await params;
-    const { projectId, unitId } = idsDeRuta(idParam, unitIdParam);
+    const [projectId, unitId] = idsDeRuta(idParam, unitIdParam);
 
     const actor = await requireActor();
     requireScope(actor, "units", "delete");

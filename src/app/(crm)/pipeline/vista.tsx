@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ReactNode, useMemo, useState } from "react";
+import { formatearMonto } from "../_ui/formato";
 import { Avatar, Modal, PageHeader } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
 import { DealInspector } from "./inspector";
@@ -60,13 +61,6 @@ export type NegocioFila = {
   notes: string | null;
   proyectoPrincipal: ProyectoPrincipal | null;
 };
-
-function formatearMonto(amountCents: number | null, currency: string): string {
-  if (amountCents == null) return "Por definir";
-  return new Intl.NumberFormat("es-DO", { style: "currency", currency, maximumFractionDigits: 0 }).format(
-    amountCents / 100,
-  );
-}
 
 const formateadorFecha = new Intl.DateTimeFormat("es-DO", { day: "2-digit", month: "short" });
 

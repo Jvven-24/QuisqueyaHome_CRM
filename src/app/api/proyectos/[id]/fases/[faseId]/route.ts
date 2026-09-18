@@ -22,7 +22,7 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
 import { transaction } from "@/infrastructure/db/client";
 import { constructionPhases, files } from "@/infrastructure/db/schema";
-import { errorResponse, parseInput } from "@/infrastructure/http";
+import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
 import { faseVisible, idsDeRuta, recalcularProgreso } from "../_fase";
 
 const EditarFaseInput = z.object({
@@ -41,22 +41,21 @@ const EditarFaseInput = z.object({
   isPublished: z.boolean().optional(),
 });
 
-/** "" desde un formulario que se vació equivale a `null`, igual que `api/proyectos/[id]/route.ts`. */
-function vaciosANull(cuerpo: unknown): unknown {
-  if (typeof cuerpo !== "object" || cuerpo === null) return cuerpo;
-  const copia: Record<string, unknown> = { ...(cuerpo as Record<string, unknown>) };
-  for (const campo of ["period", "statusDate", "videoUrl", "publicNote", "responsibleId"]) {
-    if (copia[campo] === "") copia[campo] = null;
-  }
-  return copia;
-}
-
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string; faseId: string }> }) {
   try {
     const { id: idParam, faseId: faseIdParam } = await params;
-    const { projectId, faseId } = idsDeRuta(idParam, faseIdParam);
+    const [projectId, faseId] = idsDeRuta(idParam, faseIdParam);
 
-    const datos = parseInput(EditarFaseInput, vaciosANull(await request.json().catch(() => ({}))));
+    const datos = parseInput(
+      EditarFaseInput,
+      vaciosANull(await request.json().catch(() => ({})), [
+        "period",
+        "statusDate",
+        "videoUrl",
+        "publicNote",
+        "responsibleId",
+      ]),
+    );
     const actor = await requireActor();
     const scope = requireScope(actor, "construction_phases", "edit");
 
@@ -96,7 +95,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string; faseId: string }> }) {
   try {
     const { id: idParam, faseId: faseIdParam } = await params;
-    const { projectId, faseId } = idsDeRuta(idParam, faseIdParam);
+    const [projectId, faseId] = idsDeRuta(idParam, faseIdParam);
 
     const actor = await requireActor();
     const scope = requireScope(actor, "construction_phases", "delete");

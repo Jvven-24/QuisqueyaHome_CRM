@@ -49,7 +49,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   try {
     const { id: idParam, faseId: faseIdParam } = await params;
-    const { projectId, faseId } = idsDeRuta(idParam, faseIdParam);
+    const [projectId, faseId] = idsDeRuta(idParam, faseIdParam);
 
     const actor = await requireActor();
     const scope = requireScope(actor, "construction_phases", "edit");

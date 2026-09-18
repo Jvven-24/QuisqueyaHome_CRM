@@ -16,7 +16,7 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
 import { transaction, type Db } from "@/infrastructure/db/client";
 import { projects } from "@/infrastructure/db/schema";
-import { errorResponse, parseInput } from "@/infrastructure/http";
+import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
 import { visibleRows } from "@/infrastructure/rbac-filter";
 
 const EditarProyectoInput = z.object({
@@ -37,16 +37,6 @@ const EditarProyectoInput = z.object({
   isActive: z.boolean().optional(),
 });
 
-/** "" desde un formulario que se vació equivale a `null`, igual que `api/contactos/[id]/route.ts`. */
-function vaciosANull(cuerpo: unknown): unknown {
-  if (typeof cuerpo !== "object" || cuerpo === null) return cuerpo;
-  const copia: Record<string, unknown> = { ...(cuerpo as Record<string, unknown>) };
-  for (const campo of ["zone", "developer", "description", "startDate", "estimatedDeliveryDate", "internalPriceCents", "publicRangeMinCents", "publicRangeMaxCents", "brokerId"]) {
-    if (copia[campo] === "") copia[campo] = null;
-  }
-  return copia;
-}
-
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
 
 async function proyectoVisible(tx: Tx, id: number, actor: Awaited<ReturnType<typeof requireActor>>, scope: Parameters<typeof visibleRows>[1]) {
@@ -64,7 +54,20 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const id = Number(idParam);
     if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
 
-    const datos = parseInput(EditarProyectoInput, vaciosANull(await request.json().catch(() => ({}))));
+    const datos = parseInput(
+      EditarProyectoInput,
+      vaciosANull(await request.json().catch(() => ({})), [
+        "zone",
+        "developer",
+        "description",
+        "startDate",
+        "estimatedDeliveryDate",
+        "internalPriceCents",
+        "publicRangeMinCents",
+        "publicRangeMaxCents",
+        "brokerId",
+      ]),
+    );
     const actor = await requireActor();
     const scope = requireScope(actor, "projects", "edit");
 

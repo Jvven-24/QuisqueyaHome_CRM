@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { COMMISSION_STATUSES, type CommissionStatus } from "@/domain/catalogs";
 import { COMMISSION_STATUS_LABELS } from "@/domain/comision-estado";
+import { formatearMonto } from "../_ui/formato";
 import { Badge, Metric, PageHeader } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
 import { nombreMes } from "@/domain/metas";
@@ -40,10 +41,6 @@ const ESTADO_TONE: Record<CommissionStatus, "neutral" | "gold" | "green" | "red"
   paid: "green",
   void: "red",
 };
-
-function formatearMonto(cents: number, currency: string): string {
-  return new Intl.NumberFormat("es-DO", { style: "currency", currency, maximumFractionDigits: 0 }).format(cents / 100);
-}
 
 /** Puntos básicos a porcentaje, sin decimales de sobra: 500 → "5%", 450 → "4.5%". */
 function formatearPorcentaje(basisPoints: number): string {

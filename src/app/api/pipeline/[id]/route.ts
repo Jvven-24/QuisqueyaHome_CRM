@@ -18,7 +18,7 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
 import { transaction } from "@/infrastructure/db/client";
 import { deals } from "@/infrastructure/db/schema";
-import { errorResponse, parseInput } from "@/infrastructure/http";
+import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
 import { negocioAbiertoVisible } from "./_negocio-abierto";
 
 const EditarNegocioInput = z.object({
@@ -28,22 +28,21 @@ const EditarNegocioInput = z.object({
   expectedCloseDate: z.string().nullable().optional(),
 });
 
-function vaciosANull(cuerpo: unknown): unknown {
-  if (typeof cuerpo !== "object" || cuerpo === null) return cuerpo;
-  const copia: Record<string, unknown> = { ...(cuerpo as Record<string, unknown>) };
-  for (const campo of ["amountCents", "probability", "commissionBasisPoints", "expectedCloseDate"]) {
-    if (copia[campo] === "") copia[campo] = null;
-  }
-  return copia;
-}
-
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idParam } = await params;
     const id = Number(idParam);
     if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
 
-    const datos = parseInput(EditarNegocioInput, vaciosANull(await request.json().catch(() => ({}))));
+    const datos = parseInput(
+      EditarNegocioInput,
+      vaciosANull(await request.json().catch(() => ({})), [
+        "amountCents",
+        "probability",
+        "commissionBasisPoints",
+        "expectedCloseDate",
+      ]),
+    );
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
 

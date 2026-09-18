@@ -28,7 +28,7 @@ export async function DELETE(
 ) {
   try {
     const { id: idParam, faseId: faseIdParam, fileId: fileIdParam } = await params;
-    const { projectId, faseId } = idsDeRuta(idParam, faseIdParam);
+    const [projectId, faseId] = idsDeRuta(idParam, faseIdParam);
     const fileId = Number(fileIdParam);
     if (!Number.isInteger(fileId) || fileId <= 0) throw new NotFoundError();
 

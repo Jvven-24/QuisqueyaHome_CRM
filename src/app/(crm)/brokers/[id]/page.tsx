@@ -21,12 +21,9 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
 import { brokerProfiles, contacts, deals, goals, pipelineStages, projects, roles, users } from "@/infrastructure/db/schema";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
+import { formatearMonto } from "../../_ui/formato";
 import { Avatar, Badge, PageHeader } from "../../_ui/prototipo-ui";
 import { Vacio } from "../../_ui/estados";
-
-function formatearMonto(cents: number): string {
-  return new Intl.NumberFormat("es-DO", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(cents / 100);
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
