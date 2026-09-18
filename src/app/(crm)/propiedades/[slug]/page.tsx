@@ -70,6 +70,7 @@ export default async function PropiedadDetallePage({ params }: { params: Promise
       puedeEditarUnidad={can(actor, "units", "edit")}
       puedeEliminarUnidad={can(actor, "units", "delete")}
       puedeEditarPrecioReal={can(actor, "unit_real_price", "edit")}
+      puedeVerAvances={can(actor, "construction_phases", "view")}
     />
   );
 }

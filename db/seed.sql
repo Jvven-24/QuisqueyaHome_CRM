@@ -143,4 +143,14 @@ INSERT INTO lead_sources (slug, name, position, is_active) VALUES
 ON CONFLICT (slug) DO UPDATE
   SET name = EXCLUDED.name, position = EXCLUDED.position;
 
+/* ---------------------------------------------- Storage (M6, decisión #33) -- */
+
+-- Bucket privado para fotos de obra: nada se filtra antes de publicarse desde
+-- la fase (`is_published`). La subida y las URLs firmadas las genera el
+-- servidor con `adminClient()` (`infrastructure/auth/supabase.ts`); el bucket
+-- en sí solo hace falta que exista una vez, de ahí el `ON CONFLICT DO NOTHING`.
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('avances-obra', 'avances-obra', false)
+ON CONFLICT (id) DO NOTHING;
+
 COMMIT;

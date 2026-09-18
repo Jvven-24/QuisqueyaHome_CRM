@@ -15,6 +15,41 @@ import {
   ValidationError,
 } from "@/domain/errors";
 
+/**
+ * Uno o dos ids de la URL (`/recurso/[id]` o `/recurso/[id]/hijo/[hijoId]`),
+ * ya validados como enteros positivos, o 404 (hallazgo del ponytail-audit:
+ * este parseo estaba repetido en tres route handlers).
+ *
+ * El segundo id es opcional porque `api/proyectos/[id]/fases/route.ts` solo
+ * necesita el primero (`POST` bajo un proyecto, sin `faseId` en la ruta); ahí
+ * se devuelve `NaN` sin validar, igual que antes de compartir este parseo.
+ */
+export function idsDeRuta(idParam: string, hijoIdParam?: string): [number, number] {
+  const id = Number(idParam);
+  if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
+  if (hijoIdParam === undefined) return [id, NaN];
+
+  const hijoId = Number(hijoIdParam);
+  if (!Number.isInteger(hijoId) || hijoId <= 0) throw new NotFoundError();
+  return [id, hijoId];
+}
+
+/**
+ * "" desde un formulario que se vació equivale a `null` (borrar el campo),
+ * no a un valor literal vacío. `campos` es la lista de claves donde el
+ * handler de edición permite ese borrado (hallazgo del ponytail-audit: esta
+ * función estaba repetida idéntica en siete route handlers, solo cambiaba la
+ * lista de campos).
+ */
+export function vaciosANull(cuerpo: unknown, campos: string[]): unknown {
+  if (typeof cuerpo !== "object" || cuerpo === null) return cuerpo;
+  const copia: Record<string, unknown> = { ...(cuerpo as Record<string, unknown>) };
+  for (const campo of campos) {
+    if (copia[campo] === "") copia[campo] = null;
+  }
+  return copia;
+}
+
 export function errorResponse(error: unknown): Response {
   if (error instanceof ValidationError) {
     return json(400, { error: error.message, fields: error.fields });

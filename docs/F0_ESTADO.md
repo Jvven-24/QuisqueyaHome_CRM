@@ -124,10 +124,10 @@ el build, y si el VPS lleva IPv6.
 
 - **Las altas de usuario son a mano** (crear en Supabase Auth + `INSERT` en
   `users`) hasta que exista M13, en la fase F2. Documentado en `SUPABASE.md` §5.
-- **`scripts/crear-broker-prueba.mjs` es una fixture de desarrollo.** Crea el
-  usuario directamente en `auth.users` porque Supabase rechaza los dominios de
-  prueba y un `signUp` con dominio real le mandaría un correo a un tercero. No
-  se corre en producción.
+- **`scripts/crear-usuario-prueba.mjs [admin|asistente|broker]` es una fixture
+  de desarrollo.** Crea el usuario directamente en `auth.users` porque Supabase
+  rechaza los dominios de prueba y un `signUp` con dominio real le mandaría un
+  correo a un tercero. No se corre en producción.
 
 ### Nada de F1
 

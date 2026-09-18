@@ -200,6 +200,40 @@ criterio varíe de sesión a sesión.
 **Relacionado:** decisión #30 (no crear ramas nuevas), que ya tocaba el mismo
 documento por el mismo motivo — evitar que GitHub Actions reciba el PR mal.
 
+## 32. El alcance `own` de las fases de obra se hereda del proyecto
+**Decisión (17 de septiembre de 2026, M6):** `construction_phases` no gana una columna de responsable. El alcance se aplica al proyecto —`visibleRows(actor, scope, projects.brokerId, projects.deletedAt)`— y las fases se leen solo de un proyecto que ya pasó ese filtro.
+**Por qué:** el broker tiene `construction_phases:view own`, pero la tabla no tiene `broker_id` y el esquema está congelado (§18.1). El proyecto ya sabe de quién es; duplicar esa referencia en las fases obliga a mantener dos verdades sincronizadas.
+**Consecuencia:** mismo patrón que `api/pipeline/[id]/propiedades`. Un proyecto reasignado lleva sus fases consigo, sin migrar datos.
+
+## 33. Las fotos de obra van a Supabase Storage, en un bucket privado y con URLs firmadas
+**Decisión (18 de septiembre de 2026, M6):** bucket `avances-obra`, **privado**, creado de forma idempotente en `db/seed.sql`. La subida va por route handler con `adminClient()` después de `requireScope` (mismo criterio que la invitación, decisión #28), deja una fila en `files` con la **ruta** del objeto —no una URL pública— y la pantalla genera URLs firmadas en el servidor al pintar.
+**Por qué:** las imágenes no caben en Postgres sin inflarlo, y `@supabase/supabase-js` ya está instalado: Storage no agrega una sola dependencia. Privado por defecto significa que nada se filtra antes de publicar, y el portal público (Sistema 1) está fuera de alcance.
+**Validación:** solo JPEG, PNG, WEBP y GIF. **SVG rechazado a propósito**: puede llevar script y el archivo se sirve desde una URL que un navegador abre como documento. La extensión del objeto sale del tipo validado, nunca del nombre que manda el cliente, y el tamaño se rechaza por `content-length` antes de leer el cuerpo.
+**Descartado:** guardar la ruta de un Drive de la inmobiliaria como sustituto (se evaluó el 17/09/2026 y se descartó al confirmar que Storage ya venía con el proyecto). Si algún día se cambia de proveedor, lo único que cambia es el route handler de subida.
+**Requiere:** `SUPABASE_SERVICE_ROLE_KEY` en `.env` — configurada el 18/09/2026.
+
+## 34. «Publicar en el portal» es una marca, no una integración
+**Decisión (17 de septiembre de 2026, M6):** publicar escribe `is_published` y `published_at` en la fase, auditado. Nada más.
+**Por qué:** el portal público es otro producto (§15). F3 entrega el contrato de qué verá el comprador —nota, porcentaje, fotos, video— y deja la marca lista para que alguien la consuma.
+
+## 35. La meta del mes: `goals.target_*` la fija M8; `achieved_*` solo el cierre
+**Decisión (17 de septiembre de 2026, M8):** `PUT /api/metas` escribe únicamente `target_deals` y `target_amount_cents`; el cierre transaccional escribe únicamente `achieved_*`. Ambos usan los mismos dos índices únicos de `goals`, en sentidos opuestos. Cuando el cierre **crea** la fila del mes, su meta sale de `broker_profiles.monthly_target_deals`, no de 0.
+**Por qué:** antes, el primer cierre del mes creaba la fila con meta 0 y el periodo aparecía «sin meta» aunque el perfil dijera 4. Y si la pantalla de metas pudiera tocar `achieved_*`, el criterio de terminado #4 —la meta se actualiza exactamente una vez por cierre— dejaría de ser verificable.
+**Consecuencia:** hay una prueba que compila el `ON CONFLICT` del endpoint y falla si alguien añade `achieved_*` a su `set`.
+
+## 36. Aprobar, pagar y anular una comisión son transiciones, no ediciones
+**Decisión (17 de septiembre de 2026, M9):** `pending → approved → paid`, y `pending | approved → void`. Lo decide una función pura en `domain/comision-estado.ts`, igual que `transicion-etapa.ts`; el route handler sella `approved_by`/`approved_at`/`paid_at` y bloquea la fila con `for update`. El reparto broker/agencia solo se edita en `pending`, y se recalcula con `calcularComision`.
+**Por qué:** una comisión es dinero que se le paga a una persona. Un `PATCH` libre de `status` permitiría devolver a pendiente algo ya pagado sin dejar rastro de por qué.
+
+## 37. Exportar es texto generado en el servidor
+**Decisión (17 de septiembre de 2026, M9):** `GET /api/comisiones/export` responde `text/csv` con los mismos `searchParams`, el mismo `visibleRows` y el permiso `commissions:export`. Sin librería de hojas de cálculo. Lleva BOM UTF-8 para que Excel muestre los acentos, y un campo que empieza por `=`, `+`, `-` o `@` se neutraliza con una comilla.
+**Por qué:** mismo criterio que el `.ics` (decisión #25): el filtro de permisos vive donde vive la consulta. La página y el CSV comparten el constructor de condiciones, así que no pueden divergir.
+
+## 38. M7 casi no escribe: reutiliza M13 y M5
+**Decisión (17 de septiembre de 2026, M7):** «Invitar broker» reutiliza el formulario y el endpoint de M13; editar el perfil sigue en M13; «Ver perfil» es una página de lectura. La única escritura propia de M7 es asignar proyectos (`projects.broker_id`), con `projects:edit` de alcance `all` y auditada por proyecto.
+**Por qué:** M7 muestra lo que otros módulos ya producen. Duplicar la invitación habría creado un segundo camino para crear usuarios, con su propia manera de equivocarse.
+**Detalle que muerde:** el universo de la asignación es «proyectos activos y no borrados», el mismo que ve el modal. Si el endpoint mirara más proyectos que la pantalla, un proyecto inactivo asignado al broker se quedaría sin responsable cada vez que alguien guardara la asignación, sin que nadie lo pidiera.
+
 ## Estado de implementación de estas decisiones
 **Actualizado el 12 de septiembre de 2026, al arrancar F2.**
 
@@ -209,6 +243,8 @@ La #11 (hexagonal) y la #12 (Supabase/Hostinger) están implementadas: capas sep
 
 Las decisiones #18–#22 se tomaron al arrancar F1 y están implementadas en sus cinco pasos (`docs/F1_ANALISIS_Y_PLAN.md` §7): estilos portados, duplicados avisados, endpoint público con token, broker sugerido e interfaz completa portada. **F1 está cerrada** — `npm run typecheck` limpio y 57 pruebas en verde.
 
-Las decisiones #23–#29 se toman al arrancar F2 y su implementación va en los pasos del plan de `docs/F2_ANALISIS_Y_PLAN.md` §7.
+Las decisiones #23–#29 se tomaron al arrancar F2 y están implementadas: **F2 está cerrada** (PR #29, ver `docs/F2_ESTADO.md`).
+
+Las decisiones #32–#38 se toman en F3 y están implementadas en sus cuatro issues (#30 M8, #31 M9, #32 M6, #33 M7) — ver `docs/F3_ESTADO.md` para qué se verificó y cómo.
 
 Lo que sigue siendo cierto del prototipo (`referencia-prototipo/`): su `db/schema.ts` es SQLite, D1 nunca se enlazó, y nada de lo anterior está desplegado ahí. El prototipo es material de consulta, no la base del sistema.

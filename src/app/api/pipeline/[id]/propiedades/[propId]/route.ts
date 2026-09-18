@@ -16,22 +16,15 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
 import { transaction } from "@/infrastructure/db/client";
 import { dealProperties } from "@/infrastructure/db/schema";
-import { errorResponse, parseInput } from "@/infrastructure/http";
+import { errorResponse, idsDeRuta, parseInput } from "@/infrastructure/http";
 import { negocioAbiertoVisible } from "../../_negocio-abierto";
 
 const MarcarPrincipalInput = z.object({ isPrimary: z.literal(true) });
 
-function idsDeRuta(idParam: string, propIdParam: string): { dealId: number; propId: number } {
-  const dealId = Number(idParam);
-  const propId = Number(propIdParam);
-  if (!Number.isInteger(dealId) || dealId <= 0 || !Number.isInteger(propId) || propId <= 0) throw new NotFoundError();
-  return { dealId, propId };
-}
-
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string; propId: string }> }) {
   try {
     const { id: idParam, propId: propIdParam } = await params;
-    const { dealId, propId } = idsDeRuta(idParam, propIdParam);
+    const [dealId, propId] = idsDeRuta(idParam, propIdParam);
 
     parseInput(MarcarPrincipalInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
@@ -60,7 +53,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string; propId: string }> }) {
   try {
     const { id: idParam, propId: propIdParam } = await params;
-    const { dealId, propId } = idsDeRuta(idParam, propIdParam);
+    const [dealId, propId] = idsDeRuta(idParam, propIdParam);
 
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");

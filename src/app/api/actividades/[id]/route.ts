@@ -17,7 +17,7 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
 import { transaction, type Db } from "@/infrastructure/db/client";
 import { activities } from "@/infrastructure/db/schema";
-import { errorResponse, parseInput } from "@/infrastructure/http";
+import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
 import { visibleRows } from "@/infrastructure/rbac-filter";
 
 const EditarActividadInput = z.object({
@@ -37,15 +37,6 @@ const EditarActividadInput = z.object({
   status: z.enum(ACTIVITY_STATUSES).optional(),
 });
 
-function vaciosANull(cuerpo: unknown): unknown {
-  if (typeof cuerpo !== "object" || cuerpo === null) return cuerpo;
-  const copia: Record<string, unknown> = { ...(cuerpo as Record<string, unknown>) };
-  for (const campo of ["description", "contactId", "dealId", "projectId", "startsAt", "endsAt", "location", "meetingUrl"]) {
-    if (copia[campo] === "") copia[campo] = null;
-  }
-  return copia;
-}
-
 type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
 
 async function actividadVisible(tx: Tx, id: number, actor: Awaited<ReturnType<typeof requireActor>>, scope: Parameters<typeof visibleRows>[1]) {
@@ -63,7 +54,19 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const id = Number(idParam);
     if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
 
-    const datos = parseInput(EditarActividadInput, vaciosANull(await request.json().catch(() => ({}))));
+    const datos = parseInput(
+      EditarActividadInput,
+      vaciosANull(await request.json().catch(() => ({})), [
+        "description",
+        "contactId",
+        "dealId",
+        "projectId",
+        "startsAt",
+        "endsAt",
+        "location",
+        "meetingUrl",
+      ]),
+    );
     const actor = await requireActor();
     const scope = requireScope(actor, "activities", "edit");
 

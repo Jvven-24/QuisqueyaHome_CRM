@@ -157,7 +157,13 @@ export function UsuariosPanel({ lista, roles, puedeEditar }: { lista: UsuarioFil
   );
 }
 
-function FormularioUsuario({
+/**
+ * Exportado para M7 · Brokers (issue #33, decisión #38): "Invitar broker"
+ * reutiliza este mismo formulario en vez de duplicarlo — ya preselecciona el
+ * rol "broker" cuando no se edita un usuario existente (línea de `rolId` más
+ * abajo), que es exactamente lo que pide el botón de `/brokers`.
+ */
+export function FormularioUsuario({
   usuario,
   roles,
   onClose,
