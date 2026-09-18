@@ -9,7 +9,7 @@
 
 import { and, eq, isNull, sql } from "drizzle-orm";
 import { can } from "@/domain/rbac";
-import { formatoPeriodo } from "@/domain/metas";
+import { formatoPeriodo, nombreMes } from "@/domain/metas";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
 import { commissions, deals, roles, users } from "@/infrastructure/db/schema";
@@ -100,10 +100,4 @@ export default async function ComisionesPage({
       filas={filas}
     />
   );
-}
-
-function nombreMes(mes: number): string {
-  const fecha = new Date(Date.UTC(2000, mes - 1, 1));
-  const texto = new Intl.DateTimeFormat("es-DO", { month: "long" }).format(fecha);
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }

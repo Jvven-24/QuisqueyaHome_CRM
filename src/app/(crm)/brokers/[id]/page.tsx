@@ -15,7 +15,7 @@ import { and, desc, eq, isNull } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BROKER_LEVEL_LABELS } from "@/domain/cierre-negocio";
-import { cumplimientoPorcentaje, parsearPeriodo } from "@/domain/metas";
+import { cumplimientoPorcentaje, nombreMes, parsearPeriodo } from "@/domain/metas";
 import { reaches } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
@@ -26,12 +26,6 @@ import { Vacio } from "../../_ui/estados";
 
 function formatearMonto(cents: number): string {
   return new Intl.NumberFormat("es-DO", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(cents / 100);
-}
-
-function nombreMes(mes: number): string {
-  const fecha = new Date(Date.UTC(2000, mes - 1, 1));
-  const texto = new Intl.DateTimeFormat("es-DO", { month: "long" }).format(fecha);
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {

@@ -5,7 +5,7 @@
 
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { cumplimientoPorcentaje, esMetaCumplida, formatoPeriodo, parsearPeriodo } from "./metas.ts";
+import { cumplimientoPorcentaje, esMetaCumplida, formatoPeriodo, nombreMes, parsearPeriodo } from "./metas.ts";
 
 test("parsearPeriodo con ?periodo= válido usa ese año y mes", () => {
   assert.deepEqual(parsearPeriodo("2026-03"), { year: 2026, month: 3 });
@@ -51,4 +51,10 @@ test("esMetaCumplida es verdadero al alcanzar o superar la meta", () => {
   assert.equal(esMetaCumplida(4, 4), true);
   assert.equal(esMetaCumplida(5, 4), true);
   assert.equal(esMetaCumplida(3, 4), false);
+});
+
+test("nombreMes no retrocede un mes en husos al oeste de UTC", () => {
+  assert.equal(nombreMes(9), "Septiembre");
+  assert.equal(nombreMes(1), "Enero");
+  assert.equal(nombreMes(12), "Diciembre");
 });

@@ -6,6 +6,7 @@ import { COMMISSION_STATUSES, type CommissionStatus } from "@/domain/catalogs";
 import { COMMISSION_STATUS_LABELS } from "@/domain/comision-estado";
 import { Badge, Metric, PageHeader } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
+import { nombreMes } from "@/domain/metas";
 
 export type FilaComisionVista = {
   id: number;
@@ -54,8 +55,7 @@ function formatearPorcentaje(basisPoints: number): string {
 function etiquetaPeriodo(periodo: string): string {
   if (periodo === "todos") return "todos los periodos";
   const [anio, mes] = periodo.split("-").map(Number);
-  const fecha = new Date(Date.UTC(anio!, mes! - 1, 1));
-  return new Intl.DateTimeFormat("es-DO", { month: "long", year: "numeric" }).format(fecha);
+  return `${nombreMes(mes!)} ${anio}`;
 }
 
 /**

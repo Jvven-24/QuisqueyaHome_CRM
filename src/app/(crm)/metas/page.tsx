@@ -15,7 +15,7 @@
 
 import { and, eq, isNull } from "drizzle-orm";
 import { can } from "@/domain/rbac";
-import { formatoPeriodo, parsearPeriodo } from "@/domain/metas";
+import { formatoPeriodo, nombreMes, parsearPeriodo } from "@/domain/metas";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
 import { brokerProfiles, goals, users } from "@/infrastructure/db/schema";
@@ -27,12 +27,6 @@ export const metadata = { title: "Metas · CRM Quisqueya Home" };
 
 function primero(valor: string | string[] | undefined): string | undefined {
   return Array.isArray(valor) ? valor[0] : valor;
-}
-
-function nombreMes(mes: number): string {
-  const fecha = new Date(Date.UTC(2000, mes - 1, 1));
-  const texto = new Intl.DateTimeFormat("es-DO", { month: "long" }).format(fecha);
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 export default async function MetasPage({

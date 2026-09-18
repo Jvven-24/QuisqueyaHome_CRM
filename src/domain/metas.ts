@@ -48,3 +48,19 @@ export function cumplimientoPorcentaje(achievedDeals: number, targetDeals: numbe
 export function esMetaCumplida(achievedDeals: number, targetDeals: number): boolean {
   return targetDeals > 0 && achievedDeals >= targetDeals;
 }
+
+/**
+ * Nombre del mes en español, capitalizado: `9` → `"Septiembre"`.
+ *
+ * `timeZone: "UTC"` no es decorativo: sin él, `Intl` interpreta el instante
+ * (medianoche UTC del día 1) en la zona del proceso, y en cualquier huso al
+ * oeste de Greenwich —Santo Domingo incluido— eso cae en el mes anterior.
+ * Se veía «Agosto 2026» sobre `?periodo=2026-09` (prueba de interfaz de F3).
+ * Vive aquí, y no repetido en cada pantalla, porque M8, M9 y M7 pintan el
+ * mismo selector de periodo.
+ */
+export function nombreMes(mes: number): string {
+  const fecha = new Date(Date.UTC(2000, mes - 1, 1));
+  const texto = new Intl.DateTimeFormat("es-DO", { month: "long", timeZone: "UTC" }).format(fecha);
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
