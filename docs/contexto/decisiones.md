@@ -241,6 +241,11 @@ documento por el mismo motivo — evitar que GitHub Actions reciba el PR mal.
 **Qué hay que hacer antes de entregar:** sacar esas contraseñas a variables de entorno o borrar el script, **y además** eliminar las tres cuentas de `auth.users` y de `users`. Existen de verdad en el proyecto de Supabase hospedado, así que borrar el archivo no cierra la fuga por sí solo. Las contraseñas están también en el historial de git.
 **Lo que sí está limpio, verificado el 21/09/2026:** `.env` nunca se ha versionado —tampoco en el historial— y no hay claves JWT ni el `LEADS_WEBHOOK_TOKEN` en ningún archivo versionado. Ese script es el único punto.
 
+## 40. Las reglas de seguridad comprobables las comprueba CI, no la memoria
+**Decisión (29 de septiembre de 2026):** RLS obligatorio en toda tabla de `public` y permiso en servidor en toda ruta de la API se verifican en `src/infrastructure/seguridad.test.ts`, que corre con `npm test` en CI. El resto va en el checklist de `flujo-de-trabajo.md` §6, y `AGENTS.md`/`CLAUDE.md` lo ponen delante de cualquier agente (Claude o Codex) que abra el repositorio.
+**Por qué:** Supabase avisó varias veces de que las 29 tablas estaban expuestas por PostgREST sin RLS antes de que alguien lo viera. La norma de "la seguridad la da RLS" estaba escrita en un comentario de `env.ts`, pero ninguna migración la aplicaba. La migración `0001_enable_rls_public_tables.sql` lo corrigió, y la auditoría del mismo día cerró cuatro hallazgos más (cabeceras HTTP, `requireFullScope` en usuarios, último admin, redirección del login).
+**Consecuencia:** una tabla o ruta nueva que se salte la regla rompe el build. Una ruta pública a propósito se declara en `RUTAS_PUBLICAS` con lo que la protege.
+
 ## Estado de implementación de estas decisiones
 **Actualizado el 12 de septiembre de 2026, al arrancar F2.**
 

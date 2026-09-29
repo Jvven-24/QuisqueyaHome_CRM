@@ -150,6 +150,55 @@ pendiente: la prueba de interfaz falla al cambiar de semana con el teclado
 
 El PR se abre solo cuando la fase completa está en verde.
 
+## 6. Seguridad: checklist por tipo de cambio
+
+Nació de un incidente real: el 29/09/2026 Supabase avisó que las 29 tablas de
+`public` no tenían RLS y cualquiera con la anon key podía leerlas y borrarlas
+por PostgREST. La norma existía de palabra, no en el código. Por eso lo que se
+puede comprobar solo, lo comprueba `npm test`; el resto va en esta lista.
+
+### Lo que CI ya bloquea (`src/infrastructure/seguridad.test.ts`)
+
+- Una tabla creada en `drizzle/*.sql` sin `ENABLE ROW LEVEL SECURITY`.
+- Una ruta en `src/app/api/**/route.ts` que no llama a `requireScope` ni a
+  `requireFullScope`. Las rutas públicas a propósito se declaran en
+  `RUTAS_PUBLICAS` junto con lo que las protege (token, Supabase Auth).
+
+Si una de estas pruebas falla, no se "arregla" la prueba: se arregla el código.
+
+### Según lo que toques
+
+| Si el cambio… | Entonces |
+|---|---|
+| Crea una tabla | `.enableRLS()` en su `pgTable` de `schema.ts`, para que la migración generada ya lo incluya. Sin políticas mientras solo la lea Drizzle; si algún día el navegador la lee con supabase-js, se escriben políticas antes de exponerla. |
+| Crea una vista | `WITH (security_invoker = true)`. Las vistas se saltan RLS por defecto. |
+| Crea una función SQL `SECURITY DEFINER` | Nunca en `public` ni en otro esquema expuesto por la API. |
+| Crea una ruta de API | `requireActor` + `requireScope` antes de tocar datos. Si recibe un `:id`, releer la fila con `visibleRows`/`reaches` y responder 404 si no la alcanza. Recursos sin responsable por fila (`users`) usan `requireFullScope`. |
+| Recibe un cuerpo JSON | Esquema Zod y asignación campo por campo al `insert`/`update`; nunca `...body`. |
+| Añade una variable de entorno | Se declara en `infrastructure/env.ts`. `NEXT_PUBLIC_` solo si es pública por diseño. La `service_role` jamás llega a un archivo `"use client"`. |
+| Redirige con un parámetro del usuario | Solo rutas internas: `/^\/(?![/\\])/`. Rechaza `//host`, `/\host` y URLs absolutas. |
+| Sube o sirve archivos | Nombre generado en servidor (`randomUUID`), MIME en lista blanca, bucket privado y URLs firmadas. |
+| Exporta CSV | Pasa por `domain/csv.ts`, que neutraliza fórmulas (`=`, `+`, `-`, `@`). |
+| Autoriza con datos del JWT | Nunca `user_metadata`: lo edita el propio usuario. Se usa `app_metadata` o la tabla `users`. |
+| Pinta HTML | Nada de `dangerouslySetInnerHTML` con datos de usuario. |
+
+### Al cerrar una tanda de trabajo, antes del PR
+
+1. `/security-review` sobre el diff de la rama. Se revisan los hallazgos; los
+   reales se arreglan en la misma tanda.
+2. Si se aplicó una migración a un Supabase real: panel → **Advisors →
+   Security** sin errores, y comprobar con una consulta que ninguna tabla de
+   `public` quedó con `relrowsecurity = false`. `drizzle-kit migrate` puede
+   fallar sin mostrar el error (`errores-conocidos.md`).
+3. Respaldo antes de migrar un entorno con datos (`DESPLIEGUE.md` §4).
+
+### Hábitos que no dependen del código
+
+- Los correos de seguridad de Supabase se leen y se atienden el mismo día. El
+  aviso del RLS llegó varias veces antes de que alguien lo viera.
+- Antes de entregar: cerrar la decisión #39 (credenciales de prueba en
+  `scripts/crear-usuario-prueba.mjs` y sus cuentas en Supabase).
+
 ## El patrón de código
 
 **Lecturas** desde componentes de servidor, **escrituras** por route handlers
@@ -178,6 +227,7 @@ Derivado de `MAPEO_FRONTEND_CRM.md` §16 y `AUDITORIA_FUNCIONAL_CRM.md` §11:
       de `infrastructure/db/client.ts`, con los 8 pasos de §10.2.
 - [ ] Se registra en `audit_log` cuando la acción modifica datos sensibles (T6).
 - [ ] Las métricas que muestra vienen de una consulta, no de una constante.
+- [ ] Pasa el checklist de seguridad (§6) para cada tipo de cambio que hizo.
 
 ## Entornos y despliegue
 
