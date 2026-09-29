@@ -234,6 +234,13 @@ documento por el mismo motivo — evitar que GitHub Actions reciba el PR mal.
 **Por qué:** M7 muestra lo que otros módulos ya producen. Duplicar la invitación habría creado un segundo camino para crear usuarios, con su propia manera de equivocarse.
 **Detalle que muerde:** el universo de la asignación es «proyectos activos y no borrados», el mismo que ve el modal. Si el endpoint mirara más proyectos que la pantalla, un proyecto inactivo asignado al broker se quedaría sin responsable cada vez que alguien guardara la asignación, sin que nadie lo pidiera.
 
+## 39. Ninguna credencial vive en el repositorio
+**Decisión (21 de septiembre de 2026):** las credenciales —y muy especialmente la de administrador— viven solo en la máquina de quien desarrolla, dentro de `.env`, que git ignora. El repositorio no lleva contraseñas, claves ni tokens en texto plano.
+**Por qué:** era una norma que ya se daba por acordada de palabra desde hacía semanas, pero **nunca se había escrito aquí**, y se descubrió el 21/09/2026 al buscarla. Lo que no está escrito se incumple sin que nadie lo note.
+**Estado hoy: incumplida en un punto, a propósito y con fecha de caducidad.** `scripts/crear-usuario-prueba.mjs` trae tres contraseñas en texto plano (líneas 29, 37 y 45), las de `admin.prueba@`, `asistente.prueba@` y `broker.prueba@`. Se mantiene mientras dure el desarrollo porque es la fixture con la que se prueban los flujos de RBAC de punta a punta, con un usuario por rol.
+**Qué hay que hacer antes de entregar:** sacar esas contraseñas a variables de entorno o borrar el script, **y además** eliminar las tres cuentas de `auth.users` y de `users`. Existen de verdad en el proyecto de Supabase hospedado, así que borrar el archivo no cierra la fuga por sí solo. Las contraseñas están también en el historial de git.
+**Lo que sí está limpio, verificado el 21/09/2026:** `.env` nunca se ha versionado —tampoco en el historial— y no hay claves JWT ni el `LEADS_WEBHOOK_TOKEN` en ningún archivo versionado. Ese script es el único punto.
+
 ## Estado de implementación de estas decisiones
 **Actualizado el 12 de septiembre de 2026, al arrancar F2.**
 
@@ -246,5 +253,7 @@ Las decisiones #18–#22 se tomaron al arrancar F1 y están implementadas en sus
 Las decisiones #23–#29 se tomaron al arrancar F2 y están implementadas: **F2 está cerrada** (PR #29, ver `docs/F2_ESTADO.md`).
 
 Las decisiones #32–#38 se toman en F3 y están implementadas en sus cuatro issues (#30 M8, #31 M9, #32 M6, #33 M7) — ver `docs/F3_ESTADO.md` para qué se verificó y cómo.
+
+La #39 se toma el 21 de septiembre de 2026 y está **pendiente a propósito**: se cumple en todo el repositorio menos en `scripts/crear-usuario-prueba.mjs`, que se limpia antes de la entrega.
 
 Lo que sigue siendo cierto del prototipo (`referencia-prototipo/`): su `db/schema.ts` es SQLite, D1 nunca se enlazó, y nada de lo anterior está desplegado ahí. El prototipo es material de consulta, no la base del sistema.

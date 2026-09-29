@@ -52,6 +52,37 @@ Dos listas distintas, y conviene no confundirlas:
   declara `fields` aparte. Si una clase del dominio usa esa forma, las pruebas
   fallan con un error que no menciona la causa.
 
+### Entorno de desarrollo (Windows)
+
+- **`next dev` se queda en `✓ Starting...` para siempre si los archivos de
+  `.next/` son de otro usuario de Windows.** Pasó del 18 al 21 de septiembre de
+  2026 y bloqueó el arranque tres días. El sandbox de Codex corre bajo la cuenta
+  `CodexSandboxOffline`; al ejecutar un build dejó 247 archivos suyos en `.next/`
+  con una ACL que concede a `BUILTIN\Usuarios` solo *Write + ReadAndExecute* —
+  **sin permiso de borrado**. Desde ahí el servidor no llega nunca a `Ready`:
+  gira al 100% de un núcleo reintentando sobrescribir archivos que no puede
+  borrar, y no abre una sola conexión de red. El síntoma —«se queda cargando»—
+  parece lentitud, un Supabase caído o una caché de webpack corrupta, y no es
+  ninguna de las tres: se descartaron las tres por separado antes de dar con
+  esto. Se comprueba con
+  `Get-ChildItem .next -Recurse -File -Force | ForEach-Object { (Get-Acl $_.FullName).Owner } | Group-Object`
+  y se arregla borrando `.next` desde una terminal **elevada** (`takeown /f .next
+  /r /d Y` y luego `Remove-Item .next -Recurse -Force`); sin elevar, el borrado
+  falla con *Permission denied*. **No dejes que Codex ejecute `build` ni `dev` en
+  esta carpeta.**
+- **Un servidor viejo ocupando el 3000 manda el nuevo al 3001, y acabas probando
+  el que no es.** Next no falla: avisa `Port 3000 is in use by process N` en una
+  línea fácil de pasar por alto y sigue adelante. Los síntomas son 404 y 500 en
+  rutas que existen y funcionan. Antes de dar nada por roto, **lee qué puerto
+  imprime la terminal**. La tarea «Liberar puerto 3000» de `.vscode/tasks.json`
+  solo libera el 3000, no el 3001.
+- **Borrar o mover `.next` con el servidor corriendo da 500 con `ENOENT … route.js`.**
+  No es un fallo del código: el proceso conserva en memoria un mapa de archivos
+  que ya no existen. Hay que reiniciarlo.
+- **Referencia de arranque sano:** `Ready` en menos de 4 segundos, y la primera
+  compilación de una página en unos 5. Si tarda más que eso, sospecha de los
+  permisos, no del rendimiento.
+
 ### Operación
 
 - **Las altas de usuario son manuales** (crear en Supabase Auth + `INSERT` en
@@ -59,7 +90,8 @@ Dos listas distintas, y conviene no confundirlas:
 - **`scripts/crear-usuario-prueba.mjs [admin|asistente|broker]` es una fixture
   de desarrollo.** Crea el usuario directamente en `auth.users` porque Supabase
   rechaza los dominios de prueba y un `signUp` con dominio real le mandaría un
-  correo a un tercero. **No se corre en producción.**
+  correo a un tercero. **No se corre en producción.** Y trae las tres contraseñas de
+  prueba en texto plano: hay que limpiarlo antes de entregar (decisión #39).
 - **`Closes #N` no cierra el issue al mergear a `develop`.** GitHub solo cierra
   automáticamente contra la rama por defecto (`main`). Hay que cerrarlos a mano.
 - **Crear una rama nueva por cada fix rompe 2 workflows de GitHub Actions.**
