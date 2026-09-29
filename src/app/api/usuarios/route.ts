@@ -16,7 +16,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
 import { ConflictError } from "@/domain/errors";
-import { requireScope } from "@/domain/rbac";
+import { requireFullScope } from "@/domain/rbac";
 import { BROKER_LEVELS } from "@/domain/catalogs";
 import { adminClient } from "@/infrastructure/auth/supabase";
 import { requireActor } from "@/infrastructure/auth/actor";
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
   try {
     const datos = parseInput(CrearUsuarioInput, limpiarVacios(await request.json().catch(() => ({}))));
     const actor = await requireActor();
-    requireScope(actor, "users", "create");
+    requireFullScope(actor, "users", "create");
 
     const db = getDb();
 

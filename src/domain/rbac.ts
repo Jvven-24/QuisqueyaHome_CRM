@@ -85,6 +85,24 @@ export function requireScope(
 }
 
 /**
+ * Autoriza solo con alcance `all`. Para recursos administrativos (`users`) que
+ * no tienen responsable por fila: con `own`, un usuario "alcanzaría" su propia
+ * fila y podría cambiarse el rol a sí mismo. La garantía vive aquí, no en el
+ * seed.
+ */
+export function requireFullScope(
+  actor: Actor,
+  resource: PermissionResource,
+  action: PermissionAction,
+): void {
+  if (requireScope(actor, resource, action) !== "all") {
+    throw new ForbiddenError(
+      `Solo un alcance total permite ${action} sobre ${resource}.`,
+    );
+  }
+}
+
+/**
  * ¿Alcanza este actor a un registro concreto? Para comprobaciones en memoria
  * (un registro ya cargado, un valor que se va a devolver). El filtrado de
  * listados se hace en SQL — ver `infrastructure/rbac-filter.ts` —, porque traer

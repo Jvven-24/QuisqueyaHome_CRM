@@ -12,7 +12,7 @@
 
 import { eq } from "drizzle-orm";
 import { ConflictError, NotFoundError } from "@/domain/errors";
-import { requireScope } from "@/domain/rbac";
+import { requireFullScope } from "@/domain/rbac";
 import { adminClient } from "@/infrastructure/auth/supabase";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
@@ -26,7 +26,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
     if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
 
     const actor = await requireActor();
-    requireScope(actor, "users", "edit");
+    requireFullScope(actor, "users", "edit");
 
     const db = getDb();
     const [usuario] = await db.select().from(users).where(eq(users.id, id)).limit(1);

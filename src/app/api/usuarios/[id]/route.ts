@@ -2,18 +2,18 @@
  * M13 · Usuarios — edición y borrado lógico (`docs/F2_ANALISIS_Y_PLAN.md`
  * paso 4). Mismo patrón que `api/contactos/[id]/route.ts`.
  *
- * Sin `visibleRows`: no hay alcance `own` sobre `users` en el seed (solo el
- * administrador tiene permiso sobre este recurso) — un actor que llega aquí
- * ya puede ver cualquier usuario, no solo "los suyos".
+ * Sin `visibleRows`: `users` no tiene responsable por fila, así que se exige
+ * alcance `all` (`requireFullScope`). Con `own`, un usuario alcanzaría su propia
+ * fila y podría cambiarse el rol.
  */
 
-import { eq } from "drizzle-orm";
+import { and, count, eq, isNull, ne } from "drizzle-orm";
 import { z } from "zod";
-import { NotFoundError } from "@/domain/errors";
-import { requireScope } from "@/domain/rbac";
+import { ConflictError, NotFoundError } from "@/domain/errors";
+import { requireFullScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
+import { transaction, type Db } from "@/infrastructure/db/client";
 import { brokerProfiles, roles, users } from "@/infrastructure/db/schema";
 import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
 
@@ -28,6 +28,24 @@ const EditarUsuarioInput = z.object({
   monthlyTargetDeals: z.coerce.number().int().nonnegative().optional(),
 });
 
+type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
+
+/** Sin otro admin activo, quitarle el rol o desactivar a este deja el CRM sin nadie que pueda administrarlo. */
+async function exigirOtroAdminActivo(tx: Tx, id: number) {
+  const [fila] = await tx
+    .select({ total: count() })
+    .from(users)
+    .innerJoin(roles, eq(users.roleId, roles.id))
+    .where(and(eq(roles.slug, "admin"), eq(users.isActive, true), isNull(users.deletedAt), ne(users.id, id)));
+  if (!fila?.total) throw new ConflictError("Debe quedar al menos un administrador activo.");
+}
+
+async function esAdminActivo(tx: Tx, usuario: typeof users.$inferSelect) {
+  if (!usuario.isActive || usuario.deletedAt) return false;
+  const [rol] = await tx.select({ slug: roles.slug }).from(roles).where(eq(roles.id, usuario.roleId)).limit(1);
+  return rol?.slug === "admin";
+}
+
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idParam } = await params;
@@ -39,7 +57,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       vaciosANull(await request.json().catch(() => ({})), ["jobTitle", "phone", "specialty"]),
     );
     const actor = await requireActor();
-    requireScope(actor, "users", "edit");
+    requireFullScope(actor, "users", "edit");
 
     const usuario = await transaction(async (tx) => {
       const [anterior] = await tx.select().from(users).where(eq(users.id, id)).limit(1);
@@ -50,6 +68,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         const [rol] = await tx.select({ slug: roles.slug }).from(roles).where(eq(roles.id, datos.roleId)).limit(1);
         rolSlug = rol?.slug;
       }
+
+      const dejaDeSerAdmin = (datos.roleId !== undefined && rolSlug !== "admin") || datos.isActive === false;
+      if (dejaDeSerAdmin && (await esAdminActivo(tx, anterior))) await exigirOtroAdminActivo(tx, id);
 
       const cambios: Partial<typeof users.$inferInsert> = {};
       if (datos.fullName !== undefined) cambios.fullName = datos.fullName;
@@ -96,11 +117,12 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
 
     const actor = await requireActor();
-    requireScope(actor, "users", "delete");
+    requireFullScope(actor, "users", "delete");
 
     await transaction(async (tx) => {
       const [anterior] = await tx.select().from(users).where(eq(users.id, id)).limit(1);
       if (!anterior || anterior.deletedAt) throw new NotFoundError();
+      if (await esAdminActivo(tx, anterior)) await exigirOtroAdminActivo(tx, id);
 
       const [fila] = await tx
         .update(users)
