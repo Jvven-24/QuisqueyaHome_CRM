@@ -6,7 +6,8 @@
  * `WHERE broker_id = ?` propio. Búsqueda, filtro de canal y paginación viven en
  * `searchParams`, no en estado de cliente: la URL es compartible y el filtro se
  * aplica en SQL, que es donde el permiso ya vive (`docs/contexto/decisiones.md`
- * #2). Paginación con `LIMIT`/`OFFSET`, tamaño fijo — nada de cursores.
+ * #2). La consulta vive ahora en `application/contactos/consultas.ts` y su
+ * adaptador; esta página solo parsea la URL y pinta.
  *
  * También resuelve, por `searchParams.contacto`, la ficha lateral: el
  * historial de auditoría (T6, `Historial`) es un componente de servidor, así
@@ -15,19 +16,15 @@
  * pedirlo por su cuenta ni reimplementar lo que `Historial` ya hace.
  */
 
-import { and, count, eq, ilike, isNull, or } from "drizzle-orm";
+import { consultarListadoContactos, TAMANIO_PAGINA_CONTACTOS } from "@/application/contactos/consultas";
 import { scopeFor } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { getDb } from "@/infrastructure/db/client";
-import { contacts, leadSources, roles, users } from "@/infrastructure/db/schema";
+import { contactosParaLectura } from "@/infrastructure/contenedor/contactos";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
-import { visibleRows } from "@/infrastructure/rbac-filter";
 import { Historial } from "../_ui/historial";
 import { ContactosVista } from "./vista";
 
 export const metadata = { title: "Contactos · CRM Quisqueya Home" };
-
-const TAMANIO_PAGINA = 20;
 
 /** `searchParams` puede traer el mismo parámetro repetido; solo interesa el primero. */
 function primero(valor: string | string[] | undefined): string | undefined {
@@ -52,87 +49,25 @@ export default async function ContactosPage({
   const contactoIdParam = Number(primero(params.contacto));
   const contactoId = Number.isFinite(contactoIdParam) && contactoIdParam > 0 ? contactoIdParam : undefined;
 
-  const db = getDb();
-
-  const condiciones = and(
-    visibleRows(actor, scope, contacts.brokerId, contacts.deletedAt),
-    q
-      ? or(
-          ilike(contacts.fullName, `%${q}%`),
-          ilike(contacts.phone, `%${q}%`),
-          ilike(contacts.phoneDisplay, `%${q}%`),
-          ilike(contacts.email, `%${q}%`),
-        )
-      : undefined,
-    sourceId ? eq(contacts.sourceId, sourceId) : undefined,
-  );
-
-  const columnas = {
-    id: contacts.id,
-    fullName: contacts.fullName,
-    phone: contacts.phone,
-    phoneDisplay: contacts.phoneDisplay,
-    email: contacts.email,
-    sourceId: contacts.sourceId,
-    sourceName: leadSources.name,
-    brokerId: contacts.brokerId,
-    brokerName: users.fullName,
-    notes: contacts.notes,
-    lastInteractionAt: contacts.lastInteractionAt,
-  };
-
-  const [filas, totales, canales] = await Promise.all([
-    db
-      .select(columnas)
-      .from(contacts)
-      .leftJoin(leadSources, eq(leadSources.id, contacts.sourceId))
-      .leftJoin(users, eq(users.id, contacts.brokerId))
-      .where(condiciones)
-      .orderBy(contacts.fullName)
-      .limit(TAMANIO_PAGINA)
-      .offset((pagina - 1) * TAMANIO_PAGINA),
-    db.select({ total: count() }).from(contacts).where(condiciones),
-    db
-      .select({ id: leadSources.id, name: leadSources.name })
-      .from(leadSources)
-      .where(eq(leadSources.isActive, true))
-      .orderBy(leadSources.position),
-  ]);
-
-  // La ficha lateral respeta el mismo alcance que el listado: un id fuera del
-  // `visibleRows` del actor no debe filtrarse por la URL.
-  const contactoSeleccionado = contactoId
-    ? (
-        await db
-          .select(columnas)
-          .from(contacts)
-          .leftJoin(leadSources, eq(leadSources.id, contacts.sourceId))
-      .leftJoin(users, eq(users.id, contacts.brokerId))
-          .where(and(eq(contacts.id, contactoId), condiciones))
-          .limit(1)
-      )[0]
-    : undefined;
-
   // Reasignar el responsable es de la deuda de F1 (issue #21), limitada a
   // alcance `all` (decisión de esa deuda): solo entonces vale la pena traer
   // la lista de brokers — evita la consulta en cada visita de un broker con
   // `own`, que nunca vería el selector.
   const puedeReasignar = scopeFor(actor, "contacts", "edit") === "all";
-  const brokers = puedeReasignar
-    ? await db
-        .select({ id: users.id, fullName: users.fullName })
-        .from(users)
-        .innerJoin(roles, eq(roles.id, users.roleId))
-        .where(and(eq(roles.slug, "broker"), eq(users.isActive, true), isNull(users.deletedAt)))
-        .orderBy(users.fullName)
-    : [];
+
+  const { contactos, total, canales, contactoSeleccionado, brokers } = await consultarListadoContactos(
+    contactosParaLectura(),
+    actor,
+    scope,
+    { q, sourceId, pagina, contactoId, incluirBrokers: puedeReasignar },
+  );
 
   return (
     <ContactosVista
-      contactos={filas}
+      contactos={contactos}
       canales={canales}
-      total={totales[0]?.total ?? 0}
-      tamanioPagina={TAMANIO_PAGINA}
+      total={total}
+      tamanioPagina={TAMANIO_PAGINA_CONTACTOS}
       pagina={pagina}
       filtros={{ q, sourceId }}
       contactoSeleccionado={contactoSeleccionado ?? null}
