@@ -40,7 +40,7 @@ Codex) siguen en `docs/contexto/errores-conocidos.md`. Las **decisiones** van en
 | H10 | Datos de prueba dejados en la base | base de datos de desarrollo | Al cerrar la migración | Abierto |
 | H11 | `arquitectura.md` afirmaba tres cosas falsas desde F1 | `docs/contexto/arquitectura.md` | — | **Cerrado** en `b0b4660` |
 | H12 | Cuatro referencias del README apuntaban a archivos de antes de migrar | `src/application/README.md` | — | **Cerrado** en `b0b4660` |
-| H15 | **Un broker puede sobrescribir la «próxima acción» del negocio de otro** | `src/app/api/actividades/route.ts` | **Bloqueante** | Abierto |
+| H15 | **Un broker podía sobrescribir la «próxima acción» del negocio de otro** | `src/app/api/actividades/route.ts` | **Bloqueante** | **Cerrado en parte**: la escritura entre alcances, arreglada; `assigneeId`, `contactId` y `projectId` siguen abiertos para R3.3 |
 | H16 | Reasignar un lead propio no exige alcance `all`; reasignar un contacto sí | `src/app/api/leads/[id]/route.ts` | Decisión de producto | Abierto |
 | H17 | El correo de recuperación apunta a una ruta que no existe | `src/app/api/auth/recuperar/route.ts` | Al cerrar la migración | Abierto |
 | H18 | Una invitación recién enviada se muestra como «Aceptada» | `src/app/api/usuarios/route.ts` | Al cerrar la migración | Abierto |
@@ -292,7 +292,7 @@ diseño que hay que tomar antes, no de paso.
 
 ---
 
-## H15 · Un broker puede sobrescribir la «próxima acción» del negocio de otro — **BLOQUEANTE**
+## H15 · Un broker podía sobrescribir la «próxima acción» del negocio de otro — **BLOQUEANTE, arreglado en parte**
 
 Encontrado al escribir el guion de regresión (R2.1) y **verificado leyendo el
 código**, no solo reportado.
@@ -415,3 +415,39 @@ migración.
    código. Sin comprobar en navegador.
 8. **El doble cierre concurrente de un negocio** no tiene resultado fijado por el
    código, así que el guion no puede exigir uno.
+
+### H15 · Qué se arregló y qué sigue abierto
+
+**Arreglado** (commit de este mismo cambio, en `api/actividades/route.ts`): el
+alcance que devuelve `requireScope` se guarda y **se usa**. Si llega `dealId`, el
+negocio se relee dentro de la transacción filtrando con `visibleRows` y se lanza
+`NotFoundError` si no está en el alcance del actor — el mismo patrón de
+`api/contactos/[id]` y `api/leads/[id]`. Con eso, la escritura de
+`deals.nextActivityId` ya no puede caer en un negocio ajeno.
+
+Se arregló ahora, y no en R3.3, por dos razones: es escritura entre alcances, o
+sea la casilla bloqueante de la decisión #42; y la regla de R3.3 es conservar el
+comportamiento, así que migrar primero habría trasladado el fallo fielmente a la
+arquitectura nueva, donde cuesta más verlo. La decisión 4 del plan permite
+expresamente «arreglos urgentes, que se traen a la rama de integración».
+
+**Sigue abierto, para R3.3, porque son decisiones de producto y no se deciden de
+paso:**
+
+- `assigneeId`: hoy cualquiera puede agendarle una actividad a otra persona. El
+  docblock de la ruta dice que «un administrador con alcance `all` puede agendar
+  una tarea para un broker», lo que sugiere que con alcance `own` no debería,
+  pero no lo dice explícitamente y el código no lo impide. Igualarlo a la regla
+  de contactos (reasignar exige `all`) es lo coherente, pero es una decisión, no
+  un arreglo.
+- `contactId` y `projectId` entran igual de sin comprobar. En contactos el filtro
+  es el mismo `visibleRows`; en proyectos el alcance no es «dueño» sino
+  asignación de proyectos a brokers, así que necesita su propio análisis.
+
+**Lo que sigue sin cubrir: la prueba.** No hay prueba automática de este arreglo.
+El patrón de la casa (`api/metas/route.test.ts`) evita importar un `route.ts`
+porque arrastra `requireActor` y `transaction`, que abren conexión. La prueba
+llega con R3.3, cuando la lógica pase a un caso de uso que se puede montar con
+dobles en memoria: ahí hay que escribir «un actor con alcance `own` no puede
+adjuntar una actividad al negocio de otro». Anotado para que ese issue no lo
+olvide.
