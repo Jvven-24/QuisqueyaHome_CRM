@@ -46,6 +46,12 @@ Codex) siguen en `docs/contexto/errores-conocidos.md`. Las **decisiones** van en
 | H18 | Una invitación recién enviada se muestra como «Aceptada» | `src/app/api/usuarios/route.ts` | Al cerrar la migración | Abierto |
 | H19 | El historial muestra el texto crudo de `asignar` y `descartar` | `src/app/(crm)/_ui/historial.tsx` | Al cerrar la migración | Abierto |
 | H20 | Ocho desajustes menores entre el código, el glosario y los scripts | varios | Al cerrar la migración | Abierto |
+| H21 | **El cambio simple de etapa no bloquea la fila: una pérdida concurrente puede pisar un cierre ya hecho** | `src/application/pipeline/casos-de-uso.ts` | **Sesión propia** | Abierto |
+| H22 | El candado de arquitectura exigía las dos mitades de un módulo a la vez | `src/infrastructure/arquitectura.test.ts` | — | **Cerrado** en R3.1 |
+| H23 | `isPrimary` con `z.coerce.boolean()` convierte la cadena `"false"` en `true` | `src/app/api/pipeline/[id]/propiedades/route.ts` | Al cerrar la migración | Abierto |
+| H24 | `expectedCloseDate` no valida formato: una fecha inválida da 500 | `src/app/api/pipeline/[id]/route.ts` | Al cerrar la migración | Abierto |
+| H25 | El paso 7 cancela las actividades futuras pero no limpia `deals.next_activity_id` | `src/application/pipeline/cierre.ts` | Al cerrar la migración | Abierto |
+| H26 | Cinco comentarios citan `_cierre.ts`, archivo que R3.1 eliminó | `domain/`, `api/metas`, `api/comisiones`, `(crm)/comisiones` | Al cerrar la migración | Abierto |
 | H13 | El CLI de shadcn no funciona en el contenedor: `ui.shadcn.com` da 403 | entorno | Entorno, con rodeo conocido | Abierto |
 | H14 | Las 15 primitivas de shadcn entran sin prueba ni revisión visual | `src/components/ui/` | Revisión visual pendiente | Abierto |
 
@@ -451,3 +457,99 @@ llega con R3.3, cuando la lógica pase a un caso de uso que se puede montar con
 dobles en memoria: ahí hay que escribir «un actor con alcance `own` no puede
 adjuntar una actividad al negocio de otro». Anotado para que ese issue no lo
 olvide.
+
+## H21 · El cambio simple de etapa no bloquea la fila
+
+Encontrado al migrar R3.1. **Es del código original, no lo introduce la
+migración**, y es el hallazgo más serio de los abiertos.
+
+El cierre (`kind === "won"`) tiene tres defensas contra el doble cierre:
+`validarTransicion`, el `SELECT ... FOR UPDATE` y el índice `commissions_deal_unq`.
+La rama del **cambio simple de etapa, incluida la pérdida**, no tiene ninguna: lee
+el negocio sin bloquearlo.
+
+Escenario: dos peticiones casi simultáneas sobre el mismo negocio, una cerrándolo
+como ganado y otra marcándolo como perdido. Las dos leen el negocio cuando todavía
+está `open`, las dos pasan `validarTransicion`, y la pérdida escribe después. El
+negocio queda marcado como perdido **conservando su `closedAt`, su monto y su fila
+en `commissions`**: una comisión pendiente de pago sobre un negocio perdido. Es
+corrupción de datos financieros.
+
+Probabilidad baja —hacen falta dos operaciones a la vez sobre el mismo negocio—,
+impacto alto.
+
+**El arreglo es de una línea**: usar `bloquearNegocio` en lugar de la lectura
+normal también en la rama simple. Pero **no se hizo en R3.1 a propósito**, por dos
+razones:
+
+1. La regla de R3.1 es conservar el comportamiento, y añadir un bloqueo lo cambia.
+   Mezclarlo con la migración hace que una revisión no pueda distinguir «esto lo
+   moví» de «esto lo cambié», que es justo lo que esa regla evita.
+2. Tiene una dimensión que no es solo correctitud: el cambio de etapa es la
+   operación más frecuente del CRM (arrastrar una tarjeta en el kanban), así que
+   bloquear la fila en cada cambio introduce contención donde hoy no la hay. Eso
+   es una decisión, no un arreglo obvio.
+
+Recomendación para la sesión dedicada: aplicarlo, porque la contención sobre una
+fila que se está editando es precisamente lo que se quiere, pero medirlo antes con
+el kanban abierto por dos usuarios. Y escribir la prueba: hoy ninguna cubre esta
+rama, porque en memoria no hay concurrencia (la de `won` se prueba con una perilla
+del doble que simula la carrera; se puede hacer lo mismo aquí).
+
+## H22 · El candado de arquitectura exigía las dos mitades a la vez — **cerrado**
+
+`arquitectura.test.ts` consideraba un módulo migrado en cuanto existía
+`src/application/<modulo>/`, y desde ese momento prohibía el acceso a la base
+tanto en `app/api/<modulo>` como en `app/(crm)/<modulo>`.
+
+Pero el plan migra cada módulo en **dos tiempos**: escrituras en R3 (las rutas) y
+lecturas en R4 (las páginas), en issues distintos y a veces de agentes distintos.
+Al terminar R3.1, el candado empezó a exigir la página de pipeline, que es de R4.1
+y además depende de un issue de Codex. Resultado: `npm test` y el build en rojo
+sin nada que un solo issue pueda arreglar.
+
+Un candado que obliga a romper el build para avanzar se acaba desactivando, así que
+se corrigió en R3.1: ahora mira **qué archivo existe**, no solo la carpeta —
+`casos-de-uso.ts` cierra `app/api/<modulo>`, `consultas.ts` cierra
+`app/(crm)/<modulo>`—, y se endurece en los mismos dos tiempos que el plan. R6.1
+lo pone en modo estricto para todo `src/app/` cuando no quede ninguna mitad sin
+migrar.
+
+Comprobado en los dos sentidos: con un import prohibido plantado en
+`api/pipeline`, la prueba falla; al quitarlo, las 205 vuelven a verde.
+
+## H23 · `isPrimary` convierte la cadena `"false"` en `true`
+
+`z.coerce.boolean()` aplica la conversión de JavaScript: cualquier cadena no vacía
+es `true`, así que `"false"` pasa a `true`. Con un cuerpo JSON que manda un
+booleano de verdad no ocurre, y hoy la vista manda JSON, así que no está
+explotado. Se agrupa al cerrar la migración.
+
+## H24 · `expectedCloseDate` no valida formato
+
+Es `z.string()` sin más, y va a una columna `date`. Una fecha con formato inválido
+llega a Postgres y da un 500 genérico en vez de un 400 con el campo señalado. De
+arreglo conocido (un `z.string().date()` o equivalente); se agrupa al cerrar.
+
+## H25 · El paso 7 no limpia `deals.next_activity_id`
+
+Al cerrar un negocio, el paso 7 cancela sus actividades futuras pendientes, pero
+`deals.next_activity_id` sigue apuntando a una de ellas, ahora cancelada. La
+lectura de la próxima acción ya exige `status === "pending"`, así que la interfaz
+no la muestra como vigente y no hay error visible; queda un puntero muerto. Se
+agrupa al cerrar la migración.
+
+## H26 · Cinco comentarios citan un archivo que ya no existe
+
+R3.1 movió `api/pipeline/[id]/etapa/_cierre.ts` a `src/application/pipeline/cierre.ts`
+y lo eliminó. Cinco docblocks siguen citando la ruta vieja:
+`src/domain/cierre-negocio.ts`, `src/domain/zona-horaria.ts`,
+`src/app/api/metas/route.ts`, `src/app/api/comisiones/[id]/route.ts` y
+`src/app/(crm)/comisiones/page.tsx`.
+
+No rompe nada, pero manda a quien lea a un archivo inexistente. No se arregló en
+R3.1 porque dos de los cinco están en `domain/`, que ese issue no puede tocar, y
+cambiar comentarios de dominio dentro del commit de una migración ensucia
+precisamente el diff que más falta hace poder leer. Se agrupan al cerrar la
+migración, junto con H7 (las referencias `archivo:línea` que caducan): son el mismo
+problema, documentación que apunta a código que se movió.

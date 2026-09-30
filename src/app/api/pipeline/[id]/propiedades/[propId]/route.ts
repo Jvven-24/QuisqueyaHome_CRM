@@ -5,19 +5,15 @@
  *
  * `deal_properties` no tiene `deleted_at` — es una tabla de unión, no una
  * entidad con historial propio (§9 aplica a entidades, no a filas N:M); quitar
- * un interés es un `DELETE` real.
+ * un interés es un `DELETE` real (`quitarPropiedad`).
  */
 
-import { and, eq } from "drizzle-orm";
 import { z } from "zod";
-import { NotFoundError } from "@/domain/errors";
+import { marcarPropiedadPrincipal, quitarPropiedad } from "@/application/pipeline/casos-de-uso";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
-import { dealProperties } from "@/infrastructure/db/schema";
+import { pipelineParaEscritura } from "@/infrastructure/contenedor/pipeline";
 import { errorResponse, idsDeRuta, parseInput } from "@/infrastructure/http";
-import { negocioAbiertoVisible } from "../../_negocio-abierto";
 
 const MarcarPrincipalInput = z.object({ isPrimary: z.literal(true) });
 
@@ -30,21 +26,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
 
-    const fila = await transaction(async (tx) => {
-      await negocioAbiertoVisible(tx, dealId, actor, scope);
+    const propiedad = await marcarPropiedadPrincipal(pipelineParaEscritura(), actor, scope, dealId, propId);
 
-      const [anterior] = await tx.select().from(dealProperties).where(and(eq(dealProperties.id, propId), eq(dealProperties.dealId, dealId))).limit(1);
-      if (!anterior) throw new NotFoundError();
-
-      await tx.update(dealProperties).set({ isPrimary: false }).where(and(eq(dealProperties.dealId, dealId), eq(dealProperties.isPrimary, true)));
-      const [actualizada] = await tx.update(dealProperties).set({ isPrimary: true }).where(eq(dealProperties.id, propId)).returning();
-
-      await auditar(tx, actor, { accion: "editar", entidad: "deal_property", entidadId: propId, antes: anterior, despues: actualizada });
-
-      return actualizada;
-    });
-
-    return Response.json({ ok: true, propiedad: fila });
+    return Response.json({ ok: true, propiedad });
   } catch (error) {
     return errorResponse(error);
   }
@@ -58,16 +42,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
 
-    await transaction(async (tx) => {
-      await negocioAbiertoVisible(tx, dealId, actor, scope);
-
-      const [anterior] = await tx.select().from(dealProperties).where(and(eq(dealProperties.id, propId), eq(dealProperties.dealId, dealId))).limit(1);
-      if (!anterior) throw new NotFoundError();
-
-      await tx.delete(dealProperties).where(eq(dealProperties.id, propId));
-
-      await auditar(tx, actor, { accion: "eliminar", entidad: "deal_property", entidadId: propId, antes: anterior });
-    });
+    await quitarPropiedad(pipelineParaEscritura(), actor, scope, dealId, propId);
 
     return Response.json({ ok: true });
   } catch (error) {

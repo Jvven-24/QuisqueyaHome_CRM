@@ -101,8 +101,27 @@ test("un módulo migrado ya no toca la base desde src/app/", () => {
   const dirApplication = new URL("application/", src);
   const modulos = readdirSync(dirApplication).filter((n) => statSync(new URL(n, dirApplication)).isDirectory());
 
+  /**
+   * Un módulo se migra en **dos tiempos**, como manda el plan (§6): primero sus
+   * escrituras (fase R3: `casos-de-uso.ts`, que consumen las rutas de `api/`) y
+   * después sus lecturas (fase R4: `consultas.ts`, que consumen las páginas de
+   * `(crm)/`). Son issues distintos, y en varios módulos de agentes distintos.
+   *
+   * El candado se endurece en los mismos dos tiempos, y por eso mira qué archivo
+   * existe en vez de solo si existe la carpeta del módulo. La primera versión
+   * exigía las dos mitades en cuanto aparecía `application/<modulo>/`: el issue
+   * de escrituras dejaba entonces esta prueba roja —y con ella el build— hasta
+   * que otro agente migrara la página, que puede depender de issues de terceros.
+   * Un candado que obliga a romper el build para avanzar se acaba desactivando.
+   *
+   * R6.1 lo pone en modo estricto para todo `src/app/`, cuando ya no quede
+   * ninguna mitad sin migrar.
+   */
   const carpetas = modulos
-    .flatMap((modulo) => [`app/api/${modulo}`, `app/(crm)/${modulo}`])
+    .flatMap((modulo) => [
+      ...(existsSync(new URL(`application/${modulo}/casos-de-uso.ts`, src)) ? [`app/api/${modulo}`] : []),
+      ...(existsSync(new URL(`application/${modulo}/consultas.ts`, src)) ? [`app/(crm)/${modulo}`] : []),
+    ])
     .filter((carpeta) => existsSync(new URL(carpeta, src)));
 
   assert.deepEqual(
