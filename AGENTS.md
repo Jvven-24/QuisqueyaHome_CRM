@@ -4,6 +4,16 @@ Next.js 15 · React 19 · TypeScript · Supabase · Drizzle · Zod. El contexto
 completo vive en `docs/contexto/` (arquitectura, convenciones, decisiones,
 flujo de trabajo, errores conocidos). Léelo antes de cambiar código.
 
+## Milestone activo: Reestructuración con metodología SOLID
+
+Si te piden trabajar en este milestone ("crea las issues que te corresponden y
+ponte a trabajar"), sigue `docs/R_ANALISIS_Y_PLAN.md` §9 al pie de la letra:
+identifícate (Claude o Codex), crea solo tus issues a partir de la §7, toma el
+siguiente con las dependencias cerradas y trabaja solo dentro de sus archivos.
+Claude trabaja en esta carpeta; Codex, en el worktree `../crm-codex` (§5).
+Mientras dure el milestone no se añaden funciones nuevas. El diseño visual sale
+de `docs/DESIGN.md`.
+
 ## Seguridad: no negociable
 
 Antes de cerrar cualquier cambio, recorre el checklist de
@@ -30,4 +40,7 @@ flujo en la interfaz. No se abre PR con algo fallando.
 - Codex: no ejecutes `npm run build` ni `npm run dev` en esta carpeta; deja
   archivos en `.next/` que el usuario de Windows no puede borrar
   (`errores-conocidos.md`).
-- No crees ramas nuevas sin que el usuario lo pida.
+- No crees ramas nuevas sin que el usuario lo pida. Excepción: la rama y el
+  worktree de Codex que define `docs/R_ANALISIS_Y_PLAN.md` §5.
+- `docs/contexto/decisiones.md` solo se amplía: se añaden entradas numeradas
+  nuevas y nunca se reescriben ni se borran las anteriores.
