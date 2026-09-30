@@ -52,6 +52,11 @@ Codex) siguen en `docs/contexto/errores-conocidos.md`. Las **decisiones** van en
 | H24 | `expectedCloseDate` no valida formato: una fecha inválida da 500 | `src/app/api/pipeline/[id]/route.ts` | Al cerrar la migración | Abierto |
 | H25 | El paso 7 cancela las actividades futuras pero no limpia `deals.next_activity_id` | `src/application/pipeline/cierre.ts` | Al cerrar la migración | Abierto |
 | H26 | Cinco comentarios citan `_cierre.ts`, archivo que R3.1 eliminó | `domain/`, `api/metas`, `api/comisiones`, `(crm)/comisiones` | Al cerrar la migración | Abierto |
+| H27 | **El webhook repetido sin teléfono ni correo deja contactos huérfanos y audita de más** | `src/app/api/leads/externo/route.ts` | **Sesión propia** (con H21 y H29) | Abierto |
+| H28 | El `SELECT` de respaldo del webhook no filtra `deleted_at` | `src/infrastructure/db/repos/leads.ts` | Al cerrar la migración | Abierto |
+| H29 | La conversión de lead no bloquea la fila: dos conversiones simultáneas, dos negocios | `src/application/leads/conversion.ts` | **Sesión propia** (con H21 y H27) | Abierto |
+| H30 | Dos rutas validan la entrada antes de autenticar: 422 donde debería haber 401 | `api/leads/[id]/descartar`, `api/leads/[id]` | Al cerrar la migración | Abierto |
+| H31 | Los contactos que entran por el webhook nacen sin responsable ni autor | `src/app/api/leads/externo/route.ts` | Decisión de producto | Abierto |
 | H13 | El CLI de shadcn no funciona en el contenedor: `ui.shadcn.com` da 403 | entorno | Entorno, con rodeo conocido | Abierto |
 | H14 | Las 15 primitivas de shadcn entran sin prueba ni revisión visual | `src/components/ui/` | Revisión visual pendiente | Abierto |
 
@@ -553,3 +558,92 @@ cambiar comentarios de dominio dentro del commit de una migración ensucia
 precisamente el diff que más falta hace poder leer. Se agrupan al cerrar la
 migración, junto con H7 (las referencias `archivo:línea` que caducan): son el mismo
 problema, documentación que apunta a código que se movió.
+
+---
+
+## El patrón que dibujan H21, H27 y H29
+
+Los tres salieron de migrar pipeline y leads, y los tres son del código original.
+Vistos juntos dicen algo que ninguno dice por separado:
+
+**El CRM tiene una sola operación defendida contra la concurrencia, y varias de
+la misma forma sin defender.** El cierre de negocio ganado tiene tres defensas
+—`validarTransicion`, `SELECT ... FOR UPDATE` y el índice `commissions_deal_unq`—
+y están documentadas con esmero. Pero el cambio simple de etapa (H21), la
+conversión de lead (H29) y la captura externa sin teléfono ni correo (H27) hacen
+lo mismo: leen, deciden y escriben sin bloquear, en operaciones que crean filas
+financieras o de cartera.
+
+No es descuido de quien escribió el cierre: es que **la defensa se añadió donde
+alguien se paró a pensar en la carrera**, y las demás nunca tuvieron ese momento.
+Ese es el hallazgo real, y es de diseño, no de una línea.
+
+Recomendación para la sesión dedicada: tratarlos como un solo trabajo, no como
+tres arreglos. Decidir una regla —«toda operación que crea una fila de negocio
+bloquea antes la fila de la que depende»— y aplicarla a las tres, con la medida de
+contención que H21 pide. Un arreglo suelto en cada sitio deja el mismo problema
+esperando en el siguiente módulo que se migre.
+
+## H27 · El webhook repetido sin teléfono ni correo deja contactos huérfanos
+
+`externo/route.ts` crea o reutiliza el contacto **antes** del upsert del lead. Si
+la entrega trae teléfono o correo, la reutilización hace que una segunda entrega
+no cree contacto nuevo. Pero **si no trae ninguno de los dos** —y ambos son
+opcionales; solo `fullName` y `externalId` son obligatorios— no hay por dónde
+reutilizar: cada entrega crea un contacto nuevo con su fila de auditoría, y solo
+después el upsert descarta el lead duplicado.
+
+Consecuencia: entregar dos veces el mismo `externalId` sin teléfono ni correo deja
+**un contacto huérfano y una fila de auditoría por entrega**, aunque el lead no se
+duplique. Contradice la idempotencia que promete la decisión #20, que es la razón
+de ser de este endpoint, y ocurre en la **única entrada pública** del sistema.
+
+Arreglo propuesto: al principio de la transacción, comprobar si ya existe un lead
+vivo con ese `externalId` y, si existe, devolverlo con `creado: false` sin tocar
+contactos. El upsert se queda igual: sigue siendo quien cubre la carrera de dos
+primeras entregas simultáneas. Con eso la entrega repetida —el caso real, un
+reintento del portal— pasa a ser idempotente de verdad.
+
+No se arregló en R3.2 porque reordena la transacción y cambia el comportamiento en
+el commit que promete no cambiarlo. Va con H21 y H29.
+
+## H28 · El `SELECT` de respaldo del webhook no filtra `deleted_at`
+
+Cuando el upsert no inserta (ya había un lead vivo con ese `externalId`), el
+respaldo busca por `externalId` sin excluir los borrados. Como
+`leads_external_id_unq` es parcial (`WHERE deleted_at IS NULL`), pueden coexistir
+un lead borrado y uno vivo con el mismo `externalId`, y el `limit(1)` podría
+devolver el borrado. La respuesta llevaría entonces un lead de la papelera.
+Arreglo conocido: añadir `isNull(leads.deletedAt)` a ese `SELECT`.
+
+## H29 · La conversión de lead no bloquea la fila
+
+`[id]/convertir` lee el lead sin `FOR UPDATE`, así que dos conversiones
+simultáneas del mismo lead podrían pasar las dos sus guardas y crear **dos
+negocios** para un lead. Misma clase que H21. Va en la sesión conjunta.
+
+## H30 · Dos rutas validan la entrada antes de autenticar
+
+- `[id]/descartar` valida el motivo antes de `requireActor`: una petición **sin
+  sesión** y sin motivo recibe 422 en vez de 401. Le dice a quien no está
+  autenticado algo sobre la forma del cuerpo que espera el endpoint.
+- `[id]` (asignar) valida el broker contra `candidatosBroker()` antes de leer el
+  lead: un broker inválido da 422 aunque el lead no exista ni esté en el alcance.
+
+Ninguno filtra datos de negocio, pero el orden correcto es autenticar, autorizar y
+después validar. Se conserva tal cual en R3.2 (hay una prueba que lo documenta) y
+se agrupa al cerrar la migración, porque cambiar el orden cambia códigos de
+respuesta y eso hay que hacerlo a la vista, no de paso.
+
+## H31 · Los contactos del webhook nacen sin responsable ni autor
+
+Un contacto creado por la captura externa tiene `brokerId` y `createdBy` nulos, así
+que un broker con alcance `own` **no lo ve** hasta que alguien lo asigne. Puede ser
+deliberado —el lead trae `suggestedBrokerId`, y el reparto es una decisión humana—
+pero no está escrito en ninguna decisión, y explica el «Usuario eliminado» del
+historial que recoge H19.
+
+Nota relacionada: **no existe una edición general de leads**. `api/leads/[id]`
+solo tiene el `PATCH` de asignar responsable. No es un defecto, es funcionalidad
+que no se construyó, y las funciones nuevas están congeladas (decisión 4); se
+anota porque quien busque «editar lead» no lo va a encontrar.
