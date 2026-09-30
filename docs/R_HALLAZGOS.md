@@ -40,6 +40,12 @@ Codex) siguen en `docs/contexto/errores-conocidos.md`. Las **decisiones** van en
 | H10 | Datos de prueba dejados en la base | base de datos de desarrollo | Al cerrar la migración | Abierto |
 | H11 | `arquitectura.md` afirmaba tres cosas falsas desde F1 | `docs/contexto/arquitectura.md` | — | **Cerrado** en `b0b4660` |
 | H12 | Cuatro referencias del README apuntaban a archivos de antes de migrar | `src/application/README.md` | — | **Cerrado** en `b0b4660` |
+| H15 | **Un broker puede sobrescribir la «próxima acción» del negocio de otro** | `src/app/api/actividades/route.ts` | **Bloqueante** | Abierto |
+| H16 | Reasignar un lead propio no exige alcance `all`; reasignar un contacto sí | `src/app/api/leads/[id]/route.ts` | Decisión de producto | Abierto |
+| H17 | El correo de recuperación apunta a una ruta que no existe | `src/app/api/auth/recuperar/route.ts` | Al cerrar la migración | Abierto |
+| H18 | Una invitación recién enviada se muestra como «Aceptada» | `src/app/api/usuarios/route.ts` | Al cerrar la migración | Abierto |
+| H19 | El historial muestra el texto crudo de `asignar` y `descartar` | `src/app/(crm)/_ui/historial.tsx` | Al cerrar la migración | Abierto |
+| H20 | Ocho desajustes menores entre el código, el glosario y los scripts | varios | Al cerrar la migración | Abierto |
 | H13 | El CLI de shadcn no funciona en el contenedor: `ui.shadcn.com` da 403 | entorno | Entorno, con rodeo conocido | Abierto |
 | H14 | Las 15 primitivas de shadcn entran sin prueba ni revisión visual | `src/components/ui/` | Revisión visual pendiente | Abierto |
 
@@ -283,3 +289,129 @@ definida en el plan ni en `DESIGN.md`, y `DESIGN.md` dice que el orden de la
 navegación no cambia entre roles. Agrupar sería inventar una taxonomía, y las
 funciones nuevas están congeladas. Si se quiere agrupar, es una decisión de
 diseño que hay que tomar antes, no de paso.
+
+---
+
+## H15 · Un broker puede sobrescribir la «próxima acción» del negocio de otro — **BLOQUEANTE**
+
+Encontrado al escribir el guion de regresión (R2.1) y **verificado leyendo el
+código**, no solo reportado.
+
+`POST /api/actividades` (`src/app/api/actividades/route.ts`):
+
+1. Llama a `requireScope(actor, "activities", "create")`, pero **descarta el
+   alcance que devuelve**: no lo asigna a ninguna variable.
+2. Acepta `dealId` sin comprobar que ese negocio esté dentro del alcance del
+   actor.
+3. Y al final del `transaction`, cuando la actividad se crea como pendiente:
+   `tx.update(deals).set({ nextActivityId: actividad.id }).where(eq(deals.id, datos.dealId))`
+   — **escribe en cualquier fila de `deals`**, sin `visibleRows` ni `reaches`.
+
+Escenario concreto: un broker con alcance `own` manda
+`POST /api/actividades { "title": "x", "activityType": "call", "dealId": N }` con
+el id de un negocio de otro broker. La actividad se crea y el
+`next_activity_id` del negocio ajeno queda apuntando a ella. El dueño del
+negocio ve como «próxima acción» algo que no agendó y sobre lo que no puede
+actuar.
+
+Por qué no lo atrapó nada: `src/infrastructure/seguridad.test.ts` comprueba que
+cada ruta **llame** a `requireScope`, y esta lo llama. Lo que falta es **usar**
+el alcance, que es precisamente la regla de `AGENTS.md` («las rutas por `:id`
+filtran con `visibleRows`/`reaches`»). Una comprobación de presencia no puede
+detectar un alcance que se pide y se tira.
+
+Tamaño: es escritura entre alcances, o sea corrupción de datos de otro usuario,
+así que entra en la casilla **bloqueante** de la decisión #42. Con dos matices
+honestos: todos los actores son empleados autenticados, no internet anónimo; y no
+hay fuga de lectura —el broker no llega a ver el negocio ajeno—, solo escritura.
+
+Arreglo mínimo y claro: si viene `dealId`, releer el negocio dentro de la
+transacción filtrando con `visibleRows`/`reaches` y lanzar `NotFoundError` si no
+está en el alcance, que es lo que ya hacen `api/contactos/[id]` y
+`api/leads/[id]`.
+
+Dos partes del mismo endpoint que **no** son un arreglo obvio y no deben colarse
+en ese commit, porque son decisiones de producto:
+
+- `assigneeId: datos.assigneeId ?? actor.userId` — ¿puede un broker agendarle
+  una actividad a otra persona? Hoy sí. Puede ser deliberado (una asistente
+  agenda por un broker), pero nadie lo ha decidido por escrito.
+- `contactId` y `projectId` entran igual de sin comprobar. En proyectos el
+  alcance no es «dueño», sino asignación de proyectos a brokers, así que el
+  filtro no es el mismo y merece su propio análisis.
+
+Ambas quedan como preguntas abiertas para **R3.3** (actividades, de Codex), que
+es quien reescribe este endpoint. Aviso importante para ese issue: su regla es
+conservar el comportamiento, así que **si este hallazgo no se arregla antes, la
+migración lo trasladaría fielmente** a la arquitectura nueva y sería más difícil
+de ver.
+
+## H16 · Reasignar un lead propio no exige alcance `all`; reasignar un contacto sí
+
+En `PATCH /api/leads/[id]` el alcance **sí** se aplica:
+`reaches(actor, scope, lead.brokerId)` (`route.ts:47`) impide que un broker toque
+el lead de otro. Lo que puede hacer es **reasignar un lead propio a otro broker**,
+es decir quitárselo de encima.
+
+En contactos eso exige alcance `all` desde la deuda de F1 (issue #21): «reasignar
+el responsable es una decisión de cartera, no de edición de ficha».
+
+No es un fallo de seguridad —el alcance se respeta—, es que **los dos módulos
+aplican reglas distintas a la misma acción**. En leads puede ser deliberado: el
+endpoint existe justamente para asignar, y pasar un lead a un compañero puede ser
+comportamiento de negocio legítimo. Decisión de producto, no bug: si la regla de
+contactos es la buena, leads debería igualarla en R3.2; si la de leads es la
+buena, conviene escribirlo para que nadie lo «arregle» creyendo que falta.
+
+## H17 · El correo de recuperación apunta a una ruta que no existe
+
+`src/app/api/auth/recuperar/route.ts:21` envía el enlace a
+`/recuperar/nueva-clave`, y esa ruta no existe en `src/app`. Quien pida recuperar
+la contraseña recibe un correo que lleva a un 404. Es user-facing y de arreglo
+conocido (crear la página o corregir el destino), pero es **una función que
+falta**, no un cambio de estructura: se agrupa al cerrar la migración para no
+abrir funcionalidad nueva durante el milestone (decisión 4).
+
+## H18 · Una invitación recién enviada se muestra como «Aceptada»
+
+`api/usuarios` guarda `auth_user_id` en el momento de **enviar** la invitación,
+no cuando el usuario la acepta, así que la interfaz la muestra como aceptada sin
+que nadie haya entrado. «Pendiente» solo aparece si el envío falló, que es justo
+al revés de lo que el usuario espera. Toca `api/usuarios` (**R3.5**, de Codex) y
+la vista de configuración (**R5.7**).
+
+## H19 · El historial muestra el texto crudo de dos acciones
+
+`src/app/(crm)/_ui/historial.tsx` no tiene etiqueta legible para las acciones
+`asignar` ni `descartar`, y pinta el identificador en crudo. Además, los leads que
+entran por el webhook público aparecen con autor «Usuario eliminado», porque su
+auditoría se guarda con `user_id` nulo: no hay usuario detrás, es una captura
+externa, y la interfaz no distingue «nadie» de «borrado». El historial pasa a una
+consulta compartida en **R4.3**.
+
+## H20 · Ocho desajustes menores entre el código, el glosario y los scripts
+
+Ninguno rompe nada; se agrupan para tacharlos de una pasada al cerrar la
+migración.
+
+1. **Ninguna pantalla envía `dealId`** al crear una actividad, así que las reglas
+   de etapa Contactado y Presentación no se pueden cumplir desde la interfaz. El
+   guion las ejecuta por consola. (Relacionado con H15: el campo existe en la API
+   y nadie lo usa desde la interfaz.)
+2. **El usuario broker de prueba** de `scripts/crear-usuario-prueba.mjs` no
+   recibe fila en `broker_profiles`, así que no sale en `/brokers` ni `/metas` ni
+   es asignable a un lead hasta que se le edita desde la interfaz.
+3. **El glosario dice que la asistente no ve** pipeline, propiedades, comisiones
+   ni reportes, pero `db/seed.sql` le da `view all` en los cuatro. Uno de los dos
+   está mal y hay que decidir cuál.
+4. **Restaurar un usuario de la papelera** lo devuelve como «Inactivo»: eliminar
+   lo desactiva y restaurar solo quita la marca de borrado.
+5. **Los parámetros de URL no son uniformes**: cada módulo usa el suyo
+   (`?contacto=`, `?lead=`, `?deal=`), y ninguna página usa `?id=`.
+6. **El aviso de duplicado lista contactos de toda la cartera**, también los que
+   un broker no puede ver. Es la decisión #19 y es deliberado, pero conviene
+   comprobar en navegador qué datos del contacto ajeno se enseñan.
+7. **Un lead registrado por un broker** no aparece en su propia lista, según el
+   código. Sin comprobar en navegador.
+8. **El doble cierre concurrente de un negocio** no tiene resultado fijado por el
+   código, así que el guion no puede exigir uno.
