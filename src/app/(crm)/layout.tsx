@@ -10,14 +10,29 @@
  * El grupo de rutas `(crm)` no aparece en la URL: sirve para que este shell
  * envuelva a los 15 módulos y no a `/login`.
  *
- * Las clases (`.app-shell`, `.app-sidebar`, `.sidebar-head`, `.nav-link`,
- * `.sidebar-profile`, `.workspace`, `.app-header`, `.page`) vienen de
- * `src/app/globals.css`, portado en T5 desde el prototipo aprobado. El enlace
- * activo se resuelve en `./nav-link.tsx`, el único fragmento de cliente de
- * este árbol — el layout en sí sigue siendo servidor.
+ * R5.1 (etapa B): el shell usa el `Sidebar` de shadcn/ui y clases semánticas
+ * de los tokens (`bg-sidebar`, `text-sidebar-foreground`…). La ÚNICA clase de
+ * `globals.css` que se conserva es `.page` en el contenedor del contenido: las
+ * vistas hijas siguen sin migrar y dependen de su ancho máximo y su margen
+ * (se retira en R5.8). El enlace activo se resuelve en `./nav-link.tsx` y el
+ * cierre de sesión en `./logout-button.tsx`, los únicos fragmentos de cliente
+ * propios del shell — el layout en sí sigue siendo servidor.
  */
 
 import { redirect } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { can } from "@/domain/rbac";
 import { getActor } from "@/infrastructure/auth/actor";
 import { LogoutButton } from "./logout-button";
@@ -45,50 +60,82 @@ export default async function CrmLayout({
   const etiquetaRol = ETIQUETAS_ROL[actor.roleSlug] ?? actor.roleSlug;
 
   return (
-    <div className="app-shell">
-      <aside className="app-sidebar">
-        <div className="sidebar-head">
-          <div className="brand-lockup" aria-label="Quisqueya Home">
-            <span className="brand-mark">QH</span>
-            <span>
-              <strong>Quisqueya</strong>
-              <small>Home CRM</small>
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader className="border-b border-sidebar-border px-5 py-5">
+          <div className="flex items-center gap-3" aria-label="Quisqueya Home">
+            <span
+              aria-hidden="true"
+              className="flex size-11 shrink-0 items-center justify-center rounded-full bg-sidebar-primary font-heading text-lg font-extrabold tracking-tighter text-sidebar-primary-foreground"
+            >
+              QH
+            </span>
+            <span className="grid leading-none">
+              <strong className="font-heading text-lg font-bold tracking-wide text-sidebar-accent-foreground uppercase">
+                Quisqueya
+              </strong>
+              <small className="mt-1.5 text-[13px] tracking-[0.19em] text-sidebar-primary uppercase">
+                Home CRM
+              </small>
             </span>
           </div>
-        </div>
+        </SidebarHeader>
 
-        <nav aria-label="Módulos del CRM">
-          {visibles.map((modulo, indice) => (
-            <NavLink
-              key={modulo.ruta}
-              ruta={modulo.ruta}
-              nombre={modulo.nombre}
-              indice={indice}
-            />
-          ))}
-        </nav>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <nav aria-label="Módulos del CRM">
+                <SidebarMenu>
+                  {visibles.map((modulo, indice) => (
+                    <NavLink
+                      key={modulo.ruta}
+                      ruta={modulo.ruta}
+                      nombre={modulo.nombre}
+                      indice={indice}
+                    />
+                  ))}
+                </SidebarMenu>
+              </nav>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
 
-        <div className="sidebar-profile">
-          <span className="avatar avatar-small" aria-hidden="true">
-            {etiquetaRol.slice(0, 2).toUpperCase()}
-          </span>
-          <span>
-            <strong>{etiquetaRol}</strong>
-            <small>Sesión activa</small>
-          </span>
-          <LogoutButton />
-        </div>
-      </aside>
+        <SidebarFooter className="border-t border-sidebar-border p-3.5">
+          <div className="flex items-center gap-2.5">
+            <span
+              aria-hidden="true"
+              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-[13px] font-bold text-secondary-foreground"
+            >
+              {etiquetaRol.slice(0, 2).toUpperCase()}
+            </span>
+            <span className="grid min-w-0 flex-1">
+              <strong className="truncate text-sm font-semibold text-sidebar-accent-foreground">
+                {etiquetaRol}
+              </strong>
+              <small className="text-[13px] text-sidebar-meta">Sesión activa</small>
+            </span>
+            <LogoutButton />
+          </div>
+        </SidebarFooter>
+      </Sidebar>
 
-      <div className="workspace">
-        <header className="app-header">
-          <span className="eyebrow">Panel de trabajo</span>
-          <div className="header-actions">
-            <span className="badge badge-neutral">{etiquetaRol}</span>
+      <div className="min-w-0 flex-1">
+        <header className="sticky top-0 z-10 flex h-18 items-center justify-between border-b border-border bg-card/95 px-4 md:px-7">
+          <div className="flex items-center gap-3">
+            <SidebarTrigger className="md:hidden" />
+            <span className="text-[13px] font-bold tracking-[0.11em] text-muted-foreground uppercase">
+              Panel de trabajo
+            </span>
+          </div>
+          <div className="flex items-center gap-3.5">
+            <Badge variant="secondary">{etiquetaRol}</Badge>
           </div>
         </header>
+        {/* `.page` es de globals.css (máx. 1680 px, márgenes 32/20/14): las
+            vistas hijas lo esperan. Se retira en R5.8. */}
         <main className="page">{children}</main>
       </div>
-    </div>
+      <Toaster />
+    </SidebarProvider>
   );
 }
