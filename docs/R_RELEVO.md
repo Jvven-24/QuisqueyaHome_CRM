@@ -19,7 +19,7 @@ Diseño que lo gobierna:
 | **Rama** | `dev/reestructuracion-solid` |
 | **Fecha** | 2026-10-02 |
 | **Fase** | R3 (casos de uso de escritura), **6 de 7 issues cerrados** |
-| **Pruebas** | **301 en verde**, `typecheck`, `lint` y `build` limpios |
+| **Pruebas** | **305 en verde**, `typecheck`, `lint` y `build` limpios |
 
 ### Módulos ya migrados a `src/application/`
 
@@ -142,9 +142,14 @@ abierto en dos adaptadores ya migrados**:
 - `repos/leads.ts`: el `onConflictDoNothing` del webhook con su
   `where: isNull(leads.deletedAt)`.
 
-Quien siga: extender esa guarda a esos dos es trabajo de pruebas, sin riesgo de
-comportamiento, y conviene hacerlo **antes de R4 y R5**, porque cada módulo nuevo
-añade otra línea cuya desaparición nadie vería.
+**Ya está hecho**: las cuatro garantías tienen su guarda y las cuatro se
+comprobaron por mutación (cada una cae por su nombre al romper lo que vigila).
+H33 queda cerrado en los tres adaptadores.
+
+Regla que deja para quien siga: **todo módulo que migre una garantía que no se
+pueda observar con dobles en memoria —un bloqueo, un upsert atómico, un predicado
+de índice parcial, una zona horaria en SQL— añade su guarda de lectura de código
+en el mismo commit.** Es parte del patrón, no un extra.
 
 Y una deuda concreta que **R4.3 debe deshacer**: `exportarComisionesCsv` recibe
 la consulta de filas como dependencia (`leerFilas`) porque `consultarFilas` vive

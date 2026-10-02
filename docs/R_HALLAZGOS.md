@@ -58,7 +58,7 @@ Codex) siguen en `docs/contexto/errores-conocidos.md`. Las **decisiones** van en
 | H30 | Dos rutas validan la entrada antes de autenticar: 422 donde debería haber 401 | `api/leads/[id]/descartar`, `api/leads/[id]` | Al cerrar la migración | Abierto |
 | H31 | Los contactos que entran por el webhook nacen sin responsable ni autor | `src/app/api/leads/externo/route.ts` | Decisión de producto | Abierto |
 | H32 | Editar una actividad puede reapuntarla al negocio de otro broker | `src/application/actividades/casos-de-uso.ts` | Al cerrar la migración | Abierto |
-| H33 | **Nuestra red de pruebas no ve si un bloqueo de fila desaparece** | `src/infrastructure/db/repos/{pipeline,leads}.ts` | **Sesión propia** (pequeña) | Abierto en pipeline y leads; **cerrado en comisiones** (R3.6) |
+| H33 | **Nuestra red de pruebas no veía si un bloqueo de fila desaparecía** | `repos/{comisiones,pipeline,leads}.ts` | — | **Cerrado** en los tres adaptadores |
 | H34 | La auditoría de metas lee el estado anterior fuera del upsert | `src/application/metas/casos-de-uso.ts` | Al cerrar la migración | Abierto |
 | H35 | Asignar proyectos a un broker no bloquea filas: gana el último | `src/application/brokers/casos-de-uso.ts` | Al cerrar la migración | Abierto |
 | H36 | La consulta del CSV carga todas las propiedades principales, no las filtradas | `src/app/(crm)/comisiones/_consulta.ts` | Al cerrar la migración | Abierto |
@@ -774,3 +774,25 @@ ni sin borrar. El módulo de brokers sí lo valida al asignar proyectos, así qu
 los dos módulos aplican criterios distintos a la misma pregunta. Decisión de
 producto más que fallo: puede tener sentido conservar la meta histórica de alguien
 que se fue.
+
+### H33 · Cerrado en los tres adaptadores
+
+Las cuatro garantías que quedaban sin vigilar ya tienen su guarda, con la técnica
+de leer el código del adaptador y quitarle los comentarios antes de afirmar — un
+docblock que mencione `for("update")` no es un bloqueo:
+
+| Guarda | Qué exige | Si desaparece |
+|---|---|---|
+| `pipeline/cierre.test.ts` | un solo `.for("update")`, el de `bloquearNegocio` | el doble cierre pierde su segunda defensa de tres |
+| `pipeline/cierre.test.ts` | `targetWhere: sql\`${goals.brokerId} is null\`` y las dos ramas del upsert | Postgres responde «no unique or exclusion constraint» y el cierre falla con un 500 |
+| `pipeline/cierre.test.ts` | `at time zone 'America/Santo_Domingo'` | vuelve el issue #24: un cierre nocturno cuenta en el año siguiente y el nivel del broker sale mal |
+| `leads/casos-de-uso.test.ts` | el `onConflictDoNothing` con `where: isNull(leads.deletedAt)`, y que no reaparezca `buscarPorExternalId` | la captura externa duplica leads en cada reintento del portal, contra la decisión #20 |
+
+Comprobadas por mutación una por una: cada una cae con su propio nombre al
+romper lo que vigila, y al restaurar vuelven las 305 en verde. Ninguna guarda
+cuenta hasta que se la ha visto fallar.
+
+Queda dicho para quien siga: **todo módulo que migre una garantía que no se pueda
+observar con dobles en memoria —un bloqueo, un upsert atómico, un predicado de
+índice parcial, una zona horaria en SQL— añade su guarda de lectura de código en
+el mismo commit.** Es parte del patrón, no un extra.
