@@ -18,22 +18,21 @@ Diseño que lo gobierna:
 |---|---|
 | **Rama** | `dev/reestructuracion-solid` |
 | **Fecha** | 2026-10-02 |
-| **Fase** | R3 (casos de uso de escritura), **6 de 7 issues cerrados** |
-| **Pruebas** | **305 en verde**, `typecheck`, `lint` y `build` limpios |
+| **Fase** | **R3 CERRADA**, 7 de 7. Siguiente: R4 (consultas de lectura) |
+| **Pruebas** | **334 en verde**, `typecheck`, `lint` y `build` limpios |
 
 ### Módulos ya migrados a `src/application/`
 
 `contactos` (R1.3, piloto) · `pipeline` (R3.1) · `leads` (R3.2) ·
 `actividades` (R3.3) · `proyectos` (R3.4) · `usuarios` y `roles` (R3.5) ·
-`comisiones`, `metas` y `brokers` (R3.6)
+`comisiones`, `metas` y `brokers` (R3.6) ·
+`catalogos`, `etapas` y `papelera` (R3.7)
 
 Todos integrados en la rama: comprobado con `git merge-base --is-ancestor`.
 
 ### Lo que falta de la reestructuración
 
-- **R3.7** (#51) — catálogos, etapas y papelera con repositorio genérico.
-  **Es el siguiente**, y con él cierra la fase R3.
-- **R4.1 a R4.3** (#52, #53, #54) — consultas de lectura.
+- **R4.1 a R4.3** (#52, #53, #54) — consultas de lectura. **R4.1 es el siguiente.**
 - **R5.2 a R5.8** (#55 a #60, #44) — migración de vistas a Tailwind v4 + shadcn.
 - **R6.1** (#45) — cierre y PR a `develop`.
 

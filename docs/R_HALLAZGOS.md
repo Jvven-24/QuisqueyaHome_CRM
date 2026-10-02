@@ -64,6 +64,9 @@ Codex) siguen en `docs/contexto/errores-conocidos.md`. Las **decisiones** van en
 | H36 | La consulta del CSV carga todas las propiedades principales, no las filtradas | `src/app/(crm)/comisiones/_consulta.ts` | Al cerrar la migración | Abierto |
 | H37 | Los montos del CSV salen como texto, contra lo que `csv.ts` documenta | `src/application/comisiones/casos-de-uso.ts` | Al cerrar la migración | Abierto |
 | H38 | Se puede fijar meta a un broker inactivo o borrado | `src/application/metas/casos-de-uso.ts` | Al cerrar la migración | Abierto |
+| H39 | **El sufijo del slug de catálogo puede colisionar y dar un 500** | `src/infrastructure/db/repos/catalogos.ts` | Al cerrar la migración | Abierto |
+| H40 | El `like` del slug base interpreta `_` y `%` como comodines | `src/infrastructure/db/repos/catalogos.ts` | Al cerrar la migración | Abierto, hoy inalcanzable |
+| H41 | Un comentario de configuración cita `_tablas.ts`, que R3.7 eliminó | `src/app/(crm)/configuracion/_catalogos.tsx` | Al cerrar la migración | Abierto |
 | H13 | El CLI de shadcn no funciona en el contenedor: `ui.shadcn.com` da 403 | entorno | Entorno, con rodeo conocido | Abierto |
 | H14 | Las 15 primitivas de shadcn entran sin prueba ni revisión visual | `src/components/ui/` | Revisión visual pendiente | Abierto |
 
@@ -796,3 +799,38 @@ Queda dicho para quien siga: **todo módulo que migre una garantía que no se pu
 observar con dobles en memoria —un bloqueo, un upsert atómico, un predicado de
 índice parcial, una zona horaria en SQL— añade su guarda de lectura de código en
 el mismo commit.** Es parte del patrón, no un extra.
+
+## H39 · El sufijo del slug de catálogo puede colisionar y dar un 500
+
+Al crear un catálogo con un nombre cuyo slug ya existe, el sufijo se calcula como
+**el número de coincidencias más uno**. Eso supone que los sufijos existentes son
+consecutivos, y no tienen por qué serlo.
+
+Escenario concreto y alcanzable: existen `referido` y `referido-3` (porque
+`referido-2` se borró, o porque alguien escribió el nombre a mano). Hay dos
+coincidencias, así que el siguiente sería `referido-3` — que ya existe. El índice
+único `*_slug_unq` lo rechaza y el usuario recibe un **500** genérico en vez de un
+alta correcta.
+
+Preexistente, no lo introduce la migración. Arreglo conocido: en vez de contar,
+buscar el primer sufijo libre, o dejar que el índice único rechace y reintentar.
+Hay una prueba del caso normal, así que el arreglo tendrá dónde apoyarse.
+
+## H40 · El `like` del slug base trata `_` y `%` como comodines
+
+La consulta que busca slugs parecidos usa `like(slug, base)` sin escapar, así que
+un `_` o un `%` en el slug base actuarían como comodines y contarían
+coincidencias que no lo son. **Hoy es inalcanzable**: `slugify` no genera ninguno
+de los dos caracteres. Se anota porque el día que `slugify` cambie, esto se
+convierte en H39 con otra cara.
+
+## H41 · Un comentario de configuración cita un archivo que R3.7 eliminó
+
+`src/app/(crm)/configuracion/_catalogos.tsx:12` cita
+`api/catalogos/[tipo]/_tablas.ts`, que R3.7 eliminó al mover el mapa de tablas a
+`infrastructure/db/repos/catalogos.ts`. No es un import —no rompe nada—, pero
+manda a quien lea a un archivo inexistente.
+
+No se arregló en R3.7 porque ese archivo es de R4.3/R5.7. Va con H26 y H7 al
+cierre de la migración: los tres son el mismo problema, documentación que apunta
+a código que se movió.

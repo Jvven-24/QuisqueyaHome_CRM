@@ -10,19 +10,18 @@
  * administrador tiene `delete` en ningún recurso salvo el suyo propio, así
  * que separar el permiso por entidad no cambia quién puede usarla hoy. Si
  * algún día el asistente gana `delete` sobre `contacts`, aquí es donde se
- * ajusta: un `requireScope(actor, TABLAS_PAPELERA[entityType].recurso,
- * "delete")` en vez del `settings` fijo.
+ * ajusta: un `requireScope(actor, <recurso de la entidad>, "delete")` en vez
+ * del `settings` fijo (el mapa entidad → tabla vive ahora en
+ * el adaptador de papelera, en la carpeta de repos; el recurso por entidad
+ * habría que declararlo en esta ruta).
  */
 
-import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { NotFoundError } from "@/domain/errors";
+import { restaurarDePapelera } from "@/application/papelera/casos-de-uso";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
+import { papeleraParaEscritura } from "@/infrastructure/contenedor/papelera";
 import { errorResponse, parseInput } from "@/infrastructure/http";
-import { TABLAS_PAPELERA } from "../_tablas";
 
 const RestaurarInput = z.object({
   entityType: z.enum(["contact", "lead", "deal", "project", "unit", "user"]),
@@ -35,18 +34,7 @@ export async function POST(request: Request) {
     const actor = await requireActor();
     requireScope(actor, "settings", "edit");
 
-    const tabla = TABLAS_PAPELERA[datos.entityType];
-
-    const fila = await transaction(async (tx) => {
-      const [anterior] = await tx.select().from(tabla).where(eq(tabla.id, datos.id)).limit(1);
-      if (!anterior || !("deletedAt" in anterior) || anterior.deletedAt === null) throw new NotFoundError();
-
-      const [restaurada] = await tx.update(tabla).set({ deletedAt: null }).where(eq(tabla.id, datos.id)).returning();
-
-      await auditar(tx, actor, { accion: "restaurar", entidad: datos.entityType, entidadId: datos.id, antes: anterior, despues: restaurada });
-
-      return restaurada;
-    });
+    const fila = await restaurarDePapelera(papeleraParaEscritura(), actor, datos.entityType, datos.id);
 
     return Response.json({ ok: true, fila });
   } catch (error) {

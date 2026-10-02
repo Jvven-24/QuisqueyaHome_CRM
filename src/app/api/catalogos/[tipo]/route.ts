@@ -1,18 +1,19 @@
 /**
- * M13 · Catálogos — alta (`docs/F2_ANALISIS_Y_PLAN.md` paso 5). Ver
- * `./_tablas.ts` para por qué motivos de pérdida y canales comparten ruta.
+ * M13 · Catálogos — alta (`docs/F2_ANALISIS_Y_PLAN.md` paso 5). Motivos de
+ * pérdida y canales comparten ruta: tienen la forma exacta (`slug`, `name`,
+ * `position`, `isActive`), así que un solo par de route handlers parametrizados
+ * por `[tipo]`. El caso de uso y el repositorio son genéricos
+ * (`application/catalogos/`).
  */
 
-import { like, or } from "drizzle-orm";
 import { z } from "zod";
+import { crearEntradaCatalogo, esTipoCatalogo } from "@/application/catalogos/casos-de-uso";
+import type { EntradaCrearCatalogo } from "@/application/catalogos/casos-de-uso";
 import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
-import { slugify } from "@/domain/slug";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
+import { catalogosParaEscritura } from "@/infrastructure/contenedor/catalogos";
 import { errorResponse, parseInput } from "@/infrastructure/http";
-import { resolverCatalogo } from "./_tablas";
 
 const CrearEntradaInput = z.object({
   name: z.string({ error: "Escribe el nombre." }).min(1, "Escribe el nombre."),
@@ -22,30 +23,16 @@ const CrearEntradaInput = z.object({
 export async function POST(request: Request, { params }: { params: Promise<{ tipo: string }> }) {
   try {
     const { tipo } = await params;
-    const catalogo = resolverCatalogo(tipo);
-    if (!catalogo) throw new NotFoundError("Catálogo no reconocido.");
+    if (!esTipoCatalogo(tipo)) throw new NotFoundError("Catálogo no reconocido.");
 
     const datos = parseInput(CrearEntradaInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
     requireScope(actor, "settings", "create");
 
-    const resultado = await transaction(async (tx) => {
-      const base = slugify(datos.name) || "elemento";
-      // Mismo criterio que `api/proyectos/route.ts`: catálogos pequeños,
-      // administrados por una sola persona a la vez, no hace falta más que
-      // contar coincidencias dentro de la transacción.
-      const existentes = await tx
-        .select({ slug: catalogo.tabla.slug })
-        .from(catalogo.tabla)
-        .where(or(like(catalogo.tabla.slug, base), like(catalogo.tabla.slug, `${base}-%`)));
-      const slug = existentes.length === 0 ? base : `${base}-${existentes.length + 1}`;
+    const entrada: EntradaCrearCatalogo = { name: datos.name };
+    if (datos.position !== undefined) entrada.position = datos.position;
 
-      const [fila] = await tx.insert(catalogo.tabla).values({ slug, name: datos.name, position: datos.position ?? 0 }).returning();
-
-      await auditar(tx, actor, { accion: "crear", entidad: catalogo.entidad, entidadId: fila!.id, despues: fila });
-
-      return fila!;
-    });
+    const resultado = await crearEntradaCatalogo(catalogosParaEscritura(), actor, tipo, entrada);
 
     return Response.json({ ok: true, entrada: resultado });
   } catch (error) {
