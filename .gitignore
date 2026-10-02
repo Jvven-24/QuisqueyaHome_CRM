@@ -22,3 +22,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Vitrina de pruebas de Codex (worktree ../crm-codex)
+hallazgos/
+.playwright-cli/

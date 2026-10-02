@@ -56,9 +56,10 @@ VPS para validación por módulos con el cliente (decisión #17).
 
 ### Cómo trabajar
 
-1. **Vitrina:** `D:\ViltrumTEK\Quisqueya_Home\crm-codex`, clavada a un commit ya
-   verificado, con el servidor corriendo en `http://localhost:3000`. Si no
-   responde, dilo y para: no lo levantes tú.
+1. **Vitrina:** `D:\ViltrumTEK\Quisqueya_Home\crm-codex`, clavada al commit
+   `bfc3228`, con el servidor corriendo en **`http://localhost:3001`**. (El 3000
+   es el servidor del usuario; no lo toques.) Si el 3001 no responde, dilo y
+   para: **no lo levantes tú**.
 2. **Guion:** `docs/R_REGRESION.md` tiene el recorrido de los 13 módulos. Haz el
    del módulo que toca, y después sal del guion a propósito: entra con un
    usuario de alcance `own` donde debería ver solo lo suyo, manda formularios
