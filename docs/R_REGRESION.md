@@ -191,9 +191,9 @@ y es parcial: el usuario verificó cuatro comprobaciones el 30 de septiembre de
 | Módulo | Fecha de la línea base | Resultado | Quién |
 |---|---|---|---|
 | contactos | 2026-09-30 | **PASS** en CON-2, CON-5 y CON-9 · **PARCIAL** en CON-8 (el bloqueo visual está confirmado; el 403 por llamada directa sigue pendiente). Resto de flujos de contactos: pendiente | El usuario, a mano en el navegador |
-| leads | pendiente | pendiente | pendiente |
-| pipeline | pendiente | pendiente | pendiente |
-| actividades | pendiente | pendiente | pendiente |
+| leads | 2026-10-02 | **PASS de interfaz (smoke):** bandeja, filtros, ficha, asignación y acciones Convertir/Descartar visibles y operables. Captura externa, idempotencia y resultado transaccional quedan pendientes de la variante API/completa | Codex, a mano en el navegador |
+| pipeline | 2026-10-02 | **PASS de interfaz (smoke):** tablero, filtros, tarjetas, ficha, propiedades y selector de etapa visibles y operables. Cierre de 8 pasos, pérdida con motivo y efectos en metas/comisiones quedan pendientes de la ejecución completa | Codex, a mano en el navegador |
+| actividades | 2026-10-02 | **PASS de interfaz (smoke):** listado, creación y completar tarea verificados; edición, borrado y exportación ICS quedan pendientes de la ejecución completa | Codex, a mano en el navegador |
 | proyectos | pendiente | pendiente | pendiente |
 | usuarios | pendiente | pendiente | pendiente |
 | comisiones | pendiente | pendiente | pendiente |
