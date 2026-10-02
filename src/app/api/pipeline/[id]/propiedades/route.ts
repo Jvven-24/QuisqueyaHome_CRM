@@ -3,34 +3,23 @@
  * #21). Sin esto, un negocio no podía cumplir por su cuenta el requisito de
  * §10.1 para → Preselección («al menos una fila en `deal_properties`»).
  *
- * `unitId` es opcional (el esquema permite interés a nivel de proyecto sin
- * unidad, decisión #4); marcar `isPrimary` en la misma llamada desmarca
- * cualquier otra fila del negocio que ya lo fuera — un negocio tiene como
- * mucho una unidad principal, nunca dos.
+ * Las verificaciones (negocio abierto y visible, proyecto dentro del alcance
+ * sobre `projects`, unidad del proyecto) y la regla de la unidad principal viven
+ * en `asociarPropiedad` (`application/pipeline/casos-de-uso.ts`).
  *
- * `projectId` y `unitId` se verifican antes de insertar (hallazgo P2): sin
- * esto, un `unitId` de otro proyecto pasaba tal cual, y el cierre transaccional
- * (`etapa/_cierre.ts` paso 3) marca esa unidad como vendida solo por su id —
- * cerraría un negocio contra el inventario equivocado.
- *
- * El proyecto además tiene que estar dentro del alcance del actor sobre
- * `projects` (`visibleRows`, R6), no solo existir (hallazgo de la revisión
- * del PR #29): `deals:edit` autoriza a tocar el negocio, no a usar
- * proyectos ajenos — un broker con `projects:view own` no debe poder asociar
- * a su negocio el proyecto de otro solo porque sabe su id.
+ * Aquí se piden los dos permisos: `deals:edit` autoriza a tocar el negocio, y
+ * `projects:view` fija el alcance con el que se puede usar un proyecto. Son dos
+ * permisos distintos; `requireScope` y no `scopeFor` porque sin ningún alcance
+ * sobre proyectos no hay nada legítimo que asociar.
  */
 
-import { and, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
+import { asociarPropiedad, type EntradaAsociarPropiedad } from "@/application/pipeline/casos-de-uso";
 import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
-import { dealProperties, projects, units } from "@/infrastructure/db/schema";
+import { pipelineParaEscritura } from "@/infrastructure/contenedor/pipeline";
 import { errorResponse, parseInput } from "@/infrastructure/http";
-import { visibleRows } from "@/infrastructure/rbac-filter";
-import { negocioAbiertoVisible } from "../_negocio-abierto";
 
 const AsociarPropiedadInput = z.object({
   projectId: z.coerce.number().int().positive(),
@@ -48,51 +37,14 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
     // Alcance sobre `projects`, no sobre `deals`: son dos permisos distintos
-    // (ver comentario de arriba). `requireScope` y no `scopeFor` porque sin
-    // ningún alcance sobre proyectos no hay nada legítimo que asociar.
+    // (ver comentario de arriba).
     const projectScope = requireScope(actor, "projects", "view");
 
-    const propiedad = await transaction(async (tx) => {
-      await negocioAbiertoVisible(tx, dealId, actor, scope);
+    const entrada: EntradaAsociarPropiedad = { projectId: datos.projectId };
+    if (datos.unitId !== undefined) entrada.unitId = datos.unitId;
+    if (datos.isPrimary !== undefined) entrada.isPrimary = datos.isPrimary;
 
-      const [proyecto] = await tx
-        .select({ id: projects.id })
-        .from(projects)
-        .where(and(eq(projects.id, datos.projectId), visibleRows(actor, projectScope, projects.brokerId, projects.deletedAt)))
-        .limit(1);
-      if (!proyecto) throw new NotFoundError("El proyecto indicado no existe.");
-
-      // La unidad debe existir y pertenecer *a este* proyecto — sin la
-      // segunda condición, un `unitId` de otro proyecto se insertaría tal
-      // cual, y el cierre marcaría como vendida la unidad equivocada.
-      if (datos.unitId != null) {
-        const [unidad] = await tx
-          .select({ id: units.id })
-          .from(units)
-          .where(and(eq(units.id, datos.unitId), eq(units.projectId, datos.projectId), isNull(units.deletedAt)))
-          .limit(1);
-        if (!unidad) throw new NotFoundError("La unidad indicada no existe en ese proyecto.");
-      }
-
-      if (datos.isPrimary) {
-        await tx.update(dealProperties).set({ isPrimary: false }).where(and(eq(dealProperties.dealId, dealId), eq(dealProperties.isPrimary, true)));
-      }
-
-      const [fila] = await tx
-        .insert(dealProperties)
-        .values({
-          dealId,
-          projectId: datos.projectId,
-          unitId: datos.unitId ?? null,
-          isPrimary: datos.isPrimary ?? false,
-          createdBy: actor.userId,
-        })
-        .returning();
-
-      await auditar(tx, actor, { accion: "crear", entidad: "deal_property", entidadId: fila!.id, despues: fila });
-
-      return fila!;
-    });
+    const propiedad = await asociarPropiedad(pipelineParaEscritura(), actor, scope, projectScope, dealId, entrada);
 
     return Response.json({ ok: true, propiedad });
   } catch (error) {

@@ -7,16 +7,17 @@
  * `kind` decide si un negocio está ganado o perdido (`domain/transicion-etapa.ts`),
  * y cambiarlo reescribiría en silencio el significado de los negocios ya
  * cerrados. El nombre sí se edita (decisión #1: las etapas son renombrables).
+ * Tampoco están en `CambiosEtapa` (el tipo de entrada del caso de uso) ni en el
+ * `set` del adaptador.
  */
 
-import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { editarEtapa } from "@/application/etapas/casos-de-uso";
+import type { CambiosEtapa } from "@/application/etapas/puertos";
 import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
-import { pipelineStages } from "@/infrastructure/db/schema";
+import { etapasParaEscritura } from "@/infrastructure/contenedor/etapas";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
 const EditarEtapaInput = z.object({
@@ -36,22 +37,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const actor = await requireActor();
     requireScope(actor, "settings", "edit");
 
-    const etapa = await transaction(async (tx) => {
-      const [anterior] = await tx.select().from(pipelineStages).where(eq(pipelineStages.id, id)).limit(1);
-      if (!anterior) throw new NotFoundError();
+    const cambios: CambiosEtapa = {};
+    if (datos.name !== undefined) cambios.name = datos.name;
+    if (datos.position !== undefined) cambios.position = datos.position;
+    if ("defaultProbability" in datos) cambios.defaultProbability = datos.defaultProbability;
+    if (datos.isActive !== undefined) cambios.isActive = datos.isActive;
 
-      const cambios: Partial<typeof pipelineStages.$inferInsert> = {};
-      if (datos.name !== undefined) cambios.name = datos.name;
-      if (datos.position !== undefined) cambios.position = datos.position;
-      if ("defaultProbability" in datos) cambios.defaultProbability = datos.defaultProbability;
-      if (datos.isActive !== undefined) cambios.isActive = datos.isActive;
-
-      const [fila] = await tx.update(pipelineStages).set(cambios).where(eq(pipelineStages.id, id)).returning();
-
-      await auditar(tx, actor, { accion: "editar", entidad: "pipeline_stage", entidadId: id, antes: anterior, despues: fila });
-
-      return fila;
-    });
+    const etapa = await editarEtapa(etapasParaEscritura(), actor, id, cambios);
 
     return Response.json({ ok: true, etapa });
   } catch (error) {

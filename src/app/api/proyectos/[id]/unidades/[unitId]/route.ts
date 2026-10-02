@@ -1,21 +1,16 @@
 /**
- * M5 · Propiedades — edición y borrado lógico de unidad
- * (`docs/F2_ANALISIS_Y_PLAN.md` paso 1). Mismo patrón que
- * `api/proyectos/[id]/route.ts`.
+ * R3.4: edición y borrado de unidad, con alcance del proyecto padre.
+ * El precio real se conserva restringido por el permiso original de la API.
  */
-
-import { and, eq, isNull } from "drizzle-orm";
 import { z } from "zod";
-import { NotFoundError } from "@/domain/errors";
-import { can, requireScope } from "@/domain/rbac";
 import { OPERATION_TYPES, PRICE_PERIODS, UNIT_STATUSES } from "@/domain/catalogs";
+import { can, requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction, type Db } from "@/infrastructure/db/client";
-import { units } from "@/infrastructure/db/schema";
+import { proyectosParaEscritura } from "@/infrastructure/contenedor/proyectos";
 import { errorResponse, idsDeRuta, parseInput, vaciosANull } from "@/infrastructure/http";
+import { borrarUnidad, editarUnidad } from "@/application/proyectos/casos-de-uso";
 
-const EditarUnidadInput = z.object({
+const Entrada = z.object({
   code: z.string().min(1, "Escribe el código de la unidad.").optional(),
   unitType: z.string().nullable().optional(),
   bedrooms: z.union([z.coerce.number().int().nonnegative(), z.null()]).optional(),
@@ -29,94 +24,81 @@ const EditarUnidadInput = z.object({
   status: z.enum(UNIT_STATUSES).optional(),
 });
 
-type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
-
-async function unidadVisible(tx: Tx, projectId: number, unitId: number) {
-  const [fila] = await tx
-    .select()
-    .from(units)
-    .where(and(eq(units.id, unitId), eq(units.projectId, projectId), isNull(units.deletedAt)))
-    .limit(1);
-  return fila;
+function entrada(zodDatos: z.infer<typeof Entrada>, actorId: number) {
+  const cambios: import("@/application/proyectos/puertos").CambiosUnidad = {
+    updatedBy: actorId,
+  };
+  if ("code" in zodDatos) cambios.code = zodDatos.code;
+  if ("unitType" in zodDatos) cambios.unitType = zodDatos.unitType;
+  if ("bedrooms" in zodDatos) cambios.bedrooms = zodDatos.bedrooms;
+  if ("bathrooms" in zodDatos) cambios.bathrooms = zodDatos.bathrooms;
+  if ("builtAreaM2" in zodDatos) cambios.builtAreaM2 = zodDatos.builtAreaM2;
+  if ("operationType" in zodDatos) cambios.operationType = zodDatos.operationType;
+  if ("pricePeriod" in zodDatos) cambios.pricePeriod = zodDatos.pricePeriod;
+  if ("realPriceCents" in zodDatos) cambios.realPriceCents = zodDatos.realPriceCents;
+  if ("publicRangeMinCents" in zodDatos) cambios.publicRangeMinCents = zodDatos.publicRangeMinCents;
+  if ("publicRangeMaxCents" in zodDatos) cambios.publicRangeMaxCents = zodDatos.publicRangeMaxCents;
+  if ("status" in zodDatos) cambios.status = zodDatos.status;
+  return cambios;
 }
 
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string; unitId: string }> }) {
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string; unitId: string }> },
+) {
   try {
-    const { id: idParam, unitId: unitIdParam } = await params;
-    const [projectId, unitId] = idsDeRuta(idParam, unitIdParam);
-
+    const [projectId, unitId] = idsDeRuta(
+      (await params).id,
+      (await params).unitId,
+    );
     const datos = parseInput(
-      EditarUnidadInput,
-      vaciosANull(await request.json().catch(() => ({})), [
-        "unitType",
-        "bedrooms",
-        "bathrooms",
-        "builtAreaM2",
-        "realPriceCents",
-        "publicRangeMinCents",
-        "publicRangeMaxCents",
-      ]),
+      Entrada,
+      vaciosANull(
+        await request.json().catch(() => ({})),
+        [
+          "unitType", "bedrooms", "bathrooms", "builtAreaM2",
+          "realPriceCents", "publicRangeMinCents", "publicRangeMaxCents",
+        ],
+      ),
     );
     const actor = await requireActor();
-    requireScope(actor, "units", "edit");
-
-    // Precio real, restringido por campo (decisión #26 / hallazgo P1): ver
-    // el mismo comentario en `api/proyectos/[id]/route.ts`.
+    const alcance = requireScope(actor, "units", "edit");
     if (!can(actor, "unit_real_price", "edit")) delete datos.realPriceCents;
-
-    const unidad = await transaction(async (tx) => {
-      const anterior = await unidadVisible(tx, projectId, unitId);
-      if (!anterior) throw new NotFoundError();
-
-      const cambios: Partial<typeof units.$inferInsert> = { updatedBy: actor.userId };
-      if (datos.code !== undefined) cambios.code = datos.code;
-      if ("unitType" in datos) cambios.unitType = datos.unitType;
-      if ("bedrooms" in datos) cambios.bedrooms = datos.bedrooms;
-      if ("bathrooms" in datos) cambios.bathrooms = datos.bathrooms;
-      if ("builtAreaM2" in datos) cambios.builtAreaM2 = datos.builtAreaM2;
-      if (datos.operationType !== undefined) cambios.operationType = datos.operationType;
-      if (datos.pricePeriod !== undefined) cambios.pricePeriod = datos.pricePeriod;
-      if ("realPriceCents" in datos) cambios.realPriceCents = datos.realPriceCents;
-      if ("publicRangeMinCents" in datos) cambios.publicRangeMinCents = datos.publicRangeMinCents;
-      if ("publicRangeMaxCents" in datos) cambios.publicRangeMaxCents = datos.publicRangeMaxCents;
-      if (datos.status !== undefined) cambios.status = datos.status;
-
-      const [fila] = await tx.update(units).set(cambios).where(eq(units.id, unitId)).returning();
-
-      await auditar(tx, actor, { accion: "editar", entidad: "unit", entidadId: unitId, antes: anterior, despues: fila });
-
-      return fila;
-    });
-
+    const unidad = await editarUnidad(
+      proyectosParaEscritura(),
+      actor,
+      alcance,
+      projectId,
+      unitId,
+      entrada(datos, actor.userId),
+    );
     return Response.json({ ok: true, unidad });
   } catch (error) {
     return errorResponse(error);
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string; unitId: string }> }) {
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string; unitId: string }> },
+) {
   try {
-    const { id: idParam, unitId: unitIdParam } = await params;
-    const [projectId, unitId] = idsDeRuta(idParam, unitIdParam);
-
+    const [projectId, unitId] = idsDeRuta(
+      (await params).id,
+      (await params).unitId,
+    );
     const actor = await requireActor();
-    requireScope(actor, "units", "delete");
-
-    await transaction(async (tx) => {
-      const anterior = await unidadVisible(tx, projectId, unitId);
-      if (!anterior) throw new NotFoundError();
-
-      const [fila] = await tx
-        .update(units)
-        .set({ deletedAt: new Date(), updatedBy: actor.userId })
-        .where(eq(units.id, unitId))
-        .returning();
-
-      await auditar(tx, actor, { accion: "eliminar", entidad: "unit", entidadId: unitId, antes: anterior, despues: fila });
-    });
-
+    const alcance = requireScope(actor, "units", "delete");
+    await borrarUnidad(
+      proyectosParaEscritura(),
+      actor,
+      alcance,
+      projectId,
+      unitId,
+    );
     return Response.json({ ok: true });
   } catch (error) {
     return errorResponse(error);
   }
 }
+

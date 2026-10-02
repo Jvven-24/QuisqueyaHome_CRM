@@ -12,15 +12,13 @@
  * crea — nunca queda huérfana de responsable.
  */
 
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { ACTIVITY_PRIORITIES, ACTIVITY_TYPES } from "@/domain/catalogs";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
-import { activities, deals } from "@/infrastructure/db/schema";
+import { actividadesParaEscritura } from "@/infrastructure/contenedor/actividades";
 import { errorResponse, parseInput } from "@/infrastructure/http";
+import { crearActividad } from "@/application/actividades/casos-de-uso";
 
 const CrearActividadInput = z.object({
   activityType: z.enum(ACTIVITY_TYPES),
@@ -54,48 +52,29 @@ function limpiarVacios(cuerpo: unknown): unknown {
 
 export async function POST(request: Request) {
   try {
-    const datos = parseInput(CrearActividadInput, limpiarVacios(await request.json().catch(() => ({}))));
+    const datos = parseInput(
+      CrearActividadInput,
+      limpiarVacios(await request.json().catch(() => ({}))),
+    );
     const actor = await requireActor();
-    requireScope(actor, "activities", "create");
-
-    const resultado = await transaction(async (tx) => {
-      const [actividad] = await tx
-        .insert(activities)
-        .values({
-          activityType: datos.activityType,
-          title: datos.title,
-          description: datos.description ?? null,
-          contactId: datos.contactId ?? null,
-          dealId: datos.dealId ?? null,
-          projectId: datos.projectId ?? null,
-          assigneeId: datos.assigneeId ?? actor.userId,
-          startsAt: datos.startsAt ? new Date(datos.startsAt) : null,
-          endsAt: datos.endsAt ? new Date(datos.endsAt) : null,
-          isAllDay: datos.isAllDay ?? false,
-          location: datos.location ?? null,
-          meetingUrl: datos.meetingUrl ?? null,
-          priority: datos.priority,
-          status: datos.status ?? "pending",
-          completedAt: datos.status === "completed" ? new Date() : null,
-          createdBy: actor.userId,
-          updatedBy: actor.userId,
-        })
-        .returning();
-
-      await auditar(tx, actor, { accion: "crear", entidad: "activity", entidadId: actividad!.id, despues: actividad });
-
-      // La próxima acción del negocio (§10.1, → Presentación): la actividad
-      // pendiente más reciente que se crea para un negocio es la que cuenta
-      // como "próxima acción". Una ya completada al crearla (una llamada que
-      // se registra después de hecha) no reemplaza lo que ya estaba agendado.
-      if (datos.dealId && (datos.status ?? "pending") === "pending") {
-        await tx.update(deals).set({ nextActivityId: actividad!.id }).where(eq(deals.id, datos.dealId));
-      }
-
-      return actividad!;
+    const alcance = requireScope(actor, "activities", "create");
+    const actividad = await crearActividad(actividadesParaEscritura(), actor, alcance, {
+      activityType: datos.activityType,
+      title: datos.title,
+      description: datos.description ?? null,
+      contactId: datos.contactId ?? null,
+      dealId: datos.dealId ?? null,
+      projectId: datos.projectId ?? null,
+      assigneeId: datos.assigneeId,
+      startsAt: datos.startsAt ? new Date(datos.startsAt) : null,
+      endsAt: datos.endsAt ? new Date(datos.endsAt) : null,
+      isAllDay: datos.isAllDay ?? false,
+      location: datos.location ?? null,
+      meetingUrl: datos.meetingUrl ?? null,
+      priority: datos.priority,
+      status: datos.status ?? "pending",
     });
-
-    return Response.json({ ok: true, actividad: resultado });
+    return Response.json({ ok: true, actividad });
   } catch (error) {
     return errorResponse(error);
   }

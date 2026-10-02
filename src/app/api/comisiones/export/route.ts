@@ -6,32 +6,17 @@
  * cálculo — Excel abre CSV.
  *
  * Los mismos `searchParams` (`broker`, `periodo`, `estado`) y la misma
- * consulta que `/comisiones` — `./_consulta.ts`, no una copia — así que quien
- * exporta nunca descarga una fila que la tabla no le mostró.
+ * consulta que `/comisiones` — `_consulta.ts`, no una copia — así que quien
+ * exporta nunca descarga una fila que la tabla no le mostró. La consulta se
+ * inyecta en el caso de uso (`exportarComisionesCsv`) hasta que R4.3 la mueva a
+ * `application/comisiones/consultas.ts`; el CSV y su nombre los arma el caso de uso.
  */
 
-import { COMMISSION_STATUS_LABELS } from "@/domain/comision-estado";
-import { formatoPeriodo } from "@/domain/metas";
+import { exportarComisionesCsv } from "@/application/comisiones/casos-de-uso";
 import { requireScope } from "@/domain/rbac";
-import { generarCsv } from "@/domain/csv";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { errorResponse } from "@/infrastructure/http";
 import { consultarFilas, leerFiltros } from "@/app/(crm)/comisiones/_consulta";
-
-const ENCABEZADO = [
-  "Negocio",
-  "Proyecto",
-  "Monto de venta",
-  "Comisión %",
-  "Total comisión",
-  "Broker %",
-  "Agencia %",
-  "Monto broker",
-  "Monto agencia",
-  "Broker",
-  "Estado",
-  "Fecha de cierre",
-] as const;
 
 export async function GET(request: Request) {
   try {
@@ -41,32 +26,12 @@ export async function GET(request: Request) {
     const params = Object.fromEntries(new URL(request.url).searchParams);
     const filtros = leerFiltros(params);
 
-    const filas = await consultarFilas(actor, scope, filtros);
-
-    const csv = generarCsv(
-      ENCABEZADO,
-      filas.map((fila) => [
-        fila.contactName,
-        fila.projectName ?? "",
-        (fila.saleAmountCents / 100).toFixed(2),
-        (fila.commissionBasisPoints / 100).toString(),
-        (fila.totalCommissionCents / 100).toFixed(2),
-        (fila.brokerShareBasisPoints / 100).toString(),
-        (fila.agencyShareBasisPoints / 100).toString(),
-        (fila.brokerAmountCents / 100).toFixed(2),
-        (fila.agencyAmountCents / 100).toFixed(2),
-        fila.brokerName ?? "Sin asignar",
-        COMMISSION_STATUS_LABELS[fila.status],
-        fila.closedDate ?? "",
-      ]),
-    );
-
-    const nombrePeriodo = filtros.periodo ? formatoPeriodo(filtros.periodo) : "todos";
+    const { csv, nombreArchivo } = await exportarComisionesCsv({ leerFilas: consultarFilas }, actor, scope, filtros);
 
     return new Response(csv, {
       headers: {
         "content-type": "text/csv; charset=utf-8",
-        "content-disposition": `attachment; filename="comisiones-${nombrePeriodo}.csv"`,
+        "content-disposition": `attachment; filename="${nombreArchivo}"`,
       },
     });
   } catch (error) {

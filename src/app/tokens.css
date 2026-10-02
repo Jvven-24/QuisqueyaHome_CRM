@@ -1,0 +1,174 @@
+/**
+ * Tokens del sistema de diseño (R5.1). Traduce `docs/DESIGN.md` a Tailwind v4
+ * y a las variables de shadcn/ui. Este archivo es el ÚNICO punto de entrada de
+ * CSS (`layout.tsx` importa solo este).
+ *
+ * ── Decisión 1: orden de capas, sin preflight ────────────────────────────────
+ * En CSS, lo que está FUERA de una capa gana a lo que está DENTRO de `@layer`,
+ * sin importar la especificidad. `globals.css` no usa capas y trae selectores
+ * de elemento (`input, select, textarea { border; min-height; padding; width }`,
+ * `table { min-width: 880px }`, `th`, `td`, `button`, `h1-h3`). Si se quedara
+ * sin capa, un `<Input>` de shadcn heredaría ese borde y ese ancho y ninguna
+ * utilidad de Tailwind podría corregirlo. Por eso se importa dentro de
+ * `layer(legado)`, la de menor prioridad: las utilidades ganan al CSS viejo y
+ * el CSS viejo sigue aplicándose igual a las vistas no migradas.
+ *
+ * Tampoco se importa `tailwindcss/preflight.css`, a propósito: su reseteo
+ * cambiaría márgenes, listas y bordes en las vistas que todavía no están
+ * migradas. R5.8 lo activará cuando `globals.css` desaparezca.
+ *
+ * `@import` debe ir antes de cualquier regla; solo `@layer` (orden) puede
+ * precederlo.
+ *
+ * CUIDADO AL EDITAR: Tailwind no conserva la sentencia de orden de abajo en el
+ * CSS que genera, así que el orden real de las capas lo fija **la primera
+ * aparición de cada una**. Hoy sale bien porque `globals.css` se importa antes
+ * que las utilidades. Si se reordenan los `@import`, el CSS viejo pasaría a
+ * ganar a las utilidades y el CRM se descolocaría sin que nada avise: no hay
+ * prueba que lo atrape. Comprobación manual tras tocar este bloque:
+ * `grep -o "@layer [a-z]*{" .next/static/css/*.css` debe listar `legado` antes
+ * de `utilities`.
+ *
+ * ── Decisión 2: sin modo oscuro ──────────────────────────────────────────────
+ * `DESIGN.md` define solo la paleta clara. No hay bloque `.dark` ni variantes
+ * oscuras a propósito: inventar una paleta oscura es una función nueva y las
+ * funciones están congeladas durante el milestone (decisión 4 del plan). No lo
+ * "completes" creyendo que falta.
+ */
+@layer legado, theme, base, components, utilities;
+@import "./globals.css" layer(legado);
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+
+/* Tailwind escanea por defecto todo el repo (docs/, referencia-prototipo/…) y
+   generaría utilidades de texto ajeno al código. Solo se escanea `src/`. */
+@source "../";
+
+/* Tokens de la tabla §Color de DESIGN.md. Generan utilidades (`bg-canvas`,
+   `text-ink`, `border-line`, `bg-gold-600`…). Los nombres `--color-*` no
+   chocan con las variables `--canvas`, `--ink`… de globals.css. */
+@theme {
+  --color-canvas: #f3f5f8;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f8f9fb;
+  --color-surface-hover: #f5f7fb;
+  --color-ink: #172036;
+  --color-text: #3d485f;
+  /* `muted` (#646D85, ajustado por WCAG) se llama `ink-muted` porque
+     `--color-muted` es el fondo `muted` de shadcn (`bg-muted` = surface-alt).
+     Para texto atenuado usa `text-muted-foreground`. */
+  --color-ink-muted: #646d85;
+  --color-line: #dfe3eb;
+  --color-input-line: #cfd5df;
+
+  --color-navy-950: #10172d;
+  --color-navy-900: #1d2b53;
+  --color-navy-700: #344872;
+  --color-navy-100: #e8ecf4;
+
+  --color-gold-600: #c7990e;
+  --color-gold-700: #9b7300;
+  --color-gold-800: #765600;
+  --color-gold-100: #fff6d9;
+
+  --color-success: #16734a;
+  --color-success-bg: #e9f7ef;
+  --color-warning: #8a5300;
+  --color-warning-bg: #fff3e0;
+  --color-danger: #a13f43;
+  --color-danger-bg: #fdeced;
+  --color-info: #315f8c;
+  --color-info-bg: #ebf3fb;
+
+  /* Barra lateral: metadatos (#7A89A8, ajustado por WCAG). */
+  --color-sidebar-meta: #7a89a8;
+
+  /* Las fuentes ya las monta next/font en layout.tsx; aquí solo se enganchan. */
+  --font-sans: var(--font-atkinson), sans-serif;
+  --font-heading: var(--font-hanken), sans-serif;
+
+  --ease-drawer: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-hover: 140ms;
+  --duration-drawer: 220ms;
+}
+
+/* Variables de shadcn, traducidas según la tabla de §Implementación.
+   Van en `base` (por encima de `legado`). Sin `--muted`: ver nota abajo. */
+@layer base {
+  :root {
+    --background: #f3f5f8; /* canvas */
+    --foreground: #172036; /* ink */
+    --card: #ffffff; /* surface */
+    --card-foreground: #172036;
+    --popover: #ffffff;
+    --popover-foreground: #172036;
+    --primary: #c7990e; /* gold-600 */
+    --primary-foreground: #161d31;
+    --secondary: #e8ecf4; /* navy-100 */
+    --secondary-foreground: #1d2b53; /* navy-900 */
+    /* --muted (surface-alt) NO se declara todavía: globals.css define
+       `--muted: #687189` para texto y, al ganar `base` a `legado`, dejaría el
+       texto de las vistas viejas casi invisible. R5.8 lo declara al retirar
+       globals.css. Mientras, `--color-muted` (abajo) lleva el valor directo. */
+    --muted-foreground: #646d85; /* muted */
+    --accent: #e8ecf4;
+    --accent-foreground: #1d2b53;
+    --destructive: #a13f43; /* danger */
+    --border: #dfe3eb; /* line */
+    --input: #cfd5df; /* input-line */
+    --ring: #9b7300; /* gold-700 */
+
+    --sidebar: #10172d; /* navy-950 */
+    --sidebar-foreground: #aeb8cc;
+    --sidebar-primary: #c7990e;
+    --sidebar-primary-foreground: #10172d;
+    --sidebar-accent: rgb(255 255 255 / 0.08);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgb(255 255 255 / 0.1);
+    --sidebar-ring: #c7990e;
+
+    --radius: 10px;
+    --radius-field: calc(var(--radius) - 3px);
+
+    --chart-1: #1d2b53; /* navy-900 */
+    --chart-2: #c7990e; /* gold-600 */
+  }
+}
+
+/* Puente entre las variables de shadcn y las utilidades (`bg-primary`,
+   `text-muted-foreground`, `rounded-lg`…). `inline` resuelve el valor al
+   usarse en vez de copiar la referencia. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: #f8f9fb; /* surface-alt; ver nota de --muted */
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: var(--radius-field); /* campos y botones: 7px */
+  --radius-lg: var(--radius); /* paneles: 10px */
+}
