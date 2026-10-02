@@ -98,46 +98,74 @@ escribe dentro de la misma transacción, como hoy.
 
 ## 5. Cómo trabajan Claude y Codex sin pisarse
 
+**Reparto vigente, decidido el 02/10/2026.** Invierte el que había antes, que
+daba a Codex la extracción de módulos y las vistas, y a Claude la verificación en
+el navegador. El porqué está en
+`docs/superpowers/specs/2026-10-02-flujo-claude-codex-y-relevo-design.md`.
+
 | | Claude | Codex |
 |---|---|---|
-| Dónde | Carpeta principal del repo, rama `dev/reestructuracion-solid` | Worktree propio: `D:\ViltrumTEK\Quisqueya_Home\crm-codex`, rama `dev/reestructuracion-solid-codex` |
-| Qué hace | Fundamentos, piloto, módulos grandes, base de estilos, verificación en el navegador, integración y cierre | Extracción de módulos y migración de vistas |
-| Qué puede ejecutar | Todo, incluido `npm run dev` y `build` | `typecheck`, `lint`, `test`. **Nunca `npm run dev` ni `build`** (`errores-conocidos.md`: deja archivos en `.next/` que Windows no deja borrar). **Nunca `git` ni `gh`**: ver abajo |
+| Dónde | Carpeta principal del repo, rama `dev/reestructuracion-solid` | La vitrina `D:\ViltrumTEK\Quisqueya_Home\crm-codex`: solo lee y navega |
+| Qué escribe | Todo el código: backend (R3, R4), vistas (R5) y pruebas unitarias | Nada. Solo hallazgos en `../crm-codex/hallazgos/<issue>.md` |
+| Qué prueba | `typecheck`, `lint`, `test`, `build` | La interfaz en un navegador, buscando romperla como un usuario |
+| Qué puede ejecutar | Todo, incluido `npm run dev` y `build` | Nada de npm. **Nunca `npm run dev` ni `build`** (`errores-conocidos.md`: deja archivos en `.next/` que Windows no deja borrar) |
+| `git` y `gh` | Commits, push, issues y etiquetas | Nada |
 
-**Codex no puede usar git ni GitHub** (comprobado el 02/10/2026). Su sandbox solo
-escribe dentro de `crm-codex`, y el `.git` de un worktree no es un directorio: es
-un puntero a `QuisqueyaHome_CRM_clon-github/.git/worktrees/crm-codex`. Así que
-cualquier escritura de git desde el worktree aterriza en el repositorio principal,
-fuera de su alcance; hasta un `git merge` falla al escribir `ORIG_HEAD`. Además no
-lee la configuración de `gh` (vive en `AppData\Roaming\GitHub CLI\`) ni tiene
-aprobadas las mutaciones del conector de GitHub. Darle un clon propio en vez del
-worktree arreglaría el merge, pero no el push ni los issues: no resuelve el fondo.
+**Por qué este reparto.** Probar interfaces consume muchos tokens y Codex es más
+eficiente en eso. Y separar quien escribe de quien prueba evita que un agente
+corrija su propia tarea: el 02/10 Codex entregó un módulo con una prueba suya
+fallando e informó de que todo estaba en verde.
 
-**Flujo de un issue de Codex** (reparto acordado el 02/10/2026):
+**Consecuencia estructural:** si Codex no escribe código, no necesita rama de
+trabajo. Desaparecen el merge entre agentes, la posibilidad de dejar código
+varado en otra rama y la de cerrar un issue cuyo código no está integrado. No se
+evitan con disciplina: se vuelven imposibles.
 
-1. **Claude** pone al día la rama de Codex (`git merge dev/reestructuracion-solid`
-   dentro de `../crm-codex`), crea el issue si falta y lo reclama con
-   `estado:en-curso`.
-2. **Codex** implementa en `../crm-codex` y deja `typecheck`, `lint` y `test` en
-   verde. No commitea: deja los cambios en el árbol de trabajo y entrega un informe
-   con los archivos que tocó, las decisiones de diseño, lo que encontró y no
-   arregló, y un repaso de seguridad de su propio diff.
-3. **Claude** revisa ese diff (seguridad incluida), hace el commit por issue y el
-   push de `dev/reestructuracion-solid-codex`, y pone el issue en
-   `estado:verificar` con el resumen.
-4. **Claude** trae la rama (`git merge dev/reestructuracion-solid-codex`), corre el
-   guion de regresión del módulo en el navegador y, si pasa, cierra el issue. Si
-   falla, comenta el fallo en el issue y lo devuelve a `estado:en-curso`.
+**Cómo funciona la vitrina.** Claude termina un módulo, lo deja en verde,
+commitea y pushea; pone `../crm-codex` en ese commit exacto y levanta ahí
+`npm run dev` en segundo plano; actualiza `docs/R_RELEVO.md` con qué hay que
+probar. Codex lee el relevo, recorre el módulo con el guion de
+`docs/R_REGRESION.md`, intenta romperlo y escribe los hallazgos. Claude los lee,
+arregla en la carpeta principal y repite. El código nunca viaja de Codex a
+Claude: solo viajan hallazgos en texto. Y como la vitrina está fija a un commit,
+los fallos son reproducibles.
 
-Consecuencia: los issues de Codex los crea Claude, no Codex. El paso 3 de la §9 no
-se aplica a Codex.
+**El protocolo de relevo.** `docs/R_RELEVO.md` se reescribe **en cada push**, no
+al final de una sesión: el corte de tokens llega sin aviso, así que el último
+commit del remoto tiene que ser coherente por sí solo. Nada se prueba si no está
+pusheado, y el relevo va en el mismo commit que el código. Para retomar sin
+Claude, la frase es siempre la misma: *"lee `docs/R_RELEVO.md` y haz lo que
+dice"*.
 
-**Preparar el worktree de Codex** (una sola vez, lo hace Claude en R0.1):
+### Historia: lo que se creía y era falso
+
+Entre el 30/09 y el 02/10 este documento afirmó dos cosas que no eran ciertas, y
+conviene que quede escrito para no volver a razonar sobre ellas:
+
+- **"Codex no puede usar git ni GitHub porque su sandbox solo escribe dentro de
+  `crm-codex`."** Falso: `~/.codex/config.toml` tiene
+  `sandbox_mode = "danger-full-access"`. Codex no está en sandbox. Da igual: el
+  reparto nuevo no necesita que use git.
+- **"Codex no puede probar la interfaz."** Falso: tiene `computer-use` y el
+  02/10 ya recorrió la app en un navegador real. Lo único cierto es que no debe
+  levantar el servidor él mismo.
+
+**Montar la vitrina** (lo hace Claude, cada vez que hay un módulo que probar):
 
 ```bash
-git worktree add ../crm-codex -b dev/reestructuracion-solid-codex dev/reestructuracion-solid
+cd ../crm-codex
+git fetch origin && git checkout --detach <commit-verificado>
+npm run dev    # en segundo plano; Codex nunca ejecuta esto
 ```
-Después, dentro de `../crm-codex`: copiar `.env` y correr `npm ci`.
+
+El worktree se creó una sola vez en R0.1 con
+`git worktree add ../crm-codex -b dev/reestructuracion-solid-codex dev/reestructuracion-solid`,
+y dentro hay que copiar `.env` y correr `npm ci`. La rama
+`dev/reestructuracion-solid-codex` queda como historia de los issues R3.3 a R3.5,
+que Codex sí implementó bajo el reparto anterior; desde R3.6 ya no recibe commits.
+
+Los hallazgos van a `../crm-codex/hallazgos/<issue>.md`, que está fuera de git
+para que la vitrina no se ensucie.
 
 ## 6. Etiquetas y orden
 
@@ -326,20 +354,35 @@ HTTP, mismos mensajes, mismos campos.
 
 ## 9. Cómo arranca una sesión
 
-La frase del usuario es: *"Trabaja en el milestone 'Reestructuración con metodología SOLID': crea las issues que te corresponden y ponte a trabajar."*
+**Lo primero, siempre: leer `docs/R_RELEVO.md`.** Describe el commit donde vive —
+fase, qué está verde, qué debe probar Codex y cuál es el siguiente issue de
+código — y se reescribe en cada push. Con eso se arranca en frío, sin
+conversación previa.
 
-1. **Identificarse:** Claude o Codex. Lo que sigue se refiere solo a los issues de tu etiqueta `agente:`.
-2. **Leer** este documento, `AGENTS.md`, `docs/DESIGN.md` si el trabajo es visual, y `src/application/README.md` si ya existe (lo deja R1.4).
-3. **Crear los issues que falten**, uno por cada bloque `### R…` de la §7 con tu agente. Antes de crear, buscar si ya existe:
+### Si eres Claude
+
+1. **Leer** `docs/R_RELEVO.md`, este documento, `AGENTS.md`, `docs/DESIGN.md` si el trabajo es visual, y `src/application/README.md`.
+2. **Comprobar que `git fetch` termina sin error.** Si falla, ese es el problema y se arregla primero: no se saca ninguna conclusión de un local que no puede leer el remoto.
+3. **Crear los issues que falten**, uno por cada bloque `### R…` de la §7. Antes de crear, buscar si ya existe:
    ```bash
-   gh issue list --milestone "Reestructuración con metodología SOLID" --state all --search "R3.3 in:title"
+   gh issue list --milestone "Reestructuración con metodología SOLID" --state all --search "R3.6 in:title"
    ```
-   El cuerpo del issue es el bloque completo, más un enlace a este documento. Etiquetas: `reestructuracion`, `agente:<tú>`, `fase:R<n>`.
-4. **Elegir el siguiente:** el de número más bajo entre los tuyos que esté abierto, sin `estado:en-curso` ni `estado:verificar`, y con todas sus dependencias cerradas. Si ninguno está listo, decirlo y parar: no adelantarse.
+   El cuerpo del issue es el bloque completo, más un enlace a este documento. Etiquetas: `reestructuracion`, `agente:claude`, `fase:R<n>`.
+4. **Elegir el siguiente:** el de número más bajo que esté abierto, sin `estado:en-curso` ni `estado:verificar`, y con todas sus dependencias cerradas. Si ninguno está listo, decirlo y parar: no adelantarse.
 5. **Reclamarlo:** etiqueta `estado:en-curso` y un comentario de inicio.
-6. **Trabajar** en tu carpeta y rama (§5), dentro de los **Archivos** del issue. Si hace falta tocar un archivo fuera de esa lista, parar y comentarlo en el issue.
-7. **Cerrar:** un commit por issue en Conventional Commits (`refactor(R3.3): …`), pruebas en verde, push. Si eres Claude, verificar en el navegador y cerrar el issue. Si eres Codex, poner `estado:verificar` y comentar qué cambió y qué debe comprobar Claude.
-8. **Seguir** con el siguiente, hasta que no quede ninguno listo.
+6. **Trabajar** en la carpeta principal, dentro de los **Archivos** del issue. Si hace falta tocar un archivo fuera de esa lista, parar y comentarlo en el issue.
+7. **Dejar en verde** `typecheck`, `lint` y `test`, **vistos por ti**, nunca por el informe de nadie.
+8. **Commitear y pushear:** un commit por issue en Conventional Commits (`refactor(R3.6): …`), con la línea `Probar: R3.6` al pie, y `docs/R_RELEVO.md` actualizado **en el mismo commit**.
+9. **Pasar a verificación:** montar la vitrina en ese commit (§5), poner el issue en `estado:verificar` y dejar en el relevo qué debe probar Codex.
+10. **Cerrar** cuando Codex no reporte hallazgos y el commit sea ancestro de `dev/reestructuracion-solid` (`git merge-base --is-ancestor`). Si hay hallazgos, arreglarlos y volver al paso 7.
+11. **Seguir** con el siguiente, hasta que no quede ninguno listo.
+
+### Si eres Codex
+
+1. **Leer `docs/R_RELEVO.md`** y hacer lo que diga su sección "Para Codex". Ahí está el módulo a probar, la URL y qué cuenta como fallo.
+2. **Probar la interfaz** contra la vitrina, con el guion de `docs/R_REGRESION.md` y luego saliéndote de él a propósito para romperla.
+3. **Escribir los hallazgos** en `../crm-codex/hallazgos/<issue>.md`, con pasos exactos para reproducir. Si no encuentras nada, escribirlo igual.
+4. **No** escribir código, **no** usar `git` ni `gh`, y **nunca** ejecutar `npm run dev` ni `npm run build`.
 
 ## 10. Lo que este milestone deliberadamente no hace
 
