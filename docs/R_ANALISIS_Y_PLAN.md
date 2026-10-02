@@ -102,17 +102,35 @@ escribe dentro de la misma transacción, como hoy.
 |---|---|---|
 | Dónde | Carpeta principal del repo, rama `dev/reestructuracion-solid` | Worktree propio: `D:\ViltrumTEK\Quisqueya_Home\crm-codex`, rama `dev/reestructuracion-solid-codex` |
 | Qué hace | Fundamentos, piloto, módulos grandes, base de estilos, verificación en el navegador, integración y cierre | Extracción de módulos y migración de vistas |
-| Qué puede ejecutar | Todo, incluido `npm run dev` y `build` | `npm ci`, `typecheck`, `lint`, `test`. **Nunca `npm run dev` ni `build`** (`errores-conocidos.md`: deja archivos en `.next/` que Windows no deja borrar) |
+| Qué puede ejecutar | Todo, incluido `npm run dev` y `build` | `typecheck`, `lint`, `test`. **Nunca `npm run dev` ni `build`** (`errores-conocidos.md`: deja archivos en `.next/` que Windows no deja borrar). **Nunca `git` ni `gh`**: ver abajo |
 
-**Flujo de un issue de Codex:**
+**Codex no puede usar git ni GitHub** (comprobado el 02/10/2026). Su sandbox solo
+escribe dentro de `crm-codex`, y el `.git` de un worktree no es un directorio: es
+un puntero a `QuisqueyaHome_CRM_clon-github/.git/worktrees/crm-codex`. Así que
+cualquier escritura de git desde el worktree aterriza en el repositorio principal,
+fuera de su alcance; hasta un `git merge` falla al escribir `ORIG_HEAD`. Además no
+lee la configuración de `gh` (vive en `AppData\Roaming\GitHub CLI\`) ni tiene
+aprobadas las mutaciones del conector de GitHub. Darle un clon propio en vez del
+worktree arreglaría el merge, pero no el push ni los issues: no resuelve el fondo.
 
-1. Codex actualiza su rama desde la integración: `git merge dev/reestructuracion-solid`.
-2. Implementa, deja `typecheck`, `lint` y `test` en verde, hace un commit por
-   issue y hace push de `dev/reestructuracion-solid-codex`.
-3. Cambia la etiqueta del issue a `estado:verificar` y comenta qué hizo.
-4. Claude trae la rama (`git merge dev/reestructuracion-solid-codex`), corre el
+**Flujo de un issue de Codex** (reparto acordado el 02/10/2026):
+
+1. **Claude** pone al día la rama de Codex (`git merge dev/reestructuracion-solid`
+   dentro de `../crm-codex`), crea el issue si falta y lo reclama con
+   `estado:en-curso`.
+2. **Codex** implementa en `../crm-codex` y deja `typecheck`, `lint` y `test` en
+   verde. No commitea: deja los cambios en el árbol de trabajo y entrega un informe
+   con los archivos que tocó, las decisiones de diseño, lo que encontró y no
+   arregló, y un repaso de seguridad de su propio diff.
+3. **Claude** revisa ese diff (seguridad incluida), hace el commit por issue y el
+   push de `dev/reestructuracion-solid-codex`, y pone el issue en
+   `estado:verificar` con el resumen.
+4. **Claude** trae la rama (`git merge dev/reestructuracion-solid-codex`), corre el
    guion de regresión del módulo en el navegador y, si pasa, cierra el issue. Si
    falla, comenta el fallo en el issue y lo devuelve a `estado:en-curso`.
+
+Consecuencia: los issues de Codex los crea Claude, no Codex. El paso 3 de la §9 no
+se aplica a Codex.
 
 **Preparar el worktree de Codex** (una sola vez, lo hace Claude en R0.1):
 

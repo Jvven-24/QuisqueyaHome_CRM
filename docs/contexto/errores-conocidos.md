@@ -82,6 +82,37 @@ Dos listas distintas, y conviene no confundirlas:
 - **Referencia de arranque sano:** `Ready` en menos de 4 segundos, y la primera
   compilación de una página en unos 5. Si tarda más que eso, sospecha de los
   permisos, no del rendimiento.
+- **Un cierre sucio de Windows deja los archivos escritos más recientemente con su
+  tamaño correcto pero rellenos de bytes nulos.** Pasó el 30/09/2026: los cuatro
+  archivos nuevos del commit de R5.1 (`src/lib/utils.ts`, `src/hooks/use-mobile.ts`,
+  `src/components/ui/label.tsx`, `src/components/ui/skeleton.tsx`) y el ref de la
+  rama (`.git/refs/heads/dev/reestructuracion-solid`, 41 nulos en vez del sha).
+  Patrón de NTFS: los metadatos se escribieron, el contenido no llegó a vaciarse a
+  disco. **El síntoma apunta al sitio equivocado:** `typecheck` falla con
+  `TS1127: Invalid character` en un archivo del último commit, que parece un error
+  de ese código, y git falla con `fatal: invalid object name 'HEAD'`, que parece un
+  repositorio destruido. No se pierde nada: los commits están en `origin` y
+  `.git/objects` queda intacto. Tres trampas al repararlo:
+  1. Para detectar el alcance, usa `tr`, no `grep -P`. **Nunca pongas `LC_ALL=C`
+     delante de `grep -P`**: falla con exit 2 (*-P supports only unibyte and UTF-8
+     locales*) y un `! grep -q` convierte eso en «todo está corrupto». Pasó, y casi
+     se reportó un desastre de disco inexistente.
+  2. **`git checkout -- <archivo>` no los repara.** El tamaño en disco coincide con
+     el que git espera tras expandir a CRLF y la fecha no cambió, así que los da por
+     limpios y los salta. Hay que borrarlos primero y luego hacer checkout, o
+     escribir el blob directo: `git show <ref>:<ruta> > <ruta>`.
+  3. Un ref roto se repone con `git update-ref refs/heads/<rama> <sha>` sacando el
+     sha de `origin`. Si dejas un `.broken-backup` con nulos, todo `git fsck`
+     imprimirá `badRefContent` para siempre.
+- **El sandbox de Codex no puede usar `git` ni `gh`.** Comprobado el 02/10/2026: su
+  sandbox solo escribe dentro de su propia carpeta, y el `.git` de un worktree no es
+  un directorio sino un puntero al repositorio principal, así que cualquier
+  escritura de git desde el worktree aterriza fuera de su alcance — hasta un
+  `git merge` falla al escribir `ORIG_HEAD`. Tampoco lee la configuración de `gh`
+  (está en `AppData\Roaming\GitHub CLI\`) ni tiene aprobadas las mutaciones del
+  conector de GitHub. Darle un clon propio arreglaría el merge pero no el push ni
+  los issues. El reparto que sí funciona está en `docs/R_ANALISIS_Y_PLAN.md` §5:
+  Codex edita archivos y corre las pruebas; de git y GitHub se encarga Claude.
 
 ### Operación
 
