@@ -58,6 +58,12 @@ Codex) siguen en `docs/contexto/errores-conocidos.md`. Las **decisiones** van en
 | H30 | Dos rutas validan la entrada antes de autenticar: 422 donde debería haber 401 | `api/leads/[id]/descartar`, `api/leads/[id]` | Al cerrar la migración | Abierto |
 | H31 | Los contactos que entran por el webhook nacen sin responsable ni autor | `src/app/api/leads/externo/route.ts` | Decisión de producto | Abierto |
 | H32 | Editar una actividad puede reapuntarla al negocio de otro broker | `src/application/actividades/casos-de-uso.ts` | Al cerrar la migración | Abierto |
+| H33 | **Nuestra red de pruebas no ve si un bloqueo de fila desaparece** | `src/infrastructure/db/repos/{pipeline,leads}.ts` | **Sesión propia** (pequeña) | Abierto en pipeline y leads; **cerrado en comisiones** (R3.6) |
+| H34 | La auditoría de metas lee el estado anterior fuera del upsert | `src/application/metas/casos-de-uso.ts` | Al cerrar la migración | Abierto |
+| H35 | Asignar proyectos a un broker no bloquea filas: gana el último | `src/application/brokers/casos-de-uso.ts` | Al cerrar la migración | Abierto |
+| H36 | La consulta del CSV carga todas las propiedades principales, no las filtradas | `src/app/(crm)/comisiones/_consulta.ts` | Al cerrar la migración | Abierto |
+| H37 | Los montos del CSV salen como texto, contra lo que `csv.ts` documenta | `src/application/comisiones/casos-de-uso.ts` | Al cerrar la migración | Abierto |
+| H38 | Se puede fijar meta a un broker inactivo o borrado | `src/application/metas/casos-de-uso.ts` | Al cerrar la migración | Abierto |
 | H13 | El CLI de shadcn no funciona en el contenedor: `ui.shadcn.com` da 403 | entorno | Entorno, con rodeo conocido | Abierto |
 | H14 | Las 15 primitivas de shadcn entran sin prueba ni revisión visual | `src/components/ui/` | Revisión visual pendiente | Abierto |
 
@@ -678,3 +684,93 @@ sino asignación).
 
 Va al cierre de la migración, con H15: son el mismo arreglo en dos sitios, y
 conviene hacerlos juntos con una regla común, como pide el patrón de H21/H27/H29.
+
+---
+
+## H33 · Nuestra red de pruebas no ve si un bloqueo de fila desaparece
+
+Este hallazgo no es del CRM: es **de nuestro método de verificación**, y lo
+encontramos apuntándonos a nosotros mismos.
+
+Al migrar comisiones (R3.6) se hizo la prueba de mutación de rigor: quitar el
+`{ of: commissions }` del bloqueo de fila del adaptador y ver qué caía. **No cayó
+nada.** Las 300 pruebas siguieron en verde.
+
+Y es lógico: los dobles en memoria no tienen concurrencia, así que no pueden
+distinguir entre bloquear la fila correcta, bloquear dos tablas o no bloquear
+nada. Una prueba de caso de uso con dobles **nunca** va a ver un `FOR UPDATE`
+que falta. Lo grave es que durante seis módulos creímos que sí, porque las
+mutaciones que probamos antes sí caían — pero caían por otra razón: el doble
+tenía una perilla (`alBloquear`) que simulaba la carrera, y lo que la prueba
+observaba era esa simulación, no el bloqueo real.
+
+**Qué se hizo en R3.6:** una prueba que **lee el código del adaptador** y exige
+exactamente un `.for("update", { of: commissions })`. Es la misma técnica que
+`seguridad.test.ts` usa para exigir `requireScope` en cada ruta y
+`arquitectura.test.ts` para la dirección de las capas: cuando una propiedad no se
+puede observar por comportamiento, se vigila el texto que la produce. Verificado
+por mutación en los dos sentidos.
+
+**Qué sigue abierto, y es concreto.** Las mismas garantías de los módulos ya
+migrados no tienen esa guarda:
+
+| Adaptador | Garantía sin vigilar |
+|---|---|
+| `repos/pipeline.ts` | el `for("update")` del cierre; el `targetWhere` del índice parcial de la meta de compañía |
+| `repos/leads.ts` | el `onConflictDoNothing` del webhook y su `where: isNull(leads.deletedAt)`, que repite el predicado del índice parcial |
+
+Lo de leads ya se sabía y está dicho en el informe de R3.2 con estas palabras:
+«si alguien rompe el `where` o el `onConflictDoNothing` del adaptador, ninguna
+prueba cae; solo lo cubre el grep de la verificación». Un grep que se corre a
+mano una vez no es una red.
+
+**Propuesta:** extender la guarda de lectura de código a esos dos adaptadores.
+Es trabajo de pruebas, sin riesgo de comportamiento, y cierra el agujero en los
+tres sitios donde hoy una garantía de concurrencia depende de que nadie borre una
+línea. Hacerlo **antes** de R4 y R5, porque cada módulo nuevo añade otra línea
+así.
+
+Nota de criterio: esta guarda es fea —una prueba que hace `grep` sobre código
+fuente— y hay que decir por qué se acepta. Porque la alternativa honesta es una
+prueba de integración con dos transacciones concurrentes contra Postgres real, y
+este proyecto decidió no tener esa infraestructura (decisión 3 del milestone: sin
+Playwright, red de seguridad por guion manual). Entre vigilar el texto y no
+vigilar nada, se vigila el texto, y se documenta que es un sustituto.
+
+## H34 · La auditoría de metas lee el estado anterior fuera del upsert
+
+`fijarMetaMensual` lee el estado previo antes del upsert, para el `antes` de la
+auditoría. Dos `PUT` simultáneos sobre un periodo que aún no tiene fila pueden
+auditarse **ambos** como creación, o con un `antes` ya obsoleto.
+
+**Los datos quedan bien**: el upsert es atómico y esa parte no tiene carrera. Lo
+que puede mentir es el rastro. Es de la familia de H21/H27/H29 y va con ellos.
+
+## H35 · Asignar proyectos a un broker no bloquea filas
+
+La selección y el `UPDATE` de proyectos asignados no bloquean. Dos asignaciones
+simultáneas del mismo proyecto a brokers distintos acaban con «gana el último» y
+un `antes` obsoleto en la auditoría. Tampoco se vuelve a comprobar, al escribir,
+que el proyecto siga activo y sin borrar. Misma familia.
+
+## H36 · La consulta del CSV carga todas las propiedades principales
+
+`consultarFilas` trae todas las propiedades principales de la tabla, no solo las
+de los negocios que pasaron el filtro. Es un problema de escala, no de
+corrección: hoy no se nota, y con unos miles de negocios sí. R4.3 toca ese
+archivo, así que es el sitio natural para arreglarlo.
+
+## H37 · Los montos del CSV salen como texto
+
+Salen como cadenas de `toFixed(2)` en vez de números, aunque el docblock de
+`domain/csv.ts` documente lo contrario. Consecuencia real, aunque hoy
+inalcanzable: un monto negativo recibiría el prefijo `'` de neutralización de
+fórmulas que `csv.ts` aplica a las cadenas. Hoy no hay montos negativos.
+
+## H38 · Se puede fijar meta a un broker inactivo o borrado
+
+Para `brokerId` solo se exige que exista el perfil, no que el broker esté activo
+ni sin borrar. El módulo de brokers sí lo valida al asignar proyectos, así que
+los dos módulos aplican criterios distintos a la misma pregunta. Decisión de
+producto más que fallo: puede tener sentido conservar la meta histórica de alguien
+que se fue.

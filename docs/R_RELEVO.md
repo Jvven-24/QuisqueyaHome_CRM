@@ -18,20 +18,21 @@ Diseño que lo gobierna:
 |---|---|
 | **Rama** | `dev/reestructuracion-solid` |
 | **Fecha** | 2026-10-02 |
-| **Fase** | R3 (casos de uso de escritura), 5 de 7 issues cerrados |
-| **Pruebas** | **250 en verde**, `typecheck` y `lint` limpios |
+| **Fase** | R3 (casos de uso de escritura), **6 de 7 issues cerrados** |
+| **Pruebas** | **301 en verde**, `typecheck`, `lint` y `build` limpios |
 
 ### Módulos ya migrados a `src/application/`
 
 `contactos` (R1.3, piloto) · `pipeline` (R3.1) · `leads` (R3.2) ·
-`actividades` (R3.3) · `proyectos` (R3.4) · `usuarios` y `roles` (R3.5)
+`actividades` (R3.3) · `proyectos` (R3.4) · `usuarios` y `roles` (R3.5) ·
+`comisiones`, `metas` y `brokers` (R3.6)
 
 Todos integrados en la rama: comprobado con `git merge-base --is-ancestor`.
 
 ### Lo que falta de la reestructuración
 
-- **R3.6** (#50) — comisiones, metas y brokers. **Es el siguiente.**
 - **R3.7** (#51) — catálogos, etapas y papelera con repositorio genérico.
+  **Es el siguiente**, y con él cierra la fase R3.
 - **R4.1 a R4.3** (#52, #53, #54) — consultas de lectura.
 - **R5.2 a R5.8** (#55 a #60, #44) — migración de vistas a Tailwind v4 + shadcn.
 - **R6.1** (#45) — cierre y PR a `develop`.
@@ -118,3 +119,36 @@ Patrón a seguir, igual que los cinco módulos ya migrados (ver
   —la migración conservó el comportamiento original, como se pidió— y arreglarlo
   es un cambio de comportamiento, que este milestone prohíbe. Hay que decidir si
   entra como excepción de seguridad o se deja para después.
+
+---
+
+## 4. Lo que hay que saber de R3.6 antes de seguir
+
+R3.6 dejó una guarda nueva que conviene replicar, y un agujero que conviene
+cerrar. Está en `docs/R_HALLAZGOS.md` como **H33**, y es lo más importante que
+salió de esa migración.
+
+Resumen: al migrar comisiones se hizo la prueba de mutación de rigor —quitar el
+`{ of: commissions }` del bloqueo de fila— y **no cayó ninguna prueba**. Los
+dobles en memoria no tienen concurrencia, así que no pueden ver un `FOR UPDATE`
+que falta. Durante seis módulos creímos que sí.
+
+Se cerró con una prueba que **lee el código del adaptador** y exige ese bloqueo,
+la misma técnica de `seguridad.test.ts` y `arquitectura.test.ts`. Pero **sigue
+abierto en dos adaptadores ya migrados**:
+
+- `repos/pipeline.ts`: el `for("update")` del cierre y el `targetWhere` del
+  índice parcial de la meta de compañía.
+- `repos/leads.ts`: el `onConflictDoNothing` del webhook con su
+  `where: isNull(leads.deletedAt)`.
+
+Quien siga: extender esa guarda a esos dos es trabajo de pruebas, sin riesgo de
+comportamiento, y conviene hacerlo **antes de R4 y R5**, porque cada módulo nuevo
+añade otra línea cuya desaparición nadie vería.
+
+Y una deuda concreta que **R4.3 debe deshacer**: `exportarComisionesCsv` recibe
+la consulta de filas como dependencia (`leerFilas`) porque `consultarFilas` vive
+en `app/(crm)/comisiones/_consulta.ts` e `infrastructure/` no puede importar
+`app/`. Eso deja `FilaComision` y `FiltrosComisiones` duplicados entre
+`application/comisiones/puertos.ts` y la página. R4.3 mueve la consulta a
+`consultas.ts`, borra la copia y retira la inyección.
