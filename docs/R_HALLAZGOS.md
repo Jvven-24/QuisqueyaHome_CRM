@@ -57,6 +57,7 @@ Codex) siguen en `docs/contexto/errores-conocidos.md`. Las **decisiones** van en
 | H29 | La conversión de lead no bloquea la fila: dos conversiones simultáneas, dos negocios | `src/application/leads/conversion.ts` | **Sesión propia** (con H21 y H27) | Abierto |
 | H30 | Dos rutas validan la entrada antes de autenticar: 422 donde debería haber 401 | `api/leads/[id]/descartar`, `api/leads/[id]` | Al cerrar la migración | Abierto |
 | H31 | Los contactos que entran por el webhook nacen sin responsable ni autor | `src/app/api/leads/externo/route.ts` | Decisión de producto | Abierto |
+| H32 | Editar una actividad puede reapuntarla al negocio de otro broker | `src/application/actividades/casos-de-uso.ts` | Al cerrar la migración | Abierto |
 | H13 | El CLI de shadcn no funciona en el contenedor: `ui.shadcn.com` da 403 | entorno | Entorno, con rodeo conocido | Abierto |
 | H14 | Las 15 primitivas de shadcn entran sin prueba ni revisión visual | `src/components/ui/` | Revisión visual pendiente | Abierto |
 
@@ -647,3 +648,33 @@ Nota relacionada: **no existe una edición general de leads**. `api/leads/[id]`
 solo tiene el `PATCH` de asignar responsable. No es un defecto, es funcionalidad
 que no se construyó, y las funciones nuevas están congeladas (decisión 4); se
 anota porque quien busque «editar lead» no lo va a encontrar.
+
+## H32 · Editar una actividad puede reapuntarla al negocio de otro broker
+
+Encontrado al revisar R3.3 (Actividades, de Codex) antes de integrarlo.
+**Preexistente: no lo introduce la migración.**
+
+`crearActividad` sí comprueba el alcance sobre el negocio — es el arreglo de H15,
+y la migración lo conservó citando el hallazgo por su nombre. Pero `editarActividad`
+hace `if ("dealId" in entrada) cambios.dealId = entrada.dealId;` sin releer el
+negocio nuevo con el alcance del actor. Comprobado contra el original: la línea 82
+del `PATCH` anterior hacía exactamente lo mismo, así que Codex conservó el
+comportamiento, que es lo que se le pidió.
+
+Escenario: un broker toma una actividad propia y la reapunta al negocio de otro
+broker. La actividad queda asociada a un negocio que él no puede leer, y aparecerá
+en la ficha de ese negocio cuando R4 migre esas lecturas.
+
+Es más estrecho que H15: la edición **no** escribe `deals.next_activity_id`, así
+que no pisa la próxima acción del otro. Impacto: una asociación cruzada de alcance,
+no corrupción de la fila ajena.
+
+Arreglo: el mismo patrón que ya tiene `crearActividad` —
+`buscarNegocioVisible(actor, alcance, nuevoDealId)` y `NotFoundError` si no está—
+aplicado también cuando la edición cambia `dealId`. Y lo mismo merecen `contactId`
+y `projectId`, que siguen sin comprobar en las dos rutas (es la parte de H15 que
+quedó abierta por ser decisión de producto: en proyectos el alcance no es «dueño»
+sino asignación).
+
+Va al cierre de la migración, con H15: son el mismo arreglo en dos sitios, y
+conviene hacerlos juntos con una regla común, como pide el patrón de H21/H27/H29.

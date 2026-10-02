@@ -12,17 +12,13 @@
  * crea — nunca queda huérfana de responsable.
  */
 
-import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { ACTIVITY_PRIORITIES, ACTIVITY_TYPES } from "@/domain/catalogs";
-import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
-import { activities, deals } from "@/infrastructure/db/schema";
+import { actividadesParaEscritura } from "@/infrastructure/contenedor/actividades";
 import { errorResponse, parseInput } from "@/infrastructure/http";
-import { visibleRows } from "@/infrastructure/rbac-filter";
+import { crearActividad } from "@/application/actividades/casos-de-uso";
 
 const CrearActividadInput = z.object({
   activityType: z.enum(ACTIVITY_TYPES),
@@ -56,67 +52,29 @@ function limpiarVacios(cuerpo: unknown): unknown {
 
 export async function POST(request: Request) {
   try {
-    const datos = parseInput(CrearActividadInput, limpiarVacios(await request.json().catch(() => ({}))));
+    const datos = parseInput(
+      CrearActividadInput,
+      limpiarVacios(await request.json().catch(() => ({}))),
+    );
     const actor = await requireActor();
-    const scope = requireScope(actor, "activities", "create");
-
-    const resultado = await transaction(async (tx) => {
-      // Hallazgo H15 de `docs/R_HALLAZGOS.md`: antes el alcance se pedía y se
-      // tiraba, y `dealId` entraba sin comprobar. Como más abajo se escribe
-      // `deals.nextActivityId` de ese negocio, un broker con alcance `own`
-      // podía sobrescribir la próxima acción del negocio de otro broker
-      // mandando su id a mano. `seguridad.test.ts` no lo veía porque comprueba
-      // que `requireScope` se *llame*, y se llamaba: lo que faltaba era usarlo.
-      //
-      // Se relee dentro de la transacción y con `visibleRows`, igual que
-      // `api/contactos/[id]` y `api/leads/[id]`: el `NotFoundError` cubre a la
-      // vez "no existe" y "existe fuera de tu alcance", sin distinguirlos.
-      if (datos.dealId !== undefined) {
-        const [negocio] = await tx
-          .select({ id: deals.id })
-          .from(deals)
-          .where(and(eq(deals.id, datos.dealId), visibleRows(actor, scope, deals.brokerId, deals.deletedAt)))
-          .limit(1);
-        if (!negocio) throw new NotFoundError();
-      }
-
-      const [actividad] = await tx
-        .insert(activities)
-        .values({
-          activityType: datos.activityType,
-          title: datos.title,
-          description: datos.description ?? null,
-          contactId: datos.contactId ?? null,
-          dealId: datos.dealId ?? null,
-          projectId: datos.projectId ?? null,
-          assigneeId: datos.assigneeId ?? actor.userId,
-          startsAt: datos.startsAt ? new Date(datos.startsAt) : null,
-          endsAt: datos.endsAt ? new Date(datos.endsAt) : null,
-          isAllDay: datos.isAllDay ?? false,
-          location: datos.location ?? null,
-          meetingUrl: datos.meetingUrl ?? null,
-          priority: datos.priority,
-          status: datos.status ?? "pending",
-          completedAt: datos.status === "completed" ? new Date() : null,
-          createdBy: actor.userId,
-          updatedBy: actor.userId,
-        })
-        .returning();
-
-      await auditar(tx, actor, { accion: "crear", entidad: "activity", entidadId: actividad!.id, despues: actividad });
-
-      // La próxima acción del negocio (§10.1, → Presentación): la actividad
-      // pendiente más reciente que se crea para un negocio es la que cuenta
-      // como "próxima acción". Una ya completada al crearla (una llamada que
-      // se registra después de hecha) no reemplaza lo que ya estaba agendado.
-      if (datos.dealId && (datos.status ?? "pending") === "pending") {
-        await tx.update(deals).set({ nextActivityId: actividad!.id }).where(eq(deals.id, datos.dealId));
-      }
-
-      return actividad!;
+    const alcance = requireScope(actor, "activities", "create");
+    const actividad = await crearActividad(actividadesParaEscritura(), actor, alcance, {
+      activityType: datos.activityType,
+      title: datos.title,
+      description: datos.description ?? null,
+      contactId: datos.contactId ?? null,
+      dealId: datos.dealId ?? null,
+      projectId: datos.projectId ?? null,
+      assigneeId: datos.assigneeId,
+      startsAt: datos.startsAt ? new Date(datos.startsAt) : null,
+      endsAt: datos.endsAt ? new Date(datos.endsAt) : null,
+      isAllDay: datos.isAllDay ?? false,
+      location: datos.location ?? null,
+      meetingUrl: datos.meetingUrl ?? null,
+      priority: datos.priority,
+      status: datos.status ?? "pending",
     });
-
-    return Response.json({ ok: true, actividad: resultado });
+    return Response.json({ ok: true, actividad });
   } catch (error) {
     return errorResponse(error);
   }
