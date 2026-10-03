@@ -1,13 +1,15 @@
 /**
  * Adaptador Drizzle de Leads (`application/leads/puertos.ts`).
  *
- * El SQL está calcado del que vivía en `api/leads/**`, sin "mejorarlo". Una
- * sentencia es una garantía de concurrencia y NO debe simplificarse:
+ * Garantías de concurrencia que NO deben simplificarse:
+ * - reserva transaccional de la clave externa antes de cualquier efecto,
+ *   con recibo durable en la auditoría (F05);
+ * - lectura con alcance y bloqueo de fila para convertir (F06);
  *
  * - `crearLeadExternoSiNoExiste`: `INSERT ... ON CONFLICT DO NOTHING` sobre el
  *   índice único PARCIAL `leads_external_id_unq`, con su `where`, y solo si no
- *   insertó, un `SELECT` de respaldo. Es la idempotencia del webhook
- *   (decisión #20).
+ *   insertó, un `SELECT` de respaldo de la fila activa. Es la defensa final
+ *   contra escritores que no respeten la reserva (decisión #20).
  *
  * Acepta la transacción o la conexión suelta (`Ejecutor`) porque las lecturas
  * previas (duplicados, contacto, candidatos a broker) corren fuera del `BEGIN`,
@@ -15,7 +17,9 @@
  * parámetro.
  */
 
-import { and, asc, eq, isNull, or } from "drizzle-orm";
+import { createHash } from "node:crypto";
+import { and, asc, eq, isNull, or, sql } from "drizzle-orm";
+import { ConflictError } from "../../../domain/errors";
 import type {
   CandidatoBroker,
   Contacto,
@@ -32,7 +36,15 @@ import { auditoriaDrizzle, type Tx } from "./compartido";
 /** La transacción o la conexión suelta. */
 export type Ejecutor = Tx | Db;
 
-export function repositorioLeads(ejecutor: Ejecutor): RepositorioLeads {
+export function repositorioLeads(ejecutor: Ejecutor, transaccional = false): RepositorioLeads {
+  async function exigirTransaccion() {
+    if (!transaccional) throw new Error("La reserva de Leads requiere una transacción.");
+    // Ambas reservas son la primera operación de su unidad de trabajo.
+    // Declarar el aislamiento evita heredar un snapshot anterior al ganador.
+    await ejecutor.execute(sql`set transaction isolation level read committed`);
+  }
+  const hash = (valor: string) => createHash("sha256").update(valor).digest("hex");
+  const claveCaptura = (externalId: string) => hash(`leads:webhook:v1:${externalId}`);
   return {
     // --- lecturas previas a la transacción ---------------------------------
 
@@ -91,6 +103,47 @@ export function repositorioLeads(ejecutor: Ejecutor): RepositorioLeads {
       // decide con `deletedAt` y `reaches` (el `SELECT` ya fue por `id`).
       const [fila] = await ejecutor.select().from(leads).where(eq(leads.id, id)).limit(1);
       return fila;
+    },
+
+    async buscarLeadParaConversion(id, actor, alcance): Promise<Lead | undefined> {
+      await exigirTransaccion();
+      const [fila] = await ejecutor.select().from(leads)
+        .where(and(eq(leads.id, id), visibleRows(actor, alcance, leads.brokerId, leads.deletedAt)))
+        .limit(1).for("update", { of: leads });
+      return fila;
+    },
+
+    async bloquearCapturaExterna(externalId, payload): Promise<Lead | undefined> {
+      await exigirTransaccion();
+      // Namespace propio, clave parametrizada, bloqueo hasta commit/rollback.
+      // READ COMMITTED: la consulta siguiente ve el recibo del ganador tras esperar.
+      const clave = claveCaptura(externalId);
+      const bloqueo = BigInt.asIntN(64, BigInt(`0x${clave.slice(0, 16)}`)).toString();
+      await ejecutor.execute(sql`select pg_advisory_xact_lock(${bloqueo}::bigint)`);
+      const [recibo] = await ejecutor.select({ antes: auditLog.previousValue, despues: auditLog.newValue })
+        .from(auditLog).where(and(
+          eq(auditLog.entityType, "lead"), eq(auditLog.action, "crear"), isNull(auditLog.userId),
+          sql`${auditLog.previousValue}::jsonb ->> 'captureKey' = ${clave}`,
+        )).limit(1);
+      if (recibo) {
+        const metadatos = JSON.parse(recibo.antes!);
+        if (metadatos.payloadHash !== hash(payload)) {
+          throw new ConflictError("La clave externa ya se usó con otros datos.");
+        }
+        // Snapshot original, no la fila que un usuario pudo editar o borrar.
+        const fila: Lead = JSON.parse(recibo.despues!);
+        fila.receivedAt = new Date(fila.receivedAt);
+        fila.createdAt = new Date(fila.createdAt);
+        fila.updatedAt = new Date(fila.updatedAt);
+        fila.firstContactedAt = fila.firstContactedAt ? new Date(fila.firstContactedAt) : null;
+        fila.deletedAt = fila.deletedAt ? new Date(fila.deletedAt) : null;
+        return fila;
+      }
+      // Claves anteriores al recibo (incluso borradas): no inventar su payload.
+      const [historico] = await ejecutor.select({ id: leads.id }).from(leads)
+        .where(eq(leads.externalId, externalId)).limit(1);
+      if (historico) throw new ConflictError("La captura externa requiere reconciliación.");
+      return undefined;
     },
 
     async buscarContactoPorTelefonoOCorreo({ phone, email }) {
@@ -208,7 +261,9 @@ export function repositorioLeads(ejecutor: Ejecutor): RepositorioLeads {
 
       // Ya existía: el índice único descartó el `insert`. Se devuelve el lead
       // existente.
-      const [existente] = await ejecutor.select().from(leads).where(eq(leads.externalId, datos.externalId)).limit(1);
+      const [existente] = await ejecutor.select().from(leads)
+        .where(and(eq(leads.externalId, datos.externalId), isNull(leads.deletedAt))).limit(1);
+      if (!existente) throw new ConflictError("La captura externa requiere reconciliación.");
       return { lead: existente!, creado: false };
     },
 
@@ -273,12 +328,16 @@ export function repositorioLeads(ejecutor: Ejecutor): RepositorioLeads {
      * porque `auditar()` (y el puerto `Auditoria`) exigen un actor humano. Corre
      * con el mismo ejecutor que el cambio, o sea dentro de su transacción.
      */
-    async registrarAuditoriaSinActor({ accion, entidad, entidadId, despues }): Promise<void> {
+    async registrarAuditoriaSinActor({ accion, entidad, entidadId, despues, captura }): Promise<void> {
       await ejecutor.insert(auditLog).values({
         userId: null,
         action: accion,
         entityType: entidad,
         entityId: entidadId,
+        previousValue: captura ? JSON.stringify({
+          captureKey: claveCaptura(captura.externalId),
+          payloadHash: hash(captura.payload),
+        }) : null,
         newValue: JSON.stringify(despues),
       });
     },
@@ -287,5 +346,5 @@ export function repositorioLeads(ejecutor: Ejecutor): RepositorioLeads {
 
 /** El juego transaccional: el repositorio del módulo más la auditoría, ambos ligados a `tx`. */
 export function reposLeads(tx: Tx): ReposLeads {
-  return { leads: repositorioLeads(tx), auditoria: auditoriaDrizzle(tx) };
+  return { leads: repositorioLeads(tx, true), auditoria: auditoriaDrizzle(tx) };
 }

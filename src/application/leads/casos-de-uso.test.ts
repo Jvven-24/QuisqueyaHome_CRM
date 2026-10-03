@@ -3,11 +3,9 @@
  * asignación, descarte y captura externa. La conversión está en
  * `conversion.test.ts`.
  *
- * Límite honesto: en memoria no hay concurrencia. Que dos entregas simultáneas
- * del mismo `externalId` no dupliquen lo garantiza el `ON CONFLICT DO NOTHING`
- * del adaptador Drizzle (índice único parcial `leads_external_id_unq`), no estos
- * dobles. Lo que sí se comprueba es que el caso de uso use el único método
- * atómico del puerto y que una entrega repetida no escriba nada nuevo.
+ * El escenario F05 concurrente añade un bloqueo simulado, retenido hasta salir
+ * de la unidad de trabajo. Prueba el protocolo del caso de uso; las guardas de
+ * fuente comprueban el SQL declarado. Ninguno acredita locks PostgreSQL reales.
  */
 
 import assert from "node:assert/strict";
@@ -345,6 +343,82 @@ const entradaExterna = {
   projectInterestText: "Proyectos en planos",
 };
 
+test("F05: repetir sin teléfono ni correo no duplica contactos ni auditoría", async () => {
+  const { deps, leads } = montar();
+  const entrada = { externalId: "sin-contacto", fullName: "Sintético" };
+  const primera = await capturarLeadExterno(deps, entrada);
+  const segunda = await capturarLeadExterno(deps, entrada);
+  assert.deepEqual(segunda, { lead: primera.lead, creado: false });
+  assert.equal(leads.contactos.length, 1);
+  assert.equal(leads.leads.length, 1);
+  assert.equal(leads.auditoriaSinActor.length, 2);
+});
+
+test("F05: entregas concurrentes de la misma clave ejecutan todos los efectos una vez", async () => {
+  const { leads, auditoria } = montar();
+  let cola = Promise.resolve();
+  const unidad = {
+    async ejecutar<T>(fn: (repos: { leads: RepositorioLeads; auditoria: typeof auditoria }) => Promise<T>): Promise<T> {
+      let liberar: (() => void) | undefined;
+      const repos = {
+        ...leads,
+        async bloquearCapturaExterna(externalId: string, payload: string) {
+          const anterior = cola;
+          cola = new Promise<void>((resolve) => { liberar = resolve; });
+          await anterior;
+          return leads.bloquearCapturaExterna(externalId, payload);
+        },
+      };
+      try { return await fn({ leads: repos, auditoria }); }
+      finally { liberar?.(); }
+    },
+  };
+  const entrada = { externalId: "concurrente", fullName: "Sintético" };
+  const resultados = await Promise.all([
+    capturarLeadExterno({ leads, unidad }, entrada),
+    capturarLeadExterno({ leads, unidad }, entrada),
+  ]);
+  assert.deepEqual(resultados.map((r) => r.creado).sort(), [false, true]);
+  assert.deepEqual(resultados[0]!.lead, resultados[1]!.lead);
+  assert.equal(leads.contactos.length, 1);
+  assert.equal(leads.leads.length, 1);
+  assert.equal(leads.auditoriaSinActor.length, 2);
+});
+
+test("F05: la reserva SQL y su recibo usan el mismo ejecutor transaccional", () => {
+  const codigo = readFileSync(new URL("../../infrastructure/db/repos/leads.ts", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const reserva = codigo.slice(codigo.indexOf("async bloquearCapturaExterna("), codigo.indexOf("async buscarContactoPorTelefonoOCorreo("));
+  assert.match(reserva, /exigirTransaccion\(\)/);
+  assert.match(reserva, /await ejecutor\.execute\(sql`select pg_advisory_xact_lock/);
+  assert.ok(reserva.indexOf("pg_advisory_xact_lock") < reserva.indexOf(".from(auditLog)"));
+  assert.match(reserva, /auditLog\.previousValue/);
+  assert.match(reserva, /payloadHash !== hash\(payload\)/);
+  const recibo = codigo.slice(codigo.indexOf("async registrarAuditoriaSinActor("));
+  assert.match(recibo, /ejecutor\.insert\(auditLog\)/);
+  assert.match(recibo, /payloadHash: hash\(captura\.payload\)/);
+  assert.match(codigo, /repositorioLeads\(tx, true\)/);
+  assert.match(codigo, /set transaction isolation level read committed/);
+});
+
+test("F05: misma clave con payload diferente devuelve conflicto sin efectos", async () => {
+  const { deps, leads } = montar();
+  const entrada = { externalId: "conflicto", fullName: "Sintético" };
+  await capturarLeadExterno(deps, entrada);
+  for (const cambio of [{ fullName: "Otro" }, { email: "otro@example.com" }, { budgetMaxCents: 100 }]) {
+    await assert.rejects(capturarLeadExterno(deps, { ...entrada, ...cambio }), ConflictError);
+  }
+  assert.equal(leads.contactos.length, 1);
+  assert.equal(leads.leads.length, 1);
+  assert.equal(leads.auditoriaSinActor.length, 2);
+});
+
+test("F05: el respaldo del upsert excluye filas borradas", () => {
+  const fuente = readFileSync(new URL("../../infrastructure/db/repos/leads.ts", import.meta.url), "utf8");
+  const respaldo = fuente.slice(fuente.indexOf("if (insertado)"), fuente.indexOf("async asignarResponsable("));
+  assert.match(respaldo, /and\(eq\(leads\.externalId, datos\.externalId\), isNull\(leads\.deletedAt\)\)/);
+});
+
 test("webhook: la primera entrega crea contacto y lead, con dos filas de auditoría SIN actor, y responde creado", async () => {
   const { deps, leads, auditoria } = montar();
   const { lead: fila, creado } = await capturarLeadExterno(deps, entradaExterna);
@@ -380,14 +454,47 @@ test("webhook repetido con el mismo externalId: no duplica, devuelve el existent
   assert.equal(leads.auditoriaSinActor.length, auditoriasTrasPrimera);
 });
 
-test("webhook: un lead borrado con ese externalId no cuenta (el índice único es parcial)", async () => {
+test("F05: clave histórica sin recibo requiere reconciliación incluso tras borrado", async () => {
   const borrado = lead({ id: 1, externalId: "portal-1", deletedAt: new Date() });
   const { deps, leads } = montar({ leads: [borrado] });
-  const { lead: fila, creado } = await capturarLeadExterno(deps, entradaExterna);
+  await assert.rejects(capturarLeadExterno(deps, entradaExterna), ConflictError);
+  assert.equal(leads.leads.length, 1);
+  assert.equal(leads.contactos.length, 0);
+  assert.equal(leads.auditoriaSinActor.length, 0);
+});
 
-  assert.equal(creado, true);
-  assert.notEqual(fila.id, 1);
-  assert.equal(leads.leads.length, 2);
+test("F05: el recibo conserva respuesta y clave tras editar o borrar el lead", async () => {
+  const { deps, leads } = montar();
+  const primera = await capturarLeadExterno(deps, entradaExterna);
+  const original = structuredClone(primera.lead);
+  await leads.asignarResponsable(primera.lead.id, 9, 1);
+  leads.leads[0]!.deletedAt = new Date("2026-10-03T00:00:00Z");
+  const repetida = await capturarLeadExterno(deps, entradaExterna);
+  assert.deepEqual(repetida, { lead: original, creado: false });
+  await assert.rejects(capturarLeadExterno(deps, { ...entradaExterna, campaign: "otra" }), ConflictError);
+  assert.equal(leads.leads.length, 1);
+  assert.equal(leads.contactos.length, 1);
+  assert.equal(leads.auditoriaSinActor.length, 2);
+});
+
+test("F05: rollback después de escribir el recibo permite reintento completo", async () => {
+  const { leads, auditoria, deps } = montar();
+  const roto: RepositorioLeads = {
+    ...leads,
+    async registrarAuditoriaSinActor(registro) {
+      await leads.registrarAuditoriaSinActor(registro);
+      if (registro.entidad === "lead") throw new Error("caída después del recibo");
+    },
+  };
+  const unidad = unidadDeTrabajoEnMemoria({ leads: roto, auditoria }, [leads, auditoria]);
+  await assert.rejects(capturarLeadExterno({ leads, unidad }, entradaExterna), /caída después del recibo/);
+  assert.equal(leads.leads.length, 0);
+  assert.equal(leads.contactos.length, 0);
+  assert.equal(leads.auditoriaSinActor.length, 0);
+  assert.equal((await capturarLeadExterno(deps, entradaExterna)).creado, true);
+  assert.equal(leads.leads.length, 1);
+  assert.equal(leads.contactos.length, 1);
+  assert.equal(leads.auditoriaSinActor.length, 2);
 });
 
 test("webhook con teléfono o correo de un contacto existente: lo reutiliza y no crea otro", async () => {

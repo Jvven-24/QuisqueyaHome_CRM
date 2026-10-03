@@ -164,6 +164,8 @@ export type RegistroAuditoriaSinActor = {
   entidad: EntityType;
   entidadId: number;
   despues: unknown;
+  /** Recibo de la captura: el adaptador persiste solo hashes en previousValue. */
+  captura?: { externalId: string; payload: string };
 };
 
 export interface RepositorioLeads {
@@ -184,6 +186,15 @@ export interface RepositorioLeads {
 
   /** Por id, SIN filtrar papelera ni alcance: el caso de uso decide con `deletedAt` y `reaches`. */
   buscarLead(id: number): Promise<Lead | undefined>;
+  /** Lee con alcance y bloqueo de fila, retenido hasta commit/rollback. Solo transaccional. */
+  buscarLeadParaConversion(id: number, actor: Actor, alcance: PermissionScope): Promise<Lead | undefined>;
+  /**
+   * Serializa la clave ANTES de cualquier efecto y recupera el resultado original
+   * desde su recibo durable. Distinto payload o clave histórica sin recibo: conflicto.
+   * La reserva se libera al terminar la transacción; el recibo no expira ni se
+   * elimina al borrar el lead. Solo se llama dentro de la unidad de trabajo.
+   */
+  bloquearCapturaExterna(externalId: string, payload: string): Promise<Lead | undefined>;
   /** Primer contacto vivo con ese teléfono o correo (el webhook lo reutiliza). */
   buscarContactoPorTelefonoOCorreo(criterio: { phone: string | null; email: string | null }): Promise<{ id: number } | undefined>;
   crearContactoManual(datos: DatosNuevoContactoManual): Promise<Contacto>;

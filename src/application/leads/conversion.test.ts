@@ -4,6 +4,7 @@
  */
 
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { ConflictError, NotFoundError } from "../../domain/errors.ts";
 import type { Actor } from "../../domain/rbac.ts";
@@ -12,6 +13,56 @@ import { unidadDeTrabajoEnMemoria } from "../testing/unidad-de-trabajo-en-memori
 import { convertirLead } from "./conversion.ts";
 import { leadsEnMemoria, type SemillaLeads } from "./en-memoria.ts";
 import type { Lead, RepositorioLeads } from "./puertos.ts";
+
+test("F06: dos conversiones intercaladas producen un negocio y un conflicto", async () => {
+  const leads = leadsEnMemoria({ leads: [lead({ id: 1 })], etapasAbiertas: [3] });
+  const auditoria = auditoriaEnMemoria();
+  let lecturas = 0;
+  let liberarLecturas!: () => void;
+  const ambasLecturas = new Promise<void>((resolve) => { liberarLecturas = resolve; });
+  let cola = Promise.resolve();
+  const unidad = {
+    async ejecutar<T>(fn: (repos: { leads: RepositorioLeads; auditoria: typeof auditoria }) => Promise<T>): Promise<T> {
+      let liberar: (() => void) | undefined;
+      const repos = {
+        ...leads,
+        async buscarLead(id: number) {
+          const fila = await leads.buscarLead(id);
+          if (++lecturas === 2) liberarLecturas();
+          await ambasLecturas;
+          return fila;
+        },
+        async buscarLeadParaConversion(id: number) {
+          const anterior = cola;
+          cola = new Promise<void>((resolve) => { liberar = resolve; });
+          await anterior;
+          return leads.buscarLead(id);
+        },
+      };
+      try { return await fn({ leads: repos, auditoria }); }
+      finally { liberar?.(); }
+    },
+  };
+  const resultados = await Promise.allSettled([
+    convertirLead({ unidad }, admin, "all", 1),
+    convertirLead({ unidad }, admin, "all", 1),
+  ]);
+  assert.equal(resultados.filter((r) => r.status === "fulfilled").length, 1);
+  const rechazo = resultados.find((r) => r.status === "rejected");
+  assert.ok(rechazo?.status === "rejected" && rechazo.reason instanceof ConflictError);
+  assert.equal(rechazo.reason.message, "Este lead ya fue convertido a negocio.");
+  assert.equal(leads.negocios.length, 1);
+  assert.equal(leads.leads[0]!.convertedDealId, leads.negocios[0]!.id);
+  assert.equal(auditoria.registros.length, 1);
+});
+
+test("F06: el adaptador bloquea la fila antes de decidir la conversión", () => {
+  const codigo = readFileSync(new URL("../../infrastructure/db/repos/leads.ts", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const metodo = codigo.slice(codigo.indexOf("async buscarLeadParaConversion("), codigo.indexOf("async buscarContactoPorTelefonoOCorreo("));
+  assert.match(metodo, /\.for\("update", \{ of: leads \}\)/);
+  assert.match(metodo, /visibleRows\(actor, alcance, leads\.brokerId, leads\.deletedAt\)/);
+});
 
 const broker: Actor = { userId: 5, roleSlug: "broker", permissions: [] };
 const admin: Actor = { userId: 1, roleSlug: "administrador", permissions: [] };

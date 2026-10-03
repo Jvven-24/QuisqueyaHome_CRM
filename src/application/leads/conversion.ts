@@ -13,7 +13,7 @@
  * que las tres escrituras —crear el negocio, marcar el lead convertido y
  * sellar ese campo— ocurran en la misma unidad de trabajo.
  *
- * Pasos, en este orden (el mismo de la ruta original): leer el lead → alcance →
+ * Pasos, en este orden: bloquear y leer el lead con alcance →
  * guardas de estado → primera etapa abierta → crear el negocio → marcar el lead
  * → auditar.
  */
@@ -30,10 +30,10 @@ export async function convertirLead(
   id: number,
 ): Promise<{ lead: Lead; deal: Negocio }> {
   return deps.unidad.ejecutar(async ({ leads, auditoria }) => {
-    const lead = await leads.buscarLead(id);
+    const lead = await leads.buscarLeadParaConversion(id, actor, alcance);
     if (!lead) throw new NotFoundError();
 
-    // El alcance se comprueba en memoria contra la fila ya leída: un id fuera
+    // Defensa adicional al filtro SQL de la lectura bloqueada: un id fuera
     // del alcance del actor (o en la papelera) responde igual que uno
     // inexistente — nunca le confirma a un broker que el lead de otro existe.
     if (lead.deletedAt || !reaches(actor, alcance, lead.brokerId)) throw new NotFoundError();

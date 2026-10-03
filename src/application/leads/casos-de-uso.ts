@@ -3,8 +3,8 @@
  * captura externa (webhook). La conversión a negocio, que es la operación
  * grande, vive aparte en `./conversion.ts`.
  *
- * Son el comportamiento que antes vivía dentro de `api/leads/**`, movido tal
- * cual: mismo orden de operaciones, mismos mensajes y mismas filas de auditoría.
+ * Conservan el comportamiento de `api/leads/**`, excepto la reserva previa y
+ * el conflicto de payload de la captura externa (F05).
  * La autorización (`requireScope`) la hace quien llama, antes; el alcance
  * resultante entra como parámetro donde hace falta. La captura externa es la
  * excepción: es pública y no tiene actor (ver `capturarLeadExterno`).
@@ -292,25 +292,31 @@ export type EntradaLeadExterno = EntradaCaptura & {
  * mueve aquí) y su auditoría se escribe sin usuario
  * (`registrarAuditoriaSinActor`).
  *
- * La idempotencia es UNA llamada atómica al repositorio
- * (`crearLeadExternoSiNoExiste`): no se compone con una búsqueda previa.
+ * La reserva transaccional de la clave precede todos los efectos. Su recibo
+ * guarda la huella del payload y la respuesta original en la auditoría, incluso
+ * tras borrado. La clave no expira; una clave histórica sin recibo se reconcilia.
  */
 export async function capturarLeadExterno(
   deps: DepsLeads,
   entrada: EntradaLeadExterno,
 ): Promise<{ lead: Lead; creado: boolean }> {
   const { phone, phoneDisplay } = normalizarTelefono(entrada.phone ?? null);
-
-  // La sugerencia de broker es dominio puro; se calcula antes de la
-  // transacción igual que en el alta manual.
-  const suggestedBrokerId = await sugerirBrokerPara(deps.leads, entrada);
+  // Orden fijo y valores por defecto: no depende del orden de las propiedades
+  // recibidas ni de la sugerencia dinámica de broker. Solo campos del contrato.
+  const payload = JSON.stringify({
+    fullName: entrada.fullName.trim(), phone, phoneDisplay,
+    email: entrada.email ?? null, ...datosDeCaptura(entrada, 0, null),
+  });
 
   return deps.unidad.ejecutar(async ({ leads }) => {
+    const repetido = await leads.bloquearCapturaExterna(entrada.externalId, payload);
+    if (repetido) return { lead: repetido, creado: false };
+    const suggestedBrokerId = await sugerirBrokerPara(leads, entrada);
     // Reutiliza un contacto existente por teléfono o correo en vez de crear uno
     // nuevo en cada entrega: a diferencia del alta manual (decisión #19, que
     // avisa porque hay un humano que puede confirmar), aquí no hay nadie a
-    // quien preguntarle "¿de todas formas?" — un webhook no puede responder un
-    // 409. El criterio #5 sigue cumplido: no se pierde el duplicado, se enlaza
+    // quien preguntarle "¿de todas formas?". El criterio #5 sigue cumplido:
+    // no se pierde el duplicado, se enlaza
     // al contacto que ya lo representa.
     let idContacto: number | undefined;
     if (phone || entrada.email) {
@@ -345,16 +351,16 @@ export async function capturarLeadExterno(
       externalId: entrada.externalId,
     });
 
-    // Ya existía: se devuelve el lead existente, sin auditoría nueva — no hubo
-    // cambio que registrar.
-    if (resultado.creado) {
-      await leads.registrarAuditoriaSinActor({
-        accion: "crear",
-        entidad: "lead",
-        entidadId: resultado.lead.id,
-        despues: resultado.lead,
-      });
-    }
+    // Otro escritor que no respete la reserva: rollback de TODOS los efectos,
+    // nunca confirmar un contacto huérfano ni inventar un recibo del ganador.
+    if (!resultado.creado) throw new ConflictError("La captura externa requiere reconciliación.");
+    await leads.registrarAuditoriaSinActor({
+      accion: "crear",
+      entidad: "lead",
+      entidadId: resultado.lead.id,
+      despues: resultado.lead,
+      captura: { externalId: entrada.externalId, payload },
+    });
 
     return resultado;
   });

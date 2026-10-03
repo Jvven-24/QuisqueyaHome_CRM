@@ -10,21 +10,18 @@
  *
  * ## Lo que este doble NO puede probar
  *
- * La **atomicidad** de `crearLeadExternoSiNoExiste`. En memoria no hay
- * concurrencia: dos entregas "simultáneas" del mismo `externalId` siempre se
- * serializan y la segunda ve a la primera, así que este doble NO detectaría que
- * el caso de uso compusiera "buscar + crear". Esa garantía la da el
- * `INSERT ... ON CONFLICT DO NOTHING` sobre el índice único parcial
- * `leads_external_id_unq` del adaptador Drizzle
- * (`infrastructure/db/repos/leads.ts`). Lo que el doble sí comprueba es la
- * FORMA: que el caso de uso use ese único método y que, como el upsert, no
- * inserte si ya hay un lead NO borrado con ese `externalId`.
+ * Los locks PostgreSQL: ni `bloquearCapturaExterna` ni la lectura de conversión
+ * bloquean aquí. Las pruebas concurrentes añaden explícitamente un simulador de
+ * exclusión hasta commit/rollback; las guardas de fuente vigilan el adaptador.
+ * El mapa de recibos representa almacenamiento durable con rollback, pero no
+ * prueba una caída o reinicio real de PostgreSQL.
  *
  * El doble imita también la detección por teléfono/correo de contactos vivos.
  */
 
 import type { AuditAction, EntityType } from "../../domain/catalogs.ts";
 import { reaches } from "../../domain/rbac.ts";
+import { ConflictError } from "../../domain/errors.ts";
 import type { Reversible } from "../testing/reversible.ts";
 import type {
   CandidatoBroker,
@@ -71,6 +68,7 @@ export function leadsEnMemoria(semilla: SemillaLeads = {}): LeadsEnMemoria {
   let contactos: Contacto[] = [...(semilla.contactos ?? [])];
   let negocios: Negocio[] = [...(semilla.negocios ?? [])];
   let auditoriaSinActor: AuditoriaSinActorEnMemoria[] = [];
+  let recibos = new Map<string, { payload: string; lead: Lead }>();
   const candidatos = [...(semilla.candidatosBroker ?? [])];
   const etapasAbiertas = [...(semilla.etapasAbiertas ?? [])];
   let siguienteLead = Math.max(0, ...leads.map((f) => f.id)) + 1;
@@ -183,6 +181,22 @@ export function leadsEnMemoria(semilla: SemillaLeads = {}): LeadsEnMemoria {
       return leads.find((f) => f.id === id);
     },
 
+    async buscarLeadParaConversion(id, actor, alcance) {
+      return leads.find((f) => f.id === id && !f.deletedAt && reaches(actor, alcance, f.brokerId));
+    },
+
+    async bloquearCapturaExterna(externalId, payload) {
+      const recibo = recibos.get(externalId);
+      if (recibo) {
+        if (recibo.payload !== payload) throw new ConflictError("La clave externa ya se usó con otros datos.");
+        return structuredClone(recibo.lead);
+      }
+      if (leads.some((f) => f.externalId === externalId)) {
+        throw new ConflictError("La captura externa requiere reconciliación.");
+      }
+      return undefined;
+    },
+
     async buscarContactoPorTelefonoOCorreo({ phone, email }) {
       const primero = contactosVivosCoincidentes(phone, email)[0];
       return primero ? { id: primero.id } : undefined;
@@ -286,19 +300,25 @@ export function leadsEnMemoria(semilla: SemillaLeads = {}): LeadsEnMemoria {
     },
 
     async registrarAuditoriaSinActor(registro) {
-      auditoriaSinActor = [...auditoriaSinActor, { ...registro }];
+      const { captura, ...auditoria } = registro;
+      auditoriaSinActor = [...auditoriaSinActor, auditoria];
+      if (captura) {
+        const fila = leads.find((f) => f.id === registro.entidadId)!;
+        recibos = new Map(recibos).set(captura.externalId, { payload: captura.payload, lead: structuredClone(fila) });
+      }
     },
 
     instantanea() {
       // Las colecciones se reasignan en vez de mutarse: la copia es inmutable y
       // restaurarla es devolver la referencia. Los contadores de ids no se
       // restauran: una secuencia de Postgres tampoco retrocede tras un rollback.
-      const copia = { leads, contactos, negocios, auditoriaSinActor };
+      const copia = { leads, contactos, negocios, auditoriaSinActor, recibos };
       return () => {
         leads = copia.leads;
         contactos = copia.contactos;
         negocios = copia.negocios;
         auditoriaSinActor = copia.auditoriaSinActor;
+        recibos = copia.recibos;
       };
     },
   };
