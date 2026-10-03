@@ -5,6 +5,7 @@ import { type FormEvent, type ReactNode, useRef, useState } from "react";
 import { LEAD_STATUSES, OPERATION_TYPES } from "@/domain/catalogs";
 import { Avatar, Badge, PageHeader } from "../_ui/prototipo-ui";
 import { SinResultados, Vacio } from "../_ui/estados";
+import { ModuleTabs } from "../_ui/module-tabs";
 import { LeadInspector } from "./inspector";
 
 export type LeadFila = {
@@ -129,6 +130,26 @@ export function LeadsVista({
           </button>
         }
       />
+      <div className="mb-3">
+        <ModuleTabs
+          tabs={[
+            { id: "all", label: "Todos", count: total },
+            { id: "new", label: "Nuevos", count: leads.filter((l) => l.status === "new").length },
+            { id: "assigned", label: "Asignados", count: leads.filter((l) => l.status === "assigned").length },
+            { id: "contacted", label: "Contactados", count: leads.filter((l) => l.status === "contacted").length },
+            { id: "converted", label: "Convertidos", count: leads.filter((l) => l.status === "converted").length },
+            { id: "discarded", label: "Descartados", count: leads.filter((l) => l.status === "discarded").length },
+          ]}
+          activeTab={filtros.status ?? "all"}
+          onTabChange={(tabId) =>
+            irCon({
+              status: tabId === "all" ? undefined : (tabId as LeadFila["status"]),
+              page: undefined,
+              lead: undefined,
+            })
+          }
+        />
+      </div>
       <div className="filter-bar">
         <input
           type="search"

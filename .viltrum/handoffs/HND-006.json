@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D09",
+  "gate": "G4",
+  "actor": "codex-gpt-6.1-sol-d09",
+  "createdAt": "2026-10-03T20:39:42.943054+00:00",
+  "state": "review_pending",
+  "reviewer": "D14",
+  "summary": {
+    "path": ".viltrum/crm-ux/D09-redisenio-fase1.md",
+    "sha256": "d361ff37ed0468f99a59c41350f4e7f05d973b1a624042135cb31341c7eb2c9c",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261003T202831Z-D09-codex/evidence.json",
+      "sha256": "10e17bdcf9aacbee0e425c3585fb2271fbb9bb170ef9535efc17539460e4d29b",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-006"
+}

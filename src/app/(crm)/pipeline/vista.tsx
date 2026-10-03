@@ -2,10 +2,11 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ReactNode, useMemo, useState } from "react";
-import { Building2, Calendar, MessageCircle } from "lucide-react";
+import { Building2, Calendar, MessageCircle, Kanban as KanbanIcon, List as ListIcon } from "lucide-react";
 import { formatearMonto } from "../_ui/formato";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
+import { ModuleTabs } from "../_ui/module-tabs";
 import { generarEnlaceWhatsApp } from "@/domain/comunicaciones";
 import { DealInspector } from "./inspector";
 
@@ -107,6 +108,7 @@ export function PipelineVista({
   const [brokerFiltro, setBrokerFiltro] = useState("");
   const [proyectoFiltro, setProyectoFiltro] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [vistaModo, setVistaModo] = useState<"kanban" | "lista">("kanban");
   // Negocio + etapa destino en espera del motivo de pérdida, o `null` si el
   // modal está cerrado.
   const [pendienteDePerdida, setPendienteDePerdida] = useState<{ dealId: number; etapaId: number } | null>(null);
@@ -188,6 +190,16 @@ export function PipelineVista({
           </div>
         }
       />
+      <div className="mb-3">
+        <ModuleTabs
+          tabs={[
+            { id: "kanban", label: "Tablero Kanban", icon: KanbanIcon, count: negociosFiltrados.length },
+            { id: "lista", label: "Vista Lista", icon: ListIcon, count: negociosFiltrados.length },
+          ]}
+          activeTab={vistaModo}
+          onTabChange={(id) => setVistaModo(id as "kanban" | "lista")}
+        />
+      </div>
       <div className="filter-bar">
         <select value={brokerFiltro} onChange={(event) => setBrokerFiltro(event.target.value)}>
           <option value="">Todos los brokers</option>
@@ -212,7 +224,84 @@ export function PipelineVista({
         <Vacio titulo="Sin negocios todavía" texto="Los negocios aparecen aquí al convertir un lead." />
       ) : (
         <div className={negocioSeleccionado ? "pipeline-layout inspector-open" : "pipeline-layout"}>
-          <div className="kanban">
+          {vistaModo === "lista" ? (
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Negocio / Contacto</th>
+                    <th>Proyecto</th>
+                    <th>Etapa</th>
+                    <th>Monto</th>
+                    <th>Broker</th>
+                    <th>Próxima Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {negociosFiltrados.map((negocio) => {
+                    const etapa = etapaPorId.get(negocio.stageId);
+                    return (
+                      <tr
+                        key={negocio.id}
+                        className={negocioSeleccionado?.id === negocio.id ? "selected" : ""}
+                        onClick={() => irCon({ deal: String(negocio.id) })}
+                      >
+                        <td>
+                          <span className="table-person">
+                            <Avatar name={negocio.contactName} small />
+                            <span>
+                              <strong>{negocio.contactName}</strong>
+                              <small>{negocio.sourceName ?? "Directo"}</small>
+                            </span>
+                          </span>
+                        </td>
+                        <td>
+                          <span className="font-semibold text-navy-950">
+                            {negocio.proyectoPrincipal?.projectName ?? "General"}
+                          </span>
+                          {negocio.proyectoPrincipal?.unitCode && (
+                            <small className="block text-ink-muted">
+                              Unidad {negocio.proyectoPrincipal.unitCode}
+                            </small>
+                          )}
+                        </td>
+                        <td>
+                          <Badge
+                            tone={
+                              etapa?.kind === "won"
+                                ? "green"
+                                : etapa?.kind === "lost"
+                                ? "red"
+                                : "gold"
+                            }
+                          >
+                            {etapa?.name ?? "Etapa"}
+                          </Badge>
+                        </td>
+                        <td>
+                          <strong className="font-heading text-navy-950 font-bold">
+                            {formatearMonto(negocio.amountCents, negocio.currency)}
+                          </strong>
+                        </td>
+                        <td>
+                          <div className="flex items-center gap-1.5 text-xs">
+                            <Avatar name={negocio.brokerName ?? "Sin asignar"} small />
+                            <span>{negocio.brokerName ?? "Sin asignar"}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <small className="text-xs text-ink-muted">
+                            {negocio.nextActivityTitle ?? "Sin acción"}
+                          </small>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="kanban">
             {etapas.map((etapa) => {
               const negociosEtapa = negociosFiltrados.filter((negocio) => negocio.stageId === etapa.id);
               return (
@@ -315,6 +404,7 @@ export function PipelineVista({
               );
             })}
           </div>
+          )}
           {negocioSeleccionado && (
             <DealInspector
               negocio={negocioSeleccionado}

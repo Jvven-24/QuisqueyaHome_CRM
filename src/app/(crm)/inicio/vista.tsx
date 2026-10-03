@@ -31,7 +31,14 @@ export function InicioVista({
             ? "Tu cartera y próximas acciones de hoy."
             : "Prioridades, actividad comercial y decisiones pendientes."
         }
-        action={<div className="date-chip">{metricas.fechaTexto}</div>}
+        action={
+          <div className="flex items-center gap-2">
+            <div className="date-chip">{metricas.fechaTexto}</div>
+            <Link href="/leads" className="button primary">
+              + Registrar Lead
+            </Link>
+          </div>
+        }
       />
       <section className="metrics-row">
         {isBroker ? (

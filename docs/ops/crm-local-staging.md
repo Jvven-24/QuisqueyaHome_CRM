@@ -1,33 +1,30 @@
-# Staging Local-First con GoTrue (CRM Quisqueya Home)
+# CRM en la VPS
 
-Este documento describe la configuracin de autenticacin local para el entorno de staging utilizando Supabase GoTrue ejecutado en la VPS, conectado a `quisqueya-staging-db`.
+Para probar el CRM apuntando a la base de staging, en lugar de sufrir latencia y errores `ECONNRESET` usando túneles SSH remotos a la base de datos, levantamos el CRM dentro de la VPS y hacemos un túnel reverso.
 
-## Arquitectura
-
-1.  **Base de datos:** `quisqueya-staging-db` en la VPS, red `quisqueya_staging`.
-2.  **GoTrue (Auth):** Contenedor `supabase/gotrue:v2.189.0` en la misma red de la VPS.
-3.  **Proxy:** Contenedor Caddy que mapea peticiones `/auth/v1/*` hacia GoTrue `9999` removiendo el prefijo, emulando a Supabase Kong.
-4.  **Tneles SSH Locales:**
-    -   `55432` / `55433`: Tnel directo a la base de datos PostgreSQL de staging (`quisqueya-staging-db:5432`).
-    -   `54321`: Tnel directo al proxy Caddy (`quisqueya-crm-staging-auth-proxy-1:80`), exponiendo las rutas `/auth/v1/` para el cliente de Supabase SSR en el entorno local.
-
-## Credenciales y Variables de Entorno
-
-El archivo `.env` local (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) apunta al tnel SSH en `http://127.0.0.1:54321`. Los JWT han sido generados y firmados usando la clave secreta generada especficamente para este entorno de staging.
-Los secretos nunca se commitean ni se registran en los logs.
-
-## Usuarios de Prueba
-
-Ejecutamos `node scripts/crear-usuario-prueba.mjs admin` para aprovisionar un usuario administrador real.
-Las credenciales del usuario de prueba de staging estn almacenadas en `.env.agent.local` para que Codex o Nova puedan iniciar sesin real contra la URL de frontend configurada.
-
-*Nota:* Durante la creacin del usuario, GoTrue esperaba `aud` con valor `''` (vaco), no `'authenticated'`. Esto fue ajustado en la base de datos para permitir el inicio de sesin de contrasea a travs de GoTrue de manera exitosa.
-
-## Flujo de Inicio de Sesin
-
-Al conectarse al CRM en `http://127.0.0.1:3001` con las credenciales de staging:
-1.  Supabase SSR POST `/auth/v1/token?grant_type=password` hacia `127.0.0.1:54321`.
-2.  El tnel SSH transfiere la peticin al proxy Caddy en la VPS.
-3.  Caddy quita `/auth/v1` y enva a `gotrue:9999/token`.
-4.  GoTrue valida el hash de `bcrypt` contra el esquema `auth` en `quisqueya-staging-db`.
-5.  Devuelve el token JWT firmado, y el CRM avanza a `/inicio`.
+## Pasos de Configuración
+1. En la VPS de staging, clonamos/copiamos el código en `/opt/quisqueya-crm-staging`.
+2. Compilamos el CRM mediante Docker:
+   ```dockerfile
+   FROM node:22-alpine
+   WORKDIR /app
+   COPY . .
+   RUN npm ci
+   RUN npm run build
+   CMD ["npm", "start"]
+   ```
+3. Creamos un `.env` propio sin secretos versionados, apuntando `DATABASE_URL` a la base de la red de Docker (`quisqueya-staging-db`) y la URL de Auth al proxy interno (`quisqueya-crm-staging-auth-proxy-1`).
+4. Levantamos el contenedor en la red `quisqueya_staging` publicando el puerto 3000 localmente en `127.0.0.1:3101` para el túnel SSH, de la siguiente forma:
+   ```bash
+   docker run -d --name quisqueya-crm-staging-app \
+     --network quisqueya_staging \
+     -p 127.0.0.1:3101:3000 \
+     --env-file /opt/quisqueya-crm-staging/.env \
+     --restart unless-stopped \
+     quisqueya-crm-staging
+   ```
+5. En la máquina de desarrollo, hacemos el túnel SSH a ese puerto:
+   ```bash
+   ssh -L 3101:127.0.0.1:3101 hostinger -N
+   ```
+6. El CRM ahora responde en `http://127.0.0.1:3101` de forma casi instantánea, con toda la latencia acotada dentro de la VPS.

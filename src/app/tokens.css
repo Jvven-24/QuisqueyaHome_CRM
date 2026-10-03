@@ -172,3 +172,14 @@
   --radius-md: var(--radius-field); /* campos y botones: 7px */
   --radius-lg: var(--radius); /* paneles: 10px */
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+

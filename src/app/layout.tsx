@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Atkinson_Hyperlegible_Next, Hanken_Grotesk } from "next/font/google";
 import "./tokens.css";
 
@@ -12,16 +12,36 @@ import "./tokens.css";
 const atkinson = Atkinson_Hyperlegible_Next({
   variable: "--font-atkinson",
   subsets: ["latin"],
+  adjustFontFallback: false,
 });
 
 const hanken = Hanken_Grotesk({
   variable: "--font-hanken",
   subsets: ["latin"],
+  adjustFontFallback: false,
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+  themeColor: "#10172d",
+};
+
 export const metadata: Metadata = {
-  title: "Quisqueya Home CRM",
-  description: "CRM inmobiliario de Quisqueya Home",
+  title: "Quisqueya Home Private Desk · CRM",
+  description: "Consola de operaciones y CRM inmobiliario de Quisqueya Home",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "QH CRM",
+  },
+  icons: {
+    icon: "/brand/app-icon-192.png",
+    apple: "/brand/app-icon-192.png",
+  },
 };
 
 export default function RootLayout({

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D05",
+  "gate": "G3",
+  "actor": "codex-gpt-6.1-sol-d05",
+  "createdAt": "2026-10-03T21:00:45.956360+00:00",
+  "state": "review_pending",
+  "reviewer": "D07",
+  "summary": {
+    "path": ".viltrum/crm-ux/D05-D03-D06-insumos-fase1.md",
+    "sha256": "3fff8858831c0c855e2821a087e0ed0ce1a8d410270919541ce54db67c4b16b8",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261003T204212Z-D05-codex/evidence.json",
+      "sha256": "f3b97a7755699436e5ad38f7eb4c95df8429aa115da357b68de8692844f6b5b7",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-007"
+}
