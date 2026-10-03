@@ -4,7 +4,7 @@
  */
 import { z } from "zod";
 import { OPERATION_TYPES, PRICE_PERIODS, UNIT_STATUSES } from "@/domain/catalogs";
-import { can, requireScope } from "@/domain/rbac";
+import { can, requireScope, stripRestrictedPrices } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { proyectosParaEscritura } from "@/infrastructure/contenedor/proyectos";
 import { errorResponse, idsDeRuta, parseInput, vaciosANull } from "@/infrastructure/http";
@@ -72,7 +72,7 @@ export async function PATCH(
       unitId,
       entrada(datos, actor.userId),
     );
-    return Response.json({ ok: true, unidad });
+    return Response.json({ ok: true, unidad: stripRestrictedPrices(actor, unidad) });
   } catch (error) {
     return errorResponse(error);
   }

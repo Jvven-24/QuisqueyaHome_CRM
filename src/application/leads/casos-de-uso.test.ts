@@ -15,7 +15,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { sugerirBroker } from "../../domain/asignacion-lead.ts";
 import { ConflictError, NotFoundError, ValidationError } from "../../domain/errors.ts";
-import type { Actor } from "../../domain/rbac.ts";
+import type { Actor, PermissionScope } from "../../domain/rbac.ts";
 import { auditoriaEnMemoria } from "../testing/auditoria-en-memoria.ts";
 import { unidadDeTrabajoEnMemoria } from "../testing/unidad-de-trabajo-en-memoria.ts";
 import { asignarResponsableDeLead, capturarLeadExterno, crearLead, descartarLead } from "./casos-de-uso.ts";
@@ -151,7 +151,8 @@ test("alta con contactId que no existe o está borrado: NotFoundError y nada esc
 
 test("alta con teléfono duplicado: ConflictError con candidatos; con crearIgual crea", async () => {
   const { deps, leads, auditoria } = montar({ contactos: [ana] });
-  await assert.rejects(crearLead(deps, broker, { fullName: "Otra", phone: "809-555-0184" }), (error) => {
+  const lector: Actor = { ...broker, permissions: [{ resource: "contacts", action: "view", scope: "all" }] };
+  await assert.rejects(crearLead(deps, lector, { fullName: "Otra", phone: "809-555-0184" }), (error) => {
     assert.ok(error instanceof ConflictError);
     assert.equal(error.message, MENSAJE_DUPLICADO);
     assert.deepEqual(error.details, {
@@ -165,6 +166,53 @@ test("alta con teléfono duplicado: ConflictError con candidatos; con crearIgual
   const fila = await crearLead(deps, broker, { fullName: "Otra", phone: "809-555-0184", crearIgual: true });
   assert.equal(leads.contactos.length, 2);
   assert.equal(fila.contactId, 2);
+});
+
+for (const alcance of ["own", "team", "none", "all"] as const satisfies readonly PermissionScope[]) {
+  for (const criterio of [{ phone: "809-555-0184" }, { email: "ana@example.com" }]) {
+    test(`F04 leads: candidatos de contacto respetan contacts:view ${alcance}, ${"phone" in criterio ? "teléfono" : "correo"}`, async () => {
+      const propio = { ...ana, id: 2, fullName: "Propio", brokerId: broker.userId };
+      const borrado = { ...ana, id: 3, fullName: "Borrado", deletedAt: new Date() };
+      const { deps, leads, auditoria } = montar({ contactos: [ana, propio, borrado] });
+      const lector: Actor = { ...broker, permissions: [
+        { resource: "leads", action: "view", scope: "all" },
+        { resource: "contacts", action: "view", scope: alcance },
+      ] };
+      const esperado = (alcance === "all" ? [ana, propio] : alcance === "none" ? [] : [propio])
+        .map(({ id, fullName, phone, phoneDisplay, email }) => ({ id, fullName, phone, phoneDisplay, email }));
+      await assert.rejects(crearLead(deps, lector, { fullName: "Nueva", ...criterio }), (error) => {
+        assert.ok(error instanceof ConflictError);
+        assert.equal(error.message, MENSAJE_DUPLICADO);
+        assert.deepEqual(error.details, { candidatos: esperado });
+        return true;
+      });
+      assert.deepEqual(leads.leads, []);
+      assert.equal(leads.contactos.length, 3);
+      assert.deepEqual(auditoria.registros, []);
+    });
+  }
+}
+
+test("F04 leads: sin contacts:view, duplicado ajeno solo avisa y crearIgual conserva alta", async () => {
+  const { deps, leads, auditoria } = montar({ contactos: [ana] });
+  await assert.rejects(crearLead(deps, broker, { fullName: "Nueva", email: "ana@example.com" }), (error) => {
+    assert.ok(error instanceof ConflictError);
+    assert.equal(error.message, MENSAJE_DUPLICADO);
+    assert.deepEqual(error.details, { candidatos: [] });
+    return true;
+  });
+  assert.deepEqual(auditoria.registros, []);
+  await crearLead(deps, broker, { fullName: "Nueva", email: "ana@example.com", crearIgual: true });
+  assert.equal(leads.contactos.length, 2);
+  assert.equal(leads.leads.length, 1);
+});
+
+test("F04 leads: la consulta identificable de duplicados aplica visibleRows en SQL", () => {
+  const fuente = readFileSync(new URL("../../infrastructure/db/repos/leads.ts", import.meta.url), "utf8");
+  const metodo = fuente.slice(fuente.indexOf("async candidatosDuplicados("), fuente.indexOf("async contactoExiste("));
+  const consultaIdentificable = metodo.slice(metodo.indexOf("const candidatos ="));
+  assert.match(consultaIdentificable, /\.where\([\s\S]*visibleRows\(actor, alcanceLectura, contacts\.brokerId, contacts\.deletedAt\)/);
+  assert.match(metodo, /select\(\{ id: contacts\.id \}\)[\s\S]*isNull\(contacts\.deletedAt\)[\s\S]*\.limit\(1\)/);
 });
 
 test("alta sin contactId ni nombre: ValidationError (protege al caso de uso de una entrada sin Zod)", async () => {

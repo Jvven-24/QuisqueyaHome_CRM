@@ -71,8 +71,12 @@ export type CambiosContacto = {
 };
 
 export interface RepositorioContactos {
-  /** Busca en TODA la cartera, sin filtrar por alcance: dos contactos idénticos repartidos entre brokers distintos siguen siendo el mismo duplicado (decisión #19). */
-  candidatosDuplicados(criterio: { phone: string | null; email: string | null }): Promise<CandidatoDuplicado[]>;
+  /** Detecta en toda la cartera (decisión #19); solo divulga candidatos dentro del alcance de lectura de contactos. */
+  candidatosDuplicados(
+    criterio: { phone: string | null; email: string | null },
+    actor: Actor,
+    alcanceLectura: PermissionScope,
+  ): Promise<{ existe: boolean; candidatos: CandidatoDuplicado[] }>;
   /** Filtra con `visibleRows` dentro del adaptador. `undefined` cubre a la vez "no existe" y "existe fuera de tu alcance". */
   buscarVisible(actor: Actor, alcance: PermissionScope, id: number): Promise<Contacto | undefined>;
   crear(datos: DatosNuevoContacto): Promise<Contacto>;

@@ -43,6 +43,38 @@ export const leadsWebhookToken = () => required("LEADS_WEBHOOK_TOKEN");
  */
 export const supabaseServiceRoleKey = () => required("SUPABASE_SERVICE_ROLE_KEY");
 
+/** Fixture local: contraseña obligatoria, independiente por rol; sin defaults. */
+export function testUserPassword(role: string): string {
+  const names: Record<string, string> = {
+    admin: "CRM_TEST_ADMIN_PASSWORD",
+    asistente: "CRM_TEST_ASISTENTE_PASSWORD",
+    broker: "CRM_TEST_BROKER_PASSWORD",
+  };
+  const name = Object.hasOwn(names, role) ? names[role] : undefined;
+  if (!name) throw new Error("Rol de prueba no reconocido.");
+  return required(name);
+}
+
+/** Solo servidor. Destinos HTTPS exactos registrados como array JSON, deny por defecto. */
+export function communicationConfig() {
+  let webhookDestinations: string[] = [];
+  try {
+    const parsed: unknown = JSON.parse(process.env.CRM_WEBHOOK_DESTINATIONS ?? "[]");
+    if (Array.isArray(parsed) && parsed.every((item) => typeof item === "string")) {
+      webhookDestinations = parsed;
+    }
+  } catch {
+    // Configuración inválida mantiene el despacho webhook cerrado.
+  }
+  return {
+    telegramToken: process.env.TELEGRAM_BOT_TOKEN || null,
+    whatsappToken: process.env.WHATSAPP_API_TOKEN || null,
+    whatsappPhoneId: process.env.WHATSAPP_PHONE_NUMBER_ID || null,
+    webhookDestinations,
+    webhookTimeoutMs: 10_000,
+  };
+}
+
 /** Evaluación sin contraseña: opt-in exclusivo de desarrollo en host local. */
 export function evaluationLoginAllowed(host: string | null): boolean {
   if (process.env.NODE_ENV !== "development" || process.env.CRM_EVAL_LOGIN !== "1") {

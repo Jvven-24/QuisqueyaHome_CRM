@@ -15,7 +15,6 @@ import { and, count, eq, ilike, isNull, or } from "drizzle-orm";
 import type {
   BrokerAsignable,
   Canal,
-  CandidatoDuplicado,
   Contacto,
   FilaListadoContacto,
   LecturaContactos,
@@ -36,9 +35,13 @@ type Ejecutor = Pick<Tx | Db, "select" | "insert" | "update">;
 
 export function repositorioContactos(ejecutor: Ejecutor): RepositorioContactos {
   return {
-    async candidatosDuplicados({ phone, email }): Promise<CandidatoDuplicado[]> {
-      // Toda la cartera, sin `visibleRows` (decisión #19).
-      return ejecutor
+    async candidatosDuplicados({ phone, email }, actor, alcanceLectura) {
+      const coincidencia = or(phone ? eq(contacts.phone, phone) : undefined, email ? eq(contacts.email, email) : undefined);
+      // La existencia global conserva el aviso (#19) sin cargar la ficha ajena.
+      const [duplicado] = await ejecutor.select({ id: contacts.id }).from(contacts)
+        .where(and(isNull(contacts.deletedAt), coincidencia)).limit(1);
+      if (!duplicado || alcanceLectura === "none") return { existe: Boolean(duplicado), candidatos: [] };
+      const candidatos = await ejecutor
         .select({
           id: contacts.id,
           fullName: contacts.fullName,
@@ -49,10 +52,11 @@ export function repositorioContactos(ejecutor: Ejecutor): RepositorioContactos {
         .from(contacts)
         .where(
           and(
-            isNull(contacts.deletedAt),
-            or(phone ? eq(contacts.phone, phone) : undefined, email ? eq(contacts.email, email) : undefined),
+            coincidencia,
+            visibleRows(actor, alcanceLectura, contacts.brokerId, contacts.deletedAt),
           ),
         );
+      return { existe: true, candidatos };
     },
 
     async buscarVisible(actor, alcance, id): Promise<Contacto | undefined> {

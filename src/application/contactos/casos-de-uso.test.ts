@@ -5,9 +5,10 @@
  */
 
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { ConflictError, ForbiddenError, NotFoundError } from "../../domain/errors.ts";
-import type { Actor } from "../../domain/rbac.ts";
+import type { Actor, PermissionScope } from "../../domain/rbac.ts";
 import { auditoriaEnMemoria } from "../testing/auditoria-en-memoria.ts";
 import { unidadDeTrabajoEnMemoria } from "../testing/unidad-de-trabajo-en-memoria.ts";
 import { borrarContacto, crearContacto, editarContacto } from "./casos-de-uso.ts";
@@ -70,7 +71,8 @@ test("crear: asigna responsable y autoría al actor y audita con la fila complet
 
 test("crear con teléfono duplicado sin crearIgual: ConflictError con candidatos, sin crear ni auditar", async () => {
   const { deps, contactos, auditoria } = montar([conTelefono]);
-  await assert.rejects(crearContacto(deps, broker, { fullName: "Otra", phone: "809-555-0184" }), (error) => {
+  const lector: Actor = { ...broker, permissions: [{ resource: "contacts", action: "view", scope: "all" }] };
+  await assert.rejects(crearContacto(deps, lector, { fullName: "Otra", phone: "809-555-0184" }), (error) => {
     assert.ok(error instanceof ConflictError);
     assert.equal(error.message, MENSAJE_DUPLICADO);
     assert.deepEqual(error.details, {
@@ -80,6 +82,49 @@ test("crear con teléfono duplicado sin crearIgual: ConflictError con candidatos
   });
   assert.equal(contactos.filas.length, 1);
   assert.equal(auditoria.registros.length, 0);
+});
+
+for (const alcance of ["own", "team", "none", "all"] as const satisfies readonly PermissionScope[]) {
+  for (const criterio of [{ phone: "809-555-0184" }, { email: "ana@example.com" }]) {
+    test(`F04 contactos: advertencia global y candidatos visibles con ${alcance}, ${"phone" in criterio ? "teléfono" : "correo"}`, async () => {
+      const propios = { ...conTelefono, id: 2, fullName: "Propio", brokerId: broker.userId };
+      const borrado = { ...conTelefono, id: 3, fullName: "Borrado", deletedAt: new Date() };
+      const { deps, contactos, auditoria } = montar([conTelefono, propios, borrado]);
+      const lector: Actor = { ...broker, permissions: [{ resource: "contacts", action: "view", scope: alcance }] };
+      const esperado = (alcance === "all" ? [conTelefono, propios] : alcance === "none" ? [] : [propios])
+        .map(({ id, fullName, phone, phoneDisplay, email }) => ({ id, fullName, phone, phoneDisplay, email }));
+      await assert.rejects(crearContacto(deps, lector, { fullName: "Nueva", ...criterio }), (error) => {
+        assert.ok(error instanceof ConflictError);
+        assert.equal(error.message, MENSAJE_DUPLICADO);
+        assert.deepEqual(error.details, { candidatos: esperado });
+        return true;
+      });
+      assert.equal(contactos.filas.length, 3);
+      assert.equal(auditoria.registros.length, 0);
+    });
+  }
+}
+
+test("F04 contactos: candidato exclusivamente ajeno mantiene advertencia sin PII y permite crearIgual", async () => {
+  const { deps, contactos, auditoria } = montar([conTelefono]);
+  const lector: Actor = { ...broker, permissions: [{ resource: "contacts", action: "view", scope: "own" }] };
+  await assert.rejects(crearContacto(deps, lector, { fullName: "Nueva", email: "ana@example.com" }), (error) => {
+    assert.ok(error instanceof ConflictError);
+    assert.equal(error.message, MENSAJE_DUPLICADO);
+    assert.deepEqual(error.details, { candidatos: [] });
+    return true;
+  });
+  assert.equal(auditoria.registros.length, 0);
+  await crearContacto(deps, lector, { fullName: "Nueva", email: "ana@example.com", crearIgual: true });
+  assert.equal(contactos.filas.length, 2);
+});
+
+test("F04 contactos: la consulta identificable de duplicados aplica visibleRows en SQL", () => {
+  const fuente = readFileSync(new URL("../../infrastructure/db/repos/contactos.ts", import.meta.url), "utf8");
+  const metodo = fuente.slice(fuente.indexOf("async candidatosDuplicados("), fuente.indexOf("async buscarVisible("));
+  const consultaIdentificable = metodo.slice(metodo.indexOf("const candidatos ="));
+  assert.match(consultaIdentificable, /\.where\([\s\S]*visibleRows\(actor, alcanceLectura, contacts\.brokerId, contacts\.deletedAt\)/);
+  assert.match(metodo, /select\(\{ id: contacts\.id \}\)[\s\S]*isNull\(contacts\.deletedAt\)[\s\S]*\.limit\(1\)/);
 });
 
 test("crear con correo duplicado sin crearIgual: ConflictError, sin crear ni auditar", async () => {
@@ -104,9 +149,9 @@ test("crear sin teléfono ni correo: no consulta duplicados y crea", async () =>
   const { deps, contactos } = montar([conTelefono]);
   let consultas = 0;
   const original = contactos.candidatosDuplicados;
-  contactos.candidatosDuplicados = async (criterio) => {
+  contactos.candidatosDuplicados = async (...args) => {
     consultas += 1;
-    return original(criterio);
+    return original(...args);
   };
   await crearContacto(deps, broker, { fullName: "Sin datos" });
   assert.equal(consultas, 0);

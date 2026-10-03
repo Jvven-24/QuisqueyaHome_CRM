@@ -22,11 +22,11 @@
 
 process.loadEnvFile(".env");
 import postgres from "postgres";
+import { databaseUrl, testUserPassword } from "../src/infrastructure/env.ts";
 
 const ROLES = {
   admin: {
     email: "admin.prueba@quisqueyahome.do",
-    password: "PruebaAdmin2026!",
     fullName: "Admin de Prueba",
     initials: "AP",
     jobTitle: "Administrador",
@@ -34,7 +34,6 @@ const ROLES = {
   },
   asistente: {
     email: "asistente.prueba@quisqueyahome.do",
-    password: "PruebaAsistente2026!",
     fullName: "Asistente de Prueba",
     initials: "AP",
     jobTitle: "Asistente",
@@ -42,7 +41,6 @@ const ROLES = {
   },
   broker: {
     email: "broker.prueba@quisqueyahome.do",
-    password: "PruebaBroker2026!",
     fullName: "Broker de Prueba",
     initials: "BP",
     jobTitle: "Broker",
@@ -112,7 +110,6 @@ async function crearUsuario(sql, nombre, { email, password, fullName, initials, 
     where u.email = ${email}`;
 
   console.log(`${nombre} de prueba listo:`, u);
-  console.log("credenciales:", email, "/", password);
 }
 
 const [rolPedido] = process.argv.slice(2);
@@ -123,9 +120,13 @@ if (rolPedido && !ROLES[rolPedido]) {
   process.exit(1);
 }
 
-const sql = postgres(process.env.DATABASE_URL, { prepare: false });
+const seleccionados = Object.entries(ROLES)
+  .filter(([nombre]) => !rolPedido || rolPedido === nombre)
+  .map(([nombre, datos]) => [nombre, { ...datos, password: testUserPassword(nombre) }]);
+// Se validan todas las credenciales antes de abrir una conexión.
+const sql = postgres(databaseUrl(), { prepare: false });
 
-for (const [nombre, datos] of Object.entries(ROLES)) {
+for (const [nombre, datos] of seleccionados) {
   if (rolPedido && rolPedido !== nombre) continue;
   await crearUsuario(sql, nombre, datos);
 }

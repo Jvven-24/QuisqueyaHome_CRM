@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D10",
+  "gate": "G4",
+  "actor": "codex-gpt-6.1-sol-d10",
+  "createdAt": "2026-10-03T20:10:28.944145+00:00",
+  "state": "review_pending",
+  "reviewer": "D12",
+  "summary": {
+    "path": ".viltrum/crm-ux/D10-fix-P1-F01-F04.md",
+    "sha256": "a8645e030867964fb74437528bfd3d6985ce1d3384d6a4f86ea74830d759f0f2",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261003T195046Z-D10-codex/evidence.json",
+      "sha256": "2ccb873a74ea665e08a6d9571be75a49876ffde908b0d33b42b201f04cdd5c58",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-005"
+}

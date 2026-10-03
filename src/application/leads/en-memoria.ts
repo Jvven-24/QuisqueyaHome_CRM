@@ -24,10 +24,10 @@
  */
 
 import type { AuditAction, EntityType } from "../../domain/catalogs.ts";
+import { reaches } from "../../domain/rbac.ts";
 import type { Reversible } from "../testing/reversible.ts";
 import type {
   CandidatoBroker,
-  CandidatoDuplicado,
   Contacto,
   DatosNuevoContactoExterno,
   DatosNuevoContactoManual,
@@ -162,15 +162,13 @@ export function leadsEnMemoria(semilla: SemillaLeads = {}): LeadsEnMemoria {
       return auditoriaSinActor;
     },
 
-    async candidatosDuplicados({ phone, email }): Promise<CandidatoDuplicado[]> {
-      // Ignora el alcance a propósito, como el adaptador real (decisión #19).
-      return contactosVivosCoincidentes(phone, email).map((f) => ({
-        id: f.id,
-        fullName: f.fullName,
-        phone: f.phone,
-        phoneDisplay: f.phoneDisplay,
-        email: f.email,
-      }));
+    async candidatosDuplicados({ phone, email }, actor, alcanceLectura) {
+      const coincidencias = contactosVivosCoincidentes(phone, email);
+      return {
+        existe: coincidencias.length > 0,
+        candidatos: coincidencias.filter((f) => reaches(actor, alcanceLectura, f.brokerId))
+          .map(({ id, fullName, phone, phoneDisplay, email }) => ({ id, fullName, phone, phoneDisplay, email })),
+      };
     },
 
     async contactoExiste(id) {

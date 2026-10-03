@@ -34,6 +34,7 @@
  */
 
 import type { AuditAction, EntityType, LEAD_STATUSES, OPERATION_TYPES } from "../../domain/catalogs.ts";
+import type { Actor, PermissionScope } from "../../domain/rbac.ts";
 import type { Auditoria } from "../compartido/auditoria.ts";
 import type { Contacto } from "../contactos/puertos.ts";
 import type { Negocio } from "../pipeline/puertos.ts";
@@ -168,8 +169,12 @@ export type RegistroAuditoriaSinActor = {
 export interface RepositorioLeads {
   // --- lecturas previas a la transacción (avisos y validaciones) -----------
 
-  /** Busca en TODA la cartera, sin filtrar por alcance (decisión #19). Es un aviso, no una garantía: `contacts` no tiene único en `phone`/`email`. */
-  candidatosDuplicados(criterio: { phone: string | null; email: string | null }): Promise<CandidatoDuplicado[]>;
+  /** Detecta en toda la cartera (#19), sin garantía de unicidad; divulga solo candidatos dentro del alcance de lectura de contactos. */
+  candidatosDuplicados(
+    criterio: { phone: string | null; email: string | null },
+    actor: Actor,
+    alcanceLectura: PermissionScope,
+  ): Promise<{ existe: boolean; candidatos: CandidatoDuplicado[] }>;
   /** `true` si el contacto existe y no está en la papelera. */
   contactoExiste(id: number): Promise<boolean>;
   /** Brokers activos con perfil, sin papelera. */

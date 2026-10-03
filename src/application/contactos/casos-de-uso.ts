@@ -11,6 +11,7 @@
 
 import { ConflictError, ForbiddenError, NotFoundError } from "../../domain/errors.ts";
 import type { Actor, PermissionScope } from "../../domain/rbac.ts";
+import { scopeFor } from "../../domain/rbac.ts";
 import { normalizarTelefono } from "../../domain/telefono.ts";
 import type { UnidadDeTrabajo } from "../compartido/unidad-de-trabajo.ts";
 import type { CambiosContacto, Contacto, RepositorioContactos, ReposContactos } from "./puertos.ts";
@@ -35,14 +36,17 @@ export async function crearContacto(
   // Detección de duplicados (decisión #19): se busca en toda la cartera, no solo
   // en lo que el actor puede ver. Se avisa, no se bloquea: sin `crearIgual`, un
   // candidato lanza el conflicto en vez de crear.
+  // La advertencia es global; las fichas del conflicto requieren contacts:view.
   //
   // Esta lectura va FUERA de la transacción, igual que antes: `contacts` no tiene
   // índice único en `phone` ni en `email` (solo índices normales), así que es un
   // aviso y no una garantía, y meterla en el `BEGIN` sugeriría una exclusividad
   // que la base no da.
   if (!entrada.crearIgual && (phone || entrada.email)) {
-    const candidatos = await deps.contactos.candidatosDuplicados({ phone, email: entrada.email ?? null });
-    if (candidatos.length > 0) {
+    const { existe, candidatos } = await deps.contactos.candidatosDuplicados(
+      { phone, email: entrada.email ?? null }, actor, scopeFor(actor, "contacts", "view"),
+    );
+    if (existe) {
       throw new ConflictError(
         "Ya existe un contacto con ese teléfono o correo. Confirma si quieres crearlo de todas formas.",
         { candidatos },

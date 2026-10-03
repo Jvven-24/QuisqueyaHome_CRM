@@ -13,8 +13,9 @@
  */
 
 import type { Actor, PermissionScope } from "../../domain/rbac.ts";
+import { reaches } from "../../domain/rbac.ts";
 import type { Reversible } from "../testing/reversible.ts";
-import type { CambiosContacto, CandidatoDuplicado, Contacto, DatosNuevoContacto, RepositorioContactos } from "./puertos.ts";
+import type { CambiosContacto, Contacto, DatosNuevoContacto, RepositorioContactos } from "./puertos.ts";
 
 /** Fecha fija: así las pruebas no dependen del reloj. */
 const FECHA_FIJA = new Date("2026-01-01T00:00:00Z");
@@ -45,11 +46,13 @@ export function contactosEnMemoria(
       return filas;
     },
 
-    async candidatosDuplicados({ phone, email }): Promise<CandidatoDuplicado[]> {
-      // Ignora el alcance a propósito, como el adaptador real (decisión #19).
-      return filas
-        .filter((f) => f.deletedAt === null && ((phone && f.phone === phone) || (email && f.email === email)))
-        .map((f) => ({ id: f.id, fullName: f.fullName, phone: f.phone, phoneDisplay: f.phoneDisplay, email: f.email }));
+    async candidatosDuplicados({ phone, email }, actor, alcanceLectura) {
+      const coincidencias = filas.filter((f) => f.deletedAt === null && ((phone && f.phone === phone) || (email && f.email === email)));
+      return {
+        existe: coincidencias.length > 0,
+        candidatos: coincidencias.filter((f) => reaches(actor, alcanceLectura, f.brokerId))
+          .map(({ id, fullName, phone, phoneDisplay, email }) => ({ id, fullName, phone, phoneDisplay, email })),
+      };
     },
 
     /**

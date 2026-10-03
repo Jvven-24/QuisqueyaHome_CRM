@@ -12,7 +12,7 @@
 
 import { sugerirBroker } from "../../domain/asignacion-lead.ts";
 import { ConflictError, NotFoundError, ValidationError } from "../../domain/errors.ts";
-import { reaches, type Actor, type PermissionScope } from "../../domain/rbac.ts";
+import { reaches, scopeFor, type Actor, type PermissionScope } from "../../domain/rbac.ts";
 import { normalizarTelefono } from "../../domain/telefono.ts";
 import type { UnidadDeTrabajo } from "../compartido/unidad-de-trabajo.ts";
 import type { DatosCapturaLead, Lead, RepositorioLeads, ReposLeads, TipoOperacion } from "./puertos.ts";
@@ -102,6 +102,7 @@ export async function crearLead(deps: DepsLeads, actor: Actor, entrada: EntradaC
   // los datos para crear uno nuevo — un `contactId` explícito ya es una decisión
   // tomada por quien llama, no hay nada que avisar. Se avisa con 409 y
   // candidatos, no se bloquea, y `crearIgual` fuerza la creación.
+  // Los candidatos identificables requieren contacts:view, no leads:view.
   //
   // Va FUERA de la transacción, igual que antes: es un aviso, no una garantía.
   const contactId = entrada.contactId;
@@ -109,8 +110,10 @@ export async function crearLead(deps: DepsLeads, actor: Actor, entrada: EntradaC
     const { phone } = normalizarTelefono(entrada.phone ?? null);
 
     if (!entrada.crearIgual && (phone || entrada.email)) {
-      const candidatos = await deps.leads.candidatosDuplicados({ phone, email: entrada.email ?? null });
-      if (candidatos.length > 0) {
+      const { existe, candidatos } = await deps.leads.candidatosDuplicados(
+        { phone, email: entrada.email ?? null }, actor, scopeFor(actor, "contacts", "view"),
+      );
+      if (existe) {
         throw new ConflictError(
           "Ya existe un contacto con ese teléfono o correo. Confirma si quieres crearlo de todas formas.",
           { candidatos },

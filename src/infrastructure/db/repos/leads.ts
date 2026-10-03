@@ -18,7 +18,6 @@
 import { and, asc, eq, isNull, or } from "drizzle-orm";
 import type {
   CandidatoBroker,
-  CandidatoDuplicado,
   Contacto,
   Lead,
   Negocio,
@@ -27,6 +26,7 @@ import type {
 } from "../../../application/leads/puertos";
 import type { Db } from "../client";
 import { auditLog, brokerProfiles, contacts, deals, leads, pipelineStages, users } from "../schema";
+import { visibleRows } from "../../rbac-filter";
 import { auditoriaDrizzle, type Tx } from "./compartido";
 
 /** La transacción o la conexión suelta. */
@@ -36,8 +36,13 @@ export function repositorioLeads(ejecutor: Ejecutor): RepositorioLeads {
   return {
     // --- lecturas previas a la transacción ---------------------------------
 
-    async candidatosDuplicados({ phone, email }): Promise<CandidatoDuplicado[]> {
-      return ejecutor
+    async candidatosDuplicados({ phone, email }, actor, alcanceLectura) {
+      const coincidencia = or(phone ? eq(contacts.phone, phone) : undefined, email ? eq(contacts.email, email) : undefined);
+      // La existencia global conserva el aviso (#19) sin cargar la ficha ajena.
+      const [duplicado] = await ejecutor.select({ id: contacts.id }).from(contacts)
+        .where(and(isNull(contacts.deletedAt), coincidencia)).limit(1);
+      if (!duplicado || alcanceLectura === "none") return { existe: Boolean(duplicado), candidatos: [] };
+      const candidatos = await ejecutor
         .select({
           id: contacts.id,
           fullName: contacts.fullName,
@@ -48,10 +53,11 @@ export function repositorioLeads(ejecutor: Ejecutor): RepositorioLeads {
         .from(contacts)
         .where(
           and(
-            isNull(contacts.deletedAt),
-            or(phone ? eq(contacts.phone, phone) : undefined, email ? eq(contacts.email, email) : undefined),
+            coincidencia,
+            visibleRows(actor, alcanceLectura, contacts.brokerId, contacts.deletedAt),
           ),
         );
+      return { existe: true, candidatos };
     },
 
     async contactoExiste(id): Promise<boolean> {

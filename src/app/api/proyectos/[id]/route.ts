@@ -5,7 +5,7 @@
  */
 import { z } from "zod";
 import { OPERATION_TYPES, PROJECT_TYPES } from "@/domain/catalogs";
-import { can, requireScope } from "@/domain/rbac";
+import { can, requireScope, stripRestrictedPrices } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { proyectosParaEscritura } from "@/infrastructure/contenedor/proyectos";
 import { errorResponse, idsDeRuta, parseInput, vaciosANull } from "@/infrastructure/http";
@@ -72,7 +72,7 @@ export async function PATCH(
       id,
       cambios,
     );
-    return Response.json({ ok: true, proyecto });
+    return Response.json({ ok: true, proyecto: stripRestrictedPrices(actor, proyecto) });
   } catch (error) {
     return errorResponse(error);
   }
