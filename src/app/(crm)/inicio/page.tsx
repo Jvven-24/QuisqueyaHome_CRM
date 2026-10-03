@@ -21,7 +21,8 @@ export default async function InicioPage() {
     dashboardRepositorio(),
     actor.userId,
     actor.roleSlug,
-    actor.roleSlug === "broker" ? "Yostar" : actor.roleSlug === "assistant" ? "Alexandra" : "Ismael",
+    // Actor no expone un nombre autenticado; no sustituirlo por uno de muestra.
+    "",
   );
 
   return <InicioVista roleSlug={actor.roleSlug} metricas={metricas} />;

@@ -174,6 +174,58 @@
 }
 
 @layer utilities {
+  /* Inicio: recetas acotadas por encima del legado y las utilidades de Metric. */
+  .inicio-header-actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .inicio-header-actions .date-chip {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .inicio-header-actions {
+      align-items: stretch;
+      flex-direction: column;
+      width: 100%;
+    }
+    .inicio-header-actions .date-chip {
+      align-self: flex-start;
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+    .inicio-header-actions .button {
+      min-height: 48px;
+    }
+    .inicio-metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .inicio-metrics > .metric {
+      align-content: start;
+      min-width: 0;
+      padding: 16px;
+    }
+    .inicio-metrics > .metric::before {
+      display: none;
+    }
+    .inicio-metrics > .metric > span,
+    .inicio-metrics > .metric > small {
+      font-size: 13px;
+      letter-spacing: normal;
+      line-height: 18px;
+      overflow-wrap: anywhere;
+      text-transform: none;
+    }
+    .inicio-metrics > .metric > strong {
+      font-size: 26px;
+      line-height: 32px;
+      overflow-wrap: anywhere;
+    }
+  }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }

@@ -15,24 +15,19 @@ export function InicioVista({
   const isAssistant = roleSlug === "assistant";
   const leads = metricas.leadsRecientes;
 
+  // D03: el puerto aún no expone identidad nominal autenticada; saludo neutral.
   return (
     <>
       <PageHeader
         eyebrow={isBroker ? "Mi operación" : "Resumen operativo"}
-        title={
-          isBroker
-            ? `Hola, ${metricas.saludoNombre}`
-            : isAssistant
-            ? `Hola, ${metricas.saludoNombre}`
-            : `Buenos días, ${metricas.saludoNombre}`
-        }
+        title="Hola"
         subtitle={
           isBroker
             ? "Tu cartera y próximas acciones de hoy."
             : "Prioridades, actividad comercial y decisiones pendientes."
         }
         action={
-          <div className="flex items-center gap-2">
+          <div className="inicio-header-actions">
             <div className="date-chip">{metricas.fechaTexto}</div>
             <Link href="/leads" className="button primary">
               + Registrar Lead
@@ -40,7 +35,7 @@ export function InicioVista({
           </div>
         }
       />
-      <section className="metrics-row">
+      <section className="metrics-row inicio-metrics">
         {isBroker ? (
           <>
             <Metric label="Mis leads" value={String(metricas.misLeadsCount)} note="Cartera activa asignada" />
