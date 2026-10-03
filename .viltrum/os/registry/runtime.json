@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "updated": "2026-09-29",
+  "authority": "Viltrum profiles, delivery contracts and gates",
+  "default_backend": "host",
+  "execution_scope": "read_only_analysis",
+  "construction_scope": {"mode": "bounded_software_construction", "flag": "--mode construction",
+                         "requires": ["C1 vigente", "backend host", ".viltrum/verify.json con check obligatorio"],
+                         "profiles": "commercial_required_profiles de registry/orchestration.json",
+                         "pre_handoff": "viltrum_sdk/verification.py bloquea run-submit si un check obligatorio falla"},
+  "learning": {"project_lessons": ".viltrum/memory/Dxx.md", "source": "revisiones rejected (P0-P2)",
+               "prompt_injection_limit": 5, "promotion": "D22 cura hacia departments/Dxx/MEMORY.md"},
+  "orchestration": {
+    "repository": "https://github.com/langchain-ai/langgraph",
+    "package": "langgraph",
+    "version": "1.2.12",
+    "checkpoint_package": "langgraph-checkpoint-sqlite",
+    "checkpoint_version": "3.1.1"
+  },
+  "executors": [
+    {"id":"host","binding":"manual_submission","requires":"Real host agent session and independent review"},
+    {"id":"codex","binding":"local_cli_read_only","requires":"Authenticated CLI and sandbox execution verified per run"},
+    {"id":"openhands","repository":"https://github.com/OpenHands/software-agent-sdk","binding":"agent_server_conversation","requires":"Verified local Agent Server, explicit LLM configuration and accredited read-only workspace"},
+    {"id":"openhands-codex","repository":"https://github.com/OpenHands/software-agent-sdk","binding":"agent_server_context_and_codex_cli","requires":"Verified loopback/authenticated Agent Server, read-only project mount, hash-matched context and authenticated Codex CLI; project must match server configuration"},
+    {"id":"openclaw","repository":"https://github.com/openclaw/openclaw","version":"2026.9.4","binding":"native_codex_harness_context_analysis","requires":"Explicit 23-agent registry, configured OpenAI OAuth, tools deny-all, independent sessions, selected context with hashes; Windows Node transport. Local CLI requires exclusive native state ownership; optional Gateway transport requires loopback service. Actual capability is checked locally."}
+  ],
+  "coordinators": [
+    {"id":"swarmclaw","repository":"https://github.com/swarmclawai/swarmclaw","binding":"portable_bundle","path":"integrations/swarmclaw","connected":false},
+    {"id":"openclaw","repository":"https://github.com/openclaw/openclaw","binding":"authenticated_durable_webhook_to_native_agents","path":"integrations/openclaw","connected":"runtime_doctor_required"}
+  ],
+  "references": [
+    {"id":"metagpt","repository":"https://github.com/FoundationAgents/MetaGPT","use":"Role/SOP artifacts; separate compatible Python environment if evaluated"},
+    {"id":"crewai","repository":"https://github.com/crewAIInc/crewAI","use":"Collaborative flows; alternative orchestrator, not simultaneous task authority"},
+    {"id":"mini-swe-agent","repository":"https://github.com/SWE-agent/mini-swe-agent","use":"Small issue executor reference; local subprocess is not isolation"},
+    {"id":"swe-agent","repository":"https://github.com/SWE-agent/SWE-agent","use":"Historical issue execution reference; maintenance-only"}
+  ],
+  "skills": ["orquestar", "viltrum-runtime", "viltrum-runtime-review"],
+  "knowledge": "Markdown and Git; Obsidian-compatible links; no separate state authority",
+  "dashboard": "Read-only localhost API with live run events and 23 profile projection"
+}

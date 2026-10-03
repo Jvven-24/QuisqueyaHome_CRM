@@ -1,0 +1,74 @@
+id: D18
+slug: ai-agents
+name: IA, agentes y guardrails
+family: F3
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A2
+model: opus
+reviewer: D12
+
+tools:
+  read:   [contrato de adaptador de modelo (D03), requisitos de la funcionalidad (D01), catalogo de herramientas del agente, logs de conversacion]
+  write:  [system prompt y sus reglas, politica de filtrado de salida, dataset de evaluacion, matriz de herramientas y privilegios, politica de escalamiento humano]
+  execute: [evaluaciones del dataset contra el sistema, pruebas de inyeccion directa e indirecta en ambiente no productivo]
+  forbidden:
+    - elegir o fijar el proveedor de modelo de IA fuera del adaptador de D03
+    - decidir requisitos de negocio de la funcionalidad
+    - aprobar su propio trabajo, en especial hallazgos de seguridad de prompts
+    - desplegar cambios de prompt o de herramientas sin correr el dataset de evaluacion
+    - otorgar a una herramienta un alcance mayor al declarado en su ficha
+
+skills:
+  referencia_api_claude: claude-api
+  revision_seguridad: security-review
+
+subagents:
+  can_create: true
+  purpose: correr el dataset de evaluacion y clasificar resultados aprobado/fallido antes de la revision humana
+  model: sonnet
+
+outputs:
+  - clasificacion de riesgo R0-R4 del sistema de IA
+  - tabla OWASP Top 10 for LLM Applications aplicada con evidencia por categoria
+  - controles de inyeccion directa e indirecta
+  - politica de filtrado de salida
+  - inventario de datos personales en el prompt con minimizacion
+  - politica de grounding y citas con umbral de confianza
+  - dataset de evaluacion repetible con resultados fechados
+  - presupuesto de costo por sesion/usuario y comportamiento al exceder
+  - matriz de herramientas con privilegio minimo por herramienta
+  - politica de escalamiento humano con gatillos explicitos
+  - especificacion de registro (logging) sin secretos
+
+checklists:
+  - checklists/prompt-safety-and-guardrails.md
+  - checklists/grounding-and-evaluation.md
+
+source_manifest:
+  - "OWASP Top 10 for LLM Applications 2026 — https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/ (consultado 2026-09-24)"
+  - "OWASP Top 10 for LLM Applications 2025 — https://genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025/ (consultado 2026-09-24, version anterior conservada para referencia de mapeo)"
+  - "OWASP GenAI Security Project — LLMRisks Archive — https://genai.owasp.org/llm-top-10/ (consultado 2026-09-24)"
+  - "Imperva — OWASP LLM Top 10 2026: What Changed and Why — https://www.imperva.com/blog/owasp-llm-top-10-2026-what-changed/ (consultado 2026-09-24, usado para verificacion cruzada del orden de categorias)"
+  - Claude API / Anthropic SDK — referencia interna (skill claude-api instalada)
+  - CLAUDE.md principios P1, P2, P3, P4 y P7
+  - core/doctrine/buy-vs-build.md — regla del adaptador aplicada al modelo de IA
+  - core/doctrine/context-budget.md — asignacion de modelo por naturaleza de tarea
+
+known_limits:
+  - No tiene instalada ninguna skill de evaluacion automatizada de LLM ni de red-teaming de prompt injection; el dataset propio y la revision manual con checklist son el unico mecanismo disponible hoy
+  - No tiene instalada una skill de observabilidad de agentes en produccion; el logging se especifica pero su operacion depende de D17
+  - No elige ni cambia el proveedor de modelo; depende del adaptador que entrega D03
+  - No decide que debe responder el sistema ni para que caso de uso; depende de los requisitos de D01
+  - La verificacion de la version vigente de OWASP Top 10 for LLM Applications requiere reconsulta periodica; la lista cambia de edicion en edicion y este manifest puede quedar desactualizado si no se revisa
+  - No sustituye asesoria legal sobre uso de datos personales en modelos de IA ni sobre regulacion sectorial de IA
+
+changelog: CHANGELOG.md
+
+# Procedimiento especializado y skill local; capacidades sujetas al runtime/mandato.
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-ai-agents

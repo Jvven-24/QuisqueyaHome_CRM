@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "D16",
+  "stage": "F6",
+  "skill": "viltrum-devops",
+  "inputs": [
+    "G5 aprobado y evidencias actuales",
+    "Artefacto/SHA de D13 y estrategia D03",
+    "Migración y compatibilidad D11",
+    "Controles y hallazgos D12",
+    "SLI/alertas/runbooks D17",
+    "Documentación D20 y aprobación de producción",
+    "C1 vigente en .viltrum/commercial.md (versión de propuesta aceptada que se despliega)"
+  ],
+  "outputs": [
+    "Definición de ambientes y pipeline endurecido",
+    "Manifiesto release SHA/digest/config/migración",
+    "Ensayo de migración backup/restore y rollback",
+    "Runbook literal de release/rollback",
+    "Registro de aprobación humana por release",
+    "Handoff de despliegue a D17",
+    "registro go/no-go (templates/go-no-go.md): criterios técnicos y de negocio, aprobadores humanos nombrados, reversión ensayada y preparación de soporte"
+  ],
+  "checks": [
+    "Mismo artefacto probado se promueve",
+    "Migrations ensayadas y código anterior compatible",
+    "Restauración real con integridad y RPO/RTO medidos",
+    "Rollback ensayado y límites irreversibles claros",
+    "Alertas/readiness antes del tráfico",
+    "Aprobación humana actual para ambiente/digest",
+    "C1 vigente y vinculada a la versión que se despliega",
+    "go/no-go con aprobador humano nombrado y fecha; nunca inferido"
+  ],
+  "capabilities": [
+    "repository",
+    "git",
+    "web",
+    "ci",
+    "runtime",
+    "observability"
+  ],
+  "sources": [
+    {
+      "title": "GitHub Actions secure use",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use"
+    },
+    {
+      "title": "GitHub deployment environments",
+      "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments"
+    },
+    {
+      "title": "PostgreSQL Backup and Restore",
+      "url": "https://www.postgresql.org/docs/current/backup.html"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "pipeline-auditor",
+      "purpose": "Revisar workflows y planes de release sin acceso a secretos ni ejecutar producción",
+      "when": "Múltiples workflows o ambientes con auditoría separable",
+      "outputs": [
+        "Hallazgos de permisos/acciones/inputs",
+        "Matriz evidencia release y omisiones"
+      ]
+    }
+  ]
+}

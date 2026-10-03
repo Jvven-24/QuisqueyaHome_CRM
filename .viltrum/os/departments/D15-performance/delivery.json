@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "D15",
+  "stage": "F5",
+  "skill": "viltrum-performance",
+  "inputs": [
+    "Perfil de tráfico y criticidad de D01/D02",
+    "Presupuesto y topología D03",
+    "Consultas y pool de D11",
+    "Recursos/paridad de staging D16",
+    "SLI/SLO acordados con negocio y D17"
+  ],
+  "outputs": [
+    "Plan de carga y límites de aborto",
+    "Baseline y comparación bajo iguales condiciones",
+    "Reportes k6/Lighthouse y perfiles",
+    "Capacidad sostenible y punto de degradación",
+    "Presupuesto, cache/degradación y riesgos medidos",
+    "Handoff a D03/D16/D17"
+  ],
+  "checks": [
+    "Tráfico y thresholds definidos antes de ejecutar",
+    "Target autorizado y límites de costo/aborto",
+    "Latencia percentil junto con throughput/error",
+    "Escenarios carga/estrés/pico/resistencia aplicables",
+    "Generador no limita la medición sin advertir",
+    "Presupuestos aprobados y evidencia reproducible"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "runtime",
+    "browser",
+    "observability"
+  ],
+  "sources": [
+    {
+      "title": "k6 thresholds",
+      "url": "https://grafana.com/docs/k6/latest/using-k6/thresholds/"
+    },
+    {
+      "title": "Repositorio Grafana k6",
+      "url": "https://github.com/grafana/k6"
+    },
+    {
+      "title": "Lighthouse CI",
+      "url": "https://github.com/GoogleChrome/lighthouse-ci"
+    },
+    {
+      "title": "Google SRE SLO alerting",
+      "url": "https://sre.google/workbook/alerting-on-slos/"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "measurement-runner",
+      "purpose": "Recopilar mediciones independientes bajo el plan aprobado",
+      "when": "Páginas o escenarios aislados sin competir por infraestructura ni exceder presupuesto",
+      "outputs": [
+        "Reportes de medición por target",
+        "Condiciones y límites del generador"
+      ]
+    }
+  ]
+}
+

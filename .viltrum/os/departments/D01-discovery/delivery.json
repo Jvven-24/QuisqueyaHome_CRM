@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "D01",
+  "skill": "viltrum-discovery",
+  "stage": "F0",
+  "inputs": [
+    "fuentes del cliente con procedencia",
+    "proceso actual",
+    "objetivo y restricciones"
+  ],
+  "outputs": [
+    "PRD",
+    "mapa de actores/procesos",
+    "requisitos con criterios de aceptación",
+    "NFR medibles",
+    "Q/CI y trazabilidad"
+  ],
+  "checks": [
+    "Hechos/hipótesis/peticiones distinguidos",
+    "Métrica de éxito atribuida",
+    "Excepciones/datos/permisos por capacidad",
+    "Fuente y criterio por requisito",
+    "Sin preguntas P0 abiertas para G0"
+  ],
+  "capabilities": [
+    "repository",
+    "documents",
+    "web"
+  ],
+  "sources": [
+    {
+      "title": "GOV.UK Service Manual — Discovery",
+      "url": "https://www.gov.uk/service-manual/agile-delivery/how-the-discovery-phase-works"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "extractor-reunion",
+      "purpose": "clasificar afirmaciones y preguntas",
+      "when": "transcripción larga o varias reuniones",
+      "outputs": [
+        "tabla con fragmentos y timestamps"
+      ]
+    },
+    {
+      "name": "revisor-dominio",
+      "purpose": "detectar requisitos sectoriales faltantes",
+      "when": "sector con obligaciones/restricciones relevantes",
+      "outputs": [
+        "preguntas y fuentes oficiales, sin dictamen legal"
+      ]
+    }
+  ]
+}
+

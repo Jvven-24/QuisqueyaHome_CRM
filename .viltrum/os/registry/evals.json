@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-01",
+  "authority": "Política única del ejecutor de evals (viltrum_sdk/evals.py). Cambiarla cambia cómo se puntúan todos los perfiles.",
+  "minCases": 5,
+  "verdictScores": {"approved": 100, "partial": 50, "failed": 0},
+  "approveAtOrAbove": 80,
+  "rules": [
+    "El productor recibe solo el escenario; el esperado y el criterio son del evaluador.",
+    "El evaluador es otro actor y otro perfil; su departamento es el revisor canónico del registro (o humano).",
+    "Un veredicto aprobado exige al menos una cita de evidencia; parcial o fallido exigen qué faltó.",
+    "Una falla crítica impide declarar aprobado el perfil aunque el promedio sea alto.",
+    "eval_score solo se publica con todos los casos puntuados y al menos minCases definidos, salvo decisión explícita.",
+    "El puntaje mide los casos definidos de ese perfil; no acredita pericia profesional general."
+  ]
+}

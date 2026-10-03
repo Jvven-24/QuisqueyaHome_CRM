@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "D10",
+  "stage": "F4",
+  "skill": "viltrum-backend",
+  "inputs": [
+    "mandato, commit y C1 aceptada",
+    "contratos de modulo/puertos D03",
+    "reglas, permisos y NFR D01",
+    "modelo, transacciones y politicas D11",
+    "amenazas D12 y adaptadores D19"
+  ],
+  "outputs": [
+    "API/schema y servicios de dominio",
+    "matriz permisos por recurso/tenant",
+    "idempotencia/transacciones/outbox",
+    "errores/auditoria y trazas",
+    "evidencia de fallos y handoff de seguridad/QA"
+  ],
+  "checks": [
+    "C1 y contratos G2 vigentes",
+    "autenticacion y pertenencia comprobadas server",
+    "claves concurrentes no duplican efectos",
+    "conflicto de payload y resultado desconocido tratados",
+    "colas/deduplicacion sobreviven crash",
+    "cache aislada y paginacion limitada",
+    "NFR medidos con dataset y ambiente",
+    "revision independiente D12 y handoff D14/D13"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "git",
+    "database",
+    "runtime"
+  ],
+  "sources": [
+    {
+      "title": "OpenAPI 3.1.1 — toolchain compatibility reference",
+      "url": "https://spec.openapis.org/oas/v3.1.1.html"
+    },
+    {
+      "title": "AsyncAPI — official specification repository",
+      "url": "https://github.com/asyncapi/spec"
+    },
+    {
+      "title": "PostgreSQL transaction isolation",
+      "url": "https://www.postgresql.org/docs/current/transaction-iso.html"
+    },
+    {
+      "title": "OpenTelemetry documentation",
+      "url": "https://opentelemetry.io/docs/"
+    },
+    {
+      "title": "Context7 — official repository",
+      "url": "https://github.com/upstash/context7"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "authorization-matrix",
+      "purpose": "Ejercer permisos y cruces de tenants con fixtures en sandbox",
+      "when": "Nuevo permiso/recurso o cambio de autorizacion; delegacion permitida",
+      "outputs": [
+        "intentos positivos/negativos por rol/recurso",
+        "evidencia de aislamiento",
+        "repro y controles faltantes"
+      ]
+    },
+    {
+      "name": "concurrency-probe",
+      "purpose": "Comprobar duplicados, carreras y recuperacion de operaciones",
+      "when": "Mutacion reintentable u operacion concurrente critica en sandbox",
+      "outputs": [
+        "escenarios concurrentes y crash",
+        "efectos finales e invariantes",
+        "resultado y limitaciones"
+      ]
+    }
+  ]
+}

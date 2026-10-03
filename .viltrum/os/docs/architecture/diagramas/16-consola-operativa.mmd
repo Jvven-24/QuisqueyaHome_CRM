@@ -1,0 +1,21 @@
+flowchart LR
+  IN["Transcripción / entrada externa"] --> WH["Webhook loopback 8771\nBearer + projectId permitido"]
+  WH --> Q[("SQLite · ID único\ncola serial y durable")]
+  Q --> SRC["Intake no confiable\nfuentes y hashes"]
+  SRC --> D00["D00 · mandato y enrutamiento"]
+  CAT["23 contratos · skills · tools\nregistry canónico"] --> D00
+  D00 --> LG["LangGraph + checkpoints\nplan / entrega / revisión"]
+  LG --> EX["Ejecutor explícito disponible\nCodex / host / OpenHands / OpenClaw"]
+  EX --> P["Departamento productor\nactor + evidencia"]
+  P --> R["Revisor canónico independiente\nactor distinto"]
+  R --> DONE["Entregable revisado / bloqueado"]
+  DONE --> EV[("run.json · eventos · handoff\nSHA256 y recibos")]
+  EV --> API["API local de lectura\nproyectos permitidos · datos acotados"]
+  CAT --> API
+  SRC --> API
+  READY["Preflight de capacidades\nactualización independiente cada 15 s"] --> API
+  API --> UI["Consola 8765 · lectura cada 2 s\nresumen / runs / perfiles / entradas\ncomunicación / arquitectura"]
+  OPS["viltrum up · services status/stop\nPID + fecha + identidad / cierre cooperativo"] --> UI
+  R -. "rechazo vigente + corrección explícita" .-> RW["run-rework\nnuevo run vinculado; original conservado"]
+  RW --> LG
+  DONE -. "circuito separado" .-> HUMAN["G0–G8 / C1\nevidencia y aprobación correspondiente"]

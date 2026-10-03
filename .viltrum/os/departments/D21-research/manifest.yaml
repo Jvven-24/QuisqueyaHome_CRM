@@ -1,0 +1,65 @@
+id: D21
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-research
+updated_at: 2026-09-29
+slug: research
+name: Investigación y decisión construir/comprar/integrar
+family: F6
+
+department_version: 1.1.0
+reviewed_at: 2026-09-20
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A1
+model: sonnet
+reviewer: D03
+
+tools:
+  read:   [web, repositorios publicos, registros de paquetes, proyectos previos de viltrum]
+  write:  [expedientes de investigacion]
+  execute: [pruebas tecnicas acotadas en sandbox]
+  forbidden:
+    - implementar la integracion
+    - decidir arquitectura
+    - instalar dependencias en proyectos reales
+
+skills:
+  metodo:               viltrum-research
+  buscar_componentes_ui: 21st-cli-use
+  buscar_skills:         find-skills
+  verificar_en_navegador: browser-automation
+  indexar_codigo:        gitnexus-cli
+  explorar_codigo:       gitnexus-exploring
+
+subagents:
+  can_create: true
+  purpose: busqueda amplia de candidatos; devuelve enlace, licencia, ultimo commit y una linea
+  model: haiku
+
+outputs:
+  - expediente de investigacion
+  - tabla de puntuacion de candidatos
+  - decision con umbral aplicado
+  - plan de salida del candidato elegido
+  - definicion de prueba tecnica cuando el puntaje cae en 65-79
+
+checklists:
+  - checklists/research-readiness.md
+  - core/doctrine/buy-vs-build.md
+
+templates:
+  - templates/research-dossier.md
+
+source_manifest:
+  - Viltrum Build System paso 04 (Trello lista 91, 2026-09)
+  - Viltrum Software Factory (Trello lista 91, 2026-09)
+  - core/doctrine/buy-vs-build.md
+
+known_limits:
+  - No evalua la calidad interna del codigo de un candidato sin una prueba tecnica
+  - La estimacion de costo a 3 anos es aproximada y depende de precios publicos vigentes
+  - No sustituye la revision legal de una licencia en casos regulados
+  - Sin inventario consolidado de proyectos previos de Viltrum, el frente "ya lo tenemos" depende de memoria humana
+
+changelog: CHANGELOG.md

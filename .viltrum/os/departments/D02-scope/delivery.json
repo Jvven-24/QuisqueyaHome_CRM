@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "D02",
+  "skill": "viltrum-scope",
+  "stage": "F1",
+  "inputs": [
+    "PRD verificable D01",
+    "capacidad real",
+    "restricciones y costos",
+    "estimaciones técnicas D03"
+  ],
+  "outputs": [
+    "prioridad y MVP por hipótesis validada",
+    "exclusiones y fases",
+    "rango/costos/supuestos",
+    "registro C1 para revisión humana",
+    "impacto de cambios",
+    "go de negocio para el go/no-go del release (criterios de valor, comunicación y cambio de alcance pendiente)"
+  ],
+  "checks": [
+    "Prioridad vinculada a valor y aceptación",
+    "Costos/esfuerzo con fuente y supuestos",
+    "Ninguna fecha prometida sin capacidad",
+    "Cambios trazados y C1 vigente",
+    "Revisión D01 de alcance sin autoaprobación"
+  ],
+  "capabilities": [
+    "repository",
+    "documents"
+  ],
+  "sources": [
+    {
+      "title": "MoSCoW / DSDM",
+      "url": "https://www.agilebusiness.org/dsdm-project-framework/moscow-prioritisation.html"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "impacto-alcance",
+      "purpose": "calcular impacto de cambios",
+      "when": "cambios múltiples sobre backlog aprobado",
+      "outputs": [
+        "REQ afectados",
+        "costo/plazo por rango",
+        "dependencias y supuestos"
+      ]
+    }
+  ]
+}

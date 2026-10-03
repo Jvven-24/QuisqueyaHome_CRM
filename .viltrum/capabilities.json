@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "capabilities": {
+    "repository": {
+      "status": "available",
+      "scope": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+      "evidence": "instalación local; acceso al directorio",
+      "owner": "host"
+    }
+  },
+  "notes": "El host debe verificar herramientas remotas y permisos; no incluir credenciales."
+}

@@ -1,0 +1,68 @@
+id: D17
+slug: observability
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-observability
+name: Observabilidad, SRE e incidentes
+family: F5
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A2
+model: sonnet
+reviewer: D16
+
+tools:
+  read:   [logs, trazas, metricas, dashboards, workflows de D16, recorridos criticos de D03]
+  write:  [definiciones de SLI/SLO, reglas de alerta, runbooks de incidente, postmortems]
+  execute: [consultas de observabilidad, pruebas de alerta en ambiente no productivo]
+  forbidden:
+    - registrar dato personal en logs o trazas
+    - cerrar un postmortem senalando a una persona
+    - ejecutar un rollback o despliegue directamente (eso es D16)
+    - silenciar una alerta sin registrar la razon y el dueno
+
+skills:
+  diagramas_de_arquitectura_e_incidentes: artifact-diagramming
+  dashboards_de_slo_y_error: dataviz
+  revision_de_seguridad_de_telemetria: security-review
+  rastrear_origen_de_errores_en_codigo: gitnexus-exploring
+
+subagents:
+  can_create: true
+  purpose: correlacionar trazas, métricas y logs de un incidente para armar la línea de tiempo
+  model: sonnet
+
+outputs:
+  - instrumentacion de trazas, metricas y logs correlacionada
+  - definicion de SLI/SLO por recorrido critico
+  - presupuesto de error con politica de freno
+  - catalogo de alertas accionables con runbook enlazado
+  - monitoreo de disponibilidad externo
+  - captura de errores de frontend y backend
+  - clasificacion de severidad de incidentes
+  - postmortem sin culpables con acciones y duenos
+
+checklists:
+  - checklists/observability-readiness.md
+  - checklists/incident-response.md
+
+source_manifest:
+  - "Google SRE Book — Service Level Objectives, sre.google/sre-book/service-level-objectives/ (consultado 2026-09-24)"
+  - "Google SRE Workbook — Alerting on SLOs, sre.google/workbook/alerting-on-slos/ (consultado 2026-09-24)"
+  - "Google SRE Book — Postmortem Culture, sre.google/sre-book/postmortem-culture/ (consultado 2026-09-24)"
+  - "OpenTelemetry — Documentation y Signals (traces/metrics/logs), opentelemetry.io/docs/ (consultado 2026-09-24)"
+  - "Sentry — Documentacion oficial, docs.sentry.io (consultado 2026-09-24)"
+  - "Uptime Kuma — repositorio oficial, github.com/louislam/uptime-kuma (consultado 2026-09-24)"
+  - CLAUDE.md principios P3 y P4
+
+known_limits:
+  - No existe skill instalada especifica de OpenTelemetry/Sentry/Uptime Kuma; la instrumentacion se especifica y se implementa junto con D09/D10
+  - No decide el SLO por si solo; requiere al dueno de producto como firmante
+  - No corre el rollback ni el despliegue; solo detecta y coordina con D16 para ejecutarlo
+  - La correlacion automatica de traza/metrica/log depende de que D09/D10 hayan propagado el contexto correctamente
+  - No cubre analisis forense de seguridad post-incidente cuando hay sospecha de intrusion; eso escala a D12
+
+changelog: CHANGELOG.md

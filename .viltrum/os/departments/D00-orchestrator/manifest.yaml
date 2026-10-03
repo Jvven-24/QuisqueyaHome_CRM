@@ -1,0 +1,54 @@
+id: D00
+delivery_protocol: sops/delivery.md
+local_skill: orquestar
+updated_at: 2026-09-29
+slug: orchestrator
+name: Orquestación, cobertura y riesgo
+family: F0
+
+department_version: 1.1.0
+reviewed_at: 2026-09-20
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A2
+model: sonnet
+reviewer: human
+
+# Qué puede leer, escribir y ejecutar
+tools:
+  read:   [repositorio, trello, drive, notion, figma, github]
+  write:  [trello, documentos de estado, paquetes de handoff]
+  execute: []
+  forbidden:
+    - escribir código de producto
+    - tocar produccion
+    - cerrar hallazgos propios o sustituir a su dueño (solo verifica el cierre de D14, D20 y D22 como su revisor canónico)
+
+skills: []
+
+subagents:
+  can_create: true
+  purpose: inventariar estado existente y verificar evidencia en paralelo
+  model: haiku
+
+# Artefactos obligatorios que produce
+outputs:
+  - mapa de cobertura
+  - clasificacion de intencion, tipo y riesgo
+  - paquete de activacion por departamento
+  - resultado de puerta
+  - escalaciones al humano
+
+source_manifest:
+  - Sistema de Perfiles IA — Calidad Integral del Software (Drive, 2026-08-19)
+  - Viltrum Agentic Delivery OS V2 (Trello lista 92, 2026-09)
+  - Viltrum Build System (Trello lista 91, 2026-09)
+
+known_limits:
+  - No conoce el historial de proyectos previos salvo que se le entregue el inventario
+  - No puede estimar esfuerzo ni costo; eso es D02
+  - No valida calidad tecnica de un entregable; solo verifica que exista evidencia del tipo correcto
+  - La clasificacion de riesgo depende de que el usuario declare que datos se manejan
+
+changelog: CHANGELOG.md

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "D13",
+  "stage": "F4",
+  "skill": "viltrum-git-governance",
+  "inputs": [
+    "Mandato y diff del departamento dueño",
+    "Convención y política de ramas del repositorio",
+    "Checks obligatorios y CI del commit",
+    "Revisión independiente y riesgos de D12",
+    "Contrato/ADR afectado de D03"
+  ],
+  "outputs": [
+    "Paquete de PR con cambio y evidencia",
+    "Matriz check → SHA → resultado → URL",
+    "Plan de protección de rama y owners",
+    "Versionado y changelog si aplica",
+    "Plan de reversión trazable"
+  ],
+  "checks": [
+    "Checks aplicables corresponden al SHA actual",
+    "Revisor independiente diferente del autor",
+    "Jobs omitidos no cuentan como aprobados",
+    "CI separa código no confiable de secretos",
+    "Sin reescritura de historial publicado",
+    "No publicación ni merge fuera de autorización"
+  ],
+  "capabilities": [
+    "repository",
+    "git",
+    "web",
+    "ci"
+  ],
+  "sources": [
+    {
+      "title": "GitHub Actions secure use",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use"
+    },
+    {
+      "title": "GitHub environments",
+      "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "ci-evidence-reader",
+      "purpose": "Leer checks y diffs de PRs independientes y asociarlos al SHA actual",
+      "when": "Lote de PRs con fuentes accesibles y revisión mecánica separable",
+      "outputs": [
+        "Matriz PR/SHA/check",
+        "Discrepancias y jobs omitidos"
+      ]
+    }
+  ]
+}
+

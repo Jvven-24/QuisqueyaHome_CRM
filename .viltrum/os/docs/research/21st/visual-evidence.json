@@ -1,0 +1,93 @@
+{
+  "recordedAt": "2026-09-30T15:47:35.176518+00:00",
+  "producer": "root",
+  "reviewers": [
+    "design_visual_scout",
+    "console_visual_reviewer",
+    "pxil_contract_reviewer"
+  ],
+  "decision": "Adapt layout patterns to native HTML; no provider source code shipped",
+  "templateSha256": "1bfe55ad9896c20f9b00c8eb0264a6afcf4b5f6d7f10537301cf068f2acefdd5",
+  "captures": [
+    {
+      "path": "output/design-review/21st-sidebar-preview.png",
+      "title": "21st · Dashboard Sidebar",
+      "kind": "provider_preview",
+      "actor": "design_visual_scout",
+      "source": "https://21st.dev/@arunjdass/components/dashboard-sidebar",
+      "sha256": "0e3563c3cf84998bb4d9d1c400ce71291dc21e516f0c067e17901e868f5fd1e1",
+      "imagePixels": {
+        "width": 65536,
+        "height": 4292542531
+      },
+      "capturedAtFileMtime": "2026-09-30T14:21:33.380313+00:00",
+      "scope": "Navegación compacta y jerarquía del workspace; patrón adaptado a HTML semántico.",
+      "state": "visible preview / selected department",
+      "notVerified": [
+        "All interactive states",
+        "Full WCAG audit",
+        "License for redistributing provider code"
+      ]
+    },
+    {
+      "path": "output/design-review/21st-app-preview.png",
+      "title": "21st · App Dashboard Layout",
+      "kind": "provider_preview",
+      "actor": "design_visual_scout",
+      "source": "https://21st.dev/@shadcnstore/components/app-1",
+      "sha256": "3e62003728627c1fce9340dc4039696c573d71ce54ac4299dae3de894c22e691",
+      "imagePixels": {
+        "width": 65536,
+        "height": 4292542531
+      },
+      "capturedAtFileMtime": "2026-09-30T14:21:33.443815+00:00",
+      "scope": "Resumen con métricas y actividad. En Viltrum se conservan únicamente registros reales.",
+      "state": "visible preview / selected department",
+      "notVerified": [
+        "All interactive states",
+        "Full WCAG audit",
+        "License for redistributing provider code"
+      ]
+    },
+    {
+      "path": "output/design-review/console-pxil-final.png",
+      "title": "Viltrum · Resultado integrado",
+      "kind": "integrated_dashboard",
+      "actor": "console_visual_reviewer",
+      "source": "http://127.0.0.1:8765/#departments",
+      "sha256": "342aaca3d271936e6d740231715bd7eed633d07b46befd99c6652ac1de459216",
+      "imagePixels": {
+        "width": 65536,
+        "height": 4292542531
+      },
+      "capturedAtFileMtime": "2026-09-30T14:24:26.024003+00:00",
+      "scope": "Nueve perfiles PXIL, inspector D05 y selección corregida; revisión independiente acotada.",
+      "state": "visible preview / selected department",
+      "notVerified": [
+        "All interactive states",
+        "Full WCAG audit",
+        "License for redistributing provider code"
+      ]
+    },
+    {
+      "path": "output/design-review/console-d05-mobile.png",
+      "title": "Viltrum · Móvil 390 × 844",
+      "kind": "integrated_dashboard",
+      "actor": "console_visual_reviewer",
+      "source": "http://127.0.0.1:8765/#departments",
+      "sha256": "848c5e109e46fd8f2e98e06f473110f6474b39340301a51a2410f4411e8ccd46",
+      "imagePixels": {
+        "width": 65536,
+        "height": 4292542531
+      },
+      "capturedAtFileMtime": "2026-09-30T14:21:48.014725+00:00",
+      "scope": "Sin desbordamiento global observado. Captura anterior al último ajuste ARIA, revalidado después.",
+      "state": "visible preview / selected department",
+      "notVerified": [
+        "All interactive states",
+        "Full WCAG audit",
+        "License for redistributing provider code"
+      ]
+    }
+  ]
+}

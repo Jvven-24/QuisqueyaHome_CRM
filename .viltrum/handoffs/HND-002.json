@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "department": "D04",
+  "gate": "G1",
+  "actor": "codex-gpt-6.1-sol-d04",
+  "createdAt": "2026-10-03T17:13:08.758477+00:00",
+  "state": "review_approved",
+  "reviewer": "D05",
+  "summary": {
+    "path": ".viltrum/crm-ux/D04-crm-ux-audit.md",
+    "sha256": "177715e8f7be2f107ee27cf722da06f3801b3cf8b599da161daa7e6bd1a2d719",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261003T163455Z-D04-codex/evidence.json",
+      "sha256": "6a242c5d3001b639422b12e7adccd1a54a8fd6cf7ffaaccc1d4b69250e7680d7",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-002",
+  "review": {
+    "reviewer": "D05",
+    "actor": "antigravity-gemini-3.1-pro-low-d05",
+    "result": "approved",
+    "report": {
+      "path": ".viltrum/crm-ux/D05-review-HND-002.md",
+      "sha256": "8b3041f9c98eafbda09296c8d3d07d4a2f04dc6fd024e96024e6762981151d8a",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    },
+    "createdAt": "2026-10-03T17:16:41.006106+00:00"
+  }
+}

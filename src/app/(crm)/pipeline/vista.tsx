@@ -2,9 +2,11 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ReactNode, useMemo, useState } from "react";
+import { Building2, Calendar, MessageCircle } from "lucide-react";
 import { formatearMonto } from "../_ui/formato";
-import { Avatar, Modal, PageHeader } from "../_ui/prototipo-ui";
+import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
+import { generarEnlaceWhatsApp } from "@/domain/comunicaciones";
 import { DealInspector } from "./inspector";
 
 export type Etapa = {
@@ -225,33 +227,88 @@ export function PipelineVista({
                     <strong>{negociosEtapa.length}</strong>
                   </header>
                   <div>
-                    {negociosEtapa.map((negocio) => (
-                      <button
-                        className="deal-card"
-                        draggable={!enviando}
-                        key={negocio.id}
-                        onDragStart={(event) => event.dataTransfer.setData("dealId", String(negocio.id))}
-                        onClick={() => irCon({ deal: String(negocio.id) })}
-                      >
-                        <span className="deal-source">{negocio.sourceName ?? "Sin canal"}</span>
-                        <strong>{negocio.contactName}</strong>
-                        <small>{negocio.proyectoPrincipal?.projectName ?? "Interés general"}</small>
-                        <b>{formatearMonto(negocio.amountCents, negocio.currency)}</b>
-                        <span>
-                          {negocio.nextActivityTitle
-                            ? `${negocio.nextActivityTitle}${
-                                negocio.nextActivityStartsAt
-                                  ? ` · ${formateadorFecha.format(new Date(negocio.nextActivityStartsAt))}`
-                                  : ""
-                              }`
-                            : "Sin próxima acción"}
-                        </span>
-                        <footer>
-                          <Avatar name={negocio.brokerName ?? "Sin asignar"} small />
-                          <small>{negocio.brokerName?.split(" ")[0] ?? "Sin asignar"}</small>
-                        </footer>
-                      </button>
-                    ))}
+                    {negociosEtapa.map((negocio) => {
+                      const tieneWhatsApp = Boolean(negocio.contactPhone);
+                      const enlaceWa = tieneWhatsApp
+                        ? generarEnlaceWhatsApp(
+                            negocio.contactPhone!,
+                            `Hola ${negocio.contactName}, le saludo de Quisqueya Home en relación a su interés en ${negocio.proyectoPrincipal?.projectName ?? "proyectos en RD"}.`,
+                          )
+                        : null;
+
+                      return (
+                        <div
+                          className="deal-card group relative bg-surface border border-line rounded-xl p-4 shadow-xs hover:border-gold-600/50 hover:shadow-md transition-all duration-150 cursor-pointer text-left block w-full mb-3"
+                          draggable={!enviando}
+                          key={negocio.id}
+                          onDragStart={(event) => event.dataTransfer.setData("dealId", String(negocio.id))}
+                          onClick={() => irCon({ deal: String(negocio.id) })}
+                        >
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <span className="deal-source text-[11px] font-bold tracking-wider text-ink-muted uppercase bg-surface-alt px-2 py-0.5 rounded-md border border-line">
+                              {negocio.sourceName ?? "Directo"}
+                            </span>
+                            {negocio.commissionBasisPoints ? (
+                              <span className="text-[11px] font-bold text-gold-700 bg-gold-100 px-2 py-0.5 rounded-full border border-gold-600/20">
+                                {(negocio.commissionBasisPoints / 100).toFixed(1)}% com.
+                              </span>
+                            ) : null}
+                          </div>
+
+                          <strong className="block font-heading font-bold text-base text-navy-950 group-hover:text-gold-700 transition-colors leading-snug">
+                            {negocio.contactName}
+                          </strong>
+
+                          <div className="flex items-center gap-1.5 text-xs text-ink-muted mt-1.5 mb-2 font-medium">
+                            <Building2 className="size-3.5 text-gold-600 shrink-0" />
+                            <span className="truncate">
+                              {negocio.proyectoPrincipal?.projectName ?? "Interés general"}
+                              {negocio.proyectoPrincipal?.unitCode ? ` · Unidad ${negocio.proyectoPrincipal.unitCode}` : ""}
+                            </span>
+                          </div>
+
+                          <div className="text-base font-extrabold text-navy-900 tracking-tight mb-2.5">
+                            {formatearMonto(negocio.amountCents, negocio.currency)}
+                          </div>
+
+                          <div className="flex items-center gap-1.5 text-xs text-ink-muted/90 bg-surface-alt/80 px-2.5 py-1.5 rounded-lg border border-line/60 mb-3">
+                            <Calendar className="size-3 text-ink-muted shrink-0" />
+                            <span className="truncate">
+                              {negocio.nextActivityTitle
+                                ? `${negocio.nextActivityTitle}${
+                                    negocio.nextActivityStartsAt
+                                      ? ` · ${formateadorFecha.format(new Date(negocio.nextActivityStartsAt))}`
+                                      : ""
+                                  }`
+                                : "Sin próxima acción"}
+                            </span>
+                          </div>
+
+                          <footer className="flex items-center justify-between pt-2.5 border-t border-line/60">
+                            <div className="flex items-center gap-2">
+                              <Avatar name={negocio.brokerName ?? "Sin asignar"} small />
+                              <span className="text-xs font-semibold text-ink-muted truncate max-w-[95px]">
+                                {negocio.brokerName?.split(" ")[0] ?? "Sin asignar"}
+                              </span>
+                            </div>
+
+                            {enlaceWa ? (
+                              <a
+                                href={enlaceWa}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-success hover:text-success/80 bg-success-bg px-2.5 py-1 rounded-md border border-success/30 transition-colors"
+                                title="Contactar por WhatsApp"
+                              >
+                                <MessageCircle className="size-3.5" />
+                                <span>WhatsApp</span>
+                              </a>
+                            ) : null}
+                          </footer>
+                        </div>
+                      );
+                    })}
                     {!negociosEtapa.length && <div className="kanban-empty">Suelta aquí</div>}
                   </div>
                 </section>

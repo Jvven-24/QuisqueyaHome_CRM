@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "id": "D11",
+  "stage": "F4",
+  "skill": "viltrum-data",
+  "inputs": [
+    "mandato y C1 para construccion",
+    "dominio, tenancy y ADR D03",
+    "reglas y retencion D01/D12",
+    "consultas/invariantes D10",
+    "schema/version motor, copia anonima o fixtures y RPO/RTO"
+  ],
+  "outputs": [
+    "ERD/diccionario y constraints",
+    "politicas de acceso y retencion",
+    "migraciones/backfill versionados",
+    "planes/mediciones de consultas",
+    "runbook y evidencia restore/PITR",
+    "handoff D10/D12/D16"
+  ],
+  "checks": [
+    "reglas en constraints/transacciones correctos",
+    "3FN o desnormalizacion justificada",
+    "rol real de app no cruza tenant",
+    "migracion expand/contract tolera versiones mixtas",
+    "backfill reanuda sin perder datos",
+    "RPO/RTO verificados o declarados pendientes",
+    "datos personales redactados",
+    "revision independiente D12"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "git",
+    "database",
+    "runtime"
+  ],
+  "sources": [
+    {
+      "title": "PostgreSQL row security",
+      "url": "https://www.postgresql.org/docs/current/ddl-rowsecurity.html"
+    },
+    {
+      "title": "PostgreSQL backup and restore",
+      "url": "https://www.postgresql.org/docs/current/backup.html"
+    },
+    {
+      "title": "PostgreSQL transaction isolation",
+      "url": "https://www.postgresql.org/docs/current/transaction-iso.html"
+    },
+    {
+      "title": "Context7 — official repository",
+      "url": "https://github.com/upstash/context7"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "schema-inventory",
+      "purpose": "Inventariar constraints, claves, dependencias y normalizacion",
+      "when": "Modelo existente extenso o migracion requiere mapa de dependencias; delegacion permitida",
+      "outputs": [
+        "inventario de schema versionado",
+        "violaciones con tablas/columnas",
+        "riesgos y dependencias de migracion"
+      ]
+    },
+    {
+      "name": "restore-rehearsal",
+      "purpose": "Medir recuperacion y comprobar invariantes en entorno aislado autorizado",
+      "when": "Existe respaldo autorizado y sandbox; restauracion requerida por mandato",
+      "outputs": [
+        "fecha/punto restaurado y tiempos",
+        "conteos/checksums/invariantes",
+        "RPO/RTO y limites observados"
+      ]
+    }
+  ]
+}

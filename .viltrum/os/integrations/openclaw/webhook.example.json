@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "dataDir": "C:/Users/YOUR_USER/AppData/Local/Viltrum/openclaw/inbox",
+  "secretEnvFile": "C:/Users/YOUR_USER/AppData/Local/Viltrum/openclaw/secrets.env",
+  "tokenEnv": "VILTRUM_WEBHOOK_TOKEN",
+  "backend": "openclaw",
+  "projects": {
+    "runtime-demo": "E:/YOUR_PROJECT"
+  },
+  "maxPending": 32,
+  "requestsPerMinute": 60
+}

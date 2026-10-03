@@ -1,0 +1,24 @@
+{
+  "conversation_id": "00000000-0000-4000-8000-000000000001",
+  "workspace": {"kind": "LocalWorkspace", "working_dir": "/workspace/project"},
+  "agent": {
+    "kind": "Agent",
+    "llm": {
+      "usage_id": "viltrum-producer",
+      "model": "REPLACE_WITH_PROVIDER_MODEL",
+      "api_key": "REPLACE_IN_MEMORY_WITH_EXPLICIT_PROVIDER_KEY",
+      "log_completions": false
+    },
+    "tools": [],
+    "mcp_config": {}
+  },
+  "confirmation_policy": {"kind": "AlwaysConfirm"},
+  "initial_message": {
+    "role": "user",
+    "content": [{"type": "text", "text": "Analyze only the supplied demo workspace. Return a bounded analysis with evidence paths."}],
+    "run": false
+  },
+  "max_iterations": 12,
+  "autotitle": false,
+  "plugins": []
+}

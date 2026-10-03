@@ -1,0 +1,32 @@
+# D10 — Entrega de API y reglas de negocio
+
+F4; revisor **D12**. D14 valida recorridos y D13 gobierno de cambios. C1 y contratos de G2 son entrada para construcción; despliegue o mutación de producción exige autorización humana registrada.
+
+## Entrada y mapa técnico
+
+Mandato/versiones, requisitos y casos límite D01, alcance D02, módulos/puertos D03, modelo/políticas D11, threat model D12 y contratos que consume D09. Leer framework y versiones del repositorio, DI/wiring, middleware, auth, servicios, repositorios, workers, caché, logs, CI y test harness. Usar GitNexus vigente o búsqueda local para mapear afectados. Cuando una dependencia externa sea nueva, pedir expediente D21 y documentación oficial de versión con Context7/web.
+
+## Procedimiento
+
+1. **Contrato antes de endpoint.** Operación/id, schemas entrada/salida, validaciones de límites, errores públicos, auth, scope/permiso, tenant, paginación, orden estable, rate limit y compatibilidad. Usar versión OpenAPI que valida el toolchain; manifest vigente declara 3.2, cualquier cambio requiere ADR/revisión D03. Contratos de eventos tienen schema/version, causalidad, entrega/replay y consumidores.
+2. **Dominio y casos de uso.** Controlador transforma y autoriza; servicio de dominio aplica invariantes; repositorio/adaptador conserva el límite. Definir máquina de estados y transiciones válidas, excepciones, qué sucede al cancelar/repetir y dónde vive la autoridad. Validar cliente, servidor y restricciones de datos aplicables; validaciones de regla interfilas no se delegan a un CHECK que no puede garantizarla.
+3. **Identidad y autorización.** Verificar emisor/audiencia/expiración del token y autenticidad de sesión con proveedor configurado; no construir crypto propia. Contexto tenant proviene de identidad verificada. Autorizar acción, pertenencia del recurso, campos editables y datos retornados; cubrir listados, búsqueda, exportaciones, recursos anidados y jobs. Deny por defecto. UUID no prueba pertenencia. Tenant desconocido o faltante no cae a vista global.
+4. **Transacción y concurrencia por operación.** Declarar lectura/escritura, restricciones y nivel de aislamiento; decidir optimistic version/ETag, locks o serializable según la invariancia. Dos peticiones simultáneas no deben vender el último recurso dos veces. D11 materializa unicidad y bloqueos necesarios. Retry de deadlock/serialization tiene límite y vuelve a ejecutar la transacción completa; no reintentar un efecto externo ya emitido.
+5. **Idempotencia durable.** Clave acotada a tenant/actor/operación, hash canónico del payload, UNIQUE, estado en progreso/completado/fallido, resultado estable y retención. La reserva y el efecto deben resistir caída entre pasos. Igual clave+payload devuelve resultado/estado previo; distinta carga con misma clave produce conflicto. Competidores no ejecutan dos veces. Resultado externo desconocido pasa a reconciliación con D19, no a cobro ciego.
+6. **Async durable.** Si cambio de dominio genera mensaje, transacción outbox; publicación reintentable y consumidor con inbox/efecto idempotente. Definir ownership, leasing con expiración, retries/jitter, timeout, cancelación, DLQ y reproceso autorizado en entorno correcto. Ack tras persistencia durable; no registrar deduplicación completada antes del efecto. Orden de eventos se trata por aggregate/version, sin asumir orden global.
+7. **Caché y cargas.** Keys con tenant/alcance/versión, TTL, invalidación, comportamiento stale, stampede y límite de tamaño. Datos autorizados no se comparten por URL sola. Paginación tiene tamaño máximo, orden estable y filtros permitidos. Rate limiting considera actor/tenant/operación y errores públicos; no limitar solo por IP cuando usuarios comparten NAT.
+8. **Errores, auditoría y observabilidad.** RFC 9457 o formato acordado sin stack/SQL/secrets. Correlación entre request/job/event y auditoría de actor/acción/recurso/resultado con PII minimizada. OpenTelemetry correlaciona traces/métricas/logs; evitar ids de usuario como labels de cardinalidad ilimitada. Redactar errores internos sin perder señal operativa.
+9. **Compatibilidad y operación.** Migración D11 expand/contract admite versiones N y N-1 durante rollout. Timeouts por dependencia, readiness/liveness diferenciados y shut down que drena workers. Contratos antiguos tienen política de deprecación. Runbook indica configuración, rollback de app, reconciliación y quién restaura. D11/D16 ensayan restauración; D10 verifica invariantes de negocio después.
+10. **IA cuando aplica.** Puerto D03 y política D18, input/output schema, tenant y permisos server, costo/tiempo máximos, fallback y circuito ante proveedor. Una salida de modelo no ejecuta operaciones por sí sola; executor valida permiso y argumentos, y registra confirmación donde corresponda.
+
+## Aceptación y evidencias
+
+Tabla por operación: requisito, contrato, método de control, prueba/resultado y riesgo. Incluir pruebas relevantes de validación bypass, permiso/tenant ajeno, mismas claves concurrentes, conflicto de carga, rollback, worker crash/replay y cache poisoning cuando apliquen. Presupuestos acordados p95/p99, throughput, error rate, tamaño de payload y cola incluyen dataset y ambiente; no inventar umbrales. Adjuntar comandos, commit y resultados; si falta servicio o credencial, marcar no ejecutado.
+
+Handoff D12: modelo de amenazas, matriz auth y evidencia negativa; D14: fixtures/recorridos; D09: contratos y errores; D11: cambios y transacciones; D19: externos; D16/D17: configuración y señales. D12 firma su revisión independiente; cumplimiento contractual y funcional también tiene revisión D14/D13. No confundir revisión interna con gate aprobado.
+
+## Herramientas y subagentes
+
+Repositorio/git/web, runtime y database del entorno autorizado; no conexión productiva implícita. Subagente de permisos recibe roles y fixtures de dos tenants en sandbox, devuelve intentos y resultados sin PII. Subagente de idempotencia/concurrencia recibe contrato y ambiente aislado y devuelve escenario de crash/doble petición. No reparte cambios de schema a workers sin handoff D11.
+
+Fuentes verificadas 2026-09-29: [OpenAPI](https://spec.openapis.org/oas/v3.1.1.html), [AsyncAPI](https://github.com/asyncapi/spec), [PostgreSQL aislamiento](https://www.postgresql.org/docs/current/transaction-iso.html), [OpenTelemetry](https://opentelemetry.io/docs/), [Context7](https://github.com/upstash/context7).

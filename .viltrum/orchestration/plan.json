@@ -1,0 +1,517 @@
+{
+  "schema_version": 1,
+  "createdAt": "2026-10-03T16:17:55.451259+00:00",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "identity": {
+    "id": "quisqueyahome-crm",
+    "nombre": "QuisqueyaHome CRM",
+    "tipo": "crm/luxury-real-estate",
+    "riesgo": "R3",
+    "responsable_legal": "Ismael",
+    "aprobador_comercial": "Wilber De La Rosa",
+    "fase": "F3",
+    "departamento_activo": "D00",
+    "actualizado": "2026-10-03"
+  },
+  "goal": "Refactorizacion integral de diseno y arquitectura de QuisqueyaHome CRM bajo estandar Viltrum Studio y sincronizacion Obsidian",
+  "intent": "INTEGRACION",
+  "classification": "provisional; confirmar por el asistente con evidencia",
+  "phase": "F0",
+  "gate": "G0",
+  "activeProfiles": [
+    {
+      "id": "D00",
+      "name": "Orquestación, cobertura y riesgo",
+      "slug": "orchestrator",
+      "reviewer": "human",
+      "autonomy": "A2",
+      "mode": "within_authorized_scope",
+      "skill": "orquestar",
+      "protocol": ".viltrum/os/departments/D00-orchestrator/sops/delivery.md",
+      "inputs": [
+        "objetivo autorizado",
+        "estado y gates",
+        "inventario de arquitectura/requisitos/hallazgos"
+      ],
+      "outputs": [
+        "mandato",
+        "plan de activación",
+        "mapa de cobertura",
+        "handoffs y bloqueos"
+      ],
+      "specialists": [
+        {
+          "name": "inventario",
+          "purpose": "mapear arquitectura y evidencia existente",
+          "when": "repositorio grande o fuentes dispersas",
+          "outputs": [
+            "mapa con rutas",
+            "lagunas"
+          ]
+        },
+        {
+          "name": "auditor-gates",
+          "purpose": "comprobar evidencia e independencia",
+          "when": "antes de avanzar etapa",
+          "outputs": [
+            "veredicto y hallazgos"
+          ]
+        }
+      ],
+      "capabilities": {
+        "repository": {
+          "status": "available",
+          "scope": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+          "evidence": "instalación local; acceso al directorio",
+          "owner": "host"
+        },
+        "documents": {
+          "status": "unverified"
+        },
+        "git": {
+          "status": "unverified"
+        }
+      }
+    },
+    {
+      "id": "D01",
+      "name": "Descubrimiento y requisitos",
+      "slug": "discovery",
+      "reviewer": "D02",
+      "autonomy": "A1",
+      "mode": "within_authorized_scope",
+      "skill": "viltrum-discovery",
+      "protocol": ".viltrum/os/departments/D01-discovery/sops/delivery.md",
+      "inputs": [
+        "fuentes del cliente con procedencia",
+        "proceso actual",
+        "objetivo y restricciones"
+      ],
+      "outputs": [
+        "PRD",
+        "mapa de actores/procesos",
+        "requisitos con criterios de aceptación",
+        "NFR medibles",
+        "Q/CI y trazabilidad"
+      ],
+      "specialists": [
+        {
+          "name": "extractor-reunion",
+          "purpose": "clasificar afirmaciones y preguntas",
+          "when": "transcripción larga o varias reuniones",
+          "outputs": [
+            "tabla con fragmentos y timestamps"
+          ]
+        },
+        {
+          "name": "revisor-dominio",
+          "purpose": "detectar requisitos sectoriales faltantes",
+          "when": "sector con obligaciones/restricciones relevantes",
+          "outputs": [
+            "preguntas y fuentes oficiales, sin dictamen legal"
+          ]
+        }
+      ],
+      "capabilities": {
+        "repository": {
+          "status": "available",
+          "scope": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+          "evidence": "instalación local; acceso al directorio",
+          "owner": "host"
+        },
+        "documents": {
+          "status": "unverified"
+        },
+        "web": {
+          "status": "unverified"
+        }
+      }
+    },
+    {
+      "id": "D22",
+      "name": "Gestión del conocimiento y contexto",
+      "slug": "knowledge-ops",
+      "reviewer": "D00",
+      "autonomy": "A2",
+      "mode": "within_authorized_scope",
+      "skill": "viltrum-knowledge",
+      "protocol": ".viltrum/os/departments/D22-knowledge-ops/sops/delivery.md",
+      "inputs": [
+        "fuentes/artefactos nuevos",
+        "decisiones atribuibles",
+        "estado y handoffs",
+        "inventario de código"
+      ],
+      "outputs": [
+        "índice de fuentes y hashes",
+        "paquete de contexto por perfil",
+        "registro de contradicciones",
+        "trazabilidad/recencia",
+        "lecciones para revisión"
+      ],
+      "specialists": [
+        {
+          "name": "triage-fuentes",
+          "purpose": "clasificar y detectar duplicados",
+          "when": "volumen documental alto",
+          "outputs": [
+            "índice/duplicados",
+            "contradicciones y desconocidos"
+          ]
+        },
+        {
+          "name": "auditor-trazabilidad",
+          "purpose": "localizar enlaces rotos/evidencia desactualizada",
+          "when": "cierre de fase o cambio arquitectura",
+          "outputs": [
+            "mapa de impactos",
+            "fuentes obsoletas"
+          ]
+        }
+      ],
+      "capabilities": {
+        "repository": {
+          "status": "available",
+          "scope": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+          "evidence": "instalación local; acceso al directorio",
+          "owner": "host"
+        },
+        "documents": {
+          "status": "unverified"
+        },
+        "git": {
+          "status": "unverified"
+        }
+      }
+    }
+  ],
+  "blocked": [
+    "La ruta solicitada depende de puertas previas sin evidencia/revisión vigente; se retoma F0"
+  ],
+  "gates": [
+    {
+      "id": "F0",
+      "gate": "G0",
+      "name": "Descubrimiento",
+      "profiles": [
+        "D01"
+      ],
+      "support": [
+        "D22"
+      ],
+      "review": "D02",
+      "approved": false,
+      "problems": [
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D01",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada"
+      ],
+      "path": ".viltrum/phases/F0-intake.md",
+      "expectedReviewer": "human",
+      "checksDigest": "bea2332098067db6f73c86c5305c68b8fa4f04f0b8df365ceed5f085965ed995",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "ee48ae1e432d4517bc082cf22c3a20d82b352e3ea88bde9c599624aa627fb2ee",
+      "producerActors": []
+    },
+    {
+      "id": "F1",
+      "gate": "G1",
+      "name": "Requisitos y alcance",
+      "profiles": [
+        "D01",
+        "D02"
+      ],
+      "support": [
+        "D21"
+      ],
+      "review": "cross",
+      "approved": false,
+      "problems": [
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D01",
+        "Falta revisión independiente vigente de D02",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada",
+        "Una puerta anterior perdió aprobación o está pendiente"
+      ],
+      "path": ".viltrum/phases/F1-requisitos.md",
+      "expectedReviewer": "human",
+      "checksDigest": "9dbb148ffe4300bc761362d6734e4f0d8cadc2f1beb78ec5fde05b16a7a5ac41",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "d831d63160ed839f714cadf69f5c50344c0f9bd716a3db6e6272f4b94a4c80e4",
+      "producerActors": []
+    },
+    {
+      "id": "F2",
+      "gate": "G2",
+      "name": "Arquitectura y datos",
+      "profiles": [
+        "D03",
+        "D11",
+        "D21"
+      ],
+      "support": [
+        "D12"
+      ],
+      "review": "human",
+      "approved": false,
+      "problems": [
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D03",
+        "Falta revisión independiente vigente de D11",
+        "Falta revisión independiente vigente de D21",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada",
+        "Una puerta anterior perdió aprobación o está pendiente"
+      ],
+      "path": ".viltrum/phases/F2-arquitectura.md",
+      "expectedReviewer": "human",
+      "checksDigest": "9beac1e8b6df74410018b99bf8b54647bdabd95e01436244139b7ab0d482dd76",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "1fe651e6c08197af8a98eda869fd5485e4c70cc29f7386d09e92ce8232edc388",
+      "producerActors": []
+    },
+    {
+      "id": "F3",
+      "gate": "G3",
+      "name": "Experiencia, sistema de diseño y estados",
+      "profiles": [
+        "D04",
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "support": [
+        "D08"
+      ],
+      "review": "D14",
+      "approved": false,
+      "problems": [
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D04",
+        "Falta revisión independiente vigente de D05",
+        "Falta revisión independiente vigente de D06",
+        "Falta revisión independiente vigente de D07",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada",
+        "Una puerta anterior perdió aprobación o está pendiente"
+      ],
+      "path": ".viltrum/phases/F3-diseno.md",
+      "expectedReviewer": "human",
+      "checksDigest": "edc250dd588c263fd470f40885a6cbe12f0c4e7abd646f8b3a30a9cc70632f69",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "cbfacf029b67ab34d68e3e570759f331f1dba89e20b4be1a4b5f4f6069ea224f",
+      "producerActors": []
+    },
+    {
+      "id": "F4",
+      "gate": "G4",
+      "name": "Construcción por contratos",
+      "profiles": [
+        "D09",
+        "D10",
+        "D11"
+      ],
+      "support": [
+        "D13"
+      ],
+      "review": "D14",
+      "approved": false,
+      "problems": [
+        "C1 sin aceptación comercial vigente",
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D09",
+        "Falta revisión independiente vigente de D10",
+        "Falta revisión independiente vigente de D11",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada",
+        "Una puerta anterior perdió aprobación o está pendiente"
+      ],
+      "path": ".viltrum/phases/F4-construccion.md",
+      "expectedReviewer": "human",
+      "checksDigest": "93c61b869d9517666c89f2a2b9b89c2171ed6f7d2387114aaf3e61c54f7be5cc",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "141762c71307a0ad1e8640e2598250df0cb8e316592700796ea2129c852c75cc",
+      "producerActors": []
+    },
+    {
+      "id": "F5",
+      "gate": "G5",
+      "name": "Verificación integral",
+      "profiles": [
+        "D14",
+        "D06",
+        "D07",
+        "D12",
+        "D15"
+      ],
+      "support": [],
+      "review": "D00",
+      "approved": false,
+      "problems": [
+        "C1 sin aceptación comercial vigente",
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D14",
+        "Falta revisión independiente vigente de D06",
+        "Falta revisión independiente vigente de D07",
+        "Falta revisión independiente vigente de D12",
+        "Falta revisión independiente vigente de D15",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada",
+        "Una puerta anterior perdió aprobación o está pendiente"
+      ],
+      "path": ".viltrum/phases/F5-verificacion.md",
+      "expectedReviewer": "human",
+      "checksDigest": "1eb7bda7df95fba40fd8566ddb391611ec18afa4248e3d3823c18b12d9b98fb5",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "102f00558eed778e90996a886d5ef6163071b9326f182c4064fc0ebcc85a426c",
+      "producerActors": []
+    },
+    {
+      "id": "F6",
+      "gate": "G6",
+      "name": "Release y recuperación",
+      "profiles": [
+        "D16",
+        "D20"
+      ],
+      "support": [
+        "D17",
+        "D12"
+      ],
+      "review": "human",
+      "approved": false,
+      "problems": [
+        "C1 sin aceptación comercial vigente",
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D16",
+        "Falta revisión independiente vigente de D20",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada",
+        "Una puerta anterior perdió aprobación o está pendiente"
+      ],
+      "path": ".viltrum/phases/F6-pre-release.md",
+      "expectedReviewer": "human",
+      "checksDigest": "15b951c7e55740282f8accbafe0bf8df0316cd980f1ea5124e960cce4f8fc7b7",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "fd082add17ad215fd54a6007aa66a2bc0ba3940429443e3c303bb5749272f8fd",
+      "producerActors": []
+    },
+    {
+      "id": "F7",
+      "gate": "G7",
+      "name": "Operación y confiabilidad",
+      "profiles": [
+        "D17"
+      ],
+      "support": [
+        "D16"
+      ],
+      "review": "D16",
+      "approved": false,
+      "problems": [
+        "C1 sin aceptación comercial vigente",
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D17",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada",
+        "Una puerta anterior perdió aprobación o está pendiente"
+      ],
+      "path": ".viltrum/phases/F7-produccion.md",
+      "expectedReviewer": "human",
+      "checksDigest": "39da74540de1c55d4e56e30836b1a4b248c0c9306255404627967f0c54c7c4cc",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "cb3baa3029f02a152a595f2f1d12c8ed3fcc83b15442e1216d63904a1117e121",
+      "producerActors": []
+    },
+    {
+      "id": "F8",
+      "gate": "G8",
+      "name": "Aprendizaje y evolución",
+      "profiles": [
+        "D00",
+        "D22"
+      ],
+      "support": [
+        "D20"
+      ],
+      "review": "human",
+      "approved": false,
+      "problems": [
+        "Checklist sin completar",
+        "Falta revisión independiente vigente de D00",
+        "Falta revisión independiente vigente de D22",
+        "Falta aprobación de fase vigente por human",
+        "Sin aprobación de fase registrada",
+        "Una puerta anterior perdió aprobación o está pendiente"
+      ],
+      "path": ".viltrum/phases/F8-mejora.md",
+      "expectedReviewer": "human",
+      "checksDigest": "638ea10929f715fec279cafad0395c0468a176606f75f04a1fa3f13ab1afa118",
+      "evidence": [],
+      "dependencies": [],
+      "policyDigest": "efcb25028f1bb9a05f48234d013d1ef38d6709b482dd484f68802c0bc11ba585",
+      "producerActors": []
+    }
+  ],
+  "inventory": {
+    "rootFiles": [
+      "README.md",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "package.json"
+    ],
+    "phaseFiles": [
+      ".viltrum/phases/F0-intake.md",
+      ".viltrum/phases/F1-requisitos.md",
+      ".viltrum/phases/F2-arquitectura.md",
+      ".viltrum/phases/F3-diseno.md",
+      ".viltrum/phases/F4-construccion.md",
+      ".viltrum/phases/F5-verificacion.md",
+      ".viltrum/phases/F6-pre-release.md",
+      ".viltrum/phases/F7-produccion.md",
+      ".viltrum/phases/F8-mejora.md"
+    ],
+    "architectureFiles": [
+      ".viltrum/departments/D00-orchestrator.md",
+      ".viltrum/departments/D01-discovery.md",
+      ".viltrum/departments/D02-scope.md",
+      ".viltrum/departments/D03-architecture.md",
+      ".viltrum/departments/D04-ux-research.md",
+      ".viltrum/departments/D05-ui-design-system.md",
+      ".viltrum/departments/D06-ux-states.md",
+      ".viltrum/departments/D07-accessibility.md",
+      ".viltrum/departments/D08-content-seo.md",
+      ".viltrum/departments/D09-frontend.md",
+      ".viltrum/departments/D10-backend.md",
+      ".viltrum/departments/D11-data.md",
+      ".viltrum/departments/D12-security.md",
+      ".viltrum/departments/D13-git-governance.md",
+      ".viltrum/departments/D14-qa.md",
+      ".viltrum/departments/D15-performance.md",
+      ".viltrum/departments/D16-devops.md",
+      ".viltrum/departments/D17-observability.md",
+      ".viltrum/departments/D18-ai-agents.md",
+      ".viltrum/departments/D19-integrations.md",
+      ".viltrum/departments/D20-documentation.md",
+      ".viltrum/departments/D21-research.md",
+      ".viltrum/departments/D22-knowledge-ops.md"
+    ],
+    "designFiles": []
+  },
+  "nextAction": "D01: producir el siguiente entregable de F0; resolver o atribuir los bloqueos",
+  "execution": "prepared; el asistente anfitrión ejecuta herramientas y agentes reales",
+  "commercial": {
+    "valid": false,
+    "state": "activo"
+  }
+}

@@ -1,0 +1,78 @@
+id: D10
+slug: backend
+name: Backend, API y reglas de negocio
+family: F3
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A3
+model: opus
+reviewer: D12
+
+tools:
+  read:   [contratos de modulo de D03, modelo de datos de D11, repositorio, github]
+  write:  [contratos openapi, endpoints, servicios de dominio, migraciones de cola, logs de auditoria]
+  execute: [pruebas de integracion, pruebas de idempotencia, pruebas de aislamiento BOLA/IDOR, ambiente no productivo]
+  forbidden:
+    - desplegar o migrar produccion sin aprobacion humana explicita
+    - aprobar su propio trabajo en autenticacion o autorizacion
+    - exponer mensajes de error internos del motor de base de datos al cliente
+    - confiar en el id de un payload sin verificar pertenencia del recurso
+
+skills:
+  postgres:             supabase
+  postgres_avanzado:    supabase-postgres-best-practices
+  auth_quickstart:      auth0:auth0-quickstart
+  auth_api_bearer:      auth0:express-oauth2-jwt-bearer
+  impacto_de_cambio:    gitnexus-impact-analysis
+  revision_seguridad:   security-review
+  revision_codigo:      code-review
+  simplificacion:       simplify
+  referencia_ia:        claude-api
+
+subagents:
+  can_create: true
+  purpose: ejercer pruebas de cruce de permisos (BOLA/IDOR) e idempotencia contra endpoints en ambiente no productivo
+  model: sonnet
+
+outputs:
+  - contrato OpenAPI 3.2 por modulo
+  - endpoints con validacion de servidor documentada
+  - verificacion de pertenencia de recurso con prueba que la ejerce
+  - claves de idempotencia en mutaciones reintentables
+  - estrategia de paginacion por endpoint
+  - limites de peticiones activos en endpoints sensibles
+  - errores en formato RFC 9457 sin fuga de informacion interna
+  - estrategia de transaccion y concurrencia por operacion critica
+  - trabajos asincronos en cola con reintento idempotente
+  - auditoria de mutaciones desde el primer endpoint
+
+checklists:
+  - checklists/authentication.md
+  - checklists/authorization.md
+
+source_manifest:
+  - OpenAPI Specification v3.2.0 — OpenAPI Initiative / Linux Foundation, spec.openapis.org/oas/v3.2.0.html (publicada 2025-09-19, verificada 2026-09-24)
+  - RFC 9457 — Problem Details for HTTP APIs, IETF, rfc-editor.org/rfc/rfc9457.html (publicada 2023-07, obsoleta RFC 7807, verificada 2026-09-24)
+  - OWASP Application Security Verification Standard v5.0.0, asvs.dev/v5.0.0 y owasp.org/projects/asvs (publicada 2025-05, verificada 2026-09-24)
+  - NIST SP 800-63B-4 — Digital Identity Guidelines: Authentication and Authenticator Management, pages.nist.gov/800-63-4 y csrc.nist.gov/pubs/sp/800/63/b/4/final (version final 2025-07, verificada 2026-09-24)
+  - OWASP Password Storage Cheat Sheet, cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html (verificada 2026-09-24)
+  - core/routing.md — tabla de riesgo R0-R4 y profundidad por riesgo
+  - CLAUDE.md principios P2, P3, P4, P7
+
+known_limits:
+  - No modela el esquema fisico de datos ni decide migraciones; depende de D11
+  - No decide limites de modulo ni que es irreversible; depende de D03
+  - No tiene skill instalada de rate limiting/WAF como producto (ej. Cloudflare, Kong); el control se implementa a nivel de aplicacion o se registra como known_limit del proyecto si falta
+  - No sustituye la revision humana de D12 en autenticacion y autorizacion, ni la aprobacion humana para produccion
+  - Las skills de Auth0 cubren integracion con ese proveedor especifico; un proyecto con otro proveedor de identidad requiere ampliar manifest y checklist
+  - El mapeo R0-R4 a ASVS/AAL en checklists/authentication.md es una interpretacion de D10 sobre estandares externos, no una tabla oficial publicada por OWASP o NIST — sujeta a revision de D12
+
+changelog: CHANGELOG.md
+
+# Procedimiento especializado y skill local; capacidades sujetas al runtime/mandato.
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-backend

@@ -1,0 +1,77 @@
+id: D19
+slug: integrations
+name: Integraciones y automatización
+family: F3
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A3
+model: sonnet
+reviewer: D12
+
+tools:
+  read:   [expediente de D21, contrato de puerto de D03, repositorio, documentacion oficial del proveedor, logs de integracion]
+  write:  [adaptadores, cola de mensajes muertos, registro de idempotencia, mapa de correlacion de eventos]
+  execute: [pruebas de integracion con adaptador falso, verificacion de firma en entorno no productivo, reproceso manual de dead-letter]
+  forbidden:
+    - procesar un webhook sin verificar su firma
+    - reintentar sin backoff exponencial y jitter
+    - exponer el nombre del proveedor fuera de adapters/
+    - guardar secretos o tokens de proveedor en el repositorio
+    - aprobar su propio trabajo de seguridad de webhooks o secretos
+
+skills:
+  revision_seguridad:      security-review
+  revision_codigo:         code-review
+  impacto_de_cambio:       gitnexus-impact-analysis
+  estado_o_cola_en_datos:  supabase
+
+subagents:
+  can_create: true
+  purpose: probar el adaptador contra payloads reales de webhook (validos, invalidos, duplicados, fuera de ventana de replay)
+  model: sonnet
+
+outputs:
+  - adaptador implementado detras del puerto de D03
+  - verificacion de firma de webhook con pruebas positivas y negativas
+  - politica de reintentos con backoff exponencial y jitter documentada
+  - clave de idempotencia en llamadas salientes que mutan estado externo
+  - deduplicacion de eventos entrantes por ID de evento
+  - cola de mensajes muertos con historial de intentos
+  - documentacion de limites del proveedor con fuente y fecha
+  - estrategia de sincronizacion y resolucion de conflictos
+  - mapa de trazabilidad por ID de correlacion
+
+checklists:
+  - checklists/webhook-integration.md
+  - checklists/resilience-and-idempotency.md
+
+source_manifest:
+  - "WhatsApp Cloud API — verificacion de firma X-Hub-Signature-256: https://developers.facebook.com/documentation/business-messaging/whatsapp/get-started (consultado 2026-09-24)"
+  - "WhatsApp Cloud API — plantillas y ventana de 24 horas: https://developers.facebook.com/documentation/business-messaging/whatsapp/templates/overview y https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/send-messages (consultado 2026-09-24)"
+  - "WhatsApp Cloud API — limites de mensajeria: https://developers.facebook.com/documentation/business-messaging/whatsapp/messaging-limits (consultado 2026-09-24)"
+  - "WhatsApp Cloud API — cambio de precios de mensajes de utilidad desde 1 oct 2026: https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing (consultado 2026-09-24)"
+  - "DGII — Comprobantes Fiscales Electronicos e-CF: https://dgii.gov.do/cicloContribuyente/facturacion/comprobantesFiscales/Paginas/comprobantesFiscalesElectronicos.aspx (consultado 2026-09-24)"
+  - "DGII — Documentacion tecnica sobre e-CF (pendiente de revision profunda): https://dgii.gov.do/cicloContribuyente/facturacion/comprobantesFiscalesElectronicosE-CF/Paginas/documentacionSobreE-CF.aspx (consultado 2026-09-24)"
+  - "n8n — desarrollo de flujos con nodo webhook (URL de prueba vs produccion, modo tunel): https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook/workflow-development (consultado 2026-09-24)"
+  - "Patron de idempotencia y verificacion de firma de webhook, referencia de industria (Stripe): fuentes de documentacion e implementacion consultadas 2026-09-24, sin acceso a docs.stripe.com directo en esta sesion — tratar como patron generico, verificar contra el proveedor real del proyecto antes de construir"
+  - "core/doctrine/buy-vs-build.md — regla del adaptador"
+  - "CLAUDE.md principios P1 y P7"
+
+known_limits:
+  - "No hay skill instalada especifica para WhatsApp Business Cloud API, pasarelas de pago, e-CF de la DGII ni n8n. La cobertura de estos casos vive solo en AGENTS.md de este departamento y debe reinvestigarse con WebSearch/WebFetch en cada proyecto hasta que exista skill dedicada."
+  - "El detalle tecnico exacto del e-CF de la DGII (esquema XML, endpoints de envio, codigos de rechazo, esquema de contingencia) no esta verificado. Requiere consulta directa a la documentacion tecnica de la DGII o a un proveedor certificado antes de construir el adaptador."
+  - "Las fechas de obligatoriedad del e-CF citadas (1 y 15 de noviembre de 2026) provienen de fuentes secundarias que citan a la DGII, no de la pagina oficial verificada directamente en esta investigacion. Confirmar antes de comprometerse con un cliente."
+  - "No decide si una capacidad se integra o se construye; depende del expediente de D21."
+  - "No diseña el contrato del puerto ni los limites del modulo; depende de D03."
+  - "No evalua rendimiento de la integracion bajo carga real; eso es D15."
+  - "El throughput de WhatsApp Cloud API (80 mensajes/segundo) proviene de fuentes de terceros, no confirmado como numero contractual en la pagina oficial consultada."
+
+changelog: CHANGELOG.md
+
+# Procedimiento especializado y skill local; capacidades sujetas al runtime/mandato.
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-integrations

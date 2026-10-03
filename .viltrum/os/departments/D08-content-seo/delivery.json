@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "id": "D08",
+  "stage": "F3",
+  "skill": "viltrum-content-seo",
+  "inputs": [
+    "audiencia objetivo y afirmaciones D02",
+    "sitemap y estructura D04/D05",
+    "tratamiento retencion y consentimiento D11/D12",
+    "URL implementacion o contexto de propuesta",
+    "contenido y voz aprobados"
+  ],
+  "outputs": [
+    "mapa de contenido y copy",
+    "especificacion SEO e indexacion",
+    "catalogo minimo de eventos conversion",
+    "plan y resultados de verificacion",
+    "limites de medicion y obligaciones pendientes",
+    "plan de medición: eventos, métricas de éxito del PRD, instrumentación y dueño",
+    "revisión de resultados a 30/60/90 días (templates/outcome-review.md) contra las métricas de G1"
+  ],
+  "checks": [
+    "afirmaciones con fuente y propietario",
+    "rutas publicas y privadas con politica correcta",
+    "schema refleja contenido verificable",
+    "eventos confiables sin datos personales por campos libres",
+    "consentimiento verificado o pendiente explicito",
+    "laboratorio diferenciado de campo",
+    "revision independiente D02 registrada",
+    "cada métrica de éxito del PRD tiene evento, fuente de datos y dueño",
+    "revisión de resultados aprobada por D02 y un humano; la analítica no sustituye la voz del usuario"
+  ],
+  "capabilities": [
+    "repository",
+    "browser",
+    "web"
+  ],
+  "sources": [
+    {
+      "title": "Google: SEO Starter Guide",
+      "url": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide"
+    },
+    {
+      "title": "schema.org: Getting Started",
+      "url": "https://schema.org/docs/gs.html"
+    },
+    {
+      "title": "web.dev: Web Vitals",
+      "url": "https://web.dev/articles/vitals"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "seo-route-review",
+      "purpose": "Verificar rutas y metadatos por lote",
+      "when": "Sitio grande con version y URLs autorizadas",
+      "outputs": [
+        "metadatos status y evidencia por URL",
+        "incoherencias de indexacion"
+      ]
+    },
+    {
+      "name": "copy-consistency-review",
+      "purpose": "Verificar coherencia de copy",
+      "when": "Multiples idiomas o catalogos",
+      "outputs": [
+        "hallazgos por idioma y ruta",
+        "afirmaciones sin fuente"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-experience-contract"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

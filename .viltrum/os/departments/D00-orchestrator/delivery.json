@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "D00",
+  "skill": "orquestar",
+  "stage": "F0",
+  "inputs": [
+    "objetivo autorizado",
+    "estado y gates",
+    "inventario de arquitectura/requisitos/hallazgos"
+  ],
+  "outputs": [
+    "mandato",
+    "plan de activación",
+    "mapa de cobertura",
+    "handoffs y bloqueos"
+  ],
+  "checks": [
+    "Ruta confirmada contra evidencia",
+    "Productor y revisor distintos",
+    "No avanzar con P0 ni aceptación humana fabricada",
+    "Recursos del host comprobados antes de delegar"
+  ],
+  "capabilities": [
+    "repository",
+    "documents",
+    "git"
+  ],
+  "sources": [
+    {
+      "title": "Claude Code skills",
+      "url": "https://code.claude.com/docs/en/skills"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "inventario",
+      "purpose": "mapear arquitectura y evidencia existente",
+      "when": "repositorio grande o fuentes dispersas",
+      "outputs": [
+        "mapa con rutas",
+        "lagunas"
+      ]
+    },
+    {
+      "name": "auditor-gates",
+      "purpose": "comprobar evidencia e independencia",
+      "when": "antes de avanzar etapa",
+      "outputs": [
+        "veredicto y hallazgos"
+      ]
+    }
+  ]
+}
+

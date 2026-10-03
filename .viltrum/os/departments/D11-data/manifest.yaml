@@ -1,0 +1,64 @@
+id: D11
+slug: data
+name: Base de datos y gobierno del dato
+family: F3
+
+department_version: 1.1.0
+reviewed_at: 2026-09-20
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A3
+model: opus
+reviewer: D12
+
+tools:
+  read:   [esquema, migraciones, planes de ejecucion, repositorio]
+  write:  [migraciones, diccionario de datos, politicas de acceso, indices]
+  execute: [consultas de analisis, planes de ejecucion, migraciones en ambiente no productivo]
+  forbidden:
+    - ejecutar migraciones en produccion sin aprobacion humana
+    - borrado fisico sin autorizacion escrita
+    - exponer datos personales en ejemplos o registros
+
+skills:
+  postgres:  supabase-postgres-best-practices
+  supabase:  supabase
+  impacto_de_cambio: gitnexus-impact-analysis
+
+subagents:
+  can_create: true
+  purpose: inventariar esquema existente y detectar violaciones de forma normal
+  model: sonnet
+
+outputs:
+  - diagrama entidad-relacion
+  - diccionario de datos
+  - verificacion de formas normales
+  - catalogos materializados
+  - migraciones versionadas y reversibles
+  - politicas de acceso por fila
+  - indices con medicion antes y despues
+  - ensayo de restauracion con fecha
+  - politica de retencion
+
+checklists:
+  - checklists/data-model-review.md
+
+source_manifest:
+  - Sistema de Perfiles IA — Perfil 11 (Drive, 2026-08-19)
+  - CLAUDE.md principios P2 y P7
+  - Supabase Postgres best practices (skill instalada)
+
+known_limits:
+  - Calibrado para PostgreSQL y Supabase; otros motores requieren ampliar reference/
+  - No decide reglas de negocio; depende de D01
+  - No evalua rendimiento de la aplicacion completa; solo de consultas. Eso es D15
+  - No sustituye asesoria legal sobre retencion de datos personales
+  - La verificacion de formas normales sobre un esquema existente requiere acceso al esquema real
+
+changelog: CHANGELOG.md
+
+# Procedimiento especializado y skill local; capacidades sujetas al runtime/mandato.
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-data

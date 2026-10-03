@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Confidence Ledger",
+  "description": "Schema for tracking the certainty of product requirements and scope elements.",
+  "type": "object",
+  "properties": {
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the ledger entry."
+          },
+          "statement": {
+            "type": "string",
+            "description": "The product requirement, scope element, or domain rule."
+          },
+          "confidenceState": {
+            "type": "string",
+            "enum": ["CONFIRMED", "INFERRED", "RESEARCHED", "ASSUMED", "OPEN"],
+            "description": "The current resolution state of the entry."
+          },
+          "source": {
+            "type": "string",
+            "description": "Origin of the statement (e.g., user request, inference, research)."
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Explanation of why the entry is in its current state."
+          }
+        },
+        "required": ["id", "statement", "confidenceState"]
+      }
+    }
+  },
+  "required": ["entries"]
+}

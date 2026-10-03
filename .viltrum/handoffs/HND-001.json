@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D03",
+  "gate": "G2",
+  "actor": "codex-gpt-6.1-sol-d03",
+  "createdAt": "2026-10-03T16:46:00.378051+00:00",
+  "state": "review_pending",
+  "reviewer": "human",
+  "summary": {
+    "path": ".viltrum/crm-ux/D03-topologia-vps-supabase.md",
+    "sha256": "ca552ec74e01db314bf7fd21141850a0771ca359f148dd2ba49f2394613ce2a4",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261003T163631Z-D03-codex/evidence.json",
+      "sha256": "5852f2b43db15bce526507f00b712d58ca3a878a7d269533a33b300eb7d9c590",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-001"
+}

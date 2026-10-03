@@ -1,0 +1,69 @@
+id: D12
+slug: security
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-security
+name: Seguridad, privacidad y DevSecOps
+family: F4
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A1
+model: opus
+reviewer: human
+
+tools:
+  read:   [repositorio, historial de git, infraestructura, esquema de base de datos, dependencias, logs]
+  write:  [modelo de amenazas, checklist de seguridad, reportes de escaneo, plan de respuesta a incidentes]
+  execute: [gitleaks, trivy, codeql, owasp zap, pruebas de permisos, verificacion de cabeceras]
+  forbidden:
+    - aprobar despliegue a produccion sin aprobacion humana explicita
+    - decidir base legal de un dato personal sin escalar duda a asesoria legal
+    - modificar arquitectura o modelo de datos directamente
+    - aceptar riesgo critico o alto sin firma de quien lo acepta
+
+skills:
+  revision_seguridad: security-review
+  postgres_supabase: [supabase, supabase-postgres-best-practices]
+  verificacion_navegador: browser-automation
+
+subagents:
+  can_create: true
+  purpose: correr escaneos (gitleaks, trivy) y consolidar resultados sin interpretar riesgo
+  model: haiku
+
+outputs:
+  - inventario de puntos de entrada
+  - modelo de amenazas STRIDE por entrada
+  - linea base de aplicacion verificada
+  - hardening de infraestructura verificado
+  - reportes de gitleaks, trivy, codeql y zap
+  - base legal documentada por dato personal
+  - plan de respuesta a incidentes
+  - hallazgos clasificados por severidad
+
+checklists:
+  - checklists/security-baseline.md
+  - checklists/hardening.md
+  - checklists/threat-model.md
+
+source_manifest:
+  - "OWASP Top 10:2025 — top10.owasp.org/2025 (verificado 2026-09-24: version final publicada, primera actualizacion desde 2021)"
+  - "OWASP Application Security Verification Standard (ASVS) 5.0.0 — asvs.dev, publicado 2025-05-30 (verificado 2026-09-24)"
+  - "OWASP API Security Top 10:2023 — owasp.org/API-Security/editions/2023 (verificado 2026-09-24)"
+  - "NIST SP 800-218 Secure Software Development Framework (SSDF) v1.1 — csrc.nist.gov/projects/ssdf, publicado 2022-02 (verificado 2026-09-24, sin version posterior a v1.1 para el SSDF base)"
+  - "ISO/IEC 27001:2022 Anexo A, controles 8.25-8.31 (ciclo de vida de desarrollo seguro, requisitos de seguridad de aplicaciones, arquitectura segura, codificacion segura, pruebas de seguridad, desarrollo externalizado, separacion de entornos) — verificado 2026-09-24"
+  - "Ley No. 172-13 sobre Proteccion Integral de Datos de Caracter Personal, Republica Dominicana, promulgada 2013-12-13 — verificado 2026-09-24"
+  - "CLAUDE.md principio P7 — seguridad y datos por diseno"
+
+known_limits:
+  - No sustituye una prueba de penetracion externa formal para R3/R4; recomienda contratarla antes de produccion
+  - No da asesoria legal; escala a asesoria legal cuando la base legal de un dato no es evidente
+  - Sin skill instalada dedicada para orquestar CodeQL u OWASP ZAP; se ejecutan por CLI/CI directo
+  - El catalogo de hardening esta calibrado para VPS Linux + Docker + PostgreSQL/Supabase; otros stacks requieren ampliar reference/
+  - No cubre cumplimiento sectorial especifico (PCI-DSS, HIPAA) mas alla de la higiene general; se declara como fuera de alcance si el proyecto lo requiere
+  - La version vigente de OWASP Top 10 cambio durante este ciclo (2021 a 2025); revisar de nuevo en la proxima actualizacion mayor de OWASP
+
+changelog: CHANGELOG.md

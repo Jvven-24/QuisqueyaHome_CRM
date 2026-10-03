@@ -1,0 +1,61 @@
+id: D02
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-scope
+updated_at: 2026-09-29
+slug: scope
+name: Alcance, negocio y prioridad
+family: F1
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A1
+model: sonnet
+reviewer: D01
+
+tools:
+  read:   [requisitos de D01, .viltrum/decisions.md, historial de proyectos, tarifas y capacidad del equipo]
+  write:  [matriz MoSCoW, definicion de MVP y fases, control de cambio de alcance, cotizacion por rango, .viltrum/decisions.md]
+  execute: []
+  forbidden:
+    - levantar requisitos nuevos sin pasar por D01
+    - decidir arquitectura tecnica
+    - prometer fecha fija sin margen de riesgo declarado
+    - aprobar su propio trabajo
+
+skills: [viltrum-scope]
+
+subagents:
+  can_create: true
+  purpose: calcular el impacto acumulado de cambios de alcance repetidos sobre el backlog y la fecha
+  model: haiku
+
+outputs:
+  - matriz MoSCoW con la prueba DSDM por requisito
+  - definicion de MVP y fases siguientes
+  - exclusiones explicitas con razon y fecha de revision
+  - definition of done de negocio
+  - cotizacion por rango con supuestos
+  - registro de cambio de alcance (DEC-nnn en .viltrum/decisions.md)
+  - riesgo comercial identificado con dueno
+  - .viltrum/commercial.md preparado para aceptación humana C1
+
+checklists:
+  - checklists/scope-definition.md
+  - checklists/change-control.md
+
+source_manifest:
+  - "MoSCoW / DSDM Agile Business Consortium (https://www.agilebusiness.org/dsdm-project-framework/moscow-prioritisation.html), consultado 2026-09-24"
+  - core/lifecycle.md — Fase F1, Gate G1
+  - core/evidence-contract.md
+  - departments/D01-discovery/reference/expected-capabilities.md
+
+known_limits:
+  - No calcula estimacion tecnica propia; depende de D03/D09/D10/D11 para el esfuerzo real
+  - El rango de cotizacion es tan preciso como los supuestos declarados; sin ellos el rango no tiene piso
+  - No tiene autoridad legal para redactar contratos; el control de cambio es insumo, no sustituye al documento legal firmado
+  - Sin historial consolidado de proyectos previos de Viltrum, la referencia de "esfuerzo tipico" depende de memoria humana
+
+changelog: CHANGELOG.md

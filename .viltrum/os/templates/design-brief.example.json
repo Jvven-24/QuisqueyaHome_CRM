@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "id": "BRIEF-EXAMPLE",
+  "name": "Design refresh",
+  "stack": "React · Tailwind CSS · shadcn/ui",
+  "screens": [
+    {
+      "id": "SCR-DASHBOARD",
+      "name": "Panel general",
+      "purpose": "Consultar actividad y resolver los pendientes prioritarios.",
+      "components": ["sidebar navigation", "summary cards", "activity table"],
+      "states": ["initial", "loading", "empty", "partial", "error", "offline", "success", "no_permission"]
+    },
+    {
+      "id": "SCR-REVIEW",
+      "name": "Revisión de elemento",
+      "purpose": "Inspeccionar un elemento y aprobarlo o devolverlo con observaciones.",
+      "components": ["detail header", "evidence viewer", "decision form"],
+      "states": ["initial", "loading", "partial", "error", "success", "no_permission", "conflict"]
+    }
+  ]
+}

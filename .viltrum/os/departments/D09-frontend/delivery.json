@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "D09",
+  "stage": "F4",
+  "skill": "viltrum-frontend",
+  "inputs": [
+    "mandato, commit y C1 aceptada",
+    "contratos D03/D10 y schemas versionados",
+    "tokens/componentes D05 y recorridos D04",
+    "matriz de estados D06, permisos y contenido",
+    "presupuesto de rendimiento y accesibilidad"
+  ],
+  "outputs": [
+    "recorridos/rutas y componentes",
+    "contratos consumidos y estado/cache documentados",
+    "formularios y seis estados",
+    "evidencia de anchos, permisos y fallos",
+    "handoff D14/D07/D15"
+  ],
+  "checks": [
+    "C1 y diseño/contratos aplicables vigentes",
+    "schemas cliente/servidor coherentes",
+    "seis estados por pantalla/accion",
+    "cache/session aislados al cambiar tenant",
+    "errores, conflicto, peticion obsoleta y submit duplicado",
+    "evidencia de teclado/responsive/rendimiento",
+    "revision independiente D14"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "git",
+    "browser",
+    "runtime"
+  ],
+  "sources": [
+    {
+      "title": "React reference — optional framework",
+      "url": "https://react.dev/reference/react"
+    },
+    {
+      "title": "OpenAPI 3.1.1 — toolchain compatibility reference",
+      "url": "https://spec.openapis.org/oas/v3.1.1.html"
+    },
+    {
+      "title": "Context7 — official repository",
+      "url": "https://github.com/upstash/context7"
+    },
+    {
+      "title": "GitNexus — official repository",
+      "url": "https://github.com/abhigyanpatwari/GitNexus"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "state-capture",
+      "purpose": "Registrar estados y capturas de rutas implementadas en ambiente aislado",
+      "when": "Varias rutas/anchos requieren comprobacion mecanica y delegacion permitida",
+      "outputs": [
+        "capturas etiquetadas por ruta/estado/ancho",
+        "pasos de reproduccion",
+        "fallos y escenarios no verificables"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-compose"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

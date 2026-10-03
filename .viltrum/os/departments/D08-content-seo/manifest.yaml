@@ -1,0 +1,64 @@
+id: D08
+slug: content-seo
+name: Contenido, SEO y conversión
+family: F2
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A1
+model: sonnet
+reviewer: D02
+
+tools:
+  read:   [sitemap de D04, composicion de D05, objetivo y metrica de exito de D02, politica de retencion de D11]
+  write:  [metadatos SEO, contenido y microcopy, catalogo de eventos de conversion, politica de privacidad]
+  execute: [navegador para verificar metadatos y consentimiento en el sitio real]
+  forbidden:
+    - activar analitica o marketing antes del consentimiento
+    - declarar conformidad legal GDPR/CCPA sin asesoria externa
+    - aprobar su propio trabajo
+    - decidir estrategia de negocio o precio
+
+skills:
+  verificacion_en_sitio: [browser-automation, playwright-cli]
+  exploracion_de_copy: ui-design
+  auditoria: [21st-ui-review, code-review]
+
+subagents:
+  can_create: true
+  purpose: verificar metadatos SEO y consentimiento de cookies pagina por pagina en un sitio grande
+  model: haiku
+
+outputs:
+  - SEO tecnico por pagina (titulo, H1, canonical, sitemap, robots, hreflang, structured data, Open Graph)
+  - core web vitals registrados y comunicados a D15/D09
+  - contenido y microcopy sin relleno
+  - catalogo de eventos de conversion por paso del embudo
+  - verificacion de consentimiento de cookies como bloqueante
+  - evidencia tecnica de tratamiento de datos y revision con D11/D12 sin dictamen legal propio
+  - politica de privacidad alineada con la recoleccion real
+
+checklists:
+  - checklists/seo-technical.md
+  - checklists/content-conversion.md
+
+source_manifest:
+  - "Google Search Central — SEO Starter Guide y Search Essentials (developers.google.com/search/docs/fundamentals/seo-starter-guide, consultado 2026-09-24)"
+  - "schema.org — vocabulario de datos estructurados (schema.org, consultado 2026-09-24)"
+  - "web.dev — Core Web Vitals: LCP ≤2.5s, INP ≤200ms, CLS ≤0.1 en percentil 75 (web.dev/articles/vitals, consultado 2026-09-24)"
+  - "Ley No. 172-13 sobre Protección Integral de los Datos de Carácter Personal, República Dominicana, 13 de diciembre de 2013 (camaradediputados.gob.do, consultado 2026-09-24)"
+
+known_limits:
+  - No hay skill instalada de auditoria SEO automatizada (Lighthouse SEO, Screaming Frog) ni de gestion de consentimiento (CMP); la verificacion depende de browser-automation/playwright-cli manual
+  - No declara conformidad legal formal con GDPR, CCPA u otras leyes fuera de Republica Dominicana; requiere asesoria legal externa si el proyecto tiene alcance internacional
+  - No optimiza el codigo para cumplir Core Web Vitals; solo mide y reporta a D15/D09
+  - No decide estrategia de negocio, precio ni prioridad; depende de D02
+  - El catalogo de datos sensibles de la Ley 172-13 se aplica de forma general; sectores regulados (salud, finanzas) pueden tener obligaciones adicionales no cubiertas aqui
+
+changelog: CHANGELOG.md
+
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-content-seo

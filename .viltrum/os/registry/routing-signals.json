@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-01",
+  "authority": "Señales del pre-triaje `viltrum laya-*`. Solo sugiere: el enrutamiento autoritativo es core/routing.md y la clasificación de D00. Los departamentos y su misión salen de registry/departments.yaml; aquí solo hay palabras clave (sin tildes, en minúsculas). Una señal de 3 letras o menos exige límite de palabra al final; las demás coinciden por prefijo (documentar, documentacion).",
+  "departments": {
+    "D00": ["orquestar", "coordinar", "gobernanza", "perfiles", "cobertura", "gates"],
+    "D01": ["reunion", "cliente", "requisitos", "requerimientos", "descubrimiento", "entrevista", "minuta"],
+    "D02": ["alcance", "prioridad", "mvp", "cotizacion", "backlog", "propuesta", "presupuesto"],
+    "D03": ["arquitectura", "adr", "contratos de", "dominio", "limites entre", "hexagonal", "modular"],
+    "D04": ["investigacion de usuarios", "recorrido", "arquitectura de informacion", "navegacion de", "ux research", "flujo de usuario"],
+    "D05": ["sistema de diseno", "design system", "tokens", "tailwind", "ui", "paleta", "tipografia", "layout", "bento"],
+    "D06": ["estados de", "estado vacio", "skeleton", "sin conexion", "offline", "estado de carga"],
+    "D07": ["accesibilidad", "wcag", "aria", "lector de pantalla", "contraste", "teclado"],
+    "D08": ["seo", "metadatos", "microcopy", "contenido", "sitemap", "copy", "consentimiento"],
+    "D09": ["frontend", "react", "next", "hook", "jsx", "tsx", "componente", "vite", "i18n"],
+    "D10": ["backend", "api", "endpoint", "servicio", "idempotencia", "rate limit"],
+    "D11": ["base de datos", "sql", "postgres", "supabase", "migracion", "rls", "esquema", "indices", "modelo de datos"],
+    "D12": ["seguridad", "vulnerab", "cifrado", "inyeccion", "rbac", "secretos", "owasp", "amenazas", "token", "auth"],
+    "D13": ["git", "commit", "rama", "pull request", "merge", "changelog"],
+    "D14": ["qa", "test", "prueba", "playwright", "e2e", "regresion", "cypress"],
+    "D15": ["rendimiento", "lento", "latencia", "vitals", "bundle", "k6", "optimizar", "memoria"],
+    "D16": ["docker", "caddy", "vps", "hostinger", "despliegue", "ci/cd", "pipeline", "release", "deploy", "infra"],
+    "D17": ["observabilidad", "alerta", "incidente", "logs", "slo", "sre", "monitoreo", "trazas"],
+    "D18": ["llm", "prompt", "agente", "rag", "embeddings", "modelo de ia", "guardrail", "chatbot"],
+    "D19": ["webhook", "integracion", "api externa", "stripe", "pasarela", "oauth", "terceros"],
+    "D20": ["documentar", "manual", "readme", "runbook", "guia de", "documentacion"],
+    "D21": ["investigar", "comparar", "alternativas", "licencia", "libreria", "open source", "estado del arte"],
+    "D22": ["obsidian", "vault", "conocimiento", "expediente", "transcripcion", "memoria del proyecto"]
+  },
+  "risk": {
+    "order": ["R4", "R3", "R2", "R0"],
+    "default": "R1",
+    "note": "Gana el riesgo más alto que coincida: clasificar hacia abajo es la forma más barata de causar un P0 (core/routing.md).",
+    "R4": ["contrato", "legal", "firmar", "pagare", "abogado", "regulado", "notarial", "normativa"],
+    "R3": ["pago", "tarjeta", "cobro", "credito", "prestamo", "dinero", "cedula", "pasaporte", "datos personales", "pii"],
+    "R2": ["login", "password", "contrasena", "jwt", "autenticacion", "rol", "permiso", "tenant", "sesion"],
+    "R0": ["landing", "blog", "publico", "solo lectura"]
+  },
+  "triage": [
+    {"severity": "P0_CRITICO", "priority": "INMEDIATA", "department": "D17", "signals": ["fatal", "crash", "corrupt", "connection refused", "500 internal", "data loss", "pérdida de datos"]},
+    {"severity": "P1_ALTO", "priority": "URGENTE", "department": "D14", "signals": ["timeout", "broken layout", "null pointer", "undefined is not an object", "404 not found"]},
+    {"severity": "P2_MEDIO", "priority": "PROGRAMABLE", "department": "D15", "signals": ["slow query", "misalignment", "lento"]},
+    {"severity": "P2_MEDIO", "priority": "PROGRAMABLE", "department": "D14", "signals": ["warning", "deprecation"]}
+  ],
+  "triage_default": {"severity": "P3_BAJO", "priority": "BACKLOG", "department": "D14"},
+  "gate_prechecks": {
+    "G2": [["contracts_defined", "Contratos de interfaz sin definir"], ["modular_boundaries", "Límites entre módulos sin declarar"], ["nfr_measurable", "Requisitos no funcionales sin cifras"]],
+    "G4": [["c1_valid", "C1 sin aceptación comercial vigente"], ["tests_all_passed", "Pruebas del cambio incompletas o en rojo"], ["independent_review", "Regla P4: falta revisión independiente"]],
+    "G5": [["tests_all_passed", "Pruebas incompletas o en rojo"], ["zero_console_errors", "Errores o advertencias en consola durante E2E"], ["independent_review", "Regla P4: falta revisión independiente"]],
+    "G6": [["independent_review", "Regla P4: falta revisión independiente"], ["backup_restored", "Respaldo sin restauración probada"], ["rollback_rehearsed", "Reversión sin ensayar"], ["human_approval_recorded", "Falta aprobación humana explícita registrada"]],
+    "G7": [["monitoring_active", "Monitoreo no activo"], ["runbook_available", "Sin runbook para soporte"]]
+  }
+}

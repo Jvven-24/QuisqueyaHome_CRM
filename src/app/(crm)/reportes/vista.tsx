@@ -1,29 +1,45 @@
 "use client";
 
+import { useState } from "react";
+import type { ReportesBiData } from "@/application/reportes/puertos";
 import { PageHeader } from "../_ui/prototipo-ui";
 
-/**
- * ponytail: datos de muestra portados de `referencia-prototipo/app/page.tsx`
- * (`ReportsView`). M12 · Reportes se construye en F4
- * (`docs/F1_ANALISIS_Y_PLAN.md`); sustituye estos valores fijos por
- * consultas reales (criterio de terminado #9: "las métricas de Inicio y
- * Reportes provienen de consultas, no de constantes").
- */
-export function ReportesVista() {
+export function ReportesVista({ metricas }: { metricas: ReportesBiData }) {
+  const [periodo, setPeriodo] = useState<string>("90d");
+
+  const exportarCsv = () => {
+    const encabezados = ["Etapa", "Conteo"];
+    const filas = metricas.funnel.map((f) => `"${f.label}",${f.count}`);
+    const csvContent = "data:text/csv;charset=utf-8," + [encabezados.join(","), ...filas].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `reporte_bi_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <PageHeader
-        eyebrow="C12 · Solo administrador"
+        eyebrow="C12 · Métricas Operativas"
         title="Reportes y BI"
-        subtitle="Conversión, canales, demanda y proyección comercial."
+        subtitle="Conversión, canales, demanda y proyección comercial en tiempo real."
         action={
           <div className="header-actions-inline">
-            <select className="header-select">
-              <option>Últimos 90 días</option>
-              <option>Este año</option>
+            <select
+              className="header-select"
+              value={periodo}
+              onChange={(e) => setPeriodo(e.target.value)}
+              aria-label="Seleccionar periodo de análisis"
+            >
+              <option value="90d">Últimos 90 días</option>
+              <option value="ano">Este año</option>
+              <option value="todo">Histórico completo</option>
             </select>
-            <button className="button secondary" type="button">
-              Exportar a Excel
+            <button className="button secondary" type="button" onClick={exportarCsv}>
+              Exportar a CSV
             </button>
           </div>
         }
@@ -31,109 +47,77 @@ export function ReportesVista() {
       <div className="report-grid">
         <article className="panel report-large">
           <p className="eyebrow">Conversión del embudo</p>
-          <h2>De lead a cierre</h2>
+          <h2>De lead a cierre ({metricas.totalLeads} captados)</h2>
           <div className="report-funnel">
-            {(
-              [
-                ["48", "Leads"],
-                ["38", "Contactados"],
-                ["24", "Presentaciones"],
-                ["14", "Preselección"],
-                ["10", "Negociación"],
-                ["7", "Cierres"],
-              ] as const
-            ).map(([value, label], index) => (
-              <div style={{ width: `${100 - index * 10}%` }} key={label}>
-                <strong>{value}</strong>
-                <span>{label}</span>
+            {metricas.funnel.map((step) => (
+              <div style={{ width: `${step.widthPercent}%` }} key={step.label}>
+                <strong>{step.count}</strong>
+                <span>{step.label}</span>
               </div>
             ))}
           </div>
         </article>
+
         <article className="panel">
           <p className="eyebrow">Leads por canal</p>
           <h2>Origen de captación</h2>
           <div className="donut">
-            <strong>48</strong>
+            <strong>{metricas.totalLeads}</strong>
             <span>leads</span>
           </div>
           <div className="legend">
-            <span>
-              <i className="gold" />
-              YouTube 58%
-            </span>
-            <span>
-              <i className="navy" />
-              Web 22%
-            </span>
-            <span>
-              <i className="blue" />
-              WhatsApp 14%
-            </span>
-            <span>
-              <i className="gray" />
-              Referidos 6%
-            </span>
+            {metricas.sources.map((src) => (
+              <span key={src.source}>
+                <i className={src.colorClass} />
+                {src.source} {src.percentage}% ({src.count})
+              </span>
+            ))}
           </div>
         </article>
+
         <article className="panel">
           <p className="eyebrow">Zonas calientes</p>
           <h2>Interés por ubicación</h2>
           <div className="horizontal-bars">
-            {(
-              [
-                ["Punta Cana", 88],
-                ["Bávaro", 68],
-                ["Cap Cana", 45],
-                ["Las Terrenas", 28],
-              ] as const
-            ).map(([label, value]) => (
-              <div key={label}>
-                <span>{label}</span>
+            {metricas.zones.map((zone) => (
+              <div key={zone.label}>
+                <span>{zone.label}</span>
                 <div>
-                  <i style={{ width: `${value}%` }} />
+                  <i style={{ width: `${zone.percentage}%` }} />
                 </div>
-                <strong>{value}</strong>
+                <strong>{zone.count}</strong>
               </div>
             ))}
           </div>
         </article>
+
         <article className="panel">
           <p className="eyebrow">Motivos de pérdida</p>
           <h2>Por qué no avanzan</h2>
           <div className="loss-list">
-            {(
-              [
-                ["Precio", 12],
-                ["No responde", 8],
-                ["Compró otro", 5],
-                ["Sin financiamiento", 4],
-              ] as const
-            ).map(([label, value]) => (
-              <div key={label}>
-                <span>{label}</span>
-                <strong>{value}</strong>
+            {metricas.lossReasons.map((motivo) => (
+              <div key={motivo.label}>
+                <span>{motivo.label}</span>
+                <strong>{motivo.count}</strong>
               </div>
             ))}
           </div>
         </article>
+
         <article className="panel report-large">
           <p className="eyebrow">Proyección de cierre</p>
           <h2>Pipeline ponderado</h2>
           <div className="projection">
             <div className="projection-line" />
             <div className="projection-area" />
-            <span>Jul</span>
-            <span>Ago</span>
-            <span>Sep</span>
-            <span>Oct</span>
-            <span>Nov</span>
-            <span>Dic</span>
+            {metricas.projection.points.map((p) => (
+              <span key={p.month}>{p.month}</span>
+            ))}
           </div>
           <div className="projection-total">
             <span>Proyección trimestral</span>
-            <strong>US$1.42M</strong>
-            <small>Confianza estimada 72%</small>
+            <strong>{metricas.projection.totalDisplayUsd}</strong>
+            <small>Confianza estimada {metricas.projection.confidenceEstimated}%</small>
           </div>
         </article>
       </div>

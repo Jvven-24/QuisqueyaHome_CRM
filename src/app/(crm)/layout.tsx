@@ -64,17 +64,16 @@ export default async function CrmLayout({
       <Sidebar>
         <SidebarHeader className="border-b border-sidebar-border px-5 py-5">
           <div className="flex items-center gap-3" aria-label="Quisqueya Home">
-            <span
-              aria-hidden="true"
-              className="flex size-11 shrink-0 items-center justify-center rounded-full bg-sidebar-primary font-heading text-lg font-extrabold tracking-tighter text-sidebar-primary-foreground"
-            >
-              QH
-            </span>
+            <img
+              src="/brand/app-icon-192.png"
+              alt="Quisqueya Home"
+              className="size-11 shrink-0 rounded-xl object-contain shadow-md border border-gold-600/40 bg-navy-950 p-1"
+            />
             <span className="grid leading-none">
               <strong className="font-heading text-lg font-bold tracking-wide text-sidebar-accent-foreground uppercase">
                 Quisqueya
               </strong>
-              <small className="mt-1.5 text-[13px] tracking-[0.19em] text-sidebar-primary uppercase">
+              <small className="mt-1.5 text-[13px] tracking-[0.19em] text-gold-600 font-semibold uppercase">
                 Home CRM
               </small>
             </span>

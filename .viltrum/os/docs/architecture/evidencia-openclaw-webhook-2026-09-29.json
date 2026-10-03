@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "dateLocal": "2026-09-29",
+  "eventId": "openclaw-local-20260929-001",
+  "projectId": "demo",
+  "runId": "RUN-df40231836ed4293af8b468549f00ca0",
+  "backend": "openclaw",
+  "status": "blocked",
+  "profiles": [
+    "D21",
+    "D03"
+  ],
+  "model": "openai/gpt-5.6-sol",
+  "authConfirmedByCompletedModelTurns": true,
+  "oauthCopiedBySDK": false,
+  "gatesApproved": false,
+  "commercialAccepted": false,
+  "roles": [
+    {
+      "role": "producer",
+      "agentId": "viltrum-d21",
+      "actor": "openclaw:viltrum-d21:producer:34cdf6de-3cfc-4f2d-996f-be0467b2fcdd",
+      "nativeSessionId": "34cdf6de-3cfc-4f2d-996f-be0467b2fcdd",
+      "nativeRunId": "a8b5c8dc-4b8d-4ae1-94c4-b7ad7cc342fc",
+      "transport": "local",
+      "harnessVerified": true,
+      "policyValidatedAfterRun": true,
+      "attestation": {
+        "agentHarnessId": "codex",
+        "codeModeEngaged": false,
+        "successfulToolNames": [],
+        "pendingToolCalls": [],
+        "toolSummaryPresent": false,
+        "terminalSessionMatched": true,
+        "terminalRunMatched": true,
+        "requestedProvider": "openai",
+        "effectiveProvider": "openai",
+        "requestedModel": "openai/gpt-5.6-sol",
+        "effectiveModel": "openai/gpt-5.6-sol",
+        "sourceReplyDelivered": null,
+        "rerouted": false
+      },
+      "sourceEvidenceCount": 1,
+      "verdict": null,
+      "contextFiles": {
+        ".viltrum/intake/webhooks/659f213f73464f16b56f0698ee75edcf.md": "213932d022ce7fe485e8ffe3e839b824411c58aa5e01e3c30b6c13aa97ac3a4f"
+      },
+      "summary": ".viltrum/runtime/runs/RUN-df40231836ed4293af8b468549f00ca0/artifacts/TASK-D21-producer/summary.md",
+      "summarySha256": "d2f9d1a9eb4fd5aa0e45e4901de1471efbc5d5a9d9d4fc234522e2885b636e5b",
+      "sandboxVerified": false
+    },
+    {
+      "role": "reviewer",
+      "agentId": "viltrum-d03",
+      "actor": "openclaw:viltrum-d03:reviewer:8aea9032-9765-42af-8428-ddd80764a763",
+      "nativeSessionId": "8aea9032-9765-42af-8428-ddd80764a763",
+      "nativeRunId": "c3b22fd8-a026-45a0-9593-48fa1ecdc8cf",
+      "transport": "local",
+      "harnessVerified": true,
+      "policyValidatedAfterRun": true,
+      "attestation": {
+        "agentHarnessId": "codex",
+        "codeModeEngaged": false,
+        "successfulToolNames": [],
+        "pendingToolCalls": [],
+        "toolSummaryPresent": false,
+        "terminalSessionMatched": true,
+        "terminalRunMatched": true,
+        "requestedProvider": "openai",
+        "effectiveProvider": "openai",
+        "requestedModel": "openai/gpt-5.6-sol",
+        "effectiveModel": "openai/gpt-5.6-sol",
+        "sourceReplyDelivered": null,
+        "rerouted": false
+      },
+      "sourceEvidenceCount": 2,
+      "verdict": "rejected",
+      "contextFiles": {
+        ".viltrum/intake/webhooks/659f213f73464f16b56f0698ee75edcf.md": "213932d022ce7fe485e8ffe3e839b824411c58aa5e01e3c30b6c13aa97ac3a4f",
+        ".viltrum/runtime/runs/RUN-df40231836ed4293af8b468549f00ca0/artifacts/TASK-D21-producer/summary.md": "d2f9d1a9eb4fd5aa0e45e4901de1471efbc5d5a9d9d4fc234522e2885b636e5b"
+      },
+      "summary": ".viltrum/runtime/runs/RUN-df40231836ed4293af8b468549f00ca0/artifacts/TASK-D21-reviewer/summary.md",
+      "summarySha256": "0b79e03105048faa07bf60fbe3c590f73e2e1717637c8781beb2a98b0a974c4b",
+      "sandboxVerified": false
+    }
+  ],
+  "http": {
+    "health": 200,
+    "missingBearerPost": 401,
+    "missingBearerGet": 401,
+    "acceptedPost": 202,
+    "identicalDuplicate": 202,
+    "conflictingDuplicate": 409
+  },
+  "limits": [
+    "Gateway gestionado detenido; CLI local requiere estado exclusivo",
+    "Review rejected: afirmacion SwarmClaw sin fuente y responsabilidad de verificacion de hashes a aclarar",
+    "Cancelacion remota no acreditada; reconciliar intentos ambiguos",
+    "Eval scores de los 23 perfiles siguen null"
+  ]
+}

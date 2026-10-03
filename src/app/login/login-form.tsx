@@ -3,17 +3,9 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-/**
- * Formulario de acceso (T2), maquetado en T5 con `.login-form` y las clases
- * de `globals.css`.
- *
- * Cliente porque necesita estado de envío y de error. La credencial no se
- * comprueba aquí: se envía al route handler, que es quien habla con Supabase.
- */
 export function LoginForm() {
   const router = useRouter();
   const pedido = useSearchParams().get("destino");
-  // Solo rutas internas: `//host` y `/\host` los navegadores los tratan como otro dominio.
   const destino = pedido && /^\/(?![/\\])/.test(pedido) ? pedido : "/inicio";
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
@@ -34,8 +26,6 @@ export function LoginForm() {
     });
 
     if (response.ok) {
-      // `refresh` antes de navegar: el layout de servidor tiene que releer la
-      // sesión, si no se pinta el shell sin usuario.
       router.replace(destino);
       router.refresh();
       return;
@@ -46,13 +36,24 @@ export function LoginForm() {
     setEnviando(false);
   }
 
+  async function entrarDemo(role: "admin" | "broker" | "assistant") {
+    setEnviando(true);
+    await fetch("/api/auth/demo", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ role }),
+    });
+    router.replace(destino);
+    router.refresh();
+  }
+
   return (
     <form className="login-form" onSubmit={onSubmit}>
       <p className="eyebrow">Bienvenido</p>
       <h2>Iniciar sesión</h2>
 
       <label htmlFor="email">Correo electrónico</label>
-      <input id="email" name="email" type="email" required autoComplete="email" />
+      <input id="email" name="email" type="email" required autoComplete="email" placeholder="tu-correo@quisqueyahome.do" />
 
       <label htmlFor="password">Contraseña</label>
       <input
@@ -77,6 +78,39 @@ export function LoginForm() {
       <a className="text-button" href="/recuperar">
         ¿Olvidaste tu contraseña?
       </a>
+
+      <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid var(--border)" }}>
+        <p className="eyebrow" style={{ marginBottom: "0.5rem" }}>Acceso Rápido de Evaluación</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.5rem" }}>
+          <button
+            type="button"
+            className="button secondary"
+            style={{ fontSize: "0.75rem", padding: "0.5rem 0.25rem", textAlign: "center" }}
+            onClick={() => entrarDemo("admin")}
+            disabled={enviando}
+          >
+            Admin
+          </button>
+          <button
+            type="button"
+            className="button secondary"
+            style={{ fontSize: "0.75rem", padding: "0.5rem 0.25rem", textAlign: "center" }}
+            onClick={() => entrarDemo("broker")}
+            disabled={enviando}
+          >
+            Broker
+          </button>
+          <button
+            type="button"
+            className="button secondary"
+            style={{ fontSize: "0.75rem", padding: "0.5rem 0.25rem", textAlign: "center" }}
+            onClick={() => entrarDemo("assistant")}
+            disabled={enviando}
+          >
+            Asistente
+          </button>
+        </div>
+      </div>
     </form>
   );
 }

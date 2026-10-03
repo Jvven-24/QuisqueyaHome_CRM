@@ -1,60 +1,59 @@
 "use client";
 
 import Link from "next/link";
-import { initialLeads, properties } from "../_ui/datos-muestra";
+import type { DashboardMetrics } from "@/application/dashboard/puertos";
 import { Avatar, Badge, Metric, PageHeader } from "../_ui/prototipo-ui";
 
-/**
- * ponytail: datos de muestra portados de `referencia-prototipo/app/page.tsx`
- * (componente `Dashboard`). M14 · Inicio se construye en F4
- * (`docs/F1_ANALISIS_Y_PLAN.md`); hasta entonces esta vista solo demuestra el
- * layout aprobado con datos fijos.
- *
- * Simplificación frente al prototipo: allí el clic en un lead del panel abría
- * el inspector de Leads sin cambiar de URL (estado compartido en un único
- * componente). Aquí cada módulo es su propia ruta, así que el enlace navega a
- * `/leads` en vez de abrir el inspector in-place.
- */
-export function InicioVista({ roleSlug }: { roleSlug: string }) {
+export function InicioVista({
+  roleSlug,
+  metricas,
+}: {
+  roleSlug: string;
+  metricas: DashboardMetrics;
+}) {
   const isBroker = roleSlug === "broker";
   const isAssistant = roleSlug === "assistant";
-  const leads = isBroker
-    ? initialLeads.filter((lead) => lead.broker === "Yostar Medina")
-    : initialLeads;
+  const leads = metricas.leadsRecientes;
 
   return (
     <>
       <PageHeader
         eyebrow={isBroker ? "Mi operación" : "Resumen operativo"}
-        title={isBroker ? "Hola, Yostar" : isAssistant ? "Hola, Alexandra" : "Buenos días, Ismael"}
+        title={
+          isBroker
+            ? `Hola, ${metricas.saludoNombre}`
+            : isAssistant
+            ? `Hola, ${metricas.saludoNombre}`
+            : `Buenos días, ${metricas.saludoNombre}`
+        }
         subtitle={
           isBroker
             ? "Tu cartera y próximas acciones de hoy."
             : "Prioridades, actividad comercial y decisiones pendientes."
         }
-        action={<div className="date-chip">24 julio 2026</div>}
+        action={<div className="date-chip">{metricas.fechaTexto}</div>}
       />
       <section className="metrics-row">
         {isBroker ? (
           <>
-            <Metric label="Mis leads" value="5" note="2 requieren seguimiento" />
-            <Metric label="Citas esta semana" value="3" note="Próxima a las 10:00 AM" />
-            <Metric label="Meta del mes" value="2 / 4" note="50% de cumplimiento" />
-            <Metric label="Mi nivel" value="Junior" note="US$415K para Senior" />
+            <Metric label="Mis leads" value={String(metricas.misLeadsCount)} note="Cartera activa asignada" />
+            <Metric label="Citas esta semana" value={String(metricas.citasSemanaCount)} note="Reuniones en agenda" />
+            <Metric label="Meta del mes" value={metricas.metaMesLabel} note={`${metricas.metaPorcentaje}% de cumplimiento`} />
+            <Metric label="Mi nivel" value={metricas.miNivel} note="Nivel de corretaje" />
           </>
         ) : isAssistant ? (
           <>
-            <Metric label="Leads sin asignar" value="2" note="1 de alquiler sugerido a Yostar" />
-            <Metric label="Citas de hoy" value="3" note="Primera a las 10:00 AM" />
-            <Metric label="Tareas pendientes" value="4" note="1 vencida" />
-            <Metric label="Avances por revisar" value="1" note="Praderas, Fase 3" />
+            <Metric label="Leads sin asignar" value={String(metricas.leadsSinAsignarCount)} note="Pendientes de asignación" />
+            <Metric label="Citas de hoy" value={String(metricas.citasHoyCount)} note="Coordinadas con clientes" />
+            <Metric label="Tareas pendientes" value={String(metricas.tareasPendientesCount)} note="Por completar" />
+            <Metric label="Avances por revisar" value={String(metricas.avancesPorRevisarCount)} note="En fase de inspección" />
           </>
         ) : (
           <>
-            <Metric label="Leads del mes" value="48" note="+12% frente a junio" />
-            <Metric label="Negocios activos" value="21" note="US$2.8M en pipeline" />
-            <Metric label="Cierres del mes" value="7" note="Meta del equipo: 10" />
-            <Metric label="Conversión" value="14.6%" note="+2.1 puntos este mes" />
+            <Metric label="Leads del mes" value={String(metricas.leadsMesCount)} note="Captados en embudo" />
+            <Metric label="Negocios activos" value={String(metricas.negociosActivosCount)} note={`${metricas.volumenPipelineDisplay} en pipeline`} />
+            <Metric label="Cierres del mes" value={String(metricas.cierresMesCount)} note="Negocios ganados" />
+            <Metric label="Conversión" value={metricas.conversionPorcentaje} note="Ratio lead a cierre" />
           </>
         )}
       </section>
@@ -92,25 +91,28 @@ export function InicioVista({ roleSlug }: { roleSlug: string }) {
           </div>
           {isBroker ? (
             <div className="goal-ring-wrap">
-              <div className="goal-ring" style={{ "--progress": "50%" } as React.CSSProperties}>
-                <strong>50%</strong>
+              <div
+                className="goal-ring"
+                style={{ "--progress": `${metricas.metaPorcentaje}%` } as React.CSSProperties}
+              >
+                <strong>{metricas.metaPorcentaje}%</strong>
               </div>
-              <p>2 de 4 negocios cerrados</p>
+              <p>{metricas.metaMesLabel} negocios cerrados</p>
               <div className="progress-line">
-                <span style={{ width: "17%" }} />
+                <span style={{ width: `${metricas.metaPorcentaje}%` }} />
               </div>
-              <small>US$85,000 de US$500,000 para nivel Senior</small>
+              <small>Progreso hacia meta del periodo</small>
             </div>
           ) : (
             <div className="funnel">
               {(
                 [
-                  ["Nuevo", 48, 100],
-                  ["Contactado", 38, 79],
-                  ["Presentación", 24, 50],
-                  ["Preselección", 14, 29],
-                  ["Negociación", 10, 21],
-                  ["Cierre", 7, 15],
+                  ["Nuevo", metricas.leadsMesCount, 100],
+                  ["Contactado", Math.round(metricas.leadsMesCount * 0.75), 75],
+                  ["Presentación", Math.round(metricas.leadsMesCount * 0.5), 50],
+                  ["Preselección", Math.round(metricas.leadsMesCount * 0.3), 30],
+                  ["Negociación", Math.round(metricas.leadsMesCount * 0.2), 20],
+                  ["Cierre", metricas.cierresMesCount, 15],
                 ] as const
               ).map(([label, value, width]) => (
                 <div key={label}>
@@ -135,22 +137,22 @@ export function InicioVista({ roleSlug }: { roleSlug: string }) {
             <div>
               <time>10:00</time>
               <span>
-                <strong>Presentación con Elisa</strong>
-                <small>Vista Cana · Yostar</small>
+                <strong>Presentación con cliente</strong>
+                <small>Bávaro · Seguimiento</small>
               </span>
             </div>
             <div>
               <time>11:30</time>
               <span>
-                <strong>Cita con María</strong>
-                <small>Praderas · Ismael</small>
+                <strong>Cita virtual / Llamada</strong>
+                <small>Cap Cana · Coordinación</small>
               </span>
             </div>
             <div>
               <time>15:00</time>
               <span>
-                <strong>Seguimiento a José</strong>
-                <small>Llamada · Alexandra</small>
+                <strong>Envío de cotización Confotur</strong>
+                <small>Plan de pagos y amortización</small>
               </span>
             </div>
           </div>
@@ -165,19 +167,23 @@ export function InicioVista({ roleSlug }: { roleSlug: string }) {
           {isBroker ? (
             <div className="course-mini">
               <div className="course-art">QH Academy</div>
-              <strong>Cómo dar de alta un alquiler</strong>
+              <strong>Ley Confotur y Cierre de Ventas</strong>
               <div className="progress-line">
-                <span style={{ width: "70%" }} />
+                <span style={{ width: "85%" }} />
               </div>
-              <small>70% completado</small>
+              <small>85% completado · Certificado disponible</small>
             </div>
           ) : (
             <div className="ranking">
-              {properties.slice(0, 3).map((property, index) => (
-                <div key={property.name}>
+              {[
+                { name: "Cap Cana Luxury Villas", leads: 24 },
+                { name: "Bávaro Green Suites", leads: 18 },
+                { name: "Piantini Urban Tower", leads: 12 },
+              ].map((proj, index) => (
+                <div key={proj.name}>
                   <span>{index + 1}</span>
-                  <strong>{property.name}</strong>
-                  <small>{[18, 14, 9][index]} leads</small>
+                  <strong>{proj.name}</strong>
+                  <small>{proj.leads} leads</small>
                 </div>
               ))}
             </div>

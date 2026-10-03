@@ -74,3 +74,12 @@ Cada commit lleva al pie una línea `Probar: <issue>`, o `Probar: nada`.
   worktree de Codex que define `docs/R_ANALISIS_Y_PLAN.md` §5.
 - `docs/contexto/decisiones.md` solo se amplía: se añaden entradas numeradas
   nuevas y nunca se reescriben ni se borran las anteriores.
+
+<!-- viltrum:integration:start -->
+# Viltrum Agentic OS
+
+Lee `.viltrum/project.md`, `.viltrum/status.md` y la doctrina `.viltrum/os/CLAUDE.md` antes de actuar. Clasifica con `.viltrum/os/core/routing.md`; D00 coordina y no produce. Los perfiles están en `.viltrum/os/departments/` y sus skills en `.viltrum/os/skills/`. Para reuniones, usa D01 y D22; D02 define alcance y D21 investiga antes de construir. La construcción nueva con D09/D10/D11/D16/D18/D19 espera C1 vigente en `.viltrum/commercial.md`; D11/D18/D19 pueden analizar opciones conceptuales antes. Registra evidencia en `.viltrum/` y solicita revisión independiente según `.viltrum/os/registry/departments.yaml`. Ningún perfil aprueba su propio trabajo.
+<!-- viltrum:integration:end -->
+
+<!-- viltrum:orchestration:v1 -->
+Para coordinar todo el proyecto usa la skill `orquestar` o `viltrum orchestrate . --goal <objetivo>`. Lee `.viltrum/os/core/orchestration.md`, confirma la clasificación y trabaja con perfiles/contratos. El plan prepara contexto; el host ejecuta los agentes y conserva revisión independiente.

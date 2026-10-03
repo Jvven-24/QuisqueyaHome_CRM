@@ -1,0 +1,22 @@
+{
+  "color": {
+    "primary": { "value": "#000000" },
+    "secondary": { "value": "#ffffff" }
+  },
+  "typography": {
+    "fontFamily": { "value": "Inter, sans-serif" }
+  },
+  "spacing": {
+    "small": { "value": "8px" },
+    "medium": { "value": "16px" }
+  },
+  "shape": {
+    "borderRadius": { "value": "4px" }
+  },
+  "layout": {
+    "maxWidth": { "value": "1200px" }
+  },
+  "motion": {
+    "transition": { "value": "0.3s ease-in-out" }
+  }
+}

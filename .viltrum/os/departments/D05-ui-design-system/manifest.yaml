@@ -1,0 +1,69 @@
+id: D05
+slug: ui-design-system
+name: UI premium y sistema de diseño
+family: F2
+
+department_version: 1.2.0
+reviewed_at: 2026-09-20
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A2
+model: sonnet
+reviewer: D07
+
+tools:
+  read:   [figma, repositorio, biblioteca de componentes, catalogo 21st]
+  write:  [tokens, componentes, especificacion de pantallas, matriz de estados]
+  execute: [navegador para verificacion visual, renderizado de capturas]
+  forbidden:
+    - modificar reglas de negocio
+    - decidir arquitectura de informacion sin D04
+    - aprobar su propio trabajo
+
+skills:
+  buscar_componente:    [21st-cli-use, magic-mcp-21st]
+  explorar_direcciones: [21st-ui-explore, ui-ux-pro-max]
+  implementar_ui:       [21st-ui-build, shadcn-ui]
+  auditar_ui:           [21st-ui-review, web-design-guidelines, impeccable]
+  direccion_estetica:   [frontend-design, design-taste-frontend]
+  exploracion_rapida:   ui-design
+  verificacion_visual:  [browser-automation, playwright-cli]
+  animacion:             [emilkowal-animations, framer-motion, gsap-framer-scroll-animation]
+  publicar_tema:        21st-design-sync
+  calidad_react:         vercel-react-best-practices
+
+subagents:
+  can_create: true
+  purpose: verificacion visual mecanica en multiples puntos de corte
+  model: haiku
+
+outputs:
+  - tokens documentados
+  - componentes con variantes y estados
+  - composicion de pantallas en 5 puntos de corte
+  - matriz pantalla x estado con mensajes reales
+  - checklist de formularios aprobada
+  - inventario de componentes reutilizados vs creados
+  - especificacion implementable para D09
+
+checklists:
+  - checklists/form-design.md
+  - checklists/ui-review.md
+
+source_manifest:
+  - W3C WCAG 2.2 (referencia de contraste y foco)
+  - Sistema de Perfiles IA — Perfil 05 (Drive, 2026-08-19)
+  - core/doctrine/ux-states.md
+
+known_limits:
+  - No evalua rendimiento percibido; eso es D15
+  - No decide arquitectura de informacion; depende de D04
+  - El catalogo de mascaras esta calibrado para Republica Dominicana; otros paises requieren ampliarlo
+  - No valida reglas fiscales de numeracion; solo exige que existan y se validen en servidor
+  - Sin biblioteca de componentes propia consolidada todavia; el paso 1 depende de catalogos externos
+
+changelog: CHANGELOG.md
+
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-ui-design-system

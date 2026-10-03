@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "D05",
+  "stage": "F3",
+  "skill": "viltrum-ui-design-system",
+  "inputs": [
+    "inventario recorridos y wireframes D04",
+    "datos y roles por vista",
+    "marca y objetivo D02",
+    "estados D06 y contenido D08",
+    "biblioteca y tokens existentes"
+  ],
+  "outputs": [
+    "tokens semanticos y mapeo al stack",
+    "catalogo de componentes variantes y estados",
+    "especificacion responsive por vista",
+    "prototipo y registro de decisiones",
+    "inventario reutilizar adaptar crear"
+  ],
+  "checks": [
+    "fuente unica de tokens",
+    "variantes y estados trazables",
+    "evidencia de anchos G3",
+    "formularios y formatos definidos",
+    "licencia y compatibilidad para reutilizacion",
+    "revision independiente D07 registrada"
+  ],
+  "capabilities": [
+    "repository",
+    "browser",
+    "design",
+    "web"
+  ],
+  "sources": [
+    {
+      "title": "DTCG: Format 2025.10",
+      "url": "https://www.designtokens.org/tr/2025.10/format/"
+    },
+    {
+      "title": "Figma: MCP server",
+      "url": "https://developers.figma.com/docs/figma-mcp-server/"
+    },
+    {
+      "title": "Playwright: Emulation",
+      "url": "https://playwright.dev/docs/emulation"
+    },
+    {
+      "title": "W3C: WCAG 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "ui-responsive-review",
+      "purpose": "Comparar evidencia de vistas por ancho",
+      "when": "Muchas vistas o variantes renderizables",
+      "outputs": [
+        "capturas por ancho y version",
+        "hallazgos visuales"
+      ]
+    },
+    {
+      "name": "component-reuse-review",
+      "purpose": "Comparar candidatos reutilizables",
+      "when": "Multiples candidatos de biblioteca",
+      "outputs": [
+        "licencia y compatibilidad",
+        "comparacion de comportamiento"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-compose",
+    "pxil-21st-scout",
+    "pxil-visual-qa",
+    "pxil-library-curation"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

@@ -1,0 +1,68 @@
+id: D20
+slug: documentation
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-documentation
+name: Documentación, formación y mantenimiento
+family: F5
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A2
+model: sonnet
+reviewer: D00
+
+tools:
+  read:   [repositorio, documento de arquitectura de D03, runbooks de D16, catalogo de alertas de D17, espacio .viltrum del proyecto]
+  write:  [README, manual de usuario, manual de administracion, indice de ADR, documento de handoff, .viltrum/*]
+  execute: []
+  forbidden:
+    - documentar una decision que no fue tomada por el departamento dueno
+    - entregar un manual sin verificar el criterio junior
+    - duplicar en un documento aparte un dato que ya vive en .viltrum/
+    - entregar handoff al cliente sin accesos formalizados por escrito
+
+skills:
+  manuales_y_reportes_word: anthropic-skills:docx
+  entregables_en_pdf: anthropic-skills:pdf
+  presentaciones_de_capacitacion: anthropic-skills:pptx
+  diagramas_de_arquitectura_y_flujo: artifact-diagramming
+  explorar_codigo_para_documentar_con_precision: gitnexus-exploring
+
+subagents:
+  can_create: true
+  purpose: verificar que cada procedimiento operativo critico se puede seguir sin contexto previo del proyecto
+  model: haiku
+
+outputs:
+  - README estandar
+  - manual de usuario
+  - manual de administracion
+  - indice de ADR
+  - documentacion de arquitectura enlazada y vigente
+  - procedimiento de restauracion documentado de forma literal
+  - indice unico de runbooks operativos
+  - documento de handoff al cliente
+  - espacio .viltrum consistente
+
+checklists:
+  - checklists/documentation-readiness.md
+  - checklists/handoff-readiness.md
+
+source_manifest:
+  - "Diátaxis — framework de documentación técnica, diataxis.fr (consultado 2026-09-24)"
+  - "standard-readme — especificación de README estándar, github.com/RichardLitt/standard-readme (consultado 2026-09-24)"
+  - "Google — READMEs, Google Style Guides, google.github.io/styleguide/docguide/READMEs.html (consultado 2026-09-24)"
+  - core/project-workspace.md — formato del espacio .viltrum/
+  - CLAUDE.md principios P4 y P5
+
+known_limits:
+  - No existe skill instalada especifica de generacion de sitios de documentacion (p.ej. Docusaurus); la documentacion vive como Markdown en el repositorio y en .viltrum/
+  - No decide contenido tecnico por inferencia; depende de que D03/D11/D16/D17 entreguen sus artefactos fuente
+  - La verificacion del "criterio junior" es una revision dirigida, no una prueba de usabilidad formal con usuarios reales
+  - No traduce a otros idiomas salvo que el proyecto lo requiera explicitamente
+  - No sustituye la capacitacion en vivo cuando el cliente la exige por contrato; produce el documento que la respalda
+
+changelog: CHANGELOG.md

@@ -1,0 +1,61 @@
+id: D07
+slug: accessibility
+name: Accesibilidad
+family: F2
+
+department_version: 1.2.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A1
+model: sonnet
+reviewer: D14
+
+tools:
+  read:   [pantallas compuestas de D05, matriz de estados de D06, recorridos de D04, codigo implementado]
+  write:  [informe de hallazgos, matriz de conformidad WCAG, correcciones propuestas]
+  execute: [navegador para verificacion con teclado y lector de pantalla, escaner automatico]
+  forbidden:
+    - declarar conformidad total basandose solo en escaner automatico
+    - aprobar su propio trabajo
+    - decidir composicion visual o arquitectura de informacion
+
+skills:
+  verificacion_en_navegador: [browser-automation, playwright-cli]
+  pruebas_automatizadas: playwright-best-practices
+  auditoria_wcag: accessibility
+  auditoria_de_ui: [21st-ui-review, web-design-guidelines, code-review]
+
+subagents:
+  can_create: true
+  purpose: ejecutar verificacion automatica por lotes sobre todas las pantallas y consolidar hallazgos
+  model: haiku
+
+outputs:
+  - matriz de conformidad WCAG 2.2 AA por pantalla
+  - hallazgos con criterio citado, severidad y evidencia
+  - verificacion manual con teclado documentada por recorrido critico
+  - verificacion manual con lector de pantalla documentada
+  - declaracion explicita de alcance no verificado
+
+checklists:
+  - checklists/wcag-audit.md
+  - checklists/keyboard-screenreader.md
+
+source_manifest:
+  - "W3C — Web Content Accessibility Guidelines (WCAG) 2.2, W3C Recommendation 12 December 2024 (w3.org/TR/WCAG22, consultado 2026-09-24)"
+  - "W3C WAI — Understanding WCAG 2.2, criterios nuevos 2.4.11, 2.4.12, 2.4.13, 2.5.7, 2.5.8, 3.2.6, 3.3.7, 3.3.8, 3.3.9 (w3.org/WAI/WCAG22/Understanding, consultado 2026-09-24)"
+  - "W3C WAI-ARIA Authoring Practices Guide (APG) — patrones de componentes accesibles (w3.org/WAI/ARIA/apg, consultado 2026-09-24)"
+
+known_limits:
+  - La skill accessibility no ejecuta por si sola axe-core, Lighthouse ni lector de pantalla; esas verificaciones requieren herramientas y evidencia del entorno
+  - No emite declaracion formal de conformidad tipo VPAT; si el contrato la exige, se contrata verificacion legal independiente
+  - La verificacion con lector de pantalla depende de disponibilidad de NVDA/VoiceOver en el entorno de prueba; sin acceso, ese punto queda "no verificado" explicitamente
+  - No cubre AAA de forma sistematica, solo AA; los criterios AAA nuevos (2.4.12, 2.4.13, 3.3.9) se citan pero no son bloqueantes de gate
+  - No decide la correccion de diseño o codigo; solo la identifica y la asigna al departamento dueño
+
+changelog: CHANGELOG.md
+
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-accessibility

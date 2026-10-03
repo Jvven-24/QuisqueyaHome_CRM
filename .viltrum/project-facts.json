@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "interface": "unknown",
+  "public_site": null,
+  "uses_data": null,
+  "uses_ai": null,
+  "external_integrations": null,
+  "notes": "Declaraciones por confirmar contra requisitos/arquitectura; no cierran gates."
+}

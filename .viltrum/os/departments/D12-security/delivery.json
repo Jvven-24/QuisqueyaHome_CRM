@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "id": "D12",
+  "stage": "F2",
+  "skill": "viltrum-security",
+  "inputs": [
+    "Mandato y riesgo R0-R4 de D00",
+    "Límites, contratos y entradas de D03",
+    "Inventario de datos y políticas de acceso de D11",
+    "Roles, finalidad y preguntas legales de D01/D02",
+    "Topología y pipeline de D16",
+    "Commit y entorno autorizado"
+  ],
+  "outputs": [
+    "Mapa de amenazas por entrada y frontera",
+    "Matriz control → requisito ASVS versionado → evidencia",
+    "Matriz permiso actor/recurso/acción/tenant",
+    "Inventario de privacidad y preguntas legales",
+    "Hallazgos y riesgos residuales con dueño",
+    "Handoff de seguridad a humano y D16"
+  ],
+  "checks": [
+    "Entradas y fronteras inventariadas",
+    "Pruebas negativas de rol y tenant incluidas",
+    "Secretos y dependencias escaneados con evidencia",
+    "Privacidad minimizada y decisiones legales atribuidas",
+    "Ningún P0 abierto; riesgos altos requieren firma",
+    "Revisión humana independiente registrada"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "git",
+    "runtime",
+    "browser",
+    "security_scanner"
+  ],
+  "sources": [
+    {
+      "title": "OWASP ASVS 5.0.0",
+      "url": "https://owasp.org/projects/asvs"
+    },
+    {
+      "title": "Repositorio OWASP ASVS",
+      "url": "https://github.com/OWASP/ASVS"
+    },
+    {
+      "title": "GitHub Actions secure use",
+      "url": "https://docs.github.com/en/actions/reference/security/secure-use"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "scan-consolidator",
+      "purpose": "Consolidar resultados de scanners disponibles sin aceptar riesgos",
+      "when": "Varias superficies o reportes independientes y ejecución autorizada",
+      "outputs": [
+        "Inventario de scans por commit",
+        "Reportes redactados y fallos de herramienta"
+      ]
+    }
+  ]
+}
+

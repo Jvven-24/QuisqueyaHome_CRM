@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "id": "D19",
+  "stage": "F4",
+  "skill": "viltrum-integrations",
+  "inputs": [
+    "mandato, C1 y autorizacion de acciones externas",
+    "expediente D21 y puerto D03",
+    "reglas D10 y estado/idempotencia D11",
+    "documentacion oficial proveedor/version",
+    "sandbox/fixtures y threat model D12"
+  ],
+  "outputs": [
+    "adaptador y schemas propios",
+    "verificacion firma y scopes",
+    "inbox/outbox/idempotencia/reconciliacion",
+    "retry/DLQ y sync checkpoints",
+    "evidencia de fallos y runbook",
+    "handoff D12/D10/D11/D17"
+  ],
+  "checks": [
+    "C1 y autorizacion del mandato respetados",
+    "bytes originales y firma verificados segun proveedor",
+    "dedupe durable no pierde evento tras crash",
+    "timeout desconocido se reconcilia",
+    "out of order y version manejados",
+    "retry budget/cuotas y DLQ trazables",
+    "tenant/account/scopes aislados",
+    "revision independiente D12"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "git",
+    "database",
+    "runtime"
+  ],
+  "sources": [
+    {
+      "title": "Stripe webhooks — provider-specific pattern",
+      "url": "https://docs.stripe.com/webhooks"
+    },
+    {
+      "title": "AsyncAPI — official specification repository",
+      "url": "https://github.com/asyncapi/spec"
+    },
+    {
+      "title": "OpenTelemetry documentation",
+      "url": "https://opentelemetry.io/docs/"
+    },
+    {
+      "title": "Context7 — official repository",
+      "url": "https://github.com/upstash/context7"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "payload-replay",
+      "purpose": "Ejercer fixtures validos/invalidos/duplicados con cuenta aislada",
+      "when": "Nuevo webhook/cambio schema y delegacion permitida",
+      "outputs": [
+        "fixtures/version y resultados",
+        "firma/replay/tenant verificados",
+        "repro y limites del falso"
+      ]
+    },
+    {
+      "name": "provider-failure-probe",
+      "purpose": "Simular caida, rate limit y timeout sin cargar proveedor vivo",
+      "when": "Politica resiliencia nueva y adaptador falso disponible",
+      "outputs": [
+        "intentos/backoff/DLQ",
+        "efecto y reconciliacion",
+        "riesgos de resultado desconocido"
+      ]
+    }
+  ]
+}

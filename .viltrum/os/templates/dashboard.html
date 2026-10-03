@@ -1,0 +1,2876 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Viltrum · Centro de Operaciones Multi-Agente & Estudio de Diseño</title>
+<style>
+/* ==========================================================================
+   VILTRUM AGENTIC OS — OBSIDIAN CYBER-LUXE DESIGN SYSTEM (PXIL v2 + 21st UI)
+   Deep Cosmic Slate, Glowing Accents, Frosted Glassmorphism & High-Contrast Typography
+   ========================================================================== */
+
+:root {
+  /* Core Obsidian Dark Surfaces */
+  --bg-base: #07090e;
+  --bg-surface: #0c1017;
+  --bg-elevated: #111722;
+  --bg-card: rgba(16, 22, 34, 0.75);
+  --bg-card-hover: rgba(22, 30, 46, 0.85);
+  --bg-glass: rgba(14, 19, 30, 0.8);
+  --bg-input: #080c13;
+  --bg-subtle: rgba(255, 255, 255, 0.03);
+
+  /* Sidebar Palette */
+  --sidebar-bg: #090c12;
+  --sidebar-surface: #0e131d;
+  --sidebar-border: rgba(255, 255, 255, 0.07);
+  --sidebar-text: #c5d2e3;
+  --sidebar-muted: #5c6c82;
+  --sidebar-hover: rgba(255, 255, 255, 0.05);
+  --sidebar-active-bg: linear-gradient(90deg, rgba(212, 163, 75, 0.16) 0%, rgba(212, 163, 75, 0.02) 100%);
+  --sidebar-active-text: #fae4be;
+  --sidebar-active-bar: #d4a34b;
+
+  /* Typography / Text Inks */
+  --ink: #f8fafc;
+  --ink-secondary: #cbd5e1;
+  --muted: #8292a8;
+  --muted-light: #4f5f74;
+
+  /* Borders & Dividers */
+  --line: rgba(255, 255, 255, 0.08);
+  --line-subtle: rgba(255, 255, 255, 0.04);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --line-focus: #d4a34b;
+
+  /* Viltrum Brand Gold */
+  --gold: #d4a34b;
+  --gold-hover: #b88632;
+  --gold-glow: rgba(212, 163, 75, 0.28);
+  --gold-bg: rgba(212, 163, 75, 0.1);
+  --gold-border: rgba(212, 163, 75, 0.35);
+  --gold-text: #f7d594;
+
+  /* Semantic Neon Accents */
+  --cyan: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.25);
+  --cyan-bg: rgba(56, 189, 248, 0.1);
+  --cyan-border: rgba(56, 189, 248, 0.3);
+  --cyan-text: #7dd3fc;
+
+  --emerald: #10b981;
+  --emerald-glow: rgba(16, 185, 129, 0.25);
+  --emerald-bg: rgba(16, 185, 129, 0.1);
+  --emerald-border: rgba(16, 185, 129, 0.3);
+  --emerald-text: #6ee7b7;
+
+  --amber: #f59e0b;
+  --amber-glow: rgba(245, 158, 11, 0.25);
+  --amber-bg: rgba(245, 158, 11, 0.1);
+  --amber-border: rgba(245, 158, 11, 0.3);
+  --amber-text: #fcd34d;
+
+  --rose: #f43f5e;
+  --rose-glow: rgba(244, 63, 94, 0.25);
+  --rose-bg: rgba(244, 63, 94, 0.1);
+  --rose-border: rgba(244, 63, 94, 0.3);
+  --rose-text: #fda4af;
+
+  --purple: #a855f7;
+  --purple-glow: rgba(168, 85, 247, 0.25);
+  --purple-bg: rgba(168, 85, 247, 0.1);
+  --purple-border: rgba(168, 85, 247, 0.3);
+  --purple-text: #d8b4fe;
+
+  /* Geometry & Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows & Depth */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.65);
+  --shadow-lg: 0 16px 40px -8px rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 20px var(--gold-glow);
+
+  /* Fonts */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+}
+
+/* Reset & Base Elements */
+* { box-sizing: border-box; }
+html {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--bg-base);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--bg-base);
+  background-image: radial-gradient(130% 90% at 50% -15%, #182338 0%, #0a0e17 55%, #05070c 100%);
+  color: var(--ink);
+  min-height: 100vh;
+}
+button, input, select, textarea, summary { font: inherit; }
+button { cursor: pointer; touch-action: manipulation; }
+button:disabled { cursor: wait; opacity: 0.5; }
+a { color: var(--cyan); text-decoration: none; transition: color 0.15s ease; }
+a:hover { color: #bae6fd; text-decoration: underline; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+h1, h2, h3, h4, p { margin: 0; }
+h1 { font-size: 26px; line-height: 1.25; letter-spacing: -0.035em; font-weight: 800; color: #ffffff; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); }
+h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.015em; color: #ffffff; }
+h3 { font-size: 14px; font-weight: 600; color: var(--ink); }
+small, .small { font-size: 12px; }
+code, pre, .mono { font-family: var(--font-mono); font-size: 12px; }
+code { overflow-wrap: anywhere; }
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 10px 0 0;
+  line-height: 1.6;
+  color: var(--muted);
+}
+[hidden] { display: none !important; }
+.muted { color: var(--muted); }
+
+/* Accessible Skip Link */
+.skip {
+  position: fixed;
+  z-index: 60;
+  left: 16px;
+  top: -60px;
+  background: var(--bg-elevated);
+  color: #ffffff;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 10px 18px;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.skip:focus { top: 16px; }
+
+/* Main Grid Shell */
+.shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+  transition: grid-template-columns 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.shell.compact {
+  grid-template-columns: 78px minmax(0, 1fr);
+}
+
+/* Sidebar Navigation (Obsidian Cyber-Luxe) */
+.sidebar {
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  color: var(--sidebar-text);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 14px 18px;
+  user-select: none;
+  z-index: 40;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 6px 20px;
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #f5d697 0%, #c99846 60%, #875d1b 100%);
+  color: #17120a;
+  font-weight: 900;
+  font-size: 19px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(212, 163, 75, 0.3), 0 2px 4px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+.brand-name {
+  font-size: 17px;
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.brand-sub {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-top: 2px;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-light);
+  padding: 16px 10px 6px;
+}
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.nav button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--sidebar-text);
+  text-align: left;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.15s ease;
+}
+.nav button:hover {
+  background: var(--sidebar-hover);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+.nav button[aria-current="page"] {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+  font-weight: 600;
+  border-color: rgba(212, 163, 75, 0.28);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+.nav button[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  background: var(--sidebar-active-bar);
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 10px var(--sidebar-active-bar);
+}
+.nav svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  opacity: 0.8;
+  transition: all 0.15s ease;
+}
+.nav button:hover svg, .nav button[aria-current="page"] svg {
+  opacity: 1;
+  stroke: var(--gold);
+}
+.nav-badge {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--sidebar-muted);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-variant-numeric: tabular-nums;
+  transition: all 0.15s ease;
+}
+.nav button[aria-current="page"] .nav-badge {
+  background: rgba(212, 163, 75, 0.22);
+  color: #fae4be;
+  border-color: rgba(212, 163, 75, 0.35);
+}
+.nav-pill-gold {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: var(--gold-bg);
+  color: var(--gold-text);
+  border: 1px solid var(--gold-border);
+}
+.nav-pill-live {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: var(--cyan-bg);
+  color: var(--cyan-text);
+  border: 1px solid var(--cyan-border);
+}
+
+.sidebar-foot {
+  margin-top: auto;
+  padding: 16px 8px 0;
+  border-top: 1px solid var(--sidebar-border);
+  font-size: 11px;
+  color: var(--sidebar-muted);
+  line-height: 1.45;
+}
+.sidebar-foot strong {
+  display: block;
+  color: #e2e8f0;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+.read-only {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gold-text);
+  background: rgba(212, 163, 75, 0.08);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-xs);
+  padding: 2px 7px;
+  margin-top: 8px;
+}
+
+/* Compact Sidebar Handling */
+.shell.compact .brand { padding: 0 2px 20px; justify-content: center; }
+.shell.compact .brand > div,
+.shell.compact .nav-section-label,
+.shell.compact .sidebar-foot,
+.shell.compact .nav-text,
+.shell.compact .nav-badge,
+.shell.compact .nav-pill-gold,
+.shell.compact .nav-pill-live {
+  display: none !important;
+}
+.shell.compact .nav button {
+  justify-content: center;
+  padding: 11px;
+}
+.shell.compact .nav button[aria-current="page"]::before {
+  left: -14px;
+}
+
+/* Workspace & Floating Glass Topbar */
+.workspace {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  background: rgba(8, 11, 17, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 32px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.project-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.project-picker label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.project-picker select {
+  border: 1px solid var(--line);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  border-radius: var(--radius-md);
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  max-width: 280px;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.15s ease;
+}
+.project-picker select:hover {
+  border-color: var(--line-strong);
+}
+.sidebar-toggle {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 6px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: var(--bg-elevated);
+  color: var(--ink-secondary);
+  transition: all 0.15s ease;
+}
+.sidebar-toggle:hover {
+  background: var(--surface-hover);
+  color: #ffffff;
+  border-color: var(--line-strong);
+}
+.sidebar-toggle svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+/* Sync Controls & Dynamic Connection Beacon */
+.sync {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.connection {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #64748b;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+.connection[data-state="success"] .dot {
+  background: var(--emerald);
+  box-shadow: 0 0 10px var(--emerald);
+}
+.connection[data-state="success"] .dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid var(--emerald);
+  opacity: 0.7;
+  animation: pulse-ring 2s infinite ease-out;
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+.connection[data-state="error"] .dot,
+.connection[data-state="offline"] .dot {
+  background: var(--rose);
+  box-shadow: 0 0 10px var(--rose);
+}
+.connection[data-state="permission"] .dot {
+  background: var(--amber);
+  box-shadow: 0 0 10px var(--amber);
+}
+.connection[data-state="loading"] .dot {
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+  animation: pulse-loading 1.2s infinite ease-in-out;
+}
+@keyframes pulse-loading {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* UI Button Primitives */
+.button {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  color: var(--ink-secondary);
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  min-height: 34px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.15s ease;
+}
+.button:hover {
+  background: var(--surface-hover);
+  border-color: var(--line-strong);
+  color: #ffffff;
+}
+.button:active {
+  transform: translateY(1px);
+}
+.button[aria-pressed="true"] {
+  background: rgba(212, 163, 75, 0.15);
+  border-color: var(--gold);
+  color: var(--gold-text);
+}
+.button.small {
+  padding: 4px 10px;
+  min-height: 28px;
+  font-size: 11px;
+}
+.button.primary {
+  background: linear-gradient(135deg, #d4a34b 0%, #b88632 100%);
+  color: #0d0f15;
+  border-color: #e5b869;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(212, 163, 75, 0.25);
+}
+.button.primary:hover {
+  background: linear-gradient(135deg, #e5b869 0%, #c9943f 100%);
+  color: #07090e;
+  box-shadow: 0 4px 16px rgba(212, 163, 75, 0.35);
+}
+#alerts-button span {
+  display: inline-block;
+  background: rgba(244, 63, 94, 0.2);
+  color: var(--rose-text);
+  border: 1px solid var(--rose-border);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  margin-left: 2px;
+}
+
+/* Main Content Area */
+.content {
+  padding: 28px 32px 40px;
+  max-width: 1720px;
+  margin: 0 auto;
+  width: 100%;
+}
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.page-head p {
+  color: var(--muted);
+  margin-top: 5px;
+  max-width: 80ch;
+  font-size: 13px;
+}
+.phase-pill {
+  border: 1px solid var(--gold-border);
+  background: var(--gold-bg);
+  color: var(--gold-text);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(212, 163, 75, 0.15);
+}
+
+/* Callout Banners */
+.notice {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid var(--amber-border);
+  border-left: 4px solid var(--amber);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.notice p { font-size: 13px; color: var(--amber-text); }
+.notice strong { display: block; margin-bottom: 2px; color: #fef3c7; }
+.notice.error {
+  background: rgba(244, 63, 94, 0.08);
+  border-color: var(--rose-border);
+  border-left-color: var(--rose);
+}
+.notice.error p { color: var(--rose-text); }
+.notice.error strong { color: #ffe4e6; }
+
+/* Filter Toolbar */
+.filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.field {
+  display: grid;
+  gap: 6px;
+}
+.field label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.field.search {
+  flex: 1;
+  min-width: 220px;
+}
+.field input, .field select, .field textarea {
+  height: 38px;
+  background: var(--bg-input);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  color: var(--ink);
+  min-width: 170px;
+  width: 100%;
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+.field textarea {
+  height: auto;
+  min-height: 80px;
+}
+.field input:hover, .field select:hover, .field textarea:hover {
+  border-color: var(--line-strong);
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  background: #0d121c;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+}
+.field input::placeholder { color: var(--muted-light); }
+.filters-note {
+  font-size: 12px;
+  color: var(--muted);
+  padding-bottom: 9px;
+  font-weight: 500;
+}
+
+/* Card Panel Container */
+.panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-width: 0;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+.panel:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.panel-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.panel-head h2 {
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+.panel-head small, .panel-sub {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.panel-body {
+  padding: 20px;
+}
+.stack {
+  display: grid;
+  gap: 20px;
+}
+.two-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+/* 21st Bento KPI Metrics Grid */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.metric {
+  background: linear-gradient(135deg, rgba(20, 27, 42, 0.7) 0%, rgba(12, 16, 26, 0.8) 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.metric:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), 0 0 20px var(--gold-glow);
+  border-color: rgba(212, 163, 75, 0.4);
+}
+.metric-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.metric-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.metric-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.metric-number {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+.metric-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line-subtle);
+  font-size: 11px;
+}
+.metric-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  padding: 1px 7px;
+}
+.metric-trend.good {
+  background: var(--emerald-bg);
+  color: var(--emerald-text);
+  border: 1px solid var(--emerald-border);
+}
+.metric-trend.live {
+  background: var(--cyan-bg);
+  color: var(--cyan-text);
+  border: 1px solid var(--cyan-border);
+}
+.metric-trend.warn {
+  background: var(--amber-bg);
+  color: var(--amber-text);
+  border: 1px solid var(--amber-border);
+}
+.metric-trend.neutral {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+.metric-context {
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Quality Pipeline Stepper Track */
+.pipeline {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 18px 20px;
+  scrollbar-width: thin;
+}
+.stage {
+  flex: 1;
+  min-width: 154px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  text-align: left;
+  position: relative;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.stage:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.stage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.stage.passed::before {
+  background: var(--emerald);
+  box-shadow: 0 0 10px var(--emerald);
+}
+.stage.current {
+  background: rgba(212, 163, 75, 0.08);
+  border-color: var(--gold-border);
+  box-shadow: 0 0 16px rgba(212, 163, 75, 0.15);
+}
+.stage.current::before {
+  background: var(--gold);
+  box-shadow: 0 0 12px var(--gold);
+}
+.stage strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.stage small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 5px;
+  line-height: 1.35;
+}
+.stage .badge {
+  margin-top: 8px;
+}
+
+/* Quality Gates Checklist */
+.gate {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line-subtle);
+}
+.gate:last-child { border-bottom: 0; }
+.gate-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.gate-line strong { font-size: 13px; color: #ffffff; }
+.gate p {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+.check-meter {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.check-meter span {
+  height: 100%;
+  background: var(--cyan);
+  display: block;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+.gate.validated .check-meter span {
+  background: var(--emerald);
+  box-shadow: 0 0 8px var(--emerald);
+}
+
+/* High Contrast Data Tables */
+.table-wrap {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+}
+.data-table th {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 12px 18px;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--line);
+}
+.data-table td {
+  padding: 13px 18px;
+  border-top: 1px solid var(--line-subtle);
+  vertical-align: top;
+  font-size: 13px;
+  color: var(--ink-secondary);
+}
+.data-table tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.data-table tr.selected {
+  background: rgba(212, 163, 75, 0.08);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.data-table td .muted {
+  display: block;
+  font-size: 11px;
+  margin-top: 3px;
+}
+.text-button {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--cyan);
+  text-align: left;
+  font-weight: 600;
+  font-size: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.text-button:hover {
+  color: #bae6fd;
+  text-decoration: underline;
+}
+
+/* Badges / Pill Tags */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  white-space: normal;
+}
+.badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.9;
+}
+.badge.good {
+  background: var(--emerald-bg);
+  border-color: var(--emerald-border);
+  color: var(--emerald-text);
+}
+.badge.warn {
+  background: var(--amber-bg);
+  border-color: var(--amber-border);
+  color: var(--amber-text);
+}
+.badge.bad {
+  background: var(--rose-bg);
+  border-color: var(--rose-border);
+  color: var(--rose-text);
+}
+.badge.live {
+  background: var(--cyan-bg);
+  border-color: var(--cyan-border);
+  color: var(--cyan-text);
+}
+
+/* Empty State */
+.empty {
+  padding: 42px 24px;
+  text-align: center;
+  color: var(--muted);
+}
+.empty-icon {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 14px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+}
+.empty strong {
+  display: block;
+  color: #ffffff;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+.empty p {
+  max-width: 60ch;
+  margin: 0 auto;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Department Layout & Bento Cards */
+.department-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  gap: 22px;
+  align-items: start;
+}
+.directory-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.directory-top h2 { font-size: 15px; }
+.directory-top small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.department-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.department-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  color: var(--ink);
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  min-width: 0;
+  gap: 12px;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+.department-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  background: var(--bg-card-hover);
+}
+.department-card[aria-pressed="true"] {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1.5px var(--gold), var(--shadow-md), 0 0 20px var(--gold-glow);
+  background: rgba(212, 163, 75, 0.06);
+}
+.department-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+}
+.department-avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  color: var(--cyan);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid var(--cyan-border);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.department-card.pxil .department-avatar {
+  color: var(--gold);
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-border);
+}
+.department-card strong {
+  font-size: 14px;
+  line-height: 1.35;
+  color: #ffffff;
+}
+.department-card .description {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.department-card-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid var(--line-subtle);
+  padding-top: 11px;
+  margin-top: auto;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Persistent Sticky Inspector */
+.inspector {
+  position: sticky;
+  top: 84px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.inspector-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.inspector-title strong {
+  font-size: 17px;
+  font-weight: 800;
+  color: #ffffff;
+}
+.mission {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+.divider {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 18px 0;
+}
+.tag-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* PXIL Design Resource Callout */
+.resource-callout {
+  border: 1px solid var(--gold-border);
+  background: var(--gold-bg);
+  border-radius: var(--radius-md);
+  padding: 15px 16px;
+  margin: 16px 0;
+}
+.resource-callout h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold-text);
+}
+.resource-callout p {
+  font-size: 12px;
+  color: #e2c082;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.trace-chain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+.trace-chain span {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  background: #0a0d14;
+  border: 1px solid var(--gold-border);
+  padding: 3px 6px;
+  border-radius: var(--radius-xs);
+  color: var(--gold-text);
+  font-weight: 600;
+}
+
+/* Key-Value Specification Grid */
+.kv {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.7fr) minmax(0, 1.4fr);
+  gap: 8px 14px;
+  margin: 14px 0 0;
+  font-size: 12px;
+}
+.kv dt {
+  color: var(--muted);
+  font-weight: 500;
+}
+.kv dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--ink-secondary);
+  font-weight: 500;
+}
+
+/* Accordion Evidence & Terminal Code Blocks */
+details {
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+}
+summary {
+  cursor: pointer;
+  color: var(--ink-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+summary::-webkit-details-marker { display: none; }
+summary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.chevron {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  transition: transform 0.2s ease;
+}
+details[open] > summary .chevron {
+  transform: rotate(180deg);
+}
+details[open] > summary {
+  border-bottom: 1px solid var(--line-subtle);
+}
+.evidence {
+  padding: 12px 14px;
+  background: #06090e;
+  color: #cdd9e5;
+  margin: 0;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  max-height: 380px;
+  overflow: auto;
+}
+
+/* Event Timeline Stream */
+.event-line {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line-subtle);
+  font-size: 12px;
+  position: relative;
+}
+.event-line time {
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+.event-line p {
+  color: var(--muted);
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.source-label {
+  font-size: 11px;
+  color: var(--muted-light);
+  margin-top: 6px;
+}
+
+/* Interactive Terminal Box */
+.command {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  background: #06080d;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.cmd-prompt {
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.command code {
+  color: var(--cyan);
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: transparent;
+  padding: 0;
+  border: none;
+}
+.action-line {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line-subtle);
+}
+.action-line strong {
+  font-size: 13px;
+  color: #ffffff;
+}
+.action-line p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Architecture Layout */
+.architecture-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 350px;
+  gap: 20px;
+  align-items: start;
+}
+.architecture-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  padding: 18px 20px;
+}
+.node {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  text-align: left;
+  background: var(--bg-card);
+  min-width: 0;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.node:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+.node.selected {
+  background: rgba(212, 163, 75, 0.12);
+  border-color: var(--gold);
+  box-shadow: 0 0 16px rgba(212, 163, 75, 0.2);
+}
+.node-id {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.node strong {
+  display: block;
+  font-size: 13px;
+  color: #ffffff;
+}
+.node small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.relation {
+  padding: 10px 20px;
+  border-top: 1px solid var(--line-subtle);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.relation svg {
+  width: 24px;
+  height: 10px;
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 1.6;
+}
+
+/* PXIL Design Library Gallery */
+.design-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 22px;
+  align-items: start;
+}
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+.design-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 10px;
+  padding: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  color: var(--ink);
+  min-width: 0;
+  box-shadow: var(--shadow-xs);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.design-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.design-card[aria-pressed="true"] {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1.5px var(--gold), 0 0 20px var(--gold-glow);
+}
+.design-preview {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: #080c14;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.design-preview-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 14px;
+}
+.design-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.design-captures {
+  display: grid;
+  gap: 14px;
+}
+.design-capture {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+.design-capture img {
+  width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  background: #080c14;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.design-command {
+  margin-top: 14px;
+}
+.design-command code {
+  display: block;
+  padding: 10px 12px;
+  background: #06080d;
+  color: var(--cyan);
+  border-radius: var(--radius-md);
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  margin-top: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.design-plan {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-subtle);
+}
+.design-plan:last-child { border-bottom: 0; }
+
+/* Footnote & Toast */
+.footnote {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+  font-size: 11px;
+  color: var(--muted-light);
+}
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #111724;
+  color: #ffffff;
+  z-index: 100;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--line-strong);
+  max-width: calc(100vw - 48px);
+  animation: toast-in 0.2s ease-out;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Skeleton Loading Animation */
+.loading-lines {
+  padding: 24px;
+}
+.loading-lines div {
+  height: 14px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  margin: 12px 0;
+  border-radius: var(--radius-xs);
+}
+.loading-lines div:nth-child(2) { width: 85%; }
+.loading-lines div:nth-child(3) { width: 65%; }
+.loading-lines div:nth-child(4) { width: 45%; }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* List Clean Helper */
+.list-clean {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.list-clean li {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line-subtle);
+}
+.list-clean li:last-child {
+  border-bottom: 0;
+}
+
+/* ==========================================================================
+   MULTI-AGENT COORDINATION & SUPERDESIGN STUDIO STYLES
+   ========================================================================== */
+
+/* Multi-Agent Orchestration Flow Grid */
+.agent-flow-banner {
+  background: linear-gradient(135deg, rgba(16, 24, 40, 0.8) 0%, rgba(8, 12, 20, 0.9) 100%);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 20px rgba(212, 163, 75, 0.1);
+}
+.flow-track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 12px 4px 6px;
+  scrollbar-width: thin;
+}
+.flow-step-card {
+  flex: 1;
+  min-width: 170px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+.flow-step-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+.flow-step-num {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.flow-step-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 4px 0 2px;
+}
+.flow-step-role {
+  font-size: 11px;
+  color: var(--muted);
+}
+.flow-arrow {
+  color: var(--muted-light);
+  flex-shrink: 0;
+}
+
+/* Spheres Grid */
+.spheres-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.sphere-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+.sphere-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.sphere-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.sphere-head h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.sphere-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+}
+.sphere-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.agent-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+.agent-pill {
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  color: var(--cyan);
+}
+.agent-pill.reviewer {
+  color: var(--purple-text);
+  border-color: var(--purple-border);
+  background: var(--purple-bg);
+}
+
+/* Superdesign Studio Grid */
+.studio-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(360px, 0.95fr);
+  gap: 22px;
+  align-items: start;
+}
+.studio-param-box {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.open-libraries-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.lib-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+.lib-card:hover {
+  border-color: var(--gold-border);
+  box-shadow: var(--shadow-md), 0 0 14px var(--gold-glow);
+  transform: translateY(-2px);
+}
+.lib-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.lib-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.lib-license {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--emerald-text);
+  background: var(--emerald-bg);
+  border: 1px solid var(--emerald-border);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+.lib-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.lib-cmd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: #06090e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--cyan);
+  overflow-x: auto;
+  margin-top: auto;
+}
+
+/* Prompt Generator Box */
+.generated-prompt-box {
+  background: #06080e;
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #e2e8f0;
+  line-height: 1.6;
+  max-height: 320px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  position: relative;
+}
+
+/* Responsive Breakpoints */
+@media (min-width: 1500px) {
+  .department-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .department-layout { grid-template-columns: minmax(0, 1fr) 420px; }
+  .spheres-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1150px) {
+  .shell { grid-template-columns: 210px minmax(0, 1fr); }
+  .department-layout, .design-layout, .architecture-layout, .studio-layout { grid-template-columns: 1fr; }
+  .department-grid { grid-template-columns: 1fr; }
+  .inspector { position: static; max-height: none; }
+  .content { padding: 24px; }
+  .topbar { padding: 10px 24px; }
+  .two-col { grid-template-columns: 1fr; }
+  .spheres-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 820px) {
+  .shell, .shell.compact { display: block; }
+  .sidebar {
+    height: auto;
+    position: static;
+    padding: 12px 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .brand { padding: 0; }
+  .brand-sub, .sidebar-foot, .nav-section-label, .sidebar-toggle, .eyebrow { display: none !important; }
+  .nav {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+    width: 100%;
+    margin-top: 10px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .nav button {
+    width: auto;
+    padding: 8px 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .nav button[aria-current="page"]::before { display: none; }
+  .topbar {
+    padding: 12px 16px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    position: static;
+  }
+  .content { padding: 20px 16px; }
+  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .department-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .design-grid, .open-libraries-grid, .studio-param-box, .spheres-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .metrics { grid-template-columns: 1fr; }
+  .department-grid { grid-template-columns: 1fr; }
+  .design-grid { grid-template-columns: 1fr; }
+  .page-head { flex-direction: column; align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<div class="shell">
+<aside class="sidebar" aria-label="Navegación principal">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">V</span>
+    <div>
+      <div class="brand-name">Viltrum</div>
+      <div class="brand-sub">Consola operativa</div>
+    </div>
+  </div>
+
+  <div class="nav-section-label">Consola Principal</div>
+  <nav class="nav">
+    <button type="button" aria-label="Resumen" title="Resumen" data-page="overview" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span class="nav-text">Resumen</span>
+    </button>
+    <button type="button" aria-label="Ejecuciones" title="Ejecuciones" data-page="runs">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 4 11 8-11 8zM4 4v16"/></svg>
+      <span class="nav-text">Ejecuciones</span>
+      <span class="nav-badge" id="badge-runs" hidden>0</span>
+    </button>
+    <button type="button" aria-label="Departamentos" title="Departamentos" data-page="departments">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="3" width="8" height="6" rx="1"/><path d="M12 9v5M4 17v-3h16v3"/><rect x="1" y="17" width="6" height="5" rx="1"/><rect x="9" y="17" width="6" height="5" rx="1"/><rect x="17" y="17" width="6" height="5" rx="1"/></svg>
+      <span class="nav-text">Departamentos</span>
+      <span class="nav-badge" id="badge-departments" hidden>0</span>
+    </button>
+
+    <div class="nav-section-label">Ingeniería Multi-Agente</div>
+    <button type="button" aria-label="Coordinación Multi-Agente" title="Coordinación Multi-Agente" data-page="coordination">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="17" y1="7" x2="14" y2="10"/><line x1="7" y1="17" x2="10" y2="14"/><line x1="17" y1="17" x2="14" y2="14"/></svg>
+      <span class="nav-text">Coordinación Agentes</span>
+      <span class="nav-pill-live">G0–G8</span>
+    </button>
+    <button type="button" aria-label="Motor de Superdiseño" title="Motor de Superdiseño" data-page="design_studio">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span class="nav-text">Superdiseños & 21st</span>
+      <span class="nav-pill-gold">Studio</span>
+    </button>
+    <button type="button" aria-label="Arquitectura" title="Arquitectura" data-page="architecture">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="5" r="3"/><circle cx="19" cy="12" r="3"/><circle cx="5" cy="19" r="3"/><path d="m8 6 8 5M8 18l8-5M5 8v8"/></svg>
+      <span class="nav-text">Arquitectura</span>
+    </button>
+
+    <div class="nav-section-label">Registros & Handoff</div>
+    <button type="button" aria-label="Biblioteca de diseño" title="Biblioteca de diseño" data-page="library">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1"/><rect x="13" y="4" width="8" height="7" rx="1"/><rect x="3" y="13" width="8" height="7" rx="1"/><path d="M13 16h8M17 13v7"/></svg>
+      <span class="nav-text">Biblioteca PXIL</span>
+      <span class="nav-badge" id="badge-library" hidden>0</span>
+    </button>
+    <button type="button" aria-label="Comunicación" title="Comunicación" data-page="communications">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v13H9l-6 4zM7 8h10M7 12h7"/></svg>
+      <span class="nav-text">Comunicación</span>
+      <span class="nav-badge" id="badge-comms" hidden>0</span>
+    </button>
+    <button type="button" aria-label="Entradas" title="Entradas" data-page="inputs">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h10l6 6v12H4zM14 3v6h6M8 13h8M8 17h6"/></svg>
+      <span class="nav-text">Entradas</span>
+    </button>
+  </nav>
+
+  <div class="sidebar-foot">
+    <strong>Viltrum Agentic OS</strong>
+    Orquestación y evidencia G0–G8.
+    <span class="read-only">PXIL v2 · localhost</span>
+  </div>
+</aside>
+
+<div class="workspace">
+  <header class="topbar">
+    <div class="project-picker">
+      <button class="button sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Contraer navegación" aria-expanded="true" title="Contraer navegación">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+      </button>
+      <label for="project-select">Proyecto</label>
+      <select id="project-select">
+        <option value="default">Cargando proyecto…</option>
+      </select>
+    </div>
+    <div class="sync">
+      <span class="connection" id="connection" data-state="loading" role="status" aria-live="polite">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="connection-text">Cargando</span>
+      </span>
+      <button class="button" id="alerts-button" type="button">Avisos <span id="alert-count">0</span></button>
+      <button class="button" id="pause" type="button" aria-pressed="false">Pausar</button>
+      <button class="button" id="refresh" type="button">Actualizar</button>
+    </div>
+  </header>
+
+  <main class="content" id="main" tabindex="-1">
+    <div class="page-head">
+      <div>
+        <div class="eyebrow">Viltrum Agentic OS · Centro de Operaciones</div>
+        <h1 id="page-title">Resumen operativo</h1>
+        <p id="page-description">Ejecuciones, entregas y decisiones del proyecto en una sola vista.</p>
+      </div>
+      <span class="phase-pill" id="phase">Estado pendiente</span>
+    </div>
+
+    <div class="notice" id="notice" hidden role="alert">
+      <div>
+        <strong id="notice-title"></strong>
+        <p id="notice-text"></p>
+      </div>
+      <button class="button small" type="button" id="retry">Reintentar</button>
+    </div>
+
+    <form class="filters" id="filters" role="search">
+      <div class="field search">
+        <label for="search">Buscar en la consola</label>
+        <input type="search" id="search" placeholder="Departamento, tarea, entrada o mensaje…" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="family-filter">Familia</label>
+        <select id="family-filter">
+          <option value="">Todas las familias</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="skill-filter">Skill declarada</label>
+        <select id="skill-filter">
+          <option value="">Todas las skills</option>
+        </select>
+      </div>
+      <span class="filters-note" id="filter-count">Leyendo registros…</span>
+    </form>
+
+    <section id="view" aria-label="Resumen operativo">
+      <div class="panel">
+        <div class="loading-lines" role="status">
+          <p class="muted">Cargando registros del proyecto…</p>
+          <div></div><div></div><div></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footnote">
+      <span>Actividad respaldada por registros verificables. Doctrina Viltrum: cero simulaciones, revisión independiente G0–G8.</span>
+      <span id="updated">Lectura automática cada 2 s</span>
+    </footer>
+  </main>
+</div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id),arr=v=>Array.isArray(v)?v:[],str=v=>typeof v==='object'?JSON.stringify(v):String(v??'');
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const text=v=>v==null||v===''?'Sin registrar':typeof v==='object'?JSON.stringify(v):String(v);
+const labels={created:'Creada',running:'En ejecución',reviewing:'En revisión',pending:'Pendiente',waiting_submission:'Espera entrega del host',waiting_review:'Espera revisión',waiting_host:'Espera al host',awaiting_submission:'Espera entrega',awaiting_review:'Espera revisión',delivered:'Entrega registrada',approved:'Revisada y aprobada',rejected:'Devuelta por el revisor',blocked:'Bloqueada',failed:'Falló',cancelled:'Cancelada',finished:'Entregables revisados',host_finished:'Trabajo finalizado',completed:'Completada',idle:'Sin tarea activa',stale:'Sin señal reciente',unverified:'Sin verificar',verified:'Verificado',available:'Disponible',candidate:'Candidata',not_configured:'Sin configurar',declared:'Declarado',unknown:'Sin comprobar',checking:'Comprobando',ready:'Lista',connected:'Conectada',unavailable:'No disponible'};
+const state=v=>labels[v]||v||'Sin registrar';
+function badge(v){const s=String(v||'unknown'),cls=['approved','finished','host_finished','completed','verified','ready','connected'].includes(s)?'good':['failed','rejected','cancelled','unavailable','error'].includes(s)?'bad':['blocked','waiting_submission','waiting_review','waiting_host','awaiting_submission','awaiting_review','unverified','not_configured','checking','stale'].includes(s)?'warn':['running','reviewing'].includes(s)?'live':'';return '<span class="badge '+cls+'"><span class="badge-dot" aria-hidden="true"></span>'+esc(state(v))+'</span>'}
+function date(v){if(!v)return 'Sin fecha';const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString('es-DO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function empty(title,message){return '<div class="empty"><div class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div><strong>'+esc(title)+'</strong><p>'+esc(message)+'</p></div>'}
+function panel(title,body,sub=''){return '<section class="panel"><div class="panel-head"><h2>'+esc(title)+'</h2>'+(sub?'<small class="panel-sub">'+esc(sub)+'</small>':'')+'</div>'+body+'</section>'}
+function details(key,title,value,open=false){return '<details data-key="'+esc(key)+'"'+(open?' open':'')+'><summary><span>'+esc(title)+'</span><svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><pre class="evidence"><code>'+esc(typeof value==='string'?value:JSON.stringify(value,null,2))+'</code></pre></details>'}
+function kv(rows){return '<dl class="kv">'+rows.map(([k,v])=>'<dt>'+esc(k)+'</dt><dd>'+esc(text(v))+'</dd>').join('')+'</dl>'}
+function table(headers,rows){return '<div class="table-wrap"><table class="data-table"><thead><tr>'+headers.map(h=>'<th scope="col">'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>'}
+
+function metricCard(title,num,iconSvg,trendText,trendType,context){
+  return '<div class="metric">'
+    + '<div class="metric-head">'
+    + '<span class="metric-title">'+esc(title)+'</span>'
+    + '<span class="metric-icon-wrap" aria-hidden="true">'+iconSvg+'</span>'
+    + '</div>'
+    + '<div class="metric-number">'+esc(num)+'</div>'
+    + '<div class="metric-foot">'
+    + '<span class="metric-trend '+esc(trendType)+'">'+esc(trendText)+'</span>'
+    + '<span class="metric-context">'+esc(context)+'</span>'
+    + '</div>'
+    + '</div>';
+}
+
+const pages={
+  overview:['Resumen operativo','Ejecuciones, entregas y decisiones del proyecto en una sola vista.'],
+  coordination:['Coordinación Multi-Agente','Metodología PXIL v2: orquestación de 22 perfiles, pipeline de calidad G0–G8 y revisión independiente.'],
+  design_studio:['Estudio de Superdiseños & 21st','Generador paramétrico de UI, catálogo curado de librerías open source y contratos de pantalla.'],
+  runs:['Ejecuciones','Inspecciona cada tarea, su entrega y la revisión independiente.'],
+  departments:['Departamentos','Perfiles, configuración de ejecución, skills y permisos de cada agente.'],
+  inputs:['Entradas del proyecto','Solicitudes, preguntas y archivos registrados como contexto para los agentes.'],
+  communications:['Comunicación','Eventos, relevos y mensajes que constan en el registro del proyecto.'],
+  architecture:['Arquitectura de agentes','Explora componentes y relaciones registradas. Selecciona un nodo para ver su configuración.'],
+  library:['Biblioteca de diseño','Componentes, capturas locales y paquetes de pantallas para handoff PXIL.']
+};
+
+let page='overview',projectId='default',projectEpoch=0,runId='',departmentId='',nodeId='',designId='',librarySearch='',paused=false,refreshing=false,timer=null,consoleData=null,statusData=null,runsData=null,designData=null,runDetail=null,lastRender='',runError=null,loadedAt=null;
+let filters={search:'',family:'',skill:''},endpointErrors={};const openDetails=new Map(),projectSelections=new Map();
+
+// Studio State for interactive generation
+let studioArchetype = 'obsidian';
+let studioComponent = 'bento_kpi';
+let studioLibrary = '21st';
+let studioMotion = 'spring';
+let studioA11y = 'wcag_aa';
+
+function signature(v){return JSON.stringify(v,(k,val)=>['updatedAt','generatedAt','serverTime','polledAt'].includes(k)?undefined:val)}
+function departments(){return arr(consoleData?.departments).length?consoleData.departments:arr(statusData?.departments)}
+function runs(){return Array.isArray(runsData)?runsData:arr(runsData?.runs).length?runsData.runs:arr(consoleData?.runs).length?consoleData.runs:arr(statusData?.runs)}
+function communications(){return arr(consoleData?.communications)}
+function alerts(){return arr(consoleData?.alerts)}
+function hostSessions(){return arr(consoleData?.hostSessions)}
+function hostActive(){return hostSessions().filter(s=>s.status==='running')}
+function depSkills(d){return arr(d.skills?.declared||d.declaredSkills||d.skills).map(s=>typeof s==='string'?s:s.name||s.id||str(s))}
+function verifiedSkills(d){return arr(d.skills?.verified||d.verifiedSkills).map(s=>typeof s==='string'?s:s.name||s.id||str(s))}
+function depMatches(d){return (!filters.family||d.family===filters.family)&&(!filters.skill||depSkills(d).includes(filters.skill))}
+function match(item){const ids=[item.department,item.departmentId,item.from,item.to,item.owner].filter(Boolean);const ds=departments().filter(d=>ids.includes(d.id));return (!filters.search||str(item).toLocaleLowerCase().includes(filters.search.toLocaleLowerCase()))&&(!filters.family||item.family===filters.family||ds.some(depMatches))&&(!filters.skill||arr(item.skills).includes(filters.skill)||ds.some(depMatches))}
+function filteredDepartments(){const q=filters.search.trim().toLocaleLowerCase();return departments().filter(d=>depMatches(d)&&(!q||(/^d\d{2}$/.test(q)?d.id.toLocaleLowerCase()===q:[d.id,d.name,d.mission,...depSkills(d)].join(' ').toLocaleLowerCase().includes(q))))}
+function filteredRuns(){return runs().filter(r=>{const ts=arr(r.tasks).length?r.tasks:runDetail?.id===r.id?arr(runDetail.tasks):[],depIds=arr(r.departments||r.activeProfiles||r.profiles).map(x=>typeof x==='string'?x:x.id);const filtered=(!filters.family&&!filters.skill)||ts.some(match)||departments().some(d=>depIds.includes(d.id)&&depMatches(d));return filtered&&(!filters.search||str(r).toLocaleLowerCase().includes(filters.search.toLocaleLowerCase())||ts.some(match))})}
+function stages(){return arr(statusData?.stages)}
+
+function pipeline(){
+  if(!stages().length)return empty('Flujo sin registrar','Las etapas aparecen al cargar el estado del proyecto.');
+  return '<div class="pipeline">'+stages().map(s=>{
+    const gate=arr(statusData?.gates).find(g=>g.gate===s.gate),current=statusData?.effectivePhase===s.id;
+    const statusText=gate?.validated?'✓ Validada':current?'⚡ Etapa actual':'○ Pendiente';
+    const statusClass=gate?.validated?'good':current?'warn':'';
+    return '<button class="stage '+(gate?.validated?'passed':current?'current':'')+'" data-stage="'+esc(s.id)+'" type="button"><strong>'+esc(s.id)+' <span class="muted">/ '+esc(s.gate||'')+'</span></strong><small>'+esc(s.name)+'</small><span class="badge '+statusClass+'">'+statusText+'</span><small>'+esc(arr(s.profiles).concat(arr(s.support)).join(', '))+'</small></button>';
+  }).join('')+'</div>';
+}
+
+function gates(){
+  const list=arr(statusData?.gates);
+  if(!list.length)return empty('Sin puertas registradas','No se ha recibido un checklist de calidad.');
+  return list.map(g=>{
+    const done=Number(g.done)||0,total=Number(g.total)||0,pct=total?Math.max(0,Math.min(100,Math.round(done/total*100))):0;
+    return '<div class="gate '+(g.validated?'validated':'')+'"><div class="gate-line"><strong>'+esc(g.gate)+' <span class="muted">'+esc(g.phase)+'</span></strong>'+badge(g.validated?'approved':'pending')+'</div><p>'+done+' / '+total+' controles registrados</p>'+(total?'<div class="check-meter" role="meter" aria-label="Controles registrados de '+esc(g.gate)+'" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+done+'"><span style="width:'+pct+'%"></span></div>':'')+(arr(g.problems).length?details('gate-'+g.gate,'Ver pendientes ('+g.problems.length+')',g.problems):'')+'</div>';
+  }).join('');
+}
+
+function runsTable(items,compact=false){
+  if(!items.length)return empty('No hay ejecuciones para mostrar',runs().length?'Prueba otros filtros.':'Inicia una ejecución desde la terminal para registrar tareas y entregas.');
+  return table(compact?['Ejecución / objetivo','Estado','Ejecutor']:['Ejecución / objetivo','Estado','Ejecutor','Tareas','Último registro'],items.map(r=>'<tr'+(r.id===runId?' class="selected"':'')+'><td><button class="text-button mono" data-run="'+esc(r.id)+'" type="button">'+esc(r.id)+'</button><span class="muted">'+esc(r.goal||'Objetivo sin registrar')+'</span></td><td>'+badge(r.observedStatus||r.status)+'</td><td>'+esc(r.backend||'Sin registrar')+'</td>'+(compact?'':'<td>'+esc(r.taskCount??arr(r.tasks).length)+'</td><td class="small">'+esc(date(r.updatedAt||r.createdAt))+'</td>')+'</tr>'));
+}
+
+function eventList(events){
+  if(!events.length)return empty('Sin actividad registrada','Los mensajes y eventos aparecerán cuando el runtime los registre.');
+  return events.map((e,i)=>typeof e==='string'?'<div class="event-line"><time>Sin fecha</time><p>'+esc(e)+'</p></div>':'<article class="event-line"><time datetime="'+esc(e.timestamp||e.at||e.createdAt||'')+'">'+esc(date(e.timestamp||e.at||e.createdAt))+'</time><div><strong>'+esc(e.title||e.type||e.event||e.kind||'Registro')+'</strong>'+(e.state||e.status?' '+badge(e.type==='host_activity'&&e.state==='finished'?'host_finished':e.state||e.status):'')+'<p>'+esc(text(e.message||e.summary||e.description||e.content||e.detail||''))+'</p><p class="source-label">'+esc([e.from||e.sender||e.department,e.to||e.recipient?'→ '+(e.to||e.recipient):'',e.runId||e.run_id].filter(Boolean).join(' · '))+'</p>'+details('event-'+(e.id||e.seq||i)+'-'+(e.timestamp||e.at||e.createdAt||''),'Ver evidencia del evento',e)+'</div></article>').join('');
+}
+
+function capabilityPanel(){
+  const c=consoleData?.executionCapabilities,list=arr(consoleData?.connections);
+  if(!c&&!list.length)return panel('Ejecutores y conexiones',empty('Sin comprobación disponible','Espera el diagnóstico local del runtime.'));
+  return panel('Ejecutores y conexiones',list.length?'<ul class="list-clean">'+list.map(v=>'<li><div class="gate-line"><strong>'+esc(v.name||v.id)+'</strong>'+badge(v.status)+'</div><p class="mission">'+esc(v.reason||v.readiness?.reason||v.requirements||'')+'</p>'+kv([['Modelo declarado',v.model],['Transporte',v.transport]])+details('connection-'+v.id,'Ver diagnóstico y permisos',v)+'</li>').join('')+'</ul>':'<div class="panel-body">'+details('executor-diagnostic','Ver diagnóstico local',c,true)+'</div>',c?.checking?'Comprobando acceso local':'Diagnóstico sin contactar al modelo');
+}
+
+function hostPanel(){
+  const sessions=hostSessions().filter(match);
+  return panel('Trabajo del host',sessions.length?'<div class="panel-body"><p class="source-label">Sesiones declaradas por el host. La señal reciente indica actividad reportada; no acredita un ejecutor ni una revisión.</p><ul class="list-clean">'+sessions.slice(0,8).map(s=>'<li><div class="gate-line"><strong>'+esc(s.department)+' · '+esc(s.goal)+'</strong>'+badge(s.status==='finished'?'host_finished':s.status)+'</div><p class="small muted">'+esc(s.actor)+' · '+esc(date(s.updatedAt))+'</p>'+(arr(s.events).length?'<p class="small">'+esc(s.events.at(-1).message)+'</p>':'')+'</li>').join('')+'</ul></div>':empty('Sin sesiones del host','El trabajo fuera de viltrum run aparece cuando el host lo registra.'),sessions.length+' sesiones registradas');
+}
+
+function alertPanel(){
+  const list=alerts();
+  return panel('Avisos del proyecto',list.length?'<ul class="list-clean">'+list.slice(0,8).map(a=>'<li><div class="gate-line"><strong>'+esc(a.title)+'</strong>'+badge(a.severity==='error'?'failed':'pending')+'</div><p class="small">'+esc(a.summary||'Evento registrado')+'</p><p class="source-label">'+esc(date(a.createdAt))+' · '+esc(a.department||a.runId||a.sessionId||'Proyecto')+'</p>'+(a.runId?'<button class="text-button" data-run="'+esc(a.runId)+'" type="button">Ver ejecución</button>':'')+'</li>').join('')+'</ul>':empty('Sin avisos','Los eventos configurados aparecerán aquí al registrarse.'),list.length+' avisos registrados');
+}
+
+function overview(){
+  const rs=runs(),o=statusData?.orchestration,active=rs.filter(r=>r.observedStatus==='running'),waiting=rs.filter(r=>['waiting_submission','waiting_review','waiting_host','awaiting_submission','awaiting_review','blocked'].includes(r.status));
+  const activeCount=active.length+hostActive().length;
+
+  const playIcon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="6 4 19 12 6 20 6 4"/></svg>';
+  const pulseIcon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>';
+  const alertIcon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+  const usersIcon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+
+  const metricsHtml=[
+    metricCard('Ejecuciones registradas',rs.length,playIcon,'Persistidas','good','Historial verificado'),
+    metricCard('Actividad en curso',activeCount,pulseIcon,activeCount?'En ejecución':'En reposo',activeCount?'live':'neutral','Runs y host activos'),
+    metricCard('Requieren atención',waiting.length,alertIcon,waiting.length?'Acción requerida':'Sin bloqueos',waiting.length?'warn':'good','Revisión y bloqueos'),
+    metricCard('Departamentos',departments().length,usersIcon,'PXIL 2.0','neutral','Perfiles configurados')
+  ].join('');
+
+  return '<div class="metrics">'+metricsHtml+'</div>'
+    + '<div class="stack">'
+    + panel('Flujo del proyecto',pipeline(),'Fases y puertas de calidad G0–G8')
+    + '<div class="two-col">'
+    + '<div class="stack">'
+    + hostPanel()
+    + panel('Ejecuciones recientes',runsTable(filteredRuns().slice(0,6),true),rs.length+' registradas')
+    + panel('Actividad registrada',eventList(communications().filter(match).slice(0,5)),'Últimos registros disponibles')
+    + capabilityPanel()
+    + '</div>'
+    + '<div class="stack">'
+    + alertPanel()
+    + panel('Próxima acción','<div class="action-line"><strong>'+esc(o?.nextAction||'Prepara el objetivo del proyecto con /orquestar.')+'</strong><p>'+esc(o?.createdAt?'Plan preparado: '+date(o.createdAt):'Lectura local cada 2 segundos.')+'</p></div>'+(arr(o?.blocked).length?'<ul class="list-clean">'+o.blocked.map(b=>'<li>'+badge('blocked')+'<p class="small" style="margin-top:7px">'+esc(text(b))+'</p></li>').join('')+'</ul>':'<div class="panel-body muted small">No hay bloqueos registrados en el plan.</div>'))
+    + panel('Puertas de calidad',gates(),'Aprobación efectiva y evidencia')
+    + '</div>'
+    + '</div>'
+    + '</div>';
+}
+
+/* ==========================================================================
+   VIEW: COORDINACIÓN MULTI-AGENTE (PXIL v2 ENGINEERING & REVIEW TOPOLOGY)
+   ========================================================================== */
+function coordinationView(){
+  const ds=departments();
+  const spheres=[
+    {
+      title:'1. Dirección & Alcance',
+      badge:'G0–G1',
+      badgeClass:'good',
+      desc:'Define la visión, actores, historias de usuario y trazabilidad de requisitos (Spec Kit + BMAD).',
+      agents:['D00 Orquestador','D01 Discovery','D02 Alcance'],
+      reviewer:'D02 revisa a D01'
+    },
+    {
+      title:'2. Arquitectura & Seguridad',
+      badge:'G2',
+      badgeClass:'live',
+      desc:'Diseña el modelo de dominio, máquinas de estados (XState) y barreras de seguridad (OWASP ASVS).',
+      agents:['D03 Arquitectura','D12 Seguridad','D13 Git Governance'],
+      reviewer:'D12 audita a D03'
+    },
+    {
+      title:'3. Experiencia & Diseño (PXIL)',
+      badge:'G3–G5',
+      badgeClass:'warn',
+      desc:'Produce contratos de pantalla (6 estados), tokens semánticos y scouting de componentes 21st.dev.',
+      agents:['D04 UX Research','D05 UI Design System','D06 UX States','D07 Accesibilidad','D08 Contenido/SEO'],
+      reviewer:'D09 Frontend revisa a D05'
+    },
+    {
+      title:'4. Ingeniería & Construcción',
+      badge:'G6',
+      badgeClass:'good',
+      desc:'Construcción de frontend React/Tailwind, APIs OpenAPI, bases de datos y orquestación DevOps.',
+      agents:['D09 Frontend','D10 Backend','D11 Datos','D16 DevOps','D19 Integraciones'],
+      reviewer:'D14 QA revisa a D09/D10'
+    },
+    {
+      title:'5. Calidad, Observabilidad & Cierre',
+      badge:'G7–G8',
+      badgeClass:'live',
+      desc:'Verificación automatizada E2E (Playwright/axe), telemetría OpenTelemetry y handoff a producción.',
+      agents:['D14 QA','D15 Rendimiento','D17 Observabilidad','D18 AI Agents','D20 Documentación','D21 Research','D22 Knowledge Ops'],
+      reviewer:'Validación independiente final'
+    }
+  ];
+
+  return '<div class="stack">'
+    + '<div class="agent-flow-banner">'
+    + '<div class="eyebrow" style="color:var(--gold)">Topología de Ingeniería Multi-Agente</div>'
+    + '<h2 style="font-size:18px;margin-bottom:8px">Flujo de Coordinación y Transferencia de Contratos</h2>'
+    + '<p class="muted" style="max-width:85ch;font-size:13px;line-height:1.6">Cada agente opera bajo el principio de <strong>Doctrina Viltrum</strong>: quien produce nunca aprueba su propio trabajo. Los entregables se transfieren mediante contratos estructurados (YAML/JSON) validados por puertas G0–G8.</p>'
+    + '<div class="flow-track">'
+    + '<div class="flow-step-card"><span class="flow-step-num">G0 · Brief</span><div class="flow-step-title">D01 Discovery</div><span class="flow-step-role">PRD & Actores</span></div>'
+    + '<span class="flow-arrow">→</span>'
+    + '<div class="flow-step-card"><span class="flow-step-num">G1–G2 · Dominio</span><div class="flow-step-title">D03 Arquitectura</div><span class="flow-step-role">XState & Datos</span></div>'
+    + '<span class="flow-arrow">→</span>'
+    + '<div class="flow-step-card"><span class="flow-step-num">G3–G5 · Pantallas</span><div class="flow-step-title">D05 UI Design</div><span class="flow-step-role">21st Componentes</span></div>'
+    + '<span class="flow-arrow">→</span>'
+    + '<div class="flow-step-card"><span class="flow-step-num">G6 · Código</span><div class="flow-step-title">D09 Frontend</div><span class="flow-step-role">Implementación</span></div>'
+    + '<span class="flow-arrow">→</span>'
+    + '<div class="flow-step-card"><span class="flow-step-num">G7 · Verificación</span><div class="flow-step-title">D14 QA & A11y</div><span class="flow-step-role">Playwright + axe</span></div>'
+    + '</div>'
+    + '</div>'
+    + panel('Esferas de Coordinación Multi-Agente (22 Departamentos)',
+      '<div class="panel-body"><div class="spheres-grid">'
+      + spheres.map(s=>'<div class="sphere-card"><div class="sphere-head"><h3>'+esc(s.title)+'</h3><span class="sphere-badge badge '+s.badgeClass+'">'+esc(s.badge)+'</span></div><p class="sphere-desc">'+esc(s.desc)+'</p><div class="agent-pill-list">'+s.agents.map(a=>'<span class="agent-pill">'+esc(a)+'</span>').join('')+'</div><div style="font-size:11px;color:var(--gold-text);margin-top:4px">↳ '+esc(s.reviewer)+'</div></div>').join('')
+      + '</div></div>', 'Arquitectura distribuida con revisión independiente')
+    + panel('Matriz de Handover y Contratos Entre Agentes',
+      table(['Paso / Transferencia','Agente Emisor','Agente Receptor & Revisor','Contrato / Evidencia Obligatoria','Herramienta de Verificación'],
+      [
+        '<tr><td><strong>1. Requisitos a Estado</strong></td><td>D01 Discovery</td><td>D03 Arquitectura</td><td><code>REQ-*.yaml</code> + Historias de usuario</td><td>Spec Kit + BMAD</td></tr>',
+        '<tr><td><strong>2. Dominio a Pantalla</strong></td><td>D03 Arquitectura</td><td>D05 UI Design System</td><td><code>STA-*.machine.ts</code> + Permisos</td><td>XState Machine Linter</td></tr>',
+        '<tr><td><strong>3. Receta a Componentes</strong></td><td>D05 UI Design</td><td>D09 Frontend</td><td><code>SCR-*.recipe.json</code> + 21st IDs</td><td>21st CLI / Storybook Lab</td></tr>',
+        '<tr><td><strong>4. Código a Test E2E</strong></td><td>D09 Frontend</td><td>D14 QA Automatizado</td><td>Componentes con data-testid + A11y</td><td>Playwright + axe-core WCAG</td></tr>',
+        '<tr><td><strong>5. Despliegue y Telemetría</strong></td><td>D10/D16 Backend/DevOps</td><td>D17 Observabilidad</td><td>Métricas, trazas y semántica OTel</td><td>OpenTelemetry Collector</td></tr>'
+      ]), 'Garantía de trazabilidad integral: de la necesidad de negocio al test E2E')
+    + '</div>';
+}
+
+/* ==========================================================================
+   VIEW: MOTOR DE SUPERDISEÑOS & 21ST.DEV STUDIO (INTERACTIVE PARAMETERS)
+   ========================================================================== */
+function generateStudioPrompt(){
+  const archMap = {
+    obsidian: 'Obsidian Cyber-Luxe (Fondo #080b11 con iluminación radial, acentos Viltrum Gold #d4a34b, tarjetas de cristal ahumado backdrop-filter: blur(16px), bordes de baja opacidad y brillo tenue).',
+    minimal: 'Deep Terminal Minimal (Negro absoluto #000, bordes finos 1px rgba(255,255,255,0.1), tipografía mono tabular, micro-badges y máxima densidad de información estilo Linear/Vercel).',
+    aurora: 'Solar Glass Aurora (Índigo profundo con degradados aurorales cyan/púrpura, tarjetas frosted acrílicas, micro-sombras luminosas y tipografía refinada).',
+    slate: 'Clean Enterprise Slate (Fondo neutro oscuro #0f172a, bordes de precisión slate #334155, tarjetas elevadas, jerarquía visual limpia para analistas).'
+  };
+  const compMap = {
+    bento_kpi: 'Grid Bento de Métricas KPI con cabeceras de ícono píldora, números tabulares grandes, insignias de tendencia positiva/negativa y micro-elevación en hover.',
+    app_shell: 'App Shell completa con navegación lateral colapsable a icon-rail, badges de recuento en vivo, topbar flotante con baliza de conexión y selector de proyecto.',
+    process_stepper: 'Stepper o Pipeline horizontal de fases con barras de progreso lumínicas, estados Validado / En Curso / Pendiente y checklist de calidad desplegable.',
+    terminal_box: 'Caja de comando terminal oscura interactiva con prompt de shell, syntax highlighting para bash/curl, botón de copia en 1 clic y feedback de toast.',
+    form_wizard: 'Formulario wizard por pasos con validación accesible, campos con estados de foco dorados/cyan y feedback en tiempo real sin recarga.',
+    data_table: 'Tabla de datos de alto contraste con columnas fijas, filtros integrados, badges semánticos de estado y drawer de detalle persistente.'
+  };
+  const libMap = {
+    '21st': '21st.dev (Componentes comunitarios auténticos de Tailwind/shadcn con código verificado vía CLI oficial).',
+    'aceternity': 'Aceternity UI (Micro-interacciones espectaculares: Glowing borders, 3D card perspective, background beams y text reveals).',
+    'magic': 'Magic UI (Primitivas visuales modernas: Animated beam, shimmer button, bento grid layout y ripples).',
+    'radix': 'Radix UI + Base UI (Componentes no estilizados con 100% accesibilidad WAI-ARIA, foco de teclado y robustez de producción).'
+  };
+
+  return `Genera un componente de interfaz de usuario de nivel producción siguiendo la metodología PXIL v2 y Doctrina Viltrum:
+
+1. OBJETIVO DEL COMPONENTE:
+   ${compMap[studioComponent] || compMap.bento_kpi}
+
+2. ARQUETIPO VISUAL & ESTILO:
+   ${archMap[studioArchetype] || archMap.obsidian}
+
+3. LIBRERÍA PRIMARIA & INSPIRACIÓN:
+   ${libMap[studioLibrary] || libMap['21st']}
+
+4. PARÁMETROS CRÍTICOS:
+   - Accesibilidad: ${studioA11y === 'wcag_aaa' ? 'WCAG 2.2 AAA estricto (contraste 7:1, navegación completa por teclado, WAI-ARIA roles, focus-visible obligatorio)' : 'WCAG 2.2 AA (contraste 4.5:1, foco de teclado, semántica nativa)'}.
+   - Motion: ${studioMotion === 'spring' ? 'Física Spring fluida con Framer Motion / CSS WAAPI (damping 20, stiffness 300, respeto a prefers-reduced-motion)' : studioMotion === 'micro' ? 'Micro-interacciones rápidas (<150ms) y transiciones sutiles' : 'Modo reducido estricto (cero animaciones continuas)'}.
+   - 6 Estados Operativos Mandatorios: Carga (Skeleton shimmer), Sin datos (Empty ilustrado), Error (Callout con reintento), Sin conexión (Beacon), Éxito, Permisos insuficientes.
+   - Cero Inventos: Si se utiliza 21st.dev, usar solo comandos auténticos (21st search / get / add) con autor, licencia y código real.`;
+}
+
+function designStudioView(){
+  const promptText = generateStudioPrompt();
+  const cliQuery = studioComponent.replace('_', ' ');
+
+  const libraries = [
+    {
+      name: '21st.dev',
+      author: 'Design Engineers Community',
+      license: 'MIT / Open',
+      desc: 'El marketplace líder de componentes Tailwind y shadcn/ui. Incluye CLI oficial y servidor MCP con búsqueda semántica y descarga de código auténtico.',
+      cmd: 'npx shadcn@latest add "https://21st.dev/r/..."',
+      tag: 'CLI & MCP Activo'
+    },
+    {
+      name: 'Aceternity UI',
+      author: 'Manu Arora',
+      license: 'MIT',
+      desc: 'Librería de componentes con animaciones de siguiente nivel: bordes brillantes (Glowing border), efectos 3D de tarjeta, rayos de fondo (Background beams) y parallax.',
+      cmd: 'npm install framer-motion clsx tailwind-merge',
+      tag: 'Micro-interacciones'
+    },
+    {
+      name: 'Magic UI',
+      author: 'Dillion Verma',
+      license: 'MIT',
+      desc: 'Más de 150 componentes interactivos para landing pages y dashboards: botones shimmer, animated beam, ripples, métricas ticker y grid bento animado.',
+      cmd: 'npx shadcn@latest add @magicui/...',
+      tag: 'Bento & Motion'
+    },
+    {
+      name: 'Radix UI / Base UI',
+      author: 'WorkOS / MUI Team',
+      license: 'MIT',
+      desc: 'Primitivas accesibles y desestilizadas con soporte completo de navegación por teclado, roles ARIA, portales y control de foco. Base sólida para producción.',
+      cmd: 'npm install @radix-ui/react-dialog',
+      tag: 'Accesibilidad WAI-ARIA'
+    },
+    {
+      name: 'Lucide Icons',
+      author: 'Lucide Project',
+      license: 'ISC',
+      desc: 'Colección de más de 1,400 iconos vectoriales limpios y consistentes, diseñados específicamente para interfaces modernas con trazado configurable de 1.5 a 2px.',
+      cmd: 'npm install lucide-react',
+      tag: 'Iconografía Vectorial'
+    },
+    {
+      name: 'Framer Motion (Motion)',
+      author: 'Framer',
+      license: 'MIT',
+      desc: 'Motor de animación líder para interfaces web modernas. Soporta física de resorte (springs), layout morphing, gestos táctiles y transiciones compartidas.',
+      cmd: 'npm install motion',
+      tag: 'Física de Animación'
+    }
+  ];
+
+  return '<div class="stack">'
+    + '<div class="agent-flow-banner">'
+    + '<div class="eyebrow" style="color:var(--gold)">Laboratorio de Diseño & Handoff PXIL v2</div>'
+    + '<h2 style="font-size:18px;margin-bottom:8px">Motor Paramétrico de Superdiseño UI/UX</h2>'
+    + '<p class="muted" style="max-width:85ch;font-size:13px;line-height:1.6">Configura los parámetros visuales para generar prompts de alta fidelidad, buscar candidatos en <strong>21st.dev</strong> y componer interfaces memorables utilizando las mejores librerías abiertas de la industria.</p>'
+    + '</div>'
+
+    + '<div class="studio-layout">'
+    + '<div class="stack">'
+    + panel('1. Parámetros de Diseño y Composición',
+      '<div class="panel-body">'
+      + '<div class="studio-param-box">'
+      + '<div class="field"><label for="studio-archetype">Arquetipo Visual</label><select id="studio-archetype"><option value="obsidian" '+(studioArchetype==='obsidian'?'selected':'')+'>Obsidian Cyber-Luxe (Viltrum Gold)</option><option value="minimal" '+(studioArchetype==='minimal'?'selected':'')+'>Deep Terminal Minimal (Linear/Vercel)</option><option value="aurora" '+(studioArchetype==='aurora'?'selected':'')+'>Solar Glass Aurora (Cyan/Purple)</option><option value="slate" '+(studioArchetype==='slate'?'selected':'')+'>Clean Enterprise Slate</option></select></div>'
+      + '<div class="field"><label for="studio-component">Componente Objetivo</label><select id="studio-component"><option value="bento_kpi" '+(studioComponent==='bento_kpi'?'selected':'')+'>Grid Bento de Métricas KPI</option><option value="app_shell" '+(studioComponent==='app_shell'?'selected':'')+'>App Shell & Barra Lateral</option><option value="process_stepper" '+(studioComponent==='process_stepper'?'selected':'')+'>Stepper / Pipeline de Fases</option><option value="terminal_box" '+(studioComponent==='terminal_box'?'selected':'')+'>Caja de Terminal Interactiva</option><option value="form_wizard" '+(studioComponent==='form_wizard'?'selected':'')+'>Formulario Wizard / Pasos</option><option value="data_table" '+(studioComponent==='data_table'?'selected':'')+'>Tabla de Datos con Drawer</option></select></div>'
+      + '<div class="field"><label for="studio-library">Librería Primaria</label><select id="studio-library"><option value="21st" '+(studioLibrary==='21st'?'selected':'')+'>21st.dev (Componentes de Autor)</option><option value="aceternity" '+(studioLibrary==='aceternity'?'selected':'')+'>Aceternity UI (Efectos 3D & Glow)</option><option value="magic" '+(studioLibrary==='magic'?'selected':'')+'>Magic UI (Bento & Shimmer)</option><option value="radix" '+(studioLibrary==='radix'?'selected':'')+'>Radix UI + Base UI</option></select></div>'
+      + '<div class="field"><label for="studio-motion">Física de Animación</label><select id="studio-motion"><option value="spring" '+(studioMotion==='spring'?'selected':'')+'>Framer Motion Spring (Suave)</option><option value="micro" '+(studioMotion==='micro'?'selected':'')+'>Micro-interacciones (<150ms)</option><option value="reduced" '+(studioMotion==='reduced'?'selected':'')+'>Reduced Motion (Accesible)</option></select></div>'
+      + '<div class="field"><label for="studio-a11y">Nivel de Accesibilidad</label><select id="studio-a11y"><option value="wcag_aa" '+(studioA11y==='wcag_aa'?'selected':'')+'>WCAG 2.2 AA (Línea Base)</option><option value="wcag_aaa" '+(studioA11y==='wcag_aaa'?'selected':'')+'>WCAG 2.2 AAA (Estricto 7:1)</option></select></div>'
+      + '<div class="field"><label>Comando 21st CLI</label><div class="command" style="margin-top:0"><code id="studio-cli-cmd">viltrum design . search --query "'+esc(cliQuery)+'" --limit 8</code><button class="button small" data-copy="studio-cli" type="button">Copiar</button></div></div>'
+      + '</div>'
+      + '</div>', 'Personaliza tokens, librería y comportamiento')
+
+    + panel('2. Prompt de Generación para Agentes de Código (D05 / D09)',
+      '<div class="panel-body">'
+      + '<div class="generated-prompt-box" id="studio-prompt-display">'+esc(promptText)+'</div>'
+      + '<div style="margin-top:14px;display:flex;gap:10px;justify-content:flex-end">'
+      + '<button class="button primary" data-copy="studio-prompt" type="button">Copiar Prompt Completo</button>'
+      + '</div>'
+      + '</div>', 'Prompt sin clichés, 100% compatible con Spec Kit y PXIL v2')
+    + '</div>'
+
+    + '<div class="stack">'
+    + panel('3. Catálogo de Librerías Abiertas y Gratuitas',
+      '<div class="panel-body">'
+      + '<div class="open-libraries-grid">'
+      + libraries.map(l=>'<div class="lib-card"><div class="lib-top"><strong class="lib-title">'+esc(l.name)+'</strong><span class="lib-license">'+esc(l.license)+'</span></div><p class="lib-desc">'+esc(l.desc)+'</p><div class="lib-cmd"><code>'+esc(l.cmd)+'</code></div></div>').join('')
+      + '</div>'
+      + '</div>', 'Herramientas de primer nivel sin coste de licencia')
+
+    + panel('4. Vista Previa Interactiva de Componente Generado',
+      '<div class="panel-body">'
+      + '<p class="muted small" style="margin-bottom:14px">Componente interactivo renderizado en vivo con los tokens activos:</p>'
+      + '<div style="padding:22px;border:1px solid var(--gold-border);border-radius:var(--radius-lg);background:linear-gradient(135deg, rgba(20,27,42,0.8) 0%, rgba(10,14,24,0.9) 100%);box-shadow:0 0 20px var(--gold-glow)">'
+      + '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">'
+      + '<div><span class="eyebrow" style="color:var(--gold);font-size:10px">VILTRUM COMPONENT PREVIEW</span><h3 style="color:#ffffff;font-size:16px;font-weight:700">Métrica Operativa con Glow</h3></div>'
+      + '<span class="badge live"><span class="badge-dot"></span>En Vivo</span>'
+      + '</div>'
+      + '<div style="font-size:36px;font-weight:900;color:#ffffff;letter-spacing:-0.04em;text-shadow:0 2px 10px rgba(0,0,0,0.5)">99.98%</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line-subtle)">'
+      + '<span class="badge good">✓ Validado por D14 QA</span>'
+      + '<span class="muted small">Física: '+esc(studioMotion)+'</span>'
+      + '</div>'
+      + '</div>'
+      + '</div>', 'Demostración visual en tiempo real')
+    + '</div>'
+    + '</div>'
+    + '</div>';
+}
+
+function commandPanel(){
+  return panel('Iniciar una ejecución','<div class="panel-body"><p class="muted small">Ejecuta el comando dentro del proyecto y sustituye el objetivo. Las tareas aparecerán al registrarse.</p><div class="command"><span class="cmd-prompt" aria-hidden="true">$</span><code id="run-command">viltrum run . --goal "Objetivo" --intent INVESTIGACION --backend codex</code><button class="button small" data-copy="command" type="button" aria-label="Copiar comando">Copiar comando</button></div><p class="source-label">Ejecución, reanudación y decisiones se realizan desde la CLI.</p></div>');
+}
+
+function executionInspector(d){
+  const current=d.liveExecution||d.actualExecution;
+  if(!current)return '<hr class="divider"><h3>Sesión del ejecutor</h3><p class="source-label">Sin dispatch registrado para este departamento.</p>';
+  return '<hr class="divider"><h3>'+(d.liveExecution?'Sesión activa':'Última sesión registrada')+'</h3>'+kv([['Ejecución',current.runId],['Tarea / rol',current.taskId+' / '+current.role],['Actor',current.actor],['Sesión',current.sessionId],['Estado',state(current.status)],['Inicio',date(current.createdAt)],['Finalización',current.finishedAt?date(current.finishedAt):'Sin registrar'],['Modelo observado',current.modelAttested?current.model:'No acreditado en el registro']])+details(d.id+'-observed','Ver evidencia de la sesión',current)+details(d.id+'-executions','Historial de sesiones',d.executions||[])+details(d.id+'-openclaw','Configuración declarada de OpenClaw',d.architecture?.configuredOpenClaw||'Sin configuración registrada');
+}
+
+function runInspector(){
+  if(!runId)return panel('Detalle de ejecución',empty('Selecciona una ejecución','Abre una fila para consultar tareas y evidencia.'));
+  if(runError)return panel('Detalle de ejecución',empty(runError.kind==='permission'?'Acceso denegado':'No se pudo leer la ejecución',runError.message)+'<div class="panel-body"><button class="button" data-retry-run type="button">Reintentar lectura</button></div>');
+  if(!runDetail||runDetail.id!==runId)return panel('Detalle de ejecución',empty('Leyendo ejecución…',runId));
+  const r=runDetail,tasks=arr(r.tasks).filter(match);
+  return panel('Ejecución seleccionada','<div class="panel-body"><div class="inspector-title"><strong class="mono">'+esc(r.id)+'</strong>'+badge(r.observedStatus||r.status)+'</div><p class="run-goal" style="color:#ffffff;margin-top:8px;font-size:14px">'+esc(r.goal)+'</p>'+kv([['Ejecutor',r.backend],['Motor',r.engine||'LangGraph'],['Modo',r.mode],['Fase / puerta',[r.phase,r.gate].filter(Boolean).join(' / ')],['Registro',date(r.updatedAt||r.createdAt)],['Reelaboración de',r.reworkOf?.runId||r.reworkOf]])+(arr(r.blocked).length?details('run-blocked-'+r.id,'Bloqueos y decisiones',r.blocked,true):'')+'</div>')+panel('Tareas y entregas',tasks.length?tasks.map(t=>'<article class="detail-row" style="padding:14px 20px;border-bottom:1px solid var(--line-subtle)"><div class="gate-line"><div><strong>'+esc(t.id)+' / <button class="text-button" data-department="'+esc(t.department)+'" type="button">'+esc(t.department)+'</button></strong><p class="muted small">Revisor: '+esc(t.reviewer||'Sin registrar')+'</p></div>'+badge(t.status)+'</div>'+(t.actor?'<p class="task-summary" style="margin-top:6px">Actor: '+esc(t.actor)+'</p>':'')+(t.summary?'<p class="task-summary" style="margin-top:6px;color:#e2e8f0">Entrega: '+esc(t.summary)+'</p>':'')+(t.error?'<p class="task-summary" style="color:var(--rose)">'+esc(t.error)+'</p>':'')+(t.collaboration?'<p class="source-label">Trío antes de C1 · perspectiva '+esc({product:'producto',feasibility:'factibilidad',experience:'experiencia'}[t.collaboration.perspective]||t.collaboration.perspective)+' · pares: '+arr(t.collaboration.peers).map(esc).join(', ')+(arr(t.peerArtifacts).length?' · entregas aprobadas disponibles de '+arr(t.peerArtifacts).map(a=>esc(a.department)).join(', '):'')+'</p>':'')+(t.mode==='bounded_software_construction'?'<p class="source-label">Modo: construcción acotada (pruebas obligatorias antes del handoff)</p>':'')+(t.verification?'<p class="task-summary" style="color:'+(t.verification.passed?'var(--green,#4ade80)':'var(--rose)')+'">Verificación previa: '+(t.verification.passed?'en verde':'bloqueó la entrega')+' · '+arr(t.verification.results).map(c=>esc(c.id)+' '+esc(c.status)).join(', ')+'</p>':'')+(t.artifactCurrent===false?'<p class="task-summary" style="color:var(--rose)">Evidencia modificada: requiere nueva revisión.</p>':'')+(t.sourceEvidenceCount!=null||t.supervisorSourceCount!=null?'<p class="source-label">Referencias del modelo: '+esc(t.sourceEvidenceCount??'sin declarar')+' · Fuentes verificadas por supervisor: '+esc(t.supervisorSourceCount??'no aplica')+(t.workspaceBackend?' · Workspace: '+esc(t.workspaceBackend):'')+'</p>':'')+(t.prompt?details(t.id+'-prompt','Contexto de la tarea',t.prompt):'')+(t.summaryPreview?details(t.id+'-summary','Leer entrega',t.summaryPreview):'')+(arr(t.evidence).length?details(t.id+'-evidence','Evidencia ('+t.evidence.length+')',t.evidence):'')+(t.review?details(t.id+'-review','Revisión independiente',t.review):'')+(t.reviewPreview?details(t.id+'-review-preview','Leer revisión',t.reviewPreview):'')+'</article>').join(''):empty('Sin tareas para mostrar',arr(r.tasks).length?'Prueba otros filtros.':'Esta ejecución aún no contiene tareas.'))+panel('Eventos de esta ejecución',eventList(arr(r.events).slice(-20).reverse()));
+}
+
+function runsView(){
+  return '<div class="stack">'+panel('Registro de ejecuciones',runsTable(filteredRuns()),'Selecciona una fila')+(runs().length?'<div class="two-col"><div class="stack">'+runInspector()+'</div><div class="stack">'+commandPanel()+panel('Decisiones de fase',gates())+'</div></div>':commandPanel())+'</div>';
+}
+
+function designResourcePanel(d){
+  const p=d.designResources;
+  if(!p)return '';
+  return '<section class="resource-callout"><h3>PXIL · Contrato de experiencia</h3><p>Pantallas, estados, permisos y componentes conectados al requisito. Metodología importada de VILTRUM DESING.</p><div class="trace-chain">'+arr(p.chain).map(v=>'<span>'+esc(v)+'</span>').join('')+'</div>'+details(d.id+'-pxil','Recursos y procedencia',p)+'</section>';
+}
+
+function departmentInspector(id){
+  const d=departments().find(x=>x.id===id);
+  if(!d)return panel('Ficha de departamento',empty('Selecciona un departamento','Consulta modelo, herramientas, skills y contrato de entrega.'));
+  const a=d.architecture||d.runtime||{},skills=depSkills(d),verified=verifiedSkills(d);
+  return panel('Ficha de departamento','<div class="panel-body"><div class="inspector-title"><strong>'+esc(d.id)+'</strong>'+badge(d.hostActivity?.status||d.liveExecution?.status||d.runtimeState||d.status||d.state)+'</div><h3 style="margin-top:8px">'+esc(d.name)+'</h3><p class="mission">'+esc(d.mission||'')+'</p>'+designResourcePanel(d)+(d.designResources?'<button class="button" type="button" data-open-library style="margin-top:10px">Biblioteca de diseño</button>':'')+kv([['Familia',d.family],['Revisor',d.reviewer],['Modelo recomendado',a.recommendedModel||d.model],['Modelo observado',a.modelAttested?a.model:'No registrado por el ejecutor'],['Backend observado',a.executionRoute?.backend],['Harness',a.harness],['Transporte',a.transport],['Workspace',a.workspace],['Ámbito',a.scope],['Autonomía',d.autonomy]])+'<hr class="divider"><h3>Skills declaradas</h3><p class="source-label">Archivo disponible: metodología encontrada. El acceso del ejecutor requiere evidencia propia.</p>'+(skills.length?'<div class="tag-list">'+skills.map(s=>'<span class="badge">'+esc(s)+'</span>').join('')+'</div>':'<p class="muted small" style="margin-top:8px">Sin skills declaradas.</p>')+'<h3 style="margin-top:17px">Acceso verificado a skills</h3>'+(verified.length?'<div class="tag-list">'+verified.map(s=>'<span class="badge good">'+esc(s)+'</span>').join('')+'</div>':'<p class="muted small" style="margin-top:8px">No hay evidencia de acceso verificado.</p>')+'<hr class="divider">'+details(d.id+'-skills','Archivos y estado de metodología',d.skills||[])+details(d.id+'-tools','Tools y acceso',d.tools||'Sin herramientas acreditadas')+details(d.id+'-permissions','Permisos de ejecución',a.permissions||d.permissions||'Sin permisos registrados')+details(d.id+'-contract','Contrato de entrega y revisión',d.contract||'Sin contrato disponible')+executionInspector(d)+(d.hostActivity?details(d.id+'-host-activity','Actividad reportada por el host',d.hostActivity,true):'')+(arr(d.activity).length?details(d.id+'-activity','Actividad del departamento',d.activity):'')+'</div>');
+}
+
+function departmentsView(){
+  const ds=filteredDepartments(),selected=ds.some(d=>d.id===departmentId)?departmentId:ds[0]?.id;
+  return '<div class="department-layout"><div><div class="directory-top"><h2>Equipo de agentes</h2><small>'+ds.length+' perfiles · '+ds.filter(d=>d.designResources).length+' con PXIL</small></div>'+(ds.length?'<div class="department-grid">'+ds.map(d=>'<button type="button" class="department-card '+(d.designResources?'pxil':'')+'" data-department="'+esc(d.id)+'" aria-pressed="'+(d.id===selected)+'"><span class="department-card-top"><span class="department-avatar">'+esc(d.id)+'</span>'+badge(d.hostActivity?.status||d.liveExecution?.status||d.runtimeState||'idle')+'</span><strong>'+esc(d.name)+'</strong><span class="description">'+esc(d.mission||d.contract?.outputs?.[0]||'Contrato de entrega y revisión independiente.')+'</span><span class="tag-list">'+(d.designResources?'<span class="badge warn">PXIL · Diseño</span>':'')+arr(d.phases).map(p=>'<span class="badge">'+esc(p)+'</span>').join('')+'</span><span class="department-card-footer"><span>'+depSkills(d).length+' skills · '+arr(d.tools).length+' tools</span><span>Revisa '+esc(d.reviewer||'—')+' ↗</span></span></button>').join('')+'</div>':panel('Directorio',empty('Sin coincidencias','Cambia los filtros para explorar los perfiles.')))+'</div><div class="inspector">'+departmentInspector(selected)+'</div></div>';
+}
+
+function intakePanel(title,kind,items){
+  const list=arr(items).filter(match);
+  return panel(title,list.length?table(['Entrada','Estado / responsable','Detalle'],list.map((i,n)=>'<tr><td><strong>'+esc(i.text||i.title||i.name||i.path||i.id||'Entrada')+'</strong><span class="muted">'+esc(i.kind||i.intent||i.date||'')+'</span></td><td>'+badge(i.done===true?'completed':i.status||'pending')+'<span class="muted">'+esc(i.department||i.owner||'Proyecto')+'</span></td><td>'+details(kind+'-'+(i.id||i.path||n),'Ver registro',i)+'</td></tr>')):empty('Sin '+title.toLocaleLowerCase()+' para mostrar',arr(items).length?'Prueba otros filtros.':'Esta sección aún no tiene registros.'),list.length+' registros visibles');
+}
+
+function inputsView(){
+  const i=consoleData?.intake||{};
+  return '<div class="stack">'+intakePanel('Solicitudes','request',i.requests)+intakePanel('Preguntas','question',i.questions)+intakePanel('Entradas por webhook','webhook',i.webhooks)+intakePanel('Fuentes de contexto','source',i.sources)+intakePanel('Capacidades declaradas','capability',i.capabilities)+'</div>';
+}
+
+function communicationsView(){
+  const events=communications().filter(match);
+  return '<div class="stack">'+alertPanel()+panel('Registro de comunicación',eventList(events),events.length+' registros visibles')+'</div>';
+}
+
+function architecture(){
+  const a=consoleData?.architecture||{},nodes=[],edges=[];
+  if(a.orchestration){const o=a.orchestration;nodes.push({id:'orchestration',name:typeof o==='string'?o:o.package||'Orquestación',type:'Motor',...(typeof o==='object'?o:{description:o})})}
+  arr(a.executors).forEach(e=>nodes.push({...e,id:'executor:'+e.id,name:e.id,type:'Ejecutor'}));
+  arr(a.coordinators).forEach(e=>nodes.push({...e,id:'coordinator:'+e.id,name:e.id,type:'Coordinador'}));
+  departments().forEach(d=>{nodes.push({...d,type:'Departamento'});if(departments().some(r=>r.id===d.reviewer))edges.push({from:d.id,to:d.reviewer,label:'Revisión independiente'})});
+  return {a,nodes,edges};
+}
+
+function nodeInspector(node){
+  if(!node)return panel('Inspector de arquitectura',empty('Selecciona un nodo','Explora el flujo, perfiles y relaciones del sistema.'));
+  if(departments().some(d=>d.id===node.id))return departmentInspector(node.id);
+  return panel('Inspector del componente','<div class="panel-body"><strong>'+esc(node.name||node.id)+'</strong>'+kv([['ID',node.id],['Tipo',node.type||'Fase'],['Binding',node.binding],['Requisito',node.requires],['Repositorio',node.repository]])+details('node-'+node.id,'Configuración registrada',node,true)+'</div>');
+}
+
+function architectureView(){
+  const graph=architecture(),nodes=graph.nodes.filter(n=>{const d=departments().find(d=>d.id===n.id);return (!filters.search||str(n).toLocaleLowerCase().includes(filters.search.toLocaleLowerCase()))&&(!filters.family&&!filters.skill||d&&depMatches(d))}),selected=graph.nodes.find(n=>n.id===nodeId)||stages().find(s=>s.id===nodeId),ids=new Set(nodes.map(n=>n.id)),edges=graph.edges.filter(e=>ids.has(e.from)&&ids.has(e.to)),route=graph.a.executionRoute||{};
+  return '<div class="stack">'+panel('Ruta de ejecución observada','<div class="panel-body">'+kv([['Backend',route.backend],['Origen',route.source],['Ejecución',route.runId],['Modo',route.mode]])+'<p class="source-label">La configuración declarada de OpenClaw sólo se aplica a las ejecuciones que usan ese backend.</p>'+details('configured-openclaw','Configuración declarada de OpenClaw',graph.a.configuredOpenClaw||'Sin configuración registrada')+'</div>')+panel('Pipeline de fases',pipeline(),'Selecciona una etapa')+'<div class="architecture-layout"><div class="stack">'+panel('Componentes y agentes',nodes.length?'<div class="architecture-grid">'+nodes.map(n=>'<button class="node '+(n.id===nodeId?'selected':'')+'" data-node="'+esc(n.id)+'" aria-pressed="'+(n.id===nodeId)+'" type="button"><div class="node-id">'+esc(n.id)+' / '+esc(n.type)+'</div><strong>'+esc(n.name||n.id)+'</strong><small>'+esc(n.architecture?.model||n.model||n.binding||n.family||'')+'</small></button>').join('')+'</div>':empty('Sin componentes visibles','Prueba otros filtros o espera la lectura del registro.'),nodes.length+' nodos visibles')+panel('Relaciones de revisión',edges.length?edges.map(e=>'<div class="relation"><button class="text-button" data-node="'+esc(e.from)+'" type="button">'+esc(e.from)+'</button><svg viewBox="0 0 24 10" aria-hidden="true"><path d="M0 5h22m-5-4 5 4-5 4"/></svg><button class="text-button" data-node="'+esc(e.to)+'" type="button">'+esc(e.to)+'</button><span class="muted">'+esc(e.label)+'</span></div>').join(''):empty('Sin relaciones visibles','Las conexiones se muestran cuando figuran en el registro.'))+panel('Política y conexiones','<div class="panel-body">'+details('architecture-policy','Política del runtime',graph.a.policy||graph.a.scope||'Sin política registrada')+details('architecture-connections','Conexiones y permisos',consoleData?.connections||[])+details('architecture-capabilities','Diagnóstico de ejecutores y servicios',consoleData?.executionCapabilities||'Sin diagnóstico')+'</div>')+'</div><div class="inspector">'+nodeInspector(selected)+'</div></div></div>';
+}
+
+function safeAssetUrl(capture,component){let raw=capture?.url||capture?.previewUrl;if(!raw&&capture?.name&&component?.id)raw='/api/design-assets/'+encodeURIComponent(component.id)+'/'+encodeURIComponent(capture.name);if(typeof raw!=='string'||!raw.startsWith('/api/design-assets/'))return '';try{const u=new URL(raw,location.origin);if(u.origin!==location.origin||!u.pathname.startsWith('/api/design-assets/'))return '';u.searchParams.set('project',projectId);return u.href}catch{return ''}}
+function safeSourceUrl(raw){if(typeof raw!=='string')return '';try{const u=new URL(raw);return u.protocol==='https:'?u.href:''}catch{return ''}}
+function componentCaptures(component){return arr(component?.captures)}
+function designDataArrays(){const d=designData||{};return {components:arr(d.components),briefs:arr(d.briefs),plans:arr(d.plans),summary:d.summary||{}}}
+function designNames(values){return arr(values).map(v=>typeof v==='string'?v:(v?.name||v?.id||v?.candidateId||'recurso')).join(', ')}
+function screenName(s){return typeof s?.screen==='string'?s.screen:(s?.screen?.name||s?.screen?.title||s?.screenId||s?.name||s?.id||'Pantalla')}
+function missingSummary(value){if(value===true)return 'Requiere candidatos';if(value===false||value==null)return 'Ninguno registrado';return designNames(value)||'Ninguno registrado'}
+function designSearchMatch(item){if(!librarySearch.trim())return true;const q=librarySearch.toLocaleLowerCase();return [item.id,item.name,item.description,item.metadata?.description,item.author,item.status,item.source,item.recommendation,item.provenance?.source,item.provenance?.provider].filter(Boolean).join(' ').toLocaleLowerCase().includes(q)}
+function designPreview(component){const capture=componentCaptures(component)[0],src=safeAssetUrl(capture,component);return src?'<img class="design-preview" loading="lazy" alt="Captura local de '+esc(component.name||component.id)+'" src="'+esc(src)+'">':'<div class="design-preview-placeholder">Sin captura local disponible<br><small>No se carga contenido externo automáticamente.</small></div>'}
+function designCard(c){const status=c.status||c.provenance?.status||'Estado no registrado',available=c.codeAvailable===true||c.provenance?.code_downloaded===true||c.provenance?.acquired?.code===true;return '<button type="button" class="design-card" data-design="'+esc(c.id)+'" aria-pressed="'+(designId===c.id)+'">'+designPreview(c)+'<span class="design-card-top"><strong>'+esc(c.name||c.id)+'</strong>'+badge(available?'Código descargado':'Solo metadatos')+'</span><p>'+esc(c.description||c.metadata?.description||'Sin descripción registrada.')+'</p><span class="tag-list">'+badge(status)+' '+badge(c.author||c.provenance?.author||c.source||'Autor no registrado')+'</span></button>'}
+function designInspector(c){if(!c)return panel('Inspector de componente',empty('Selecciona un componente','Consulta procedencia, capturas y disponibilidad registrada.'));const captures=componentCaptures(c),captureHtml=captures.length?'<div class="design-captures">'+captures.map((cap,i)=>{const src=safeAssetUrl(cap,c);return '<figure class="design-capture">'+(src?'<a href="'+esc(src)+'" target="_blank" rel="noopener noreferrer"><img loading="lazy" src="'+esc(src)+'" alt="Captura local '+esc(cap.name||'del componente')+'"></a>':'<div class="design-preview-placeholder">Captura no disponible localmente</div>')+'<figcaption><strong>'+esc(cap.name||'Captura '+(i+1))+'</strong>'+kv([['Actor',cap.actor||'Sin registrar'],['Tipo',cap.kind||'Sin registrar'],['SHA-256',cap.sha256||cap.hash||'Sin registrar'],['Origen',cap.source||c.url||c.source||'No registrado'],['Aprobación',cap.approval||'No declarada']])+'</figcaption></figure>'}).join('')+'</div>':empty('Sin capturas locales','Las imágenes externas no se solicitan automáticamente.');const provider=safeSourceUrl(c.url||c.source),available=c.codeAvailable===true||c.provenance?.code_downloaded===true||c.provenance?.acquired?.code===true;return panel('Componente seleccionado','<div class="panel-body"><div class="inspector-title"><strong>'+esc(c.name||c.id)+'</strong>'+badge(c.status||c.provenance?.status||'Estado no registrado')+'</div><p class="mission">'+esc(c.description||c.metadata?.description||'Sin descripción registrada.')+'</p>'+kv([['ID',c.id],['Autor',c.author||c.provenance?.author||c.source||'Sin registrar'],['Estado',c.status||c.provenance?.status||'Sin registrar'],['Metadatos adquiridos',c.acquired===true||c.provenance?.acquired===true?'Sí':'No acreditado'],['Código descargado',available?'Sí':'No acreditado'],['Fuente',provider?'Proveedor HTTPS registrado':'No se muestra enlace externo inválido']])+(provider?'<p style="margin-top:12px"><a href="'+esc(provider)+'" target="_blank" rel="noopener noreferrer">Abrir proveedor (HTTPS)</a></p>':'')+'<p class="source-label">El registro de metadatos y la disponibilidad del código son estados distintos. El estado es informativo.</p><hr class="divider"><h3>Capturas registradas · '+captures.length+'</h3>'+captureHtml+'</div>')}
+function designPlans(){const {briefs,plans}=designDataArrays();if(!briefs.length&&!plans.length)return empty('Sin briefs o planes','Prepara el flujo PXIL desde la CLI para registrar pantallas y handoffs.');return '<div class="panel-body">'+briefs.map(b=>'<article class="design-plan"><div class="gate-line"><strong>'+esc(b.name||b.id)+'</strong>'+badge(b.status||'Brief')+'</div><p class="source-label">'+esc(b.id||'ID no registrado')+' · Metadatos del brief; la lista de pantallas se muestra desde el plan asociado.</p>'+details('brief-'+b.id,'Ver metadatos del brief',b)+'</article>').join('')+plans.filter(p=>p.status!=='superseded').map(p=>'<article class="design-plan"><div class="gate-line"><strong>Plan '+esc(p.id)+'</strong>'+badge(p.status||'Plan informativo')+'</div>'+kv([['Brief',p.briefId],['Pantallas',arr(p.screens).map(screenName).join(', ')||'No registradas'],['Siguientes perfiles',designNames(p.nextDepartments)||'No registrados'],['Paquete',p.packetPath||'No registrado'],['Hash de caché',p.cacheHash||'Sin registrar'],['Recomendación',p.recommendation||'Sin recomendación'],['Aprobación',p.approval||'No representa aprobación']])+(arr(p.screens).length?'<ul class="list-clean">'+arr(p.screens).map(s=>'<li><strong>'+esc(screenName(s))+'</strong><p class="source-label">Candidatos: '+esc(designNames(s.candidates)||'Sin registrar')+' · Pendientes: '+esc(missingSummary(s.missing))+'</p>'+details('plan-screen-'+(s.screenId||s.screen?.id||p.id),'Ver preparación de pantalla',s)+'</li>').join('')+'</ul>':'')+'<p class="source-label">Handoff para revisión de pantallas en D05/D09. El plan es informativo y no representa aprobación.</p>'+details('plan-'+p.id,'Ver metadatos del plan',p)+'</article>').join('')+'</div>'}
+function designCommandPanel(){return panel('Operar desde terminal','<div class="panel-body"><p class="muted small">Ejecuta los comandos desde la raíz del proyecto. Sustituye las rutas de ejemplo por tus archivos y verifica licencia/procedencia antes de integrar un candidato.</p>'+[['Buscar en 21st','viltrum design . search --query "término" --limit 8'],['Adquirir candidato y registrar su metadata','viltrum design . acquire --id <id-21st>'],['Guardar captura local','viltrum design . capture --id <id> --file <captura.png> --actor <actor> --kind provider_preview'],['Registrar un brief existente','viltrum design . brief --file <ruta-brief.json>'],['Preparar handoff de pantallas','viltrum design . prepare --brief-id <brief-id>']].map(([label,cmd])=>'<div class="design-command"><strong>'+esc(label)+'</strong><code>'+esc(cmd)+'</code></div>').join('')+'<p class="source-label">La búsqueda usa la CLI oficial 21st cuando está disponible. Esta vista es de solo lectura; no ejecuta comandos, guarda capturas ni descarga código.</p></div>')}
+
+function libraryView(){
+  const d=designDataArrays(),components=d.components.filter(designSearchMatch),selected=components.find(c=>c.id===designId)||components[0]||null;
+  if(selected)designId=selected.id;
+  const error=endpointErrors['biblioteca de diseño'];
+  const compIcon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',briefIcon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',planIcon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',codeIcon='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>';
+  const libCards=[
+    metricCard('Componentes',d.summary.components??d.components.length,compIcon,'Biblioteca 21st','good','Registros locales'),
+    metricCard('Briefs',d.summary.briefs??d.briefs.length,briefIcon,'Diseño PXIL','neutral','Briefs guardados'),
+    metricCard('Versiones de planes',d.summary.plans??d.plans.length,planIcon,'Handoff D05/D09','neutral','Última versión por brief'),
+    metricCard('Código disponible',d.components.filter(c=>c.codeAvailable===true).length,codeIcon,'Fuente local','good','Hash verificado')
+  ].join('');
+
+  return '<div class="stack">'
+    +(error?'<section class="notice '+(error.kind==='permission'?'':'error')+'" role="alert"><div><strong>'+(error.kind==='permission'?'Acceso denegado a la biblioteca':'No se pudo actualizar la biblioteca')+'</strong><p>'+esc(error.message)+(designData?' Se conserva la última lectura disponible.':' La vista se actualizará en el siguiente ciclo de lectura.')+'</p></div></section>':'')
+    +'<div class="metrics">'+libCards+'</div>'
+    +'<div class="design-layout">'
+    +'<div class="stack">'
+    +'<section class="filters" aria-label="Filtrar componentes"><div class="field search"><label for="design-search">Buscar en la biblioteca local</label><input id="design-search" type="search" placeholder="Nombre, autor, descripción o estado" value="'+esc(librarySearch)+'"></div><span class="filters-note">'+components.length+' componentes visibles · '+d.components.length+' registrados</span></section>'
+    +panel('Galería de componentes',components.length?'<div class="panel-body"><div class="design-grid">'+components.map(designCard).join('')+'</div></div>':empty(d.components.length?'No hay coincidencias':'Biblioteca vacía',d.components.length?'Prueba otra búsqueda.':'Aún no hay componentes registrados para este proyecto.'),components.length+' coincidencias locales')
+    +panel('Briefs y planes de pantallas',designPlans(),'PXIL · Los planes se entregan a revisión independiente')
+    +designCommandPanel()
+    +'</div>'
+    +'<div class="inspector">'+designInspector(selected)+'</div>'
+    +'</div>'
+    +'</div>';
+}
+
+function setOptions(el,html,value){if(el.innerHTML!==html){el.innerHTML=html;el.value=value}}
+function updateFilterOptions(){const fs=[...new Set(departments().map(d=>d.family).filter(Boolean))].sort(),ss=[...new Set(departments().flatMap(depSkills))].sort();setOptions($('family-filter'),'<option value="">Todas las familias</option>'+fs.map(f=>'<option value="'+esc(f)+'">'+esc(f)+'</option>').join(''),filters.family);setOptions($('skill-filter'),'<option value="">Todas las skills</option>'+ss.map(s=>'<option value="'+esc(s)+'">'+esc(s)+'</option>').join(''),filters.skill)}
+function updateNavBadges(){const r=runs().length,d=departments().length,c=communications().length,l=designDataArrays().components.length;const br=$('badge-runs'),bd=$('badge-departments'),bc=$('badge-comms'),bl=$('badge-library');if(br){br.textContent=String(r);br.hidden=r===0}if(bd){bd.textContent=String(d);bd.hidden=d===0}if(bc){bc.textContent=String(c);bc.hidden=c===0}if(bl){bl.textContent=String(l);bl.hidden=l===0}}
+
+function render(force=false){
+  if(!consoleData&&!statusData&&!runsData&&!designData)return;
+  const sig=signature({page,projectId,filters,librarySearch,designId,designData,runId,departmentId,nodeId,consoleData,statusData,runsData,runDetail,runError:runError?.message,studioArchetype,studioComponent,studioLibrary,studioMotion,studioA11y});
+  if(!force&&sig===lastRender)return;
+  lastRender=sig;
+  updateFilterOptions();
+  updateNavBadges();
+  const position={x:window.scrollX,y:window.scrollY},view=$('view'),focus=document.activeElement,focusId=focus?.id||'',selectionStart=focus?.selectionStart,selectionEnd=focus?.selectionEnd;
+  const focusAttr=['data-run','data-department','data-node','data-design'].find(a=>focus?.hasAttribute(a)),focusKey=focusAttr?focus.getAttribute(focusAttr):null;
+  view.querySelectorAll('details[data-key]').forEach(d=>openDetails.set(projectId+'::'+d.dataset.key,d.open));
+  const scrolls=[...view.querySelectorAll('.table-wrap,.pipeline,.flow-track')].map(e=>({x:e.scrollLeft,y:e.scrollTop}));
+  
+  const views = {
+    overview,
+    coordination: coordinationView,
+    design_studio: designStudioView,
+    runs: runsView,
+    departments: departmentsView,
+    inputs: inputsView,
+    communications: communicationsView,
+    architecture: architectureView,
+    library: libraryView
+  };
+  view.innerHTML = (views[page] || overview)();
+
+  view.querySelectorAll('details[data-key]').forEach(d=>{const key=projectId+'::'+d.dataset.key;if(openDetails.has(key))d.open=openDetails.get(key)});
+  view.querySelectorAll('.table-wrap,.pipeline,.flow-track').forEach((el,i)=>{if(scrolls[i]){el.scrollLeft=scrolls[i].x;el.scrollTop=scrolls[i].y}});
+  if(focusAttr){const next=[...view.querySelectorAll('['+focusAttr+']')].find(e=>e.getAttribute(focusAttr)===focusKey);next?.focus({preventScroll:true})}
+  else if(focusId){const next=$(focusId);if(next){next.focus({preventScroll:true});if(selectionStart!=null&&selectionEnd!=null)next.setSelectionRange(selectionStart,selectionEnd)}}
+  window.scrollTo(position.x,position.y);
+  
+  const count=page==='departments'?filteredDepartments().length:page==='runs'?filteredRuns().length:page==='communications'?communications().filter(match).length:page==='library'?designDataArrays().components.filter(designSearchMatch).length:null;
+  $('filter-count').textContent=count==null?'Filtros aplicados a los registros':count+' registros visibles';
+  const p=statusData?.project||consoleData?.project||{};
+  $('phase').textContent='Fase '+(statusData?.effectivePhase||p.fase||p.phase||'sin registrar');
+}
+
+function setPage(next,focus=false){
+  if(!pages[next])return;
+  page=next;
+  $('page-title').textContent=pages[next][0];
+  $('page-description').textContent=pages[next][1];
+  $('view').setAttribute('aria-label',pages[next][0]);
+  document.querySelectorAll('[data-page]').forEach(b=>{
+    if(b.dataset.page===page)b.setAttribute('aria-current','page');
+    else b.removeAttribute('aria-current');
+  });
+  render(true);
+  if(focus)$('main').focus({preventScroll:true});
+  history.replaceState(null,'','#'+page);
+}
+
+class ReadError extends Error{constructor(message,kind){super(message);this.kind=kind}}
+async function get(url,project=true){
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+  try{
+    const r=await fetch(url+(project?'?project='+encodeURIComponent(projectId):''),{cache:'no-store',signal:controller.signal,headers:{'Accept':'application/json'}});
+    if([401,403].includes(r.status))throw new ReadError('El servidor no permite consultar '+url+'. Revisa el acceso local.','permission');
+    if(!r.ok)throw new ReadError('La lectura de '+url+' devolvió HTTP '+r.status+'.','error');
+    return await r.json();
+  }catch(e){
+    if(e instanceof ReadError)throw e;
+    throw new ReadError(e.name==='AbortError'?'El servidor no respondió a tiempo.':e instanceof TypeError?'No se pudo conectar con el servidor local.':'El servidor devolvió datos que no se pueden leer.',e instanceof TypeError||e.name==='AbortError'?'offline':'error');
+  }finally{
+    clearTimeout(timeout);
+  }
+}
+
+function showConnection(){
+  const errors=Object.entries(endpointErrors);
+  if(errors.length){
+    const error=errors.find(([,e])=>e.kind==='permission')?.[1]||errors[0][1];
+    $('connection').dataset.state=error.kind;
+    $('connection-text').textContent=error.kind==='permission'?'Acceso denegado':error.kind==='offline'?'Sin conexión':'Lectura incompleta';
+    $('notice').hidden=false;
+    $('notice').classList.toggle('error',error.kind!=='permission');
+    $('notice-title').textContent=error.kind==='permission'?'Acceso a registros denegado':loadedAt?'No se pudieron actualizar todos los registros':'No se pudo cargar la consola';
+    $('notice-text').textContent=error.message+(loadedAt?' Se conserva la última lectura disponible.':'')+' Fuentes pendientes: '+errors.map(([n])=>n).join(', ')+'.';
+    return;
+  }
+  $('notice').hidden=true;
+  $('connection').dataset.state='success';
+  $('connection-text').textContent=paused?'Lectura pausada':streamLive?'En vivo':'Conectada · cada 4 s';
+}
+
+const knownAlerts=new Map();
+function updateAlerts(){
+  const current=alerts(),ids=new Set(current.map(a=>a.id)),previous=knownAlerts.get(projectId);
+  $('alert-count').textContent=String(current.length);
+  $('alerts-button').setAttribute('aria-label',current.length+' avisos del proyecto');
+  if(previous){
+    const fresh=current.filter(a=>!previous.has(a.id));
+    if(fresh.length)toast(fresh.length===1?fresh[0].title:fresh.length+' avisos nuevos');
+  }
+  knownAlerts.set(projectId,ids);
+}
+
+let runRead=null;
+async function loadRun(){
+  if(!runId){runDetail=null;runError=null;return}
+  const selected=runId,epoch=projectEpoch,key=epoch+'::'+selected;
+  if(runRead?.key===key)return runRead.promise;
+  const promise=(async()=>{
+    try{
+      const v=await get('/api/runs/'+encodeURIComponent(selected));
+      if(epoch===projectEpoch&&selected===runId){runDetail=v;runError=null;delete endpointErrors['detalle de ejecución']}
+    }catch(e){
+      if(epoch===projectEpoch&&selected===runId){runError=e;endpointErrors['detalle de ejecución']=e}
+    }finally{
+      if(runRead?.key===key)runRead=null;
+    }
+  })();
+  runRead={key,promise};
+  return promise;
+}
+
+async function refresh(){
+  if(refreshing)return;
+  refreshing=true;
+  $('refresh').disabled=true;
+  clearTimeout(timer);
+  const epoch=projectEpoch;
+  try{
+    const sources=[['consola','/api/console'],['estado del proyecto','/api/status'],['ejecuciones','/api/runs'],['biblioteca de diseño','/api/design']];
+    const results=[];
+    for(const [,url] of sources){
+      try{
+        const val=await get(url);
+        results.push({status:'fulfilled',value:val});
+      }catch(err){
+        results.push({status:'rejected',reason:err});
+      }
+    }
+    if(epoch!==projectEpoch)return;
+    let any=false;
+    results.forEach((r,i)=>{
+      const name=sources[i][0];
+      if(r.status==='fulfilled'){
+        delete endpointErrors[name];
+        if(i===0)consoleData=r.value;
+        if(i===1)statusData=r.value;
+        if(i===2)runsData=r.value;
+        if(i===3)designData=r.value;
+        any=true;
+      }else endpointErrors[name]=r.reason;
+    });
+    if(!runId&&runs().length)runId=runs()[0].id;
+    if(runId)await loadRun();
+    if(epoch!==projectEpoch)return;
+    if(any){
+      updateAlerts();
+      loadedAt=new Date();
+      $('updated').textContent='Última lectura: '+loadedAt.toLocaleTimeString('es-DO')+(paused?' · Pausada':(streamLive?' · SSE en vivo':' · Intervalo 4 s'));
+    }
+    showConnection();
+    render();
+    if(!any&&!consoleData&&!statusData&&!runsData&&!designData){
+      $('view').innerHTML=panel('Lectura de registros',empty(Object.values(endpointErrors).some(e=>e.kind==='permission')?'Acceso denegado':'Consola sin conexión','Revisa el servidor local y pulsa Reintentar.'));
+    }
+  }catch(e){
+    endpointErrors['renderizado']=new ReadError('No se pudo presentar el registro recibido: '+e.message,'error');
+    showConnection();
+  }finally{
+    refreshing=false;
+    $('refresh').disabled=false;
+    if(epoch!==projectEpoch)refresh();
+    else if(!paused)timer=setTimeout(refresh,streamLive?8000:4000);
+  }
+}
+
+async function loadProjects(){
+  try{
+    const p=await get('/api/projects',false),items=arr(p.projects);
+    projectId=p.defaultProject||items[0]?.id||'default';
+    setOptions($('project-select'),items.map(i=>'<option value="'+esc(i.id)+'">'+esc(i.name||i.id)+'</option>').join('')||'<option value="default">Proyecto local</option>',projectId);
+  }catch{
+    $('project-select').innerHTML='<option value="default">Proyecto local</option>';
+  }
+  await refresh();
+}
+
+let toastTimer;
+function toast(message){
+  $('toast').textContent=message;
+  $('toast').hidden=false;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>$('toast').hidden=true,4000);
+}
+
+document.querySelector('.nav').addEventListener('click',e=>{
+  const b=e.target.closest('[data-page]');
+  if(b)setPage(b.dataset.page,true);
+});
+
+$('view').addEventListener('click',async e=>{
+  const run=e.target.closest('[data-run]'),dep=e.target.closest('[data-department]'),node=e.target.closest('[data-node]'),design=e.target.closest('[data-design]'),stage=e.target.closest('[data-stage]');
+  if(e.target.closest('[data-open-library]')){
+    setPage('library',true);
+  }else if(run){
+    runId=run.dataset.run;runError=null;setPage('runs');await loadRun();showConnection();render();
+  }else if(dep){
+    departmentId=dep.dataset.department;setPage('departments');
+  }else if(node){
+    nodeId=node.dataset.node;render();
+  }else if(design){
+    designId=design.dataset.design;render();
+  }else if(stage){
+    nodeId=stage.dataset.stage;setPage('architecture');
+  }else if(e.target.closest('[data-copy="command"]')){
+    try{await navigator.clipboard.writeText($('run-command').textContent);toast('Comando copiado.')}catch{toast('Selecciona el comando para copiarlo.')}
+  }else if(e.target.closest('[data-copy="studio-prompt"]')){
+    try{await navigator.clipboard.writeText(generateStudioPrompt());toast('Prompt copiado al portapapeles.')}catch{toast('Error al copiar prompt.')}
+  }else if(e.target.closest('[data-copy="studio-cli"]')){
+    try{await navigator.clipboard.writeText($('studio-cli-cmd').textContent);toast('Comando CLI copiado.')}catch{toast('Error al copiar comando.')}
+  }else if(e.target.closest('[data-retry-run]')){
+    await loadRun();showConnection();render();
+  }
+});
+
+$('view').addEventListener('input',e=>{
+  if(e.target.id==='design-search'){
+    librarySearch=e.target.value;render();
+  }
+});
+
+$('view').addEventListener('change',e=>{
+  if(e.target.id==='studio-archetype'){studioArchetype=e.target.value;render(true);}
+  else if(e.target.id==='studio-component'){studioComponent=e.target.value;render(true);}
+  else if(e.target.id==='studio-library'){studioLibrary=e.target.value;render(true);}
+  else if(e.target.id==='studio-motion'){studioMotion=e.target.value;render(true);}
+  else if(e.target.id==='studio-a11y'){studioA11y=e.target.value;render(true);}
+});
+
+$('view').addEventListener('toggle',e=>{
+  if(e.target.matches('details[data-key]'))openDetails.set(projectId+'::'+e.target.dataset.key,e.target.open);
+},true);
+
+$('filters').addEventListener('submit',e=>e.preventDefault());
+$('search').addEventListener('input',e=>{filters.search=e.target.value;render()});
+$('family-filter').addEventListener('change',e=>{filters.family=e.target.value;render()});
+$('skill-filter').addEventListener('change',e=>{filters.skill=e.target.value;render()});
+
+$('alerts-button').addEventListener('click',()=>setPage('communications',true));
+$('pause').addEventListener('click',()=>{
+  paused=!paused;
+  $('pause').textContent=paused?'Reanudar':'Pausar';
+  $('pause').setAttribute('aria-pressed',String(paused));
+  clearTimeout(timer);
+  showConnection();
+  if(paused)$('updated').textContent=loadedAt?'Última lectura: '+loadedAt.toLocaleTimeString('es-DO')+' · Pausada':'Lectura pausada';
+  else refresh();
+});
+$('refresh').addEventListener('click',refresh);
+$('retry').addEventListener('click',refresh);
+
+$('project-select').addEventListener('change',e=>{
+  projectSelections.set(projectId,{runId,departmentId,nodeId,designId,librarySearch,filters:{...filters}});
+  projectId=e.target.value;
+  projectEpoch++;
+  const saved=projectSelections.get(projectId);
+  runId=saved?.runId||'';departmentId=saved?.departmentId||'';nodeId=saved?.nodeId||'';designId=saved?.designId||'';librarySearch=saved?.librarySearch||'';
+  filters=saved?.filters||{search:'',family:'',skill:''};
+  $('search').value=filters.search;$('family-filter').value=filters.family;$('skill-filter').value=filters.skill;
+  consoleData=statusData=runsData=designData=runDetail=null;
+  runError=null;endpointErrors={};loadedAt=null;lastRender='';
+  $('view').innerHTML=panel('Lectura de registros',empty('Cargando proyecto…','Consultando el registro seleccionado.'));
+  $('connection').dataset.state='loading';$('connection-text').textContent='Cargando';$('notice').hidden=true;
+  refresh();
+});
+
+$('sidebar-toggle').addEventListener('click',()=>{
+  const compact=document.querySelector('.shell').classList.toggle('compact');
+  $('sidebar-toggle').setAttribute('aria-expanded',String(!compact));
+  $('sidebar-toggle').setAttribute('aria-label',compact?'Expandir navegación':'Contraer navegación');
+  $('sidebar-toggle').title=compact?'Expandir navegación':'Contraer navegación';
+});
+
+window.addEventListener('hashchange',()=>{
+  const next=location.hash.slice(1);
+  if(pages[next]&&next!==page)setPage(next);
+});
+
+// SSE solo señala qué cambió; los datos siguen llegando por /api/* con sus límites y redacciones.
+let stream=null,streamLive=false;
+function connectStream(){
+  if(stream){stream.close();stream=null}
+  streamLive=false;
+  if(!window.EventSource||paused||document.hidden){showConnection();return}
+  stream=new EventSource('/api/stream?project='+encodeURIComponent(projectId));
+  stream.addEventListener('invalidate',()=>{if(!paused)refresh()});
+  stream.onopen=()=>{streamLive=true;showConnection()};
+  stream.onerror=()=>{streamLive=false;showConnection()};
+}
+document.addEventListener('visibilitychange',connectStream);
+$('pause').addEventListener('click',connectStream);
+$('project-select').addEventListener('change',connectStream);
+
+const initial=location.hash.slice(1);
+if(pages[initial])setPage(initial);
+loadProjects().then(connectStream);
+</script>
+</body>
+</html>

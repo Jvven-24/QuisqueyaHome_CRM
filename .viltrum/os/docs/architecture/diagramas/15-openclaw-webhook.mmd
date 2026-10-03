@@ -1,0 +1,18 @@
+flowchart TD
+  SRC[Transcripciones, requisitos y eventos] --> AUTH[POST localhost:8771 /webhooks/viltrum + Bearer]
+  AUTH --> Q[SQLite: eventId único, cola persistente]
+  Q --> DATA[Fuente externa en intake del proyecto permitido]
+  DATA --> D00[Viltrum: intención, fase y contratos]
+  D00 --> LG[LangGraph + SQLite: runId antes del despacho]
+  LG --> P[Agente productor Dxx en .clawd/viltrum]
+  P --> GPT[OpenClaw CLI local + harness Codex + OpenAI OAuth existente]
+  GPT --> EV[JSON validado + fuentes con SHA256 + entrega]
+  EV --> R[Otro perfil y sesión: revisión independiente]
+  R -->|Aprobado| DONE[Análisis terminado y evidencia]
+  R -->|Rechazado o ambiguo| BLOCK[Bloqueo explícito y reconciliación]
+  DONE --> UI[Dashboard: 23 perfiles, runs y eventos]
+  BLOCK --> UI
+  Q --> GET[GET /events/eventId + Bearer]
+  DONE --> GET
+  BLOCK --> GET
+  DONE --> GATES[Gates y aceptación comercial: decisión humana por separado]

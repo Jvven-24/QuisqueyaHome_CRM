@@ -1,0 +1,576 @@
+{
+  "schema_version": 1,
+  "updated": "2026-09-29",
+  "purpose": "Catálogo de herramientas y estándares candidatos por capacidad para los perfiles Viltrum.",
+  "policy": {
+    "auto_install": false,
+    "grants_access": false,
+    "credentials_stored": false,
+    "availability_source": ".viltrum/capabilities.json del proyecto y comprobación del host",
+    "selection": "D21/D03 evalúan necesidad, compatibilidad, licencia/procedencia/costo y plan de salida; D12 revisa permisos y datos.",
+    "activation": "El host comprueba instalación, conexión, entorno, alcance y autorización antes de invocar; referencias oficiales no acreditan disponibilidad.",
+    "limits": "Preparación de procedimientos y catálogo; no implica importación SwarmClaw, ejecución de tools ni entrenamiento/fine-tuning de modelos."
+  },
+  "candidates": [
+    {
+      "id": "gitnexus",
+      "name": "GitNexus",
+      "kind": "code_intelligence",
+      "capabilities": [
+        "repository",
+        "git"
+      ],
+      "profiles": [
+        "D00",
+        "D03",
+        "D09",
+        "D10",
+        "D11",
+        "D12",
+        "D13",
+        "D18",
+        "D19",
+        "D20",
+        "D21"
+      ],
+      "purpose": "Localizar relaciones entre símbolos, contratos, dependencias e impacto en un repositorio; corroborar el índice contra el commit actual.",
+      "connection_requirements": [
+        "CLI/MCP realmente disponible en el host y versión comprobada",
+        "Repositorio autorizado e indexado; SHA/estado del índice identificado",
+        "Lectura del código dentro del mandato; no subir fuentes privadas sin autorización"
+      ],
+      "fallback": "rg y lectura de archivos/contratos y git diff del commit.",
+      "sources": [
+        {
+          "title": "Repositorio oficial GitNexus",
+          "url": "https://github.com/abhigyanpatwari/GitNexus"
+        }
+      ],
+      "status": "verified",
+      "access": "local_cli_verified",
+      "enabled": true,
+      "verified_at": "2026-09-30"
+    },
+    {
+      "id": "context7",
+      "name": "Context7",
+      "kind": "documentation_context",
+      "capabilities": [
+        "web"
+      ],
+      "profiles": [
+        "D03",
+        "D09",
+        "D10",
+        "D11",
+        "D15",
+        "D16",
+        "D18",
+        "D19",
+        "D21"
+      ],
+      "purpose": "Consultar documentación de bibliotecas pertinente a la versión del proyecto y contrastar la integración propuesta.",
+      "connection_requirements": [
+        "MCP/CLI disponible y transporte/endpoint comprobados",
+        "Identificar biblioteca/versión y límites de consulta",
+        "Autenticación/cuota del servicio si el modo elegido la requiere; nunca guardar la clave en este registro"
+      ],
+      "fallback": "Documentación oficial versionada consultada por web.",
+      "sources": [
+        {
+          "title": "Repositorio oficial Upstash Context7",
+          "url": "https://github.com/upstash/context7"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright",
+      "kind": "browser_testing",
+      "capabilities": [
+        "browser",
+        "runtime",
+        "ci"
+      ],
+      "profiles": [
+        "D06",
+        "D07",
+        "D09",
+        "D14"
+      ],
+      "purpose": "Verificar recorridos E2E, seis estados, permisos desde UI/API y capturas reproducibles en el build de prueba.",
+      "connection_requirements": [
+        "Runner y navegadores compatibles instalados en entorno autorizado",
+        "Target sandbox/staging, cuentas y datasets sintéticos aislados",
+        "CI/artifacts accesibles; traces/capturas redactadas sin tokens ni PII"
+      ],
+      "fallback": "Verificación manual reproducible en navegador autorizado; automatización pendiente.",
+      "sources": [
+        {
+          "title": "Repositorio oficial Microsoft Playwright",
+          "url": "https://github.com/microsoft/playwright"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "axe-core",
+      "name": "axe-core",
+      "kind": "accessibility_testing",
+      "capabilities": [
+        "browser",
+        "runtime",
+        "ci"
+      ],
+      "profiles": [
+        "D05",
+        "D07",
+        "D09",
+        "D14"
+      ],
+      "purpose": "Detectar problemas de accesibilidad automatizables en componentes/recorridos; complementar pruebas manuales de teclado y lector.",
+      "connection_requirements": [
+        "Versión del motor y adaptador compatibles con el stack y navegador",
+        "Documento/componente en entorno de prueba autorizado",
+        "Criterios WCAG y alcance acordados; reporte no sustituye verificación manual"
+      ],
+      "fallback": "Auditoría manual dirigida con evidencia y cobertura automática pendiente.",
+      "sources": [
+        {
+          "title": "Repositorio oficial Deque axe-core",
+          "url": "https://github.com/dequelabs/axe-core"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "owasp-asvs",
+      "name": "OWASP ASVS",
+      "kind": "verification_standard",
+      "capabilities": [
+        "web",
+        "repository",
+        "security_scanner"
+      ],
+      "profiles": [
+        "D03",
+        "D10",
+        "D11",
+        "D12",
+        "D14",
+        "D16",
+        "D18",
+        "D19"
+      ],
+      "purpose": "Definir controles verificables de seguridad por riesgo, con requisito ASVS versionado y evidencia por control.",
+      "connection_requirements": [
+        "Estándar estable fijado a versión y nivel por D12/riesgo",
+        "Inventario de entradas, amenazas, roles y datos del proyecto",
+        "Scanners/runners separados deben estar realmente disponibles para probar controles; el estándar no ejecuta pruebas"
+      ],
+      "fallback": "Consulta de fuente oficial y matriz de controles pendientes de verificación.",
+      "sources": [
+        {
+          "title": "Proyecto oficial OWASP ASVS",
+          "url": "https://owasp.org/projects/asvs"
+        },
+        {
+          "title": "Repositorio oficial ASVS",
+          "url": "https://github.com/OWASP/ASVS"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "openapi",
+      "name": "OpenAPI Specification",
+      "kind": "contract_standard",
+      "capabilities": [
+        "repository",
+        "runtime",
+        "web"
+      ],
+      "profiles": [
+        "D03",
+        "D09",
+        "D10",
+        "D12",
+        "D14",
+        "D19",
+        "D20"
+      ],
+      "purpose": "Describir contratos HTTP y generar/verificar tipos, esquemas y compatibilidad productor/consumidor con herramientas elegidas por el proyecto.",
+      "connection_requirements": [
+        "Versión de especificación compatible con validadores/codegen realmente disponibles",
+        "Contrato canónico, dueño y política de cambios definidos",
+        "Servicios/pruebas autorizados para verificar implementación; especificación escrita no prueba API real"
+      ],
+      "fallback": "Contrato HTTP versionado y revisión manual; generación/validación automatizada pendiente.",
+      "sources": [
+        {
+          "title": "Especificación oficial OpenAPI",
+          "url": "https://spec.openapis.org/oas/latest.html"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "asyncapi",
+      "name": "AsyncAPI Specification",
+      "kind": "contract_standard",
+      "capabilities": [
+        "repository",
+        "runtime",
+        "web"
+      ],
+      "profiles": [
+        "D03",
+        "D10",
+        "D12",
+        "D14",
+        "D18",
+        "D19",
+        "D20"
+      ],
+      "purpose": "Documentar contratos de mensajes/eventos, canales y productores/consumidores para integraciones asíncronas.",
+      "connection_requirements": [
+        "Versión de especificación y tooling compatibles identificados",
+        "Broker/protocolo/canales y esquemas del proyecto definidos",
+        "Acceso sandbox al broker solo si la prueba lo requiere; reintentos/duplicados/orden se verifican aparte"
+      ],
+      "fallback": "Esquemas de eventos y contratos versionados con revisión manual.",
+      "sources": [
+        {
+          "title": "Repositorio oficial de especificación AsyncAPI",
+          "url": "https://github.com/asyncapi/spec"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "opentelemetry",
+      "name": "OpenTelemetry",
+      "kind": "instrumentation",
+      "capabilities": [
+        "observability",
+        "runtime"
+      ],
+      "profiles": [
+        "D03",
+        "D09",
+        "D10",
+        "D12",
+        "D15",
+        "D16",
+        "D17",
+        "D18",
+        "D19"
+      ],
+      "purpose": "Correlacionar trazas, métricas y logs mediante una capa de instrumentación desacoplada del backend de observabilidad.",
+      "connection_requirements": [
+        "SDK/exporter/Collector compatibles con lenguajes y runtime del proyecto",
+        "Endpoint/OTLP y backend autorizados con transporte y permisos mínimos comprobados",
+        "Allowlist/redacción, retención, sampling y cardinalidad revisados por D12/D17",
+        "D09/D10 instrumentan aplicación; D17 valida señales y D16 operación"
+      ],
+      "fallback": "Logs/métricas existentes redactados y plan de instrumentación; no afirmar correlación ausente.",
+      "sources": [
+        {
+          "title": "Documentación oficial OpenTelemetry Collector",
+          "url": "https://opentelemetry.io/docs/collector/"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "k6",
+      "name": "Grafana k6",
+      "kind": "load_testing",
+      "capabilities": [
+        "runtime",
+        "observability",
+        "ci"
+      ],
+      "profiles": [
+        "D03",
+        "D10",
+        "D11",
+        "D14",
+        "D15",
+        "D16",
+        "D17"
+      ],
+      "purpose": "Medir capacidad, percentiles, tasa de error y degradación frente al perfil de tráfico y presupuestos acordados.",
+      "connection_requirements": [
+        "Binario/runner disponible y versión comprobada",
+        "Target staging/sandbox autorizado; perfil/thresholds y condiciones conocidas",
+        "Límites de tasa/costo/tiempo y aborto definidos; generador sin saturación desconocida",
+        "Producción exige autorización humana y coordinación D16; terceros excluidos salvo autorización"
+      ],
+      "fallback": "Mediciones existentes verificables y plan de carga pendiente, sin inventar capacidad.",
+      "sources": [
+        {
+          "title": "Repositorio oficial Grafana k6",
+          "url": "https://github.com/grafana/k6"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "github-actions",
+      "name": "GitHub Actions",
+      "kind": "continuous_integration",
+      "capabilities": [
+        "git",
+        "ci",
+        "runtime"
+      ],
+      "profiles": [
+        "D09",
+        "D10",
+        "D11",
+        "D12",
+        "D13",
+        "D14",
+        "D15",
+        "D16",
+        "D18",
+        "D19",
+        "D20"
+      ],
+      "purpose": "Ejecutar checks reproducibles y producir evidencia asociada a SHA/build para revisión, release y promoción del artefacto aprobado.",
+      "connection_requirements": [
+        "Repositorio/CI accesibles dentro del mandato y cuota/plan comprobados",
+        "Actions de terceros fijadas por SHA, mínimo permiso por job e inputs no confiables aislados",
+        "Runners y artefactos protegidos; PRs externos sin secretos privilegiados",
+        "Revisores/environments si disponibles; control alternativo documentado cuando el plan no soporte protección",
+        "Producción conserva aprobación humana por release/digest; disponibilidad de CI no autoriza deploy"
+      ],
+      "fallback": "CI existente del proyecto o comandos locales verificados; no declarar checks CI ejecutados si solo corrieron localmente.",
+      "sources": [
+        {
+          "title": "GitHub Actions secure use oficial",
+          "url": "https://docs.github.com/en/actions/reference/security/secure-use"
+        }
+      ],
+      "status": "candidate",
+      "access": "no_access_granted",
+      "enabled": false,
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "21st",
+      "name": "21st CLI / MCP",
+      "kind": "design_experience",
+      "profiles": [
+        "D05",
+        "D09",
+        "D21"
+      ],
+      "purpose": "Buscar y recuperar candidatos de componentes por canal oficial.",
+      "capabilities": [
+        "design",
+        "repository"
+      ],
+      "connection_requirements": [
+        "Comprobar CLI/MCP, versión y permisos en el host",
+        "Acreditar compatibilidad con el stack y licencia/procedencia",
+        "No instalar ni ejecutar automáticamente por aparecer en este catálogo"
+      ],
+      "sources": [
+        {
+          "title": "21st CLI / MCP",
+          "url": "https://help.21st.dev/cli"
+        }
+      ],
+      "status": "candidate",
+      "enabled": false,
+      "access": "no_access_granted",
+      "verified_at": null
+    },
+    {
+      "id": "xstate",
+      "name": "XState",
+      "kind": "design_experience",
+      "profiles": [
+        "D06",
+        "D09"
+      ],
+      "purpose": "Formalizar estados y eventos del contrato de experiencia.",
+      "capabilities": [
+        "design",
+        "repository"
+      ],
+      "connection_requirements": [
+        "Comprobar CLI/MCP, versión y permisos en el host",
+        "Acreditar compatibilidad con el stack y licencia/procedencia",
+        "No instalar ni ejecutar automáticamente por aparecer en este catálogo"
+      ],
+      "sources": [
+        {
+          "title": "XState",
+          "url": "https://github.com/statelyai/xstate"
+        }
+      ],
+      "status": "candidate",
+      "enabled": false,
+      "access": "no_access_granted",
+      "verified_at": null
+    },
+    {
+      "id": "storybook",
+      "name": "Storybook",
+      "kind": "design_experience",
+      "profiles": [
+        "D05",
+        "D07",
+        "D09",
+        "D14"
+      ],
+      "purpose": "Renderizar componentes y estados en aislamiento.",
+      "capabilities": [
+        "design",
+        "repository"
+      ],
+      "connection_requirements": [
+        "Comprobar CLI/MCP, versión y permisos en el host",
+        "Acreditar compatibilidad con el stack y licencia/procedencia",
+        "No instalar ni ejecutar automáticamente por aparecer en este catálogo"
+      ],
+      "sources": [
+        {
+          "title": "Storybook",
+          "url": "https://github.com/storybookjs/storybook"
+        }
+      ],
+      "status": "candidate",
+      "enabled": false,
+      "access": "no_access_granted",
+      "verified_at": null
+    },
+    {
+      "id": "onlook",
+      "name": "Onlook",
+      "kind": "design_experience",
+      "profiles": [
+        "D05",
+        "D09"
+      ],
+      "purpose": "Edición visual conectada al código cuando el stack sea compatible.",
+      "capabilities": [
+        "design",
+        "repository"
+      ],
+      "connection_requirements": [
+        "Comprobar CLI/MCP, versión y permisos en el host",
+        "Acreditar compatibilidad con el stack y licencia/procedencia",
+        "No instalar ni ejecutar automáticamente por aparecer en este catálogo"
+      ],
+      "sources": [
+        {
+          "title": "Onlook",
+          "url": "https://github.com/onlook-dev/onlook"
+        }
+      ],
+      "status": "candidate",
+      "enabled": false,
+      "access": "no_access_granted",
+      "verified_at": null
+    },
+    {
+      "id": "viltrum_channels",
+      "name": "Viltrum Channels (Slack para IAs)",
+      "kind": "agent_messaging",
+      "profiles": ["D00", "D01", "D02", "D03", "D09", "D10", "D11", "D12", "D14", "D15", "D16", "D20", "D21", "D22"],
+      "purpose": "Bus de comunicación multi-agente local en SQLite WAL con canales temáticos (#d00 a #d14).",
+      "capabilities": ["runtime", "repository"],
+      "connection_requirements": ["Python 3.10+", "SQLite local", "viltrum_sdk.channels"],
+      "fallback": "Handoffs estándar en .viltrum/handoffs/",
+      "status": "verified",
+      "enabled": true,
+      "access": "local_sqlite_verified",
+      "verified_at": "2026-09-30"
+    },
+    {
+      "id": "viltrum_intake",
+      "name": "Viltrum Meeting Intake & Gap Detector",
+      "kind": "requirements_intelligence",
+      "profiles": ["D01", "D02", "D22"],
+      "purpose": "Ingesta semántica de minutas, detección de faltantes en 4 dimensiones y cálculo determinista de completitud de F1.",
+      "capabilities": ["repository"],
+      "connection_requirements": ["viltrum_sdk.intake", "Archivo de minuta/transcripción"],
+      "fallback": "Checklist manual client-meeting-intake.md",
+      "status": "verified",
+      "enabled": true,
+      "access": "local_cli_verified",
+      "verified_at": "2026-09-30"
+    },
+    {
+      "id": "viltrum_legal",
+      "name": "Viltrum Legal & Pagaré Generator",
+      "kind": "contract_generation",
+      "profiles": ["D01", "D02", "D03"],
+      "purpose": "Generación automatizada de contratos C0, C1, C4 y pagarés notariales con cálculo de amortización y hash SHA256.",
+      "capabilities": ["repository"],
+      "connection_requirements": ["viltrum_sdk.legal"],
+      "fallback": "Plantillas markdown estáticas en core/doctrine/",
+      "status": "verified",
+      "enabled": true,
+      "access": "local_cli_verified",
+      "verified_at": "2026-09-30"
+    },
+    {
+      "id": "viltrum_services",
+      "name": "Viltrum Services Manager & Watchdog",
+      "kind": "resource_orchestration",
+      "profiles": ["D00", "D16", "D17"],
+      "purpose": "Arranque y apagado bajo demanda de servicios locales con perro guardián por inactividad y limpieza de procesos huérfanos.",
+      "capabilities": ["runtime"],
+      "connection_requirements": ["PowerShell 5.1/7+", "Manage-ViltrumServices.ps1"],
+      "fallback": "Detención manual de procesos con Taskkill",
+      "status": "verified",
+      "enabled": true,
+      "access": "local_powershell_verified",
+      "verified_at": "2026-09-30"
+    },
+    {
+      "id": "viltrum_audit_master",
+      "name": "Viltrum Audit Master Suite (21 Herramientas)",
+      "kind": "assurance_automation",
+      "profiles": ["D03", "D07", "D09", "D10", "D11", "D12", "D14", "D15"],
+      "purpose": "Orquestador unificado de análisis estático, seguridad, dependencias, E2E y rendimiento con manifiesto criptográfico SHA256.",
+      "capabilities": ["runtime", "ci", "browser"],
+      "connection_requirements": ["Invoke-ViltrumAudit.ps1", "Node.js / Python"],
+      "fallback": "Ejecución individual de ESLint, Biome y Playwright",
+      "status": "verified",
+      "enabled": true,
+      "access": "local_powershell_verified",
+      "verified_at": "2026-09-30"
+    }
+  ]
+}

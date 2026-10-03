@@ -1,0 +1,56 @@
+name: viltrum-openhands-local
+services:
+  agent-server:
+    image: ghcr.io/openhands/agent-server:1.50.0-python-slim@sha256:cf8ebed4d3b65ee14ae5742e58db009681845f8eca340521da07d1c862e7b4af
+    platform: linux/amd64
+    container_name: viltrum-openhands-agent-server
+    user: "10001:10001"
+    command: ["--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "127.0.0.1:8011:8000"
+    env_file:
+      - "${OPENHANDS_SECRET_ENV:?Run setup-local.ps1 first}"
+    environment:
+      OH_CONVERSATIONS_PATH: /workspace/conversations
+      OH_WORKSPACE_PATH: /workspace/project
+      OH_ENABLE_VSCODE: "false"
+      OH_PRELOAD_TOOLS: "false"
+      OH_MAX_CONCURRENT_RUNS: "1"
+      OH_REGISTERED_MARKETPLACES: "[]"
+      OH_TELEMETRY_EXPORTER: none
+      OH_TELEMETRY_CONSENT: denied
+      DO_NOT_TRACK: "1"
+      HOME: /workspace/home
+    volumes:
+      - type: volume
+        source: agent-state
+        target: /workspace
+      - type: bind
+        source: "${OPENHANDS_PROJECT:?Set an isolated project}"
+        target: /workspace/project
+        read_only: true
+        bind:
+          create_host_path: false
+    tmpfs:
+      # The official one-file PyInstaller binary unpacks executable libraries here.
+      - /tmp:rw,exec,nosuid,nodev,size=2g,mode=1777
+    read_only: true
+    privileged: false
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 256
+    mem_limit: 4g
+    cpus: 2
+    restart: "no"
+    labels:
+      viltrum.component: openhands-local
+      viltrum.scope: analysis-readonly
+      viltrum.version: "1.50.0"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "2"
+volumes:
+  agent-state:
+    name: viltrum-openhands-agent-state-v150

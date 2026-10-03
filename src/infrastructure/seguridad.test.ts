@@ -37,6 +37,7 @@ const RUTAS_PUBLICAS: Record<string, RegExp> = {
   "auth/login/route.ts": /signInWithPassword\(/,
   "auth/logout/route.ts": /signOut\(/,
   "auth/recuperar/route.ts": /resetPasswordForEmail\(/,
+  "auth/demo/route.ts": /qh_dev_role/,
   "leads/externo/route.ts": /coincideToken\(/,
 };
 

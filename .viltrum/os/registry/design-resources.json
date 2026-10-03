@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "pxil",
+  "name": "PXIL · Product & Experience Intelligence Layer",
+  "status": "methodology_available",
+  "source": "VILTRUM DESING",
+  "snapshotDate": "2026-09-30",
+  "entrypoint": "skills/viltrum-pxil-design/SKILL.md",
+  "reference": "integrations/pxil/reference",
+  "provenance": "integrations/pxil/provenance.json",
+  "template": "templates/pxil-experience-contract.md",
+  "profiles": {
+    "D04": [
+      "viltrum-pxil-design",
+      "pxil-experience-contract"
+    ],
+    "D05": [
+      "viltrum-pxil-design",
+      "pxil-compose",
+      "pxil-21st-scout",
+      "pxil-visual-qa",
+      "pxil-library-curation"
+    ],
+    "D06": [
+      "viltrum-pxil-design",
+      "pxil-experience-contract",
+      "pxil-permission-matrix"
+    ],
+    "D07": [
+      "viltrum-pxil-design",
+      "pxil-a11y-qa",
+      "pxil-permission-matrix"
+    ],
+    "D08": [
+      "viltrum-pxil-design",
+      "pxil-experience-contract"
+    ],
+    "D09": [
+      "viltrum-pxil-design",
+      "pxil-compose"
+    ],
+    "D14": [
+      "viltrum-pxil-design",
+      "pxil-visual-qa"
+    ],
+    "D21": [
+      "viltrum-pxil-design",
+      "pxil-21st-scout"
+    ],
+    "D22": [
+      "viltrum-pxil-design",
+      "pxil-library-curation"
+    ]
+  },
+  "chain": [
+    "REQ",
+    "MOD",
+    "FLOW",
+    "SCR",
+    "STA",
+    "EVT",
+    "API / DATA / PERM",
+    "TST"
+  ],
+  "tools": [
+    "21st CLI/MCP",
+    "XState",
+    "Storybook",
+    "Onlook",
+    "Playwright",
+    "axe-core"
+  ],
+  "runtimeAccessGranted": false,
+  "gatePolicy": "PXIL-G0..G8 son referencias; no aprueban gates Viltrum ni C1",
+  "excludedMockValidator": "pxil/scripts/traceability-linter.js",
+  "catalogReference": {
+    "name": "Dashboard Sidebar",
+    "author": "arunjdass",
+    "id": 14941,
+    "url": "https://21st.dev/@arunjdass/components/dashboard-sidebar",
+    "use": "Layout and navigation pattern adapted to native HTML; no React dependency"
+  },
+  "library": {
+    "schemaVersion": 1,
+    "storage": ".viltrum/design",
+    "cli": "viltrum design PROJECT",
+    "dashboard": "#library",
+    "api": "/api/design",
+    "briefTemplate": "templates/design-brief.example.json",
+    "handoff": "docs/architecture/HANDOFF-DESIGN-LIBRARY.md",
+    "ranking": "lexical_candidates_require_visual_review",
+    "construction": "authorized_host_D09",
+    "externalSourceRequired": false,
+    "remoteJevConfigured": false
+  }
+}

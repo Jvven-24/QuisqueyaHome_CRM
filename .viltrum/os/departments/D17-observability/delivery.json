@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "id": "D17",
+  "stage": "F7",
+  "skill": "viltrum-observability",
+  "inputs": [
+    "Recorridos y fronteras D03",
+    "Objetivos/SLO con dueño de negocio",
+    "Release/digest/migración/runbooks D16",
+    "Instrumentación D09/D10 y privacidad D12",
+    "Topología, acceso y retención de telemetría"
+  ],
+  "outputs": [
+    "Mapa recorrido → señal → SLI/SLO → dueño",
+    "Especificación OpenTelemetry y privacidad",
+    "Dashboards/alertas/runbooks verificados",
+    "Línea de tiempo de incidente y estado de impacto",
+    "Postmortem y acciones con dueños",
+    "Handoff de estabilidad G7",
+    "datos de producción para la revisión de resultados (SLI, uso, errores) y feedback de soporte al backlog",
+    "borradores de comunicación de incidente y estado (envío aprobado por un humano)"
+  ],
+  "checks": [
+    "SLI tiene numerador/denominador/ventana",
+    "SLO acordado por negocio y error budget calculado",
+    "Telemetría correlacionada sin secretos/PII",
+    "Canal y runbook probados con autorización",
+    "Monitor externo y recorrido de negocio",
+    "Rollback remitido a D16 y humano cuando aplica",
+    "SEV1/SEV2 con comandante de incidente humano nombrado y aprobador de posmortem"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "observability",
+    "runtime"
+  ],
+  "sources": [
+    {
+      "title": "OpenTelemetry Collector",
+      "url": "https://opentelemetry.io/docs/collector/"
+    },
+    {
+      "title": "Repositorio OpenTelemetry Collector",
+      "url": "https://github.com/open-telemetry/opentelemetry-collector"
+    },
+    {
+      "title": "Google SRE alerting on SLOs",
+      "url": "https://sre.google/workbook/alerting-on-slos/"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "incident-correlator",
+      "purpose": "Correlacionar evidencia redactada para reconstruir una línea de tiempo",
+      "when": "Incidente con varias fuentes autorizadas y necesidad de correlación",
+      "outputs": [
+        "Timeline con fuente/timestamp",
+        "Hipótesis separadas de hechos y huecos de evidencia"
+      ]
+    }
+  ]
+}

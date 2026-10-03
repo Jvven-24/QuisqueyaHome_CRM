@@ -1,0 +1,67 @@
+id: D14
+slug: qa
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-qa
+name: QA funcional, E2E y bug hunting
+family: F4
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A2
+model: sonnet
+reviewer: D00
+
+tools:
+  read:   [repositorio, criterios de aceptacion, modelo de amenazas, sistema desplegado en staging]
+  write:  [pruebas e2e, reportes de bug, cartas de exploracion, referencias de regresion visual]
+  execute: [playwright, navegador para verificacion visual, peticiones directas de api para probar permisos]
+  forbidden:
+    - corregir el codigo del hallazgo que encontro
+    - aceptar un hallazgo como riesgo por cuenta propia
+    - aprobar su propia puerta de calidad
+    - cerrar un bug sin prueba nueva en CI
+
+skills:
+  diseno_y_ci_e2e: playwright-best-practices
+  ejecucion_cli: playwright-cli
+  exploracion_de_sitio: playwright-explore-website
+  automatizar_formularios: playwright-automation-fill-in-form
+  verificacion_visual: browser-automation
+  revision_de_codigo: code-review
+
+subagents:
+  can_create: true
+  purpose: ejecutar suites de regresion en paralelo y consolidar resultados sin decidir severidad
+  model: haiku
+
+outputs:
+  - suite e2e de recorridos criticos en CI
+  - matriz pantalla x estado verificada en ejecucion
+  - reportes de ataque a formularios
+  - pruebas de permisos que intentan cruzar limites
+  - referencias de regresion visual versionadas
+  - cartas de exploracion documentadas
+  - reportes de bug reproducibles con severidad
+  - prueba nueva por cada bug cerrado
+
+checklists:
+  - checklists/e2e-states.md
+  - checklists/e2e-forms.md
+
+source_manifest:
+  - "The Testing Trophy and Testing Classifications, Kent C. Dodds, kentcdodds.com (verificado 2026-09-24)"
+  - "Playwright — documentacion oficial de testing E2E (verificado 2026-09-24)"
+  - "core/doctrine/ux-states.md — seis estados obligatorios"
+  - "core/evidence-contract.md — severidad P0-P3 y formato de evidencia"
+
+known_limits:
+  - No decide la severidad final de riesgo aceptado; eso corresponde al dueño de producto o a D00
+  - La regresion visual depende de referencias ya versionadas; en un proyecto sin ellas, la primera ejecucion solo establece la linea base
+  - No cubre pruebas de carga ni de estres; eso es D15
+  - No cubre pruebas de penetracion formales; eso es D12 o un proveedor externo para R3/R4
+  - Las pruebas de permisos requieren el modelo de amenazas de D12 ya hecho; sin el, la cobertura de cruce de limites es parcial
+
+changelog: CHANGELOG.md

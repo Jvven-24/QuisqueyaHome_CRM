@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pxil.org/schemas/evt.schema.json",
+  "title": "PXIL Event",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": "string", "const": "event" },
+    "version": { "type": "string" },
+    "status": { "type": "string", "enum": ["draft", "active", "approved", "rejected", "deprecated"] },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "payload": { "type": "object" },
+    "trigger": { "type": "string" },
+    "source": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "owner": { "type": "string" },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "rel": { "type": "string" }, "href": { "type": "string" } },
+        "required": ["rel", "href"]
+      }
+    }
+  },
+  "required": ["id", "type", "version", "status", "name", "payload"],
+  "additionalProperties": false
+}

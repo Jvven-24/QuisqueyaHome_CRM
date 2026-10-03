@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "D18",
+  "stage": "F4",
+  "skill": "viltrum-ai-agents",
+  "inputs": [
+    "mandato, caso de uso D01 y riesgo D00",
+    "C1 y puerto/adaptador D03",
+    "fuentes/ACL D22/D11",
+    "herramientas realmente disponibles y scopes",
+    "dataset, objetivos y presupuesto acordados"
+  ],
+  "outputs": [
+    "contrato de agente y estado durable",
+    "fichas tools/ACL y guardrails",
+    "politica grounding/citas/fallback",
+    "dataset y resultados versionados",
+    "budget, observabilidad y runbook",
+    "handoff D12/D10/D17/D00"
+  ],
+  "checks": [
+    "C1 para construccion y autonomia A2 respetada",
+    "fuentes no se convierten en instrucciones autorizadas",
+    "executor verifica permisos/schema/tenant",
+    "retencion y retrieval conservan ACL",
+    "evals holdout y casos adversariales con evidencia",
+    "cancel/timeout/retry no duplican efectos",
+    "budget max pasos/costo enforceado",
+    "revision independiente D12"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "git",
+    "runtime"
+  ],
+  "sources": [
+    {
+      "title": "Claude criteria and evaluations — provider-specific reference",
+      "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    },
+    {
+      "title": "OpenTelemetry documentation",
+      "url": "https://opentelemetry.io/docs/"
+    },
+    {
+      "title": "Context7 — official repository",
+      "url": "https://github.com/upstash/context7"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "evaluation-runner",
+      "purpose": "Ejecutar casos autorizados con resultados reproducibles y errores de harness",
+      "when": "Cambio prompt/model/retrieval/tool y dataset/runner disponible; delegacion permitida",
+      "outputs": [
+        "resultados por caso y versiones",
+        "regresiones y costos",
+        "errores de harness y limites"
+      ]
+    },
+    {
+      "name": "adversarial-sandbox",
+      "purpose": "Evaluar inyeccion/fuga/permisos en fixtures aislados",
+      "when": "Nuevo tool o retrieval cambia superficie de confianza y sandbox autorizado",
+      "outputs": [
+        "escenarios adversariales",
+        "acciones/filtraciones observadas o rechazadas",
+        "riesgos reproducibles sin secretos"
+      ]
+    }
+  ]
+}

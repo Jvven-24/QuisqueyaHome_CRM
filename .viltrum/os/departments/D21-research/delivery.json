@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "D21",
+  "skill": "viltrum-research",
+  "stage": "F2",
+  "inputs": [
+    "capacidad y criterios D01/D02",
+    "arquitectura/restricciones",
+    "candidatos y componentes existentes"
+  ],
+  "outputs": [
+    "expediente construir/comprar/integrar",
+    "tabla comparativa con evidencia",
+    "prueba acotada",
+    "licencia/mantenimiento/costo",
+    "contrato adaptador y plan salida"
+  ],
+  "checks": [
+    "Fuentes oficiales fechadas",
+    "Comparación alineada a capacidad",
+    "Licencia/mantenimiento verificados",
+    "Costos e incertidumbre declarados",
+    "Prueba sandbox reproducible si necesaria",
+    "D03 revisa recomendación"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "runtime"
+  ],
+  "sources": [
+    {
+      "title": "Context7",
+      "url": "https://github.com/upstash/context7"
+    },
+    {
+      "title": "SwarmClaw",
+      "url": "https://github.com/swarmclawai/swarmclaw"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "scout-candidatos",
+      "purpose": "buscar alternativas independientes",
+      "when": "mercado amplio con criterios definidos",
+      "outputs": [
+        "enlace/licencia/fecha",
+        "cobertura y límites"
+      ]
+    },
+    {
+      "name": "evaluador-tecnico",
+      "purpose": "probar adaptabilidad sin mutar proyecto real",
+      "when": "candidato con incertidumbre significativa",
+      "outputs": [
+        "PoC sandbox",
+        "costos y incompatibilidades"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-21st-scout"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-30T13:58:23.173221+00:00",
+  "sdkVersion": "0.5.0",
+  "checks": {
+    "dashboardHealth": {
+      "status": 200,
+      "milliseconds": 10,
+      "bytes": 97
+    },
+    "projects": {
+      "status": 200,
+      "milliseconds": 19,
+      "bytes": 218
+    },
+    "console": {
+      "status": 200,
+      "milliseconds": 2514,
+      "bytes": 404164
+    },
+    "sdkConsole": {
+      "status": 200,
+      "milliseconds": 504,
+      "bytes": 169621
+    },
+    "unknownProject": {
+      "status": 404,
+      "milliseconds": 3,
+      "bytes": 479
+    },
+    "unknownQuery": {
+      "status": 400,
+      "milliseconds": 27,
+      "bytes": 475
+    },
+    "foreignOrigin": {
+      "status": 403,
+      "milliseconds": 25,
+      "bytes": 482
+    },
+    "foreignHost": {
+      "status": 403,
+      "milliseconds": 3,
+      "bytes": 482
+    },
+    "webhookHealth": {
+      "status": 200,
+      "milliseconds": 3,
+      "bytes": 115
+    },
+    "unauthenticatedEvent": {
+      "status": 401,
+      "milliseconds": 4,
+      "bytes": 39
+    },
+    "event": {
+      "status": 200,
+      "milliseconds": 55,
+      "bytes": 1077
+    }
+  },
+  "counts": {
+    "departments": 23,
+    "skills": 39,
+    "tools": 10,
+    "communications": 59,
+    "runs": 11,
+    "webhookEntries": 2
+  },
+  "event": {
+    "eventId": "console-functional-20260930-001",
+    "status": "completed",
+    "runId": "RUN-6b70cf74a1964e42af935a6cf1c202de",
+    "runStatus": "finished",
+    "runStatusRefreshed": true
+  },
+  "newRun": {
+    "id": "RUN-6b70cf74a1964e42af935a6cf1c202de",
+    "backend": "codex",
+    "status": "finished",
+    "taskStatus": "approved",
+    "producerActor": "codex:producer:0e248db134a94921bbb039317b2b8409",
+    "reviewerActor": "codex:reviewer:1adb2ae911e948c78020f51dd001df31",
+    "reviewResult": "approved",
+    "handoffId": "HND-007",
+    "sourceEvidenceCount": 12,
+    "artifactCurrent": true
+  },
+  "correction": {
+    "runId": "RUN-3eecb4a97af3493192f7ced29716ba20",
+    "status": "finished",
+    "originalRun": "RUN-df40231836ed4293af8b468549f00ca0",
+    "originalStatus": "blocked"
+  },
+  "services": {
+    "schemaVersion": 1,
+    "services": [
+      {
+        "id": "dashboard",
+        "pid": 75868,
+        "port": 8765,
+        "url": "http://127.0.0.1:8765/",
+        "owned": true,
+        "processAlive": true,
+        "status": "ok",
+        "project": "E:\\PERFILES AI\\tmp\\runtime-demo",
+        "startedAt": "2026-09-30T13:56:14.458203+00:00"
+      },
+      {
+        "id": "webhook",
+        "pid": 57076,
+        "port": 8771,
+        "url": "http://127.0.0.1:8771/",
+        "owned": true,
+        "processAlive": true,
+        "status": "ok",
+        "project": "E:\\PERFILES AI\\tmp\\runtime-demo",
+        "startedAt": "2026-09-30T13:40:38.143016+00:00"
+      }
+    ],
+    "nativeGatewayManaged": false
+  },
+  "gatesApproved": false,
+  "C1Approved": false,
+  "scope": "read_only_analysis",
+  "externalMessagesSent": false,
+  "credentialsExported": false
+}

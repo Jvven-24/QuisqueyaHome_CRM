@@ -1,0 +1,206 @@
+{
+  "sourceLabel": "VILTRUM DESING",
+  "snapshotDate": "2026-09-30",
+  "capturedAt": "2026-09-30T14:24:51.821485+00:00",
+  "packRevision": "0cdd2ee70be887f41324aa799fb2a76286767cfbb32635efa7b829cebf0ce94b",
+  "importerSha256": "f7df729c7ac37c9b44a9be75d01147aaf297daaf59c34f5db32888b7796059ae",
+  "scope": "methodology_and_schemas",
+  "vendorCodeExecuted": false,
+  "excluded": [
+    "mcp_config.json",
+    "credentials",
+    "cloned vendor repositories",
+    "scripts/traceability-linter.js: mock; not a validator"
+  ],
+  "files": [
+    {
+      "source": "pxil/schemas/confidence-ledger.schema.json",
+      "sourceSha256": "f0ac03d761aac55357c9253b96648e611d61fda4048e0cc1c4702e1bb7e8b33e",
+      "destination": "integrations/pxil/reference/pxil/schemas/confidence-ledger.schema.json",
+      "sha256": "f0ac03d761aac55357c9253b96648e611d61fda4048e0cc1c4702e1bb7e8b33e",
+      "bytes": 1270
+    },
+    {
+      "source": "pxil/schemas/domain-pack.schema.json",
+      "sourceSha256": "2b8acf9e7c4a497e0c3900e361187d958f2fae42fe5f5b52a18959283c00a88c",
+      "destination": "integrations/pxil/reference/pxil/schemas/domain-pack.schema.json",
+      "sha256": "2b8acf9e7c4a497e0c3900e361187d958f2fae42fe5f5b52a18959283c00a88c",
+      "bytes": 661
+    },
+    {
+      "source": "pxil/schemas/ent.schema.json",
+      "sourceSha256": "b56b0e720a0cba3dd9c76edb6f89df4c498a5ac4210d7ae313350fdfe3546a46",
+      "destination": "integrations/pxil/reference/pxil/schemas/ent.schema.json",
+      "sha256": "b56b0e720a0cba3dd9c76edb6f89df4c498a5ac4210d7ae313350fdfe3546a46",
+      "bytes": 1566
+    },
+    {
+      "source": "pxil/schemas/evidence-store.schema.json",
+      "sourceSha256": "cb0e121fe9a1bbf926987ba9a9c2cbf36b7c3e4210b1f671be9cc93e5a925e03",
+      "destination": "integrations/pxil/reference/pxil/schemas/evidence-store.schema.json",
+      "sha256": "cb0e121fe9a1bbf926987ba9a9c2cbf36b7c3e4210b1f671be9cc93e5a925e03",
+      "bytes": 1485
+    },
+    {
+      "source": "pxil/schemas/evt.schema.json",
+      "sourceSha256": "ef0ba11d1d17c13ba2e8955c20ad974b84628293b0e7521785af663bf4b9c87a",
+      "destination": "integrations/pxil/reference/pxil/schemas/evt.schema.json",
+      "sha256": "ef0ba11d1d17c13ba2e8955c20ad974b84628293b0e7521785af663bf4b9c87a",
+      "bytes": 1016
+    },
+    {
+      "source": "pxil/schemas/flow.schema.json",
+      "sourceSha256": "2523f118308f858d0f73d8d573cf2e33a7c257a4acdc779e0a1ab98357466345",
+      "destination": "integrations/pxil/reference/pxil/schemas/flow.schema.json",
+      "sha256": "2523f118308f858d0f73d8d573cf2e33a7c257a4acdc779e0a1ab98357466345",
+      "bytes": 1322
+    },
+    {
+      "source": "pxil/schemas/mod.schema.json",
+      "sourceSha256": "e8fd94d8202df68b9f08815a1fae6139ed2eccd1796bd0f2dc18deb7978c6a61",
+      "destination": "integrations/pxil/reference/pxil/schemas/mod.schema.json",
+      "sha256": "e8fd94d8202df68b9f08815a1fae6139ed2eccd1796bd0f2dc18deb7978c6a61",
+      "bytes": 1090
+    },
+    {
+      "source": "pxil/schemas/perm.schema.json",
+      "sourceSha256": "830a6ca40c46d44955782ed6aa5ac831b5554ceb9b1998cce1d20bbab97b2009",
+      "destination": "integrations/pxil/reference/pxil/schemas/perm.schema.json",
+      "sha256": "830a6ca40c46d44955782ed6aa5ac831b5554ceb9b1998cce1d20bbab97b2009",
+      "bytes": 1176
+    },
+    {
+      "source": "pxil/schemas/private-library.schema.json",
+      "sourceSha256": "38563e7bec54f5b8d9cc7f3a9fb01acbe278641461c1ad93ab36c5bbbec119c6",
+      "destination": "integrations/pxil/reference/pxil/schemas/private-library.schema.json",
+      "sha256": "38563e7bec54f5b8d9cc7f3a9fb01acbe278641461c1ad93ab36c5bbbec119c6",
+      "bytes": 1154
+    },
+    {
+      "source": "pxil/schemas/req.schema.json",
+      "sourceSha256": "6667247623caf55bbb6ef9bf7ad54cedba3694a4e946094469b1b10db3f2e036",
+      "destination": "integrations/pxil/reference/pxil/schemas/req.schema.json",
+      "sha256": "6667247623caf55bbb6ef9bf7ad54cedba3694a4e946094469b1b10db3f2e036",
+      "bytes": 1163
+    },
+    {
+      "source": "pxil/schemas/scr.schema.json",
+      "sourceSha256": "c7e19190f845ba331a7eac1f4aca8a60bac02cc17bdcb20ff732c238b850b531",
+      "destination": "integrations/pxil/reference/pxil/schemas/scr.schema.json",
+      "sha256": "c7e19190f845ba331a7eac1f4aca8a60bac02cc17bdcb20ff732c238b850b531",
+      "bytes": 1276
+    },
+    {
+      "source": "pxil/schemas/sta.schema.json",
+      "sourceSha256": "72639d15a347cfbf479b6da72910367797bf0c81ea8afbf3ed2adca342bce33d",
+      "destination": "integrations/pxil/reference/pxil/schemas/sta.schema.json",
+      "sha256": "72639d15a347cfbf479b6da72910367797bf0c81ea8afbf3ed2adca342bce33d",
+      "bytes": 1319
+    },
+    {
+      "source": "pxil/schemas/tst.schema.json",
+      "sourceSha256": "19a141f25ef1cbd6eb9936eca0f2989a790a67117f0ac46fac84706356c62fd5",
+      "destination": "integrations/pxil/reference/pxil/schemas/tst.schema.json",
+      "sha256": "19a141f25ef1cbd6eb9936eca0f2989a790a67117f0ac46fac84706356c62fd5",
+      "bytes": 1205
+    },
+    {
+      "source": "pxil/skills/pxil-experience-contract/SKILL.md",
+      "sourceSha256": "a12a941e742a49f1a4cce1c75eaa10039d36663ce8b79aeb45c1fadbfd3d2abd",
+      "destination": "skills/pxil-experience-contract/SKILL.md",
+      "sha256": "97327a6cde071ac7594f20197e937d5cd4f0a2d11193461be7ea6bf6eb4aa3a4",
+      "bytes": 812
+    },
+    {
+      "source": "pxil/skills/pxil-compose/SKILL.md",
+      "sourceSha256": "536d04e76880a70c3d3cdb87a0db22df6557dff69c2f125cd26951e208710bb5",
+      "destination": "skills/pxil-compose/SKILL.md",
+      "sha256": "3e9bb4790d64f7f80ac7c355ad181d34448d7f14dea8857d7a0721eb4d02d199",
+      "bytes": 810
+    },
+    {
+      "source": "pxil/skills/pxil-21st-scout/SKILL.md",
+      "sourceSha256": "f903bb84712d7fdb87c497d9907159f57ad61e3ac13d80543c3fd0ed5d33b83b",
+      "destination": "skills/pxil-21st-scout/SKILL.md",
+      "sha256": "899230a2dcb942a2ed1a83bc2d97c61bcac9767139d70ec5e07952397e15868f",
+      "bytes": 705
+    },
+    {
+      "source": "pxil/skills/pxil-a11y-qa/SKILL.md",
+      "sourceSha256": "405e0b18ee97c4cfb73de3a048b1eee3f6da44619a3977b03745d2c6860813e6",
+      "destination": "skills/pxil-a11y-qa/SKILL.md",
+      "sha256": "91edd538b336eef585820f916ef57132070e1f85569ac408c53395b7b163933a",
+      "bytes": 562
+    },
+    {
+      "source": "pxil/skills/pxil-visual-qa/SKILL.md",
+      "sourceSha256": "95b6c706c3062a6e202dd716f144335fa39ce5265ce1b33b4a77f7186ab2eb8b",
+      "destination": "skills/pxil-visual-qa/SKILL.md",
+      "sha256": "a4a15151021a59fdf7c8da2401972312e8c3faf9ce4df1178b74053fdde45ff4",
+      "bytes": 523
+    },
+    {
+      "source": "pxil/skills/pxil-permission-matrix/SKILL.md",
+      "sourceSha256": "a3bcc4b99b48963c71287057808289a0cb8247b938b1eb1cc6a32615d8d9cc88",
+      "destination": "skills/pxil-permission-matrix/SKILL.md",
+      "sha256": "0853c721853164ec747428b102a56b50762a24d0e6ed247e7c61fbdcf27f3089",
+      "bytes": 692
+    },
+    {
+      "source": "pxil/skills/pxil-library-curation/SKILL.md",
+      "sourceSha256": "b2afb3c0e812ac1a2ba5ca166967928cf14dc3251ee3e22cc0a19107ba42787c",
+      "destination": "skills/pxil-library-curation/SKILL.md",
+      "sha256": "87c0dc1e5e7d3e188da8c007acd1365d02f0e9b8307d2dd01f568a2646ba0369",
+      "bytes": 790
+    },
+    {
+      "source": "pxil-ecosystem/AI-CONTEXT.md",
+      "sourceSha256": "61f8768b44240709555032b79f3bafb50cd5d81686cc64748c05471118a6d020",
+      "destination": "integrations/pxil/reference/pxil-ecosystem/AI-CONTEXT.md",
+      "sha256": "61f8768b44240709555032b79f3bafb50cd5d81686cc64748c05471118a6d020",
+      "bytes": 25430
+    },
+    {
+      "source": "pxil-ecosystem/ECOSYSTEM.md",
+      "sourceSha256": "f8fa3afb8cc25f8096a4b0d0cc68655bec2f841ffebc31f948a3ee69e3c58bcd",
+      "destination": "integrations/pxil/reference/pxil-ecosystem/ECOSYSTEM.md",
+      "sha256": "f8fa3afb8cc25f8096a4b0d0cc68655bec2f841ffebc31f948a3ee69e3c58bcd",
+      "bytes": 8342
+    },
+    {
+      "source": "pxil-ecosystem/INTEGRATION-MAP.md",
+      "sourceSha256": "95a117b89cc24f0ea994943ead780e948fc4c3442241766946e1d724cd1c8d94",
+      "destination": "integrations/pxil/reference/pxil-ecosystem/INTEGRATION-MAP.md",
+      "sha256": "95a117b89cc24f0ea994943ead780e948fc4c3442241766946e1d724cd1c8d94",
+      "bytes": 10033
+    },
+    {
+      "source": "pxil-ecosystem/PXIL-DOCUMENT.md",
+      "sourceSha256": "8d6ddb242ab2da68f9231d5e17b0272e788c2e1cfeb5750d4c5282e3c3a062a4",
+      "destination": "integrations/pxil/reference/pxil-ecosystem/PXIL-DOCUMENT.md",
+      "sha256": "8d6ddb242ab2da68f9231d5e17b0272e788c2e1cfeb5750d4c5282e3c3a062a4",
+      "bytes": 69613
+    },
+    {
+      "source": "pxil/design/design-tokens-template.json",
+      "sourceSha256": "36a24e48bedc392aa15135d7f07f36375e72fc02667fcf0fb83898deac474c09",
+      "destination": "integrations/pxil/reference/pxil/design/design-tokens-template.json",
+      "sha256": "36a24e48bedc392aa15135d7f07f36375e72fc02667fcf0fb83898deac474c09",
+      "bytes": 444
+    },
+    {
+      "source": "pxil/design/wcag-baseline.md",
+      "sourceSha256": "2171bcf7852872c7c2b114b9659caf40c0e52aa9ba86fd9b5a7f1b2db5f2be73",
+      "destination": "integrations/pxil/reference/pxil/design/wcag-baseline.md",
+      "sha256": "2171bcf7852872c7c2b114b9659caf40c0e52aa9ba86fd9b5a7f1b2db5f2be73",
+      "bytes": 316
+    },
+    {
+      "source": "pxil/design/owasp-baseline.md",
+      "sourceSha256": "bd3ba88bb04fbcedad69605307b7301d19b8580a050f3e4fc85856beb78d5a21",
+      "destination": "integrations/pxil/reference/pxil/design/owasp-baseline.md",
+      "sha256": "bd3ba88bb04fbcedad69605307b7301d19b8580a050f3e4fc85856beb78d5a21",
+      "bytes": 272
+    }
+  ]
+}

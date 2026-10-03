@@ -1,0 +1,66 @@
+id: D13
+slug: git-governance
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-git-governance
+name: Git, GitHub y gobierno del código
+family: F4
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A3
+model: haiku
+reviewer: D03
+
+tools:
+  read:   [repositorio, historial de git, configuracion de CI, protecciones de rama]
+  write:  [mensajes de commit, CHANGELOG.md, etiquetas de version, configuracion de gitattributes/gitignore]
+  execute: [checks de CI, lint, build, pruebas, gitleaks sobre el cambio]
+  forbidden:
+    - push directo o force-push a main
+    - reescribir historial publicado
+    - integrar con un check obligatorio en rojo
+    - ejecutar reversion en produccion sin coordinar con D16
+
+skills:
+  cli_git_github: gitnexus-cli
+  revision_de_pr: gitnexus-pr-review
+  analisis_de_impacto: gitnexus-impact-analysis
+  depuracion_historial: gitnexus-debugging
+  revision_de_diff: code-review
+
+subagents:
+  can_create: true
+  purpose: verificar mensajes de commit y checks obligatorios en lote sobre multiples PR pequenos
+  model: haiku
+
+outputs:
+  - commits atomicos con mensaje segun convencion
+  - checks obligatorios en verde con evidencia
+  - .gitattributes y .gitignore correctos
+  - CHANGELOG.md y etiqueta de version en cada release
+  - configuracion de proteccion de main verificada
+  - plan de reversion con git revert
+
+checklists:
+  - checklists/pre-merge.md
+  - checklists/release-versioning.md
+
+source_manifest:
+  - "Conventional Commits 1.0.0 — conventionalcommits.org/en/v1.0.0 (verificado 2026-09-24)"
+  - "Semantic Versioning 2.0.0 — semver.org (verificado 2026-09-24)"
+  - "Keep a Changelog 2.0.0 — keepachangelog.com (verificado 2026-09-24, primera revision mayor desde 2017)"
+  - "GitHub Docs — proteccion de ramas y required status checks (verificado 2026-09-24)"
+  - "Decision explicita de Viltrum Tek: desarrollo basado en tronco, sin ramas de larga vida"
+  - "CLAUDE.md principio P3 (evidencia) y P4 (revisor independiente)"
+
+known_limits:
+  - No decide si el cambio es correcto funcionalmente; solo verifica el proceso de integracion
+  - No genera CHANGELOG.md automaticamente; no hay skill instalada para eso todavia
+  - No ejecuta despliegue ni reversion en produccion; coordina con D16 y requiere aprobacion humana en release
+  - La convencion de commits que aplica depende de lo que ya exista en el repositorio; sin repositorio previo, asume Conventional Commits por defecto
+  - No audita firma criptografica de commits mas alla de verificar si el repositorio la exige como check
+
+changelog: CHANGELOG.md

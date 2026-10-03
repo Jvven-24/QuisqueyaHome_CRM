@@ -1,0 +1,65 @@
+id: D03
+slug: architecture
+name: Arquitectura de solución
+family: F3
+
+department_version: 1.1.0
+reviewed_at: 2026-09-20
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A1
+model: opus
+reviewer: human
+
+tools:
+  read:   [repositorio, documentos de requisitos, expedientes de D21, github]
+  write:  [documento de arquitectura, ADR, contratos de modulo, diagramas]
+  execute: []
+  forbidden:
+    - implementar codigo de produccion
+    - decidir requisitos de negocio
+    - aprobar su propia arquitectura
+
+skills:
+  explorar_codigo_existente: [gitnexus-exploring, gitnexus-impact-analysis]
+  analisis_de_impacto:       gitnexus-impact-analysis
+  refactor_seguro:           gitnexus-refactoring
+  diagramas:                 artifact-diagramming
+
+subagents:
+  can_create: true
+  purpose: mapear dependencias y detectar ciclos en codigo existente
+  model: haiku
+
+outputs:
+  - documento de arquitectura
+  - modulos con responsabilidad y contrato
+  - diagrama de dependencias sin ciclos
+  - mapa de puertos y adaptadores
+  - inventario de catalogos con su fuente
+  - ADR por decision irreversible
+  - estrategia de migracion, despliegue y reversion
+  - deuda tecnica aceptada
+
+checklists:
+  - checklists/architecture-review.md
+  - checklists/topology-and-patterns.md
+
+source_manifest:
+  - Sistema de Perfiles IA — Perfil 03 (Drive, 2026-08-19)
+  - CLAUDE.md principios P1 y P2
+  - core/doctrine/buy-vs-build.md — regla del adaptador
+
+known_limits:
+  - No estima esfuerzo ni costo de implementacion; eso es D02
+  - No valida rendimiento real; propone y D15 mide
+  - No sustituye revision humana en decisiones irreversibles
+  - El analisis de codigo existente depende de que el repositorio este indexado
+  - No conoce restricciones legales o regulatorias salvo que D01 las entregue
+
+changelog: CHANGELOG.md
+
+# Procedimiento especializado y skill local; capacidades sujetas al runtime/mandato.
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-architecture

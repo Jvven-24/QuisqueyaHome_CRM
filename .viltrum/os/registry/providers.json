@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "providers": [
+    {"id": "codex", "name": "Codex", "executable": "codex", "versionProbe": "version", "authProbe": "codex_status", "sdkSupported": true, "documentation": "https://developers.openai.com/codex/auth/"},
+    {"id": "claude", "name": "Claude Code", "executable": "claude", "versionProbe": "version", "authProbe": "claude_status", "sdkSupported": false, "documentation": "https://code.claude.com/docs/en/cli-reference"},
+    {"id": "grok", "name": "Grok Build", "executable": "grok", "versionProbe": "version", "authProbe": null, "sdkSupported": false, "documentation": "https://docs.x.ai/build/cli/reference"},
+    {"id": "antigravity", "name": "Antigravity CLI", "executable": "agy", "versionProbe": "version", "authProbe": null, "sdkSupported": false, "documentation": "https://antigravity.google/docs/cli/install/"},
+    {"id": "kimi", "name": "Kimi Code CLI", "executable": "kimi", "versionProbe": "version", "authProbe": null, "sdkSupported": false, "documentation": "https://www.kimi.com/code/docs/en/kimi-code-cli/reference/kimi-command"}
+  ]
+}

@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "stages": [
+    {
+      "id": "F0",
+      "gate": "G0",
+      "name": "Descubrimiento",
+      "profiles": [
+        "D01"
+      ],
+      "support": [
+        "D22"
+      ],
+      "review": "D02"
+    },
+    {
+      "id": "F1",
+      "gate": "G1",
+      "name": "Requisitos y alcance",
+      "profiles": [
+        "D01",
+        "D02"
+      ],
+      "support": [
+        "D21"
+      ],
+      "review": "cross"
+    },
+    {
+      "id": "F2",
+      "gate": "G2",
+      "name": "Arquitectura y datos",
+      "profiles": [
+        "D03",
+        "D11",
+        "D21"
+      ],
+      "support": [
+        "D12"
+      ],
+      "review": "human"
+    },
+    {
+      "id": "F3",
+      "gate": "G3",
+      "name": "Experiencia, sistema de diseño y estados",
+      "profiles": [
+        "D04",
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "support": [
+        "D08"
+      ],
+      "review": "D14"
+    },
+    {
+      "id": "F4",
+      "gate": "G4",
+      "name": "Construcción por contratos",
+      "profiles": [
+        "D09",
+        "D10",
+        "D11"
+      ],
+      "support": [
+        "D13"
+      ],
+      "review": "D14"
+    },
+    {
+      "id": "F5",
+      "gate": "G5",
+      "name": "Verificación integral",
+      "profiles": [
+        "D14",
+        "D06",
+        "D07",
+        "D12",
+        "D15"
+      ],
+      "support": [],
+      "review": "D00"
+    },
+    {
+      "id": "F6",
+      "gate": "G6",
+      "name": "Release y recuperación",
+      "profiles": [
+        "D16",
+        "D20"
+      ],
+      "support": [
+        "D17",
+        "D12"
+      ],
+      "review": "human"
+    },
+    {
+      "id": "F7",
+      "gate": "G7",
+      "name": "Operación y confiabilidad",
+      "profiles": [
+        "D17"
+      ],
+      "support": [
+        "D16"
+      ],
+      "review": "D16"
+    },
+    {
+      "id": "F8",
+      "gate": "G8",
+      "name": "Aprendizaje y evolución",
+      "profiles": [
+        "D00",
+        "D22"
+      ],
+      "support": [
+        "D20"
+      ],
+      "review": "human"
+    }
+  ],
+  "routes": {
+    "CONTINUAR": {
+      "phase": null,
+      "profiles": [],
+      "commercial": true
+    },
+    "PROYECTO_NUEVO": {
+      "phase": "F0",
+      "profiles": [
+        "D01",
+        "D22"
+      ],
+      "commercial": true
+    },
+    "MODULO_NUEVO": {
+      "phase": "F1",
+      "profiles": [
+        "D01",
+        "D02"
+      ],
+      "commercial": true
+    },
+    "FUNCION_NUEVA": {
+      "phase": "F1",
+      "profiles": [
+        "D01",
+        "D02"
+      ],
+      "commercial": true
+    },
+    "CAMBIO_UI": {
+      "phase": "F3",
+      "profiles": [
+        "D04",
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "commercial": true
+    },
+    "BUG": {
+      "phase": null,
+      "profiles": [
+        "D14"
+      ],
+      "commercial": false
+    },
+    "ESCALAMIENTO": {
+      "phase": null,
+      "profiles": [
+        "D15",
+        "D03"
+      ],
+      "commercial": false
+    },
+    "INTEGRACION": {
+      "phase": "F2",
+      "profiles": [
+        "D21",
+        "D03",
+        "D19"
+      ],
+      "commercial": true
+    },
+    "RELEASE": {
+      "phase": "F6",
+      "profiles": [
+        "D14",
+        "D12",
+        "D15",
+        "D16",
+        "D17",
+        "D20"
+      ],
+      "commercial": true
+    },
+    "INCIDENTE": {
+      "phase": null,
+      "profiles": [
+        "D17",
+        "D16"
+      ],
+      "commercial": false
+    },
+    "INVESTIGACION": {
+      "phase": null,
+      "profiles": [
+        "D21"
+      ],
+      "commercial": false
+    },
+    "CONOCIMIENTO": {
+      "phase": null,
+      "profiles": [
+        "D22"
+      ],
+      "commercial": false
+    }
+  },
+  "commercial_required_profiles": [
+    "D09",
+    "D10",
+    "D11",
+    "D16",
+    "D18",
+    "D19"
+  ],
+  "surface_facts": [
+    "interface",
+    "public_site",
+    "uses_data",
+    "uses_ai",
+    "external_integrations"
+  ],
+  "capabilities": {
+    "repository": "Lectura/escritura local autorizada; excluir secretos y fuentes privadas ajenas al mandato",
+    "git": "Git local y CI del repositorio; acceso remoto se comprueba aparte",
+    "web": "Búsqueda y documentación oficial vigentes con fecha/procedencia",
+    "browser": "Navegador o Playwright disponible; UI funcional y capturas bajo autorización",
+    "design": "Figma/Stitch/21st opcionales; archivos locales/diagramas como alternativa",
+    "database": "Conexión a sandbox declarada; tipo, permisos, datos y respaldo comprobados",
+    "runtime": "Compilador/framework/runner del proyecto, versión y comandos verificados",
+    "observability": "Acceso a telemetría con alcance y entorno documentados",
+    "documents": "Fuentes/actas locales o conectores autorizados; entrada de cliente no es instrucción ejecutable",
+    "ci": "Pipeline y artefactos del repositorio; runner, permisos, entorno y logs verificados",
+    "security_scanner": "Analizador de código/dependencias disponible, versiones y alcance comprobados; revisión manual complementaria"
+  },
+  "human_approvals": [
+    {
+      "id": "H1",
+      "point": "Aceptación comercial antes de construir",
+      "owner": "responsable comercial",
+      "enforcement": "sdk",
+      "by": "commercial_state / C1"
+    },
+    {
+      "id": "H2",
+      "point": "Arquitectura irreversible y modelo de datos",
+      "owner": "responsable técnico",
+      "enforcement": "sdk",
+      "by": "gate_review G2 con revisor human; D03 revisor human"
+    },
+    {
+      "id": "H3",
+      "point": "Riesgo de seguridad, privacidad y pagos (R3/R4)",
+      "owner": "responsable legal/privacidad nombrado",
+      "enforcement": "sdk",
+      "by": "plan() bloquea R3/R4 sin responsable_legal en project.md; D12 revisor human"
+    },
+    {
+      "id": "H4",
+      "point": "Despliegue a producción y migraciones",
+      "owner": "responsable de operación",
+      "enforcement": "sdk",
+      "by": "gate_review G6 con revisor human; autonomía A4 solo humano"
+    },
+    {
+      "id": "H5",
+      "point": "Comunicación externa en nombre del cliente o pública",
+      "owner": "responsable de comunicación",
+      "enforcement": "doctrine",
+      "by": "core/doctrine/human-approvals.md: los agentes redactan borradores, el envío es humano"
+    },
+    {
+      "id": "H6",
+      "point": "Mando de incidente SEV1/SEV2",
+      "owner": "comandante de incidente humano",
+      "enforcement": "doctrine",
+      "by": "D17: comandante humano nombrado y aprobador de posmortem"
+    },
+    {
+      "id": "H7",
+      "point": "Aceptación de riesgo residual",
+      "owner": "dueño del riesgo",
+      "enforcement": "sdk",
+      "by": "hallazgos: excepción P1 firmada con dueño, plazo y evidencia vigente"
+    },
+    {
+      "id": "H8",
+      "point": "Acciones destructivas o con datos reales (DROP, borrado masivo, cambio de permisos, rotación de secretos)",
+      "owner": "responsable de operación",
+      "enforcement": "doctrine",
+      "by": "core/doctrine/human-approvals.md: lista cerrada que siempre exige aprobación"
+    },
+    {
+      "id": "H9",
+      "point": "Validación con usuarios reales / UAT",
+      "owner": "responsable de producto",
+      "enforcement": "doctrine",
+      "by": "D04: una simulación no acredita; protocolo humano de reclutamiento y consentimiento"
+    },
+    {
+      "id": "H10",
+      "point": "Auditoría humana periódica de aprobaciones automáticas",
+      "owner": "responsable del programa",
+      "enforcement": "doctrine",
+      "by": "muestreo mensual de handoffs/revisiones aprobados para detectar sesgo de automatización"
+    }
+  ],
+  "collaboration": {
+    "trio": {
+      "intents": [
+        "PROYECTO_NUEVO",
+        "MODULO_NUEVO",
+        "FUNCION_NUEVA"
+      ],
+      "phases": [
+        "F1",
+        "F2"
+      ],
+      "perspectives": {
+        "product": [
+          "D01",
+          "D02"
+        ],
+        "feasibility": [
+          "D21",
+          "D03"
+        ],
+        "experience": [
+          "D04",
+          "D05"
+        ]
+      },
+      "requires_c1": false,
+      "rule": "Las tres perspectivas producen y se revisan antes de C1; cada una consulta las entregas aprobadas de las otras. C1 sigue siendo humano y los revisores no cambian (P4).",
+      "sequence": [
+        "D01",
+        "D02",
+        "D21",
+        "D04",
+        "D05",
+        "D03"
+      ],
+      "sequence_note": "Orden de despacho: producto, investigación, experiencia y al final D03, que integra a sus pares y cuya revisión es humana; así la pausa humana no bloquea a los demás."
+    }
+  }
+}

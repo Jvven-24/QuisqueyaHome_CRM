@@ -1,0 +1,316 @@
+# Registro maestro de departamentos agénticos — Viltrum Agentic OS
+# Fuente de verdad para el router, el switch de perfiles y la matriz de cobertura.
+# Un departamento no existe para el sistema si no está aquí.
+
+version: 1.1.0
+updated: 2026-09-29
+
+# ---------------------------------------------------------------------------
+# Familias (agrupan sin duplicar; ver core/routing.md)
+# ---------------------------------------------------------------------------
+families:
+  F0: { name: Control Plane,        color: charcoal }
+  F1: { name: Negocio y Producto,   color: gold }
+  F2: { name: Diseno y Experiencia, color: coral }
+  F3: { name: Ingenieria,           color: blue }
+  F4: { name: Assurance,            color: amber }
+  F5: { name: Operacion,            color: green }
+  F6: { name: Conocimiento,         color: gray }
+
+# ---------------------------------------------------------------------------
+# Niveles de autonomia
+#   A0 leer - A1 proponer - A2 ejecutar en sandbox
+#   A3 cambios reversibles fuera de produccion - A4 produccion (humano obligatorio)
+# ---------------------------------------------------------------------------
+
+departments:
+
+  # ===== F0 - CONTROL PLANE =================================================
+  - id: D00
+    slug: orchestrator
+    name: Orquestación, cobertura y riesgo
+    family: F0
+    mission: Clasificar el trabajo, activar departamentos, custodiar gates e impedir autoaprobaciones.
+    autonomy: A2
+    model: sonnet
+    reviewer: human
+    activates_on: [always]
+    never: [escribir código de producto, cerrar hallazgos propios o sustituir a su dueño]
+
+  # ===== F1 - NEGOCIO Y PRODUCTO ===========================================
+  - id: D01
+    slug: discovery
+    name: Descubrimiento y requisitos
+    family: F1
+    mission: Convertir una necesidad difusa en requisitos verificables con criterios de aceptación.
+    autonomy: A1
+    model: opus
+    reviewer: D02
+    activates_on: [nuevo_proyecto, nuevo_modulo, cambio_de_alcance]
+
+  - id: D02
+    slug: scope
+    name: Alcance, negocio y prioridad
+    family: F1
+    mission: Decidir qué entra, qué no, en qué orden y con qué valor. Controlar el cambio de alcance.
+    autonomy: A1
+    model: sonnet
+    reviewer: D01
+    activates_on: [nuevo_proyecto, cambio_de_alcance, cotizacion]
+
+  # ===== F2 - DISENO Y EXPERIENCIA =========================================
+  - id: D04
+    slug: ux-research
+    name: UX research y arquitectura de información
+    family: F2
+    mission: Definir recorridos, navegación y jerarquía antes de que exista un pixel.
+    autonomy: A1
+    model: sonnet
+    reviewer: D05
+    activates_on: [nueva_interfaz, rediseno, friccion_reportada]
+
+  - id: D05
+    slug: ui-design-system
+    name: UI premium y sistema de diseño
+    family: F2
+    mission: Componer interfaces coherentes y precisas sobre tokens y componentes reutilizables.
+    autonomy: A2
+    model: sonnet
+    reviewer: D07
+    activates_on: [nueva_interfaz, nuevo_componente, rediseno]
+    skills: [21st-ui-build, 21st-ui-explore, 21st-cli-use, frontend-design, design-taste-frontend, ui-design]
+
+  - id: D06
+    slug: ux-states
+    name: Estados, resiliencia y microinteracciones
+    family: F2
+    mission: Garantizar los seis estados obligatorios en cada pantalla, módulo y acción.
+    autonomy: A1
+    model: sonnet
+    reviewer: D14
+    activates_on: [nueva_interfaz, nuevo_flujo, pre_release]
+
+  - id: D07
+    slug: accessibility
+    name: Accesibilidad
+    family: F2
+    mission: Cumplir WCAG 2.2 AA con auditoría automática y verificación manual.
+    autonomy: A1
+    model: sonnet
+    reviewer: D14
+    activates_on: [nueva_interfaz, pre_release]
+
+  - id: D08
+    slug: content-seo
+    name: Contenido, SEO y conversión
+    family: F2
+    mission: Que el producto se encuentre, se entienda y convierta; y que eso se mida.
+    autonomy: A1
+    model: sonnet
+    reviewer: D02
+    activates_on: [sitio_publico, landing, pre_release]
+
+  # ===== F3 - INGENIERIA ===================================================
+  - id: D03
+    slug: architecture
+    name: Arquitectura de solución
+    family: F3
+    mission: Definir módulos, límites, contratos y reversibilidad. Custodiar el bajo acoplamiento.
+    autonomy: A1
+    model: opus
+    reviewer: human
+    activates_on: [nuevo_proyecto, nuevo_modulo, escalamiento, integracion_nueva, decision_tecnica]
+    sub_specialties:
+      - id: D03-A
+        name: Topología & Estilos Arquitectónicos
+        scope: Monolito modular, Hexagonal/Ports & Adapters, BFF, Event-Driven, Microfrontends (Fowler, Evans, Martin, Xu, Kleppmann).
+      - id: D03-B
+        name: Contratos de Integración & Protocolos
+        scope: OpenAPI 3.1, tRPC, Idempotency-Keys, esquemas Zod compartidos y versionado semántico de contratos.
+      - id: D03-C
+        name: Concurrencia, Caching & Consistencia
+        scope: Split-brain mitigation, Distributed locks, Invalidación reactiva de caché, ETags y SWR en tres niveles.
+
+  - id: D09
+    slug: frontend
+    name: Frontend y calidad de interfaz
+    family: F3
+    mission: Implementar la interfaz con separación de responsabilidades, tipado y reutilización.
+    autonomy: A3
+    model: sonnet
+    reviewer: D14
+    activates_on: [implementacion_ui, bug_ui, refactor_frontend]
+    skills: [21st-cli-use, 21st-ui-build, mobile-native-experience, playwright-best-practices, code-review]
+    sub_specialties:
+      - id: D09-A
+        name: Mobile Native Experience & Touch
+        scope: Bottom Sheets con snap points, Pull to Refresh elástico, Emulación háptica (navigator.vibrate), Safe-area insets y VisualViewport para teclados virtuales.
+      - id: D09-B
+        name: Responsive Layouts & Desktop Ergonomics
+        scope: Container queries, CSS Grid, breakpoints fluidos y ergonomía en pantallas grandes.
+      - id: D09-C
+        name: Design Tokens & UI Atoms
+        scope: Tipografía, tokens cromáticos, sombras, elevaciones y micro-interacciones de Viltrum Design.
+      - id: D09-D
+        name: State & Data Synchronization
+        scope: TanStack Query, SWR, persistencia local, mutaciones optimistas y aislamiento multi-inquilino.
+
+  - id: D10
+    slug: backend
+    name: Backend, API y reglas de negocio
+    family: F3
+    mission: Servicios con contratos explícitos, validación en servidor, permisos e idempotencia.
+    autonomy: A3
+    model: opus
+    reviewer: D12
+    activates_on: [implementacion_api, regla_negocio, bug_backend]
+    sub_specialties:
+      - id: D10-A
+        name: Node.js / Core API Runtime
+        scope: Event Loop lag, middlewares defensivos, compresión HTTP, streaming y validación de bordes con Zod.
+      - id: D10-B
+        name: Data Access & Database Query Engine
+        scope: Pool management, prevención de memory leaks, transacciones ACID, índices y mitigación de N+1 queries.
+
+  - id: D11
+    slug: data
+    name: Base de datos y gobierno del dato
+    family: F3
+    mission: Modelar con integridad, normalizar, versionar migraciones y poder restaurar.
+    autonomy: A3
+    model: opus
+    reviewer: D12
+    activates_on: [nuevo_modelo_datos, migracion, consulta_lenta, nuevo_modulo]
+    skills: [supabase, supabase-postgres-best-practices]
+
+  - id: D18
+    slug: ai-agents
+    name: IA, agentes y guardrails
+    family: F3
+    mission: Calidad y seguridad de respuestas, grounding, costos y fallback humano.
+    autonomy: A2
+    model: opus
+    reviewer: D12
+    activates_on: [funcionalidad_ia, rag, agente_nuevo]
+    skills: [claude-api]
+
+  - id: D19
+    slug: integrations
+    name: Integraciones y automatización
+    family: F3
+    mission: Conectar sistemas externos con reintentos, idempotencia y trazabilidad.
+    autonomy: A3
+    model: sonnet
+    reviewer: D12
+    activates_on: [integracion_nueva, webhook, automatizacion]
+
+  # ===== F4 - ASSURANCE ====================================================
+  - id: D12
+    slug: security
+    name: Seguridad, privacidad y DevSecOps
+    family: F4
+    mission: Modelar amenazas, minimizar privilegios y cerrar la superficie expuesta.
+    autonomy: A1
+    model: opus
+    reviewer: human
+    activates_on: [riesgo_R2_o_mayor, pre_release, dato_personal, pago]
+    skills: [security-review]
+    sub_specialties:
+      - id: D12-A
+        name: Identity, Auth & RBAC/RLS Governance
+        scope: PostgreSQL RLS vs permisos de tabla, Security Invoker en vistas, ciclo de vida de tokens JWT, CSRF y sesiones seguras.
+      - id: D12-B
+        name: SAST, Secret Scanning & Infrastructure Hardening
+        scope: Reglas Semgrep para Node/React/SQL, Gitleaks antes de commits, auditoría Trivy de CVEs y cabeceras HSTS/CSP en Caddy.
+
+  - id: D13
+    slug: git-governance
+    name: Git, GitHub y gobierno del código
+    family: F4
+    mission: Trazabilidad de cada cambio - ramas, PR, revisión, checks y releases.
+    autonomy: A3
+    model: haiku
+    reviewer: D03
+    activates_on: [inicio_repositorio, cada_cambio]
+
+  - id: D14
+    slug: qa
+    name: QA funcional, E2E y bug hunting
+    family: F4
+    mission: Romper el producto antes que el usuario y dejar la evidencia reproducible.
+    autonomy: A2
+    model: sonnet
+    reviewer: D00
+    activates_on: [pre_release, nuevo_flujo, bug_reportado]
+    skills: [playwright-best-practices, playwright-cli, browser-automation, code-review]
+
+  - id: D15
+    slug: performance
+    name: Rendimiento, carga y confiabilidad
+    family: F4
+    mission: Velocidad percibida y capacidad real dentro de un presupuesto declarado.
+    autonomy: A1
+    model: sonnet
+    reviewer: D03
+    activates_on: [pre_release, lentitud_reportada, escalamiento]
+    sub_specialties:
+      - id: D15-A
+        name: Core Web Vitals & Client Profiling
+        scope: Optimización y presupuesto de LCP, INP, CLS en throttling móvil 4G, análisis de bundle y flamegraphs.
+      - id: D15-B
+        name: Backend Saturation & Load Testing
+        scope: Pruebas de estrés p95/p99 con Autocannon y k6, saturación de pools de base de datos y detección de fugas de memoria.
+
+  # ===== F5 - OPERACION ====================================================
+  - id: D16
+    slug: devops
+    name: DevOps, despliegue y release
+    family: F5
+    mission: Publicar de forma reproducible, con respaldo probado y reversión ensayada.
+    autonomy: A3
+    model: sonnet
+    reviewer: D12
+    activates_on: [release, nuevo_ambiente, incidente_infra]
+
+  - id: D17
+    slug: observability
+    name: Observabilidad, SRE e incidentes
+    family: F5
+    mission: Saber qué ocurre después de publicar y actuar antes que el cliente reclame.
+    autonomy: A2
+    model: sonnet
+    reviewer: D16
+    activates_on: [post_release, incidente, operacion]
+
+  - id: D20
+    slug: documentation
+    name: Documentación, formación y mantenimiento
+    family: F5
+    mission: Que el producto pueda operarse y restaurarse sin depender de una sola persona.
+    autonomy: A2
+    model: sonnet
+    reviewer: D00
+    activates_on: [pre_release, handoff, cierre_fase]
+
+  # ===== F6 - CONOCIMIENTO (nuevos) ========================================
+  - id: D21
+    slug: research
+    name: Investigación y decisión construir/comprar/integrar
+    family: F6
+    mission: Materializar el principio "todo está creado" con evidencia, puntuación y plan de salida.
+    autonomy: A1
+    model: sonnet
+    reviewer: D03
+    activates_on: [nueva_capacidad, nuevo_modulo, decision_tecnica, antes_de_construir]
+    note: Departamento nuevo. Eleva a disciplina el paso 04 del Build System.
+
+  - id: D22
+    slug: knowledge-ops
+    name: Gestión del conocimiento y contexto
+    family: F6
+    mission: Organizar información, taxonomía, versionado y paquetes de contexto por perfil.
+    autonomy: A2
+    model: sonnet
+    reviewer: D00
+    activates_on: [documento_nuevo, cierre_fase, onboarding, mantenimiento_memoria]
+    note: Departamento nuevo. Cubre Drive/Notion/Obsidian y la optimización de tokens (P5).

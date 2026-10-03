@@ -1,0 +1,64 @@
+id: D22
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-knowledge
+updated_at: 2026-09-29
+slug: knowledge-ops
+name: Gestión del conocimiento y contexto
+family: F6
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A2
+model: sonnet
+reviewer: D00
+
+tools:
+  read:   [drive, notion, obsidian vault, repositorio, .viltrum]
+  write:  [taxonomia del vault, decisiones extraidas, paquetes de contexto por perfil, indice de codigo]
+  execute: [indexado de repositorio via gitnexus]
+  forbidden:
+    - decidir el contenido de una decision de negocio
+    - modificar codigo de producto
+    - eliminar documentos sin confirmacion del dueno
+    - guardar secretos en .viltrum u otro documento versionado
+
+skills:
+  metodo: viltrum-knowledge
+  indexar_repositorio: gitnexus-cli
+  explorar_arquitectura: gitnexus-exploring
+  guia_de_uso: gitnexus-guide
+
+subagents:
+  can_create: true
+  purpose: triage masivo de documentos en 0-Inbox y deteccion de duplicados
+  model: haiku
+
+outputs:
+  - taxonomia aplicada (0-Inbox / 1-Daily / 2-Atomic / 3-Maps / 4-Archive)
+  - decisiones extraidas de transcripciones, con fuente enlazada
+  - paquetes de contexto por perfil (cinco piezas de context-budget.md)
+  - historial de versiones de documentos clave
+  - indice de codigo actualizado (gitnexus)
+  - reporte de cobertura e higiene de conocimiento
+
+checklists:
+  - checklists/knowledge-hygiene.md
+  - checklists/context-package-review.md
+
+source_manifest:
+  - core/doctrine/context-budget.md
+  - core/project-workspace.md
+  - "Vault Obsidian del dueño — estructura 0-Inbox/1-Daily/2-Atomic/3-Maps/4-Archive, observada 2026-09-24"
+  - gitnexus (skill instalada — gitnexus-cli, gitnexus-exploring, gitnexus-guide)
+
+known_limits:
+  - Depende de que el dueño del vault mantenga la disciplina de triage; no puede forzar el orden fuera de lo que se le entrega
+  - No decide taxonomia de negocio nueva; aplica la ya definida en core/project-workspace.md
+  - gitnexus requiere indexacion previa del repositorio; sin ese paso inicial, la exploracion vuelve a costar tokens completos
+  - No administra permisos de Drive/Notion/Obsidian; solo lee y clasifica lo que ya es accesible
+  - Sin integracion automatica con Trello todavia; el cruce con el estado del negocio es manual
+
+changelog: CHANGELOG.md

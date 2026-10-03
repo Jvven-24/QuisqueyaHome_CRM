@@ -1,0 +1,28 @@
+flowchart LR
+  user["Objetivo / transcripción del cliente"] --> router["D00: fase, alcance, riesgo y contratos"]
+  router --> graph["LangGraph: un thread por run"]
+  graph <--> sqlite["SQLite: checkpoints e interrupciones"]
+  graph --> producer["Perfil productor D01–D22"]
+  producer --> host["Host: subagente real y run-submit"]
+  producer --> codex["Codex CLI: análisis read-only"]
+  producer --> oh["OpenHands: Agent Server local 1.50"]
+  oh --> sources["GET de fuentes: proyecto Docker read-only"]
+  sources --> hashes["Supervisor: mount + auth + SHA256"]
+  hashes -->|"openhands-codex: contexto verificado"| codex
+  oh -. "LLM propio pendiente de credenciales" .-> remote["Conversación OpenHands: adaptador incluido"]
+  host --> handoff["Handoff: salida + evidencia + hashes"]
+  codex --> handoff
+  remote -.-> handoff
+  handoff --> reviewer["Revisor canónico: otra ejecución / actor"]
+  reviewer --> decision{"Revisión del paquete"}
+  decision -->|rechazado| repair["Devolver / corregir en nuevo paquete"]
+  decision -->|aprobado| next["Siguiente perfil autorizado"]
+  next --> graph
+  reviewer -->|humano requerido| wait["Interrupt: esperar evidencia humana real"]
+  wait --> reviewer
+  handoff --> store[".viltrum: runs, eventos, artefactos, revisiones"]
+  store --> panel["Dashboard local: 23 perfiles + fases + runs"]
+  store --> gates["G0–G8 y C1: protocolo separado"]
+  swarm["SwarmClaw: bundle portable opcional"] -.-> router
+  claw["OpenClaw: interfaz / tools del host opcional"] -.-> host
+  store --> knowledge["D22: Markdown / Git / Obsidian"]

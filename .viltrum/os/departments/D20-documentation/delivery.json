@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "D20",
+  "stage": "F6",
+  "skill": "viltrum-documentation",
+  "inputs": [
+    "Código/build actual y contratos D03/D10",
+    "ADRs/diccionario/migraciones D03/D11",
+    "Runbooks y ensayos D16",
+    "Alertas/SLO y soporte D17",
+    "Roles D01/D02 y políticas de acceso",
+    "Expediente y requisitos del cliente"
+  ],
+  "outputs": [
+    "README reproducible y documentación por audiencia",
+    "Índice vigente de ADR y contratos",
+    "Índice de runbooks con fuentes canónicas",
+    "Informe de lectura/ensayo sin contexto previo",
+    "Paquete de handoff y recepción atribuida",
+    "Plan de mantenimiento con dueños",
+    "notas de versión por audiencia (templates/release-notes.md) y guía de migración",
+    "base de conocimiento de soporte, matriz de escalación por niveles y borradores de comunicación (el envío lo aprueba un humano)"
+  ],
+  "checks": [
+    "Comandos y datos documentados tienen fuente",
+    "Manual admin restringido y sin credenciales",
+    "Restore/rollback enlazan ensayo real",
+    "Referencia versión/build y responsable",
+    "Revisor nuevo identifica bloqueos de uso",
+    "Recepción/capacitación reales o pendientes explícitos",
+    "notas de versión y guía de migración publicadas antes del go/no-go",
+    "runbook de soporte probado por un lector en frío (G7)"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "git",
+    "runtime"
+  ],
+  "sources": [
+    {
+      "title": "Diátaxis",
+      "url": "https://diataxis.fr/"
+    },
+    {
+      "title": "PostgreSQL Backup and Restore",
+      "url": "https://www.postgresql.org/docs/current/backup.html"
+    },
+    {
+      "title": "GitHub deployment environments",
+      "url": "https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "fresh-reader",
+      "purpose": "Revisar un procedimiento crítico con contexto mínimo y registrar bloqueos",
+      "when": "Manual operativo listo y revisión independiente autorizada",
+      "outputs": [
+        "Pasos ambiguos/prerrequisitos faltantes",
+        "Evidencia de ensayo sandbox o límite de revisión documental"
+      ]
+    }
+  ]
+}

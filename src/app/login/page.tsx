@@ -14,7 +14,11 @@ export default function LoginPage() {
     <main className="login-page">
       <section className="login-brand">
         <div className="brand-lockup" aria-label="Quisqueya Home">
-          <span className="brand-mark">QH</span>
+          <img
+            src="/brand/app-icon-192.png"
+            alt="Quisqueya Home"
+            className="size-12 shrink-0 rounded-2xl object-contain shadow-lg border border-gold-600/50 bg-navy-950 p-1"
+          />
           <span>
             <strong>Quisqueya</strong>
             <small>Home CRM</small>

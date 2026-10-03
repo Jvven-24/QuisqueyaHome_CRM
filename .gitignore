@@ -26,3 +26,9 @@ next-env.d.ts
 # Vitrina de pruebas de Codex (worktree ../crm-codex)
 hallazgos/
 .playwright-cli/
+
+# Despachos de perfiles e insumos: locales, no van a git
+.viltrum/dispatch/
+.viltrum/inputs/
+.viltrum/provider-health/
+.env.agent.local

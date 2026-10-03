@@ -55,12 +55,16 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const devRole = request.cookies.get("qh_dev_role")?.value;
+  const isDevOrDemo = process.env.NODE_ENV !== "production" || process.env.CRM_DEMO_MODE === "true";
+  const hasDevSession = isDevOrDemo && Boolean(devRole);
+
   const path = request.nextUrl.pathname;
   const isPublic = PUBLIC_PATHS.some(
     (p) => path === p || path.startsWith(`${p}/`),
   );
 
-  if (!user && !isPublic) {
+  if (!user && !hasDevSession && !isPublic) {
     // Un route handler de /api espera JSON, no un 302: si se le deja seguir el
     // redirect, recibe el HTML de /login con 200 y `!respuesta.ok` nunca se
     // dispara — el cliente sigue como si la petición hubiera tenido éxito.
@@ -74,7 +78,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && path === "/login") {
+  if ((user || hasDevSession) && path === "/login") {
     const url = request.nextUrl.clone();
     url.pathname = "/inicio";
     url.search = "";

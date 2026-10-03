@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "D22",
+  "skill": "viltrum-knowledge",
+  "stage": "F8",
+  "inputs": [
+    "fuentes/artefactos nuevos",
+    "decisiones atribuibles",
+    "estado y handoffs",
+    "inventario de código"
+  ],
+  "outputs": [
+    "índice de fuentes y hashes",
+    "paquete de contexto por perfil",
+    "registro de contradicciones",
+    "trazabilidad/recencia",
+    "lecciones para revisión"
+  ],
+  "checks": [
+    "Procedencia/fecha/autor conservados",
+    "Decisión distinta de petición o simulación",
+    "Secretos y datos innecesarios excluidos",
+    "Enlaces/hashes vigentes",
+    "D00 revisa paquete antes de promoción"
+  ],
+  "capabilities": [
+    "repository",
+    "documents",
+    "git"
+  ],
+  "sources": [
+    {
+      "title": "Git hash-object",
+      "url": "https://git-scm.com/docs/git-hash-object"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "triage-fuentes",
+      "purpose": "clasificar y detectar duplicados",
+      "when": "volumen documental alto",
+      "outputs": [
+        "índice/duplicados",
+        "contradicciones y desconocidos"
+      ]
+    },
+    {
+      "name": "auditor-trazabilidad",
+      "purpose": "localizar enlaces rotos/evidencia desactualizada",
+      "when": "cierre de fase o cambio arquitectura",
+      "outputs": [
+        "mapa de impactos",
+        "fuentes obsoletas"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-library-curation"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

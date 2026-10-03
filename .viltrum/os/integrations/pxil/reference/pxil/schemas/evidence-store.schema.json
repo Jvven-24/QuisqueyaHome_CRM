@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Domain Evidence Store",
+  "description": "Schema for storing domain research, capability maps, rules, and risks.",
+  "type": "object",
+  "properties": {
+    "domainName": {
+      "type": "string",
+      "description": "The name of the target product domain."
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "capabilityId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceUrl": { "type": "string" },
+                "excerpt": { "type": "string" },
+                "notes": { "type": "string" }
+              }
+            }
+          },
+          "rules": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Domain-specific rules and constraints."
+          },
+          "risks": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Potential pitfalls or technical risks identified in the domain."
+          }
+        },
+        "required": ["capabilityId", "name", "description"]
+      }
+    }
+  },
+  "required": ["domainName", "capabilities"]
+}

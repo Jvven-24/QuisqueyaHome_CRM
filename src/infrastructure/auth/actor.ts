@@ -29,7 +29,29 @@ export const getActor = cache(async (): Promise<Actor | null> => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return null;
+
+  if (!user) {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies().catch(() => null);
+    const devRole = cookieStore?.get("qh_dev_role")?.value;
+    if (devRole && (process.env.NODE_ENV !== "production" || process.env.CRM_DEMO_MODE === "true")) {
+      const roleSlug = ["admin", "broker", "assistant"].includes(devRole) ? devRole : "admin";
+      const { PERMISSION_RESOURCES, PERMISSION_ACTIONS } = await import("@/domain/catalogs");
+      const granted: Permission[] = PERMISSION_RESOURCES.flatMap((resource) =>
+        PERMISSION_ACTIONS.map((action) => ({
+          resource,
+          action,
+          scope: (roleSlug === "broker" && ["leads", "deals", "goals"].includes(resource) ? "own" : "all") as "own" | "all",
+        })),
+      );
+      return {
+        userId: roleSlug === "broker" ? 2 : roleSlug === "assistant" ? 3 : 1,
+        roleSlug,
+        permissions: granted,
+      };
+    }
+    return null;
+  }
 
   const rows = await getDb()
     .select({

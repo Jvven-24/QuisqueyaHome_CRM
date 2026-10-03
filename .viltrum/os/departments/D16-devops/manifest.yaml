@@ -1,0 +1,68 @@
+id: D16
+slug: devops
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-devops
+name: DevOps, despliegue y release
+family: F5
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A3
+model: sonnet
+reviewer: D12
+
+tools:
+  read:   [repositorio, docker-compose, workflows de CI/CD, config.md, migraciones de D11, hallazgos de D12]
+  write:  [workflows de CI/CD, docker-compose por ambiente, runbooks, config.md, decisions.md]
+  execute: [build de imagenes, despliegue a dev y staging, ensayo de restauracion, ensayo de reversion en ambiente no productivo]
+  forbidden:
+    - desplegar a produccion sin aprobacion humana registrada
+    - guardar o imprimir un secreto en texto plano
+    - fijar una accion de terceros por tag mutable en produccion
+    - ejecutar una migracion no probada por D11 sobre copia de produccion
+
+skills:
+  explorar_infraestructura_existente: gitnexus-exploring
+  revision_de_seguridad_de_pipeline: security-review
+  diagramas_de_pipeline_y_ambientes: artifact-diagramming
+
+subagents:
+  can_create: true
+  purpose: auditar workflows de CI/CD existentes y detectar secretos o acciones sin fijar por SHA
+  model: sonnet
+
+outputs:
+  - ambientes dev, staging y produccion con paridad declarada
+  - pipeline de CI/CD con hardening aplicado
+  - politica de gestion de secretos
+  - migraciones ejecutadas con patron expand/contract
+  - respaldo 3-2-1 con restauracion ensayada y fechada
+  - reversion ensayada con tiempo medido
+  - runbook de release
+  - runbook de reversion
+  - verificacion de dominio, DNS y TLS con renovacion automatica
+
+checklists:
+  - checklists/release-readiness.md
+  - checklists/backup-restore-drill.md
+
+source_manifest:
+  - "GitHub Docs — Security hardening for GitHub Actions, docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments (consultado 2026-09-24)"
+  - "OWASP Docker Security Cheat Sheet, cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html (consultado 2026-09-24)"
+  - "Trunk Based Development, trunkbaseddevelopment.com (consultado 2026-09-24)"
+  - "Martin Fowler — bliki: Parallel Change (expand/contract), martinfowler.com/bliki/ParallelChange.html (consultado 2026-09-24)"
+  - "CISA — Back Up Business/Government Data (regla 3-2-1-1-0), cisa.gov (consultado 2026-09-24)"
+  - "Let's Encrypt / Certbot — User Guide, eff-certbot.readthedocs.io (consultado 2026-09-24)"
+  - CLAUDE.md principios P4 y P7
+
+known_limits:
+  - No existe skill instalada especifica de infraestructura-como-codigo (Terraform/Ansible); el despliegue se documenta como Docker Compose sobre VPS hasta que se instale una
+  - No decide el proveedor de VPS ni de DNS; ejecuta sobre lo que D03/D21 ya evaluaron
+  - No sustituye a D12 en la aprobacion de hallazgos de seguridad; solo los detecta y corrige lo operativo
+  - El ensayo de restauracion requiere acceso real al ambiente de respaldo; sin ese acceso, el paso queda bloqueado, no supuesto
+  - No cubre despliegues multi-region ni orquestadores tipo Kubernetes; el alcance actual es VPS unico con Docker Compose
+
+changelog: CHANGELOG.md

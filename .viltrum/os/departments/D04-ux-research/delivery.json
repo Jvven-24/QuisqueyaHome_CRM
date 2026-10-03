@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "D04",
+  "stage": "F3",
+  "skill": "viltrum-ux-research",
+  "inputs": [
+    "requisitos y roles D01/D02",
+    "limites de modulo D03",
+    "fuentes y hallazgos D22",
+    "mandato y estado del proyecto"
+  ],
+  "outputs": [
+    "plan y hallazgos UX con procedencia",
+    "inventario de vistas y matriz de roles",
+    "sitemap y recorridos criticos",
+    "wireframes y evidencia de validacion"
+  ],
+  "checks": [
+    "cada vista enlaza requisito y tarea",
+    "roles y navegacion sin ambigüedad",
+    "recorridos incluyen alternativas errores e interrupciones",
+    "simulacion distinguida de investigacion real",
+    "revision independiente D05 registrada"
+  ],
+  "capabilities": [
+    "repository",
+    "browser",
+    "design",
+    "web"
+  ],
+  "sources": [
+    {
+      "title": "GOV.UK: Plan user research",
+      "url": "https://www.gov.uk/service-manual/user-research/plan-user-research-for-your-service"
+    },
+    {
+      "title": "GOV.UK: Moderated usability testing",
+      "url": "https://www.gov.uk/service-manual/user-research/using-moderated-usability-testing"
+    },
+    {
+      "title": "W3C: ARIA APG",
+      "url": "https://www.w3.org/WAI/ARIA/apg/"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "ux-inventory",
+      "purpose": "Inventariar vistas con roles y localizadores",
+      "when": "Modulos independientes o sitio grande",
+      "outputs": [
+        "inventario con localizadores",
+        "vistas fuera de alcance"
+      ]
+    },
+    {
+      "name": "ux-evidence-analysis",
+      "purpose": "Extraer hallazgos sin decidir reglas",
+      "when": "Multiples entrevistas o documentos",
+      "outputs": [
+        "hallazgos con fuentes",
+        "contradicciones y preguntas"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-experience-contract"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

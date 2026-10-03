@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "evalId": "EVAL-c6655d799a0c",
+  "department": "D09",
+  "createdAt": "2026-10-01T04:15:46.681676+00:00",
+  "cases": [
+    {
+      "case": "C01",
+      "title": "Diccionario de traducción incrustado en el componente",
+      "verdict": "approved",
+      "score": 100,
+      "critical": false,
+      "graded": true
+    },
+    {
+      "case": "C02",
+      "title": "Formulario con esquema Zod que no comparte con el servidor",
+      "verdict": "approved",
+      "score": 100,
+      "critical": false,
+      "graded": true
+    },
+    {
+      "case": "C03",
+      "title": "Catálogo de `<select>` como array literal en el JSX",
+      "verdict": "approved",
+      "score": 100,
+      "critical": false,
+      "graded": true
+    },
+    {
+      "case": "C04",
+      "title": "Dato sensible en `localStorage` sin cifrar",
+      "verdict": "approved",
+      "score": 100,
+      "critical": false,
+      "graded": true
+    },
+    {
+      "case": "C05",
+      "title": "Evaluación de entrega — Cambio de tenant con request pendiente",
+      "verdict": "approved",
+      "score": 100,
+      "critical": false,
+      "graded": true
+    },
+    {
+      "case": "C06",
+      "title": "Evaluación de entrega — Timeout y doble submit",
+      "verdict": "partial",
+      "score": 50,
+      "critical": false,
+      "graded": true
+    }
+  ],
+  "gradedCases": 6,
+  "totalCases": 6,
+  "complete": true,
+  "score": 92,
+  "partialScore": 92,
+  "criticalFailures": [],
+  "approved": true,
+  "definedCasesForProfile": 6,
+  "meetsMinCases": true,
+  "scope": "Mide los casos definidos de este perfil; no acredita pericia profesional general.",
+  "profile": {
+    "SOUL.md": "5ddc8b346ea7650e16298bd6be174b4f5f7f226095918b69b172989e7bed1af7",
+    "AGENTS.md": "d8811a5b6925a29c5175d1f8729fed0b3e3be8041f8e02b6a61d7d81245b108b",
+    "manifest.yaml": "ac11f789bdc64d7c6eb48821b55d270156f7c2754364f96a888e2bbb597fea95"
+  },
+  "publishedFrom": "viltrum eval-score --publish",
+  "reviewedBy": "pendiente: la revisión humana del perfil no se infiere"
+}

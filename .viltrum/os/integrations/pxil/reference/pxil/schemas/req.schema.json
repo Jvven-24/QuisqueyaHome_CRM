@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pxil.org/schemas/req.schema.json",
+  "title": "PXIL Requirement",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": "string", "const": "requirement" },
+    "version": { "type": "string" },
+    "status": { "type": "string", "enum": ["draft", "active", "approved", "rejected", "deprecated"] },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "priority": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+    "acceptanceCriteria": { "type": "array", "items": { "type": "string" } },
+    "source": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "owner": { "type": "string" },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rel": { "type": "string" },
+          "href": { "type": "string" }
+        },
+        "required": ["rel", "href"]
+      }
+    }
+  },
+  "required": ["id", "type", "version", "status", "title", "description", "priority"],
+  "additionalProperties": false
+}

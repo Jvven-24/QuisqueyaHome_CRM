@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "D03",
+  "stage": "F2",
+  "skill": "viltrum-architecture",
+  "inputs": [
+    "mandato y commit/documentos versionados",
+    "requisitos funcionales y NFR medibles D01/D02",
+    "roles, permisos, reglas y exclusiones",
+    "expediente construir/comprar/integrar D21",
+    "estado, gates y riesgos D00"
+  ],
+  "outputs": [
+    "estimación técnica pre-C1: rangos de esfuerzo y costo con supuestos, riesgos y opciones reversibles, sin construir producto",
+    "arquitectura y diagramas",
+    "matriz requisito/modulo/contrato/evidencia",
+    "contratos API/eventos y ownership de datos",
+    "ADR y amenazas",
+    "estrategia de migracion, recuperacion y handoffs"
+  ],
+  "checks": [
+    "estimación pre-C1 con rangos y supuestos explícitos, opciones reversibles y sin código de producto (insumo de D02)",
+    "NFR aprobados o preguntas bloqueantes registradas",
+    "limites y dependencias sin ciclos",
+    "contratos coherentes y version compatibles",
+    "aislamiento tenant en datos/cache/jobs",
+    "plan de fallos, concurrencia y restauracion",
+    "revision humana independiente"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "git"
+  ],
+  "sources": [
+    {
+      "title": "GitNexus — official repository",
+      "url": "https://github.com/abhigyanpatwari/GitNexus"
+    },
+    {
+      "title": "Context7 — official repository",
+      "url": "https://github.com/upstash/context7"
+    },
+    {
+      "title": "OpenAPI 3.1.1 — toolchain compatibility reference",
+      "url": "https://spec.openapis.org/oas/v3.1.1.html"
+    },
+    {
+      "title": "AsyncAPI — official specification repository",
+      "url": "https://github.com/asyncapi/spec"
+    },
+    {
+      "title": "OpenTelemetry documentation",
+      "url": "https://opentelemetry.io/docs/"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "dependency-map",
+      "purpose": "Mapear simbolos, imports y ciclos de modulos sin implementar",
+      "when": "Codigo existente amplio o limite entre modulos incierto; mandato permite delegacion",
+      "outputs": [
+        "mapa con rutas/simbolos y commit",
+        "ciclos o acoplamientos con evidencia",
+        "incertidumbres y limites"
+      ]
+    }
+  ]
+}

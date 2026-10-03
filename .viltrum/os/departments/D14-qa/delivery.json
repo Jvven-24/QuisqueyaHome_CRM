@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "id": "D14",
+  "stage": "F5",
+  "skill": "viltrum-qa",
+  "inputs": [
+    "Criterios de aceptación trazables de D01/D02",
+    "Contratos API/evento/esquema de D03/D10/D11",
+    "Commit/build y staging autorizado",
+    "Flujos, estados y accesibilidad de D04-D07",
+    "Permisos/amenazas de D12",
+    "Mocks y límites de terceros"
+  ],
+  "outputs": [
+    "Plan de pruebas por riesgo y trazabilidad",
+    "Pruebas unitarias/integración/contratos/E2E aplicables",
+    "Reportes y evidencias del build",
+    "Matriz recorrido × seis estados",
+    "Bugs reproducibles y cobertura residual",
+    "Handoff para G5"
+  ],
+  "checks": [
+    "Aserciones validan resultado persistido de negocio",
+    "Contrato productor/consumidor compatible",
+    "Datos y cuentas aislados de producción",
+    "Pruebas negativas de permisos y concurrencia",
+    "Flakiness visible y acotada",
+    "Revisión independiente D00"
+  ],
+  "capabilities": [
+    "repository",
+    "web",
+    "runtime",
+    "browser",
+    "ci"
+  ],
+  "sources": [
+    {
+      "title": "Playwright best practices",
+      "url": "https://playwright.dev/docs/best-practices"
+    },
+    {
+      "title": "Repositorio Microsoft Playwright",
+      "url": "https://github.com/microsoft/playwright"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "regression-runner",
+      "purpose": "Ejecutar suites o charters independientes y devolver evidencia sin aceptar riesgos",
+      "when": "Cobertura dividida por flujo/browser con datos y recursos aislados",
+      "outputs": [
+        "Reportes por suite y build",
+        "Reproducciones y áreas no cubiertas"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-visual-qa"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

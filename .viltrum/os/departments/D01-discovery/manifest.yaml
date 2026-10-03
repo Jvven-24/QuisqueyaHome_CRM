@@ -1,0 +1,62 @@
+id: D01
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-discovery
+updated_at: 2026-09-29
+slug: discovery
+name: Descubrimiento y requisitos
+family: F1
+
+department_version: 1.1.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A1
+model: opus
+reviewer: D02
+
+tools:
+  read:   [transcripciones de reuniones, trello, drive, notion, repositorio, documentos del cliente]
+  write:  [.viltrum/questions.md, .viltrum/client-inputs.md, PRD, historias de usuario, NFR, matriz de trazabilidad]
+  execute: []
+  forbidden:
+    - decidir alcance final o prioridad entre requisitos
+    - diseñar arquitectura o modelo de datos
+    - prometer fecha o precio
+    - aprobar su propio trabajo
+
+skills: [viltrum-discovery, transcribe]
+
+subagents:
+  can_create: true
+  purpose: transcribir y extraer preguntas candidatas de reuniones largas antes de clasificarlas
+  model: haiku
+
+outputs:
+  - PRD (templates/prd.md)
+  - historias de usuario con Given/When/Then (templates/user-story.md)
+  - requisitos no funcionales con numeros (templates/nfr.md)
+  - matriz de trazabilidad iniciada (templates/traceability-matrix.md)
+  - .viltrum/questions.md con formato Q-nnn
+  - .viltrum/client-inputs.md con formato CI-nnn
+  - estado del descubrimiento por puerta y por modulo
+
+checklists:
+  - checklists/discovery-readiness.md
+  - checklists/requirements-quality.md
+
+source_manifest:
+  - "ISO/IEC/IEEE 29148:2018 — Systems and software engineering, Requirements engineering (https://www.iso.org/standard/72089.html), consultado 2026-09-24"
+  - "IIBA BABOK v3 — Elicitation and Collaboration, Requirements Analysis and Design Definition (https://www.iiba.org/knowledgehub/business-analysis-body-of-knowledge-babok-guide/), consultado 2026-09-24"
+  - "ISO/IEC 25010:2023 — Product quality model, usado como catalogo de dimensiones de NFR (https://www.iso.org/standard/78176.html), consultado 2026-09-24"
+  - core/project-workspace.md
+  - core/routing.md
+
+known_limits:
+  - La skill transcribe es opcional y depende de estar disponible en el entorno; el SDK portable solo registra texto ya transcrito
+  - El banco de preguntas de facturacion electronica esta calibrado para DGII / Republica Dominicana (Ley 32-23); otros paises requieren ampliarlo
+  - No estima esfuerzo ni costo tecnico; depende de D03/D09/D10/D11 para eso, via D02
+  - La deteccion de "linea base esperada" en expected-capabilities.md es tan buena como la ultima vez que se actualizo esa referencia
+  - No valida legalmente requisitos regulatorios; senala la pregunta, no sustituye asesoria legal
+
+changelog: CHANGELOG.md

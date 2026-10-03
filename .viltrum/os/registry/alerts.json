@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "rules": [
+    {
+      "id": "webhook_received",
+      "title": "Nueva entrada por webhook",
+      "severity": "info",
+      "eventTypes": ["webhook_received"]
+    },
+    {
+      "id": "execution_problem",
+      "title": "Ejecución requiere atención",
+      "severity": "error",
+      "eventTypes": ["executor_failed", "executor_blocked", "run_error", "run_blocked", "run_invalidated", "review_rejected"]
+    },
+    {
+      "id": "host_problem",
+      "title": "Trabajo del host requiere atención",
+      "severity": "error",
+      "eventTypes": ["host_activity"],
+      "states": ["blocked", "failed"]
+    },
+    {
+      "id": "handoff_needed",
+      "title": "Entrega o revisión pendiente",
+      "severity": "attention",
+      "eventTypes": ["submission_requested"]
+    },
+    {
+      "id": "signal_lost",
+      "title": "Se perdió la señal de actividad",
+      "severity": "attention",
+      "eventTypes": ["host_session", "runtime_run"],
+      "states": ["stale"]
+    }
+  ]
+}
