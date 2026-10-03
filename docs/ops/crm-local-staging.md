@@ -1,30 +1,33 @@
-# CRM en entorno local sin Docker
+# Staging Local-First con GoTrue (CRM Quisqueya Home)
 
-Para iniciar sesión en el CRM en local sin levantar el stack de Supabase (evitando que el login se quede colgado en "Entrando..."), utilizamos el **modo de evaluación local** que ya está previsto en el repositorio.
+Este documento describe la configuracin de autenticacin local para el entorno de staging utilizando Supabase GoTrue ejecutado en la VPS, conectado a `quisqueya-staging-db`.
 
-Este modo funciona usando los botones de "Acceso Rápido de Evaluación" en `/login` cuando la aplicación corre en modo desarrollo, lo que deposita la cookie `qh_dev_role`.
+## Arquitectura
 
-## Problema anterior
-El archivo `.env` apuntaba `NEXT_PUBLIC_SUPABASE_URL` a `http://127.0.0.1:54321`. Como el servidor de Supabase no existía, el cliente HTTP del lado del servidor se quedaba bloqueado esperando respuesta, lo que provocaba que la aplicación se colgara en el login y nunca pudiera resolver la función `supabase.auth.getUser()` del middleware.
+1.  **Base de datos:** `quisqueya-staging-db` en la VPS, red `quisqueya_staging`.
+2.  **GoTrue (Auth):** Contenedor `supabase/gotrue:v2.189.0` en la misma red de la VPS.
+3.  **Proxy:** Contenedor Caddy que mapea peticiones `/auth/v1/*` hacia GoTrue `9999` removiendo el prefijo, emulando a Supabase Kong.
+4.  **Tneles SSH Locales:**
+    -   `55432` / `55433`: Tnel directo a la base de datos PostgreSQL de staging (`quisqueya-staging-db:5432`).
+    -   `54321`: Tnel directo al proxy Caddy (`quisqueya-crm-staging-auth-proxy-1:80`), exponiendo las rutas `/auth/v1/` para el cliente de Supabase SSR en el entorno local.
 
-## Procedimiento para operar en local
+## Credenciales y Variables de Entorno
 
-1. **Asegurar la conexión a base de datos:** El túnel SSH a la base de datos de staging ya debe estar activo en el puerto `55432`:
-   `DATABASE_URL=postgresql://postgres:CLAVE@127.0.0.1:55432/postgres`
+El archivo `.env` local (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) apunta al tnel SSH en `http://127.0.0.1:54321`. Los JWT han sido generados y firmados usando la clave secreta generada especficamente para este entorno de staging.
+Los secretos nunca se commitean ni se registran en los logs.
 
-2. **Apuntar Supabase URL a un puerto local que devuelva respuesta rápida:**
-   En el archivo `.env` cambia el valor de la URL para que apunte al propio servidor de Next.js. De esta forma, las peticiones internas de autenticación recibirán un 404 instantáneo y el SDK de Supabase fallará rápido sin colgar la petición.
-   
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:3001
-   ```
-   *(Nota: reemplaza `3001` por `3000` si ejecutas `npm run dev` sin especificar puerto).*
+## Usuarios de Prueba
 
-3. **Reiniciar el servidor Next.js:** 
-   Next.js no recarga el `.env` automáticamente. Apaga el servidor en la terminal y vuelve a ejecutar:
-   ```bash
-   npm run dev
-   ```
+Ejecutamos `node scripts/crear-usuario-prueba.mjs admin` para aprovisionar un usuario administrador real.
+Las credenciales del usuario de prueba de staging estn almacenadas en `.env.agent.local` para que Codex o Nova puedan iniciar sesin real contra la URL de frontend configurada.
 
-4. **Acceder vía evaluación:**
-   Ve a la URL local (ej: `http://localhost:3001/login`). No uses el formulario de usuario y contraseña (eso aún intentará golpear la API de Supabase). En su lugar, usa los botones al final bajo **Acceso Rápido de Evaluación** (Admin, Broker, Asistente). Entrarás inmediatamente.
+*Nota:* Durante la creacin del usuario, GoTrue esperaba `aud` con valor `''` (vaco), no `'authenticated'`. Esto fue ajustado en la base de datos para permitir el inicio de sesin de contrasea a travs de GoTrue de manera exitosa.
+
+## Flujo de Inicio de Sesin
+
+Al conectarse al CRM en `http://127.0.0.1:3001` con las credenciales de staging:
+1.  Supabase SSR POST `/auth/v1/token?grant_type=password` hacia `127.0.0.1:54321`.
+2.  El tnel SSH transfiere la peticin al proxy Caddy en la VPS.
+3.  Caddy quita `/auth/v1` y enva a `gotrue:9999/token`.
+4.  GoTrue valida el hash de `bcrypt` contra el esquema `auth` en `quisqueya-staging-db`.
+5.  Devuelve el token JWT firmado, y el CRM avanza a `/inicio`.
