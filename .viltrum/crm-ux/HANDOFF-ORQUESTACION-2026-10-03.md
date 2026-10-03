@@ -59,8 +59,9 @@ Antes de una tarea larga: `python tools/provider_probe.py <proyecto> --provider 
 ### En curso al cerrar
 - D09 afinado (Codex): KPI 2×2 en móvil, fecha compacta, saludo con el usuario real → `tareas/t-crm-ui-fix.md`,
   entrega `D09-afinado-fase1.md`. Verificar parche y redesplegar.
-- D21 Academy open source (Codex) → `tareas/t-academy.md`, entrega `D21-academy-opensource.md`. Revisar con
-  otro proveedor (D03) y presentar la recomendación a Wilber.
+- D21 Academy open source (Codex) ENTREGADO (HND-010, `D21-academy-opensource.md`): recomienda **Moodle** (78/100)
+  como servicio separado tras un adaptador propio, con PoC acotada; alternativa Frappe Learning; descarta construir
+  sobre Payload/Strapi. Falta: revisión D03 por otro proveedor y decisión de Wilber (el hito SOLID congela funciones nuevas).
 
 ### Pendiente, en orden
 1. **QA del rediseño RECHAZADO** (`D14-qa-rediseno.md`, 61 capturas): QA-01 P0 formularios largos pierden estado
