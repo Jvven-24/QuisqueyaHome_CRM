@@ -6,12 +6,14 @@
  * cosa. Aquí se cruzan las dos cosas, una vez por petición.
  */
 
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, type SQL } from "drizzle-orm";
+import { cookies, headers } from "next/headers";
 import { cache } from "react";
 import { UnauthorizedError } from "@/domain/errors";
 import type { Actor, Permission } from "@/domain/rbac";
 import { getDb } from "../db/client";
 import { permissions, roles, users } from "../db/schema";
+import { evaluationLoginAllowed } from "../env";
 import { serverClient } from "./supabase";
 
 /**
@@ -31,28 +33,30 @@ export const getActor = cache(async (): Promise<Actor | null> => {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    const { cookies } = await import("next/headers");
     const cookieStore = await cookies().catch(() => null);
     const devRole = cookieStore?.get("qh_dev_role")?.value;
-    if (devRole && (process.env.NODE_ENV !== "production" || process.env.CRM_DEMO_MODE === "true")) {
-      const roleSlug = ["admin", "broker", "assistant"].includes(devRole) ? devRole : "admin";
-      const { PERMISSION_RESOURCES, PERMISSION_ACTIONS } = await import("@/domain/catalogs");
-      const granted: Permission[] = PERMISSION_RESOURCES.flatMap((resource) =>
-        PERMISSION_ACTIONS.map((action) => ({
-          resource,
-          action,
-          scope: (roleSlug === "broker" && ["leads", "deals", "goals"].includes(resource) ? "own" : "all") as "own" | "all",
-        })),
-      );
-      return {
-        userId: roleSlug === "broker" ? 2 : roleSlug === "assistant" ? 3 : 1,
-        roleSlug,
-        permissions: granted,
-      };
-    }
-    return null;
+    return devRole ? getEvaluationActor(devRole) : null;
   }
 
+  return actorFor(eq(users.authUserId, user.id));
+});
+
+/** Rol y usuario reales: nunca inventar identidad ni conceder permisos extra. */
+export async function getEvaluationActor(roleSlug: string): Promise<Actor | null> {
+  const requestHeaders = await headers();
+  if (!evaluationLoginAllowed(requestHeaders.get("host"))) return null;
+
+  const [candidate] = await getDb()
+    .select({ userId: users.id })
+    .from(users)
+    .innerJoin(roles, eq(roles.id, users.roleId))
+    .where(and(eq(roles.slug, roleSlug), eq(users.isActive, true), isNull(users.deletedAt)))
+    .orderBy(users.id)
+    .limit(1);
+  return candidate ? actorFor(eq(users.id, candidate.userId)) : null;
+}
+
+async function actorFor(identity: SQL): Promise<Actor | null> {
   const rows = await getDb()
     .select({
       userId: users.id,
@@ -66,7 +70,7 @@ export const getActor = cache(async (): Promise<Actor | null> => {
     .leftJoin(permissions, eq(permissions.roleId, users.roleId))
     .where(
       and(
-        eq(users.authUserId, user.id),
+        identity,
         eq(users.isActive, true),
         isNull(users.deletedAt),
       ),
@@ -88,7 +92,7 @@ export const getActor = cache(async (): Promise<Actor | null> => {
     roleSlug: first.roleSlug,
     permissions: granted,
   };
-});
+}
 
 /** El actor, o 401. Es lo que llama todo caso de uso que exige sesión. */
 export async function requireActor(): Promise<Actor> {

@@ -14,6 +14,7 @@
 
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { evaluationLoginAllowed, supabaseAnonKey, supabaseUrl } from "@/infrastructure/env";
 
 /**
  * Rutas accesibles sin sesión. Todo lo demás exige estar dentro.
@@ -31,8 +32,8 @@ export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl(),
+    supabaseAnonKey(),
     {
       cookies: {
         getAll: () => request.cookies.getAll(),
@@ -56,8 +57,7 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const devRole = request.cookies.get("qh_dev_role")?.value;
-  const isDevOrDemo = process.env.NODE_ENV !== "production" || process.env.CRM_DEMO_MODE === "true";
-  const hasDevSession = isDevOrDemo && Boolean(devRole);
+  const hasDevSession = evaluationLoginAllowed(request.headers.get("host")) && Boolean(devRole);
 
   const path = request.nextUrl.pathname;
   const isPublic = PUBLIC_PATHS.some(

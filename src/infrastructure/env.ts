@@ -42,3 +42,12 @@ export const leadsWebhookToken = () => required("LEADS_WEBHOOK_TOKEN");
  * Supabase.
  */
 export const supabaseServiceRoleKey = () => required("SUPABASE_SERVICE_ROLE_KEY");
+
+/** Evaluación sin contraseña: opt-in exclusivo de desarrollo en host local. */
+export function evaluationLoginAllowed(host: string | null): boolean {
+  if (process.env.NODE_ENV !== "development" || process.env.CRM_EVAL_LOGIN !== "1") {
+    return false;
+  }
+  // No se aceptan URLs, subdominios, listas de proxy ni variantes de loopback.
+  return host !== null && /^(?:localhost|127\.0\.0\.1)(?::[0-9]{1,5})?$/i.test(host);
+}
