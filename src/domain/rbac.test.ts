@@ -13,6 +13,7 @@ import { ForbiddenError } from "./errors.ts";
 import {
   can,
   reaches,
+  requireFullScope,
   requireScope,
   scopeFor,
   stripRestrictedPrices,
@@ -51,6 +52,20 @@ test("requireScope lanza 403 cuando no hay permiso, y devuelve el alcance cuando
   assert.throws(() => requireScope(broker, "commissions", "view"), ForbiddenError);
   assert.equal(requireScope(broker, "deals", "view"), "own");
   assert.equal(requireScope(admin, "deals", "view"), "all");
+});
+
+test("requireFullScope exige alcance all: own sobre users no basta para gestionar usuarios", () => {
+  const brokerConUsers: Actor = {
+    ...broker,
+    permissions: [{ resource: "users", action: "edit", scope: "own" }],
+  };
+  const adminConUsers: Actor = {
+    ...admin,
+    permissions: [{ resource: "users", action: "edit", scope: "all" }],
+  };
+  assert.throws(() => requireFullScope(brokerConUsers, "users", "edit"), ForbiddenError);
+  assert.throws(() => requireFullScope(broker, "users", "edit"), ForbiddenError);
+  assert.doesNotThrow(() => requireFullScope(adminConUsers, "users", "edit"));
 });
 
 test("con alcance own solo se alcanzan los registros propios", () => {

@@ -1,25 +1,17 @@
 /**
- * M5 · Propiedades — edición y borrado lógico de proyecto
- * (`docs/F2_ANALISIS_Y_PLAN.md` paso 1).
- *
- * Mismo patrón que `api/contactos/[id]/route.ts`: se relee dentro de la
- * transacción con `visibleRows` aplicado, así que un id fuera del alcance del
- * actor responde igual que uno inexistente.
+ * R3.4: edición y borrado de proyecto, con alcance aplicado en el caso de uso.
+ * Referencias: `src/application/README.md` §4 y `docs/R_ANALISIS_Y_PLAN.md` §7.
+ * La ruta conserva los mensajes, respuestas y el filtrado de precio original.
  */
-
-import { and, eq } from "drizzle-orm";
 import { z } from "zod";
-import { NotFoundError } from "@/domain/errors";
-import { can, requireScope } from "@/domain/rbac";
 import { OPERATION_TYPES, PROJECT_TYPES } from "@/domain/catalogs";
+import { can, requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction, type Db } from "@/infrastructure/db/client";
-import { projects } from "@/infrastructure/db/schema";
-import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
-import { visibleRows } from "@/infrastructure/rbac-filter";
+import { proyectosParaEscritura } from "@/infrastructure/contenedor/proyectos";
+import { errorResponse, idsDeRuta, parseInput, vaciosANull } from "@/infrastructure/http";
+import { borrarProyecto, editarProyecto } from "@/application/proyectos/casos-de-uso";
 
-const EditarProyectoInput = z.object({
+const Entrada = z.object({
   name: z.string().min(1, "Escribe el nombre del proyecto.").optional(),
   zone: z.string().nullable().optional(),
   projectType: z.enum(PROJECT_TYPES).optional(),
@@ -37,106 +29,67 @@ const EditarProyectoInput = z.object({
   isActive: z.boolean().optional(),
 });
 
-type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
-
-async function proyectoVisible(tx: Tx, id: number, actor: Awaited<ReturnType<typeof requireActor>>, scope: Parameters<typeof visibleRows>[1]) {
-  const [fila] = await tx
-    .select()
-    .from(projects)
-    .where(and(eq(projects.id, id), visibleRows(actor, scope, projects.brokerId, projects.deletedAt)))
-    .limit(1);
-  return fila;
-}
-
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const { id: idParam } = await params;
-    const id = Number(idParam);
-    if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
-
+    const [id] = idsDeRuta((await params).id);
     const datos = parseInput(
-      EditarProyectoInput,
-      vaciosANull(await request.json().catch(() => ({})), [
-        "zone",
-        "developer",
-        "description",
-        "startDate",
-        "estimatedDeliveryDate",
-        "internalPriceCents",
-        "publicRangeMinCents",
-        "publicRangeMaxCents",
-        "brokerId",
-      ]),
+      Entrada,
+      vaciosANull(
+        await request.json().catch(() => ({})),
+        [
+          "zone", "developer", "description", "startDate",
+          "estimatedDeliveryDate", "internalPriceCents",
+          "publicRangeMinCents", "publicRangeMaxCents", "brokerId",
+        ],
+      ),
     );
     const actor = await requireActor();
-    const scope = requireScope(actor, "projects", "edit");
-
-    // Precio real, restringido por campo (decisión #26 / hallazgo P1): un
-    // actor con `projects:edit` pero sin `unit_real_price:edit` no debe poder
-    // fijarlo ni borrarlo — el formulario siempre lo envía, así que se
-    // descarta en silencio en vez de rechazar el resto de la edición.
+    const alcance = requireScope(actor, "projects", "edit");
     if (!can(actor, "unit_real_price", "edit")) delete datos.internalPriceCents;
-
-    const proyecto = await transaction(async (tx) => {
-      const anterior = await proyectoVisible(tx, id, actor, scope);
-      if (!anterior) throw new NotFoundError();
-
-      const cambios: Partial<typeof projects.$inferInsert> = { updatedBy: actor.userId };
-      if (datos.name !== undefined) cambios.name = datos.name;
-      if ("zone" in datos) cambios.zone = datos.zone;
-      if (datos.projectType !== undefined) cambios.projectType = datos.projectType;
-      if (datos.operationType !== undefined) cambios.operationType = datos.operationType;
-      if ("developer" in datos) cambios.developer = datos.developer;
-      if ("description" in datos) cambios.description = datos.description;
-      if ("startDate" in datos) cambios.startDate = datos.startDate;
-      if ("estimatedDeliveryDate" in datos) cambios.estimatedDeliveryDate = datos.estimatedDeliveryDate;
-      if ("internalPriceCents" in datos) cambios.internalPriceCents = datos.internalPriceCents;
-      if ("publicRangeMinCents" in datos) cambios.publicRangeMinCents = datos.publicRangeMinCents;
-      if ("publicRangeMaxCents" in datos) cambios.publicRangeMaxCents = datos.publicRangeMaxCents;
-      if (datos.progressPercent !== undefined) cambios.progressPercent = datos.progressPercent;
-      if ("brokerId" in datos) cambios.brokerId = datos.brokerId;
-      if (datos.isPublished !== undefined) cambios.isPublished = datos.isPublished;
-      if (datos.isActive !== undefined) cambios.isActive = datos.isActive;
-
-      const [fila] = await tx.update(projects).set(cambios).where(eq(projects.id, id)).returning();
-
-      await auditar(tx, actor, { accion: "editar", entidad: "project", entidadId: id, antes: anterior, despues: fila });
-
-      return fila;
-    });
-
+    const cambios: import("@/application/proyectos/puertos").CambiosProyecto = {};
+    if ("name" in datos) cambios.name = datos.name;
+    if ("zone" in datos) cambios.zone = datos.zone;
+    if ("projectType" in datos) cambios.projectType = datos.projectType;
+    if ("operationType" in datos) cambios.operationType = datos.operationType;
+    if ("developer" in datos) cambios.developer = datos.developer;
+    if ("description" in datos) cambios.description = datos.description;
+    if ("startDate" in datos) cambios.startDate = datos.startDate;
+    if ("estimatedDeliveryDate" in datos) cambios.estimatedDeliveryDate = datos.estimatedDeliveryDate;
+    if ("internalPriceCents" in datos) cambios.internalPriceCents = datos.internalPriceCents;
+    if ("publicRangeMinCents" in datos) cambios.publicRangeMinCents = datos.publicRangeMinCents;
+    if ("publicRangeMaxCents" in datos) cambios.publicRangeMaxCents = datos.publicRangeMaxCents;
+    if ("progressPercent" in datos) cambios.progressPercent = datos.progressPercent;
+    if ("brokerId" in datos) cambios.brokerId = datos.brokerId;
+    if ("isPublished" in datos) cambios.isPublished = datos.isPublished;
+    if ("isActive" in datos) cambios.isActive = datos.isActive;
+    const proyecto = await editarProyecto(
+      proyectosParaEscritura(),
+      actor,
+      alcance,
+      id,
+      cambios,
+    );
     return Response.json({ ok: true, proyecto });
   } catch (error) {
     return errorResponse(error);
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const { id: idParam } = await params;
-    const id = Number(idParam);
-    if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
-
+    const [id] = idsDeRuta((await params).id);
     const actor = await requireActor();
-    const scope = requireScope(actor, "projects", "delete");
-
-    await transaction(async (tx) => {
-      const anterior = await proyectoVisible(tx, id, actor, scope);
-      if (!anterior) throw new NotFoundError();
-
-      // Borrado lógico: nunca `DELETE` real (§9). `visibleRows` ya excluye
-      // `deleted_at` no nulo de cualquier lectura futura.
-      const [fila] = await tx
-        .update(projects)
-        .set({ deletedAt: new Date(), updatedBy: actor.userId })
-        .where(eq(projects.id, id))
-        .returning();
-
-      await auditar(tx, actor, { accion: "eliminar", entidad: "project", entidadId: id, antes: anterior, despues: fila });
-    });
-
+    const alcance = requireScope(actor, "projects", "delete");
+    await borrarProyecto(proyectosParaEscritura(), actor, alcance, id);
     return Response.json({ ok: true });
   } catch (error) {
     return errorResponse(error);
   }
 }
+

@@ -12,7 +12,9 @@ import { useState } from "react";
  */
 export function LoginForm() {
   const router = useRouter();
-  const destino = useSearchParams().get("destino") ?? "/inicio";
+  const pedido = useSearchParams().get("destino");
+  // Solo rutas internas: `//host` y `/\host` los navegadores los tratan como otro dominio.
+  const destino = pedido && /^\/(?![/\\])/.test(pedido) ? pedido : "/inicio";
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
 

@@ -1,41 +1,19 @@
 /**
- * M2 · Leads — candidatos para la asignación sugerida (decisión #21).
+ * Puente temporal para `app/(crm)/leads/page.tsx`.
  *
- * Pequeño helper de consulta, compartido por el alta manual
- * (`app/api/leads/route.ts`) y el endpoint externo (`app/api/leads/externo/route.ts`):
- * las dos vías necesitan la misma lista de brokers activos con perfil, y
- * duplicar la consulta en dos archivos es el tipo de cosa que diverge sola con
- * el tiempo. No es un repositorio (decisión #16): es una consulta de Drizzle
- * de una sola tabla, sin interfaz ni implementación alternativa — vive junto a
- * las rutas que la usan, no en `infrastructure/`.
+ * La lógica de "brokers activos con perfil" (decisión #21 y asignación manual,
+ * issue #22) ya vive en el módulo: `RepositorioLeads.candidatosBroker`
+ * (`application/leads/puertos.ts`, su adaptador Drizzle en `repos/leads.ts`).
+ * Las tres rutas (alta, asignación y webhook) la usan desde ahí.
  *
- * La decisión de a cuál sugerir es dominio puro (`domain/asignacion-lead.ts`);
- * esto solo arma la lista de candidatos que esa función recibe.
- *
- * También es la lista de brokers válidos para asignación manual (issue #22):
- * `fullName` no lo usa `sugerirBroker`, pero evita una segunda consulta casi
- * idéntica para el selector del inspector y para validar el `PATCH`.
+ * Este archivo solo se conserva porque la página de leads todavía lo importa y
+ * está fuera del alcance de R3.2. Se elimina en R4.1, cuando la página pase a
+ * `consultas.ts`. El parámetro se ignora: la conexión es la misma.
  */
 
-import { and, eq, isNull } from "drizzle-orm";
-import type { BrokerCandidato } from "@/domain/asignacion-lead";
-import { getDb, type Db } from "@/infrastructure/db/client";
-import { brokerProfiles, users } from "@/infrastructure/db/schema";
+import { leadsParaEscritura } from "@/infrastructure/contenedor/leads";
 
-export async function candidatosBroker(
-  db: Db = getDb(),
-): Promise<(BrokerCandidato & { fullName: string })[]> {
-  const filas = await db
-    .select({
-      userId: brokerProfiles.userId,
-      specialty: brokerProfiles.specialty,
-      handlesRentals: brokerProfiles.handlesRentals,
-      annualSalesCents: brokerProfiles.annualSalesCents,
-      fullName: users.fullName,
-    })
-    .from(brokerProfiles)
-    .innerJoin(users, eq(users.id, brokerProfiles.userId))
-    .where(and(eq(users.isActive, true), isNull(users.deletedAt)));
-
-  return filas;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- la página aún pasa `db`
+export async function candidatosBroker(_db?: unknown) {
+  return leadsParaEscritura().leads.candidatosBroker();
 }

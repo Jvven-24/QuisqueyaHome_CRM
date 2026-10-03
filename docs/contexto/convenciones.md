@@ -1,7 +1,8 @@
 # Convenciones — CRM Quisqueya Home
 
 Estas son las convenciones del **repositorio de producción**, al cierre de F0
-(1 de septiembre de 2026). Si algo aquí contradice a `referencia-prototipo/`,
+(1 de septiembre de 2026), ampliadas el 30 de septiembre de 2026 con lo que
+introduce el milestone de reestructuración (decisión #41). Si algo aquí contradice a `referencia-prototipo/`,
 manda este documento: el prototipo corría sobre SQLite/D1 y ya no aplica.
 
 ## Estilo de código
@@ -11,7 +12,21 @@ manda este documento: el prototipo corría sobre SQLite/D1 y ya no aplica.
 - Arquitectura hexagonal en tres carpetas: `src/domain/` (reglas puras, sin
   importar nada de Next, Drizzle ni Supabase), `src/application/` (casos de uso)
   y `src/infrastructure/` (adaptadores). La dependencia va siempre de
-  infraestructura a dominio, nunca al revés.
+  infraestructura a dominio, nunca al revés. Precisión tras la decisión #41:
+  `application/` se divide en `compartido/` (puertos transversales), `testing/`
+  (sus dobles en memoria) y una carpeta por módulo, y **no puede importar**
+  `infrastructure/`, `app/`, `next`, `drizzle-orm` ni `@supabase`; lo vigila
+  `src/infrastructure/arquitectura.test.ts`. La receta está en
+  `src/application/README.md`.
+- **Extensión en los imports según la capa.** En `src/application/` y
+  `src/domain/`, los imports de valores llevan ruta relativa **con `.ts`**
+  (`../../domain/errors.ts`), porque `npm test` corre `node --test` sobre TS sin
+  compilar y Node exige la extensión y no entiende `@/`. `@/...` solo vale en
+  `import type`, que se borra antes de ejecutar. En `src/infrastructure/` y
+  `src/app/` es al contrario: sin extensión y con `@/`, como los vecinos. La
+  excepción son los archivos de `infrastructure/` que cargan las pruebas
+  (`rbac-filter.ts`, `audit.ts`, `db/schema.ts`), que siguen la regla de
+  `domain/` (ver `src/domain/README.md`, "La regla de los imports").
 - Componentes de servidor por defecto. `"use client"` solo cuando el componente
   necesita estado o eventos, y en el archivo más pequeño posible — un layout no
   se convierte en cliente para marcar un enlace activo.
@@ -44,6 +59,19 @@ manda este documento: el prototipo corría sobre SQLite/D1 y ya no aplica.
 - Recursos y entidades como listas cerradas (`PERMISSION_RESOURCES`,
   `ENTITY_TYPES`), no strings libres — evita que `"Leads"` frente a `"leads"`
   desactive un permiso en silencio.
+- **Archivos de un módulo migrado** (nombres de módulo en español, como las
+  carpetas de `src/app/`: `contactos`, `leads`, `pipeline`…):
+  - `src/application/<modulo>/puertos.ts` — tipos de fila, repositorio y
+    `Repos<Modulo>` (el juego transaccional, con la auditoría dentro).
+  - `src/application/<modulo>/casos-de-uso.ts` — las escrituras.
+  - `src/application/<modulo>/consultas.ts` — las lecturas de las páginas.
+  - `src/application/<modulo>/en-memoria.ts` — el doble en memoria del
+    repositorio del módulo, y `casos-de-uso.test.ts` para sus pruebas. El doble
+    vive en el módulo, no en `application/testing/`, que es solo para lo
+    transversal.
+  - `src/infrastructure/db/repos/<modulo>.ts` y
+    `src/infrastructure/contenedor/<modulo>.ts` — el adaptador Drizzle y la
+    fábrica que lo arma.
 
 ## Patrones que usamos
 
@@ -60,10 +88,15 @@ manda este documento: el prototipo corría sobre SQLite/D1 y ya no aplica.
   bloquee reutilizar un email o un teléfono.
 - Campos transversales en toda tabla operativa: `id`, `created_at`,
   `updated_at`, `created_by`, `updated_by`, y `deleted_at` donde hay papelera.
-- Errores: un caso de uso lanza `ValidationError` / `ForbiddenError` /
-  `UnauthorizedError` / `NotFoundError` / `ConflictError` de `src/domain/errors.ts`,
-  nunca un `Error` genérico ni un `{ ok: false }`. `errorResponse` los traduce a
-  HTTP en un solo sitio.
+- Errores: un caso de uso **y un puerto** lanzan `ValidationError` /
+  `ForbiddenError` / `UnauthorizedError` / `NotFoundError` / `ConflictError` de
+  `src/domain/errors.ts`, nunca un `Error` genérico ni un `{ ok: false }`. Un
+  adaptador que falla por una causa externa lanza el error de dominio con el
+  mensaje que verá el usuario (por ejemplo `ConflictError` en el almacenamiento
+  de archivos). `errorResponse` los traduce a HTTP en un solo sitio.
+- El `set` de un `update` en un repositorio se arma **campo por campo**, nunca
+  `...cambios` ni `...body`: un campo de más no se escribe sin que nadie lo
+  decida (`AGENTS.md`; ejemplo en `infrastructure/db/repos/contactos.ts`).
 
 ## Prohibido / a evitar
 
@@ -103,7 +136,12 @@ manda este documento: el prototipo corría sobre SQLite/D1 y ya no aplica.
   permiso, el filtro por alcance, las reglas de transición de etapa y el cierre
   transaccional. No hay pruebas de maquetación.
 - Precedente a copiar: `src/domain/rbac.test.ts` y
-  `src/infrastructure/rbac-filter.test.ts`.
+  `src/infrastructure/rbac-filter.test.ts`. Para los casos de uso, el precedente
+  es `src/application/contactos/casos-de-uso.test.ts`: corre con dobles en
+  memoria, sin base de datos.
+- Hay dos candados en CI, dentro de `npm test`: `seguridad.test.ts` (RLS y
+  permiso por ruta) y `arquitectura.test.ts` (dirección de las capas y módulos
+  migrados).
 
 ## Commits
 
