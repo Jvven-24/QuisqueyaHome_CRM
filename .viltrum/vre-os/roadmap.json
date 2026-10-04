@@ -133,8 +133,8 @@
    "items": [
     {
      "id": "F2.1",
-     "titulo": "Reportes e Inicio desde la base, sin cifras fijas",
-     "estado": "DONE",
+     "titulo": "Reportes e Inicio desde la base, sin cifras fijas (falta: guarda automática anti-hardcode y test:db)",
+     "estado": "IN_PROGRESS",
      "depende": [],
      "peso": 1,
      "evidencia": {
@@ -157,9 +157,7 @@
      "id": "F2.3",
      "titulo": "Corrección SQL de Inicio y Reportes",
      "estado": "DONE",
-     "depende": [
-      "F2.1"
-     ],
+     "depende": [],
      "peso": 1,
      "evidencia": {
       "commit": "622a7d8"
@@ -515,8 +513,8 @@
    "items": [
     {
      "id": "F4.0",
-     "titulo": "Inicio y Reportes: gráficas, pestañas, móvil",
-     "estado": "DONE",
+     "titulo": "Inicio y Reportes: gráficas, pestañas, móvil (falta: test:db y capturas verificadas a 320/390/768/1440)",
+     "estado": "IN_PROGRESS",
      "depende": [
       "F2.1"
      ],
