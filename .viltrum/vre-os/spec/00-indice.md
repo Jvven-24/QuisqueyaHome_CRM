@@ -4,8 +4,8 @@ Flujo: `../FLUJO-PASADAS.md`. Estados: DRAFT → REVIEW → READY → BUILT → 
 
 | Pasada | Entregable | Estado |
 |---|---|---|
-| P0 | `inventario/crm-as-is.md`, `inventario/crm-mapa-modulos.md` | pendiente (Codex Sol, en cola) |
-| P0 | `inventario/cms-reutilizable.md` | pendiente (Antigravity, en cola) |
+| P0 | `inventario/crm-as-is.md`, `inventario/crm-mapa-modulos.md` | EN CURSO: Codex D03, run `20261004T220027Z` |
+| P0 | `inventario/cms-reutilizable.md` | EN CURSO: Codex D22, run `20261004T220533Z` (el intento de Gemini fue rechazado) |
 | P1 | `arquitectura/*` (ADR, reglas de integración, convenciones, fuente de verdad) | tras P0 |
 | P2+P3 | `modulos/M01…M21`, `globales/G01…G11` | tras P1 (insumo UX: `../D05-ux-modulos-A.md`, `../D05-ux-modulos-B.md`) |
 | P4 | `integraciones/I01…I08` | tras P1 |
