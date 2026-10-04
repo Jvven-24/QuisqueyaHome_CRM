@@ -154,7 +154,7 @@ export function CrmSidebarMenu({ modulosVisibles }: CrmSidebarMenuProps) {
                   className="overflow-hidden"
                 >
                   <SidebarGroupContent className="pt-0.5">
-                    <SidebarMenu className="gap-0.5">
+                    <SidebarMenu className="gap-0.5 list-none pl-0 m-0">
                       {items.map((modulo) => {
                         const activo =
                           pathname === modulo.ruta ||
@@ -163,7 +163,7 @@ export function CrmSidebarMenu({ modulosVisibles }: CrmSidebarMenuProps) {
                         const badgeInfo = BADGES_INMOBILIARIOS[modulo.ruta];
 
                         return (
-                          <SidebarMenuItem key={modulo.ruta}>
+                          <SidebarMenuItem key={modulo.ruta} className="list-none">
                             <SidebarMenuButton
                               asChild
                               isActive={activo}
