@@ -26,7 +26,14 @@ import { evaluationLoginAllowed, supabaseAnonKey, supabaseUrl } from "@/infrastr
  * middleware la redirigiría a `/login` antes de que su propio código llegara
  * a comprobar el token.
  */
-const PUBLIC_PATHS = ["/login", "/recuperar", "/api/auth", "/api/leads/externo"];
+const PUBLIC_PATHS = [
+  "/login",
+  "/recuperar",
+  "/api/auth",
+  "/api/leads/externo",
+  "/manifest.json",
+  "/favicon.ico",
+];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -91,6 +98,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Todo salvo estáticos de Next y archivos con extensión.
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|manifest.json|.*\\.(?:svg|png|jpg|jpeg|gif|webp|json|ico)$).*)",
   ],
 };
