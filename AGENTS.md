@@ -11,7 +11,8 @@ estamos, qué está verde, qué debe probar Codex y cuál es el siguiente issue 
 código. Se reescribe en cada push, así que es fiable aunque no tengas ninguna
 conversación previa.
 
-**No negociables (obligatorio leer antes de cualquier tarea):** `.viltrum/vre-os/NO-NEGOCIABLES.md`.
+**Constitución (obligatorio leer antes de cualquier tarea):** `.specify/memory/constitution.md` (GitHub Spec Kit;
+skills `speckit-*` en `.claude/skills/`, `.agents/skills/` y `.gemini/`).
 Flujo por pasadas y Spec Pack: `.viltrum/vre-os/FLUJO-PASADAS.md` y `.viltrum/vre-os/spec/00-indice.md`.
 Nada se codifica sin una ficha en estado `READY` citada en la tarea.
 
