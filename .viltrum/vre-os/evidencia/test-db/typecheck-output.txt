@@ -1,0 +1,1 @@
+﻿npx.cmd tsc --noEmit --incremental false: exit 0; sin diagnósticos.

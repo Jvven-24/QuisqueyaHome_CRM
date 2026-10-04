@@ -1,0 +1,38 @@
+﻿[
+    {
+        "path":  "src/infrastructure/db/repos/dashboard.ts",
+        "sha256":  "510B529F39415953ED0BDA5D8ED7B63FDD68826F45263400661538759A555F0B"
+    },
+    {
+        "path":  "src/infrastructure/db/repos/reportes.ts",
+        "sha256":  "CAAD4F9AA935F61DA8F4B31448B1D5CC80E25B9B31F3CE0DD10C8B83E4C1B00E"
+    },
+    {
+        "path":  "src/infrastructure/db/repos/leads.ts",
+        "sha256":  "83327D775E16DF1014273A4ABFF696F98115FE7261D4BBC08F32DC376514F131"
+    },
+    {
+        "path":  "src/infrastructure/db/repos/contactos.ts",
+        "sha256":  "3F3D734CACA8B6F7617F131F18CABEE933CDFD54C7F6E71B983054723C99C7C5"
+    },
+    {
+        "path":  "src/infrastructure/db/repos/pipeline.ts",
+        "sha256":  "71B8E4859F20ECF1C38BCC8C0727605D61F26ED177BC29F0C8205744B6C39A77"
+    },
+    {
+        "path":  "src/infrastructure/db/repos/proyectos.ts",
+        "sha256":  "F57939EB8EEFB7641A5A4B6165D00AA3F9964074887D341C018FD989E6892584"
+    },
+    {
+        "path":  "src/infrastructure/db/repos/comisiones.ts",
+        "sha256":  "6E4C6473243CA4DF2121610CA36DE0EE0C9F4D5A0A54DB2402E4B459FA010EA0"
+    },
+    {
+        "path":  "src/infrastructure/db/repos/metas.ts",
+        "sha256":  "C53107853A752BF3688C50A1BB57161FA4E6AA7ECD2F737C8AA5DA68148CACF1"
+    },
+    {
+        "path":  "src/infrastructure/db/repos/brokers.ts",
+        "sha256":  "776D504BFA756618E37117985A654021019006C0536F459A8A74BB4CBFA6B8CC"
+    }
+]

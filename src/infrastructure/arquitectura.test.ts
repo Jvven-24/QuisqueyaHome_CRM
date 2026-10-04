@@ -153,3 +153,22 @@ test("ARQ-5: CrmPort ejecuta la misma suite en memoria y adaptador local", () =>
   assert.match(suite, /crmEnMemoria\(/);
   assert.match(suite, /crmLocal\(/);
 });
+
+test("ARQ-SQL: no interpolar comparación JS como condición where/and/or/when", () => {
+  const directa = /\b(?:where|and|or|when)\s+\$\{[^{}]*(?:===|!==)[^{}]*\}/gi;
+  const booleanoSql = 'where ${scope !== "none"}';
+  assert.ok(directa.test(booleanoSql), "la guarda detecta el defecto original");
+  directa.lastIndex = 0;
+  assert.equal(directa.test('where ${scope !== "none" ? sql`true` : sql`false`}'), true);
+  directa.lastIndex = 0;
+  const encontradas: string[] = [];
+  for (const archivo of archivos.filter(f => f.startsWith("infrastructure/db/repos/") && !f.endsWith(".test.ts"))) {
+    const codigo = readFileSync(new URL(archivo, src), "utf8");
+    for (const match of codigo.matchAll(directa)) {
+      // Comparaciones que eligen fragmentos SQL sí son seguras.
+      if (/\?\s*sql`/.test(match[0])) continue;
+      encontradas.push(`src/${archivo}:${codigo.slice(0, match.index).split("\n").length}`);
+    }
+  }
+  assert.deepEqual(encontradas, [], "Usar predicados Drizzle o fragmentos sql, nunca un booleano JS directo.");
+});
