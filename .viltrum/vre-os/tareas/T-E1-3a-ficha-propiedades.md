@@ -14,6 +14,17 @@ Plan: `.viltrum/vre-os/PLAN-E1.md` (léelo: §2 definición de hecho y §4 asign
 - Datos reales sembrados (648 leads, 184 negocios, 400 unidades, 12 brokers): esquema en `src/infrastructure/db/schema.ts`, tablas: `projects`, `units`, `unit_inventory_states`, `zones`, `construction_phases`, `files`, `deal_properties`.
 - Referencia de capacidades (solo ideas, sin copiar): Twenty (vistas guardadas, agrupar/filtrar, timeline, kanban).
 
+
+## Requisitos FIRMADOS del cliente (mandan sobre esta ficha y sobre cualquier otro documento)
+Fuente: Expediente del Sprint 1, decisiones D-01 a D-11 (`C:/Users/wilbe/Documents/QuisqueyaHome PortalWeb/.viltrum/inputs/whatsapp-qa-seguridad/texto/Expediente_Sprint1_CRM_Quisqueya_Home.md`, líneas ~192-230 y ~1431-1470) y `docs/contexto/decisiones.md` #45.
+- **D-04 · Vocabulario:** el módulo se llama **«Negocios»**. La palabra «pipeline» **no puede aparecer en ningún texto visible al cliente** (menú, títulos, KPIs, botones, vacíos, errores, ayudas, exportaciones). La fase «clasificación» se llama **«presentación»**.
+- **D-03 / D-09 · Un contacto puede tener negocios en varios proyectos a la vez;** varias negociaciones conviven sobre una misma propiedad hasta el cierre.
+- **D-05 / D-10 · Nada se elimina:** las bajas son lógicas; el negocio perdido se archiva con motivo obligatorio (y comentario) y el contacto sigue recontactable. Hace falta un control que distinga **venta cerrada** de **negocio no concretado**.
+- **D-06 · Asistente sin publicación directa:** todo cambio del rol asistente requiere aprobación previa. **D-07 · Solo el administrador ve** precio real, métricas globales y comisiones de terceros. **D-08 · El cliente final nunca entra al CRM.**
+- **D-01 / D-02 · Inventario por rangos** (desde-hasta) y documentación enlazada; no cargar el detalle fino unidad por unidad.
+- **D-11 · Diseño aprobado sin rediseño:** replicar la demo (`referencia-prototipo/`, `docs/DESIGN.md`) lo más fielmente posible; solo **mejoras puntuales, sin recargar la interfaz** («si es lento, no se usa»). Esta ficha especifica **pulido y funcionalidad dentro del diseño aprobado**, no un diseño distinto.
+- Etapas editables por el cliente (no fijas en código) y nota/estado de seguimiento disponible en todos los módulos (Acta de la Reunión 2).
+
 ## Qué entregar
 Un archivo `.viltrum/vre-os/spec/modulos/M04-propiedades.md` con la plantilla completa, **cabecera YAML incluida** (`id: M04`,
 `estado`, `riesgo`, `owner`, `revisores`, `fuente_de_verdad`, `depende_de`, `actualizado`) y las 9 secciones con contenido real:

@@ -193,6 +193,14 @@
    "peso": 4,
    "items": [
     {
+     "id": "E1.0",
+     "titulo": "«Pipeline» → «Negocios» en toda la interfaz + guarda de vocabulario (decisión firmada D-04)",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "D09 (Codex)"
+    },
+    {
      "id": "E1.1a",
      "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · ficha READY",
      "estado": "TODO",
@@ -208,7 +216,8 @@
      "estado": "TODO",
      "depende": [
       "E1.1a",
-      "F2.4"
+      "F2.4",
+      "E1.0"
      ],
      "peso": 2,
      "responsable": "D10/D11 (Codex)"
