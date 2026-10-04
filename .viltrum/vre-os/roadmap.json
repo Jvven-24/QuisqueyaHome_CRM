@@ -170,12 +170,15 @@
     {
      "id": "F2.4",
      "titulo": "Pruebas de integración contra PostgreSQL real (test:db)",
-     "estado": "IN_PROGRESS",
+     "estado": "DONE",
      "depende": [
       "F2.3"
      ],
      "peso": 1,
-     "responsable": "D14"
+     "responsable": "D14",
+     "evidencia": {
+      "commit": "76d963d"
+     }
     },
     {
      "id": "F2.5",
