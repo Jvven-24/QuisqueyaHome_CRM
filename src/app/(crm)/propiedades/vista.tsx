@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { PROJECT_TYPES } from "@/domain/catalogs";
 import { Avatar, Badge, PageHeader } from "../_ui/prototipo-ui";
 import { SinResultados, Vacio } from "../_ui/estados";
 import { ETIQUETAS_TIPO, FormularioProyecto, type BrokerOpcion } from "./_formulario-proyecto";
+import { ArrowRight, Building2, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 
 export type ProyectoFila = {
   id: number;
@@ -115,45 +117,70 @@ export function PropiedadesVista({
         )
       ) : (
         <div className="property-grid">
-          {proyectos.map((proyecto, index) => (
-            <Link className="property-card" key={proyecto.id} href={`/propiedades/${proyecto.slug}`}>
-              <div className={`property-visual visual-${index % 4}`}>
-                <span>QH</span>
-                <div>
-                  <small>Avance de obra</small>
-                  <strong>{proyecto.progressPercent}%</strong>
-                </div>
-              </div>
-              <div className="property-body">
-                <div>
-                  <Badge tone="blue">{ETIQUETAS_TIPO[proyecto.projectType] ?? proyecto.projectType}</Badge>
-                  <small>{proyecto.zone ?? "Sin zona"}</small>
-                </div>
-                <h2>{proyecto.name}</h2>
-                <dl>
-                  <div>
-                    <dt>Disponibles</dt>
-                    <dd>
-                      {proyecto.unidadesDisponibles}/{proyecto.unidadesTotal}
-                    </dd>
+          {proyectos.map((proyecto, index) => {
+            const esConfotur =
+              proyecto.zone &&
+              ["Cap Cana", "Bávaro", "Punta Cana", "Las Terrenas"].some((z) =>
+                proyecto.zone!.toLowerCase().includes(z.toLowerCase())
+              );
+            return (
+              <Link className="property-card group hover:shadow-lg transition-all" key={proyecto.id} href={`/propiedades/${proyecto.slug}`}>
+                <div className={`property-visual visual-${index % 4} relative overflow-hidden`}>
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src="/brand/app-icon-192.png"
+                      alt="Quisqueya Home"
+                      width={32}
+                      height={32}
+                      className="size-8 rounded-lg object-contain shadow-md border border-gold-500/40 bg-navy-950 p-0.5"
+                    />
+                    {esConfotur && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-xs">
+                        <ShieldCheck size={11} /> Confotur
+                      </span>
+                    )}
                   </div>
                   <div>
-                    <dt>{proyecto.internalPriceCents != null ? "Precio real" : "Rango asignado"}</dt>
-                    <dd>
-                      {proyecto.internalPriceCents != null
-                        ? `${proyecto.currency} ${(proyecto.internalPriceCents / 100).toLocaleString("es-DO")}`
-                        : formatoRango(proyecto.publicRangeMinCents, proyecto.publicRangeMaxCents, proyecto.currency)}
-                    </dd>
+                    <small>Avance de obra</small>
+                    <strong>{proyecto.progressPercent}%</strong>
                   </div>
-                </dl>
-                <footer>
-                  <Avatar name={proyecto.brokerName ?? "Sin asignar"} small />
-                  <span>{proyecto.brokerName ?? "Sin asignar"}</span>
-                  <b>Ver detalle →</b>
-                </footer>
-              </div>
-            </Link>
-          ))}
+                </div>
+                <div className="property-body">
+                  <div className="flex items-center justify-between gap-2">
+                    <Badge tone="blue">{ETIQUETAS_TIPO[proyecto.projectType] ?? proyecto.projectType}</Badge>
+                    <small className="flex items-center gap-1 text-muted-foreground">
+                      <MapPin size={11} className="text-gold-500" />
+                      {proyecto.zone ?? "Sin zona"}
+                    </small>
+                  </div>
+                  <h2 className="group-hover:text-gold-600 transition-colors">{proyecto.name}</h2>
+                  <dl>
+                    <div>
+                      <dt>Disponibles</dt>
+                      <dd>
+                        {proyecto.unidadesDisponibles}/{proyecto.unidadesTotal}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>{proyecto.internalPriceCents != null ? "Precio real" : "Rango asignado"}</dt>
+                      <dd className="font-semibold tabular-nums">
+                        {proyecto.internalPriceCents != null
+                          ? `${proyecto.currency} ${(proyecto.internalPriceCents / 100).toLocaleString("es-DO")}`
+                          : formatoRango(proyecto.publicRangeMinCents, proyecto.publicRangeMaxCents, proyecto.currency)}
+                      </dd>
+                    </div>
+                  </dl>
+                  <footer>
+                    <Avatar name={proyecto.brokerName ?? "Sin asignar"} small />
+                    <span className="truncate">{proyecto.brokerName ?? "Sin asignar"}</span>
+                    <b className="inline-flex items-center gap-1 text-xs text-gold-600 group-hover:translate-x-0.5 transition-transform">
+                      Ver detalle <ArrowRight size={13} />
+                    </b>
+                  </footer>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
       {creando && (

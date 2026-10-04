@@ -12,5 +12,9 @@
   - **D01:** Auditoría de arquitectura limpia y preservación de aislamiento de capas (0 dependencias en `domain/`).
   - **D02 / D21:** Benchmark competitivo e inventario de brechas funcionales de CRM de lujo.
   - **D03 / D05:** Dirección de arte y adopción de componentes de Viltrum Design Studio (`pxil-ecosystem`) y el CMS interactivo de `PortalWeb` (`DataTable`, `tone.ts`, `Bits`, `CommandPalette`).
-  - **D15:** Auditoría de rendimiento, latencia y tamaño de bundles de Next.js App Router.
+  - **D10 / D11:** Persistencia 100% real en PostgreSQL local dedicado (`quisqueyahome_crm` en puerto 5432). Base de datos poblada con proyectos de lujo en Punta Cana, Cap Cana, Bávaro y Santo Domingo, unidades con régimen Confotur, leads, pipeline deals, comisiones y actividades. Cero impacto o modificaciones en la VPS.
+  - **D14:** Cobertura de pruebas unitarias y de arquitectura elevada a 448/448 pruebas aprobadas (100% pass). Verificación estricta de TypeScript con `tsc --noEmit` (0 errores).
+  - **D15:** Eliminación total de emojis en UI y adopción de iconos vectoriales SVG Lucide con botones directos de WhatsApp y llamadas en cada prospecto.
+  - **D16:** Asignación y verificación en puerto dedicado `http://localhost:9301` con flujo de evaluación rápida por rol (`admin`, `broker`, `assistant`) sin contraseñas en entorno local.
   - **D22:** Sincronización del repositorio de conocimiento hacia Obsidian (`C:\Users\wilbe\OneDrive\Obsidian\Projects\QuisqueyaHome CRM\Viltrum\`).
+

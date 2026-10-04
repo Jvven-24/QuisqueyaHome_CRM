@@ -1,12 +1,13 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { type FormEvent, type ReactNode, useRef, useState } from "react";
+import { type FormEvent, type ReactNode, useMemo, useRef, useState } from "react";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { Avatar, PageHeader } from "../_ui/prototipo-ui";
-import { SinResultados, Vacio } from "../_ui/estados";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { ContactoInspector } from "./inspector";
+import { DataTable, type Columna } from "@/components/ui/data-table";
+import { MessageSquare, Phone, X } from "lucide-react";
 
 export type ContactoFila = {
   id: number;
@@ -79,6 +80,96 @@ export function ContactosVista({
   const totalPaginas = Math.max(1, Math.ceil(total / tamanioPagina));
   const hayFiltro = Boolean(filtros.q || filtros.sourceId);
 
+  const columnasTabla: Columna<ContactoFila>[] = useMemo(
+    () => [
+      {
+        clave: "contacto",
+        titulo: "Contacto",
+        movil: "titulo",
+        celda: (c) => (
+          <div className="flex items-center gap-3">
+            <Avatar name={c.fullName} small />
+            <div className="grid min-w-0 leading-tight">
+              <strong className="text-[13.5px] font-bold text-foreground truncate">{c.fullName}</strong>
+              <span className="text-[11.5px] text-muted-foreground truncate">{c.phoneDisplay ?? c.phone ?? c.email ?? "—"}</span>
+            </div>
+          </div>
+        ),
+        valor: (c) => c.fullName,
+        ordenable: true,
+      },
+      {
+        clave: "canal",
+        titulo: "Canal",
+        celda: (c) => (
+          <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2 py-0.5 text-[11.5px] font-medium text-muted-foreground border border-border/40">
+            {c.sourceName ?? "Directo"}
+          </span>
+        ),
+        valor: (c) => c.sourceName ?? "",
+      },
+      {
+        clave: "broker",
+        titulo: "Broker Asignado",
+        celda: (c) => (
+          <span className="text-[12.5px] font-medium text-foreground">
+            {c.brokerName ?? "Sin asignar"}
+          </span>
+        ),
+        valor: (c) => c.brokerName ?? "",
+        ordenable: true,
+      },
+      {
+        clave: "interaccion",
+        titulo: "Última Interacción",
+        movil: "subtitulo",
+        celda: (c) => (
+          <span className="text-[12px] text-muted-foreground">
+            {c.lastInteractionAt ? new Date(c.lastInteractionAt).toLocaleDateString("es-DO") : "Sin registrar"}
+          </span>
+        ),
+        valor: (c) => (c.lastInteractionAt ? new Date(c.lastInteractionAt).getTime() : 0),
+        ordenable: true,
+      },
+      {
+        clave: "acciones",
+        titulo: "Contacto",
+        alinear: "derecha",
+        celda: (c) => {
+          const phone = c.phone;
+          const clean = phone ? phone.replace(/\D/g, "") : null;
+          return (
+            <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+              {clean && (
+                <a
+                  href={`https://wa.me/${clean}?text=${encodeURIComponent(
+                    `Hola ${c.fullName}, le escribo de Quisqueya Home respecto a su portafolio inmobiliario.`
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={`WhatsApp con ${c.fullName}`}
+                  className="inline-flex size-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-300 transition-colors shadow-2xs"
+                >
+                  <MessageSquare size={13} />
+                </a>
+              )}
+              {clean && (
+                <a
+                  href={`tel:${clean}`}
+                  title={`Llamar a ${c.fullName}`}
+                  className="inline-flex size-7 items-center justify-center rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border transition-colors shadow-2xs"
+                >
+                  <Phone size={13} />
+                </a>
+              )}
+            </div>
+          );
+        },
+      },
+    ],
+    []
+  );
+
   return (
     <>
       <PageHeader
@@ -117,57 +208,21 @@ export function ContactosVista({
       </div>
       <div className={contactoSeleccionado ? "split-view inspector-open" : "split-view"}>
         <div className="table-wrap">
-          {contactos.length === 0 ? (
-            hayFiltro ? (
-              <SinResultados onLimpiar={() => irCon({ q: undefined, source_id: undefined, page: undefined })} />
-            ) : (
-              <Vacio titulo="Sin contactos todavía" texto="Registra el primero con “Nuevo contacto”." />
-            )
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Contacto</th>
-                  <th>Canal</th>
-                  <th>Broker</th>
-                  <th>Última interacción</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contactos.map((contacto) => (
-                  <tr
-                    key={contacto.id}
-                    tabIndex={0}
-                    role="button"
-                    onClick={() => irCon({ contacto: String(contacto.id) })}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        irCon({ contacto: String(contacto.id) });
-                      }
-                    }}
-                  >
-                    <td>
-                      <span className="table-person">
-                        <Avatar name={contacto.fullName} small />
-                        <span>
-                          <strong>{contacto.fullName}</strong>
-                          <small>{contacto.phoneDisplay ?? contacto.phone ?? "—"}</small>
-                        </span>
-                      </span>
-                    </td>
-                    <td>{contacto.sourceName ?? "—"}</td>
-                    <td>{contacto.brokerName ?? "Sin asignar"}</td>
-                    <td>
-                      {contacto.lastInteractionAt
-                        ? new Date(contacto.lastInteractionAt).toLocaleDateString("es-DO")
-                        : "Sin registrar"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <DataTable
+            filas={contactos}
+            columnas={columnasTabla}
+            idDe={(c) => String(c.id)}
+            activa={contactoSeleccionado ? String(contactoSeleccionado.id) : null}
+            onAbrir={(c) => irCon({ contacto: String(c.id) })}
+            porPagina={tamanioPagina}
+            etiqueta="Listado de contactos"
+            vacio={{
+              titulo: hayFiltro ? "Sin contactos para este filtro" : "Sin contactos todavía",
+              cuerpo: hayFiltro
+                ? "Prueba cambiando o limpiando los filtros actuales."
+                : "Registra el primer cliente o inversionista con “Nuevo contacto”.",
+            }}
+          />
           {totalPaginas > 1 && (
             <div className="form-actions" style={{ justifyContent: "space-between", padding: "12px 4px 0" }}>
               <button
@@ -178,7 +233,7 @@ export function ContactosVista({
               >
                 Anterior
               </button>
-              <span>
+              <span className="text-xs font-semibold text-muted-foreground tabular-nums">
                 Página {pagina} de {totalPaginas}
               </span>
               <button
@@ -279,7 +334,7 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
         <div className="drawer-head">
           <h2 id="nuevo-contacto-title">Nuevo contacto</h2>
           <button className="icon-button" onClick={onClose} aria-label="Cerrar">
-            ×
+            <X size={18} />
           </button>
         </div>
         <form className="form-grid" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>

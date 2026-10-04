@@ -1,12 +1,15 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { COMMISSION_STATUSES, type CommissionStatus } from "@/domain/catalogs";
 import { COMMISSION_STATUS_LABELS } from "@/domain/comision-estado";
 import { formatearMonto } from "../_ui/formato";
-import { Badge, Metric, PageHeader } from "../_ui/prototipo-ui";
-import { Vacio } from "../_ui/estados";
+import { Metric, PageHeader } from "../_ui/prototipo-ui";
+import { DataTable, type Columna } from "@/components/ui/data-table";
+import { Insignia } from "@/components/ui/bits";
+import { type Tone } from "@/components/ui/tone";
+import { BadgeDollarSign, Ban, Check, DollarSign, Pencil } from "lucide-react";
 import { nombreMes } from "@/domain/metas";
 
 export type FilaComisionVista = {
@@ -35,11 +38,11 @@ export type KpisComisiones = {
 
 export type OpcionPeriodo = { value: string; label: string };
 
-const ESTADO_TONE: Record<CommissionStatus, "neutral" | "gold" | "green" | "red" | "blue"> = {
+const ESTADO_TONE: Record<CommissionStatus, Tone> = {
   pending: "neutral",
   approved: "gold",
-  paid: "green",
-  void: "red",
+  paid: "ok",
+  void: "danger",
 };
 
 /** Puntos básicos a porcentaje, sin decimales de sobra: 500 → "5%", 450 → "4.5%". */
@@ -152,6 +155,151 @@ export function ComisionesVista({
   parametrosExport.set("periodo", periodoSeleccionado);
   parametrosExport.set("estado", estadoSeleccionado);
 
+  const columnasTabla: Columna<FilaComisionVista>[] = useMemo(
+    () => [
+      {
+        clave: "negocio",
+        titulo: "Negocio / Proyecto",
+        movil: "titulo",
+        celda: (fila) => (
+          <div className="grid leading-tight min-w-0">
+            <strong className="text-[13.5px] font-bold text-foreground truncate">{fila.contactName}</strong>
+            <span className="text-[11.5px] text-muted-foreground truncate">{fila.projectName ?? "Propiedad directa"}</span>
+          </div>
+        ),
+        valor: (fila) => `${fila.contactName} ${fila.projectName ?? ""}`,
+        ordenable: true,
+      },
+      {
+        clave: "venta",
+        titulo: "Monto de Venta",
+        movil: "subtitulo",
+        alinear: "derecha",
+        celda: (fila) => (
+          <span className="font-semibold text-foreground tabular-nums text-[13px]">
+            {formatearMonto(fila.saleAmountCents, fila.currency)}
+          </span>
+        ),
+        valor: (fila) => fila.saleAmountCents,
+        ordenable: true,
+      },
+      {
+        clave: "comision",
+        titulo: "Comisión Total",
+        alinear: "derecha",
+        celda: (fila) => (
+          <div className="text-right leading-tight">
+            <span className="font-bold text-gold-600 tabular-nums text-[13px]">
+              {formatearMonto(fila.totalCommissionCents, fila.currency)}
+            </span>
+            <small className="block text-[11px] text-muted-foreground">
+              {formatearPorcentaje(fila.commissionBasisPoints)}
+            </small>
+          </div>
+        ),
+        valor: (fila) => fila.totalCommissionCents,
+        ordenable: true,
+      },
+      {
+        clave: "reparto",
+        titulo: "Reparto Interno",
+        celda: (fila) => (
+          <span className="text-[12px] text-muted-foreground tabular-nums">
+            <strong className="text-foreground">{formatearPorcentaje(fila.brokerShareBasisPoints)}</strong> broker /{" "}
+            <strong className="text-foreground">{formatearPorcentaje(fila.agencyShareBasisPoints)}</strong> agencia
+          </span>
+        ),
+        valor: (fila) => fila.brokerShareBasisPoints,
+      },
+      {
+        clave: "broker",
+        titulo: "Broker",
+        celda: (fila) => (
+          <span className="text-[12.5px] font-medium text-foreground">
+            {fila.brokerName ?? "Sin asignar"}
+          </span>
+        ),
+        valor: (fila) => fila.brokerName ?? "",
+        ordenable: true,
+      },
+      {
+        clave: "estado",
+        titulo: "Estado",
+        movil: "insignia",
+        celda: (fila) => (
+          <Insignia
+            texto={COMMISSION_STATUS_LABELS[fila.status]}
+            tono={ESTADO_TONE[fila.status]}
+            punto={true}
+          />
+        ),
+        valor: (fila) => COMMISSION_STATUS_LABELS[fila.status],
+      },
+      ...(puedeEditar
+        ? ([
+            {
+              clave: "acciones",
+              titulo: "Acciones",
+              alinear: "derecha" as const,
+              celda: (fila: FilaComisionVista) => (
+                <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+                  {fila.status === "pending" && (
+                    <>
+                      <button
+                        className="inline-flex size-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-300 transition-colors shadow-2xs cursor-pointer"
+                        type="button"
+                        disabled={ocupada === fila.id}
+                        onClick={() => cambiarEstado(fila, "approved")}
+                        title="Aprobar comisión"
+                        aria-label="Aprobar comisión"
+                      >
+                        <Check size={14} />
+                      </button>
+                      <button
+                        className="inline-flex size-7 items-center justify-center rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border transition-colors shadow-2xs cursor-pointer"
+                        type="button"
+                        disabled={ocupada === fila.id}
+                        onClick={() => editarReparto(fila)}
+                        title="Editar reparto"
+                        aria-label="Editar reparto"
+                      >
+                        <Pencil size={13} />
+                      </button>
+                    </>
+                  )}
+                  {fila.status === "approved" && (
+                    <button
+                      className="inline-flex size-7 items-center justify-center rounded-lg bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-300 transition-colors shadow-2xs cursor-pointer"
+                      type="button"
+                      disabled={ocupada === fila.id}
+                      onClick={() => cambiarEstado(fila, "paid")}
+                      title="Marcar pagada"
+                      aria-label="Marcar pagada"
+                    >
+                      <BadgeDollarSign size={14} />
+                    </button>
+                  )}
+                  {(fila.status === "pending" || fila.status === "approved") && (
+                    <button
+                      className="inline-flex size-7 items-center justify-center rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-300 transition-colors shadow-2xs cursor-pointer"
+                      type="button"
+                      disabled={ocupada === fila.id}
+                      onClick={() => cambiarEstado(fila, "void")}
+                      title="Anular comisión"
+                      aria-label="Anular comisión"
+                    >
+                      <Ban size={13} />
+                    </button>
+                  )}
+                </div>
+              ),
+            },
+          ] as Columna<FilaComisionVista>[])
+        : []),
+    ],
+    [puedeEditar, ocupada]
+  );
+
   return (
     <>
       <PageHeader
@@ -215,91 +363,16 @@ export function ComisionesVista({
         </select>
       </div>
       <div className="table-wrap">
-        {filas.length === 0 ? (
-          <Vacio titulo="Sin comisiones" texto="No hay comisiones para este filtro." />
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Negocio</th>
-                <th>Monto de venta</th>
-                <th>Comisión</th>
-                <th>Reparto interno</th>
-                <th>Broker</th>
-                <th>Estado</th>
-                {puedeEditar && <th></th>}
-              </tr>
-            </thead>
-            <tbody>
-              {filas.map((fila) => (
-                <tr key={fila.id}>
-                  <td>
-                    {fila.contactName}
-                    {fila.projectName ? ` · ${fila.projectName}` : ""}
-                  </td>
-                  <td>{formatearMonto(fila.saleAmountCents, fila.currency)}</td>
-                  <td>{formatearPorcentaje(fila.commissionBasisPoints)}</td>
-                  <td>
-                    {formatearPorcentaje(fila.brokerShareBasisPoints)} broker / {formatearPorcentaje(fila.agencyShareBasisPoints)}{" "}
-                    agencia
-                  </td>
-                  <td>{fila.brokerName ?? "Sin asignar"}</td>
-                  <td>
-                    <Badge tone={ESTADO_TONE[fila.status]}>{COMMISSION_STATUS_LABELS[fila.status]}</Badge>
-                  </td>
-                  {puedeEditar && (
-                    <td className="table-actions">
-                      {fila.status === "pending" && (
-                        <>
-                          <button
-                            className="icon-button"
-                            type="button"
-                            disabled={ocupada === fila.id}
-                            onClick={() => cambiarEstado(fila, "approved")}
-                            aria-label="Aprobar comisión"
-                          >
-                            ✓
-                          </button>
-                          <button
-                            className="icon-button"
-                            type="button"
-                            disabled={ocupada === fila.id}
-                            onClick={() => editarReparto(fila)}
-                            aria-label="Editar reparto"
-                          >
-                            ✎
-                          </button>
-                        </>
-                      )}
-                      {fila.status === "approved" && (
-                        <button
-                          className="icon-button"
-                          type="button"
-                          disabled={ocupada === fila.id}
-                          onClick={() => cambiarEstado(fila, "paid")}
-                          aria-label="Marcar pagada"
-                        >
-                          💲
-                        </button>
-                      )}
-                      {(fila.status === "pending" || fila.status === "approved") && (
-                        <button
-                          className="icon-button"
-                          type="button"
-                          disabled={ocupada === fila.id}
-                          onClick={() => cambiarEstado(fila, "void")}
-                          aria-label="Anular comisión"
-                        >
-                          🚫
-                        </button>
-                      )}
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        <DataTable
+          filas={filas}
+          columnas={columnasTabla}
+          idDe={(f) => String(f.id)}
+          etiqueta="Listado de comisiones"
+          vacio={{
+            titulo: "Sin comisiones",
+            cuerpo: "No hay comisiones registradas para este filtro o periodo.",
+          }}
+        />
       </div>
     </>
   );

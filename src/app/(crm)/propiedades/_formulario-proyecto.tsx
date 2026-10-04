@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useRef, useState } from "react";
+import { X } from "lucide-react";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { PROJECT_TYPES } from "@/domain/catalogs";
 import type { projects } from "@/infrastructure/db/schema";
@@ -98,7 +99,7 @@ export function FormularioProyecto({
         <div className="drawer-head">
           <h2 id="proyecto-title">{editando ? "Editar proyecto" : "Nuevo proyecto"}</h2>
           <button className="icon-button" onClick={onClose} aria-label="Cerrar">
-            ×
+            <X size={18} />
           </button>
         </div>
         <form className="form-grid" ref={formRef} onSubmit={enviar} aria-busy={enviando}>

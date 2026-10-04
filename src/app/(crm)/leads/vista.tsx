@@ -1,14 +1,17 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { type FormEvent, type ReactNode, useRef, useState } from "react";
+import { type FormEvent, type ReactNode, useMemo, useRef, useState } from "react";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { LEAD_STATUSES, OPERATION_TYPES } from "@/domain/catalogs";
-import { Avatar, Badge, PageHeader } from "../_ui/prototipo-ui";
-import { SinResultados, Vacio } from "../_ui/estados";
+import { Avatar, PageHeader } from "../_ui/prototipo-ui";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { ModuleTabs } from "../_ui/module-tabs";
 import { LeadInspector } from "./inspector";
+import { DataTable, type Columna } from "@/components/ui/data-table";
+import { Insignia } from "@/components/ui/bits";
+import { leadStatusTone } from "@/components/ui/tone";
+import { Building2, MessageSquare, Phone, Sparkles, X } from "lucide-react";
 
 export type LeadFila = {
   id: number;
@@ -120,6 +123,133 @@ export function LeadsVista({
   const totalPaginas = Math.max(1, Math.ceil(total / tamanioPagina));
   const hayFiltro = Boolean(filtros.q || filtros.sourceId || filtros.status);
 
+  const columnasTabla: Columna<LeadFila>[] = useMemo(
+    () => [
+      {
+        clave: "lead",
+        titulo: "Lead / Prospecto",
+        movil: "titulo",
+        celda: (lead) => (
+          <div className="flex items-center gap-3">
+            <Avatar name={lead.contactName} small />
+            <div className="grid min-w-0 leading-tight">
+              <strong className="text-[13.5px] font-bold text-foreground truncate">{lead.contactName}</strong>
+              <span className="text-[11.5px] text-muted-foreground truncate">
+                {lead.contactPhoneDisplay ?? lead.contactPhone ?? "—"}
+              </span>
+            </div>
+          </div>
+        ),
+        valor: (lead) => lead.contactName,
+        ordenable: true,
+      },
+      {
+        clave: "proyecto",
+        titulo: "Proyecto / Interés",
+        movil: "subtitulo",
+        celda: (lead) => (
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Building2 size={13} className="text-gold-500 shrink-0" />
+            <span className="truncate font-medium text-foreground text-[12.5px]">
+              {lead.projectName ?? lead.projectInterestText ?? lead.zoneInterest ?? "Por definir"}
+            </span>
+          </div>
+        ),
+        valor: (lead) => lead.projectName ?? lead.projectInterestText ?? lead.zoneInterest ?? "",
+        ordenable: true,
+      },
+      {
+        clave: "origen",
+        titulo: "Canal",
+        secundaria: true,
+        celda: (lead) => (
+          <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2 py-0.5 text-[11.5px] font-medium text-muted-foreground border border-border/40">
+            {lead.sourceName ?? "Directo"}
+          </span>
+        ),
+        valor: (lead) => lead.sourceName ?? "",
+      },
+      {
+        clave: "responsable",
+        titulo: "Responsable",
+        celda: (lead) =>
+          lead.brokerName ? (
+            <span className="text-[12.5px] font-medium text-foreground">{lead.brokerName}</span>
+          ) : lead.suggestedBrokerName ? (
+            <span className="inline-flex items-center gap-1 text-[11.5px] text-gold-600 bg-gold-500/10 px-2 py-0.5 rounded-full border border-gold-500/30">
+              <Sparkles size={11} /> {lead.suggestedBrokerName}
+            </span>
+          ) : (
+            <span className="text-[12px] text-muted-foreground italic">Sin asignar</span>
+          ),
+        valor: (lead) => lead.brokerName ?? lead.suggestedBrokerName ?? "",
+      },
+      {
+        clave: "estado",
+        titulo: "Estado",
+        movil: "insignia",
+        celda: (lead) => (
+          <Insignia
+            texto={ETIQUETAS_ESTADO[lead.status]}
+            tono={leadStatusTone(lead.status)}
+            punto={true}
+          />
+        ),
+        valor: (lead) => ETIQUETAS_ESTADO[lead.status],
+      },
+      {
+        clave: "presupuesto",
+        titulo: "Presupuesto",
+        alinear: "derecha",
+        celda: (lead) => (
+          <span className="font-semibold text-foreground tabular-nums text-[12.5px]">
+            {formatoPresupuesto(lead)}
+          </span>
+        ),
+        valor: (lead) => lead.budgetMaxCents ?? lead.budgetMinCents ?? 0,
+        ordenable: true,
+      },
+      {
+        clave: "acciones",
+        titulo: "Contacto",
+        alinear: "derecha",
+        celda: (lead) => {
+          const phone = lead.contactPhone;
+          const clean = phone ? phone.replace(/\D/g, "") : null;
+          return (
+            <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+              {clean && (
+                <a
+                  href={`https://wa.me/${clean}?text=${encodeURIComponent(
+                    `Hola ${lead.contactName}, le contacto de Quisqueya Home respecto a su interés en ${
+                      lead.projectName ?? "nuestros proyectos inmobiliarios en República Dominicana"
+                    }.`
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={`WhatsApp directo con ${lead.contactName}`}
+                  className="inline-flex size-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-300 transition-colors shadow-2xs"
+                >
+                  <MessageSquare size={13} />
+                </a>
+              )}
+              {clean && (
+                <a
+                  href={`tel:${clean}`}
+                  title={`Llamar a ${lead.contactName}`}
+                  className="inline-flex size-7 items-center justify-center rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border transition-colors shadow-2xs"
+                >
+                  <Phone size={13} />
+                </a>
+              )}
+            </div>
+          );
+        },
+      },
+    ],
+    []
+  );
+
   return (
     <>
       <PageHeader
@@ -191,73 +321,21 @@ export function LeadsVista({
       </div>
       <div className={leadSeleccionado ? "split-view inspector-open" : "split-view"}>
         <div className="table-wrap">
-          {leads.length === 0 ? (
-            hayFiltro ? (
-              <SinResultados
-                onLimpiar={() =>
-                  irCon({ q: undefined, source_id: undefined, status: undefined, page: undefined })
-                }
-              />
-            ) : (
-              <Vacio titulo="Sin leads todavía" texto="Registra el primero con “Registrar lead” o espera a que llegue por el portal." />
-            )
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Lead</th>
-                  <th>Proyecto</th>
-                  <th>Origen</th>
-                  <th>Responsable</th>
-                  <th>Estado</th>
-                  <th>Presupuesto</th>
-                </tr>
-              </thead>
-              <tbody>
-                {leads.map((lead) => (
-                  <tr
-                    key={lead.id}
-                    tabIndex={0}
-                    role="button"
-                    aria-label={`Ver ficha de ${lead.contactName}`}
-                    className={`cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-600 ${
-                      leadSeleccionado?.id === lead.id ? "selected" : ""
-                    }`}
-                    onClick={() => irCon({ lead: String(lead.id) })}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        irCon({ lead: String(lead.id) });
-                      }
-                    }}
-                  >
-                    <td>
-                      <span className="table-person">
-                        <Avatar name={lead.contactName} small />
-                        <span>
-                          <strong>{lead.contactName}</strong>
-                          <small>{lead.contactPhoneDisplay ?? lead.contactPhone ?? "—"}</small>
-                        </span>
-                      </span>
-                    </td>
-                    <td>{lead.projectName ?? lead.projectInterestText ?? lead.zoneInterest ?? "—"}</td>
-                    <td>{lead.sourceName ?? "—"}</td>
-                    <td>
-                      {lead.brokerName ?? (
-                        <span title={lead.suggestedBrokerName ? `Sugerido: ${lead.suggestedBrokerName}` : undefined}>
-                          {lead.suggestedBrokerName ? `Sugerido: ${lead.suggestedBrokerName}` : "Sin asignar"}
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <Badge tone={TONO_ESTADO[lead.status]}>{ETIQUETAS_ESTADO[lead.status]}</Badge>
-                    </td>
-                    <td>{formatoPresupuesto(lead)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <DataTable
+            filas={leads}
+            columnas={columnasTabla}
+            idDe={(lead) => String(lead.id)}
+            activa={leadSeleccionado ? String(leadSeleccionado.id) : null}
+            onAbrir={(lead) => irCon({ lead: String(lead.id) })}
+            porPagina={tamanioPagina}
+            etiqueta="Listado de leads"
+            vacio={{
+              titulo: hayFiltro ? "Sin resultados para esta búsqueda" : "Sin leads todavía",
+              cuerpo: hayFiltro
+                ? "Prueba cambiando o limpiando los filtros actuales."
+                : "Registra el primer prospecto con “Registrar lead” o espera a que ingrese por los canales de captación.",
+            }}
+          />
           {totalPaginas > 1 && (
             <div className="form-actions" style={{ justifyContent: "space-between", padding: "12px 4px 0" }}>
               <button
@@ -268,7 +346,7 @@ export function LeadsVista({
               >
                 Anterior
               </button>
-              <span>
+              <span className="text-xs font-semibold text-muted-foreground tabular-nums">
                 Página {pagina} de {totalPaginas}
               </span>
               <button
@@ -377,7 +455,7 @@ function FormularioLead({ canales, onClose }: { canales: Canal[]; onClose: () =>
             Registrar lead manual
           </h2>
           <button className="icon-button" onClick={onClose} aria-label="Cerrar">
-            ×
+            <X size={18} />
           </button>
         </div>
         <form className="form-grid p-6" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
