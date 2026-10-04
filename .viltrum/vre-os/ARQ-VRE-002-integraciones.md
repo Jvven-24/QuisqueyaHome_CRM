@@ -1,6 +1,6 @@
 # ARQ-VRE-002 · Arquitectura de conexiones: cómo conviven módulos de distintos proveedores
 
-> Autor: D00 (Claude, base del programa). Revisión: **D03 + Wilber** (decisión estructural). Estado: PROPUESTA.
+> Autor: D00 (Claude, base del programa). Revisión: **D03 + Wilber** (decisión estructural). Estado: APROBADA por Wilber el 2026-10-04 (decisión #45).
 > Base real: `src/application/README.md`, `src/infrastructure/arquitectura.test.ts`, `src/infrastructure/contenedor/`,
 > `src/infrastructure/comunicaciones/proveedor-despacho.ts`. Doctrina: P1 (bajo acoplamiento), P2 (nada hardcodeado),
 > Blueprint §10–§13, §37–§40, §61. Decisión vigente: #43.
