@@ -11,6 +11,10 @@ estamos, qué está verde, qué debe probar Codex y cuál es el siguiente issue 
 código. Se reescribe en cada push, así que es fiable aunque no tengas ninguna
 conversación previa.
 
+**No negociables (obligatorio leer antes de cualquier tarea):** `.viltrum/vre-os/NO-NEGOCIABLES.md`.
+Flujo por pasadas y Spec Pack: `.viltrum/vre-os/FLUJO-PASADAS.md` y `.viltrum/vre-os/spec/00-indice.md`.
+Nada se codifica sin una ficha en estado `READY` citada en la tarea.
+
 Reparto vigente, decidido el 04/10/2026 (decisión #44; sustituye al del 02/10):
 
 - **Programa VRE-OS** (`.viltrum/vre-os/M-20261004-VRE.md`): **Codex y Antigravity
