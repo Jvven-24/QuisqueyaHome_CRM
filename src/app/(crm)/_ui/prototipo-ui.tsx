@@ -102,6 +102,8 @@ export function Metric({ label, value, note }: { label: string; value: string; n
   );
 }
 
+import { useFocusTrap } from "@/hooks/use-focus-trap";
+
 export function Modal({
   title,
   children,
@@ -111,6 +113,8 @@ export function Modal({
   children: ReactNode;
   onClose: () => void;
 }) {
+  const containerRef = useFocusTrap<HTMLElement>({ onClose });
+
   return (
     <div
       className="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
@@ -120,7 +124,9 @@ export function Modal({
       }}
     >
       <section
-        className="modal bg-surface border border-line rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in zoom-in-95 duration-200"
+        ref={containerRef}
+        tabIndex={-1}
+        className="modal bg-surface border border-line rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in zoom-in-95 duration-200 outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"

@@ -2,8 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useRef, useState } from "react";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { PROJECT_TYPES } from "@/domain/catalogs";
 import type { projects } from "@/infrastructure/db/schema";
+import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
+import { centavosAUnidad, unidadACentavos } from "../_ui/formato";
 
 type Proyecto = typeof projects.$inferSelect;
 export type BrokerOpcion = { id: number; fullName: string };
@@ -37,45 +40,77 @@ export function FormularioProyecto({
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
+  const modalRef = useFocusTrap<HTMLElement>({ onClose });
   const [enviando, setEnviando] = useState(false);
   const [errores, setErrores] = useState<Record<string, string>>({});
+  const [errorRed, setErrorRed] = useState<string | null>(null);
   const editando = Boolean(proyecto);
 
   async function enviar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!formRef.current) return;
+    if (!formRef.current || submittingRef.current) return;
+    submittingRef.current = true;
     setEnviando(true);
     setErrores({});
+    setErrorRed(null);
 
-    const datos = Object.fromEntries(new FormData(formRef.current).entries());
-    const url = editando ? `/api/proyectos/${proyecto!.id}` : "/api/proyectos";
-    const respuesta = await fetch(url, {
-      method: editando ? "PATCH" : "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(datos),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setEnviando(false);
+    try {
+      const raw = Object.fromEntries(new FormData(formRef.current).entries());
+      const datos: Record<string, unknown> = { ...raw };
+      if (puedeEditarPrecioReal && datos.internalPrice !== undefined) {
+        const val = String(datos.internalPrice).trim();
+        datos.internalPriceCents = val ? unidadACentavos(Number(val)) : null;
+        delete datos.internalPrice;
+      }
+      const url = editando ? `/api/proyectos/${proyecto!.id}` : "/api/proyectos";
+      const respuesta = await fetch(url, {
+        method: editando ? "PATCH" : "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
 
-    if (!respuesta.ok) {
-      setErrores(cuerpo.fields ?? { _: cuerpo.error ?? "No se pudo guardar el proyecto." });
-      return;
+      if (!respuesta.ok) {
+        setErrores(cuerpo.fields ?? {});
+        setErrorRed(cuerpo.error ?? "No se pudo guardar el proyecto. Revisa los datos ingresados.");
+        return;
+      }
+
+      router.refresh();
+      onClose();
+    } catch {
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setErrorRed(
+        offline
+          ? "Sin conexión a internet. Los datos ingresados se mantienen intactos."
+          : "Fallo de conexión de red al guardar el proyecto. Tus datos están intactos.",
+      );
+    } finally {
+      submittingRef.current = false;
+      setEnviando(false);
     }
-
-    router.refresh();
-    onClose();
   }
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <section className="modal" role="dialog" aria-modal="true" aria-labelledby="proyecto-title">
+      <section className="modal" role="dialog" aria-modal="true" aria-labelledby="proyecto-title" ref={modalRef}>
         <div className="drawer-head">
           <h2 id="proyecto-title">{editando ? "Editar proyecto" : "Nuevo proyecto"}</h2>
           <button className="icon-button" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>
-        <form className="form-grid" ref={formRef} onSubmit={enviar}>
+        <form className="form-grid" ref={formRef} onSubmit={enviar} aria-busy={enviando}>
+          {errorRed && (
+            <div className="span-2">
+              <AlertaErrorFormulario
+                mensaje={errorRed}
+                onReintentar={() => formRef.current?.requestSubmit()}
+                disabled={enviando}
+              />
+            </div>
+          )}
           <label className="span-2">
             Nombre del proyecto
             <input name="name" defaultValue={proyecto?.name} required />
@@ -113,11 +148,12 @@ export function FormularioProyecto({
             <label>
               Precio interno (real)
               <input
-                name="internalPriceCents"
+                name="internalPrice"
                 type="number"
                 min="0"
-                placeholder="Centavos, ej. 14000000"
-                defaultValue={proyecto?.internalPriceCents ?? ""}
+                step="0.01"
+                placeholder="Ej. 140,000"
+                defaultValue={proyecto?.internalPriceCents != null ? centavosAUnidad(proyecto.internalPriceCents) : ""}
               />
             </label>
           )}
@@ -134,7 +170,7 @@ export function FormularioProyecto({
           </label>
           {errores._ && <small style={{ color: "#b42318" }}>{errores._}</small>}
           <div className="form-actions span-2">
-            <button className="button" type="button" onClick={onClose}>
+            <button className="button" type="button" onClick={onClose} disabled={enviando}>
               Cancelar
             </button>
             <button className="button primary" type="submit" disabled={enviando}>

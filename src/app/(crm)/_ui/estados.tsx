@@ -20,16 +20,33 @@ export function Vacio({ titulo, texto }: { titulo: string; texto: string }) {
   );
 }
 
+import type { ReactNode } from "react";
+
 /** Hay datos, pero el filtro o la búsqueda actual no encuentra ninguno. */
 export function SinResultados({
   texto = "Ajusta la búsqueda o los filtros para ver más resultados.",
+  onLimpiar,
+  accion,
 }: {
   texto?: string;
+  onLimpiar?: () => void;
+  accion?: ReactNode;
 }) {
   return (
-    <div className="empty">
-      <strong>Sin resultados</strong>
-      <p>{texto}</p>
+    <div className="empty flex flex-col items-center justify-center p-8 text-center animate-in fade-in">
+      <strong className="text-base font-bold text-navy-950">Sin resultados</strong>
+      <p className="text-sm text-ink-muted mt-1 mb-4 max-w-md">{texto}</p>
+      {accion ? (
+        accion
+      ) : onLimpiar ? (
+        <button
+          type="button"
+          onClick={onLimpiar}
+          className="button secondary text-xs font-semibold px-4 py-2"
+        >
+          Limpiar filtros
+        </button>
+      ) : null}
     </div>
   );
 }

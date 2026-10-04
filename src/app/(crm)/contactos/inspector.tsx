@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { Avatar } from "../_ui/prototipo-ui";
 import type { Canal, ContactoFila } from "./vista";
 
@@ -33,51 +34,69 @@ export function ContactoInspector({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const asideRef = useFocusTrap<HTMLElement>({ onClose });
+  const submittingRef = useRef(false);
   const [editando, setEditando] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [errores, setErrores] = useState<Record<string, string>>({});
 
   async function guardar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     setGuardando(true);
     setErrores({});
 
-    const datos: Record<string, unknown> = Object.fromEntries(new FormData(event.currentTarget).entries());
-    // "" en brokerId significa "no lo tocó" (la placeholder deshabilitada
-    // sigue siendo el valor si el select nunca se abrió) — nunca "vaciar el
-    // responsable", que este control no ofrece.
-    if (datos.brokerId === "") delete datos.brokerId;
-    const respuesta = await fetch(`/api/contactos/${contacto.id}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(datos),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setGuardando(false);
+    try {
+      const datos: Record<string, unknown> = Object.fromEntries(new FormData(event.currentTarget).entries());
+      // "" en brokerId significa "no lo tocó" (la placeholder deshabilitada
+      // sigue siendo el valor si el select nunca se abrió) — nunca "vaciar el
+      // responsable", que este control no ofrece.
+      if (datos.brokerId === "") delete datos.brokerId;
+      const respuesta = await fetch(`/api/contactos/${contacto.id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
 
-    if (!respuesta.ok) {
-      setErrores(cuerpo.fields ?? { _: cuerpo.error ?? "No se pudo guardar el cambio." });
-      return;
+      if (!respuesta.ok) {
+        setErrores(cuerpo.fields ?? { _: cuerpo.error ?? "No se pudo guardar el cambio." });
+        return;
+      }
+
+      setEditando(false);
+      router.refresh();
+    } catch {
+      setErrores({ _: "Fallo de conexión al guardar los cambios." });
+    } finally {
+      submittingRef.current = false;
+      setGuardando(false);
     }
-
-    setEditando(false);
-    router.refresh();
   }
 
   async function eliminar() {
+    if (submittingRef.current) return;
     if (!confirm(`¿Eliminar a ${contacto.fullName}? Podrás verlo en la papelera, no se borra de la base.`)) return;
-    const respuesta = await fetch(`/api/contactos/${contacto.id}`, { method: "DELETE" });
-    if (!respuesta.ok) {
-      const cuerpo = await respuesta.json().catch(() => ({}));
-      alert(cuerpo.error ?? "No se pudo eliminar el contacto.");
-      return;
+    submittingRef.current = true;
+    try {
+      const respuesta = await fetch(`/api/contactos/${contacto.id}`, { method: "DELETE" });
+      if (!respuesta.ok) {
+        const cuerpo = await respuesta.json().catch(() => ({}));
+        alert(cuerpo.error ?? "No se pudo eliminar el contacto.");
+        return;
+      }
+      onClose();
+      router.refresh();
+    } catch {
+      alert("Error de red al eliminar el contacto.");
+    } finally {
+      submittingRef.current = false;
     }
-    onClose();
-    router.refresh();
   }
 
   return (
-    <aside className="inspector">
+    <aside className="inspector" ref={asideRef} aria-label={`Ficha de ${contacto.fullName}`}>
       <div className="drawer-head">
         <div>
           <p className="eyebrow">Ficha de contacto</p>

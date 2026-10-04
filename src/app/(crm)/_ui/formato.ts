@@ -16,3 +16,21 @@ export function formatearMonto(cents: number | null, currency = "USD"): string {
     cents / 100,
   );
 }
+
+/**
+ * Convierte enteros de base de datos (centavos) a unidades comerciales (pesos/dólares) para inputs de formulario.
+ */
+export function centavosAUnidad(cents: number | null | undefined): number | "" {
+  if (cents === null || cents === undefined || !Number.isFinite(cents)) return "";
+  return Math.round(cents / 100);
+}
+
+/**
+ * Convierte entrada comercial en unidades (pesos/dólares) a enteros de base de datos (centavos).
+ */
+export function unidadACentavos(valor: string | number | null | undefined): number | null {
+  if (valor === "" || valor === null || valor === undefined) return null;
+  const num = typeof valor === "number" ? valor : Number(String(valor).replace(/[^0-9.-]/g, ""));
+  if (!Number.isFinite(num) || num < 0) return null;
+  return Math.round(num * 100);
+}

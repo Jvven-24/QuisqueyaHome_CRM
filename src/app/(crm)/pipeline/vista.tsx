@@ -5,7 +5,7 @@ import { type ReactNode, useMemo, useState } from "react";
 import { Building2, Calendar, MessageCircle, Kanban as KanbanIcon, List as ListIcon } from "lucide-react";
 import { formatearMonto } from "../_ui/formato";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
-import { Vacio } from "../_ui/estados";
+import { SinResultados, Vacio } from "../_ui/estados";
 import { ModuleTabs } from "../_ui/module-tabs";
 import { generarEnlaceWhatsApp } from "@/domain/comunicaciones";
 import { DealInspector } from "./inspector";
@@ -145,7 +145,6 @@ export function PipelineVista({
     .filter((n) => etapaPorId.get(n.stageId)?.kind === "open")
     .reduce((suma, n) => suma + (n.amountCents ?? 0), 0);
 
-  /** Llama al servidor para mover un negocio de etapa. Común a drag&drop, modal de pérdida e inspector. */
   async function cambiarEtapa(dealId: number, stageId: number, extra?: { lossReasonId?: number; lossComment?: string }) {
     setEnviando(true);
     try {
@@ -156,13 +155,12 @@ export function PipelineVista({
       });
       const cuerpo = await respuesta.json().catch(() => ({}));
       if (!respuesta.ok) {
-        // 409 (`validarTransicion`, motivo faltante, doble cierre) y 400 (Zod)
-        // traen el mensaje ya redactado en español para el usuario — se
-        // muestra tal cual, sin envolverlo en texto propio.
         alert(cuerpo.error ?? "No se pudo cambiar la etapa del negocio.");
         return;
       }
       router.refresh();
+    } catch {
+      alert("Error de red o conexión al intentar mover el negocio. Por favor, reintenta.");
     } finally {
       setEnviando(false);
     }
@@ -222,6 +220,14 @@ export function PipelineVista({
 
       {negocios.length === 0 ? (
         <Vacio titulo="Sin negocios todavía" texto="Los negocios aparecen aquí al convertir un lead." />
+      ) : negociosFiltrados.length === 0 ? (
+        <SinResultados
+          texto="No hay negocios que coincidan con los filtros seleccionados de broker o proyecto."
+          onLimpiar={() => {
+            setBrokerFiltro("");
+            setProyectoFiltro("");
+          }}
+        />
       ) : (
         <div className={negocioSeleccionado ? "pipeline-layout inspector-open" : "pipeline-layout"}>
           {vistaModo === "lista" ? (
@@ -243,8 +249,19 @@ export function PipelineVista({
                     return (
                       <tr
                         key={negocio.id}
-                        className={negocioSeleccionado?.id === negocio.id ? "selected" : ""}
+                        tabIndex={0}
+                        role="button"
+                        aria-label={`Ver ficha de negocio de ${negocio.contactName}`}
+                        className={`cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-600 ${
+                          negocioSeleccionado?.id === negocio.id ? "selected" : ""
+                        }`}
                         onClick={() => irCon({ deal: String(negocio.id) })}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            irCon({ deal: String(negocio.id) });
+                          }
+                        }}
                       >
                         <td>
                           <span className="table-person">

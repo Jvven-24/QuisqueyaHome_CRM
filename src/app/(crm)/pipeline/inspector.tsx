@@ -2,6 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useRef, useState } from "react";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
+import { centavosAUnidad, unidadACentavos } from "../_ui/formato";
+import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { Avatar, Modal } from "../_ui/prototipo-ui";
 import type { Etapa, MotivoPerdida, NegocioFila, PropiedadDeal, ProyectoOpcion } from "./vista";
 
@@ -43,6 +46,7 @@ export function DealInspector({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const inspectorRef = useFocusTrap<HTMLElement>({ onClose });
   const [editando, setEditando] = useState(false);
   const [agregandoPropiedad, setAgregandoPropiedad] = useState(false);
   const [ocupado, setOcupado] = useState<number | null>(null);
@@ -80,7 +84,13 @@ export function DealInspector({
   }
 
   return (
-    <aside className="inspector">
+    <aside
+      className="inspector"
+      ref={inspectorRef}
+      tabIndex={-1}
+      role="region"
+      aria-label="Ficha de negocio"
+    >
       <div className="drawer-head">
         <div>
           <p className="eyebrow">Ficha de negocio</p>
@@ -243,47 +253,85 @@ export function DealInspector({
 function FormularioNegocio({ negocio, onClose }: { negocio: NegocioFila; onClose: () => void }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [esErrorRed, setEsErrorRed] = useState(false);
 
-  async function enviar(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!formRef.current) return;
+  async function enviar(event?: FormEvent<HTMLFormElement>) {
+    if (event) event.preventDefault();
+    if (!formRef.current || submittingRef.current) return;
+    submittingRef.current = true;
     setEnviando(true);
     setError(null);
+    setEsErrorRed(false);
 
-    const form = formRef.current;
-    const datos = Object.fromEntries(new FormData(form).entries());
-    // El porcentaje se escribe como "4.5" y se guarda en puntos básicos
-    // enteros (decisión #14: dinero en centavos/puntos básicos, nunca coma
-    // flotante) — la conversión vive aquí, no en el servidor, que solo acepta
-    // el entero final.
-    const comision = form.elements.namedItem("commissionPercent") as HTMLInputElement;
-    const puntosBasicos = comision.value ? Math.round(Number(comision.value) * 100) : "";
+    try {
+      const form = formRef.current;
+      const formData = new FormData(form);
+      const datos = Object.fromEntries(formData.entries());
 
-    const respuesta = await fetch(`/api/pipeline/${negocio.id}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ ...datos, commissionBasisPoints: puntosBasicos }),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setEnviando(false);
+      // QA-06: Separar presentación comercial de enteros de base de datos
+      const montoComercial = formData.get("amount");
+      const amountCents = unidadACentavos(montoComercial ? String(montoComercial) : null);
 
-    if (!respuesta.ok) {
-      setError(cuerpo.error ?? "No se pudo guardar el negocio.");
-      return;
+      const comision = form.elements.namedItem("commissionPercent") as HTMLInputElement;
+      const puntosBasicos = comision.value ? Math.round(Number(comision.value) * 100) : "";
+
+      const respuesta = await fetch(`/api/pipeline/${negocio.id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          ...datos,
+          amountCents,
+          commissionBasisPoints: puntosBasicos,
+        }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        setError(cuerpo.error ?? "No se pudo guardar el negocio.");
+        setEsErrorRed(false);
+        return;
+      }
+
+      router.refresh();
+      onClose();
+    } catch {
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setError(
+        offline
+          ? "Sin conexión a internet. Los cambios ingresados están a salvo."
+          : "Fallo temporal de conexión con el servidor. Tus datos siguen aquí.",
+      );
+      setEsErrorRed(true);
+    } finally {
+      submittingRef.current = false;
+      setEnviando(false);
     }
-
-    router.refresh();
-    onClose();
   }
 
   return (
     <Modal title="Editar negocio" onClose={onClose}>
-      <form className="form-grid" ref={formRef} onSubmit={enviar}>
+      <form className="form-grid" ref={formRef} onSubmit={enviar} aria-busy={enviando}>
+        {error && (
+          <AlertaErrorFormulario
+            mensaje={error}
+            esErrorRed={esErrorRed}
+            onReintentar={esErrorRed ? () => void enviar() : undefined}
+            reintentando={enviando}
+          />
+        )}
         <label>
-          Monto ({negocio.currency}, en centavos)
-          <input name="amountCents" type="number" min="0" defaultValue={negocio.amountCents ?? ""} />
+          Monto comercial ({negocio.currency})
+          <input
+            name="amount"
+            type="number"
+            min="0"
+            step="1"
+            placeholder="Ej. 150000"
+            defaultValue={centavosAUnidad(negocio.amountCents)}
+          />
         </label>
         <label>
           Probabilidad (%)
@@ -291,18 +339,24 @@ function FormularioNegocio({ negocio, onClose }: { negocio: NegocioFila; onClose
         </label>
         <label>
           Comisión (%)
-          <input name="commissionPercent" type="number" min="0" max="100" step="0.01" defaultValue={negocio.commissionBasisPoints != null ? (negocio.commissionBasisPoints / 100).toString() : ""} />
+          <input
+            name="commissionPercent"
+            type="number"
+            min="0"
+            max="100"
+            step="0.01"
+            defaultValue={negocio.commissionBasisPoints != null ? (negocio.commissionBasisPoints / 100).toString() : ""}
+          />
         </label>
         <label>
           Fecha estimada de cierre
           <input name="expectedCloseDate" type="date" defaultValue={negocio.expectedCloseDate ?? ""} />
         </label>
-        {error && <small style={{ color: "#b42318" }}>{error}</small>}
         <div className="form-actions span-2">
-          <button className="button secondary" type="button" onClick={onClose}>
+          <button className="button secondary" type="button" onClick={onClose} disabled={enviando}>
             Cancelar
           </button>
-          <button className="button primary" type="submit" disabled={enviando}>
+          <button className="button primary" type="submit" disabled={enviando} aria-busy={enviando}>
             {enviando ? "Guardando…" : "Guardar cambios"}
           </button>
         </div>
@@ -329,41 +383,54 @@ function FormularioPropiedad({
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
   const [proyectoId, setProyectoId] = useState<number | "">(proyectos[0]?.id ?? "");
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [esErrorRed, setEsErrorRed] = useState(false);
   const unidadesDelProyecto = proyectos.find((p) => p.id === proyectoId)?.unidades ?? [];
 
-  async function enviar(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!formRef.current) return;
+  async function enviar(event?: FormEvent<HTMLFormElement>) {
+    if (event) event.preventDefault();
+    if (!formRef.current || submittingRef.current) return;
+    submittingRef.current = true;
     setEnviando(true);
     setError(null);
+    setEsErrorRed(false);
 
-    const form = formRef.current;
-    const datos: Record<string, unknown> = Object.fromEntries(new FormData(form).entries());
-    datos.isPrimary = (form.elements.namedItem("isPrimary") as HTMLInputElement).checked;
-    // "Interés general" es la opción vacía del select de unidad — "" no es un
-    // id válido, y sin esto Zod la rechaza con "expected number to be >0" en
-    // vez de tratarla como "sin unidad" (mismo criterio que `limpiarVacios`
-    // en `api/contactos/route.ts`).
-    if (datos.unitId === "") delete datos.unitId;
+    try {
+      const form = formRef.current;
+      const datos: Record<string, unknown> = Object.fromEntries(new FormData(form).entries());
+      datos.isPrimary = (form.elements.namedItem("isPrimary") as HTMLInputElement).checked;
+      if (datos.unitId === "") delete datos.unitId;
 
-    const respuesta = await fetch(`/api/pipeline/${dealId}/propiedades`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(datos),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setEnviando(false);
+      const respuesta = await fetch(`/api/pipeline/${dealId}/propiedades`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
 
-    if (!respuesta.ok) {
-      setError(cuerpo.error ?? "No se pudo agregar la propiedad.");
-      return;
+      if (!respuesta.ok) {
+        setError(cuerpo.error ?? "No se pudo agregar la propiedad.");
+        setEsErrorRed(false);
+        return;
+      }
+
+      router.refresh();
+      onClose();
+    } catch {
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setError(
+        offline
+          ? "Sin conexión a internet. Los datos seleccionados están a salvo."
+          : "Fallo temporal de conexión con el servidor. Por favor, reintenta.",
+      );
+      setEsErrorRed(true);
+    } finally {
+      submittingRef.current = false;
+      setEnviando(false);
     }
-
-    router.refresh();
-    onClose();
   }
 
   if (proyectos.length === 0) {
@@ -371,7 +438,15 @@ function FormularioPropiedad({
   }
 
   return (
-    <form className="form-grid" ref={formRef} onSubmit={enviar}>
+    <form className="form-grid" ref={formRef} onSubmit={enviar} aria-busy={enviando}>
+      {error && (
+        <AlertaErrorFormulario
+          mensaje={error}
+          esErrorRed={esErrorRed}
+          onReintentar={esErrorRed ? () => void enviar() : undefined}
+          reintentando={enviando}
+        />
+      )}
       <label>
         Proyecto
         <select name="projectId" value={proyectoId} onChange={(e) => setProyectoId(Number(e.target.value))}>
@@ -397,12 +472,11 @@ function FormularioPropiedad({
         <input name="isPrimary" type="checkbox" defaultChecked={!tienePrincipal} />
         Marcar como principal
       </label>
-      {error && <small style={{ color: "#b42318" }}>{error}</small>}
       <div className="form-actions span-2">
-        <button className="button secondary" type="button" onClick={onClose}>
+        <button className="button secondary" type="button" onClick={onClose} disabled={enviando}>
           Cancelar
         </button>
-        <button className="button primary" type="submit" disabled={enviando}>
+        <button className="button primary" type="submit" disabled={enviando} aria-busy={enviando}>
           {enviando ? "Agregando…" : "Agregar"}
         </button>
       </div>

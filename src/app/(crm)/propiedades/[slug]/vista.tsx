@@ -3,9 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useRef, useState } from "react";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { OPERATION_TYPES, PRICE_PERIODS, UNIT_STATUSES } from "@/domain/catalogs";
 import type { projects, units } from "@/infrastructure/db/schema";
 import { Badge, PageHeader } from "../../_ui/prototipo-ui";
+import { AlertaErrorFormulario } from "../../_ui/alerta-error-formulario";
+import { centavosAUnidad, unidadACentavos } from "../../_ui/formato";
 import { Vacio } from "../../_ui/estados";
 import { ETIQUETAS_TIPO, FormularioProyecto, type BrokerOpcion } from "../_formulario-proyecto";
 
@@ -216,45 +219,89 @@ function FormularioUnidad({
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
+  const modalRef = useFocusTrap<HTMLElement>({ onClose });
   const [enviando, setEnviando] = useState(false);
   const [errores, setErrores] = useState<Record<string, string>>({});
+  const [errorRed, setErrorRed] = useState<string | null>(null);
   const editando = Boolean(unidad);
 
   async function enviar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!formRef.current) return;
+    if (!formRef.current || submittingRef.current) return;
+    submittingRef.current = true;
     setEnviando(true);
     setErrores({});
+    setErrorRed(null);
 
-    const datos = Object.fromEntries(new FormData(formRef.current).entries());
-    const url = editando ? `/api/proyectos/${proyectoId}/unidades/${unidad!.id}` : `/api/proyectos/${proyectoId}/unidades`;
-    const respuesta = await fetch(url, {
-      method: editando ? "PATCH" : "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(datos),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setEnviando(false);
+    try {
+      const raw = Object.fromEntries(new FormData(formRef.current).entries());
+      const datos: Record<string, unknown> = { ...raw };
 
-    if (!respuesta.ok) {
-      setErrores(cuerpo.fields ?? { _: cuerpo.error ?? "No se pudo guardar la unidad." });
-      return;
+      if (puedeEditarPrecioReal && datos.realPrice !== undefined) {
+        const val = String(datos.realPrice).trim();
+        datos.realPriceCents = val ? unidadACentavos(Number(val)) : null;
+        delete datos.realPrice;
+      }
+      if (datos.publicRangeMin !== undefined) {
+        const val = String(datos.publicRangeMin).trim();
+        datos.publicRangeMinCents = val ? unidadACentavos(Number(val)) : null;
+        delete datos.publicRangeMin;
+      }
+      if (datos.publicRangeMax !== undefined) {
+        const val = String(datos.publicRangeMax).trim();
+        datos.publicRangeMaxCents = val ? unidadACentavos(Number(val)) : null;
+        delete datos.publicRangeMax;
+      }
+
+      const url = editando ? `/api/proyectos/${proyectoId}/unidades/${unidad!.id}` : `/api/proyectos/${proyectoId}/unidades`;
+      const respuesta = await fetch(url, {
+        method: editando ? "PATCH" : "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        setErrores(cuerpo.fields ?? {});
+        setErrorRed(cuerpo.error ?? "No se pudo guardar la unidad. Revisa los datos ingresados.");
+        return;
+      }
+
+      router.refresh();
+      onClose();
+    } catch {
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setErrorRed(
+        offline
+          ? "Sin conexión a internet. Los datos ingresados se mantienen intactos."
+          : "Fallo de conexión de red al guardar la unidad. Tus datos están intactos.",
+      );
+    } finally {
+      submittingRef.current = false;
+      setEnviando(false);
     }
-
-    router.refresh();
-    onClose();
   }
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <section className="modal" role="dialog" aria-modal="true" aria-labelledby="unidad-title">
+      <section className="modal" role="dialog" aria-modal="true" aria-labelledby="unidad-title" ref={modalRef}>
         <div className="drawer-head">
           <h2 id="unidad-title">{editando ? `Editar unidad ${unidad!.code}` : "Nueva unidad"}</h2>
           <button className="icon-button" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>
-        <form className="form-grid" ref={formRef} onSubmit={enviar}>
+        <form className="form-grid" ref={formRef} onSubmit={enviar} aria-busy={enviando}>
+          {errorRed && (
+            <div className="span-2">
+              <AlertaErrorFormulario
+                mensaje={errorRed}
+                onReintentar={() => formRef.current?.requestSubmit()}
+                disabled={enviando}
+              />
+            </div>
+          )}
           <label>
             Código
             <input name="code" defaultValue={unidad?.code} required />
@@ -299,16 +346,37 @@ function FormularioUnidad({
           {puedeEditarPrecioReal && (
             <label>
               Precio real
-              <input name="realPriceCents" type="number" min="0" defaultValue={unidad?.realPriceCents ?? ""} />
+              <input
+                name="realPrice"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Ej. 120,000"
+                defaultValue={unidad?.realPriceCents != null ? centavosAUnidad(unidad.realPriceCents) : ""}
+              />
             </label>
           )}
           <label>
             Rango público — mínimo
-            <input name="publicRangeMinCents" type="number" min="0" defaultValue={unidad?.publicRangeMinCents ?? ""} />
+            <input
+              name="publicRangeMin"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Ej. 115,000"
+              defaultValue={unidad?.publicRangeMinCents != null ? centavosAUnidad(unidad.publicRangeMinCents) : ""}
+            />
           </label>
           <label>
             Rango público — máximo
-            <input name="publicRangeMaxCents" type="number" min="0" defaultValue={unidad?.publicRangeMaxCents ?? ""} />
+            <input
+              name="publicRangeMax"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Ej. 130,000"
+              defaultValue={unidad?.publicRangeMaxCents != null ? centavosAUnidad(unidad.publicRangeMaxCents) : ""}
+            />
           </label>
           <label>
             Estado
@@ -322,7 +390,7 @@ function FormularioUnidad({
           </label>
           {errores._ && <small style={{ color: "#b42318" }}>{errores._}</small>}
           <div className="form-actions span-2">
-            <button className="button" type="button" onClick={onClose}>
+            <button className="button" type="button" onClick={onClose} disabled={enviando}>
               Cancelar
             </button>
             <button className="button primary" type="submit" disabled={enviando}>

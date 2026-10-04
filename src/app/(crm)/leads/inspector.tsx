@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { Avatar } from "../_ui/prototipo-ui";
 import { ETIQUETAS_ESTADO, type BrokerOpcion, type LeadFila } from "./vista";
 
@@ -30,6 +31,8 @@ export function LeadInspector({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const inspectorRef = useFocusTrap<HTMLElement>({ onClose });
+  const accionandoRef = useRef(false);
   const [convirtiendo, setConvirtiendo] = useState(false);
   const [descartando, setDescartando] = useState(false);
   const [motivoDescarte, setMotivoDescarte] = useState("");
@@ -43,61 +46,89 @@ export function LeadInspector({
   const puedeActuar = lead.status !== "converted" && lead.status !== "discarded";
 
   async function asignar() {
-    if (!brokerElegido) return;
+    if (!brokerElegido || accionandoRef.current) return;
+    accionandoRef.current = true;
     setAsignando(true);
     setError(null);
-    const respuesta = await fetch(`/api/leads/${lead.id}`, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ brokerId: Number(brokerElegido) }),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setAsignando(false);
-    if (!respuesta.ok) {
-      setError(cuerpo.error ?? "No se pudo asignar el responsable.");
-      return;
+    try {
+      const respuesta = await fetch(`/api/leads/${lead.id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ brokerId: Number(brokerElegido) }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        setError(cuerpo.error ?? "No se pudo asignar el responsable.");
+        return;
+      }
+      router.refresh();
+    } catch {
+      setError("Error de red o conexión al asignar el responsable.");
+    } finally {
+      accionandoRef.current = false;
+      setAsignando(false);
     }
-    router.refresh();
   }
 
   async function convertir() {
+    if (accionandoRef.current) return;
     if (!confirm(`¿Convertir a ${lead.contactName} en negocio? Se creará en la primera etapa del embudo.`)) return;
+    accionandoRef.current = true;
     setConvirtiendo(true);
     setError(null);
-    const respuesta = await fetch(`/api/leads/${lead.id}/convertir`, { method: "POST" });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setConvirtiendo(false);
-    if (!respuesta.ok) {
-      setError(cuerpo.error ?? "No se pudo convertir el lead.");
-      return;
+    try {
+      const respuesta = await fetch(`/api/leads/${lead.id}/convertir`, { method: "POST" });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        setError(cuerpo.error ?? "No se pudo convertir el lead.");
+        return;
+      }
+      router.refresh();
+    } catch {
+      setError("Error de red o conexión al convertir el lead.");
+    } finally {
+      accionandoRef.current = false;
+      setConvirtiendo(false);
     }
-    router.refresh();
   }
 
   async function descartar() {
-    if (!motivoDescarte.trim()) {
-      setError("Escribe el motivo del descarte.");
+    if (!motivoDescarte.trim() || accionandoRef.current) {
+      if (!motivoDescarte.trim()) setError("Escribe el motivo del descarte.");
       return;
     }
+    accionandoRef.current = true;
     setDescartando(true);
     setError(null);
-    const respuesta = await fetch(`/api/leads/${lead.id}/descartar`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ discardReason: motivoDescarte.trim() }),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setDescartando(false);
-    if (!respuesta.ok) {
-      setError(cuerpo.error ?? "No se pudo descartar el lead.");
-      return;
+    try {
+      const respuesta = await fetch(`/api/leads/${lead.id}/descartar`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ discardReason: motivoDescarte.trim() }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
+      if (!respuesta.ok) {
+        setError(cuerpo.error ?? "No se pudo descartar el lead.");
+        return;
+      }
+      setMostrarDescarte(false);
+      router.refresh();
+    } catch {
+      setError("Error de red o conexión al descartar el lead.");
+    } finally {
+      accionandoRef.current = false;
+      setDescartando(false);
     }
-    setMostrarDescarte(false);
-    router.refresh();
   }
 
   return (
-    <aside className="inspector">
+    <aside
+      className="inspector"
+      ref={inspectorRef}
+      tabIndex={-1}
+      role="region"
+      aria-label="Ficha de lead"
+    >
       <div className="drawer-head">
         <div>
           <p className="eyebrow">Ficha de lead</p>

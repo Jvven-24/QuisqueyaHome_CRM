@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, useRef, useState } from "react";
 import { formatoFechaIcs } from "@/domain/ics";
 import { fechaSantoDomingo, horaSantoDomingo, sumarDias } from "@/domain/zona-horaria";
+import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { Modal, PageHeader } from "../_ui/prototipo-ui";
 
 export type CitaFila = {
@@ -139,45 +140,70 @@ function FormularioCita({
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
   const [enviando, setEnviando] = useState(false);
   const [errores, setErrores] = useState<Record<string, string>>({});
+  const [errorRed, setErrorRed] = useState<string | null>(null);
 
   async function enviar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!formRef.current) return;
+    if (!formRef.current || submittingRef.current) return;
+    submittingRef.current = true;
     setEnviando(true);
     setErrores({});
+    setErrorRed(null);
 
-    const form = new FormData(formRef.current);
-    const dia = String(form.get("day"));
-    const hora = String(form.get("time"));
-    const datos = {
-      activityType: "meeting",
-      title: form.get("title"),
-      assigneeId: form.get("assigneeId") || undefined,
-      startsAt: `${dia}T${hora}:00-04:00`,
-      location: form.get("location") || undefined,
-    };
-    const respuesta = await fetch("/api/actividades", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(datos),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setEnviando(false);
+    try {
+      const form = new FormData(formRef.current);
+      const dia = String(form.get("day"));
+      const hora = String(form.get("time"));
+      const datos = {
+        activityType: "meeting",
+        title: form.get("title"),
+        assigneeId: form.get("assigneeId") || undefined,
+        startsAt: `${dia}T${hora}:00-04:00`,
+        location: form.get("location") || undefined,
+      };
+      const respuesta = await fetch("/api/actividades", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
 
-    if (!respuesta.ok) {
-      setErrores(cuerpo.fields ?? { _: cuerpo.error ?? "No se pudo agendar la cita." });
-      return;
+      if (!respuesta.ok) {
+        setErrores(cuerpo.fields ?? {});
+        setErrorRed(cuerpo.error ?? "No se pudo agendar la cita. Revisa los campos ingresados.");
+        return;
+      }
+
+      router.refresh();
+      onClose();
+    } catch {
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setErrorRed(
+        offline
+          ? "Sin conexión a internet. Los datos de la cita se mantienen intactos."
+          : "Fallo de conexión al agendar la cita. Tus datos están intactos.",
+      );
+    } finally {
+      submittingRef.current = false;
+      setEnviando(false);
     }
-
-    router.refresh();
-    onClose();
   }
 
   return (
     <Modal title="Nueva cita" onClose={onClose}>
-      <form className="form-grid" ref={formRef} onSubmit={enviar}>
+      <form className="form-grid" ref={formRef} onSubmit={enviar} aria-busy={enviando}>
+        {errorRed && (
+          <div className="span-2">
+            <AlertaErrorFormulario
+              mensaje={errorRed}
+              onReintentar={() => formRef.current?.requestSubmit()}
+              disabled={enviando}
+            />
+          </div>
+        )}
         <label className="span-2">
           Asunto
           <input name="title" required autoFocus placeholder="Cliente y proyecto" />
@@ -215,7 +241,7 @@ function FormularioCita({
         </label>
         {errores._ && <small style={{ color: "#b42318" }}>{errores._}</small>}
         <div className="form-actions">
-          <button className="button secondary" type="button" onClick={onClose}>
+          <button className="button secondary" type="button" onClick={onClose} disabled={enviando}>
             Cancelar
           </button>
           <button className="button primary" type="submit" disabled={enviando}>

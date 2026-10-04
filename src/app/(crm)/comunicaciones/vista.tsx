@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertCircle,
   Check,
@@ -103,7 +103,10 @@ export function ComunicacionesVista({
 
   // Estados UX (Regla P6 de Viltrum OS)
   const [estaOffline, setEstaOffline] = useState(false);
+  const [guardando, setGuardando] = useState(false);
   const [despachando, setDespachando] = useState(false);
+  const guardandoRef = useRef(false);
+  const despachandoRef = useRef(false);
   const [errorMensaje, setErrorMensaje] = useState<string | null>(null);
   const [notificacionExito, setNotificacionExito] = useState<string | null>(null);
   const [copiado, setCopiado] = useState(false);
@@ -168,6 +171,9 @@ export function ComunicacionesVista({
 
   // Guardar o Actualizar plantilla en el servidor
   async function handleGuardarPlantilla() {
+    if (guardandoRef.current) return;
+    guardandoRef.current = true;
+    setGuardando(true);
     setErrorMensaje(null);
     try {
       if (plantillaSeleccionada.id > 0) {
@@ -216,12 +222,22 @@ export function ComunicacionesVista({
         setNotificacionExito("Nueva plantilla guardada exitosamente.");
       }
     } catch (err: unknown) {
-      setErrorMensaje(err instanceof Error ? err.message : "Error al guardar la plantilla.");
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setErrorMensaje(
+        offline
+          ? "Sin conexión a internet. La plantilla no pudo guardarse pero tu texto sigue intacto."
+          : (err instanceof Error ? err.message : "Error al guardar la plantilla."),
+      );
+    } finally {
+      guardandoRef.current = false;
+      setGuardando(false);
     }
   }
 
   // Despachar mensaje multicanal directamente
   async function handleDespacharMensaje() {
+    if (despachandoRef.current) return;
+    despachandoRef.current = true;
     setErrorMensaje(null);
     setDespachando(true);
     try {
@@ -248,8 +264,14 @@ export function ComunicacionesVista({
         }`,
       );
     } catch (err: unknown) {
-      setErrorMensaje(err instanceof Error ? err.message : "Error en el despacho del mensaje.");
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setErrorMensaje(
+        offline
+          ? "Sin conexión a internet. No se pudo despachar el mensaje."
+          : (err instanceof Error ? err.message : "Error en el despacho del mensaje."),
+      );
     } finally {
+      despachandoRef.current = false;
       setDespachando(false);
     }
   }
@@ -493,11 +515,13 @@ export function ComunicacionesVista({
 
             <div className="flex items-center gap-2 pt-1">
               <button
-                className="px-3.5 py-1.5 text-xs font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors"
+                className="px-3.5 py-1.5 text-xs font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-50"
                 type="button"
+                disabled={guardando || despachando}
+                aria-busy={guardando}
                 onClick={handleGuardarPlantilla}
               >
-                Guardar Plantilla
+                {guardando ? "Guardando..." : "Guardar Plantilla"}
               </button>
               <button
                 className="px-3.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors flex items-center gap-1.5"
@@ -579,7 +603,8 @@ export function ComunicacionesVista({
                   <button
                     className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-50"
                     type="button"
-                    disabled={despachando}
+                    disabled={despachando || guardando}
+                    aria-busy={despachando}
                     onClick={handleDespacharMensaje}
                   >
                     <Send className="w-3.5 h-3.5" />
@@ -600,7 +625,8 @@ export function ComunicacionesVista({
                   <button
                     className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-50"
                     type="button"
-                    disabled={despachando}
+                    disabled={despachando || guardando}
+                    aria-busy={despachando}
                     onClick={handleDespacharMensaje}
                   >
                     <Send className="w-3.5 h-3.5" />

@@ -2,8 +2,10 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, type ReactNode, useRef, useState } from "react";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { Avatar, PageHeader } from "../_ui/prototipo-ui";
 import { SinResultados, Vacio } from "../_ui/estados";
+import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { ContactoInspector } from "./inspector";
 
 export type ContactoFila = {
@@ -117,7 +119,7 @@ export function ContactosVista({
         <div className="table-wrap">
           {contactos.length === 0 ? (
             hayFiltro ? (
-              <SinResultados />
+              <SinResultados onLimpiar={() => irCon({ q: undefined, source_id: undefined, page: undefined })} />
             ) : (
               <Vacio titulo="Sin contactos todavía" texto="Registra el primero con “Nuevo contacto”." />
             )
@@ -133,7 +135,18 @@ export function ContactosVista({
               </thead>
               <tbody>
                 {contactos.map((contacto) => (
-                  <tr key={contacto.id} onClick={() => irCon({ contacto: String(contacto.id) })}>
+                  <tr
+                    key={contacto.id}
+                    tabIndex={0}
+                    role="button"
+                    onClick={() => irCon({ contacto: String(contacto.id) })}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        irCon({ contacto: String(contacto.id) });
+                      }
+                    }}
+                  >
                     <td>
                       <span className="table-person">
                         <Avatar name={contacto.fullName} small />
@@ -205,37 +218,54 @@ export function ContactosVista({
 function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: () => void }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const submittingRef = useRef(false);
+  const modalRef = useFocusTrap<HTMLElement>({ onClose });
   const [enviando, setEnviando] = useState(false);
   const [errores, setErrores] = useState<Record<string, string>>({});
+  const [errorRed, setErrorRed] = useState<string | null>(null);
   const [candidatos, setCandidatos] = useState<
     { id: number; fullName: string; phoneDisplay: string | null; email: string | null }[] | null
   >(null);
 
   async function enviar(crearIgual = false) {
-    if (!formRef.current) return;
+    if (!formRef.current || submittingRef.current) return;
+    submittingRef.current = true;
     setEnviando(true);
     setErrores({});
+    setErrorRed(null);
 
-    const datos = Object.fromEntries(new FormData(formRef.current).entries());
-    const respuesta = await fetch("/api/contactos", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ ...datos, crear_igual: crearIgual }),
-    });
-    const cuerpo = await respuesta.json().catch(() => ({}));
-    setEnviando(false);
+    try {
+      const datos = Object.fromEntries(new FormData(formRef.current).entries());
+      const respuesta = await fetch("/api/contactos", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...datos, crear_igual: crearIgual }),
+      });
+      const cuerpo = await respuesta.json().catch(() => ({}));
 
-    if (respuesta.status === 409) {
-      setCandidatos((cuerpo.details?.candidatos as typeof candidatos) ?? []);
-      return;
+      if (respuesta.status === 409) {
+        setCandidatos((cuerpo.details?.candidatos as typeof candidatos) ?? []);
+        return;
+      }
+      if (!respuesta.ok) {
+        setErrores(cuerpo.fields ?? {});
+        setErrorRed(cuerpo.error ?? "No se pudo crear el contacto. Revisa los datos ingresados.");
+        return;
+      }
+
+      router.refresh();
+      onClose();
+    } catch {
+      const offline = typeof navigator !== "undefined" && !navigator.onLine;
+      setErrorRed(
+        offline
+          ? "Sin conexión a internet. Los datos ingresados se mantienen intactos."
+          : "Fallo de conexión de red al crear el contacto. Tus datos están intactos.",
+      );
+    } finally {
+      submittingRef.current = false;
+      setEnviando(false);
     }
-    if (!respuesta.ok) {
-      setErrores(cuerpo.fields ?? { _: cuerpo.error ?? "No se pudo crear el contacto." });
-      return;
-    }
-
-    router.refresh();
-    onClose();
   }
 
   function alEnviar(event: FormEvent<HTMLFormElement>) {
@@ -245,17 +275,26 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <section className="modal" role="dialog" aria-modal="true" aria-labelledby="nuevo-contacto-title">
+      <section className="modal" role="dialog" aria-modal="true" aria-labelledby="nuevo-contacto-title" ref={modalRef}>
         <div className="drawer-head">
           <h2 id="nuevo-contacto-title">Nuevo contacto</h2>
           <button className="icon-button" onClick={onClose} aria-label="Cerrar">
             ×
           </button>
         </div>
-        <form className="form-grid" ref={formRef} onSubmit={alEnviar}>
+        <form className="form-grid" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
+          {errorRed && (
+            <div className="span-2">
+              <AlertaErrorFormulario
+                mensaje={errorRed}
+                onReintentar={() => void enviar(false)}
+                disabled={enviando}
+              />
+            </div>
+          )}
           <label className="span-2">
             Nombre completo
-            <input name="fullName" required />
+            <input name="fullName" required autoFocus />
             {errores.fullName && <small style={{ color: "#b42318" }}>{errores.fullName}</small>}
           </label>
           <label>
@@ -302,7 +341,7 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
           )}
 
           <div className="form-actions">
-            <button className="button" type="button" onClick={onClose}>
+            <button className="button" type="button" onClick={onClose} disabled={enviando}>
               Cancelar
             </button>
             <button className="button primary" type="submit" disabled={enviando}>

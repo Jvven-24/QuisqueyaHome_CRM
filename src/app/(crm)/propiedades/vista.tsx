@@ -109,7 +109,7 @@ export function PropiedadesVista({
       </div>
       {proyectos.length === 0 ? (
         hayFiltro ? (
-          <SinResultados />
+          <SinResultados onLimpiar={() => irCon({ zone: undefined, type: undefined })} />
         ) : (
           <Vacio titulo="Sin proyectos todavía" texto="Registra el primero con “Nuevo proyecto”." />
         )
