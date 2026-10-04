@@ -350,17 +350,24 @@ export function PipelineVista({
                           onDragStart={(event) => event.dataTransfer.setData("dealId", String(negocio.id))}
                           onClick={() => irCon({ deal: String(negocio.id) })}
                         >
-                          <div className="flex items-center justify-between gap-2 mb-2">
-                            <span className="deal-source text-[11px] font-bold tracking-wider text-ink-muted uppercase bg-surface-alt px-2 py-0.5 rounded-md border border-line">
+                          {/* Header row: Source & Confotur tag */}
+                          <div className="flex items-center justify-between gap-1.5 mb-2 flex-wrap">
+                            <span className="deal-source text-[10px] font-extrabold tracking-wider text-ink-muted uppercase bg-surface-alt px-2 py-0.5 rounded-md border border-line font-mono">
                               {negocio.sourceName ?? "Directo"}
                             </span>
-                            {negocio.commissionBasisPoints ? (
-                              <span className="text-[11px] font-bold text-gold-700 bg-gold-100 px-2 py-0.5 rounded-full border border-gold-600/20">
-                                {(negocio.commissionBasisPoints / 100).toFixed(1)}% com.
+                            <div className="flex items-center gap-1">
+                              <span className="text-[10px] font-bold text-cyan-800 bg-cyan-50 px-1.5 py-0.5 rounded border border-cyan-200 uppercase tracking-tight">
+                                Confotur
                               </span>
-                            ) : null}
+                              {negocio.probability ? (
+                                <span className="text-[10px] font-bold text-navy-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                                  {negocio.probability}% prob.
+                                </span>
+                              ) : null}
+                            </div>
                           </div>
 
+                          {/* Contact Name & Project */}
                           <strong className="block font-heading font-bold text-base text-navy-950 group-hover:text-gold-700 transition-colors leading-snug">
                             {negocio.contactName}
                           </strong>
@@ -368,17 +375,45 @@ export function PipelineVista({
                           <div className="flex items-center gap-1.5 text-xs text-ink-muted mt-1.5 mb-2 font-medium">
                             <Building2 className="size-3.5 text-gold-600 shrink-0" />
                             <span className="truncate">
-                              {negocio.proyectoPrincipal?.projectName ?? "Interés general"}
+                              {negocio.proyectoPrincipal?.projectName ?? "Interés en pozo RD"}
                               {negocio.proyectoPrincipal?.unitCode ? ` · Unidad ${negocio.proyectoPrincipal.unitCode}` : ""}
                             </span>
                           </div>
 
-                          <div className="text-base font-extrabold text-navy-900 tracking-tight mb-2.5">
-                            {formatearMonto(negocio.amountCents, negocio.currency)}
+                          {/* Amount and Commission estimate */}
+                          <div className="flex items-baseline justify-between gap-2 mb-2">
+                            <span className="text-base font-extrabold text-navy-900 tracking-tight font-heading">
+                              {formatearMonto(negocio.amountCents, negocio.currency)}
+                            </span>
+                            {negocio.commissionBasisPoints && negocio.amountCents ? (
+                              <span className="text-[10px] font-bold text-gold-700 bg-gold-50 px-2 py-0.5 rounded-md border border-gold-200">
+                                Com: {formatearMonto((negocio.amountCents * negocio.commissionBasisPoints) / 10000, negocio.currency)} ({(negocio.commissionBasisPoints / 100).toFixed(1)}%)
+                              </span>
+                            ) : null}
                           </div>
 
-                          <div className="flex items-center gap-1.5 text-xs text-ink-muted/90 bg-surface-alt/80 px-2.5 py-1.5 rounded-lg border border-line/60 mb-3">
-                            <Calendar className="size-3 text-ink-muted shrink-0" />
+                          {/* Pre-construction Dominican payment milestone bar */}
+                          <div className="mb-2.5 p-1.5 bg-surface-alt/70 rounded-lg border border-line/60">
+                            <div className="flex items-center justify-between text-[9px] font-bold text-ink-muted uppercase tracking-wider mb-1 font-mono">
+                              <span>Esquema Pre-construcción</span>
+                              <span className="text-gold-700">10 / 40 / 50</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-1 text-center text-[9px] font-semibold">
+                              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded py-0.5">
+                                Reserva 10%
+                              </span>
+                              <span className="bg-blue-50 text-blue-700 border border-blue-200 rounded py-0.5">
+                                Obra 40%
+                              </span>
+                              <span className="bg-amber-50 text-amber-700 border border-amber-200 rounded py-0.5">
+                                Entrega 50%
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Next activity SLA pill */}
+                          <div className="flex items-center gap-1.5 text-xs text-ink-muted/90 bg-surface-alt/90 px-2.5 py-1.5 rounded-lg border border-line/60 mb-3">
+                            <Calendar className="size-3 text-gold-600 shrink-0" />
                             <span className="truncate">
                               {negocio.nextActivityTitle
                                 ? `${negocio.nextActivityTitle}${
@@ -390,10 +425,11 @@ export function PipelineVista({
                             </span>
                           </div>
 
+                          {/* Footer with broker avatar and fast WhatsApp action */}
                           <footer className="flex items-center justify-between pt-2.5 border-t border-line/60">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 min-w-0">
                               <Avatar name={negocio.brokerName ?? "Sin asignar"} small />
-                              <span className="text-xs font-semibold text-ink-muted truncate max-w-[95px]">
+                              <span className="text-xs font-semibold text-ink-muted truncate max-w-[105px]">
                                 {negocio.brokerName?.split(" ")[0] ?? "Sin asignar"}
                               </span>
                             </div>
@@ -404,8 +440,8 @@ export function PipelineVista({
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-success hover:text-success/80 bg-success-bg px-2.5 py-1 rounded-md border border-success/30 transition-colors"
-                                title="Contactar por WhatsApp"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-success hover:text-success/80 bg-success-bg px-2.5 py-1 rounded-md border border-success/30 transition-colors shrink-0"
+                                title="Contactar por WhatsApp con plantilla de proyecto"
                               >
                                 <MessageCircle className="size-3.5" />
                                 <span>WhatsApp</span>
