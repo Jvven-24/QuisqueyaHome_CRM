@@ -68,10 +68,13 @@
     {
      "id": "F0.6",
      "titulo": "Arquitectura de integraciones (ARQ-VRE-002) aprobada por Wilber",
-     "estado": "IN_PROGRESS",
+     "estado": "DONE",
      "depende": [],
      "peso": 1,
-     "responsable": "Wilber+D03"
+     "responsable": "Wilber+D03",
+     "evidencia": {
+      "commit": "f886ce8"
+     }
     }
    ]
   },
@@ -202,7 +205,7 @@
     },
     {
      "id": "E1.1a",
-     "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · ficha READY",
+     "titulo": "Negocios (kanban real, reglas de etapa, evento al outbox) · ficha READY",
      "estado": "TODO",
      "depende": [
       "F3.2"
@@ -212,7 +215,7 @@
     },
     {
      "id": "E1.1b",
-     "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · backend y consultas con test:db",
+     "titulo": "Negocios (kanban real, reglas de etapa, evento al outbox) · backend y consultas con test:db",
      "estado": "TODO",
      "depende": [
       "E1.1a",
@@ -224,7 +227,7 @@
     },
     {
      "id": "E1.1c",
-     "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · interfaz completa (6 estados, móvil, gráficas)",
+     "titulo": "Negocios (kanban real, reglas de etapa, evento al outbox) · interfaz completa (6 estados, móvil, gráficas)",
      "estado": "TODO",
      "depende": [
       "E1.1b"
@@ -234,7 +237,7 @@
     },
     {
      "id": "E1.1d",
-     "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · QA independiente con capturas y cierre (10 condiciones)",
+     "titulo": "Negocios (kanban real, reglas de etapa, evento al outbox) · QA independiente con capturas y cierre (10 condiciones)",
      "estado": "TODO",
      "depende": [
       "E1.1c"
@@ -427,10 +430,13 @@
     {
      "id": "F3.2",
      "titulo": "P0 Inventario del CRM",
-     "estado": "IN_PROGRESS",
+     "estado": "DONE",
      "depende": [],
      "peso": 1,
-     "responsable": "D03"
+     "responsable": "D03",
+     "evidencia": {
+      "archivo": ".viltrum/vre-os/spec/inventario/crm-as-is.md"
+     }
     },
     {
      "id": "F3.3",
