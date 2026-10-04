@@ -51,6 +51,7 @@ import {
   date,
   index,
   integer,
+  jsonb,
   pgTable,
   real,
   serial,
@@ -59,6 +60,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import { CLASES_FALLO_CRM, TIPOS_EVENTO_CRM } from "../../application/compartido/crm.ts";
 
 import {
   STAGE_KINDS,
@@ -1124,3 +1126,70 @@ export const auditLog = pgTable(
     index("audit_log_created_idx").on(table.createdAt),
   ],
 );
+
+/* Base de integraciones: acceso exclusivamente servidor, sin políticas públicas. */
+export const outbox = pgTable("outbox", {
+  eventId: uuid("event_id").primaryKey(),
+  eventType: text("event_type", { enum: TIPOS_EVENTO_CRM }).notNull(),
+  version: integer("version").notNull().default(1),
+  aggregateId: integer("aggregate_id").notNull(),
+  correlationId: uuid("correlation_id").notNull(),
+  payload: jsonb("payload").$type<Record<string, unknown>>().notNull(),
+  idempotencyKey: text("idempotency_key").notNull(),
+  attempts: integer("attempts").notNull().default(0),
+  availableAt: instant("available_at").notNull().defaultNow(),
+  sentAt: instant("sent_at"),
+  deadAt: instant("dead_at"),
+  lastFailure: text("last_failure", { enum: CLASES_FALLO_CRM }),
+  attemptHistory: jsonb("attempt_history").$type<{ attempt: number; at: string; outcome: string }[]>().notNull().default([]),
+  createdAt: instant("created_at").notNull().defaultNow(),
+}, (table) => [
+  uniqueIndex("outbox_idempotency_unq").on(table.idempotencyKey),
+  index("outbox_pending_idx").on(table.availableAt, table.createdAt).where(sql`${table.sentAt} is null and ${table.deadAt} is null`),
+  index("outbox_aggregate_idx").on(table.eventType, table.aggregateId, table.createdAt),
+  check("outbox_version_check", sql`${table.version} > 0`),
+  check("outbox_attempts_check", sql`${table.attempts} >= 0`),
+  check("outbox_terminal_check", sql`${table.sentAt} is null or ${table.deadAt} is null`),
+  check("outbox_type_check", sql`${table.eventType} in ('LeadCreado','NegocioCambioEtapa','ActividadRegistrada')`),
+]).enableRLS();
+
+/** Se conserva también la identidad en outbox: un replay no recrea un evento muerto. */
+export const outboxDead = pgTable("outbox_dead", {
+  eventId: uuid("event_id").primaryKey().references(() => outbox.eventId, { onDelete: "restrict" }),
+  reason: text("reason", { enum: CLASES_FALLO_CRM }).notNull(),
+  failedAt: instant("failed_at").notNull().defaultNow(),
+}, (table) => [
+  index("outbox_dead_failed_idx").on(table.failedAt),
+  check("outbox_dead_reason_check", sql`${table.reason} in ('RETRYABLE','NON_RETRYABLE','HUMAN_REQUIRED')`),
+]).enableRLS();
+
+export const externalRefs = pgTable("external_refs", {
+  id: serial("id").primaryKey(),
+  entityType: text("entity_type").notNull(),
+  localId: integer("local_id").notNull(),
+  system: text("system").notNull(),
+  externalId: text("external_id").notNull(),
+  version: integer("version").notNull(),
+  syncedAt: instant("synced_at").notNull().defaultNow(),
+}, (table) => [
+  uniqueIndex("external_refs_local_system_unq").on(table.entityType, table.localId, table.system),
+  uniqueIndex("external_refs_system_external_unq").on(table.system, table.externalId),
+  check("external_refs_version_check", sql`${table.version} > 0`),
+]).enableRLS();
+
+/** Recepción durable != efecto aplicado; un crash permite retomar received. */
+export const webhookInbox = pgTable("webhook_inbox", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  system: text("system").notNull(),
+  accountId: text("account_id").notNull(),
+  eventId: text("event_id").notNull(),
+  correlationId: uuid("correlation_id").notNull(),
+  version: integer("version").notNull(),
+  receivedAt: instant("received_at").notNull().defaultNow(),
+  processedAt: instant("processed_at"),
+  payload: jsonb("payload").$type<Record<string, unknown>>().notNull(),
+}, (table) => [
+  uniqueIndex("webhook_inbox_account_event_unq").on(table.system, table.accountId, table.eventId),
+  index("webhook_inbox_pending_idx").on(table.receivedAt).where(sql`${table.processedAt} is null`),
+  check("webhook_inbox_version_check", sql`${table.version} > 0`),
+]).enableRLS();

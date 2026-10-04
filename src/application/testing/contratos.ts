@@ -21,8 +21,34 @@ import type { AdminAuth } from "../compartido/admin-auth.ts";
 import type { AlmacenamientoArchivos } from "../compartido/almacenamiento.ts";
 import type { Auditoria } from "../compartido/auditoria.ts";
 import type { UnidadDeTrabajo } from "../compartido/unidad-de-trabajo.ts";
+import type { CrmPort } from "../compartido/crm.ts";
 
 const actor: Actor = { userId: 7, roleSlug: "admin", permissions: [] };
+
+export function contratoCrm(nombre: string, crear: () => { crm: CrmPort; contar: () => number }): void {
+  const contexto = { idempotencyKey: "evento-1", correlationId: "correlacion-1", version: 1 };
+  test(`${nombre}: salud disponible sin red`, async () => {
+    assert.equal(await crear().crm.salud(), "disponible");
+  });
+  test(`${nombre}: cada capacidad devuelve una referencia propia`, async () => {
+    const { crm, contar } = crear();
+    assert.deepEqual(await crm.reflejarContacto({ id: 7 }, contexto), { system: "local", externalId: "contact:7" });
+    assert.deepEqual(await crm.reflejarNegocio({ id: 8, stageId: 2 }, { ...contexto, idempotencyKey: "evento-2" }), { system: "local", externalId: "deal:8" });
+    assert.deepEqual(await crm.registrarActividad({ id: 9, activityType: "call" }, { ...contexto, idempotencyKey: "evento-3" }), { system: "local", externalId: "activity:9" });
+    assert.equal(contar(), 3);
+  });
+  test(`${nombre}: duplicado concurrente conserva referencia y registra una vez`, async () => {
+    const { crm, contar } = crear();
+    const refs = await Promise.all([crm.reflejarContacto({ id: 7 }, contexto), crm.reflejarContacto({ id: 7 }, contexto)]);
+    assert.deepEqual(refs[0], refs[1]);
+    assert.equal(contar(), 1);
+  });
+  test(`${nombre}: clave reutilizada con otro contenido se rechaza`, async () => {
+    const { crm } = crear();
+    await crm.reflejarContacto({ id: 7 }, contexto);
+    await assert.rejects(crm.reflejarContacto({ id: 8 }, contexto), ConflictError);
+  });
+}
 
 /**
  * El puerto de auditoría no expone lectura, así que la fábrica entrega también

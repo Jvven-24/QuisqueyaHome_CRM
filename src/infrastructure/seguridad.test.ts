@@ -61,3 +61,38 @@ test("toda ruta de la API comprueba permisos en servidor, salvo las públicas de
     "Rutas sin requireScope/requireFullScope. Si una ruta debe ser pública, decláralo en RUTAS_PUBLICAS con lo que la protege.",
   );
 });
+
+test("ARQ-3: tablas de integración con RLS en esquema y migración", () => {
+  const esquema = readFileSync(new URL("src/infrastructure/db/schema.ts", raiz), "utf8");
+  const dir = new URL("drizzle/", raiz);
+  const migraciones = readdirSync(dir).filter((f) => f.endsWith(".sql")).map((f) => readFileSync(new URL(f, dir), "utf8")).join("\n");
+  for (const tabla of ["outbox", "outbox_dead", "external_refs", "webhook_inbox"]) {
+    const declaracion = esquema.slice(esquema.indexOf(`pgTable("${tabla}"`)).split("export const ")[0]!;
+    assert.match(declaracion, /\.enableRLS\(\)/, `${tabla}: esquema sin RLS`);
+    assert.ok(migraciones.includes(`ALTER TABLE "${tabla}" ENABLE ROW LEVEL SECURITY`), `${tabla}: migración sin RLS`);
+  }
+});
+
+/** Firma sobre bytes crudos antes de JSON; leer bytes es necesario para verificar. */
+function exigirVerificacionWebhook(codigo: string): void {
+  const sinComentarios = codigo.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|\n)\s*\/\/[^\n]*/g, "$1");
+  const verificacion = sinComentarios.search(/await\s+verificarFirma(?:YReplay)?\(/);
+  const parseo = sinComentarios.search(/(?:JSON\.parse|\w+\.json)\s*\(/);
+  assert.ok(verificacion >= 0, "webhook sin verificación explícita await verificarFirma(bytes)");
+  assert.ok(parseo < 0 || verificacion < parseo, "webhook parsea antes de verificar firma");
+  assert.doesNotMatch(sinComentarios, /catch\s*\([^)]*\)\s*\{\s*\}/, "webhook ignora el rechazo de firma");
+}
+
+test("ARQ-4: webhooks verifican firma antes de parsear el cuerpo", () => {
+  const codigoValido = 'const bytes = await request.arrayBuffer(); await verificarFirma(bytes); const payload = JSON.parse(texto);';
+  exigirVerificacionWebhook(codigoValido);
+  // Fixtures obligatorias: la ausencia actual de rutas webhooks no vacía la prueba.
+  assert.throws(() => exigirVerificacionWebhook('const payload = await request.json(); await verificarFirma(payload);'));
+  assert.throws(() => exigirVerificacionWebhook('const payload = JSON.parse(texto);'));
+  const dir = new URL("src/app/api/", raiz);
+  for (const archivo of (readdirSync(dir, { recursive: true }) as string[]).map((f) => f.replaceAll("\\", "/"))) {
+    if (archivo.startsWith("webhooks/") && archivo.endsWith("/route.ts")) {
+      exigirVerificacionWebhook(readFileSync(new URL(archivo, dir), "utf8"));
+    }
+  }
+});

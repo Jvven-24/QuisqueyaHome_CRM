@@ -19,6 +19,13 @@ function required(name: string): string {
 /** Cadena de conexión de Postgres (Supabase). Solo servidor. */
 export const databaseUrl = () => required("DATABASE_URL");
 
+/** Base local: cualquier motor todavía no implementado falla cerrado. */
+export function crmMotor(): "local" {
+  const motor = process.env.CRM_MOTOR ?? "local";
+  if (motor !== "local") throw new Error("Motor CRM no implementado.");
+  return motor;
+}
+
 /** URL del proyecto de Supabase. Pública: la usa también el navegador. */
 export const supabaseUrl = () => required("NEXT_PUBLIC_SUPABASE_URL");
 

@@ -130,3 +130,26 @@ test("un módulo migrado ya no toca la base desde src/app/", () => {
     "Este módulo ya tiene casos de uso en src/application/: la ruta o la página debe llamarlos, no consultar la base. Si el import hace falta, el módulo no está migrado.",
   );
 });
+
+test("ARQ-1: app y application no importan adaptadores de integraciones", () => {
+  assert.deepEqual(infracciones(["app", "application"], (d) => "interno" in d && d.interno.startsWith("infrastructure/integraciones/")), []);
+});
+
+test("ARQ-2: proveedor CRM confinado a su adaptador", () => {
+  // Esta base incorpora el puerto CRM. Los proveedores de comunicaciones previos
+  // tienen su propia frontera; añadir otro proveedor CRM amplía este catálogo.
+  const proveedor = /\btwenty\b|@twenty\//i;
+  const fuera = archivos.filter((archivo) => !archivo.endsWith(".test.ts") && !archivo.startsWith("infrastructure/integraciones/twenty/"))
+    .filter((archivo) => proveedor.test(readFileSync(new URL(archivo, src), "utf8")));
+  assert.deepEqual(fuera, []);
+});
+
+test("ARQ-5: CrmPort ejecuta la misma suite en memoria y adaptador local", () => {
+  const contrato = readFileSync(new URL("application/testing/contratos.ts", src), "utf8");
+  const suite = readFileSync(new URL("infrastructure/integraciones/crm/local.test.ts", src), "utf8");
+  assert.match(contrato, /export function contratoCrm\(/);
+  assert.match(suite, /contratoCrm\("crm memoria"/);
+  assert.match(suite, /contratoCrm\("crm local"/);
+  assert.match(suite, /crmEnMemoria\(/);
+  assert.match(suite, /crmLocal\(/);
+});
