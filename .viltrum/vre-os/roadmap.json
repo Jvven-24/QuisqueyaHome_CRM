@@ -471,10 +471,13 @@
     {
      "id": "F3.6",
      "titulo": "P3 UX integraciones y open source (B)",
-     "estado": "IN_PROGRESS",
+     "estado": "DONE",
      "depende": [],
      "peso": 1,
-     "responsable": "D05"
+     "responsable": "D05",
+     "evidencia": {
+      "archivo": ".viltrum/vre-os/D05-ux-modulos-B.md"
+     }
     },
     {
      "id": "F3.7",

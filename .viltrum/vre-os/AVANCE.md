@@ -1,6 +1,6 @@
 # Avance · VRE-OS · Quisqueya Home CRM
 
-Actualizado: 2026-10-04 · **Global: 19.9 %** ████░░░░░░░░░░░░░░░░
+Actualizado: 2026-10-04 · **Global: 20.3 %** ████░░░░░░░░░░░░░░░░
 
 | Fase | Avance | Hechas | En curso | Pendientes | Bloqueadas |
 |---|---|---|---|---|---|
@@ -8,7 +8,7 @@ Actualizado: 2026-10-04 · **Global: 19.9 %** ████░░░░░░░�
 | F1 Datos e higiene visual | ████████████ 100 % | 4 | 0 | 0 | 0 |
 | F2 Reportes reales e integración base | ███████░░░░░ 60 % | 2 | 2 | 1 | 0 |
 | E1 E1 · Cinco entregas completas (plan de alto impacto) | ░░░░░░░░░░░░ 1 % | 0 | 1 | 20 | 0 |
-| F3 Especificación (pasadas P0–P6) | ████░░░░░░░░ 31 % | 3 | 2 | 5 | 0 |
+| F3 Especificación (pasadas P0–P6) | ████░░░░░░░░ 35 % | 4 | 1 | 5 | 0 |
 | F4 Rediseño de pantallas existentes | █░░░░░░░░░░░ 6 % | 0 | 1 | 8 | 0 |
 | F5 Módulos nuevos del Blueprint | ░░░░░░░░░░░░ 0 % | 0 | 0 | 16 | 0 |
 | F6 Integraciones con sistemas open source | ░░░░░░░░░░░░ 0 % | 0 | 0 | 4 | 1 |
@@ -24,7 +24,6 @@ Actualizado: 2026-10-04 · **Global: 19.9 %** ████░░░░░░░�
 - **E1.4a** Brokers (ranking y perfil con rendimiento) · ficha READY — D01+D03 (Codex)
 - **E1.5a** Integraciones (salud de puertos, cola de salida, reintentar/descartar) · ficha READY — D01+D03 (Codex)
 - **F3.3** P0 Inventario del CMS reutilizable _(en curso)_ — D22
-- **F3.6** P3 UX integraciones y open source (B) _(en curso)_ — D05
 
 ## Bloqueado (necesita una decisión o acceso)
 - **F6.1** Twenty detrás de CrmPort (TwentyAdapter) — D19
