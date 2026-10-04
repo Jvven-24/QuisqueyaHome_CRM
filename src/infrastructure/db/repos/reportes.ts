@@ -1,264 +1,197 @@
 /**
- * Repositorio Drizzle de Reportes y BI (M12).
- *
- * Ejecuta agregaciones SQL sobre leads, deals, pipeline_stages, fuentes y motivos de pérdida.
+ * Reportes: una sentencia de lectura, una instantánea MVCC.
+ * Las fechas filtran eventos; el embudo/forecast filtran cohortes por creación.
  */
-
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
-import type {
-  FunnelStep,
-  LossReasonMetric,
-  ReportesBiData,
-  ReportesRepositorio,
-  SourceDistribution,
-  ZoneInterestMetric,
-} from "../../../application/reportes/puertos";
+import { and, eq, sql, type SQL } from "drizzle-orm";
+import type { Actor } from "../../../domain/rbac.ts";
+import { visibleRows } from "../../rbac-filter.ts";
+import { REPORT_TIME_ZONE, TREND_MONTHS, requireReadScope } from "../../../application/reportes/consultas.ts";
+import type { ReadScope, ReportQuery, ReportSnapshot, ReportesRepositorio } from "../../../application/reportes/puertos.ts";
 import type { Db } from "../client";
-import { deals, leads, leadSources, lossReasons, pipelineStages } from "../schema";
+import { leads, deals, units, commissions } from "../schema.ts";
 
-export function repositorioReportes(db: Db): ReportesRepositorio {
-  return {
-    async obtenerMetricasBi(actorId: number, scope: string): Promise<ReportesBiData> {
-      try {
-        const filtroScopeLeads =
-        scope === "own"
-          ? and(isNull(leads.deletedAt), eq(leads.brokerId, actorId))
-          : isNull(leads.deletedAt);
-
-      const filtroScopeDeals =
-        scope === "own"
-          ? and(isNull(deals.deletedAt), eq(deals.brokerId, actorId))
-          : isNull(deals.deletedAt);
-
-      // 1. Total leads y conteos
-      const [leadsTotales] = await db
-        .select({ count: sql<number>`count(*)::int` })
-        .from(leads)
-        .where(filtroScopeLeads);
-
-      const totalLeads = Number(leadsTotales?.count || 0);
-
-      // 2. Etapas del Embudo
-      const filasDealsPorEtapa = await db
-        .select({
-          stageName: pipelineStages.name,
-          stageKind: pipelineStages.kind,
-          position: pipelineStages.position,
-          count: sql<number>`count(${deals.id})::int`,
-        })
-        .from(pipelineStages)
-        .leftJoin(deals, and(eq(deals.stageId, pipelineStages.id), filtroScopeDeals))
-        .groupBy(pipelineStages.id, pipelineStages.name, pipelineStages.kind, pipelineStages.position)
-        .orderBy(pipelineStages.position);
-
-      const totalEmbudoBase = Math.max(totalLeads, 1);
-      const funnel: FunnelStep[] = [
-        {
-          label: "Leads",
-          count: totalLeads,
-          widthPercent: 100,
-        },
-      ];
-
-      for (const [idx, etapa] of filasDealsPorEtapa.entries()) {
-        const c = Number(etapa.count || 0);
-        // Ancho decreciente proporcional o relativo
-        const width = Math.max(20, Math.min(100, Math.round(100 - (idx + 1) * 12)));
-        funnel.push({
-          label: etapa.stageName,
-          count: c,
-          widthPercent: width,
-        });
-      }
-
-      // Si no hay datos suficientes de deals en la BD, dar estructura representativa con los leads
-      if (funnel.length <= 1) {
-        funnel.push(
-          { label: "Contactados", count: Math.round(totalLeads * 0.75), widthPercent: 88 },
-          { label: "Presentaciones", count: Math.round(totalLeads * 0.5), widthPercent: 76 },
-          { label: "Preselección", count: Math.round(totalLeads * 0.3), widthPercent: 64 },
-          { label: "Negociación", count: Math.round(totalLeads * 0.2), widthPercent: 52 },
-          { label: "Cierres", count: Math.round(totalLeads * 0.15), widthPercent: 40 },
-        );
-      }
-
-      // 3. Origen / Canales
-      const filasFuentes = await db
-        .select({
-          sourceName: leadSources.name,
-          count: sql<number>`count(${leads.id})::int`,
-        })
-        .from(leadSources)
-        .leftJoin(leads, and(eq(leads.sourceId, leadSources.id), filtroScopeLeads))
-        .groupBy(leadSources.id, leadSources.name)
-        .orderBy(desc(sql`count(${leads.id})`));
-
-      const totalConFuente = filasFuentes.reduce((acc, f) => acc + Number(f.count || 0), 0);
-      const baseFuentes = totalConFuente > 0 ? totalConFuente : 1;
-      const colores: Array<"gold" | "navy" | "blue" | "gray"> = ["gold", "navy", "blue", "gray"];
-
-      let sources: SourceDistribution[] = filasFuentes
-        .filter(f => Number(f.count) > 0)
-        .slice(0, 4)
-        .map((f, i) => ({
-          source: f.sourceName,
-          count: Number(f.count),
-          percentage: Math.round((Number(f.count) / baseFuentes) * 100),
-          colorClass: colores[i % colores.length] ?? "blue",
-        }));
-
-      if (sources.length === 0) {
-        sources = [
-          { source: "YouTube", count: Math.max(1, Math.round(totalLeads * 0.58)), percentage: 58, colorClass: "gold" },
-          { source: "Web", count: Math.max(1, Math.round(totalLeads * 0.22)), percentage: 22, colorClass: "navy" },
-          { source: "WhatsApp / Telegram", count: Math.max(1, Math.round(totalLeads * 0.14)), percentage: 14, colorClass: "blue" },
-          { source: "Referidos", count: Math.max(1, Math.round(totalLeads * 0.06)), percentage: 6, colorClass: "gray" },
-        ];
-      }
-
-      // 4. Zonas Calientes
-      const filasZonas = await db
-        .select({
-          zone: leads.zoneInterest,
-          count: sql<number>`count(*)::int`,
-        })
-        .from(leads)
-        .where(and(filtroScopeLeads, sql`${leads.zoneInterest} is not null`))
-        .groupBy(leads.zoneInterest)
-        .orderBy(desc(sql`count(*)`));
-
-      let zones: ZoneInterestMetric[] = filasZonas
-        .filter(z => z.zone && z.zone.trim().length > 0)
-        .slice(0, 4)
-        .map(z => ({
-          label: z.zone!,
-          count: Number(z.count),
-          percentage: Math.min(100, Math.round((Number(z.count) / totalEmbudoBase) * 100)),
-        }));
-
-      if (zones.length === 0) {
-        zones = [
-          { label: "Punta Cana", count: 88, percentage: 88 },
-          { label: "Bávaro", count: 68, percentage: 68 },
-          { label: "Cap Cana", count: 45, percentage: 45 },
-          { label: "Las Terrenas", count: 28, percentage: 28 },
-        ];
-      }
-
-      // 5. Motivos de Pérdida
-      const filasPerdida = await db
-        .select({
-          reasonName: lossReasons.name,
-          count: sql<number>`count(${deals.id})::int`,
-        })
-        .from(lossReasons)
-        .leftJoin(deals, and(eq(deals.lossReasonId, lossReasons.id), filtroScopeDeals))
-        .groupBy(lossReasons.id, lossReasons.name)
-        .orderBy(desc(sql`count(${deals.id})`));
-
-      let lossReasonList: LossReasonMetric[] = filasPerdida
-        .filter(r => Number(r.count) > 0)
-        .slice(0, 4)
-        .map(r => ({
-          label: r.reasonName,
-          count: Number(r.count),
-        }));
-
-      if (lossReasonList.length === 0) {
-        lossReasonList = [
-          { label: "Precio fuera de rango", count: 12 },
-          { label: "No responde seguimiento", count: 8 },
-          { label: "Compró otro proyecto", count: 5 },
-          { label: "Sin calificación bancaria", count: 4 },
-        ];
-      }
-
-      // 6. Proyección Ponderada
-      const filasDealsAbiertos = await db
-        .select({
-          amountCents: deals.amountCents,
-          probability: deals.probability,
-        })
-        .from(deals)
-        .where(filtroScopeDeals);
-
-      let totalPonderadoCents = 0;
-      for (const d of filasDealsAbiertos) {
-        const monto = Number(d.amountCents || 0);
-        const prob = (d.probability ?? 50) / 100;
-        totalPonderadoCents += Math.round(monto * prob);
-      }
-
-      const totalDisplay =
-        totalPonderadoCents > 0
-          ? `US$${(totalPonderadoCents / 100000000).toFixed(2)}M`
-          : "US$1.42M";
-
-      return {
-        totalLeads,
-        funnel,
-        sources,
-        zones,
-        lossReasons: lossReasonList,
-        projection: {
-          totalWeightedCents: totalPonderadoCents || 142000000,
-          totalDisplayUsd: totalDisplay,
-          confidenceEstimated: 72,
-          points: [
-            { month: "Jul", amountCents: 15000000, heightPercent: 40 },
-            { month: "Ago", amountCents: 22000000, heightPercent: 55 },
-            { month: "Sep", amountCents: 28000000, heightPercent: 65 },
-            { month: "Oct", amountCents: 35000000, heightPercent: 75 },
-            { month: "Nov", amountCents: 42000000, heightPercent: 85 },
-            { month: "Dic", amountCents: 50000000, heightPercent: 95 },
-          ],
-        },
-      };
-    } catch (err) {
-      console.warn("[Reportes Repo] Modo offline/demo activo:", (err as Error).message);
-      return {
-        totalLeads: 48,
-        funnel: [
-          { label: "Leads", count: 48, widthPercent: 100 },
-          { label: "Contactados", count: 36, widthPercent: 88 },
-          { label: "Presentaciones", count: 24, widthPercent: 76 },
-          { label: "Preselección", count: 14, widthPercent: 64 },
-          { label: "Negociación", count: 9, widthPercent: 52 },
-          { label: "Cierres", count: 7, widthPercent: 40 },
-        ],
-        sources: [
-          { source: "YouTube", count: 28, percentage: 58, colorClass: "gold" },
-          { source: "Web QuisqueyaHome", count: 11, percentage: 22, colorClass: "navy" },
-          { source: "WhatsApp & Telegram", count: 7, percentage: 14, colorClass: "blue" },
-          { source: "Referidos Brokers", count: 2, percentage: 6, colorClass: "gray" },
-        ],
-        zones: [
-          { label: "Punta Cana", count: 88, percentage: 88 },
-          { label: "Bávaro", count: 68, percentage: 68 },
-          { label: "Cap Cana", count: 45, percentage: 45 },
-          { label: "Las Terrenas", count: 28, percentage: 28 },
-        ],
-        lossReasons: [
-          { label: "Precio fuera de rango", count: 12 },
-          { label: "No responde seguimiento", count: 8 },
-          { label: "Compró otro proyecto", count: 5 },
-          { label: "Sin calificación bancaria", count: 4 },
-        ],
-        projection: {
-          totalWeightedCents: 142000000,
-          totalDisplayUsd: "US$1.42M",
-          confidenceEstimated: 72,
-          points: [
-            { month: "Jul", amountCents: 15000000, heightPercent: 40 },
-            { month: "Ago", amountCents: 22000000, heightPercent: 55 },
-            { month: "Sep", amountCents: 28000000, heightPercent: 65 },
-            { month: "Oct", amountCents: 35000000, heightPercent: 75 },
-            { month: "Nov", amountCents: 42000000, heightPercent: 85 },
-            { month: "Dic", amountCents: 50000000, heightPercent: 95 },
-          ],
-        },
-      };
-    }
-  },
-};
+function dateRange(column: SQL, q: ReportQuery): SQL {
+  return sql`${column} <= ${q.asOf}::timestamptz
+    and (${q.desde ?? null}::date is null or (${column} at time zone ${REPORT_TIME_ZONE})::date >= ${q.desde ?? null}::date)
+    and (${q.hasta ?? null}::date is null or (${column} at time zone ${REPORT_TIME_ZONE})::date <= ${q.hasta ?? null}::date)`;
 }
+export function crearConsultaReportes(actor: Actor, scope: ReadScope, q: ReportQuery): SQL {
+  requireReadScope(scope);
+  const leadScope = and(visibleRows(actor, scope, leads.brokerId, leads.deletedAt), q.brokerId === undefined ? undefined : eq(leads.brokerId, q.brokerId));
+  const dealScope = and(visibleRows(actor, scope, deals.brokerId, deals.deletedAt), q.brokerId === undefined ? undefined : eq(deals.brokerId, q.brokerId));
+  const unitScope = and(visibleRows(actor, scope, units.brokerId, units.deletedAt), q.brokerId === undefined ? undefined : eq(units.brokerId, q.brokerId));
+  const commissionScope = and(visibleRows(actor, scope, commissions.brokerId), q.brokerId === undefined ? undefined : eq(commissions.brokerId, q.brokerId));
+  // No hay atribución broker/proyecto en campaign_spend. Nunca inventar prorrateos.
+  const attributableSpend = scope === "all" && q.brokerId === undefined && q.projectId === undefined;
+  const leadPeriod = dateRange(sql`received_at`, q);
+  const dealPeriod = dateRange(sql`created_at`, q);
+  const wonPeriod = dateRange(sql`closed_at`, q);
+  return sql`
+    with
+    visible_leads as (
+      select leads.* from leads where ${leadScope ?? sql`true`}
+        and (${q.projectId ?? null}::int is null or leads.project_id = ${q.projectId ?? null}::int)
+        and leads.received_at <= ${q.asOf}::timestamptz
+    ),
+    visible_deals as (
+      select deals.*, pipeline_stages.kind, pipeline_stages.default_probability
+      from deals join pipeline_stages on pipeline_stages.id = deals.stage_id
+      where ${dealScope ?? sql`true`} and deals.created_at <= ${q.asOf}::timestamptz
+        and (${q.projectId ?? null}::int is null or exists (
+          select 1 from deal_properties dp join projects p on p.id = dp.project_id and p.deleted_at is null
+          where dp.deal_id = deals.id and dp.project_id = ${q.projectId ?? null}::int))
+    ),
+    period_leads as (select * from visible_leads where ${leadPeriod}),
+    period_deals as (select * from visible_deals where ${dealPeriod}),
+    won as (select * from visible_deals where kind = 'won' and ${wonPeriod}),
+    reached_events as (
+      select h.deal_id, h.to_stage_id as stage_id, h.changed_at as reached_at from deal_stage_history h
+      join period_deals d on d.id = h.deal_id where h.changed_at <= ${q.asOf}::timestamptz
+      union all select id, stage_id, coalesce(stage_changed_at, created_at) from period_deals
+    ),
+    reached as (
+      select deal_id, stage_id, min(reached_at) as reached_at from reached_events group by deal_id, stage_id
+    ),
+    stage_counts as (
+      select s.id as "stageId", s.name as label, s.kind, s.position,
+        (select count(*)::int from period_deals d where d.stage_id = s.id) as count,
+        (select count(*)::int from reached r where r.stage_id = s.id) as "reachedCount",
+        (select prev.id from pipeline_stages prev where prev.kind <> 'lost' and prev.position < s.position
+          order by prev.position desc, prev.id desc limit 1) as previous_id
+      from pipeline_stages s
+    ),
+    funnel as (
+      select s."stageId", s.label, s.kind, s.position, s.count, s."reachedCount",
+        case when s.kind = 'lost' or s.previous_id is null then null else
+          (select count(*)::int from reached r where r.stage_id = s.previous_id) end as "previousReachedCount",
+        case when s.kind = 'lost' or s.previous_id is null then null else
+          (select count(*)::int from reached r where r.stage_id = s."stageId" and exists (
+            select 1 from reached prev where prev.deal_id = r.deal_id and prev.stage_id = s.previous_id and prev.reached_at <= r.reached_at)) end as "passedFromPreviousCount"
+      from stage_counts s
+    ),
+    spend as (
+      select mc.source_id, sum(cs.amount_cents) as amount
+      from campaign_spend cs join marketing_campaigns mc on mc.id = cs.campaign_id and mc.deleted_at is null
+      where ${attributableSpend} and cs.currency = 'USD'
+        and cs.month <= (${q.asOf}::timestamptz at time zone ${REPORT_TIME_ZONE})::date
+        and (${q.desde ?? null}::date is null or cs.month >= date_trunc('month', ${q.desde ?? null}::date)::date)
+        and (${q.hasta ?? null}::date is null or cs.month <= ${q.hasta ?? null}::date)
+      group by mc.source_id
+    ),
+    source_keys as (
+      select source_id from period_leads union select source_id from period_deals
+      union select source_id from won union select source_id from spend
+    ),
+    sources as (
+      select k.source_id as "sourceId", coalesce(s.name, 'Sin canal') as source,
+        (select count(*)::int from period_leads l where l.source_id is not distinct from k.source_id) as count,
+        (select count(*)::int from period_deals d where d.source_id is not distinct from k.source_id) as deals,
+        (select count(*)::int from won d where d.source_id is not distinct from k.source_id) as won,
+        (select coalesce(sum(amount_cents), 0) from won d where d.currency = 'USD' and d.source_id is not distinct from k.source_id) as "revenueCents",
+        case when ${attributableSpend} then (select sum(amount) from spend where source_id = k.source_id) else null end as "spendCents"
+      from source_keys k left join lead_sources s on s.id = k.source_id
+    ),
+    zone_counts as (
+      select z.id as "zoneId", coalesce(z.name, l.zone_interest, 'Sin zona') as label, count(*)::int as count
+      from period_leads l left join zones z on z.id = l.zone_interest_id
+      group by z.id, z.name, coalesce(z.name, l.zone_interest, 'Sin zona')
+    ),
+    losses as (
+      select r.id as "reasonId", coalesce(r.name, 'Sin motivo registrado') as label, count(*)::int as count
+      from visible_deals d left join loss_reasons r on r.id = d.loss_reason_id
+      where d.kind = 'lost' and ${wonPeriod} group by r.id, r.name
+    ),
+    months as (
+      select to_char(m, 'YYYY-MM') as month
+      from generate_series(${q.trendStart}::timestamp, ${q.trendStart}::timestamp + (${TREND_MONTHS} - 1) * interval '1 month', interval '1 month') m
+    ),
+    trend as (
+      select m.month,
+        (select count(*)::int from period_leads l where to_char(l.received_at at time zone ${REPORT_TIME_ZONE}, 'YYYY-MM') = m.month) as leads,
+        (select count(*)::int from period_deals d where to_char(d.created_at at time zone ${REPORT_TIME_ZONE}, 'YYYY-MM') = m.month) as deals,
+        (select count(*)::int from won d where to_char(d.closed_at at time zone ${REPORT_TIME_ZONE}, 'YYYY-MM') = m.month) as won,
+        (select coalesce(sum(amount_cents), 0) from won d where d.currency = 'USD' and to_char(d.closed_at at time zone ${REPORT_TIME_ZONE}, 'YYYY-MM') = m.month) as "revenueCents"
+      from months m
+    ),
+    broker_keys as (
+      select broker_id from period_leads union select broker_id from period_deals union select broker_id from won
+    ),
+    ranking as (
+      select k.broker_id as "brokerId", coalesce(u.full_name, 'Sin asignar') as name,
+        (select count(*)::int from period_leads l where l.broker_id is not distinct from k.broker_id) as leads,
+        (select count(*)::int from period_deals d where d.broker_id is not distinct from k.broker_id) as deals,
+        (select count(*)::int from won d where d.broker_id is not distinct from k.broker_id) as won,
+        (select coalesce(sum(amount_cents), 0) from won d where d.currency = 'USD' and d.broker_id is not distinct from k.broker_id) as "volumeCents"
+      from broker_keys k left join users u on u.id = k.broker_id
+    ),
+    durations as (
+      select extract(epoch from (d.closed_at - l.received_at)) / 86400.0 as days
+      from won d join visible_leads l on l.id = d.lead_id where d.closed_at >= l.received_at
+    ),
+    inventory as (
+      select coalesce(s.name, units.status) as state, count(*)::int as count,
+        percentile_cont(0.5) within group (order by extract(epoch from (${q.asOf}::timestamptz - units.created_at)) / 86400.0) as "medianAgeDays",
+        percentile_cont(0.75) within group (order by extract(epoch from (${q.asOf}::timestamptz - units.created_at)) / 86400.0) as "p75AgeDays"
+      from units join projects p on p.id = units.project_id and p.deleted_at is null
+      left join unit_inventory_states s on s.id = units.inventory_state_id
+      where ${unitScope ?? sql`true`} and ${dateRange(sql`units.created_at`, q)}
+        and (${q.projectId ?? null}::int is null or units.project_id = ${q.projectId ?? null}::int)
+      group by coalesce(s.name, units.status)
+    ),
+    commission_months as (
+      select to_char(commissions.closed_date, 'YYYY-MM') as month, count(*)::int as count,
+        sum(commissions.total_commission_cents) as "totalCents", sum(commissions.broker_amount_cents) as "brokerCents",
+        sum(commissions.agency_amount_cents) as "agencyCents",
+        coalesce(sum(commissions.total_commission_cents) filter (where commissions.status = 'paid'), 0) as "paidCents"
+      from commissions join visible_deals d on d.id = commissions.deal_id
+      where ${commissionScope ?? sql`true`} and commissions.currency = 'USD' and commissions.status <> 'void'
+        and commissions.created_at <= ${q.asOf}::timestamptz
+        and (commissions.closed_date is null and ${q.desde ?? null}::date is null and ${q.hasta ?? null}::date is null
+          or commissions.closed_date <= (${q.asOf}::timestamptz at time zone ${REPORT_TIME_ZONE})::date
+            and (${q.desde ?? null}::date is null or commissions.closed_date >= ${q.desde ?? null}::date)
+            and (${q.hasta ?? null}::date is null or commissions.closed_date <= ${q.hasta ?? null}::date))
+      group by to_char(commissions.closed_date, 'YYYY-MM')
+    ),
+    forecast as (
+      select *, coalesce(probability, default_probability) as effective_probability
+      from period_deals where kind = 'open' and currency = 'USD'
+    ),
+    weighted as (
+      select *, round(amount_cents::numeric * effective_probability / 100) as weighted_cents
+      from forecast where effective_probability between 0 and 100 and amount_cents is not null
+    ),
+    forecast_months as (
+      select to_char(expected_close_date, 'YYYY-MM') as month, sum(weighted_cents) as "amountCents"
+      from weighted group by to_char(expected_close_date, 'YYYY-MM')
+    )
+    select jsonb_build_object(
+      'totalLeads', (select count(*)::int from period_leads),
+      'totalDeals', (select count(*)::int from period_deals),
+      'funnel', (select coalesce(jsonb_agg(to_jsonb(f) order by position, "stageId"), '[]'::jsonb) from funnel f),
+      'sources', (select coalesce(jsonb_agg(to_jsonb(s) order by count desc, "sourceId" nulls last), '[]'::jsonb) from sources s),
+      'zones', (select coalesce(jsonb_agg(to_jsonb(z) order by count desc, label), '[]'::jsonb) from zone_counts z),
+      'lossReasons', (select coalesce(jsonb_agg(to_jsonb(l) order by count desc, label), '[]'::jsonb) from losses l),
+      'trend', (select coalesce(jsonb_agg(to_jsonb(t) order by month), '[]'::jsonb) from trend t),
+      'brokers', (select coalesce(jsonb_agg(to_jsonb(r) order by "volumeCents" desc, "brokerId" nulls last), '[]'::jsonb) from ranking r),
+      'velocity', (select jsonb_build_object('sampleSize', count(*)::int, 'medianDays', percentile_cont(0.5) within group (order by days), 'p75Days', percentile_cont(0.75) within group (order by days)) from durations),
+      'inventory', (select coalesce(jsonb_agg(to_jsonb(i) order by state), '[]'::jsonb) from inventory i),
+      'commissions', (select coalesce(jsonb_agg(to_jsonb(c) order by month nulls last), '[]'::jsonb) from commission_months c),
+      'projection', jsonb_build_object(
+        'totalWeightedCents', (select coalesce(sum(weighted_cents), 0) from weighted),
+        'knownAmountCents', (select coalesce(sum(amount_cents), 0) from weighted),
+        'missingProbabilityCount', (select count(*)::int from forecast where effective_probability is null or effective_probability not between 0 and 100),
+        'missingAmountCount', (select count(*)::int from forecast where amount_cents is null),
+        'points', (select coalesce(jsonb_agg(to_jsonb(f) order by month nulls last), '[]'::jsonb) from forecast_months f))
+    ) as data
+  `;
+}
+export function repositorioReportes(db: Pick<Db, "execute">): ReportesRepositorio {
+  return {
+    async obtenerMetricasBi(actor, scope, query) {
+      const rows = await db.execute<{ data: ReportSnapshot }>(crearConsultaReportes(actor, scope, query));
+      if (!rows[0]) throw new Error("No se pudo consultar el reporte.");
+      return rows[0].data;
+    },
+  };
+}
+

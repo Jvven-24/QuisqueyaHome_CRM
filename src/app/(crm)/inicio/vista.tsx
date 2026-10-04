@@ -56,7 +56,7 @@ export function InicioVista({
             <Metric label="Leads sin asignar" value={String(metricas.leadsSinAsignarCount)} note="Pendientes de asignación" />
             <Metric label="Citas de hoy" value={String(metricas.citasHoyCount)} note="Coordinadas con clientes" />
             <Metric label="Tareas pendientes" value={String(metricas.tareasPendientesCount)} note="Por completar" />
-            <Metric label="Avances por revisar" value={String(metricas.avancesPorRevisarCount)} note="En fase de inspección" />
+            <Metric label="Avances por revisar" value={metricas.avancesPorRevisarCount === null ? "—" : String(metricas.avancesPorRevisarCount)} note="Sin registro de revisión" />
           </>
         ) : (
           <>
@@ -77,6 +77,7 @@ export function InicioVista({
             <span>{leads.length} visibles</span>
           </div>
           <div className="compact-list">
+            {leads.length === 0 && <p className="empty">Sin leads visibles.</p>}
             {leads.slice(0, 4).map((lead) => (
               <Link key={lead.id} href="/leads" className="lead-row">
                 <Avatar name={lead.name} small />
@@ -115,22 +116,14 @@ export function InicioVista({
             </div>
           ) : (
             <div className="funnel">
-              {(
-                [
-                  ["Nuevo", metricas.leadsMesCount, 100],
-                  ["Contactado", Math.round(metricas.leadsMesCount * 0.75), 75],
-                  ["Presentación", Math.round(metricas.leadsMesCount * 0.5), 50],
-                  ["Preselección", Math.round(metricas.leadsMesCount * 0.3), 30],
-                  ["Negociación", Math.round(metricas.leadsMesCount * 0.2), 20],
-                  ["Cierre", metricas.cierresMesCount, 15],
-                ] as const
-              ).map(([label, value, width]) => (
-                <div key={label}>
-                  <span>{label}</span>
+              {metricas.funnel.length === 0 && <p className="empty">Sin etapas visibles.</p>}
+              {metricas.funnel.map((step) => (
+                <div key={step.stageId}>
+                  <span>{step.label}</span>
                   <div>
-                    <i style={{ width: `${width}%` }} />
+                    <i style={{ width: `${step.widthPercent}%` }} />
                   </div>
-                  <strong>{value}</strong>
+                  <strong>{step.reachedCount}</strong>
                 </div>
               ))}
             </div>
@@ -144,27 +137,14 @@ export function InicioVista({
             </div>
           </div>
           <div className="timeline-list">
-            <div>
-              <time>10:00</time>
+            {metricas.activities.length === 0 && <p className="empty">Sin próximas actividades.</p>}
+            {metricas.activities.map((activity) => <div key={activity.id}>
+              <time dateTime={activity.startsAt}>{new Intl.DateTimeFormat("es-DO", { timeZone: "America/Santo_Domingo", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(activity.startsAt))}</time>
               <span>
-                <strong>Presentación con cliente</strong>
-                <small>Bávaro · Seguimiento</small>
+                <strong>{activity.title}</strong>
+                <small>{activity.location ?? "Sin ubicación"}</small>
               </span>
-            </div>
-            <div>
-              <time>11:30</time>
-              <span>
-                <strong>Cita virtual / Llamada</strong>
-                <small>Cap Cana · Coordinación</small>
-              </span>
-            </div>
-            <div>
-              <time>15:00</time>
-              <span>
-                <strong>Envío de cotización Confotur</strong>
-                <small>Plan de pagos y amortización</small>
-              </span>
-            </div>
+            </div>)}
           </div>
         </div>
         <div className="panel">
@@ -175,22 +155,19 @@ export function InicioVista({
             </div>
           </div>
           {isBroker ? (
-            <div className="course-mini">
+            metricas.academy ? <div className="course-mini">
               <div className="course-art">QH Academy</div>
-              <strong>Ley Confotur y Cierre de Ventas</strong>
+              <strong>{metricas.academy.title}</strong>
               <div className="progress-line">
-                <span style={{ width: "85%" }} />
+                <span style={{ width: `${metricas.academy.progressPercent}%` }} />
               </div>
-              <small>85% completado · Certificado disponible</small>
-            </div>
+              <small>{metricas.academy.progressPercent}% completado</small>
+            </div> : <p className="empty">Sin cursos en progreso.</p>
           ) : (
             <div className="ranking">
-              {[
-                { name: "Cap Cana Luxury Villas", leads: 24 },
-                { name: "Bávaro Green Suites", leads: 18 },
-                { name: "Piantini Urban Tower", leads: 12 },
-              ].map((proj, index) => (
-                <div key={proj.name}>
+              {metricas.projects.length === 0 && <p className="empty">Sin demanda registrada.</p>}
+              {metricas.projects.map((proj, index) => (
+                <div key={proj.id}>
                   <span>{index + 1}</span>
                   <strong>{proj.name}</strong>
                   <small>{proj.leads} leads</small>

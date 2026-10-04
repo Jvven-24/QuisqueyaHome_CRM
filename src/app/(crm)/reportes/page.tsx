@@ -1,24 +1,16 @@
-/**
- * M12 · Reportes y Business Intelligence.
- *
- * Componente de servidor: actor resuelto una vez, permiso comprobado antes de
- * pintar nada. Conectado a agregaciones SQL reales de la base de datos a través
- * de la arquitectura limpia de Viltrum Agentic OS.
- */
-
 import { consultarReportesBi } from "@/application/reportes/consultas";
+import { can } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { reportesRepositorio } from "@/infrastructure/contenedor/reportes";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
+import { leerFiltros, type FilterParams } from "./filtros";
 import { ReportesVista } from "./vista";
-
 export const metadata = { title: "Reportes · CRM Quisqueya Home" };
-
-export default async function ReportesPage() {
+export default async function ReportesPage({ searchParams }: { searchParams: Promise<FilterParams> }) {
   const actor = await requireActor();
   const scope = requireScopeInPage(actor, "reports", "view");
-
-  const metricas = await consultarReportesBi(reportesRepositorio(), actor.userId, scope);
-
-  return <ReportesVista metricas={metricas} />;
+  const params = await searchParams;
+  const metricas = await consultarReportesBi(reportesRepositorio(), actor, scope, leerFiltros(params));
+  return <ReportesVista metricas={metricas} canExport={can(actor, "reports", "export")} periodo={typeof params.periodo === "string" ? params.periodo : "todo"} />;
 }
+
