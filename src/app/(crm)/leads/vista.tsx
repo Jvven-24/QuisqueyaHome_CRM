@@ -11,7 +11,7 @@ import { LeadInspector } from "./inspector";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Insignia } from "@/components/ui/bits";
 import { leadStatusTone } from "@/components/ui/tone";
-import { Building2, MessageSquare, Phone, Sparkles, X } from "lucide-react";
+import { Building2, MessageSquare, Phone, Plus, Search, Sparkles, X } from "lucide-react";
 
 export type LeadFila = {
   id: number;
@@ -257,8 +257,13 @@ export function LeadsVista({
         title={isBroker ? "Mis leads" : "Bandeja de leads"}
         subtitle="Origen, asignación y próxima acción de cada prospecto."
         action={
-          <button className="button primary" type="button" onClick={() => setCreando(true)}>
-            Registrar lead
+          <button
+            type="button"
+            onClick={() => setCreando(true)}
+            className="h-9 px-3.5 inline-flex items-center gap-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+          >
+            <Plus className="size-3.5 text-gold-400" />
+            <span>Registrar lead</span>
           </button>
         }
       />
@@ -282,42 +287,68 @@ export function LeadsVista({
           }
         />
       </div>
-      <div className="filter-bar">
-        <input
-          type="search"
-          placeholder="Buscar por nombre, teléfono o correo…"
-          defaultValue={filtros.q}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              irCon({ q: event.currentTarget.value.trim() || undefined, page: undefined, lead: undefined });
-            }
-          }}
-        />
-        <select
-          aria-label="Filtrar por origen"
-          value={filtros.sourceId ?? ""}
-          onChange={(event) => irCon({ source_id: event.target.value || undefined, page: undefined })}
-        >
-          <option value="">Todos los orígenes</option>
-          {canales.map((canal) => (
-            <option key={canal.id} value={canal.id}>
-              {canal.name}
-            </option>
-          ))}
-        </select>
-        <select
-          aria-label="Filtrar por estado"
-          value={filtros.status ?? ""}
-          onChange={(event) => irCon({ status: event.target.value || undefined, page: undefined })}
-        >
-          <option value="">Todos los estados</option>
-          {LEAD_STATUSES.map((estado) => (
-            <option key={estado} value={estado}>
-              {ETIQUETAS_ESTADO[estado]}
-            </option>
-          ))}
-        </select>
-        <span>{total} leads</span>
+      <div className="flex flex-wrap items-center justify-between gap-3 p-2 bg-slate-100/70 border border-slate-200/80 rounded-xl mb-4">
+        <div className="flex items-center gap-2 flex-1 min-w-[260px] max-w-md">
+          <div className="relative flex items-center w-full">
+            <Search className="absolute left-2.5 size-3.5 text-slate-400 pointer-events-none" />
+            <input
+              type="search"
+              placeholder="Buscar por nombre, teléfono o correo…"
+              defaultValue={filtros.q}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  irCon({ q: event.currentTarget.value.trim() || undefined, page: undefined, lead: undefined });
+                }
+              }}
+              className="w-full h-8 pl-8 pr-3 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder:text-slate-400 shadow-2xs focus:outline-none focus:border-gold-500"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <select
+            aria-label="Filtrar por origen"
+            value={filtros.sourceId ?? ""}
+            onChange={(event) => irCon({ source_id: event.target.value || undefined, page: undefined })}
+            className="h-8 px-2.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-2xs focus:outline-none focus:border-gold-500 cursor-pointer"
+          >
+            <option value="">Todos los orígenes</option>
+            {canales.map((canal) => (
+              <option key={canal.id} value={canal.id}>
+                {canal.name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            aria-label="Filtrar por estado"
+            value={filtros.status ?? ""}
+            onChange={(event) => irCon({ status: event.target.value || undefined, page: undefined })}
+            className="h-8 px-2.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-2xs focus:outline-none focus:border-gold-500 cursor-pointer"
+          >
+            <option value="">Todos los estados</option>
+            {LEAD_STATUSES.map((estado) => (
+              <option key={estado} value={estado}>
+                {ETIQUETAS_ESTADO[estado]}
+              </option>
+            ))}
+          </select>
+
+          {hayFiltro && (
+            <button
+              type="button"
+              onClick={() => irCon({ q: undefined, source_id: undefined, status: undefined, page: undefined })}
+              className="h-8 px-2.5 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-800 bg-white border border-slate-200 rounded-lg shadow-2xs transition-colors cursor-pointer"
+            >
+              <X className="size-3" />
+              <span>Limpiar</span>
+            </button>
+          )}
+
+          <span className="text-xs text-slate-500 font-medium pl-1 font-mono">
+            {total} leads
+          </span>
+        </div>
       </div>
       <div className={leadSeleccionado ? "split-view inspector-open" : "split-view"}>
         <div className="table-wrap">

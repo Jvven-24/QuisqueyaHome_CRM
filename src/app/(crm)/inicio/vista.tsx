@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import type { DashboardMetrics } from "@/application/dashboard/puertos";
 import { Avatar, Badge, Metric, PageHeader } from "../_ui/prototipo-ui";
 
@@ -27,10 +28,16 @@ export function InicioVista({
             : "Prioridades, actividad comercial y decisiones pendientes."
         }
         action={
-          <div className="inicio-header-actions">
-            <div className="date-chip">{metricas.fechaTexto}</div>
-            <Link href="/leads" className="button primary">
-              + Registrar Lead
+          <div className="flex items-center gap-2.5">
+            <div className="h-9 px-3 inline-flex items-center text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded-lg shadow-2xs font-mono">
+              {metricas.fechaTexto}
+            </div>
+            <Link
+              href="/leads"
+              className="h-9 px-3.5 inline-flex items-center gap-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold shadow-xs transition-colors"
+            >
+              <Plus className="size-3.5 text-gold-400" />
+              <span>Registrar Lead</span>
             </Link>
           </div>
         }

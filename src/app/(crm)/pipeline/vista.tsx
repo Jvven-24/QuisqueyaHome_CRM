@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ReactNode, useMemo, useState } from "react";
-import { Building2, Calendar, MessageCircle, Kanban as KanbanIcon, List as ListIcon } from "lucide-react";
+import { Building2, Calendar, MessageCircle, Kanban as KanbanIcon, List as ListIcon, UserCheck, X } from "lucide-react";
 import { formatearMonto } from "../_ui/formato";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 import { SinResultados, Vacio } from "../_ui/estados";
@@ -198,24 +198,58 @@ export function PipelineVista({
           onTabChange={(id) => setVistaModo(id as "kanban" | "lista")}
         />
       </div>
-      <div className="filter-bar">
-        <select value={brokerFiltro} onChange={(event) => setBrokerFiltro(event.target.value)}>
-          <option value="">Todos los brokers</option>
-          {brokers.map((broker) => (
-            <option key={broker} value={broker}>
-              {broker}
-            </option>
-          ))}
-        </select>
-        <select value={proyectoFiltro} onChange={(event) => setProyectoFiltro(event.target.value)}>
-          <option value="">Todos los proyectos</option>
-          {proyectos.map((proyecto) => (
-            <option key={proyecto} value={proyecto}>
-              {proyecto}
-            </option>
-          ))}
-        </select>
-        <span>Arrastra para cambiar de etapa</span>
+      <div className="flex flex-wrap items-center justify-between gap-3 p-2 bg-slate-100/70 border border-slate-200/80 rounded-xl mb-4">
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="relative flex items-center">
+            <UserCheck className="absolute left-2.5 size-3.5 text-slate-400 pointer-events-none" />
+            <select
+              value={brokerFiltro}
+              onChange={(event) => setBrokerFiltro(event.target.value)}
+              className="h-8 pl-8 pr-7 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-2xs focus:outline-none focus:border-gold-500 cursor-pointer"
+            >
+              <option value="">Todos los brokers</option>
+              {brokers.map((broker) => (
+                <option key={broker} value={broker}>
+                  {broker}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="relative flex items-center">
+            <Building2 className="absolute left-2.5 size-3.5 text-slate-400 pointer-events-none" />
+            <select
+              value={proyectoFiltro}
+              onChange={(event) => setProyectoFiltro(event.target.value)}
+              className="h-8 pl-8 pr-7 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-2xs focus:outline-none focus:border-gold-500 cursor-pointer"
+            >
+              <option value="">Todos los proyectos</option>
+              {proyectos.map((proyecto) => (
+                <option key={proyecto} value={proyecto}>
+                  {proyecto}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {(brokerFiltro || proyectoFiltro) && (
+            <button
+              type="button"
+              onClick={() => {
+                setBrokerFiltro("");
+                setProyectoFiltro("");
+              }}
+              className="h-8 px-2.5 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-800 bg-white border border-slate-200 rounded-lg shadow-2xs transition-colors cursor-pointer"
+            >
+              <X className="size-3" />
+              <span>Limpiar</span>
+            </button>
+          )}
+        </div>
+
+        <span className="text-xs text-slate-500/80 hidden sm:inline-block pr-1 font-medium">
+          Arrastra para cambiar de etapa
+        </span>
       </div>
 
       {negocios.length === 0 ? (
@@ -352,15 +386,15 @@ export function PipelineVista({
                         >
                           {/* Header row: Source & Confotur tag */}
                           <div className="flex items-center justify-between gap-1.5 mb-2 flex-wrap">
-                            <span className="deal-source text-[10px] font-extrabold tracking-wider text-ink-muted uppercase bg-surface-alt px-2 py-0.5 rounded-md border border-line font-mono">
+                            <span className="deal-source text-[10px] font-semibold tracking-wider text-slate-500 uppercase bg-slate-100 px-2 py-0.5 rounded border border-slate-200/60 font-mono">
                               {negocio.sourceName ?? "Directo"}
                             </span>
                             <div className="flex items-center gap-1">
-                              <span className="text-[10px] font-bold text-cyan-800 bg-cyan-50 px-1.5 py-0.5 rounded border border-cyan-200 uppercase tracking-tight">
+                              <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50/80 px-1.5 py-0.5 rounded border border-emerald-200/60 uppercase tracking-tight">
                                 Confotur
                               </span>
                               {negocio.probability ? (
-                                <span className="text-[10px] font-bold text-navy-900 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                                <span className="text-[10px] font-medium text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200/60">
                                   {negocio.probability}% prob.
                                 </span>
                               ) : null}
@@ -393,22 +427,9 @@ export function PipelineVista({
                           </div>
 
                           {/* Pre-construction Dominican payment milestone bar */}
-                          <div className="mb-2.5 p-1.5 bg-surface-alt/70 rounded-lg border border-line/60">
-                            <div className="flex items-center justify-between text-[9px] font-bold text-ink-muted uppercase tracking-wider mb-1 font-mono">
-                              <span>Esquema Pre-construcción</span>
-                              <span className="text-gold-700">10 / 40 / 50</span>
-                            </div>
-                            <div className="grid grid-cols-3 gap-1 text-center text-[9px] font-semibold">
-                              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded py-0.5">
-                                Reserva 10%
-                              </span>
-                              <span className="bg-blue-50 text-blue-700 border border-blue-200 rounded py-0.5">
-                                Obra 40%
-                              </span>
-                              <span className="bg-amber-50 text-amber-700 border border-amber-200 rounded py-0.5">
-                                Entrega 50%
-                              </span>
-                            </div>
+                          <div className="mb-2.5 px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200/60 flex items-center justify-between text-[10px]">
+                            <span className="text-slate-500 font-medium">Pre-construcción</span>
+                            <span className="font-mono font-semibold text-slate-700">10 · 40 · 50</span>
                           </div>
 
                           {/* Next activity SLA pill */}
