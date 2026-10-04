@@ -178,14 +178,226 @@
     },
     {
      "id": "F2.5",
-     "titulo": "Leads, pipeline y actividades emiten eventos al outbox",
+     "titulo": "Leads, pipeline y actividades emiten eventos al outbox (se cubre en E1.1b y E1.2b)",
      "estado": "TODO",
      "depende": [
-      "F2.2",
-      "F2.4"
+      "E1.1b",
+      "E1.2b"
      ],
      "peso": 1,
      "responsable": "D19"
+    }
+   ]
+  },
+  {
+   "id": "E1",
+   "nombre": "E1 · Cinco entregas completas (plan de alto impacto)",
+   "peso": 4,
+   "items": [
+    {
+     "id": "E1.1a",
+     "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · ficha READY",
+     "estado": "TODO",
+     "depende": [
+      "F3.2"
+     ],
+     "peso": 1,
+     "responsable": "D01+D03 (Codex)"
+    },
+    {
+     "id": "E1.1b",
+     "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · backend y consultas con test:db",
+     "estado": "TODO",
+     "depende": [
+      "E1.1a",
+      "F2.4"
+     ],
+     "peso": 2,
+     "responsable": "D10/D11 (Codex)"
+    },
+    {
+     "id": "E1.1c",
+     "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · interfaz completa (6 estados, móvil, gráficas)",
+     "estado": "TODO",
+     "depende": [
+      "E1.1b"
+     ],
+     "peso": 2,
+     "responsable": "D09 (Codex)"
+    },
+    {
+     "id": "E1.1d",
+     "titulo": "Pipeline (kanban real, reglas de etapa, evento al outbox) · QA independiente con capturas y cierre (10 condiciones)",
+     "estado": "TODO",
+     "depende": [
+      "E1.1c"
+     ],
+     "peso": 2,
+     "responsable": "D14 (Gemini) + Claude"
+    },
+    {
+     "id": "E1.2a",
+     "titulo": "Leads (tabla, inspector, línea de tiempo, eventos) · ficha READY",
+     "estado": "TODO",
+     "depende": [
+      "F3.2"
+     ],
+     "peso": 1,
+     "responsable": "D01+D03 (Codex)"
+    },
+    {
+     "id": "E1.2b",
+     "titulo": "Leads (tabla, inspector, línea de tiempo, eventos) · backend y consultas con test:db",
+     "estado": "TODO",
+     "depende": [
+      "E1.2a",
+      "F2.4"
+     ],
+     "peso": 2,
+     "responsable": "D10/D11 (Codex)"
+    },
+    {
+     "id": "E1.2c",
+     "titulo": "Leads (tabla, inspector, línea de tiempo, eventos) · interfaz completa (6 estados, móvil, gráficas)",
+     "estado": "TODO",
+     "depende": [
+      "E1.2b"
+     ],
+     "peso": 2,
+     "responsable": "D09 (Codex)"
+    },
+    {
+     "id": "E1.2d",
+     "titulo": "Leads (tabla, inspector, línea de tiempo, eventos) · QA independiente con capturas y cierre (10 condiciones)",
+     "estado": "TODO",
+     "depende": [
+      "E1.2c"
+     ],
+     "peso": 2,
+     "responsable": "D14 (Gemini) + Claude"
+    },
+    {
+     "id": "E1.3a",
+     "titulo": "Propiedades (inventario, matriz torre/piso) · ficha READY",
+     "estado": "TODO",
+     "depende": [
+      "F3.2"
+     ],
+     "peso": 1,
+     "responsable": "D01+D03 (Codex)"
+    },
+    {
+     "id": "E1.3b",
+     "titulo": "Propiedades (inventario, matriz torre/piso) · backend y consultas con test:db",
+     "estado": "TODO",
+     "depende": [
+      "E1.3a",
+      "F2.4"
+     ],
+     "peso": 2,
+     "responsable": "D10/D11 (Codex)"
+    },
+    {
+     "id": "E1.3c",
+     "titulo": "Propiedades (inventario, matriz torre/piso) · interfaz completa (6 estados, móvil, gráficas)",
+     "estado": "TODO",
+     "depende": [
+      "E1.3b"
+     ],
+     "peso": 2,
+     "responsable": "D09 (Codex)"
+    },
+    {
+     "id": "E1.3d",
+     "titulo": "Propiedades (inventario, matriz torre/piso) · QA independiente con capturas y cierre (10 condiciones)",
+     "estado": "TODO",
+     "depende": [
+      "E1.3c"
+     ],
+     "peso": 2,
+     "responsable": "D14 (Gemini) + Claude"
+    },
+    {
+     "id": "E1.4a",
+     "titulo": "Brokers (ranking y perfil con rendimiento) · ficha READY",
+     "estado": "TODO",
+     "depende": [
+      "F3.2"
+     ],
+     "peso": 1,
+     "responsable": "D01+D03 (Codex)"
+    },
+    {
+     "id": "E1.4b",
+     "titulo": "Brokers (ranking y perfil con rendimiento) · backend y consultas con test:db",
+     "estado": "TODO",
+     "depende": [
+      "E1.4a",
+      "F2.4"
+     ],
+     "peso": 2,
+     "responsable": "D10/D11 (Codex)"
+    },
+    {
+     "id": "E1.4c",
+     "titulo": "Brokers (ranking y perfil con rendimiento) · interfaz completa (6 estados, móvil, gráficas)",
+     "estado": "TODO",
+     "depende": [
+      "E1.4b"
+     ],
+     "peso": 2,
+     "responsable": "D09 (Codex)"
+    },
+    {
+     "id": "E1.4d",
+     "titulo": "Brokers (ranking y perfil con rendimiento) · QA independiente con capturas y cierre (10 condiciones)",
+     "estado": "TODO",
+     "depende": [
+      "E1.4c"
+     ],
+     "peso": 2,
+     "responsable": "D14 (Gemini) + Claude"
+    },
+    {
+     "id": "E1.5a",
+     "titulo": "Integraciones (salud de puertos, cola de salida, reintentar/descartar) · ficha READY",
+     "estado": "TODO",
+     "depende": [
+      "F3.2"
+     ],
+     "peso": 1,
+     "responsable": "D01+D03 (Codex)"
+    },
+    {
+     "id": "E1.5b",
+     "titulo": "Integraciones (salud de puertos, cola de salida, reintentar/descartar) · backend y consultas con test:db",
+     "estado": "TODO",
+     "depende": [
+      "E1.5a",
+      "F2.4"
+     ],
+     "peso": 2,
+     "responsable": "D10/D11 (Codex)"
+    },
+    {
+     "id": "E1.5c",
+     "titulo": "Integraciones (salud de puertos, cola de salida, reintentar/descartar) · interfaz completa (6 estados, móvil, gráficas)",
+     "estado": "TODO",
+     "depende": [
+      "E1.5b"
+     ],
+     "peso": 2,
+     "responsable": "D09 (Codex)"
+    },
+    {
+     "id": "E1.5d",
+     "titulo": "Integraciones (salud de puertos, cola de salida, reintentar/descartar) · QA independiente con capturas y cierre (10 condiciones)",
+     "estado": "TODO",
+     "depende": [
+      "E1.5c"
+     ],
+     "peso": 2,
+     "responsable": "D14 (Gemini) + Claude"
     }
    ]
   },
@@ -315,48 +527,8 @@
      "responsable": "D09"
     },
     {
-     "id": "F4.1",
-     "titulo": "Rediseño de Leads",
-     "estado": "TODO",
-     "depende": [
-      "F3.7"
-     ],
-     "peso": 1,
-     "responsable": "D09"
-    },
-    {
-     "id": "F4.2",
-     "titulo": "Rediseño de Pipeline",
-     "estado": "TODO",
-     "depende": [
-      "F3.7"
-     ],
-     "peso": 1,
-     "responsable": "D09"
-    },
-    {
      "id": "F4.3",
      "titulo": "Rediseño de Contactos",
-     "estado": "TODO",
-     "depende": [
-      "F3.7"
-     ],
-     "peso": 1,
-     "responsable": "D09"
-    },
-    {
-     "id": "F4.4",
-     "titulo": "Rediseño de Propiedades",
-     "estado": "TODO",
-     "depende": [
-      "F3.7"
-     ],
-     "peso": 1,
-     "responsable": "D09"
-    },
-    {
-     "id": "F4.5",
-     "titulo": "Rediseño de Brokers",
      "estado": "TODO",
      "depende": [
       "F3.7"

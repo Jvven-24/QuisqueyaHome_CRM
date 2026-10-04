@@ -1,14 +1,15 @@
 # Avance · VRE-OS · Quisqueya Home CRM
 
-Actualizado: 2026-10-04 · **Global: 25.5 %** █████░░░░░░░░░░░░░░░
+Actualizado: 2026-10-04 · **Global: 19.9 %** ████░░░░░░░░░░░░░░░░
 
 | Fase | Avance | Hechas | En curso | Pendientes | Bloqueadas |
 |---|---|---|---|---|---|
 | F0 Base y cimientos | ███████████░ 92 % | 5 | 1 | 0 | 0 |
 | F1 Datos e higiene visual | ████████████ 100 % | 4 | 0 | 0 | 0 |
 | F2 Reportes reales e integración base | ████████░░░░ 70 % | 3 | 1 | 1 | 0 |
+| E1 E1 · Cinco entregas completas (plan de alto impacto) | ░░░░░░░░░░░░ 0 % | 0 | 0 | 20 | 0 |
 | F3 Especificación (pasadas P0–P6) | ███░░░░░░░░░ 27 % | 2 | 3 | 5 | 0 |
-| F4 Rediseño de pantallas existentes | █░░░░░░░░░░░ 8 % | 1 | 0 | 12 | 0 |
+| F4 Rediseño de pantallas existentes | █░░░░░░░░░░░ 11 % | 1 | 0 | 8 | 0 |
 | F5 Módulos nuevos del Blueprint | ░░░░░░░░░░░░ 0 % | 0 | 0 | 16 | 0 |
 | F6 Integraciones con sistemas open source | ░░░░░░░░░░░░ 0 % | 0 | 0 | 4 | 1 |
 | F7 Cierre y salida a staging | ░░░░░░░░░░░░ 0 % | 0 | 0 | 3 | 1 |
@@ -24,19 +25,19 @@ Actualizado: 2026-10-04 · **Global: 25.5 %** █████░░░░░░�
 - **F6.1** Twenty detrás de CrmPort (TwentyAdapter) — D19
 - **F7.4** Migraciones y despliegue a staging en la VPS (requiere autorización de Wilber) — D16
 
-## Esperando dependencias (41)
-- F2.5 Leads, pipeline y actividades emiten eventos al outbox ← F2.4
-- F3.4 P1 Arquitectura consolidada y reglas de integración (aprueba Wilber) ← F3.2, F3.3
-- F3.7 P2 Fichas de módulos M01–M21 y globales G01–G11 ← F3.4, F3.6
-- F3.8 P4 Fichas de integraciones I01–I08 ← F3.4
-- F3.9 P5 Huecos investigados ← F3.7, F3.8
-- F3.10 P6 Plan de construcción por oleadas (aprueba Wilber) ← F3.9
-- F4.1 Rediseño de Leads ← F3.7
-- F4.2 Rediseño de Pipeline ← F3.7
-- F4.3 Rediseño de Contactos ← F3.7
-- F4.4 Rediseño de Propiedades ← F3.7
-- F4.5 Rediseño de Brokers ← F3.7
-- F4.6 Rediseño de Comisiones ← F3.7
-- … y 29 más
+## Esperando dependencias (57)
+- F2.5 Leads, pipeline y actividades emiten eventos al outbox (se cubre en E1.1b y E1.2b) ← E1.1b, E1.2b
+- E1.1a Pipeline (kanban real, reglas de etapa, evento al outbox) · ficha READY ← F3.2
+- E1.1b Pipeline (kanban real, reglas de etapa, evento al outbox) · backend y consultas con test:db ← E1.1a, F2.4
+- E1.1c Pipeline (kanban real, reglas de etapa, evento al outbox) · interfaz completa (6 estados, móvil, gráficas) ← E1.1b
+- E1.1d Pipeline (kanban real, reglas de etapa, evento al outbox) · QA independiente con capturas y cierre (10 condiciones) ← E1.1c
+- E1.2a Leads (tabla, inspector, línea de tiempo, eventos) · ficha READY ← F3.2
+- E1.2b Leads (tabla, inspector, línea de tiempo, eventos) · backend y consultas con test:db ← E1.2a, F2.4
+- E1.2c Leads (tabla, inspector, línea de tiempo, eventos) · interfaz completa (6 estados, móvil, gráficas) ← E1.2b
+- E1.2d Leads (tabla, inspector, línea de tiempo, eventos) · QA independiente con capturas y cierre (10 condiciones) ← E1.2c
+- E1.3a Propiedades (inventario, matriz torre/piso) · ficha READY ← F3.2
+- E1.3b Propiedades (inventario, matriz torre/piso) · backend y consultas con test:db ← E1.3a, F2.4
+- E1.3c Propiedades (inventario, matriz torre/piso) · interfaz completa (6 estados, móvil, gráficas) ← E1.3b
+- … y 45 más
 
 ## Validación: sin errores
