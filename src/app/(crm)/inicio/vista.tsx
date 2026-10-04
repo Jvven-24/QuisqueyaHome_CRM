@@ -1,182 +1,69 @@
 "use client";
 
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import dynamic from "next/dynamic";
 import type { DashboardMetrics } from "@/application/dashboard/puertos";
-import { Avatar, Badge, Metric, PageHeader } from "../_ui/prototipo-ui";
+import { ChartCard } from "@/components/ui/chart-card";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { analyticsCopy, inicioTabs } from "../_ui/analitica-copy";
+import { AnalyticsTabs } from "../_ui/analytics-tabs";
+import { AnalyticsDetails } from "../_ui/analytics-details";
+import { metricState, useOnline } from "../_ui/analytics-state";
+import { formatActivity, formatNumber } from "@/lib/formato-analitica";
 
-export function InicioVista({
-  roleSlug,
-  metricas,
-  nombre,
-}: {
-  roleSlug: string;
-  metricas: DashboardMetrics;
-  nombre: string;
-}) {
+const MetricChart = dynamic(() => import("../_ui/metric-chart"), { loading: () => <div className="analytics-skeleton" role="status">{analyticsCopy.common.loading}</div>, ssr: false });
+export type InicioPermissions = { leads: boolean; deals: boolean; activities: boolean; projects: boolean; goals: boolean; academy: boolean; createLead: boolean };
+
+export function InicioVista({ roleSlug, metricas, nombre, permissions }: { roleSlug: string; metricas: DashboardMetrics; nombre: string; permissions: InicioPermissions }) {
+  const online = useOnline();
+  const c = analyticsCopy.inicio;
+  const common = analyticsCopy.common;
   const isBroker = roleSlug === "broker";
   const isAssistant = roleSlug === "assistant";
-  const leads = metricas.leadsRecientes;
-
-  return (
-    <>
-      <PageHeader
-        eyebrow={isBroker ? "Mi operación" : "Resumen operativo"}
-        title={nombre.trim() ? `Hola, ${nombre.trim()}` : "Hola"}
-        subtitle={
-          isBroker
-            ? "Tu cartera y próximas acciones de hoy."
-            : "Prioridades, actividad comercial y decisiones pendientes."
-        }
-        action={
-          <div className="flex items-center gap-2.5">
-            <div className="h-9 px-3 inline-flex items-center text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded-lg shadow-2xs font-mono">
-              {metricas.fechaTexto}
-            </div>
-            <Link
-              href="/leads"
-              className="h-9 px-3.5 inline-flex items-center gap-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold shadow-xs transition-colors"
-            >
-              <Plus className="size-3.5 text-gold-400" />
-              <span>Registrar Lead</span>
-            </Link>
-          </div>
-        }
-      />
-      <section className="metrics-row inicio-metrics">
-        {isBroker ? (
-          <>
-            <Metric label="Mis leads" value={String(metricas.misLeadsCount)} note="Cartera activa asignada" />
-            <Metric label="Citas esta semana" value={String(metricas.citasSemanaCount)} note="Reuniones en agenda" />
-            <Metric label="Meta del mes" value={metricas.metaMesLabel} note={`${metricas.metaPorcentaje}% de cumplimiento`} />
-            <Metric label="Mi nivel" value={metricas.miNivel} note="Nivel de corretaje" />
-          </>
-        ) : isAssistant ? (
-          <>
-            <Metric label="Leads sin asignar" value={String(metricas.leadsSinAsignarCount)} note="Pendientes de asignación" />
-            <Metric label="Citas de hoy" value={String(metricas.citasHoyCount)} note="Coordinadas con clientes" />
-            <Metric label="Tareas pendientes" value={String(metricas.tareasPendientesCount)} note="Por completar" />
-            <Metric label="Avances por revisar" value={metricas.avancesPorRevisarCount === null ? "—" : String(metricas.avancesPorRevisarCount)} note="Sin registro de revisión" />
-          </>
-        ) : (
-          <>
-            <Metric label="Leads del mes" value={String(metricas.leadsMesCount)} note="Captados en embudo" />
-            <Metric label="Negocios activos" value={String(metricas.negociosActivosCount)} note={`${metricas.volumenPipelineDisplay} en pipeline`} />
-            <Metric label="Cierres del mes" value={String(metricas.cierresMesCount)} note="Negocios ganados" />
-            <Metric label="Conversión" value={metricas.conversionPorcentaje} note="Ratio lead a cierre" />
-          </>
-        )}
-      </section>
-      <section className="dashboard-grid">
-        <div className="panel span-2">
-          <div className="panel-title">
-            <div>
-              <p className="eyebrow">Acción inmediata</p>
-              <h2>{isBroker ? "Mis leads recientes" : "Leads que requieren atención"}</h2>
-            </div>
-            <span>{leads.length} visibles</span>
-          </div>
-          <div className="compact-list">
-            {leads.length === 0 && <p className="empty">Sin leads visibles.</p>}
-            {leads.slice(0, 4).map((lead) => (
-              <Link key={lead.id} href="/leads" className="lead-row">
-                <Avatar name={lead.name} small />
-                <span>
-                  <strong>{lead.name}</strong>
-                  <small>
-                    {lead.project} · {lead.source}
-                  </small>
-                </span>
-                <Badge tone={lead.stage === "Nuevo" ? "gold" : "blue"}>{lead.stage}</Badge>
-                <span className="row-next">{lead.next}</span>
-              </Link>
-            ))}
-          </div>
+  const funnel = metricas.funnel.map(p => ({ id: String(p.stageId), label: p.label, reached: p.reachedCount, current: p.count, pass: p.passRatePercent }));
+  const funnelSeries = [{ key: "reached", label: c.reached, color: "var(--chart-2)" }];
+  const funnelDetails = [...funnelSeries, { key: "current", label: c.currentCount, color: "var(--chart-3)" }, { key: "pass", label: `${c.pass} (%)`, color: "var(--chart-4)" }];
+  const kpis = isAssistant ? [
+    { key: "unassigned", label: c.unassigned, value: formatNumber(metricas.leadsSinAsignarCount), context: common.scope, allowed: permissions.leads },
+    { key: "today", label: c.today, value: formatNumber(metricas.citasHoyCount), context: metricas.fechaTexto, allowed: permissions.activities },
+    { key: "tasks", label: c.pending, value: formatNumber(metricas.tareasPendientesCount), context: common.scope, allowed: permissions.activities },
+    { key: "review", label: c.review, value: metricas.avancesPorRevisarCount === null ? common.noData : formatNumber(metricas.avancesPorRevisarCount), context: c.reviewMissing, allowed: permissions.projects },
+  ] : [
+    { key: "leads", label: isBroker ? c.myLeads : c.monthLeads, value: formatNumber(isBroker ? metricas.misLeadsCount : metricas.leadsMesCount), context: isBroker ? c.portfolio : c.month, allowed: permissions.leads },
+    { key: "active", label: c.active, value: formatNumber(metricas.negociosActivosCount), context: c.current, allowed: permissions.deals },
+    { key: "pipeline", label: c.pipeline, value: metricas.volumenPipelineDisplay, context: c.current, allowed: permissions.deals },
+    { key: "won", label: c.monthWon, value: formatNumber(metricas.cierresMesCount), context: c.month, allowed: permissions.deals },
+    { key: "conversion", label: c.conversion, value: metricas.conversionPorcentaje, context: c.conversionContext, allowed: permissions.deals && permissions.leads },
+  ];
+  return <div className="analytics-page analytics-inicio">
+    <header className="analytics-page-header"><div><p className="analytics-eyebrow">{c.title}</p><h1>{c.greeting}{nombre.trim() ? `, ${nombre.trim()}` : ""}</h1><p>{c.subtitle}</p></div>
+      {permissions.createLead && <Link className="analytics-button analytics-primary" href="/leads">{c.createLead}</Link>}
+    </header>
+    <p className="analytics-context">{metricas.fechaTexto} · {common.scope}</p>
+    {!online && <p className="analytics-offline" role="status">{common.offline}</p>}
+    <div className="analytics-kpis" aria-label={c.summary}>{kpis.filter(k => k.allowed).map(k => <article key={k.key} data-kind={k.key} className="analytics-kpi"><h2>{k.label}</h2><strong>{k.value}</strong><p>{k.context}</p><small>{common.previousMissing}</small></article>)}</div>
+    <Tabs defaultValue="resumen" className="analytics-main-tabs">
+      <AnalyticsTabs tabs={inicioTabs} label={c.tabs} />
+      <TabsContent value="resumen" className="analytics-inicio-panel">
+        <div className="analytics-dashboard-grid">
+          <ChartCard title={c.attention} subtitle={c.attentionContext} state={metricState(permissions.leads, metricas.leadsRecientes.length > 0, online)} emptyMessage={c.noLeads} emptyAction={permissions.leads && <Link className="analytics-button" href="/leads">{c.viewLeads}</Link>} action={permissions.leads && <Link className="analytics-button" href="/leads">{c.viewLeads}</Link>}>
+            <ul className="analytics-record-list">{metricas.leadsRecientes.map(lead => <li key={lead.id}><Link href={`/leads?lead=${lead.id}`}><strong>{lead.name}</strong><span>{lead.project} · {lead.source}</span><span className="analytics-badge">{lead.stage}</span><small>{lead.next}</small></Link></li>)}</ul>
+          </ChartCard>
+          <ChartCard title={isBroker ? c.goal : c.demand} subtitle={isBroker ? c.goalContext : c.demandContext} state={metricState(isBroker ? permissions.goals : permissions.projects, isBroker ? metricas.metaMesLabel !== "Sin meta" : metricas.projects.length > 0, online)}>
+            {isBroker ? <div className="analytics-goal"><strong>{metricas.metaMesLabel}</strong><progress max={100} value={metricas.metaPorcentaje} aria-label={c.goal} /><p>{formatNumber(metricas.metaPorcentaje)}%</p><p>{metricas.miNivel}</p>{permissions.academy && <p>{metricas.academy ? `${metricas.academy.title} · ${formatNumber(metricas.academy.progressPercent)}% ${c.complete}` : c.academyEmpty}</p>}</div> : <ul className="analytics-record-list">{metricas.projects.map(p => <li key={p.id}><Link href="/propiedades"><strong>{p.name}</strong><span>{formatNumber(p.leads)} {common.leads}</span></Link></li>)}</ul>}
+          </ChartCard>
         </div>
-        <div className="panel">
-          <div className="panel-title">
-            <div>
-              <p className="eyebrow">{isBroker ? "Mi avance" : "Embudo"}</p>
-              <h2>{isBroker ? "Meta mensual" : "Conversión por etapa"}</h2>
-            </div>
-          </div>
-          {isBroker ? (
-            <div className="goal-ring-wrap">
-              <div
-                className="goal-ring"
-                style={{ "--progress": `${metricas.metaPorcentaje}%` } as React.CSSProperties}
-              >
-                <strong>{metricas.metaPorcentaje}%</strong>
-              </div>
-              <p>{metricas.metaMesLabel} negocios cerrados</p>
-              <div className="progress-line">
-                <span style={{ width: `${metricas.metaPorcentaje}%` }} />
-              </div>
-              <small>Progreso hacia meta del periodo</small>
-            </div>
-          ) : (
-            <div className="funnel">
-              {metricas.funnel.length === 0 && <p className="empty">Sin etapas visibles.</p>}
-              {metricas.funnel.map((step) => (
-                <div key={step.stageId}>
-                  <span>{step.label}</span>
-                  <div>
-                    <i style={{ width: `${step.widthPercent}%` }} />
-                  </div>
-                  <strong>{step.reachedCount}</strong>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="panel">
-          <div className="panel-title">
-            <div>
-              <p className="eyebrow">Agenda</p>
-              <h2>Próximas actividades</h2>
-            </div>
-          </div>
-          <div className="timeline-list">
-            {metricas.activities.length === 0 && <p className="empty">Sin próximas actividades.</p>}
-            {metricas.activities.map((activity) => <div key={activity.id}>
-              <time dateTime={activity.startsAt}>{new Intl.DateTimeFormat("es-DO", { timeZone: "America/Santo_Domingo", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(activity.startsAt))}</time>
-              <span>
-                <strong>{activity.title}</strong>
-                <small>{activity.location ?? "Sin ubicación"}</small>
-              </span>
-            </div>)}
-          </div>
-        </div>
-        <div className="panel">
-          <div className="panel-title">
-            <div>
-              <p className="eyebrow">{isBroker ? "Academy" : "Demanda"}</p>
-              <h2>{isBroker ? "Continúa tu capacitación" : "Proyectos más consultados"}</h2>
-            </div>
-          </div>
-          {isBroker ? (
-            metricas.academy ? <div className="course-mini">
-              <div className="course-art">QH Academy</div>
-              <strong>{metricas.academy.title}</strong>
-              <div className="progress-line">
-                <span style={{ width: `${metricas.academy.progressPercent}%` }} />
-              </div>
-              <small>{metricas.academy.progressPercent}% completado</small>
-            </div> : <p className="empty">Sin cursos en progreso.</p>
-          ) : (
-            <div className="ranking">
-              {metricas.projects.length === 0 && <p className="empty">Sin demanda registrada.</p>}
-              {metricas.projects.map((proj, index) => (
-                <div key={proj.id}>
-                  <span>{index + 1}</span>
-                  <strong>{proj.name}</strong>
-                  <small>{proj.leads} leads</small>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-    </>
-  );
+      </TabsContent>
+      <TabsContent value="embudo" className="analytics-inicio-panel">
+        <ChartCard title={c.funnel} subtitle={c.funnelContext} state={metricState(permissions.leads, funnel.some(p => p.reached > 0), online)} summary={funnel.map(p => `${p.label}: ${p.reached}; ${c.pass}: ${p.pass ?? common.noBase}`).join(". ")} emptyAction={permissions.leads && <Link className="analytics-button" href="/leads">{c.viewLeads}</Link>}>
+          <MetricChart data={funnel} series={funnelSeries} type="horizontal" summary={c.funnelContext} /><AnalyticsDetails data={funnel} series={funnelDetails} />
+        </ChartCard>
+      </TabsContent>
+      <TabsContent value="agenda" className="analytics-inicio-panel">
+        <ChartCard title={c.activities} subtitle={c.activitiesContext} state={metricState(permissions.activities, metricas.activities.length > 0, online)} emptyMessage={c.noActivities} emptyAction={permissions.activities && <Link className="analytics-button" href="/agenda">{c.viewAgenda}</Link>} action={permissions.activities && <Link className="analytics-button" href="/agenda">{c.viewAgenda}</Link>}>
+          <ul className="analytics-record-list">{metricas.activities.map(a => <li key={a.id}><Link href="/agenda"><time dateTime={a.startsAt}>{formatActivity(a.startsAt)}</time><strong>{a.title}</strong><span>{a.location ?? common.noLocation}</span></Link></li>)}</ul>
+        </ChartCard>
+      </TabsContent>
+    </Tabs>
+  </div>;
 }

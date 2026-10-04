@@ -1,4 +1,5 @@
-import { consultarDashboard } from "@/application/dashboard/consultas";
+import { consultarDashboard, dashboardScopes } from "@/application/dashboard/consultas";
+import { can } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { dashboardRepositorio } from "@/infrastructure/contenedor/dashboard";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
@@ -9,6 +10,8 @@ export default async function InicioPage({ searchParams }: { searchParams: Promi
   const actor = await requireActor();
   const scope = requireScopeInPage(actor, "dashboard", "view");
   const metricas = await consultarDashboard(dashboardRepositorio(), actor, scope, leerFiltros(await searchParams));
-  return <InicioVista roleSlug={actor.roleSlug} metricas={metricas} nombre={metricas.nombre} />;
+  const scopes = dashboardScopes(actor, scope);
+  const permissions = { leads: scopes.leads !== "none", deals: scopes.deals !== "none", activities: scopes.activities !== "none", projects: scopes.projects !== "none", goals: scopes.goals !== "none", academy: scopes.academy !== "none", createLead: can(actor, "leads", "create") };
+  return <InicioVista key={actor.userId} roleSlug={actor.roleSlug} metricas={metricas} nombre={metricas.nombre} permissions={permissions} />;
 }
 

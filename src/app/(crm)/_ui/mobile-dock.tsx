@@ -37,7 +37,7 @@ export function MobileDock({
       {/* Fixed bottom navigation bar for mobile (<768px) */}
       <nav
         aria-label="Navegación móvil rápida"
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface/95 border-t border-line/80 backdrop-blur-lg px-2 pt-1 pb-[max(0.35rem,env(safe-area-inset-bottom))] shadow-[0_-8px_20px_rgba(16,23,45,0.06)]"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface border-t border-line px-2 pt-1 pb-[max(0.35rem,var(--sab))] pl-[max(0.5rem,var(--sal))] pr-[max(0.5rem,var(--sar))]"
       >
         <div className="flex items-center justify-around max-w-lg mx-auto">
           {/* 1. Inicio */}
@@ -45,21 +45,21 @@ export function MobileDock({
             href="/inicio"
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 px-1 rounded-xl transition-all ${
               isActive("/inicio")
-                ? "text-gold-700 font-bold"
+                ? "bg-gold-100 text-navy-950 font-bold"
                 : "text-ink-muted hover:text-navy-950 font-medium"
             }`}
           >
             <div className="relative">
               <LayoutDashboard
                 className={`size-5 transition-transform ${
-                  isActive("/inicio") ? "scale-110 text-gold-700 stroke-[2.2]" : ""
+                  isActive("/inicio") ? "text-navy-950 stroke-[2.2]" : ""
                 }`}
               />
               {isActive("/inicio") && (
                 <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 size-1 rounded-full bg-gold-600" />
               )}
             </div>
-            <span className="text-[10px] tracking-tight mt-1 leading-none">Inicio</span>
+            <span className="text-[13px] mt-1 leading-none">Inicio</span>
           </Link>
 
           {/* 2. Leads */}
@@ -67,28 +67,28 @@ export function MobileDock({
             href="/leads"
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 px-1 rounded-xl transition-all ${
               isActive("/leads")
-                ? "text-gold-700 font-bold"
+                ? "bg-gold-100 text-navy-950 font-bold"
                 : "text-ink-muted hover:text-navy-950 font-medium"
             }`}
           >
             <div className="relative">
               <UserPlus
                 className={`size-5 transition-transform ${
-                  isActive("/leads") ? "scale-110 text-gold-700 stroke-[2.2]" : ""
+                  isActive("/leads") ? "text-navy-950 stroke-[2.2]" : ""
                 }`}
               />
               {isActive("/leads") && (
                 <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 size-1 rounded-full bg-gold-600" />
               )}
             </div>
-            <span className="text-[10px] tracking-tight mt-1 leading-none">Leads</span>
+            <span className="text-[13px] mt-1 leading-none">Leads</span>
           </Link>
 
           {/* 3. Center Elevated Action Button (FAB) */}
           <button
             type="button"
             onClick={() => setCommandOpen(true)}
-            className="flex items-center justify-center size-11 -mt-3 rounded-full bg-gradient-to-tr from-gold-700 via-gold-600 to-gold-500 text-navy-950 shadow-md shadow-gold-600/30 border-2 border-surface active:scale-95 transition-transform"
+            className="flex items-center justify-center size-12 -mt-3 rounded-full bg-gold-600 text-navy-950 border-2 border-surface"
             aria-label="Abrir buscador global de CRM"
           >
             <Search className="size-5 stroke-[2.5]" />
@@ -99,21 +99,21 @@ export function MobileDock({
             href="/agenda"
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 px-1 rounded-xl transition-all ${
               isActive("/agenda")
-                ? "text-gold-700 font-bold"
+                ? "bg-gold-100 text-navy-950 font-bold"
                 : "text-ink-muted hover:text-navy-950 font-medium"
             }`}
           >
             <div className="relative">
               <Calendar
                 className={`size-5 transition-transform ${
-                  isActive("/agenda") ? "scale-110 text-gold-700 stroke-[2.2]" : ""
+                  isActive("/agenda") ? "text-navy-950 stroke-[2.2]" : ""
                 }`}
               />
               {isActive("/agenda") && (
                 <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 size-1 rounded-full bg-gold-600" />
               )}
             </div>
-            <span className="text-[10px] tracking-tight mt-1 leading-none">Agenda</span>
+            <span className="text-[13px] mt-1 leading-none">Agenda</span>
           </Link>
 
           {/* 5. Más Módulos (Drawer Trigger) */}
@@ -122,13 +122,13 @@ export function MobileDock({
             onClick={() => setDrawerOpen(true)}
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] py-1 px-1 rounded-xl transition-all ${
               drawerOpen
-                ? "text-gold-700 font-bold"
+                ? "bg-gold-100 text-navy-950 font-bold"
                 : "text-ink-muted hover:text-navy-950 font-medium"
             }`}
             aria-label="Ver todos los módulos"
           >
             <Grid className="size-5" />
-            <span className="text-[10px] tracking-tight mt-1 leading-none">Más</span>
+            <span className="text-[13px] mt-1 leading-none">Más</span>
           </button>
         </div>
       </nav>
@@ -136,7 +136,7 @@ export function MobileDock({
       {/* Sliding Bottom Drawer for "Más Módulos" */}
       {drawerOpen && (
         <div
-          className="md:hidden fixed inset-0 z-50 bg-navy-950/70 backdrop-blur-sm animate-in fade-in duration-200"
+          className="md:hidden fixed inset-0 z-50 bg-navy-950/70"
           onClick={() => setDrawerOpen(false)}
         >
           <div
@@ -154,7 +154,7 @@ export function MobileDock({
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="p-1 rounded-lg text-ink-muted hover:text-ink hover:bg-surface transition-colors"
+                className="size-12 inline-flex items-center justify-center rounded-lg text-ink-muted hover:text-ink hover:bg-surface transition-colors"
                 aria-label="Cerrar menú"
               >
                 <X className="size-5" />
@@ -172,10 +172,10 @@ export function MobileDock({
                 return (
                   <div key={workspace.id} className="space-y-2">
                     <div className="flex items-center justify-between px-1">
-                      <span className="text-[11px] font-bold text-gold-700 uppercase tracking-wider">
+                      <span className="text-[13px] font-semibold text-navy-950">
                         {workspace.nombre}
                       </span>
-                      <small className="text-[10px] text-ink-muted">
+                      <small className="text-[13px] text-ink-muted">
                         {modulesInWs.length} módulos
                       </small>
                     </div>
@@ -204,16 +204,9 @@ export function MobileDock({
                               <ModuloIcon name={modulo.icono} className="size-4" />
                             </span>
                             <div className="truncate">
-                              <strong className="text-xs font-semibold block truncate leading-tight">
+                              <strong className="text-[13px] font-semibold block truncate leading-tight">
                                 {modulo.nombre}
                               </strong>
-                              <small
-                                className={`text-[10px] block truncate leading-tight mt-0.5 ${
-                                  active ? "text-slate-300" : "text-ink-muted"
-                                }`}
-                              >
-                                {modulo.id}
-                              </small>
                             </div>
                           </Link>
                         );
@@ -224,7 +217,7 @@ export function MobileDock({
               })}
 
               {/* Bottom user badge inside drawer */}
-              <div className="pt-2 border-t border-line flex items-center justify-between text-xs text-ink-muted">
+              <div className="pt-2 border-t border-line flex items-center justify-between text-[13px] text-ink-muted">
                 <span className="font-semibold text-navy-950">
                   Rol: {etiquetaRol}
                 </span>
@@ -232,7 +225,7 @@ export function MobileDock({
                   href="https://quisqueyahome.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1 font-semibold text-gold-700"
+                  className="inline-flex min-h-12 items-center gap-1 font-semibold text-navy-900"
                 >
                   <ExternalLink className="size-3" />
                   Portal Web
