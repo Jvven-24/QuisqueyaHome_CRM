@@ -4,7 +4,7 @@ El CRM ya tiene paleta, DataTable, Bits y tonos: hay que converger contratos, no
 El CMS aporta edición con evidencia, galerías, taxonomías, i18n y atribución; algunas piezas son demos o contienen afirmaciones sin respaldo.
 Los modelos de proyectos, tipologías, unidades e identidades son distintos: compartir tablas directamente no resuelve la integración.
 I06 tiene emisor/receptor parciales, respuesta incompatible y recuperación durable no acreditada.
-Esta entrega documenta código local y propone reutilización; ninguna recomendación, ADR o puerta queda aprobada.
+Esta entrega documenta código local y propone reutilización; D22 no aprueba recomendaciones, ADR ni puertas. Las aprobaciones previas se atribuyen a su fuente.
 
 **Versión:** 2.0 · **Fecha:** 2026-10-04 · **Productor:** D22 / Codex, criterio de arquitectura D03.
 **Mandato:** `.viltrum/dispatch/20261004T220533Z-D22-codex/TAREA.md:1`.
@@ -108,7 +108,7 @@ Ausencias Studio contrastadas con búsquedas en C/src: `ProjectJourney|beforeunl
 | Origen P / evidencia | Función/dependencias | Equivalente C observado | Propuesta y razón | Divergencia / esfuerzo |
 |---|---|---|---|---|
 | `server/catalog.mjs:28`, `shared/public-commercial.mjs:20` | DTO público por allowlist recursiva, redacción comercial; pg/reglas puras | RBAC/consultas restringen precios: `src/domain/rbac.ts:133`; contrato editorial distinto | COMPARTIR contrato público/regla parametrizada; PORTAR proyección | Alto: originales privados, derechos y validación / L |
-| `server/catalog-cache.mjs:10` | TTL/ETag, refresh único, generación de invalidación y último resultado válido; crypto/Node | No caché pública de catálogo localizada en C/src; RSC tiene otro ámbito | REFERENCIA para futura API pública; nunca cache global de datos por actor | Alto: cruce de ámbitos/datos obsoletos / M |
+| `server/catalog-cache.mjs:6`, `:28`, `:45`, `:66`, `:89` | TTL/ETag, refresh único, generación de invalidación/último resultado válido y snapshot en arranque frío; crypto/fs/Node | No caché pública de catálogo localizada en C/src; RSC tiene otro ámbito | REFERENCIA para futura API pública; proyectar también el snapshot y nunca cache global por actor | Alto: snapshot sin allowlist, ámbitos/obsolescencia / M |
 | `server/editorial.mjs:270`, `:334`, `:363` | Bundle/CRUD avances, zonas, POI, páginas, settings, taxonomías; pg/audit/can | `src/application/catalogos/casos-de-uso.ts:1`, `src/application/proyectos/casos-de-uso.ts:56` | REFERENCIA de publicación/validación; PORTAR por contrato | Alto: roles/tablas/editorial vs comercial / L |
 | `server/project-tools.mjs:42`, `:50`, `:65`, `:117` | Fuentes; upload firma-formato/8MB/hash/compensación; variantes/hitos; fs/crypto/pg | `src/application/proyectos/casos-de-uso.ts:310`, `src/application/compartido/almacenamiento.ts:25` | PORTAR evidencia/derechos detrás del puerto existente | Alto: disco público CMS vs URLs firmadas CRM / L |
 | `server/amenities.mjs:42`, `shared/amenities.mjs:3` | Selecciones/evidencia/revisión; hash y transacción | Catálogos CRM; sin selección editorial equivalente localizada | COMPARTIR vocabulario/DTO; PORTAR editor | Medio: planned/reported ≠ comprobado / M |
@@ -150,8 +150,8 @@ Equivalentes CRM abreviados para evitar repetir rutas. Una referencia Cn remite 
 | Origen P / archivo:línea | Función y dependencias verificadas | Equivalente CRM real o ausencia buscada | Recomendación, razón, riesgo y esfuerzo |
 |---|---|---|---|
 | `src/portal/Portal.jsx:31`, `:80`, `:122` | Shell/rutas lazy, catálogo/perfil/asistente, header/footer/consent/onboarding y dwell; React Router/Motion/i18n/stores | C8; Next y shell por permisos | REFERENCIA / M / medio: composición pública útil; adaptar routing/document globals y autorización |
-| `src/portal/store.jsx:22`, `:97`, `:116`, `:124`, `:132` | GET catálogo/cache navegador/retry, sincronización favoritos, undo, comparación máximo 3 y colecciones; React/fetch/storage | C1; favoritos/comparador/colecciones no localizados | REFERENCIA / L / alto: separar datos públicos de privados; cache/lifecycle y fallos de sincronización requieren contrato |
-| `src/portal/store.jsx:140`, `:145`, `:148` | Helpers zona/URL/foto/rango monetario, filtros zona/tipo/moneda/precio/dormitorios/recencia y ordenación | C1/C10 | COMPARTIR funciones puras por contrato / M / alto: decimales CMS frente centavos CRM; locale y acceso al precio separados |
+| `src/portal/store.jsx:5`, `:21`, `:27`, `:107`, `:126`, `:134`, `:142` | GET catálogo/cache navegador/retry/snapshot importado, favoritos/sync/undo, comparación máximo 3 y colecciones; React/fetch/storage | C1; favoritos/comparador/colecciones no localizados | REFERENCIA / L / alto: snapshot debe tener la misma proyección pública; cache/lifecycle y fallos de sincronización requieren contrato |
+| `src/portal/store.jsx:150`, `:155`, `:158` | Helpers zona/URL/foto/rango monetario, filtros zona/tipo/moneda/precio/dormitorios/recencia y ordenación | C1/C10 | COMPARTIR funciones puras por contrato / M / alto: decimales CMS frente centavos CRM; locale y acceso al precio separados |
 | `src/portal/client-store.jsx:6`, `:68`, `:101`, `:159`, `:192`, `:235`, `:259` | Context de sesión/registro/perfil/inquiries/export/purge; fetch/toasts/eventos | C7/C4; no client/profile ni privacy/export/purge CRM | REFERENCIA / L / alto: identidad pública distinta; datos personales/consentimiento y contrato I06 previos |
 | `src/portal/auth/ClientAuthModal.jsx:8`, `:47`, `:79` | Dialog nativo login/registro, password visible/fuerza, contacto/+18/remember me; React/i18n/Lucide/store/CSS | C7/C9/C10 | REFERENCIA / M / alto: no copiar sesión cliente a empleados; textos/validación teléfono y foco por comprobar |
 | `src/portal/profile/ClientProfile.jsx:45`, `:106`, `:133`, `:149`, `:180`, `:638` | Perfil/inversión/favoritos/solicitudes/recomendación/export/purge; catálogo/store | C2/C4/C7; no perfil inversor público | REFERENCIA / L / alto: matching con listas fijas y sin moneda; errores silenciosos; preferencias ≠ evaluación comercial |
@@ -253,7 +253,10 @@ Ocho diccionarios no equivalen a ocho idiomas completos: auth/perfil/comparador 
 - Consentimiento: `P/src/portal/ConsentNotice.jsx:25` retorna si ya hay elección antes del listener `:30`; footer `P/src/portal/Portal.jsx:121` sin acción de reapertura. `P/src/portal/analytics.js:71` usa básico por defecto. Son observaciones de código, no dictamen jurídico.
 - Perfil: `P/src/portal/profile/ClientProfile.jsx:142`, `:161` silencian fallo suponiendo gestión por store, que lanza `P/src/portal/client-store.jsx:167`; matching `:106` ignora moneda/usa catálogo fijo `:28`, `:33`, `:37`; setState dentro useMemo `:86`. Riesgo: guardar parece exitoso o recomendación económica equivocada; no ejecutado aquí.
 - Logout: `P/src/portal/client-store.jsx:144`, `:146` ignora error DELETE y limpia local `:148`; sesión servidor podría seguir activa si request falla. Runtime UNKNOWN.
-- Cache/reintento: `P/src/portal/store.jsx:10` sin control de edad; `:51` comparte AbortController con reintentos `:55`, abortado `:59`. Copiar a datos privados agravaría exposición/obsolescencia; recuperación tras abort requiere prueba.
+- Cache/reintento: `P/src/portal/store.jsx:11` sin control de edad; `:56` comparte AbortController con reintentos `:60`, abortado por timeout `:64`. Copiar a datos privados agravaría exposición/obsolescencia; recuperación tras abort requiere prueba.
+- Snapshot añadido durante la lectura: `P/src/portal/store.jsx:5`, `:21` importa/usa catálogo estático; `P/server/catalog-cache.mjs:67`, `:69` serializa el snapshot sin llamar publicCatalogProjection. Inspección estructural de `P/src/data/catalog.json:1`: 28 proyectos, fuentes por proyecto, metadata database y estados de publicación distintos de published presentes; editorial=false no elimina esos campos. Escenario: arranque sin BD sirve ese JSON completo; frontend también lo importa. D03/D12 deben revisar proyección/recencia/filtrado antes del reuso. Contenido configurado/desplegado, sensibilidad de metadata y exposición real **UNKNOWN**; no se reprodujeron sus valores.
+- Recencia: `P/src/portal/store.jsx:164` exige sources para el filtro, mientras `P/server/catalog.mjs:69` los excluye del DTO público. Con catálogo recibido de esa API, el filtro podría vaciar resultados; con snapshot puede comportarse distinto. D03 contrato público de recencia sin documentos privados; runtime UNKNOWN.
+- Ingesta analítica: `P/server/analytics.mjs:66` limita tamaño pero no claves de props; `:129`, `:141` guardan origin arbitrario y `:207` propaga props al proveedor. Escenario: cliente manipulado envía datos personales/campos reservados pese al comentario de no guardar formularios. REFERENCIA del flujo, no copiarlo sin allowlist; no se enviaron peticiones ni datos reales.
 - Analítica: `P/src/portal/analytics.js:225`, `:235` Set de dedupe vive durante carga y puede suprimir retorno a ruta. No prometer sesiones/contactos exactos.
 - PWA: `P/public/sw.js:1` cachea offline.html/theme-init y fallback navegación GET; no catálogo/API ni escrituras. `P/src/main.jsx:46` registra en producción; `:85` configura reduced motion. C12 manifest ya existe; installability/offline real de ambos UNKNOWN.
 
@@ -278,9 +281,9 @@ No se acreditó WCAG AA, seis estados o 320/390/768/1440 por inspección/imports
 | Confotur/beneficios | Texto benefits/legal/payment, `P/shared/public-commercial.mjs:2`, `P/src/portal/DetailSections.jsx:50`; presets `P/src/studio/ProjectAdvanced.jsx:4` | Elegibilidad/interés `C/src/infrastructure/db/schema.ts:434`, `:622`; cálculo `C/src/domain/confotur.ts:72`; API `C/src/app/api/cotizador/confotur/route.ts:26` | Texto ≠ certificado; cálculo ≠ elegibilidad documental. No contrato fiscal/certificación verificados. Proponer fuente/fecha/alcance y UNKNOWN hasta autoridad; cifras/ROI de código no se promueven a política fiscal validada |
 | Medios/fuentes | Derechos/hash/publicación/documentos/vínculos `P/supabase/migrations/20260905_quisqueya_catalog.sql:170`, `:199`; upload disco `P/server/project-tools.mjs:50`; filtro `P/server/catalog.mjs:134` | files por entidad/visibilidad `C/src/infrastructure/db/schema.ts:1034`; compensación/puerto `C/src/application/proyectos/casos-de-uso.ts:310`, `C/src/application/compartido/almacenamiento.ts:25` | Metadatos paralelos; duplicado binario no comprobado. Proponer assetId/ref/proyección pública, original privado. Host/bucket/derechos efectivos UNKNOWN |
 | Avances/entregas | Updates editoriales e hitos/evidencia `P/server/editorial.mjs:270`, `P/server/project-tools.mjs:65` | Fases por proyecto/progreso `C/src/infrastructure/db/schema.ts:526`, `C/src/application/proyectos/casos-de-uso.ts:17` | Fase, noticia e hito distintos. Dueño por campo; vídeo/masterplan no prueba porcentaje de unidad |
-| Zonas/taxonomías | Catálogos editoriales `P/server/catalog.mjs:151` | Catálogos/relaciones `C/src/application/catalogos/casos-de-uso.ts:1`, `C/src/infrastructure/db/schema.ts:1` | Solapamiento semántico; compartir códigos/traducciones realmente comunes y mapear IDs; no sustituir permisos/estados CRM por listas CMS |
+| Zonas/taxonomías | Catálogos editoriales `P/server/catalog.mjs:161` | Catálogos/relaciones `C/src/application/catalogos/casos-de-uso.ts:1`, `C/src/infrastructure/db/schema.ts:1` | Solapamiento semántico; compartir códigos/traducciones realmente comunes y mapear IDs; no sustituir permisos/estados CRM por listas CMS |
 
-**UNKNOWN:** localización/configuración viva BD, migraciones aplicadas, filas y sincronización. Se leyó código/SQL, no bases reales. Ambos llaman public.projects a esquemas incompatibles (UUID vs serial); compartir misma BD/esquema sin adaptación no es válido. `C/.viltrum/vre-os/ARQ-VRE-002-integraciones.md:65` propone propietario por entidad, `:75` refs; cabecera dice **PROPUESTA**. La constitución exige puertos/fuente única/outbox/webhook verificado; este documento no aprueba el ADR ni la propiedad objetivo.
+**UNKNOWN:** localización/configuración viva BD, migraciones aplicadas, filas y sincronización. Se leyó código/SQL, no bases reales. Ambos llaman public.projects a esquemas incompatibles (UUID vs serial); compartir misma BD/esquema sin adaptación no es válido. `C/.viltrum/vre-os/ARQ-VRE-002-integraciones.md:65` fija fuente única por entidad y `:75` refs. Su cabecera `:3`, actualizada durante la lectura, declara **APROBADA por Wilber**, decisión #45, corroborada por `C/docs/contexto/decisiones.md:301`. La constitución exige puertos/fuente única/outbox/webhook verificado. Ese ADR no fija por sí solo la partición de campos CMS↔CRM propuesta aquí ni aprueba el contrato I06; tampoco acredita implementación o bases vivas.
 
 ### 3.2 I06 existente: recorrido y huecos
 
@@ -329,6 +332,8 @@ Futuras pruebas de contrato: legacy/ACK/versiones; token ausente/incorrecto sin 
 
 ### 4.1 Lo existente en CMS que CRM volvió a implementar
 
+La comparación acredita implementaciones funcionales paralelas y diferencias actuales. Orden histórico, autoría y cuál se escribió primero son **UNKNOWN** sin investigación de historia autorizada. “Mejor” se limita al mecanismo concreto observado, no a una evaluación visual o de producción.
+
 | Capacidad | Comparación verificada | Qué conservar/límite |
 |---|---|---|
 | Paleta | CMS módulos+catálogo; CRM quick actions/módulos `C/src/app/(crm)/_ui/command-palette.tsx:113` | CMS mayor búsqueda entidades local; converger teclado/shell con proveedor autorizado. Quick action navega, no crea registro; vídeo CMS tampoco abre entidad |
@@ -364,6 +369,8 @@ Futuras pruebas de contrato: legacy/ACK/versiones; token ausente/incorrecto sin 
 | Comparador/presets aparentan condiciones confirmadas | Fallbacks/presets citados §1/2 | No hechos/certificación/negocio; D02/D12/D05 revisan |
 | ComponentGallery offline, Drive verificado | Demo/local sin mecanismo de sync/verificación | REFERENCIA/IGNORAR, nunca capacidad acreditada |
 | Índices GitNexus vs bytes actuales | CRM commit distinto, CMS líneas desplazadas | Grafo navegación; bytes/hashes evidencia; reindex otro despacho |
+| ARQ inicialmente PROPUESTA, ahora APROBADA | Cabecera actual `C/.viltrum/vre-os/ARQ-VRE-002-integraciones.md:3` y decisión #45 `C/docs/contexto/decisiones.md:301` | Reconocida la aprobación externa previa de Wilber; propuestas CMS/I06 de esta entrega siguen pendientes D03 |
+| Fuentes mutaron durante inventario | 12 diferencias SHA-256 frente captura inicial; detalle en Fuentes | Reread/citas ajustadas para catálogo/store/ADR; db.mjs solo hash, configuración no consumida; ejecución y autor del cambio UNKNOWN |
 
 Documentado en esta lectura: piezas/equivalentes/limitaciones, frontera editorial-comercial y captación. **UNKNOWN:** runtime/UI/QA, bases vivas, autoría/licencia propia, recencia catálogo Drive, configuración efectiva, migraciones aplicadas, autoridad fiscal/privacidad. Sin transcripciones ni DEC inventadas. Duplicados de contratos/modelos observados; filas/binarios no comprobados. Paquete mínimo receptor: esta entrega+TAREA/PERFIL, enlaces a constitución/ARQ-VRE-002; detalle bajo demanda.
 
@@ -373,16 +380,327 @@ Fuentes internas observadas el 2026-10-04. Autor individual/aceptación del nego
 
 Original rechazado sustituido por mandato: cms-reutilizable.md de72líneas, SHA-256 `7e70b643243f78e2b1581830cb0cd3bb126739d10ba60df874710bd593c2de28`; rechazo TAREA actual, run 20261004T213724Z. No otra copia fuera de único archivo permitido.
 
-<!-- MANIFIESTO-FUENTES -->
+### Procedencia, recencia y comprobación
+
+Productor D22 / Codex. Inventarios mecánicos apoyados por `/root/inventario_studio` y `/root/inventario_portal`, ambos tras leer el mismo PERFIL completo; D22 consolidó y contrastó las comparaciones. Son productores del mismo proveedor. D03 todavía no ha revisado esta entrega.
+
+Lectura local: `rg --files`, `rg -n` con búsquedas positivas/negativas, `Get-Content -LiteralPath` con numeración y navegación GitNexus indicada en §1.1. Huellas y controles documentales: Python por stdin (`pathlib`/`hashlib.sha256`/`json`/`re`), sin guardar scripts ni consultar configuración secreta. No se ejecutaron tests de aplicación ni llamadas a APIs reales.
+
+Captura inicial de **580 huellas**: `2026-10-04T22:13:31.151924+00:00`. Cotejo posterior de **579 archivos**, excluyendo el entregable: 12 diferencias en ese momento; 567 sin diferencia. Consolidación de **253 fuentes citadas**: `2026-10-04T22:51:18.616966+00:00`; aparecieron además cambios en motion.css, notifications.css y arquitectura.test.ts, y volvió a cambiar package.json CRM. En conjunto se observaron **15 rutas distintas que mutaron**. Esto acredita un workspace cambiante, no una revisión atómica ni una relación con remoto. Los hashes finales son los de la captura indicada; futuros cambios pueden invalidar citas.
+
+Se ajustaron las citas de store/catalog/cache y se releyeron el ADR/constitución y CSS afectados. Los cambios de manifests se comprobaron por estructura/dependencias/nombres de scripts; `server/db.mjs` solo por huella, sin leer configuración. Pruebas/implementación nuevas concurrentes no se acreditan en ejecución. La aprobación ARQ se atribuye a las fuentes actuales, y las propuestas de este informe siguen pendientes.
+
+| Fuente que cambió | SHA-256 inicial | SHA-256 al último cotejo |
+|---|---|---|
+| P/`package.json` | `49f08d3a068172a3cf27e3ec55f3e4e47392772e80e67de24a141645b9bd06cd` | `442de6059152798e20eab91f30c6ab5c134e3cd59e226f3cda0379d3e3f44825` |
+| P/`server/analytics.mjs` | `17a2f3889713366ff0bc1c3c91198486a408b6f353a32f0213f6cd33113d9f3f` | `0725eea3079301f1c02b409a2bd86109a61f4e8bd0a0ec2c131a3e3f112f70bd` |
+| P/`server/catalog-cache.mjs` | `f19dad48609bda52e50388c2edb1fb70b7af5c5791b9c02ae8ac88790f4e9892` | `0042f804d49530d4fb1c99378a4713990fb45e245240963e77aba2425f4c9979` |
+| P/`server/catalog.mjs` | `90e40ebebfabf13b7fcb047064132c8fb8c2880b23174577d7a7f50a11190362` | `d5bf5958fe21428a6a1589645436e93b69fb18b815953c9cb029157fcb56a8e3` |
+| P/`server/db.mjs` | `89c9bfb0f5ce34f8322174bb9e2f3247e4fb2cf7ed2eed50b697329a3bd4e72a` | `543477e677f053a9c6a2aa173b2bf973b525e2114ce247606ae4823335143801` |
+| P/`server/server.mjs` | `d9e2711188b8b391dcc6c553f3a198aa800cac3cb99860ac31e59f2fa36880bf` | `396f888d99fdbfc240fb7545ecc78f87f165f103f97ec2d9a1a0468f19a22446` |
+| P/`src/portal/media.js` | `71f79762f3a0b9b8b3f1646a03f74fe107a384186aaef5f0c329243ef99fd6b5` | `391186f06d1d05e4649b791b011087ae5fde4cd6de94d961691282d5ab4f4f62` |
+| P/`src/portal/motion/motion.css` | `bec8159c667a061dbea6eb805448622c15481b3572f78bbd486ae64b3687be64` | `b7988c85e12acf5bbb800d444c753615998629c48de28669facc19dac375bc1a` |
+| P/`src/portal/notifications.css` | `7412cf4779c82c4a704a088907674e694b17071c111c9f780a79c97aa0aee8ce` | `9e9676f2576cdc0360d0e4c1d118147096dabdecd0c91e7da023ef18a1bde998` |
+| P/`src/portal/store.jsx` | `741717d1176e8fdd732152291e861f5e49c24bf693b4bd62bf2b4f979bfc7da9` | `687166849a84684cf972a4d71b5474d83dc1ac32ada9a640ac5380e13c5c7d75` |
+| P/`src/studio/Studio.jsx` | `0a61e0737b230f3121bc792b8aa0d7a16535af9f6cb2b5618d2c47d4856de6e5` | `8ae984e55996b8222fab331288f66ba3ff64c8a55738895117281e0936236c4d` |
+| C/`.specify/memory/constitution.md` | `b5769a56790d1249131903c4bc95547c81707182e9e9f67ab5e48ef4c4273621` | `88b02a3168435acb0c4b2a3cae324eba586133d8fe61a4e0cba70a832fd69a82` |
+| C/`.viltrum/vre-os/ARQ-VRE-002-integraciones.md` | `e01b44b2c7f44b47362424366a1b8d0d3e3058d1ec6bfd5539b3ba75cbf21cc5` | `eff3fa91ba433127f071eec41998f587695db4f7f5a0f489034f349fed962b18` |
+| C/`package.json` | `b1719d65e75cea2dfc830c2039810bce1d7c1ad2738236c1b3675f5a56f3edf4` | `3d5a481a4bf2830be3208bed8903c2791c0f2a2f1d4d46cccb036cc5ce60501c` |
+| C/`src/infrastructure/arquitectura.test.ts` | `807c3af1730f6f0bdbd74fb4bea42e38d7192a6510c1189286db979e5db84002` | `b4d0c30b76f718fe8836e00638f1c55ad5ac109cd8ab11b2e26f2e058cb0b91d` |
+
+**Controles del inventario:** 123/123 archivos primarios representados antes de Fuentes; 326 citas explícitas distintas con ruta existente y línea dentro del archivo; cero rutas faltantes, líneas fuera de rango o marcadores de inventario pendientes. Las referencias abreviadas C1–C12/`:n` remiten a la tabla/fila correspondiente y no aumentan ese contador. No se detectaron caracteres de reemplazo, errores de codificación buscados ni patrones de credencial en el documento. Estas comprobaciones validan cobertura y localización; no equivalen a revisión semántica independiente, pruebas o certificación de ausencia universal de secretos.
+
+### Manifiesto SHA-256 de fuentes citadas
+
+Las rutas P/C se resuelven con los prefijos del inicio. “Líneas” cuenta líneas del archivo completo, no líneas ejecutadas ni una declaración de lectura exhaustiva de cada backend. CSS se inspeccionó estáticamente; el snapshot JSON solo por estructura y booleanos, sin reproducir datos. Manifests/locks/SQL/contexto son evidencia de declaración/modelo. Autoría individual, licencias propias, bases aplicadas y despliegue siguen UNKNOWN. El archivo de entrega queda fuera de su propio manifiesto para evitar una huella circular.
+
+<details>
+<summary>CMS: inventario y dependencias (160 archivos)</summary>
+
+| Archivo | Líneas | SHA-256 |
+|---|---|---|
+| `package-lock.json` | 4009 | `eb528a34d220354466a486a5a170a365ac9285da12354d51c8a00b3cd4d44621` |
+| `package.json` | 73 | `442de6059152798e20eab91f30c6ab5c134e3cd59e226f3cda0379d3e3f44825` |
+| `public/manifest.webmanifest` | 1 | `057a4b54dcb6ff7ec581ce8c0dbba8ea74137c1b5fb7ef61905d9e97e52e47a5` |
+| `public/sw.js` | 5 | `a98d59ff18430ed89ce12d3b39fc1706b9f1f51f39c4ebd7a5e73d989f8fd54e` |
+| `server/amenities.mjs` | 105 | `011cb360b72e99f5b30f04e1889578eb7d2e59619f4a5941f2f8476813aa6ad1` |
+| `server/analytics.mjs` | 371 | `0725eea3079301f1c02b409a2bd86109a61f4e8bd0a0ec2c131a3e3f112f70bd` |
+| `server/assistant-guardrails.mjs` | 73 | `ae12261b873a81f9c75d447e462201ef2e827c71a00de1c77eeec129ee16596d` |
+| `server/assistant.mjs` | 287 | `f694a9a09dca0ffd718694dc6a44b9e7aeddfdf6bd5899e5ae2ae57986f3820b` |
+| `server/auth.mjs` | 47 | `441034b45f30dd5492b4203b219813adc6924fc5cc8b074b40b63e4f5c0d43f4` |
+| `server/catalog-cache.mjs` | 122 | `0042f804d49530d4fb1c99378a4713990fb45e245240963e77aba2425f4c9979` |
+| `server/catalog.mjs` | 225 | `d5bf5958fe21428a6a1589645436e93b69fb18b815953c9cb029157fcb56a8e3` |
+| `server/client-api.mjs` | 293 | `e3cab96f464f0b1e7bccbe8df762f6c25ee290137c60417f95b8b65194ca9ba4` |
+| `server/client-auth.mjs` | 440 | `eab019324ad971884d57688e28b5213cc49f417eedcc97e9f6335abbf6584626` |
+| `server/editorial.mjs` | 725 | `fa7fe3b133fc96bf4d522c4beb515cd83b4c6383e56ac93aee0c5bec2b1757b1` |
+| `server/project-tools.mjs` | 128 | `be42c2b0b56df15d846df2843dd96b26db5f9472a70a0fc6e33a5c370dc971c3` |
+| `server/roles.mjs` | 26 | `3020f320c69fe8859ff3ea6fc223828c77029a847cdcc71ac705cf70fc036473` |
+| `server/saved.mjs` | 46 | `c94b9ca065259d8f428a8238dee07180f0bc72a00882ccdc6690a1165d7d6d59` |
+| `server/seo.mjs` | 51 | `4b53d410bd13bed13359acaf7d60652481f3979a839f454b0062a0a16c117aff` |
+| `server/server.mjs` | 297 | `396f888d99fdbfc240fb7545ecc78f87f165f103f97ec2d9a1a0468f19a22446` |
+| `server/static.mjs` | 68 | `e45f2b350278989420a3cf0d392b68641b961f55d65446b8655fe705c5036695` |
+| `server/translator.mjs` | 116 | `6e3a06010c8d0018d1bf1315039b3ed26ae168b43e9a450b6579f9c7911bd070` |
+| `server/video-import.mjs` | 21 | `03b64049b2bec5c9e73e6a3ae1564bf262c8c460d9d084e675efb02730fe9a61` |
+| `server/video-links.mjs` | 32 | `fef6e54f630759830807cdfed508f22c004902a584c346cbabcef61af05c2ccd` |
+| `server/zone-cover.mjs` | 23 | `fc7cbef5dae62bd618af26f6260e3c4e4952eb50b5e3f5ed3186849d57e3b2a2` |
+| `shared/advisor-content.mjs` | 139 | `5bfb1489c2232d1797e8abc8bbf0c1c548954ed6b9bd0e38f1394dfd2711ade3` |
+| `shared/amenities.mjs` | 5 | `280fbd1d7d2a2d238219d25cb83d620f75dc2d99b5fa47b79812af429cd6e7f1` |
+| `shared/contact.mjs` | 36 | `04046042986654faf0a3d4db2a181a305aab80fd6caf4825f73875f7db68e4ac` |
+| `shared/project-facts.mjs` | 12 | `da93505ab1f402d4de773cfb24784515ead2b62fe9990e5d3a0b32f67b206492` |
+| `shared/public-commercial.mjs` | 32 | `118f8001af50288f4accd8ddbf1618c0ddb50b877e2150df1663a309f535d25e` |
+| `shared/public-errors.mjs` | 29 | `ac4f0e4ae94ddf093dd9a9c321c541c53c11e0c654a092471b7d34d4083cea8d` |
+| `shared/request-limits.mjs` | 91 | `8ac41deeaac34a4ff28ff3fbedfe7df5e60ee52321e896f4f7b5b9b9b76efc34` |
+| `shared/validation.mjs` | 64 | `568ab28534b9acad3408850e53b88f584c9f9b5cdbd7bc89c5bfa67bbb887ec5` |
+| `src/components/ui/ai-citation.tsx` | 5 | `5422083c489f6584b3fbfbe27b7077e636033427f7c53b068806fcb160f99ba6` |
+| `src/components/ui/arrow-fill-button.tsx` | 7 | `4d2d6e897c760b7651f5bc3569fd7768315efa6b4a957ddd9db0418548346ecf` |
+| `src/components/ui/assistant-rich-text.tsx` | 58 | `1236377afddd6c19ab3725f48340ac6e0019d7e6cdb3d0361d67a0c82b0b7d16` |
+| `src/components/ui/model-selector.tsx` | 5 | `f79ebd84af0d744fbf1e54d0d56d6f9e1f510a4cfa05106a576699f1236635ba` |
+| `src/components/ui/quisqueya-ai-mark.tsx` | 19 | `96d95c60eb88803ec1baa694d007bcc1bdabef88716d22be9bb140bc8c66da29` |
+| `src/components/ui/select.tsx` | 9 | `c7ac1f939bd8926581486e21d13ca9cf041e51becdf1c459f01843072000273c` |
+| `src/components/ui/text-rotate.tsx` | 40 | `c85689e17a1bd967a5dcd29cec3063b19b498c8f5d19b5162d9985c3e9f99a33` |
+| `src/components/ui/tool-calls-section.tsx` | 6 | `a9969f11f0bf58b37095752eee1e7a93de822acf8055c32dbb4839791e7512a7` |
+| `src/data/catalog.json` | 13758 | `ccd3c6d450c89b45a1f5f1e7d0771e724135d696244380b4bfdf512d3f4e3b8e` |
+| `src/data/media-widths.json` | 1 | `4efb44969706c59a2a5dcffc417ac874d7087240cfd120e3ef4e953450b74b87` |
+| `src/i18n/de.json` | 516 | `203357f2315802f8a9ef16dbdbcda6fc639c12f5b7bcb2a17e390eba593e467a` |
+| `src/i18n/en.json` | 517 | `f8a396c88aa08af825429f67594d518ade7dde26b7f7c8509eac63fea6637957` |
+| `src/i18n/es.json` | 517 | `8c1a84b7cb18727a22f31fec445647b7cfec92fef822507929c309e61d480f38` |
+| `src/i18n/fr.json` | 516 | `da6e227294a1baf95476b992a67b20c83218d33f23907404b62831cd7105f4ba` |
+| `src/i18n/ht.json` | 516 | `c129689bca1c98b4d8cf74becf365b25d8052a38ba6081e2dc0f7d780ea4957b` |
+| `src/i18n/index.jsx` | 92 | `bcfb792001e8a1e81b54746fd8e95292e9d5db0f1ffe08039aaf4cad94bf9718` |
+| `src/i18n/it.json` | 516 | `b1b82f1ce0b26fec2dab7992095a0742a6a6849822ddb8f864fe2ea0708fddaa` |
+| `src/i18n/LanguagePicker.jsx` | 64 | `e6d8df7759bad61eeb53a889c22869f7828fca70199fe3c1ce1c0974e0bc89b5` |
+| `src/i18n/Link.tsx` | 44 | `f5ef7ea25c820e7913fa45820f44914eb0d83c540049da62f588a7deb2dc602f` |
+| `src/i18n/locales.js` | 73 | `c6bbd29cc176ac39a658de5cf3ac753d5be9cd439be9950fb555029e8d918815` |
+| `src/i18n/protected-terms.js` | 81 | `11dccb31795441fee46affa2d03fb9417c1a94562822c22b36f3f6841c8572e6` |
+| `src/i18n/pt.json` | 516 | `e1608d8728af8b5d608cdfd2a7baa798e66ad1ea6d991fa31c4fce277dec7d09` |
+| `src/i18n/ru.json` | 516 | `d4a026431d94832dc73db461dd5428ce600a4f01382f98e07c305da835a9b3d4` |
+| `src/lib/utils.ts` | 3 | `0c97f5ec0478867d5369a4369f811e1b779c7f2548f671ef252f1503a6392d9d` |
+| `src/main.jsx` | 109 | `5adddce32578ea1f8d5d207b9550240cb6df1fd805641c86f06e2ae044863440` |
+| `src/portal/advances.css` | 237 | `dada272c9007381a0f9af119ebd218a307fdce37a442a0b688096ec4672f8630` |
+| `src/portal/Advances.jsx` | 232 | `bad766c77d3eb8530ad0705fa6bbd57b96f1aa19ca46b613ff5ab38e8439932f` |
+| `src/portal/amenity-details.css` | 7 | `39507e5a47285c372e73868b796b5ed8527e5963aca0bf9f67d2f895502e43d5` |
+| `src/portal/AmenityDetails.jsx` | 15 | `e30098809aec92698eb7dfb1f5822a3b8cb4aae85fbe3b89b28e9da3e53e54e7` |
+| `src/portal/analytics.js` | 241 | `7f0710719cb27773bbfc02fc1ac61791bbd71a08a84b9c323603fd0aca234d7c` |
+| `src/portal/AnimatedViewSwitch.jsx` | 12 | `1afee6ecdeeaaceb3b50e63abba7dff7ccf5c2b48d551d2ad9d03117977a3902` |
+| `src/portal/Appointment.jsx` | 40 | `54b0f5d8aaf2a5f53d0e1f7db8797beda1732e3eb3586139bb1455086c2c1924` |
+| `src/portal/AppStatus.jsx` | 24 | `8500a8186e699614324547052ee7fd59e41d623c54f3a6515d61c86e4ceabf8f` |
+| `src/portal/assistant/Assistant.jsx` | 289 | `f0a98182bc8b75272b620e2dec59dfa6f06a279ea9e1b77138b06ffe4afbff4a` |
+| `src/portal/assistant/engine.js` | 96 | `b74569d33a2f7b049f27302f0c04a04e1f5ffad84c79bdb2cd38b5b7f88376e6` |
+| `src/portal/attribution.js` | 124 | `0ecd38a056961c3e0bb9c78f7c938c7ff099429e6cbb653cc425b4b3eb0eade7` |
+| `src/portal/auth/client-auth.css` | 388 | `5899d94f8ee4fccf9b6babb39e3ee298a85f5709b5df9f89f8fb9ad69ad3b08c` |
+| `src/portal/auth/ClientAuthModal.jsx` | 326 | `a968a3e07ce442163e34bfa8710b50dda2e40b27305f030362626ef32a98d50b` |
+| `src/portal/catalog.jsx` | 42 | `a0e74704bbfc65de481b582801428879e23947a3ed9442dc28e5c467ca1be59c` |
+| `src/portal/client-store.jsx` | 327 | `82c2faba0cd7d98255f810aea2959ef1aaa6cf74751ef0470d0269fe4deb379b` |
+| `src/portal/compare.css` | 760 | `d4c908635113d7c601147b41f85bb536616506691358d766554f07fa76c7d226` |
+| `src/portal/CompareDock.jsx` | 108 | `7105315e2fa082b0e7cec9eaacc64e5401b84a3f5124dec7172b68b8120caabc` |
+| `src/portal/ComparePage.jsx` | 758 | `369fc4277e7cde6d8334b5c813e4bb8e1adbf580e42c886d698f46a02e4db62d` |
+| `src/portal/ConsentNotice.jsx` | 71 | `31f8246047b861e62950002e806a47bfe97fe7e083ab8900a57adffbcd08138f` |
+| `src/portal/detail.jsx` | 123 | `18737d578a42a53e274cc3b8a1f3ae60c736785c23886f724af0812d3a1b22c4` |
+| `src/portal/DetailSections.jsx` | 71 | `7c02721b3aa175d6292a0f09f03af2cdf47239bff6c2f3244290c32df7b5cfea` |
+| `src/portal/discovery.css` | 41 | `583f7a3b6c8514dc4e232d487d6c80a04c471fb224ff0fd5348c6dc18551369d` |
+| `src/portal/Discovery.jsx` | 73 | `9500699213b4e31ad4d035e29df1bb23456585a8a1971a461ccea583d2c9abc7` |
+| `src/portal/effects.jsx` | 42 | `8745d9f9730634f3df8525e252b293cd4891469655ba4180132017a2fa502a3b` |
+| `src/portal/hero/hero.css` | 60 | `6b038a6d3ec37852d8d62e94d460eab97c401a7970357af996bd6035257164f6` |
+| `src/portal/hero/Hero.tsx` | 72 | `79cb2ccf31c6cd3d122d58cb47346fd7b9370b80bb39de97235c21d67b341d5f` |
+| `src/portal/hero/pointer.ts` | 77 | `fe8fc7d4a9b39994a72f6609fc4bfece887e7c87ef48fdd9f3e08f9abe8c88e1` |
+| `src/portal/hero/RotatingWord.tsx` | 49 | `2e28a6eacd21656cc95fbaa3bb4dff45a0d45878b8a4cf1c7ef1ea41b953a3f1` |
+| `src/portal/HomeSearch.jsx` | 38 | `f2818b299b5e5b545c3d5d06491a25b84b0b58b5eb96178354a2a3b707720c8d` |
+| `src/portal/install.js` | 59 | `1eadada907414f2a03b9d9b7d2efbfe11f935bf2377a280a3c6c7cf448244789` |
+| `src/portal/map.jsx` | 409 | `ca7dec3112685038cc5242d20c18808328f003902ba82808cad2d474b3ba3311` |
+| `src/portal/media.js` | 72 | `391186f06d1d05e4649b791b011087ae5fde4cd6de94d961691282d5ab4f4f62` |
+| `src/portal/motion/auto-reveal.js` | 63 | `82856540b4dc12ef14d635b21608b7a4784c9cff6f324fe89fa253b27a5af144` |
+| `src/portal/motion/motion.css` | 247 | `b7988c85e12acf5bbb800d444c753615998629c48de28669facc19dac375bc1a` |
+| `src/portal/motion/pointer.tsx` | 143 | `22bb13f3f85f26ac64921cbd81dac4537e474867b079a0162158a0b68d0fbb30` |
+| `src/portal/motion/scroll.tsx` | 329 | `c19f83562be025be03a6d39b2d36d64237d0009a52fc9b1124efc39024531473` |
+| `src/portal/notifications.css` | 77 | `9e9676f2576cdc0360d0e4c1d118147096dabdecd0c91e7da023ef18a1bde998` |
+| `src/portal/Onboarding.jsx` | 99 | `54c27092b753682a391ba6bcad0f242f2d14f348d00cce29a629fcef81e8f0ca` |
+| `src/portal/Portal.jsx` | 135 | `d09766fe327a6a563d8000b84a9129292e24eacf8b417549ee5cfd3e32296d07` |
+| `src/portal/primitives.jsx` | 107 | `3f2c9e954c5234b21aff91076d3cbdc0dcc2c40b9496b034cdf49c4f17a830e4` |
+| `src/portal/profile/client-profile.css` | 583 | `0815d43c9b552192ea2eb988a70dfd0f6fe56a304056a9c1e64e0e5aa26b1a07` |
+| `src/portal/profile/ClientProfile.jsx` | 699 | `fe331ef29fc5663d209e7e7ee21639b2bdebb52fdf7bce6514282a70414f4794` |
+| `src/portal/SavedDrawer.jsx` | 28 | `c5d6faecec5cbaa558c480b5ca18f9ce2f128891b01dd6006a40e66e6588c020` |
+| `src/portal/Splash.jsx` | 60 | `7141463ffc22d1cfcf2e71f0c0112cccd5c2727dd8ea0e61432aa116d072dc25` |
+| `src/portal/store.jsx` | 178 | `687166849a84684cf972a4d71b5474d83dc1ac32ada9a640ac5380e13c5c7d75` |
+| `src/portal/support.jsx` | 97 | `2a8dece557d453514e6df21d19c2563348655e042cbc0b80b796314a20a90ac9` |
+| `src/portal/theme.js` | 37 | `d819b0f75fdb5b98354eab1b4f0e94fa3579d1e374126273a752ac6d671d63ed` |
+| `src/portal/Toast.jsx` | 81 | `3a9128eba928f8a41c40b189d9b6c0689e6c731a8b9edd2d496af78fde3d8b3a` |
+| `src/portal/video-discovery.js` | 39 | `0942125134b5920901b9d5f276236be7c4b96f16259d805c2540fe873c5ad890` |
+| `src/portal/Videos.jsx` | 227 | `830cd34f4af7aab5d2f576e3fb2df669bcba0c2321ca41cd65279315f5f1cee6` |
+| `src/portal/zone-places.css` | 7 | `04df9cd2e88f9b2ad20120f75ca60b57dacd3c09700af171f6a57c9389dfdb69` |
+| `src/portal/ZonePlaces.jsx` | 49 | `86ebc469a53ce51513c8bc6e28eee8bf8007dccc8ef75146e975f1dbf87eb5e4` |
+| `src/studio/Accounts.tsx` | 891 | `8c8ef0918ba54d4c20859002275333aeb9a6a2e680273644259cc10fc3e352ba` |
+| `src/studio/amenity-editor.css` | 17 | `37f78be233d09e1cbf9d9448c7ca60042a38491785c0680b3b4879e2705fdd1e` |
+| `src/studio/AmenityEditor.jsx` | 124 | `3033e05c36a7f0930e606288517852fa2e5fc6d44021ef24bfd656607de1a257` |
+| `src/studio/Analytics.tsx` | 680 | `741d01386161c0ca03ca15c85e29ae783674154417a5cf31cf4f1c26f9577ecc` |
+| `src/studio/Audit.tsx` | 470 | `5112696c799959a92a533fe1b6db451b07519a4128a9aaad221f24f3052c2c12` |
+| `src/studio/CommandPalette.tsx` | 413 | `8b2a87f23273536a14e886e6f2c38bab7df1787c7e71af1cc94dcabcd079ac5c` |
+| `src/studio/ComponentGallery.jsx` | 325 | `6f40b751d30ceb05ac07c8d89d27584b152583f84bc8d99ff544abae9d653181` |
+| `src/studio/ContentSections.jsx` | 175 | `b56d49b3855401f50fb2705b1303f24d1b4a34d9dd9ae2c9ea8716f37dbb4d90` |
+| `src/studio/DeliveryMilestones.jsx` | 75 | `1b1ff91a6670183dd66469af000dd900e6d826787c4cc0b58f7d7c59d51a027d` |
+| `src/studio/drive-explorer.css` | 622 | `adb9f87ec6c41e05d5c3095256b6ae6361c59b96ff0c27962686174e2c3ba617` |
+| `src/studio/editorial-media.mjs` | 21 | `3bc3dff8c2f0483cef55e9235e84d4deb67540aef7b626747df30202debd69d9` |
+| `src/studio/editorial-modules.css` | 333 | `facfa5bb85fcb3810bbc8a2d6918bf86bacce81777abe583a5c19f55f38941b3` |
+| `src/studio/EditorialModules.jsx` | 1411 | `7567a2d03287b3008d07302d05de6bcca9ed6db213721b3a69a9a935803ecdf8` |
+| `src/studio/GoogleDriveExplorer.jsx` | 774 | `a118481316b0ac63e64b8a90485baf07fde095d4c3db07b9a1f7057457c5dba4` |
+| `src/studio/Library21st.tsx` | 1175 | `11e866219f713a1d3b145d648be8c43e1ef1174b8b6c4af1005d25cc6b2ce26f` |
+| `src/studio/OriginLinks.jsx` | 550 | `629483192283163aaa3fd146080bcb4f7c93b6fd1f55dd5d23c7b3eac5d60bae` |
+| `src/studio/Overview.tsx` | 530 | `c6b6be0dadbd868d90721b9d5d04d96b3f95a6b1605ed587cd5041d57e13d48f` |
+| `src/studio/PagesShowcase.jsx` | 460 | `d72ae2675d3757773cd87efc1f72b7a1385f667e730b7183b999711950c3cb39` |
+| `src/studio/PhasesManagerModal.jsx` | 545 | `a430c2bb82dd3b0f394dfc8cd2c310c2f3a537268eac57dce91a26f5f604ac42` |
+| `src/studio/PoiCategoriesModal.jsx` | 548 | `3e855c6aa913ca0635a6d895ab2cdb6384f573cdd98b7edf3b0e0d823c201e3f` |
+| `src/studio/project-journey.css` | 70 | `de5ed3e41ddd8d80f3a456bbe97f4439ae850139bb68a0aa2fcb0cb20e1a9037` |
+| `src/studio/ProjectAdvanced.jsx` | 25 | `e8b9128a42960dba3c5dd33a55685442342f377e6410287f59dc91e4ba161df7` |
+| `src/studio/ProjectJourney.jsx` | 84 | `a0c59d014c6c7477bc0e593de25b4a0f53c3dd103473b56101a57c0f7b3b021d` |
+| `src/studio/ProjectLocationMap.jsx` | 28 | `883ba8b15a39619f7a9f8d7f6067865309bd31281b7945e530148bd1cf1871d1` |
+| `src/studio/Projects.tsx` | 651 | `d97576f645a9f68bfb32729bd5d6e43e7d1b786c5e5f6c4c828feeea3bda0ac3` |
+| `src/studio/PropertyTypesModal.jsx` | 520 | `6b2eaa56d1432edf181bef566482efe3145dc2fd1a23345bcdb3983f6e427eb8` |
+| `src/studio/SettingsShowcase.jsx` | 546 | `421adc73746eb27b5b39b513ce68b3e32362923c0667edd4fd561a5ede3743f0` |
+| `src/studio/SourceEditor.jsx` | 6 | `ddc6bdf98653b1cc300e2c6475256308a3690029411fa22b19ee81a974f749db` |
+| `src/studio/Sources.tsx` | 6 | `795c757685eb9198a19fd9fb60af723a3b1d55ee38eb96847cd607240309aeb4` |
+| `src/studio/studio.css` | 1083 | `bd94aec218f50648a9d0152783ada96f76a4a0e0a52a191872221b29ca13eee3` |
+| `src/studio/Studio.jsx` | 749 | `8ae984e55996b8222fab331288f66ba3ff64c8a55738895117281e0936236c4d` |
+| `src/studio/ui/Bits.tsx` | 80 | `dcfeb7d3061bbf17a3e4ae3ba63ed9681b7a62e657e6dbcc407c5b0685edae78` |
+| `src/studio/ui/DataTable.tsx` | 356 | `aaeaf3776d5e6bd7084dc6eeac60e00d7217f862a78289dcf1575bd8f3ce353b` |
+| `src/studio/ui/Disclosure.tsx` | 128 | `36434a1c9b9a9833b8cdb97281e65577210ca5f01aca20f30a862b5ec387cfc6` |
+| `src/studio/ui/editor-tabs-logic.mjs` | 2 | `e64560422bf37eb59306fa383735d2ab5eb0dc796347925990a878a546850321` |
+| `src/studio/ui/editor-tabs.css` | 1 | `68ecde73c37c3dd6c81597dec28b4dbdb0eed0c38773357112b0697326d0a0b8` |
+| `src/studio/ui/EditorTabs.d.ts` | 14 | `60dcd82d7d66ab6952f17193522965d5793f39df5c20b9cba171703793039c91` |
+| `src/studio/ui/EditorTabs.jsx` | 12 | `4de33619130e4d620685b9eb4f20a969bbd18ddefb62207da15b731dfc854ddc` |
+| `src/studio/ui/Field.tsx` | 113 | `649ec0171edef5708d62ecc523901bd62724d8ed601d02c2ebf01c9932e48b8b` |
+| `src/studio/ui/Filtros.tsx` | 98 | `ee2d843c3aa599a30520de247ebcdc3dde6982de6dfac3f50cc6bd01f4ea83e1` |
+| `src/studio/ui/Notifications.tsx` | 135 | `8344c463c27637f40e91d759d72ee8d896b9eef1f01d014cf4eb9606aa8b70cc` |
+| `src/studio/ui/tone.ts` | 36 | `2f28a41971509fc3d2cba49120a16baad2b8570486e91faf108069832f5949f8` |
+| `src/studio/ui/useForm.ts` | 105 | `c2c31473d25ac13a7d6ff51f588073ff8736d37d8fc1c3dede61039b0bc350e4` |
+| `src/studio/UnsavedChangesDialog.jsx` | 8 | `88ee7ed1583ad635af881303c323c160f9a151725c30d147219e14371ece1c14` |
+| `src/studio/UpdatesTimeline.jsx` | 801 | `ddcfe9bbdc9984cfa5d6a8408ea6e8ceebdb948ae5198ed6fb5ac5276582ae7c` |
+| `src/studio/VideoBatch.jsx` | 26 | `8f5feb3f86160891ae698da16daca044c7a85e55ee1fbc8b5b295aa4bfa56325` |
+| `src/studio/VideoCategoriesModal.jsx` | 468 | `897f12c8befbd21b21d8e2dfa497fbbc1a8d02ff9232b4e4aa242a63c3b9277d` |
+| `src/studio/VideoRelations.jsx` | 50 | `1be960c7a9cee5fddf2d90b9d6762abfe1d1fda590fbdbadc4e32f5e3df0d623` |
+| `src/studio/Videos.tsx` | 817 | `d353ffae744f52d434a9cedad6c6eb7e10f2eeee171d4faf1e9adf2d593e2898` |
+| `src/studio/ZonesShowcase.jsx` | 523 | `b3d94517e06fc0e8a45f3678cefbf4c620dba13ce81a7a75cf5c801e0b30f39e` |
+| `supabase/migrations/20260905_quisqueya_catalog.sql` | 541 | `b60e8294d95fc45aaf1a16dde010528fca7b35ff676223538037871b980b246e` |
+
+</details>
+
+<details>
+<summary>CRM: equivalentes y contexto (92 archivos)</summary>
+
+| Archivo | Líneas | SHA-256 |
+|---|---|---|
+| `.specify/memory/constitution.md` | 44 | `88b02a3168435acb0c4b2a3cae324eba586133d8fe61a4e0cba70a832fd69a82` |
+| `.viltrum/dispatch/20261004T220533Z-D22-codex/PERFIL.md` | 642 | `a1bed0d4af3e745c5271b9dc48da63309aa4ee28aa40e0ec62b3f9711efc91d3` |
+| `.viltrum/dispatch/20261004T220533Z-D22-codex/TAREA.md` | 29 | `96acc06a146eb2f122eaea773224b1ef8833a4f507071c6de1cad79ba2f54fd4` |
+| `.viltrum/os/CLAUDE.md` | 153 | `7e9dc4cec88dbada13d759faadf213ff8f5ebbeb3e4ff96970c02159e299c62d` |
+| `.viltrum/os/core/orchestration.md` | 157 | `af0b2c06310dadd35aaa53fcb1d42acbf7690b6f3bcc3ffbb521cbdea1efb335` |
+| `.viltrum/os/core/routing.md` | 165 | `7cc3091b2021cabc22b56bb0bbfbaec6bec74bdab156270091e5f8beb51f5e0a` |
+| `.viltrum/project.md` | 17 | `3b20a8911ad6d82c0d1ad0d377767b3e8254e2a0db6ac90436c07061c3cac889` |
+| `.viltrum/status.md` | 20 | `13c9df42a0e9fdeb41e2a3424d79b7474996ecd586178551dc42c51a76046b27` |
+| `.viltrum/vre-os/ARQ-VRE-002-integraciones.md` | 134 | `eff3fa91ba433127f071eec41998f587695db4f7f5a0f489034f349fed962b18` |
+| `.viltrum/vre-os/FLUJO-PASADAS.md` | 71 | `3480a74bb021dfcaa86d7916f5e22fb5b15b3b9ff545ff224eda22dd5b4db8b5` |
+| `.viltrum/vre-os/spec/00-indice.md` | 25 | `0b6ed864fbaba3ec16440d68444864f51223562e01e4ff840453af71b757023c` |
+| `docs/contexto/arquitectura.md` | 166 | `b92f015186844b003c246085a211cf80fff836e4b358bfe2b63e416e5f714498` |
+| `docs/contexto/convenciones.md` | 159 | `e0fc25e77a06fc2c8c7ce9f3c19db4837733c00d689c9c02cb5698f0972a356a` |
+| `docs/contexto/decisiones.md` | 308 | `3e0b85fba98754e3dc041c619b50e631296f1698bfccc50f905a7922f6746142` |
+| `docs/contexto/errores-conocidos.md` | 225 | `ab54e90c0956b84960945a6ffed229c4cc18a17cf9d84f73da879db4d272d136` |
+| `docs/contexto/flujo-de-trabajo.md` | 251 | `ed8486fc02600454c74c445a57a0d43ec4703f56af53958d7ffaaaad90e61b47` |
+| `docs/DESIGN.md` | 165 | `3f6da9dd0360dece295ade609fb3319638be48adfc3272a22e473c0b14d160bd` |
+| `docs/R_RELEVO.md` | 158 | `47219b3424099c4ac100fd2800f46458a9f251e53a57f3f8e6b1183259e9a7c9` |
+| `package-lock.json` | 10319 | `b0949dd140bee3124e32f53420db8adad3c13e4213bf76e2953275dfc6789a79` |
+| `package.json` | 63 | `3d5a481a4bf2830be3208bed8903c2791c0f2a2f1d4d46cccb036cc5ce60501c` |
+| `public/manifest.json` | 30 | `cd9acb9b747d7e2efa1da0e69658461df6c4a2f3d90fd3019cb0d23d65f5cce9` |
+| `src/app/(crm)/_ui/alerta-error-formulario.tsx` | 61 | `5a33e3d20d9a29105f95885731eedd6af7235d1c752b5ad8f51fb8fb59576b2a` |
+| `src/app/(crm)/_ui/analytics-details.tsx` | 12 | `8c6b5eb2e207ba93a2b8a1de2e17ff97b6b972e857a8ef9e83de4dcd5f918d77` |
+| `src/app/(crm)/_ui/analytics-state.ts` | 17 | `0baa9f41be1bc275d8568a315f8e6a29858e3bfed865fb23b4120620ce05ab24` |
+| `src/app/(crm)/_ui/command-palette.tsx` | 400 | `e4b615b7b9ff10840769a479efae28ae3c9d753d3eed58bdfb36eea4609f884d` |
+| `src/app/(crm)/_ui/crm-header.tsx` | 253 | `f30523e4646dd934bd3eadd754442b0d3e9f6699ced93e55e14a0f2cf76dcc29` |
+| `src/app/(crm)/_ui/crm-sidebar-menu.tsx` | 135 | `0bfbdf7b683d19a1662d2a03ea4e50a581621f4c5d59ab9499d066d33beef25c` |
+| `src/app/(crm)/_ui/estados.tsx` | 75 | `d748ea5f845d42a8ac6e47d63ad7a087745e3ba3cad6b767d21f4083feb6e082` |
+| `src/app/(crm)/_ui/formato.ts` | 36 | `33de85c187e8683f4ab026dce4a7693ce6947b643a9dc812291f887df821edce` |
+| `src/app/(crm)/_ui/historial.tsx` | 103 | `aae1c385b42412c319aabd05038ca3ce6a9483a40b03dc3678d378f72c717f0b` |
+| `src/app/(crm)/_ui/mobile-dock.tsx` | 247 | `74ec623ede5018939b92a2efa548110e272ba76c778cb03caa945a7c1565e319` |
+| `src/app/(crm)/_ui/module-tabs.tsx` | 107 | `885f2642765736abb17222f33feced7b7c64d19477066a766e1a7afad3a85962` |
+| `src/app/(crm)/_ui/prototipo-ui.tsx` | 152 | `a5c585bb5cd1742aef2ab9e4cd7088160a2e1ae12226cb3852a13d4cd9f24731` |
+| `src/app/(crm)/academy/vista.tsx` | 549 | `68f98ff195ded40b9f4ef699ab56da706de487d0d8fedf8d568d0ddd97d5b5f3` |
+| `src/app/(crm)/agenda/vista.tsx` | 254 | `0326e8d5d47e5789ac87074da3ec4294c99bd2bca1839fa837d2c842e7957943` |
+| `src/app/(crm)/avances/page.tsx` | 144 | `09362b645e6a7b1ba4500f4245cfbc6dc416dca4792b0e19bc12fdda5f12ef89` |
+| `src/app/(crm)/avances/vista.tsx` | 411 | `e4c4778bcd0e9c6019f8963c632309ba0a177ffeb918228e5f29f0c5823f25bc` |
+| `src/app/(crm)/configuracion/_catalogos.tsx` | 141 | `5eb62a93f6bb5138632109f5556f6ad4cdf994f1084fa5f99313ee73c3a941e7` |
+| `src/app/(crm)/configuracion/_integraciones.tsx` | 60 | `09ee4c861dd062d9e87d0b28f2f669f432a2f92d0f7c4276cbb05da87f8afd1f` |
+| `src/app/(crm)/configuracion/_usuarios.tsx` | 294 | `26d2a34030fb20c89f00c0096491921a896b3e76dbcca294f51fd3d5ac4d5de1` |
+| `src/app/(crm)/configuracion/vista.tsx` | 82 | `268d505a3821963687077f51aa0836aee828f52c635fa896e99d1b2e2d6860db` |
+| `src/app/(crm)/layout.tsx` | 103 | `dcb9fdd5056ea0d9bb255eb765ddbd3fe82020ff3ebd3397b464ea4f6234a295` |
+| `src/app/(crm)/leads/inspector.tsx` | 250 | `16a46115b3760a80b64250e56c003579a21d4a5096fec9394a37f0a19bdbc821` |
+| `src/app/(crm)/propiedades/_formulario-proyecto.tsx` | 185 | `d900ee3450916424ddf9b8b890d3c52cec2bc0fda025f5799b838bdde319a2be` |
+| `src/app/(crm)/propiedades/[slug]/vista.tsx` | 404 | `f3113ca0b784ed876a5fe049680072b317b1008576d7b3f5f53a8d232f55f8db` |
+| `src/app/(crm)/propiedades/vista.tsx` | 191 | `7a29cf85245ab03798d8e3cbc4c9e4ec46e99ec7a8febef51b2bfcce3f3df8bd` |
+| `src/app/(crm)/reportes/filtros-vista.tsx` | 55 | `2fd05cafbf1f61ab3b218287d22c6df00f5a4277adddd95eaa3172728686b0bf` |
+| `src/app/(crm)/reportes/vista.tsx` | 92 | `b5c651bf335e893b5bb5642213381a9b9e0df0204792a3b46a688b7fd4af6295` |
+| `src/app/api/ai/audio-transcribe/route.ts` | 36 | `811b9d895b44f14f879f19ed0b99ca55d189b547a620c928d147ef74b5219c9c` |
+| `src/app/api/cotizador/confotur/route.ts` | 50 | `b8bf7beda0c89cbac77224fe38a2d0d3949e9817ad5e3cb77293475aeb590d89` |
+| `src/app/api/leads/externo/route.ts` | 102 | `d42daa888f9605d6a065e4da61c536839c9f7e6983e6baeb5858e5126bb91f96` |
+| `src/app/layout.tsx` | 59 | `4b47c67edcb59008c3cf41b57ca0819cfce220e177d67e02e50e13b77944b609` |
+| `src/app/login/login-form.tsx` | 116 | `1b9755b5e55b469be9899d727efb71e7aa1801b3cd09909e3404a8311fef0e22` |
+| `src/application/ai/casos-de-uso.ts` | 25 | `b0b54c1bebcc79981d718b726cf039e328576f321d212448bd59740e8e609e85` |
+| `src/application/ai/puertos.ts` | 11 | `d4b8e8e3f4e9fc71781d58d4d858766a73ea1f6ac7528dd917a7da2d2398d052` |
+| `src/application/catalogos/casos-de-uso.ts` | 73 | `e593c1683af052e76130de4ed6aa80741213772a8c47d00a3daabef09281507e` |
+| `src/application/compartido/almacenamiento.ts` | 32 | `9860b6e85c519e5ea6949637912fd1290ff575fb003177b020d6baf6c24817f1` |
+| `src/application/compartido/auditoria.ts` | 32 | `7879bd3cb9f982a0a5dab72cdb1a75e851e8da1b325ed1e1f9c5a06aa020137d` |
+| `src/application/compartido/unidad-de-trabajo.ts` | 17 | `154ac29b8685626b5d5f78dcfad420c0dea406826df33fc1ef9dab427b5fbcf5` |
+| `src/application/confotur/casos-de-uso.ts` | 9 | `c57c1cf6b287f821bdb880d3afe728b806a26df8aa02183da5645791df25e6a8` |
+| `src/application/dashboard/consultas.ts` | 48 | `0d9a0b0519c327cd493d8aff8059d3c7b42babb8d4232f26e65f017c67e6f5e4` |
+| `src/application/leads/casos-de-uso.ts` | 367 | `4429fbb8bd193235999cb7718be5b373fe69f1b3889db5ec4ff1a0f8c1dcd4af` |
+| `src/application/proyectos/casos-de-uso.ts` | 389 | `8a13e02281d807af184d10184f52daa3f4f1231dc0510580c120f15b4bab828e` |
+| `src/application/proyectos/puertos.ts` | 130 | `05b2b4246a80d339679ae7691c50200daa87bce12bb624685c5c6faad197cfb0` |
+| `src/application/reportes/consultas.ts` | 65 | `212f9204e49d5c1ea7ff3e2c37b6bde3a40b7130d22d02db424ff2066e64bde3` |
+| `src/application/reportes/puertos.ts` | 48 | `913f0e1f4f2c0631ba7cf9334462dd836af4cf01a25aeaf33f6cf5a66f1a4d67` |
+| `src/application/usuarios/casos-de-uso.ts` | 126 | `1f750410ef8ee63acc6a2171fd9fb614e68031e72803018e0ebc880302f952a2` |
+| `src/components/ui/bits.tsx` | 100 | `117e69dfa34a13818dd306a1564cbaa043141a528014804cb14a065cb22d3318` |
+| `src/components/ui/chart-card.tsx` | 28 | `103a7f75a7569bc05a2e590930c863eb667dde13181cd197f1c638af6845a9a7` |
+| `src/components/ui/data-table.tsx` | 381 | `be7b4d49d24e95fc684d91abdc6c6ed70606ff7d8191c950d6c9a447a0ebd6ab` |
+| `src/components/ui/dialog.tsx` | 158 | `914609811127177fda0ce9ac47922f9a788a361330a9e2eef3d145be3fe85818` |
+| `src/components/ui/drawer.tsx` | 134 | `2190d08dca91983fd03eb15e52ac77f1ad0bb05c97ecf35191ecd7c1ef415654` |
+| `src/components/ui/select.tsx` | 189 | `9de3f2a5458ca457b8ed267946990a3710331df7df0eef45f1513c2c17026513` |
+| `src/components/ui/sheet.tsx` | 142 | `6e8260fd099f0b3be712d315ca812fe5b9c1eb38a9926dc53a9ceb4374f01f30` |
+| `src/components/ui/sonner.tsx` | 38 | `9d3398dfef09dfb8532d05d0ed7e83f47c1bc5327ebca883e1ea3ae3cea0e0fc` |
+| `src/components/ui/tabs.tsx` | 90 | `d707c15a2682b7a82e5340922a2eaefd6aa7917c5b09cba1f8a6237baecdf12d` |
+| `src/components/ui/tone.ts` | 60 | `fcdc234af7c33f4a7b17d722690f240b3d67d34ac11f7f98440f8764ce165961` |
+| `src/domain/confotur.ts` | 144 | `03d576c2de871bf042414cd65f7c75d0d4e88235c48e90aafb23e18ed3b769bd` |
+| `src/domain/rbac.ts` | 150 | `c9268792d9d9553364f51d51d094c802420371417bbbdb5b0a45313f21c1b1fc` |
+| `src/domain/telefono.ts` | 44 | `0cfe5dd288892e83b7037b133e6ba9e56077814857676dc58a34148f88b2169a` |
+| `src/hooks/use-focus-trap.ts` | 105 | `d96e1f91fc18ae05cb21b47c19b87accfae1e6f87e1ba79fec07af795ec750b7` |
+| `src/infrastructure/arquitectura.test.ts` | 174 | `b4d0c30b76f718fe8836e00638f1c55ad5ac109cd8ab11b2e26f2e058cb0b91d` |
+| `src/infrastructure/audit.ts` | 85 | `547d1e93e23d9d5aae3a3024dae9fdfc5e39055b0a3be6a40f43e388affb8cb9` |
+| `src/infrastructure/auth/actor.ts` | 102 | `e855ccaa154d66d94a421b4f042cfb23062f9cedfd27f67a7882d88186462ab9` |
+| `src/infrastructure/db/repos/leads.ts` | 350 | `83327d775e16df1014273a4abff696f98115fe7261d4bbc08f32dc376514f131` |
+| `src/infrastructure/db/schema.ts` | 1195 | `5be892527a22a54c6e075536fbc9cf1d1c32deab179aeced825bf3c59605d823` |
+| `src/infrastructure/http.ts` | 98 | `b8b01631c362de0a5975b5a5e6920ad20adb4f181819cd2192e4d51bbdc3868d` |
+| `src/infrastructure/integraciones/outbox/politica.ts` | 23 | `731e3af86af8f15861cde2d4cc88e1fde343c6d5b9d0005949ca37331a9b631c` |
+| `src/infrastructure/integraciones/outbox/worker.ts` | 64 | `a2834a7d5ba9d329eefdefb019cb6fa7915f77eb41b16f8b988055ac30d5ee4c` |
+| `src/infrastructure/rbac-filter.ts` | 58 | `d2da6b7366c10f2595a72dc56320f19c3978e41222edfc0b641080ec591cb866` |
+| `src/infrastructure/seguridad.test.ts` | 98 | `344474b4eb91be312c2887665e5fd8dc9bb38f8712df7b43f303195bdc61c81a` |
+| `src/lib/utils.ts` | 12 | `3b0d09c4bd66fc028e7eb8708e32444bd7ee7ceeca98dc90f3f2d68e35dfd5e9` |
+
+</details>
+
+<details>
+<summary>Skill de origen (1 archivos)</summary>
+
+| Archivo | Líneas | SHA-256 |
+|---|---|---|
+| `E:/PERFILES AI/skills/patron-consola/SKILL.md` | 109 | `25c2a08e8b547a0aa18d7d04f07204432017814bb7c8af5b9c5b9955c4374c86` |
+
+</details>
 
 ## Handoff
 
-**D03 de otro proveedor:** revisar cobertura/citas/comparaciones antes de aceptar propuestas. Prioridades: ACK I06, envío no durable, propiedad/mapeo proyectos-unidades, claims inventados, Drive de referencia, fronteras de identidad. **D00:** promoción/contexto tras revisión; sin aprobar G0/C1/ADR ni cambiar índice de fichas. D22 y subagentes son productores del mismo proveedor, no revisión independiente.
+**D03 de otro proveedor:** revisar cobertura/citas/comparaciones antes de aceptar propuestas. Prioridades: snapshot público sin proyección, ACK I06, envío no durable, propiedad/mapeo proyectos-unidades, claims inventados, Drive de referencia, fronteras de identidad. **D00:** promoción/contexto tras revisión; esta entrega no cambia puertas, aprobaciones ni índice de fichas. D22 y subagentes son productores del mismo proveedor, no revisión independiente.
 
 **D19/D11/D12 en P4:** ficha I06 con consumidor UI/ACK/snapshot/retry/refs/consent/privacidad. **D05/D07:** tokens, teclado/foco, estados y 320/390/768/1440. Construcción espera ficha READY y despacho con archivos permitidos.
 
 **Seguridad del cambio documental (§6 flujo):** no crea tabla/ruta/JSON operativo/variable/HTML usuario/exportador, por lo que esas casillas no aplican a esta edición. Futuro porte conserva RLS, requireScope/visibleRows, Zod/campos explícitos/env central/almacenamiento privado. Sin credenciales ni cadenas de conexión en entregable; sin leer .env ni volcar configuración/inspect. No apareció secreto real en salidas revisadas. Riesgos concretos/escenarios citados §3.2 y tablas; no declarados corregidos.
 
-**Verificación:** citas/rutas/cobertura/manifiesto de fuentes al consolidar. Typecheck/lint/npm test/build/UI **no ejecutados**: tarea de análisis, sin código ni issue/flujo cerrado. Build/dev expresamente prohibidos aquí a Codex. QA de aplicación/reproducción corresponde al despacho autorizado independiente.
+**Verificación documental realizada:** 123/123 archivos primarios representados, 326 citas explícitas con rutas y líneas válidas y manifiesto de 253 fuentes; 15 rutas mutaron durante la lectura y quedan registradas. Typecheck/lint/npm test/build/UI **no ejecutados**: tarea de análisis, sin código ni issue/flujo cerrado. Build/dev expresamente prohibidos aquí a Codex. QA de aplicación/reproducción corresponde al despacho autorizado independiente.
+
+**Respuesta esperada del revisor:** aceptado/con observaciones/rechazado, con hallazgos archivo:línea y propuestas que pueden pasar a ficha. Priorizar reproducción del fallback y ACK antes de promover capacidades. El productor no interpreta silencio como aprobación.
 
 **Estado:** entregado para revisión, sin autoaprobación. Desconocidos y alcance/datos permanecen con sus dueños.

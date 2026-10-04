@@ -1,0 +1,134 @@
+﻿[
+  {
+    "sistema": "Twenty",
+    "capacidad": "crear contacto / negocio",
+    "fuente_url": "https://twenty.com/developers",
+    "puerto_metodo": "CrmPort.reflejarContacto",
+    "pantalla": "SCR-LEAD-FICHA",
+    "evento": "ContactoCreado (outbox)",
+    "prioridad": "P0",
+    "degradado": "Guarda en PostgreSQL local y acumula en outbox",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "inscribir en curso",
+    "fuente_url": "https://github.com/moodle/moodle",
+    "puerto_metodo": "AprendizajePort.inscribirUsuario",
+    "pantalla": "SCR-BRK-PERFIL",
+    "evento": "BrokerInscrito (outbox)",
+    "prioridad": "P1",
+    "degradado": "Marca estado pendiente, oculta botón y reintenta worker",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "enviar y recibir mensajes omnicanal",
+    "fuente_url": "https://www.chatwoot.com/developers",
+    "puerto_metodo": "MensajeriaPort.enviarMensaje",
+    "pantalla": "SCR-LEAD-FICHA",
+    "evento": "webhook (message.created)",
+    "prioridad": "P1",
+    "degradado": "Desactiva widget de chat y guarda nota interna",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "enviar mensaje de WhatsApp",
+    "fuente_url": "https://docs.evolutionfoundation.com.br",
+    "puerto_metodo": "MensajeriaPort.enviarMensajeWhatsApp",
+    "pantalla": "SCR-LEAD-BANDEJA",
+    "evento": "webhook (MESSAGES_UPSERT)",
+    "prioridad": "P0",
+    "degradado": "Encola en outbox o cae a Baileys",
+    "verificado": true
+  },
+  {
+    "sistema": "Baileys",
+    "capacidad": "alternativa envío WhatsApp",
+    "fuente_url": "https://github.com/WhiskeySockets/Baileys",
+    "puerto_metodo": "MensajeriaPort.enviarMensajeWhatsApp",
+    "pantalla": "SCR-LEAD-BANDEJA",
+    "evento": "Evento JS local (messages.upsert)",
+    "prioridad": "P1",
+    "degradado": "Fallo completo de mensajería asíncrona",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "agendar cita",
+    "fuente_url": "https://cal.com/docs",
+    "puerto_metodo": "AgendaPort.agendarCita",
+    "pantalla": "SCR-LEAD-FICHA",
+    "evento": "webhook (BOOKING_CREATED)",
+    "prioridad": "P0",
+    "degradado": "Oculta el iframe/botón de agendamiento y permite añadir nota manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Schedule-X",
+    "capacidad": "renderizar calendario en interfaz",
+    "fuente_url": "https://github.com/schedule-x/schedule-x",
+    "puerto_metodo": "N/A (Librería UI)",
+    "pantalla": "SCR-NEG-TABLERO",
+    "evento": "N/A",
+    "prioridad": "P1",
+    "degradado": "Muestra vista de lista básica HTML",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "gestionar contratos de renta",
+    "fuente_url": "https://github.com/clawnify/OpenProperty",
+    "puerto_metodo": "RentasPort (nativo)",
+    "pantalla": "SCR-PROP-PROYECTO",
+    "evento": "ContratoRentaCreado (dominio)",
+    "prioridad": "P1",
+    "degradado": "N/A (Código portado local)",
+    "verificado": true
+  },
+  {
+    "sistema": "MapLibre GL",
+    "capacidad": "ver mapa de propiedades",
+    "fuente_url": "https://maplibre.org/maplibre-gl-js/docs/",
+    "puerto_metodo": "N/A (Librería UI)",
+    "pantalla": "SCR-PROP-CATALOGO",
+    "evento": "N/A",
+    "prioridad": "P2",
+    "degradado": "Oculta el mapa y muestra solo el grid de tarjetas",
+    "verificado": true
+  },
+  {
+    "sistema": "Meilisearch",
+    "capacidad": "búsqueda global de texto completo",
+    "fuente_url": "https://www.meilisearch.com/docs/reference/api/search",
+    "puerto_metodo": "BusquedaPort.buscarGlobal",
+    "pantalla": "SCR-GLB-SHELL",
+    "evento": "Sincronizador outbox",
+    "prioridad": "P0",
+    "degradado": "Cae a búsqueda SQL ILIKE en PostgreSQL local (lenta)",
+    "verificado": true
+  },
+  {
+    "sistema": "react-pdf / GoRules Zen",
+    "capacidad": "evaluar reglas y generar cotización PDF",
+    "fuente_url": "https://docs.gorules.io/",
+    "puerto_metodo": "MotorPort.evaluarRegla / DocumentosPort",
+    "pantalla": "SCR-PROP-MATRIZ",
+    "evento": "N/A (Librerías embebidas)",
+    "prioridad": "P0",
+    "degradado": "N/A (Se ejecutan localmente en el runtime de Node)",
+    "verificado": true
+  },
+  {
+    "sistema": "Portal Quisqueya",
+    "capacidad": "capturar lead de inversor",
+    "fuente_url": "UNKNOWN",
+    "puerto_metodo": "Controlador de API Webhook",
+    "pantalla": "SCR-LEAD-ENTRADA",
+    "evento": "webhook entrante (/api/webhooks/portal)",
+    "prioridad": "P0",
+    "degradado": "N/A",
+    "verificado": true
+  }
+]

@@ -51,6 +51,32 @@ nuestro frente con nuestros componentes, alimentada por su puerto (ARQ-VRE-002).
   proveedor soporta y define la **versión degradada** cuando no (ejemplo: sin mensajería conectada, el botón WhatsApp abre `wa.me`).
 - Define el **comportamiento si el proveedor cae**: la pantalla sigue útil con datos locales y avisa del estado.
 
+
+## Por qué se repite
+Tu entrega anterior NO pasó el validador objetivo. **Ejecútalo tú** y no termines hasta que salga completo:
+`node scripts/spec/design-check.mjs .viltrum/vre-os/design/DS-3-integraciones-shell.md` (directorio: `C:/Users/wilbe/Documents/QuisqueyaHome_CRM`). Itera: corrige, vuelve a correrlo,
+repite. Trabaja **una pantalla cada vez** y corre el validador al terminar cada una: la calidad bajó a medida que avanzabas (la primera pantalla estaba
+bien; las últimas tenían recetas de 175 caracteres). Cada pantalla debe quedar al nivel de la primera o por encima.
+
+## FORMATO OBLIGATORIO (el validador lo exige; una pantalla = un bloque independiente)
+Para cada pantalla, un bloque con este encabezado exacto y estas cinco subsecciones, en este orden:
+```
+## <n>. SCR-XXX-YYY · <Nombre>
+### 1. Concepto a máxima capacidad   (capacidades; por cada una: construir | integrar open source (sistema, puerto, método de capacidades()) | portar; prioridad P0/P1/P2; capa visual y modo degradado si el proveedor cae)
+### 2. Librería Viltrum Design        (≥ 2 componentes con ID NUMÉRICO real de la librería, cada uno con encaje, qué normalizar a tokens, riesgo de accesibilidad, comportamiento móvil)
+### 3. Screen Recipe                  (≥ 1500 caracteres; ver lista)
+### 4. Wireframes                     (DOS bloques de código ASCII: uno a 390 px y otro a 1440 px)
+### 5. Criterios de aceptación       (lista numerada de ≥ 5 criterios verificables con captura o prueba)
+```
+La **Screen Recipe** debe contener, cada elemento con su etiqueta en negrita:
+**Jerarquía y zonas** · **Datos exactos** (≥ 4 campos entre acentos graves, p. ej. `deal.amount_cents`, y la consulta o contrato que los alimenta) ·
+**Componentes por id** · **Puntos de corte** (320, 390, 768, 1440) · **Matriz de estados**: los ocho — initial, loading, empty, partial, error, offline,
+success, no_permission (+ conflict si hay mutaciones) — cada uno con el texto exacto en pantalla y la acción disponible · **Permisos por rol** (admin,
+broker, asistente) · **Acciones** (feedback, auditoría y recuperación de cada una) · **Gráficas e indicadores** (tipo, métrica y consulta) ·
+**Micro-interacciones y atajos** · **Integración externa visible** (qué sistema, estado de conexión y cómo se ve si cae).
+Reglas de vocabulario: «Negocios», **nunca la palabra «pipeline»** (tampoco en mensajes de error ni en consultas de ejemplo); sin emojis; sin `vd-…` inventados.
+Conserva lo que ya estaba bien y amplíalo; **sobrescribe el mismo archivo**.
+
 ## Reglas de entrega
 Escribe SOLO `.viltrum/vre-os/design/DS-3-integraciones-shell.md` (más lo que la CLI guarde en `.viltrum/design/` y capturas en
 `.viltrum/vre-os/capturas/DS/`). Sin código del CRM, sin git. Lo no verificado = `UNKNOWN`. Nada de componentes inventados

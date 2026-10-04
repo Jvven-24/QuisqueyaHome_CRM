@@ -27,3 +27,14 @@ Cada afirmación con **URL oficial**; sin URL = `UNKNOWN`. No inventes endpoints
 Escribe SOLO `.viltrum/vre-os/spec/integraciones/CAPACIDADES.md` y `.viltrum/vre-os/spec/integraciones/capacidades.json` (máquina-legible:
 `[{ "sistema","capacidad","fuente_url","puerto_metodo","pantalla","prioridad","degradado","verificado": true|false }]`).
 Termina con `## Fuentes` y `## Verificación` (cuántas filas, cuántas con URL).
+
+## Por qué se repite (profundidad)
+La entrega anterior tiene **una sola fila por sistema** (12 filas): no detecta funcionalidades. Se pide **una fila por capacidad**. Ejecuta tú
+`node scripts/spec/capacidades-check.mjs` (directorio `C:/Users/wilbe/Documents/QuisqueyaHome_CRM`) e itera hasta `OK`. Mínimos: Twenty 12 capacidades,
+Moodle 10, Chatwoot 8, Evolution API 8, Cal.com 8, Schedule-X 4, OpenProperty 8, MapLibre 6, Meilisearch 5; ≥ 70 filas y ≥ 30 URLs distintas
+(cada capacidad con **su** URL de la documentación oficial, p. ej. la página del endpoint). `verificado: true` solo si hay URL; el Portal Quisqueya, que
+es desarrollo propio, va con `verificado: false` y la ruta del archivo del CMS como fuente. Capacidades típicas a cubrir, entre otras: Twenty
+(personas, compañías, oportunidades, tareas, notas, campos personalizados, vistas, webhooks, búsqueda, importación, workflows, permisos); Moodle
+(crear usuario, matricular, progreso, finalización, certificados, cursos, grupos, calificaciones, webhooks/eventos); Chatwoot (conversaciones, mensajes,
+plantillas, etiquetas, asignación, contactos, bandejas, webhooks); Cal.com (tipos de evento, disponibilidad, reservas, cancelación, recordatorios,
+webhooks). Sobrescribe el mismo archivo y `capacidades.json`.
