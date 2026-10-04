@@ -839,8 +839,8 @@
    "items": [
     {
      "id": "F6.1",
-     "titulo": "Twenty detrás de CrmPort (TwentyAdapter)",
-     "estado": "BLOCKED",
+     "titulo": "Twenty detrás de CrmPort (TwentyAdapter): instancia local viva y clave de API verificada (200 en personas, oportunidades y empresas)",
+     "estado": "TODO",
      "depende": [
       "F2.2",
       "F0.5"

@@ -11,7 +11,7 @@ Actualizado: 2026-10-04 · **Global: 22.1 %** ████░░░░░░░�
 | F3 Especificación (pasadas P0–P6) | ████░░░░░░░░ 35 % | 4 | 1 | 5 | 0 |
 | F4 Rediseño de pantallas existentes | █░░░░░░░░░░░ 6 % | 0 | 1 | 8 | 0 |
 | F5 Módulos nuevos del Blueprint | ░░░░░░░░░░░░ 0 % | 0 | 0 | 16 | 0 |
-| F6 Integraciones con sistemas open source | ░░░░░░░░░░░░ 0 % | 0 | 0 | 4 | 1 |
+| F6 Integraciones con sistemas open source | ░░░░░░░░░░░░ 0 % | 0 | 0 | 5 | 0 |
 | F7 Cierre y salida a staging | ░░░░░░░░░░░░ 0 % | 0 | 0 | 3 | 1 |
 
 ## Siguiente (dependencias cumplidas, se puede empezar ya)
@@ -22,9 +22,9 @@ Actualizado: 2026-10-04 · **Global: 22.1 %** ████░░░░░░░�
 - **E1.P2** Diseño profundo PXIL: Propiedades y Brokers _(en curso)_ — D05 (Gemini)
 - **E1.P1** Diseño profundo PXIL: Negocios y Leads (brief, librería Viltrum Design, recetas) _(en curso)_ — D05 (Gemini)
 - **F3.3** P0 Inventario del CMS reutilizable _(en curso)_ — D22
+- **F6.1** Twenty detrás de CrmPort (TwentyAdapter): instancia local viva y clave de API verificada (200 en personas, oportunidades y empresas) — D19
 
 ## Bloqueado (necesita una decisión o acceso)
-- **F6.1** Twenty detrás de CrmPort (TwentyAdapter) — D19
 - **F7.4** Migraciones y despliegue a staging en la VPS (requiere autorización de Wilber) — D16
 
 ## Esperando dependencias (57)
