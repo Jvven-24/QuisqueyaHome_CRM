@@ -22,7 +22,8 @@ export function crearConsultaReportes(actor: Actor, scope: ReadScope, q: ReportQ
   const unitScope = and(visibleRows(actor, scope, units.brokerId, units.deletedAt), q.brokerId === undefined ? undefined : eq(units.brokerId, q.brokerId));
   const commissionScope = and(visibleRows(actor, scope, commissions.brokerId), q.brokerId === undefined ? undefined : eq(commissions.brokerId, q.brokerId));
   // No hay atribución broker/proyecto en campaign_spend. Nunca inventar prorrateos.
-  const attributableSpend = scope === "all" && q.brokerId === undefined && q.projectId === undefined;
+  // Fragmento SQL, no booleano de JS: postgres-js envía un boolean como parámetro de texto y `where $n` falla.
+  const attributableSpend = scope === "all" && q.brokerId === undefined && q.projectId === undefined ? sql`true` : sql`false`;
   const leadPeriod = dateRange(sql`received_at`, q);
   const dealPeriod = dateRange(sql`created_at`, q);
   const wonPeriod = dateRange(sql`closed_at`, q);

@@ -55,7 +55,7 @@ export function crearConsultaDashboard(actor: Actor, scope: ReadScope, scopes: D
         (select count(*)::int from reached r where r.stage_id = s.id) as "reachedCount",
         (select prev.id from pipeline_stages prev where prev.kind <> 'lost' and prev.position < s.position
           order by prev.position desc, prev.id desc limit 1) as previous_id
-      from pipeline_stages s where ${scopes.deals !== "none"}
+      from pipeline_stages s where ${scopes.deals !== "none" ? sql`true` : sql`false`}
     ),
     funnel as (
       select s."stageId", s.label, s.kind, s.position, s.count, s."reachedCount",
@@ -74,14 +74,14 @@ export function crearConsultaDashboard(actor: Actor, scope: ReadScope, scopes: D
         and (${q.hasta ?? null}::date is null or (activities.starts_at at time zone ${REPORT_TIME_ZONE})::date <= ${q.hasta ?? null}::date)
     ),
     recent as (
-      select l.id, coalesce(c.full_name, 'Nombre no disponible') as name,
-        coalesce(p.name, l.project_interest_text, 'Sin proyecto') as project,
+      select l.id, coalesce(contacts.full_name, 'Nombre no disponible') as name,
+        coalesce(projects.name, l.project_interest_text, 'Sin proyecto') as project,
         coalesce(s.name, 'Sin canal') as source, l.status as stage,
         coalesce((select a.title from va a where a.lead_id = l.id and a.status = 'pending'
           order by a.starts_at asc nulls last, a.id limit 1), 'Sin próxima actividad') as next,
         l.received_at
-      from vl l left join contacts c on c.id = l.contact_id and ${cs ?? sql`true`}
-        left join projects p on p.id = l.project_id and ${ps ?? sql`true`}
+      from vl l left join contacts on contacts.id = l.contact_id and ${cs ?? sql`true`}
+        left join projects on projects.id = l.project_id and ${ps ?? sql`true`}
         left join lead_sources s on s.id = l.source_id
       order by l.received_at desc, l.id desc limit ${DASHBOARD_LIST_LIMIT}
     ),

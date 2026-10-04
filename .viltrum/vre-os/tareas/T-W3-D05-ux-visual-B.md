@@ -25,5 +25,16 @@ su adaptador/puerto). Registro de candidatos: `.viltrum/vre-os/oss-registry.json
    que el puerto debe devolver (campos, sin tipos del proveedor).
 4. Wireframe ASCII a 390 y 1440.
 
+## RECHAZO del intento anterior (run 20261004T213416Z, 1,5 min) — corrige todo
+1. **Cero capturas** en `.viltrum/vre-os/capturas/B/`: el paso 1 es obligatorio (Playwright, 390 y 1440, login con
+   el botón "Admin"). Sin capturas no se acepta.
+2. Componentes **inventados** (`vd-course-card`, `vd-progress-bar`, `vd-bottom-sheet` "No verificado"): usa
+   `viltrum design search` y cita **ids numéricos reales** del catálogo (como hizo la parte A), mirando sus capturas.
+3. Academy debe cubrir lo que pidió Wilber: **seguimiento y certificación de brokers** (progreso por broker y por
+   curso, certificados emitidos/vencidos, ranking, cumplimiento obligatorio p. ej. Ley 155-17), no solo un catálogo.
+4. Contratos de datos completos por puerto (no solo `Curso`): matrícula, progreso, certificado, broker; mensajería
+   (conversación, mensaje, plantilla, canal); agenda (evento, disponibilidad, recordatorio); salud de integración.
+5. Integraciones: muestra outbox/DLQ con acciones (reintentar, descartar con motivo) y el estado de cada puerto.
+
 ## Entregable
 `.viltrum/vre-os/D05-ux-modulos-B.md`, una sección por fila y `## Fuentes`.

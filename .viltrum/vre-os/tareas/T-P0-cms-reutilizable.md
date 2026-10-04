@@ -15,6 +15,13 @@ Flujo: `.viltrum/vre-os/FLUJO-PASADAS.md` §4. Repo CMS (solo lectura): `C:\User
    de verdad de cada uno hoy? ¿Hay duplicación? Propuesta de contrato (I06 Portal → CRM: captura de leads).
 4. Lista de lo que el CRM reimplementó y ya existe mejor en el CMS (y al revés).
 
+## Rechazo del intento anterior (Antigravity, run 20261004T213724Z, 4,8 KB, 6 piezas) — no lo repitas
+- Afirmó que el CRM **no tiene** paleta de comandos: falso, existe desde el rediseño fase 1 (`d05f4ff`); busca en
+  `src/app/(crm)/_ui/`. Verifica cada "No existe" con búsqueda real en el CRM antes de escribirlo.
+- Cubrió 6 piezas: recorre **todo** `src/studio/**` y `src/portal/**` (componentes, hooks, servicios, i18n, media,
+  formularios, captura de leads, perfil, auth) y lista cada pieza reutilizable.
+- Modo: escribe **solo** el archivo de entrega (sin tocar código de ningún repo).
+
 ## Reglas
 No modifiques ningún repo. Lo no verificado = `UNKNOWN`. Cita archivo:línea.
 
