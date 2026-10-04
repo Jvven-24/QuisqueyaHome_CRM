@@ -1,0 +1,182 @@
+﻿[
+    {
+        "id":  "evolution-api",
+        "repo":  "EvolutionAPI/evolution-api",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "chatwoot",
+        "repo":  "chatwoot/chatwoot",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "baileys",
+        "repo":  "WhiskeySockets/Baileys",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "cal-com",
+        "repo":  "calcom/cal.com",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "schedule-x",
+        "repo":  "schedule-x/schedule-x",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "fullcalendar",
+        "repo":  "fullcalendar/fullcalendar",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "ical-generator",
+        "repo":  "sebbo2002/ical-generator",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "novu",
+        "repo":  "novuhq/novu",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "activepieces",
+        "repo":  "activepieces/activepieces",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "n8n",
+        "repo":  "n8n-io/n8n",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "gorules-zen",
+        "repo":  "gorules/zen",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "react-email",
+        "repo":  "resend/react-email",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "papermark",
+        "repo":  "mfts/papermark",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "pannellum",
+        "repo":  "mpetroff/pannellum",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "libphonenumber-js",
+        "repo":  "catamphetamine/libphonenumber-js",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "meilisearch",
+        "repo":  "meilisearch/meilisearch",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "formbricks",
+        "repo":  "formbricks/formbricks",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "growthbook",
+        "repo":  "growthbook/growthbook",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "posthog",
+        "repo":  "PostHog/posthog",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "moodle",
+        "repo":  "moodle/moodle",
+        "registro":  "GPL-3.0",
+        "github":  "GPL-3.0",
+        "ok":  true
+    },
+    {
+        "id":  "frappe-lms",
+        "repo":  "frappe/lms",
+        "registro":  "AGPL-3.0",
+        "github":  "AGPL-3.0",
+        "ok":  true
+    },
+    {
+        "id":  "twenty",
+        "repo":  "twentyhq/twenty",
+        "registro":  "NOASSERTION",
+        "github":  "NOASSERTION",
+        "ok":  true
+    },
+    {
+        "id":  "open-property",
+        "repo":  "OpenProperty/open-property",
+        "registro":  "UNKNOWN",
+        "github":  "ERROR",
+        "ok":  false
+    },
+    {
+        "id":  "react-pdf",
+        "repo":  "diegomura/react-pdf",
+        "registro":  "MIT",
+        "github":  "MIT",
+        "ok":  true
+    },
+    {
+        "id":  "prolink",
+        "repo":  "prolink",
+        "registro":  "NONE",
+        "github":  "(no es repo GitHub)"
+    },
+    {
+        "id":  "reality-crm",
+        "repo":  "reality-crm",
+        "registro":  "NONE",
+        "github":  "(no es repo GitHub)"
+    }
+]

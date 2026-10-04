@@ -204,11 +204,44 @@
      "responsable": "D09 (Codex)"
     },
     {
+     "id": "E1.P4",
+     "titulo": "Catálogo de capacidades de todos los sistemas open source (detección de funciones)",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "D21+D19 (Gemini)"
+    },
+    {
+     "id": "E1.P3",
+     "titulo": "Diseño profundo PXIL: Centro de integraciones y shell global",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "D05 (Gemini)"
+    },
+    {
+     "id": "E1.P2",
+     "titulo": "Diseño profundo PXIL: Propiedades y Brokers",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "D05 (Gemini)"
+    },
+    {
+     "id": "E1.P1",
+     "titulo": "Diseño profundo PXIL: Negocios y Leads (brief, librería Viltrum Design, recetas)",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "D05 (Gemini)"
+    },
+    {
      "id": "E1.1a",
      "titulo": "Negocios (kanban real, reglas de etapa, evento al outbox) · ficha READY",
      "estado": "TODO",
      "depende": [
-      "F3.2"
+      "F3.2",
+      "E1.P1"
      ],
      "peso": 1,
      "responsable": "D01+D03 (Codex)"
@@ -250,7 +283,8 @@
      "titulo": "Leads (tabla, inspector, línea de tiempo, eventos) · ficha READY",
      "estado": "TODO",
      "depende": [
-      "F3.2"
+      "F3.2",
+      "E1.P1"
      ],
      "peso": 1,
      "responsable": "D01+D03 (Codex)"
@@ -291,7 +325,8 @@
      "titulo": "Propiedades (inventario, matriz torre/piso) · ficha READY",
      "estado": "TODO",
      "depende": [
-      "F3.2"
+      "F3.2",
+      "E1.P2"
      ],
      "peso": 1,
      "responsable": "D01+D03 (Codex)"
@@ -332,7 +367,8 @@
      "titulo": "Brokers (ranking y perfil con rendimiento) · ficha READY",
      "estado": "TODO",
      "depende": [
-      "F3.2"
+      "F3.2",
+      "E1.P2"
      ],
      "peso": 1,
      "responsable": "D01+D03 (Codex)"
@@ -373,7 +409,9 @@
      "titulo": "Integraciones (salud de puertos, cola de salida, reintentar/descartar) · ficha READY",
      "estado": "TODO",
      "depende": [
-      "F3.2"
+      "F3.2",
+      "E1.P3",
+      "E1.P4"
      ],
      "peso": 1,
      "responsable": "D01+D03 (Codex)"

@@ -1,0 +1,529 @@
+[
+    {
+        "status": "CANDIDATE",
+        "id": "evolution-api",
+        "notes": "",
+        "modules": [
+            "comunicaciones"
+        ],
+        "last_push": "2026-07-14T19:50:55Z",
+        "wave": "W1",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/EvolutionAPI/evolution-api",
+        "port": "MensajeriaPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "EvolutionAPI/evolution-api",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 9758,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "Custom License / Restricts commercial use"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "chatwoot",
+        "notes": "",
+        "modules": [
+            "comunicaciones"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W1",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/chatwoot/chatwoot",
+        "port": "MensajeriaPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "chatwoot/chatwoot",
+        "stack": "Ruby",
+        "mode": "RUN",
+        "priority": "P1",
+        "stars": 37526,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "MIT salvo /ee (Enterprise edition is proprietary)"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "baileys",
+        "notes": "",
+        "modules": [
+            "comunicaciones"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W1",
+        "license_spdx": "MIT",
+        "url": "https://github.com/WhiskeySockets/Baileys",
+        "port": "MensajeriaPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "WhiskeySockets/Baileys",
+        "stack": "JavaScript",
+        "mode": "RUN",
+        "priority": "P1",
+        "stars": 11230
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "cal-com",
+        "notes": "",
+        "modules": [
+            "agenda"
+        ],
+        "last_push": "2026-09-26",
+        "wave": "W2",
+        "license_spdx": "MIT",
+        "url": "https://github.com/calcom/cal.com",
+        "port": "AgendaPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "calcom/cal.com",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 48859
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "schedule-x",
+        "notes": "",
+        "modules": [
+            "agenda"
+        ],
+        "last_push": "2026-10-03",
+        "wave": "W2",
+        "license_spdx": "MIT",
+        "url": "https://github.com/schedule-x/schedule-x",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "schedule-x/schedule-x",
+        "stack": "TypeScript",
+        "mode": "APP",
+        "priority": "P1",
+        "stars": 2593
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "fullcalendar",
+        "notes": "",
+        "modules": [
+            "agenda"
+        ],
+        "last_push": "2026-10-03",
+        "wave": "W2",
+        "license_spdx": "MIT",
+        "url": "https://github.com/fullcalendar/fullcalendar",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "fullcalendar/fullcalendar",
+        "stack": "TypeScript",
+        "mode": "APP",
+        "priority": "P2",
+        "stars": 20662
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "ical-generator",
+        "notes": "",
+        "modules": [
+            "agenda"
+        ],
+        "last_push": "2026-09-30",
+        "wave": "W3",
+        "license_spdx": "MIT",
+        "url": "https://github.com/sebbo2002/ical-generator",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "sebbo2002/ical-generator",
+        "stack": "TypeScript",
+        "mode": "APP",
+        "priority": "P3",
+        "stars": 855
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "novu",
+        "notes": "",
+        "modules": [
+            "notificaciones"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W2",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/novuhq/novu",
+        "port": "NotificacionesPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "novuhq/novu",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 40111,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "MIT salvo /ee"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "activepieces",
+        "notes": "",
+        "modules": [
+            "automatizaciones/workflows"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W3",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/activepieces/activepieces",
+        "port": "AutomatizacionesPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "activepieces/activepieces",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 24894,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "Custom License / Enterprise features restricted"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "n8n",
+        "notes": "Fair-code license (sustainable use), check strict limits",
+        "modules": [
+            "automatizaciones/workflows"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W3",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/n8n-io/n8n",
+        "port": "AutomatizacionesPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "n8n-io/n8n",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P1",
+        "stars": 206646,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "Sustainable Use License: no es OSI (not open source OSI)"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "gorules-zen",
+        "notes": "",
+        "modules": [
+            "cotizaciones",
+            "planes de pago"
+        ],
+        "last_push": "2026-10-02",
+        "wave": "W4",
+        "license_spdx": "MIT",
+        "url": "https://github.com/gorules/zen",
+        "port": "MotorPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "gorules/zen",
+        "stack": "Rust",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 2035
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "react-email",
+        "notes": "",
+        "modules": [
+            "comunicaciones"
+        ],
+        "last_push": "2026-10-03",
+        "wave": "W1",
+        "license_spdx": "MIT",
+        "url": "https://github.com/resend/react-email",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "resend/react-email",
+        "stack": "TypeScript",
+        "mode": "APP",
+        "priority": "P0",
+        "stars": 19805
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "papermark",
+        "notes": "",
+        "modules": [
+            "documentos/dossiers",
+            "Deal Room"
+        ],
+        "last_push": "2026-08-28",
+        "wave": "W3",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/mfts/papermark",
+        "port": "DocumentosPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "mfts/papermark",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 9237,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "Custom License / Fair-code"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "pannellum",
+        "notes": "",
+        "modules": [
+            "avances"
+        ],
+        "last_push": "2026-07-12",
+        "wave": "W4",
+        "license_spdx": "MIT",
+        "url": "https://github.com/mpetroff/pannellum",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "mpetroff/pannellum",
+        "stack": "JavaScript",
+        "mode": "APP",
+        "priority": "P1",
+        "stars": 4905
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "libphonenumber-js",
+        "notes": "",
+        "modules": [
+            "deduplicación E.164"
+        ],
+        "last_push": "2026-06-18",
+        "wave": "W1",
+        "license_spdx": "MIT",
+        "url": "https://github.com/catamphetamine/libphonenumber-js",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "catamphetamine/libphonenumber-js",
+        "stack": "JavaScript",
+        "mode": "APP",
+        "priority": "P0",
+        "stars": 2998
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "meilisearch",
+        "notes": "",
+        "modules": [
+            "búsqueda"
+        ],
+        "last_push": "2026-10-02",
+        "wave": "W2",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/meilisearch/meilisearch",
+        "port": "BusquedaPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "meilisearch/meilisearch",
+        "stack": "Rust",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 59487,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "Proprietary or Custom License"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "formbricks",
+        "notes": "",
+        "modules": [
+            "captura de leads"
+        ],
+        "last_push": "2026-10-03",
+        "wave": "W3",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/formbricks/formbricks",
+        "port": "EncuestasPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "formbricks/formbricks",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P1",
+        "stars": 13060,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "AGPL-3.0 / Fair-code limits"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "growthbook",
+        "notes": "",
+        "modules": [
+            "reportes",
+            "auditoría"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W4",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/growthbook/growthbook",
+        "port": "AnalyticsPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "growthbook/growthbook",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P1",
+        "stars": 8473,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "Custom License: no es OSI o núcleo + /ee"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "posthog",
+        "notes": "",
+        "modules": [
+            "reportes",
+            "auditoría"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W4",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/PostHog/posthog",
+        "port": "AnalyticsPort",
+        "license_verified_at": "2026-10-04",
+        "repo": "PostHog/posthog",
+        "stack": "Python",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 40133,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "MIT salvo /ee"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "moodle",
+        "notes": "GPL must run standalone behind port",
+        "modules": [
+            "academy",
+            "certificación"
+        ],
+        "last_push": "2026-10-03",
+        "wave": "W2",
+        "license_spdx": "GPL-3.0",
+        "url": "https://github.com/moodle/moodle",
+        "port": "AprendizajePort",
+        "license_verified_at": "2026-10-04",
+        "repo": "moodle/moodle",
+        "stack": "PHP",
+        "mode": "RUN",
+        "priority": "P0",
+        "stars": 7461
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "frappe-lms",
+        "notes": "AGPL must run standalone behind port",
+        "modules": [
+            "academy",
+            "certificación"
+        ],
+        "last_push": "2026-10-03",
+        "wave": "W2",
+        "license_spdx": "AGPL-3.0",
+        "url": "https://github.com/frappe/lms",
+        "port": "AprendizajePort",
+        "license_verified_at": "2026-10-04",
+        "repo": "frappe/lms",
+        "stack": "TypeScript",
+        "mode": "RUN",
+        "priority": "P1",
+        "stars": 3285
+    },
+    {
+        "status": "REFERENCE_ONLY",
+        "id": "twenty",
+        "notes": "Already inventoried, used for architecture references",
+        "modules": [
+            "leads",
+            "pipeline",
+            "contactos"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W1",
+        "license_spdx": "NOASSERTION",
+        "url": "https://github.com/twentyhq/twenty",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "twentyhq/twenty",
+        "stack": "TypeScript",
+        "mode": "REFERENCE",
+        "priority": "P0",
+        "stars": 57898,
+        "license_review": "HUMAN_REQUIRED",
+        "license_detail": "AGPL-3.0 (assuming due to fair-code limits or similar, needs human review)"
+    },
+    {
+        "status": "REFERENCE_ONLY",
+        "id": "open-property",
+        "notes": "Ported in W4b",
+        "modules": [
+            "rentas"
+        ],
+        "last_push": "2026-10-04",
+        "wave": "W4b",
+        "license_spdx": "MIT",
+        "url": "https://github.com/clawnify/OpenProperty",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "clawnify/OpenProperty",
+        "stack": "UNKNOWN",
+        "mode": "PORT",
+        "priority": "P1",
+        "stars": "UNKNOWN"
+    },
+    {
+        "status": "CANDIDATE",
+        "id": "react-pdf",
+        "notes": "",
+        "modules": [
+            "reportes",
+            "documentos/dossiers"
+        ],
+        "last_push": "2026-09-23",
+        "wave": "W2",
+        "license_spdx": "MIT",
+        "url": "https://github.com/diegomura/react-pdf",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "diegomura/react-pdf",
+        "stack": "TypeScript",
+        "mode": "APP",
+        "priority": "P0",
+        "stars": 16817
+    },
+    {
+        "status": "REFERENCE_ONLY",
+        "id": "prolink",
+        "notes": "Proprietary / Reference only",
+        "modules": [
+            "propiedades",
+            "brokers"
+        ],
+        "last_push": "",
+        "wave": "W1",
+        "license_spdx": "NONE",
+        "url": "https://github.com/prolinkinfo/RealEstateCRM",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "prolink",
+        "stack": "",
+        "mode": "REFERENCE",
+        "priority": "P0",
+        "stars": 0
+    },
+    {
+        "status": "REFERENCE_ONLY",
+        "id": "reality-crm",
+        "notes": "Proprietary / Reference only",
+        "modules": [
+            "leads",
+            "propiedades"
+        ],
+        "last_push": "",
+        "wave": "W1",
+        "license_spdx": "NONE",
+        "url": "https://github.com/mallyav/CRM",
+        "port": "",
+        "license_verified_at": "2026-10-04",
+        "repo": "reality-crm",
+        "stack": "",
+        "mode": "REFERENCE",
+        "priority": "P0",
+        "stars": 0
+    }
+]
