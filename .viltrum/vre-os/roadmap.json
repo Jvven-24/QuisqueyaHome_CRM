@@ -1,0 +1,713 @@
+{
+ "programa": "VRE-OS · Quisqueya Home CRM",
+ "actualizado": "2026-10-04",
+ "nota": "Estado: DONE|IN_PROGRESS|TODO|BLOCKED. DONE exige evidencia (commit o archivo). Editar con: npm run avance -- --set F2.4=DONE --commit <sha>",
+ "fases": [
+  {
+   "id": "F0",
+   "nombre": "Base y cimientos",
+   "peso": 1,
+   "items": [
+    {
+     "id": "F0.1",
+     "titulo": "Mandato y plan maestro",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "archivo": ".viltrum/vre-os/M-20261004-VRE.md"
+     },
+     "responsable": "D00"
+    },
+    {
+     "id": "F0.2",
+     "titulo": "Constitución + GitHub Spec Kit (CRM y global)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "commit": "6bc550d"
+     },
+     "responsable": "D00"
+    },
+    {
+     "id": "F0.3",
+     "titulo": "Spec Kit en el sistema de perfiles (skill spec-driven)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "commit": "e371684",
+      "repo": "E:/PERFILES AI"
+     },
+     "responsable": "D00"
+    },
+    {
+     "id": "F0.4",
+     "titulo": "Despachador Codex sin MCP (evita cuelgues)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "commit": "e371684",
+      "repo": "E:/PERFILES AI"
+     },
+     "responsable": "D00"
+    },
+    {
+     "id": "F0.5",
+     "titulo": "Twenty levantado en local (Docker, puerto 9320)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "archivo": "E:/VILTRUM/twenty-crm/docker-compose.yml"
+     },
+     "responsable": "D16"
+    },
+    {
+     "id": "F0.6",
+     "titulo": "Arquitectura de integraciones (ARQ-VRE-002) aprobada por Wilber",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "Wilber+D03"
+    }
+   ]
+  },
+  {
+   "id": "F1",
+   "nombre": "Datos e higiene visual",
+   "peso": 1,
+   "items": [
+    {
+     "id": "F1.1",
+     "titulo": "Esquema ampliado (migración 0002)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "commit": "2de69fa"
+     },
+     "responsable": "D11"
+    },
+    {
+     "id": "F1.2",
+     "titulo": "Datos simulados RD: 640 leads, 400 unidades, 1800 actividades",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "commit": "2de69fa"
+     },
+     "responsable": "D11"
+    },
+    {
+     "id": "F1.3",
+     "titulo": "Sin subrayados, siglas ni badges decorativos",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "commit": "2de69fa"
+     },
+     "responsable": "D09"
+    },
+    {
+     "id": "F1.4",
+     "titulo": "Registro open source (26 candidatos, licencias verificadas)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "archivo": ".viltrum/vre-os/oss-registry.json"
+     },
+     "responsable": "D21"
+    }
+   ]
+  },
+  {
+   "id": "F2",
+   "nombre": "Reportes reales e integración base",
+   "peso": 1,
+   "items": [
+    {
+     "id": "F2.1",
+     "titulo": "Reportes e Inicio desde la base, sin cifras fijas",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "commit": "b376aad"
+     },
+     "responsable": "D10"
+    },
+    {
+     "id": "F2.2",
+     "titulo": "Base de integraciones: outbox, CrmPort, guardas (migración 0003)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "commit": "5d96155"
+     },
+     "responsable": "D19"
+    },
+    {
+     "id": "F2.3",
+     "titulo": "Corrección SQL de Inicio y Reportes",
+     "estado": "DONE",
+     "depende": [
+      "F2.1"
+     ],
+     "peso": 1,
+     "evidencia": {
+      "commit": "622a7d8"
+     },
+     "responsable": "D10"
+    },
+    {
+     "id": "F2.4",
+     "titulo": "Pruebas de integración contra PostgreSQL real (test:db)",
+     "estado": "IN_PROGRESS",
+     "depende": [
+      "F2.3"
+     ],
+     "peso": 1,
+     "responsable": "D14"
+    },
+    {
+     "id": "F2.5",
+     "titulo": "Leads, pipeline y actividades emiten eventos al outbox",
+     "estado": "TODO",
+     "depende": [
+      "F2.2",
+      "F2.4"
+     ],
+     "peso": 1,
+     "responsable": "D19"
+    }
+   ]
+  },
+  {
+   "id": "F3",
+   "nombre": "Especificación (pasadas P0–P6)",
+   "peso": 2,
+   "items": [
+    {
+     "id": "F3.1",
+     "titulo": "Validador del Spec Pack y avance (spec:check, avance)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "archivo": "scripts/spec/check.mjs"
+     },
+     "responsable": "D13"
+    },
+    {
+     "id": "F3.2",
+     "titulo": "P0 Inventario del CRM",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "D03"
+    },
+    {
+     "id": "F3.3",
+     "titulo": "P0 Inventario del CMS reutilizable",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "D22"
+    },
+    {
+     "id": "F3.4",
+     "titulo": "P1 Arquitectura consolidada y reglas de integración (aprueba Wilber)",
+     "estado": "TODO",
+     "depende": [
+      "F3.2",
+      "F3.3"
+     ],
+     "peso": 1,
+     "responsable": "D03"
+    },
+    {
+     "id": "F3.5",
+     "titulo": "P3 UX módulos comerciales (A)",
+     "estado": "DONE",
+     "depende": [],
+     "peso": 1,
+     "evidencia": {
+      "archivo": ".viltrum/vre-os/D05-ux-modulos-A.md"
+     },
+     "responsable": "D05"
+    },
+    {
+     "id": "F3.6",
+     "titulo": "P3 UX integraciones y open source (B)",
+     "estado": "IN_PROGRESS",
+     "depende": [],
+     "peso": 1,
+     "responsable": "D05"
+    },
+    {
+     "id": "F3.7",
+     "titulo": "P2 Fichas de módulos M01–M21 y globales G01–G11",
+     "estado": "TODO",
+     "depende": [
+      "F3.4",
+      "F3.5",
+      "F3.6"
+     ],
+     "peso": 3,
+     "responsable": "D01+D03"
+    },
+    {
+     "id": "F3.8",
+     "titulo": "P4 Fichas de integraciones I01–I08",
+     "estado": "TODO",
+     "depende": [
+      "F3.4"
+     ],
+     "peso": 2,
+     "responsable": "D19"
+    },
+    {
+     "id": "F3.9",
+     "titulo": "P5 Huecos investigados",
+     "estado": "TODO",
+     "depende": [
+      "F3.7",
+      "F3.8"
+     ],
+     "peso": 1,
+     "responsable": "D21"
+    },
+    {
+     "id": "F3.10",
+     "titulo": "P6 Plan de construcción por oleadas (aprueba Wilber)",
+     "estado": "TODO",
+     "depende": [
+      "F3.9"
+     ],
+     "peso": 1,
+     "responsable": "D00"
+    }
+   ]
+  },
+  {
+   "id": "F4",
+   "nombre": "Rediseño de pantallas existentes",
+   "peso": 2,
+   "items": [
+    {
+     "id": "F4.0",
+     "titulo": "Inicio y Reportes: gráficas, pestañas, móvil",
+     "estado": "DONE",
+     "depende": [
+      "F2.1"
+     ],
+     "peso": 1,
+     "evidencia": {
+      "commit": "08e7fa9"
+     },
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.1",
+     "titulo": "Rediseño de Leads",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.2",
+     "titulo": "Rediseño de Pipeline",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.3",
+     "titulo": "Rediseño de Contactos",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.4",
+     "titulo": "Rediseño de Propiedades",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.5",
+     "titulo": "Rediseño de Brokers",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.6",
+     "titulo": "Rediseño de Comisiones",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.7",
+     "titulo": "Rediseño de Metas",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.8",
+     "titulo": "Rediseño de Agenda",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.9",
+     "titulo": "Rediseño de Tareas",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.10",
+     "titulo": "Rediseño de Academy",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.11",
+     "titulo": "Rediseño de Comunicaciones",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    },
+    {
+     "id": "F4.12",
+     "titulo": "Rediseño de Configuración",
+     "estado": "TODO",
+     "depende": [
+      "F3.7"
+     ],
+     "peso": 1,
+     "responsable": "D09"
+    }
+   ]
+  },
+  {
+   "id": "F5",
+   "nombre": "Módulos nuevos del Blueprint",
+   "peso": 3,
+   "items": [
+    {
+     "id": "F5.1",
+     "titulo": "Cotizaciones y plan de pagos 10/40/50",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.2",
+     "titulo": "Reservas (motor sin doble reserva)",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.3",
+     "titulo": "Rentas (OpenProperty)",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.4",
+     "titulo": "Client Room",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.5",
+     "titulo": "Deal Room",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.6",
+     "titulo": "Portal del broker y co-broking",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.7",
+     "titulo": "Certificación y seguimiento de brokers",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.8",
+     "titulo": "Documentos y plantillas (PDF)",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.9",
+     "titulo": "Búsqueda global",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.10",
+     "titulo": "Mapas (MapLibre)",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.11",
+     "titulo": "Asistente de IA",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.12",
+     "titulo": "Captura de leads desde el portal",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.13",
+     "titulo": "Automatizaciones",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.14",
+     "titulo": "Inglés (i18n)",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.15",
+     "titulo": "Importar y exportar",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    },
+    {
+     "id": "F5.16",
+     "titulo": "Deduplicación de teléfonos E.164",
+     "estado": "TODO",
+     "depende": [
+      "F3.10"
+     ],
+     "peso": 1,
+     "responsable": "D10"
+    }
+   ]
+  },
+  {
+   "id": "F6",
+   "nombre": "Integraciones con sistemas open source",
+   "peso": 2,
+   "items": [
+    {
+     "id": "F6.1",
+     "titulo": "Twenty detrás de CrmPort (TwentyAdapter)",
+     "estado": "BLOCKED",
+     "depende": [
+      "F2.2",
+      "F0.5"
+     ],
+     "peso": 1,
+     "responsable": "D19"
+    },
+    {
+     "id": "F6.2",
+     "titulo": "Moodle detrás de AprendizajePort (Academy)",
+     "estado": "TODO",
+     "depende": [
+      "F3.8"
+     ],
+     "peso": 1,
+     "responsable": "D19"
+    },
+    {
+     "id": "F6.3",
+     "titulo": "Mensajería (Chatwoot/Evolution) detrás de MensajeriaPort",
+     "estado": "TODO",
+     "depende": [
+      "F3.8"
+     ],
+     "peso": 1,
+     "responsable": "D19"
+    },
+    {
+     "id": "F6.4",
+     "titulo": "Agenda (Cal.com/Schedule-X) detrás de AgendaPort",
+     "estado": "TODO",
+     "depende": [
+      "F3.8"
+     ],
+     "peso": 1,
+     "responsable": "D19"
+    },
+    {
+     "id": "F6.5",
+     "titulo": "Contrato Portal → CRM (captura de leads)",
+     "estado": "TODO",
+     "depende": [
+      "F3.3",
+      "F3.8"
+     ],
+     "peso": 1,
+     "responsable": "D19"
+    }
+   ]
+  },
+  {
+   "id": "F7",
+   "nombre": "Cierre y salida a staging",
+   "peso": 1,
+   "items": [
+    {
+     "id": "F7.1",
+     "titulo": "GitNexus: reindexar y revisar flujos afectados",
+     "estado": "TODO",
+     "depende": [
+      "F5.1"
+     ],
+     "peso": 1,
+     "responsable": "D03"
+    },
+    {
+     "id": "F7.2",
+     "titulo": "Rendimiento y observabilidad (D15/D17)",
+     "estado": "TODO",
+     "depende": [
+      "F5.1"
+     ],
+     "peso": 1,
+     "responsable": "D15"
+    },
+    {
+     "id": "F7.3",
+     "titulo": "Manual de uso y runbook (D20)",
+     "estado": "TODO",
+     "depende": [
+      "F5.1"
+     ],
+     "peso": 1,
+     "responsable": "D20"
+    },
+    {
+     "id": "F7.4",
+     "titulo": "Migraciones y despliegue a staging en la VPS (requiere autorización de Wilber)",
+     "estado": "BLOCKED",
+     "depende": [
+      "F2.4"
+     ],
+     "peso": 1,
+     "responsable": "D16"
+    }
+   ]
+  }
+ ]
+}
