@@ -178,7 +178,7 @@ export function PipelineVista({
   return (
     <>
       <PageHeader
-        eyebrow="C3 · Ventas"
+        eyebrow="Ventas"
         title="Pipeline"
         subtitle="Mueve cada oportunidad y mantén visible la siguiente acción."
         action={

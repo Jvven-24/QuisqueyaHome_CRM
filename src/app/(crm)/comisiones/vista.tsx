@@ -303,7 +303,7 @@ export function ComisionesVista({
   return (
     <>
       <PageHeader
-        eyebrow="C9 · Finanzas internas"
+        eyebrow="Finanzas internas"
         title="Comisiones"
         subtitle="Comisiones de Quisqueya Home, sin colaboración con agencias externas."
         action={

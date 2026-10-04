@@ -15,6 +15,13 @@
       "when": 1790708400972,
       "tag": "0001_enable_rls_public_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791132922493,
+      "tag": "0002_messy_gwen_stacy",
+      "breakpoints": true
     }
   ]
 }

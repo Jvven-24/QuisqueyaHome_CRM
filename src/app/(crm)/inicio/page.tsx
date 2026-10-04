@@ -8,7 +8,10 @@
 import { consultarDashboard } from "@/application/dashboard/consultas";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { dashboardRepositorio } from "@/infrastructure/contenedor/dashboard";
+import { getDb } from "@/infrastructure/db/client";
+import { users } from "@/infrastructure/db/schema";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
+import { eq } from "drizzle-orm";
 import { InicioVista } from "./vista";
 
 export const metadata = { title: "Inicio · CRM Quisqueya Home" };
@@ -17,13 +20,18 @@ export default async function InicioPage() {
   const actor = await requireActor();
   requireScopeInPage(actor, "dashboard", "view");
 
+  const [usuario] = await getDb()
+    .select({ fullName: users.fullName })
+    .from(users)
+    .where(eq(users.id, actor.userId))
+    .limit(1);
+
   const metricas = await consultarDashboard(
     dashboardRepositorio(),
     actor.userId,
     actor.roleSlug,
-    // Actor no expone un nombre autenticado; no sustituirlo por uno de muestra.
-    "",
+    usuario?.fullName ?? "",
   );
 
-  return <InicioVista roleSlug={actor.roleSlug} metricas={metricas} />;
+  return <InicioVista roleSlug={actor.roleSlug} metricas={metricas} nombre={usuario?.fullName ?? ""} />;
 }

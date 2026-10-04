@@ -11,17 +11,21 @@ estamos, qué está verde, qué debe probar Codex y cuál es el siguiente issue 
 código. Se reescribe en cada push, así que es fiable aunque no tengas ninguna
 conversación previa.
 
-Reparto, decidido el 02/10/2026 (sustituye lo que decía la §5 antes):
+Reparto vigente, decidido el 04/10/2026 (decisión #44; sustituye al del 02/10):
 
-- **Claude escribe todo el código** —backend, vistas y pruebas unitarias— en esta
-  carpeta y en la rama `dev/reestructuracion-solid`, y es el único que usa `git`
-  y `gh`.
-- **Codex solo prueba la interfaz** en un navegador, buscando romperla. No escribe
-  código ni usa `git`. Prueba contra la vitrina `../crm-codex`, clavada a un
-  commit verificado con el servidor ya levantado, y deja lo que encuentre en
-  `../crm-codex/hallazgos/<issue>.md`. **Nunca** ejecuta `npm run dev` ni `build`.
+- **Programa VRE-OS** (`.viltrum/vre-os/M-20261004-VRE.md`): **Codex y Antigravity
+  producen código** —backend, datos, vistas y pruebas— cuando reciben una tarea
+  despachada por perfil (`tools/profile_dispatch.py`, archivo `TAREA.md` con los
+  archivos permitidos). Trabajan en un worktree aislado y entregan un parche; no
+  usan `git` ni hacen commit o push.
+- **Claude orquesta y revisa**: aplica el parche solo si `typecheck`, `lint`,
+  `test` y `build` están en verde, y es el único que hace commit (en `develop`,
+  sin push sin autorización de Wilber).
+- La revisión la hace siempre un proveedor distinto del que produjo.
 
 Quien escribe no es quien prueba: así ningún agente corrige su propia tarea.
+El reparto del 02/10 (Claude escribe, Codex solo prueba en `../crm-codex`) queda
+histórico en `docs/R_ANALISIS_Y_PLAN.md` §5.
 El detalle está en `docs/R_ANALISIS_Y_PLAN.md` §5 y el porqué en
 `docs/superpowers/specs/2026-10-02-flujo-claude-codex-y-relevo-design.md`.
 
@@ -83,3 +87,47 @@ Lee `.viltrum/project.md`, `.viltrum/status.md` y la doctrina `.viltrum/os/CLAUD
 
 <!-- viltrum:orchestration:v1 -->
 Para coordinar todo el proyecto usa la skill `orquestar` o `viltrum orchestrate . --goal <objetivo>`. Lee `.viltrum/os/core/orchestration.md`, confirma la clasificación y trabaja con perfiles/contratos. El plan prepara contexto; el host ejecuta los agentes y conserva revisión independiente.
+
+<!-- gitnexus:start -->
+# GitNexus — Code Intelligence
+
+This project is indexed by GitNexus as **QuisqueyaHome_CRM** (4364 symbols, 8767 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+
+> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
+
+## Always Do
+
+- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
+- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
+- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
+- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
+- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
+
+## Never Do
+
+- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
+- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
+- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
+- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
+
+## Resources
+
+| Resource | Use for |
+|----------|---------|
+| `gitnexus://repo/QuisqueyaHome_CRM/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/QuisqueyaHome_CRM/clusters` | All functional areas |
+| `gitnexus://repo/QuisqueyaHome_CRM/processes` | All execution flows |
+| `gitnexus://repo/QuisqueyaHome_CRM/process/{name}` | Step-by-step execution trace |
+
+## CLI
+
+| Task | Read this skill file |
+|------|---------------------|
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
+| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
+| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
+| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
+| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
+
+<!-- gitnexus:end -->

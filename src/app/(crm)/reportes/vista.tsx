@@ -23,7 +23,7 @@ export function ReportesVista({ metricas }: { metricas: ReportesBiData }) {
   return (
     <>
       <PageHeader
-        eyebrow="C12 · Métricas Operativas"
+        eyebrow="Métricas operativas"
         title="Reportes y BI"
         subtitle="Conversión, canales, demanda y proyección comercial en tiempo real."
         action={

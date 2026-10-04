@@ -135,7 +135,7 @@ export function AvancesVista({
   return (
     <>
       <PageHeader
-        eyebrow="C13 · Gestión manual"
+        eyebrow="Gestión manual"
         title="Avances de obra"
         subtitle={
           proyecto

@@ -76,7 +76,7 @@ export function PropiedadesVista({
   return (
     <>
       <PageHeader
-        eyebrow="C5 · Inventario privado"
+        eyebrow="Inventario privado"
         title="Propiedades internas"
         subtitle="Inventario, disponibilidad y rangos comerciales del equipo."
         action={

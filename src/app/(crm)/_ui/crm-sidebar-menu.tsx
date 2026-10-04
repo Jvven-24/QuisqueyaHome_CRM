@@ -19,14 +19,6 @@ interface CrmSidebarMenuProps {
   modulosVisibles: readonly Modulo[];
 }
 
-/** Badges sutiles y refinados para datos de interés */
-const BADGES_MAP: Record<string, string> = {
-  "/leads": "12",
-  "/pipeline": "$2.4M",
-  "/propiedades": "Confotur",
-  "/comisiones": "50/50",
-};
-
 export function CrmSidebarMenu({ modulosVisibles }: CrmSidebarMenuProps) {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
@@ -91,8 +83,6 @@ export function CrmSidebarMenu({ modulosVisibles }: CrmSidebarMenuProps) {
                       pathname === modulo.ruta ||
                       (modulo.ruta !== "/inicio" && pathname.startsWith(`${modulo.ruta}/`));
 
-                    const badge = BADGES_MAP[modulo.ruta];
-
                     return (
                       <SidebarMenuItem key={modulo.ruta} className="list-none">
                         <SidebarMenuButton
@@ -123,19 +113,7 @@ export function CrmSidebarMenu({ modulosVisibles }: CrmSidebarMenuProps) {
                             </div>
 
                             <div className="flex items-center gap-1.5 shrink-0">
-                              {badge && (
-                                <span
-                                  className={`text-[10px] font-medium px-1.5 py-0.2 rounded-full leading-tight ${
-                                    activo
-                                      ? "bg-gold-500/20 text-gold-300"
-                                      : "bg-white/[0.08] text-slate-400"
-                                  }`}
-                                >
-                                  {badge}
-                                </span>
-                              )}
-
-                              {modulo.atajo && !badge && (
+                              {modulo.atajo && (
                                 <span className="hidden group-hover:inline-block text-[9px] font-mono text-slate-500">
                                   {modulo.atajo}
                                 </span>

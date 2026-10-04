@@ -173,7 +173,7 @@ export function ContactosVista({
   return (
     <>
       <PageHeader
-        eyebrow="C2 · Relación"
+        eyebrow="Relación"
         title="Contactos"
         subtitle="Historial consolidado de clientes y proyectos de interés."
         action={

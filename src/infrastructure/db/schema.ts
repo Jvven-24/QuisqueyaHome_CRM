@@ -47,6 +47,7 @@ import { sql } from "drizzle-orm";
 import {
   bigint,
   boolean,
+  check,
   date,
   index,
   integer,
@@ -56,6 +57,7 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 import {
@@ -212,6 +214,7 @@ export const brokerProfiles = pgTable("broker_profiles", {
     .references(() => users.id),
   /** Ej. "Proyectos en planos", "Alquileres". Dirige el enrutamiento por especialidad. */
   specialty: text("specialty"),
+  agencyId: integer("agency_id").references(() => agencies.id, { onDelete: "restrict", onUpdate: "cascade" }),
   handlesRentals: boolean("handles_rentals").notNull().default(false),
   level: text("level", { enum: BROKER_LEVELS }).notNull().default("junior"),
   annualSalesCents: bigint("annual_sales_cents", { mode: "number" })
@@ -333,6 +336,89 @@ export const leadSources = pgTable(
 /* Inventario                                                                  */
 /* -------------------------------------------------------------------------- */
 
+/** Catálogos VRE. RLS sin políticas: acceso directo cerrado; BFF autorizado. */
+export const zones = pgTable("zones", {
+  id: serial("id").primaryKey(),
+  publicId: uuid("public_id").notNull().defaultRandom(),
+  slug: text("slug").notNull(),
+  name: text("name").notNull(),
+  position: integer("position").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  ...timestamps,
+}, (t) => [uniqueIndex("zones_slug_unq").on(t.slug), uniqueIndex("zones_public_id_unq").on(t.publicId)]).enableRLS();
+
+/** Afiliación comercial, no tenant ni frontera de permisos. */
+export const agencies = pgTable("agencies", {
+  id: serial("id").primaryKey(),
+  publicId: uuid("public_id").notNull().defaultRandom(),
+  slug: text("slug").notNull(),
+  name: text("name").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  ...timestamps,
+}, (t) => [uniqueIndex("agencies_slug_unq").on(t.slug), uniqueIndex("agencies_public_id_unq").on(t.publicId)]).enableRLS();
+
+export const paymentMethods = pgTable("payment_methods", {
+  id: serial("id").primaryKey(),
+  publicId: uuid("public_id").notNull().defaultRandom(),
+  slug: text("slug").notNull(),
+  name: text("name").notNull(),
+  position: integer("position").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  ...timestamps,
+}, (t) => [uniqueIndex("payment_methods_slug_unq").on(t.slug), uniqueIndex("payment_methods_public_id_unq").on(t.publicId)]).enableRLS();
+
+/** Estados detallados; legacyStatus mantiene el contrato vigente de la app. */
+export const unitInventoryStates = pgTable("unit_inventory_states", {
+  id: serial("id").primaryKey(),
+  publicId: uuid("public_id").notNull().defaultRandom(),
+  slug: text("slug").notNull(),
+  name: text("name").notNull(),
+  legacyStatus: text("legacy_status", { enum: UNIT_STATUSES }).notNull(),
+  position: integer("position").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  ...timestamps,
+}, (t) => [
+  uniqueIndex("unit_inventory_states_slug_unq").on(t.slug),
+  uniqueIndex("unit_inventory_states_public_id_unq").on(t.publicId),
+  check("unit_inventory_states_legacy_check", sql`${t.legacyStatus} in ('available','reserved','sold','unavailable')`),
+]).enableRLS();
+
+export const marketingCampaigns = pgTable("marketing_campaigns", {
+  id: serial("id").primaryKey(),
+  publicId: uuid("public_id").notNull().defaultRandom(),
+  slug: text("slug").notNull(),
+  name: text("name").notNull(),
+  sourceId: integer("source_id").notNull().references(() => leadSources.id, { onDelete: "restrict", onUpdate: "cascade" }),
+  startsOn: date("starts_on", { mode: "string" }).notNull(),
+  endsOn: date("ends_on", { mode: "string" }).notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  ...timestamps,
+  ...authorship,
+  deletedAt: instant("deleted_at"),
+}, (t) => [
+  uniqueIndex("marketing_campaigns_slug_unq").on(t.slug),
+  uniqueIndex("marketing_campaigns_public_id_unq").on(t.publicId),
+  check("marketing_campaigns_dates_check", sql`${t.endsOn} >= ${t.startsOn}`),
+]).enableRLS();
+
+/** Mes como date (día 1); importes en centavos USD, nunca flotante. */
+export const campaignSpend = pgTable("campaign_spend", {
+  id: serial("id").primaryKey(),
+  publicId: uuid("public_id").notNull().defaultRandom(),
+  campaignId: integer("campaign_id").notNull().references(() => marketingCampaigns.id, { onDelete: "restrict", onUpdate: "cascade" }),
+  month: date("month", { mode: "string" }).notNull(),
+  amountCents: bigint("amount_cents", { mode: "number" }).notNull(),
+  currency: text("currency").notNull().default("USD"),
+  ...timestamps,
+  ...authorship,
+}, (t) => [
+  uniqueIndex("campaign_spend_campaign_month_unq").on(t.campaignId, t.month),
+  uniqueIndex("campaign_spend_public_id_unq").on(t.publicId),
+  check("campaign_spend_amount_check", sql`${t.amountCents} >= 0`),
+  check("campaign_spend_currency_check", sql`${t.currency} = 'USD'`),
+  check("campaign_spend_month_check", sql`extract(day from ${t.month}) = 1`),
+]).enableRLS();
+
 export const projects = pgTable(
   "projects",
   {
@@ -341,6 +427,9 @@ export const projects = pgTable(
     slug: text("slug").notNull(),
     /** Punta Cana, Bávaro, Vista Cana, Cap Cana… Alimenta "Zonas calientes". */
     zone: text("zone"),
+    zoneId: integer("zone_id").references(() => zones.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    /** Atributo del proyecto; no duplicarlo en cada unidad. */
+    confoturEligible: boolean("confotur_eligible"),
     projectType: text("project_type", { enum: PROJECT_TYPES })
       .notNull()
       .default("blueprint"),
@@ -396,6 +485,9 @@ export const units = pgTable(
     builtAreaM2: real("built_area_m2"),
     yardAreaM2: real("yard_area_m2"),
     floorLevel: integer("floor_level"),
+    /** Etiqueta dentro del proyecto, sin atributos propios que requieran tabla. */
+    tower: text("tower"),
+    inventoryStateId: integer("inventory_state_id").references(() => unitInventoryStates.id, { onDelete: "restrict", onUpdate: "cascade" }),
     operationType: text("operation_type", { enum: OPERATION_TYPES })
       .notNull()
       .default("sale"),
@@ -521,6 +613,11 @@ export const leads = pgTable(
     projectInterestText: text("project_interest_text"),
     /** Zona de interés, necesaria para "Zonas calientes". */
     zoneInterest: text("zone_interest"),
+    zoneInterestId: integer("zone_interest_id").references(() => zones.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    campaignId: integer("campaign_id").references(() => marketingCampaigns.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    deliveryHorizonMonths: integer("delivery_horizon_months"),
+    paymentMethodId: integer("payment_method_id").references(() => paymentMethods.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    confoturInterest: boolean("confotur_interest"),
     operationType: text("operation_type", { enum: OPERATION_TYPES }),
     currency: text("currency").notNull().default("USD"),
     budgetMinCents: bigint("budget_min_cents", { mode: "number" }),
@@ -558,6 +655,10 @@ export const leads = pgTable(
     index("leads_status_idx").on(table.status),
     index("leads_broker_idx").on(table.brokerId),
     index("leads_received_idx").on(table.receivedAt),
+    check("leads_horizon_check", sql`${table.deliveryHorizonMonths} >= 0`),
+    check("leads_budget_min_check", sql`${table.budgetMinCents} >= 0`),
+    check("leads_budget_max_check", sql`${table.budgetMaxCents} >= 0`),
+    check("leads_budget_order_check", sql`${table.budgetMinCents} <= ${table.budgetMaxCents}`),
   ],
 );
 
@@ -681,6 +782,8 @@ export const activities = pgTable(
     title: text("title").notNull(),
     description: text("description"),
     contactId: integer("contact_id").references(() => contacts.id),
+    /** Timeline del lead exacto, incluso si el contacto tiene varios leads. */
+    leadId: integer("lead_id").references(() => leads.id, { onDelete: "restrict", onUpdate: "cascade" }),
     dealId: integer("deal_id").references(() => deals.id),
     projectId: integer("project_id").references(() => projects.id),
     assigneeId: integer("assignee_id").references(() => users.id),

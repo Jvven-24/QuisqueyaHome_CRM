@@ -285,7 +285,7 @@ export function ComunicacionesVista({
   return (
     <>
       <PageHeader
-        eyebrow="C11 · Mensajería Multicanal Abierta"
+        eyebrow="Mensajería multicanal"
         title="Comunicaciones"
         subtitle="Plantillas dinámicas con variables automáticas. Integración oficial con Telegram Bot (gratis) y WhatsApp abierta."
       />

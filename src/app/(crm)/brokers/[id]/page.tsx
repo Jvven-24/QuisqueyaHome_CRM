@@ -103,7 +103,7 @@ export default async function BrokerDetallePage({ params }: { params: Promise<{ 
   return (
     <>
       <PageHeader
-        eyebrow="C6 · Equipo"
+        eyebrow="Equipo"
         title={broker.fullName}
         subtitle={broker.jobTitle ?? broker.roleName}
         action={

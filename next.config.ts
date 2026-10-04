@@ -7,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.resolve(__dirname),
   reactStrictMode: true,
+  devIndicators: false,
   poweredByHeader: false,
   async headers() {
     return [

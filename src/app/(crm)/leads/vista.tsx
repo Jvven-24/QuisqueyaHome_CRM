@@ -253,7 +253,7 @@ export function LeadsVista({
   return (
     <>
       <PageHeader
-        eyebrow="C1 · Captación"
+        eyebrow="Captación"
         title={isBroker ? "Mis leads" : "Bandeja de leads"}
         subtitle="Origen, asignación y próxima acción de cada prospecto."
         action={

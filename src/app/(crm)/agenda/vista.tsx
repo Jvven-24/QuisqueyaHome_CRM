@@ -66,7 +66,7 @@ export function AgendaVista({ citas, personas, lunes }: { citas: CitaFila[]; per
   return (
     <>
       <PageHeader
-        eyebrow="C4 · Seguimiento"
+        eyebrow="Seguimiento"
         title="Citas y agenda"
         subtitle="La agenda central del equipo comercial."
         action={

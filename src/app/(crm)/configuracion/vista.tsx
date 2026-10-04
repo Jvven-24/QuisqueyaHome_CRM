@@ -56,7 +56,7 @@ export function ConfiguracionVista(props: {
   return (
     <>
       <PageHeader
-        eyebrow="C14 · Administración"
+        eyebrow="Administración"
         title="Configuración y permisos"
         subtitle="Controla quién puede ver y modificar cada área."
       />

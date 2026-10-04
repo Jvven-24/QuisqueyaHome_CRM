@@ -240,7 +240,7 @@ export function AcademyVista({ initialContenidos, initialResumen }: AcademyVista
   return (
     <>
       <PageHeader
-        eyebrow="C7 · Formación & Certificación de Brokers"
+        eyebrow="Formación y certificación de brokers"
         title="Academy"
         subtitle="Sesiones técnicas, protocolos operativos y certificación de ventas inmobiliarias."
       />

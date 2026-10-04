@@ -73,7 +73,7 @@ export function TareasVista({
   return (
     <>
       <PageHeader
-        eyebrow="C10 · Operación"
+        eyebrow="Operación"
         title="Tareas y actividades"
         subtitle="Seguimientos asociados a contactos y fechas concretas."
         action={

@@ -125,7 +125,7 @@ export function DataTable<F>({
           <button
             type="button"
             onClick={() => setMarcadas(new Set())}
-            className="text-[12px] font-semibold text-gold-600 underline underline-offset-2 hover:text-gold-500 cursor-pointer"
+            className="text-[12px] font-semibold text-gold-600 hover:text-gold-500 cursor-pointer"
           >
             Quitar selección
           </button>

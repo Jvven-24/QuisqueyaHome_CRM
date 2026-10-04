@@ -8,20 +8,21 @@ import { Avatar, Badge, Metric, PageHeader } from "../_ui/prototipo-ui";
 export function InicioVista({
   roleSlug,
   metricas,
+  nombre,
 }: {
   roleSlug: string;
   metricas: DashboardMetrics;
+  nombre: string;
 }) {
   const isBroker = roleSlug === "broker";
   const isAssistant = roleSlug === "assistant";
   const leads = metricas.leadsRecientes;
 
-  // D03: el puerto aún no expone identidad nominal autenticada; saludo neutral.
   return (
     <>
       <PageHeader
         eyebrow={isBroker ? "Mi operación" : "Resumen operativo"}
-        title="Hola"
+        title={nombre.trim() ? `Hola, ${nombre.trim()}` : "Hola"}
         subtitle={
           isBroker
             ? "Tu cartera y próximas acciones de hoy."

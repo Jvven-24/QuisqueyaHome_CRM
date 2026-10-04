@@ -50,7 +50,7 @@ export function BrokersVista({
   return (
     <>
       <PageHeader
-        eyebrow="C6 · Equipo"
+        eyebrow="Equipo"
         title="Brokers"
         subtitle="Asignación, especialidad y desarrollo del equipo comercial."
         action={
