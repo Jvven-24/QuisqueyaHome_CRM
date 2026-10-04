@@ -5,6 +5,15 @@ Autorización: decisiones #43/#44/#45 (sí escribes código en los archivos list
 Origen: Expediente del Sprint 1, D-04: «el término técnico no era comprensible para el usuario final; se adoptó **Negocios**»
 (el nombre de AlterEstate). `docs/contexto/decisiones.md` #45. **La palabra «pipeline» no puede aparecer en texto visible al cliente.**
 
+
+## EXCEPCIÓN A «NADA SIN FICHA READY» (declarada por el orquestador, con la instrucción de Wilber del 4-oct)
+Esto **no es una función nueva**: es una corrección de vocabulario exigida por la decisión **firmada por el cliente D-04**
+(Expediente del Sprint 1; `docs/contexto/decisiones.md` #45, ya integrada en el commit base de tu copia). Wilber pidió corregirlo al
+descubrir que el cliente no quiere la palabra. La constitución §A1 se refiere a módulos y funciones; un cambio de texto visible y de
+ruta con redirección no necesita ficha. **Tienes autorización expresa para escribir código en los archivos listados.** No pidas
+confirmación al usuario: no hay nadie que responda en una ejecución sin supervisión; si algo no encaja, déjalo anotado y sigue con el resto.
+La decisión #45 existe; si tu copia local no la ve, léela en la sección anterior de esta tarea.
+
 ## Qué cambiar
 1. **Textos visibles**: menú (`src/app/(crm)/modulos.ts`), títulos de página, `loading.tsx`/`error.tsx`, `command-palette.tsx`,
    Configuración («Etapas del pipeline» → «Etapas de negocios»), Metas («Cierres del pipeline» → «Cierres de negocios»),
