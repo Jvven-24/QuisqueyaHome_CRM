@@ -36,7 +36,7 @@
 
 ## D. Seguimiento
 12. **El estado vive en el repositorio**: cada ficha tiene `estado:` en su cabecera y `spec/00-indice.md` se actualiza
-    en el mismo cambio (`npm run spec:check`). Trello lo refleja; si discrepan, gana el repositorio.
+    en el mismo cambio (`npm run spec:check`). **El avance global y por fase vive en `.viltrum/vre-os/roadmap.json` y se lee con `npm run avance`**: al cerrar una tarea el orquestador la marca (`npm run avance -- --set ID=DONE --commit <sha>`), la herramienta exige evidencia real y muestra qué sigue. Trello lo refleja; si discrepan, gana el repositorio.
 13. **Toda afirmación lleva evidencia** (archivo:línea, comando y salida, captura, commit). Lo no verificado = `UNKNOWN`.
 14. **Cada fallo deja aprendizaje**: regla nueva aquí, en el plan (§9) o una prueba que lo impida.
 15. **Secretos fuera de todo**: nunca en archivos del repo, en salidas ni en prompts a proveedores externos.
