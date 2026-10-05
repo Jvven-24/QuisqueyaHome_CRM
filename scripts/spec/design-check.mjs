@@ -8,7 +8,10 @@ const CATALOGO = "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/private-library/catal
 const ESTADOS = [["initial|inicial"], ["loading|carga"], ["empty|vac"], ["partial|parcial"], ["error"], ["offline|sin conexi"], ["success|éxito|exito"], ["no_permission|permiso"]];
 
 export function idExiste(id, catalogoTexto) {
-  return existsSync(resolve(RAIZ, `.viltrum/design/components/${id}.json`)) || new RegExp(`(?:"id"\s*:\s*"?|\b)${id}\b`).test(catalogoTexto);
+  if (existsSync(resolve(RAIZ, `.viltrum/design/components/${id}.json`))) return true;
+  if (!catalogoTexto) return false;
+  if (!globalThis.__ids) { try { globalThis.__ids = new Set(JSON.parse(catalogoTexto).map((c) => String(c.id))); } catch { globalThis.__ids = new Set(); } }
+  return globalThis.__ids.has(String(id));
 }
 export function revisar(md, catalogoTexto = "") {
   const bloques = md.split(/^## (?=\d+\.\s*`?SCR-|`?SCR-)/m).slice(1);
@@ -31,6 +34,9 @@ export function revisar(md, catalogoTexto = "") {
     if (bloquesCodigo < 2) defectos.push(`wireframes insuficientes (${Math.floor(bloquesCodigo)}; se piden 390 y 1440)`);
     const ids = [...new Set((b.match(/\b\d{3,5}\b/g) ?? []).filter((n) => !["390", "320", "768", "1440", "2026", "100", "360", "200", "002"].includes(n)))];
     const reales = ids.filter((i) => idExiste(i, catalogoTexto));
+    const citados = [...new Set([...b.matchAll(/(?:\bid\b|\bID\b|cat[aá]logo|Cat[aá]logo)[^\d\n]{0,14}(\d{3,5})/g)].map((m) => m[1]))];
+    const inexistentes = citados.filter((i) => !idExiste(i, catalogoTexto));
+    if (inexistentes.length) defectos.push(`cita ids que NO existen en la librería: ${inexistentes.join(", ")}`);
     if (reales.length < 2) defectos.push(`menos de 2 componentes de la librería con id verificable (${reales.length})`);
     if (!/criterios? de aceptaci/i.test(b)) defectos.push("faltan criterios de aceptación visuales");
     if (/pipeline/i.test(b)) defectos.push("usa la palabra «pipeline» (vocabulario firmado: «Negocios»)");

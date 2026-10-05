@@ -1,6 +1,6 @@
 {
  "programa": "VRE-OS · Quisqueya Home CRM",
- "actualizado": "2026-10-04",
+ "actualizado": "2026-10-05",
  "nota": "Estado: DONE|IN_PROGRESS|TODO|BLOCKED. DONE exige evidencia (commit o archivo). Editar con: npm run avance -- --set F2.4=DONE --commit <sha>",
  "fases": [
   {
@@ -201,10 +201,13 @@
     {
      "id": "E1.0",
      "titulo": "«Pipeline» → «Negocios» en toda la interfaz + guarda de vocabulario (decisión firmada D-04)",
-     "estado": "IN_PROGRESS",
+     "estado": "DONE",
      "depende": [],
      "peso": 1,
-     "responsable": "D09 (Codex)"
+     "responsable": "D09 (Codex)",
+     "evidencia": {
+      "commit": "6c610e3"
+     }
     },
     {
      "id": "E1.P4",
@@ -217,26 +220,35 @@
     {
      "id": "E1.P3",
      "titulo": "Diseño profundo PXIL: Centro de integraciones y shell global",
-     "estado": "IN_PROGRESS",
+     "estado": "DONE",
      "depende": [],
      "peso": 1,
-     "responsable": "D05 (Gemini)"
+     "responsable": "D05 (Gemini)",
+     "evidencia": {
+      "archivo": ".viltrum/vre-os/design/DS-3-integraciones-shell.md"
+     }
     },
     {
      "id": "E1.P2",
      "titulo": "Diseño profundo PXIL: Propiedades y Brokers",
-     "estado": "IN_PROGRESS",
+     "estado": "DONE",
      "depende": [],
      "peso": 1,
-     "responsable": "D05 (Gemini)"
+     "responsable": "D05 (Gemini)",
+     "evidencia": {
+      "archivo": ".viltrum/vre-os/design/DS-2-propiedades-brokers.md"
+     }
     },
     {
      "id": "E1.P1",
      "titulo": "Diseño profundo PXIL: Negocios y Leads (brief, librería Viltrum Design, recetas)",
-     "estado": "IN_PROGRESS",
+     "estado": "DONE",
      "depende": [],
      "peso": 1,
-     "responsable": "D05 (Gemini)"
+     "responsable": "D05 (Gemini)",
+     "evidencia": {
+      "archivo": ".viltrum/vre-os/design/DS-1-negocios-leads.md"
+     }
     },
     {
      "id": "E1.1a",
