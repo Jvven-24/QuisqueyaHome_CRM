@@ -105,6 +105,8 @@ export function runCheck({ root = process.cwd(), today = localDate(), writeMarkd
 
   for (const directory of TYPE_DIRS) {
     for (const filename of listMarkdown(path.join(specRoot, directory))) {
+      // Solo son fichas los archivos con prefijo de id (M01-…, G10-…, I01-…); el resto (p. ej. CAPACIDADES.md) son referencias.
+      if (!/^[MGI]\d+-/i.test(path.basename(filename))) continue;
       const relative = path.relative(root, filename).replaceAll(path.sep, '/');
       const source = fs.readFileSync(filename, 'utf8');
       const { values, error } = parseHeader(source);

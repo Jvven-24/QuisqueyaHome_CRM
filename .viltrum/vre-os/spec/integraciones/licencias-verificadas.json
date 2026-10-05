@@ -1,0 +1,76 @@
+{
+ "evolution-api": {
+  "repo": "EvolutionAPI/evolution-api",
+  "licencia_real": "# Evolution API License / Evolution API is licensed under the Apache License 2.0, with the following additional conditions:",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": []
+ },
+ "chatwoot": {
+  "repo": "chatwoot/chatwoot",
+  "licencia_real": "Copyright (c) 2017-2026 Chatwoot Inc. / Portions of this software are licensed as follows:",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": [
+   "enterprise"
+  ]
+ },
+ "novu": {
+  "repo": "novuhq/novu",
+  "licencia_real": "SIN ARCHIVO LICENSE",
+  "archivo": null,
+  "carpetas_comerciales": [
+   "enterprise"
+  ]
+ },
+ "activepieces": {
+  "repo": "activepieces/activepieces",
+  "licencia_real": "Copyright (c) 2020-2024 Activepieces Inc. / Portions of this software are licensed as follows:",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": []
+ },
+ "n8n": {
+  "repo": "n8n-io/n8n",
+  "licencia_real": "# License / Portions of this software are licensed as follows:",
+  "archivo": "LICENSE.md",
+  "carpetas_comerciales": []
+ },
+ "papermark": {
+  "repo": "mfts/papermark",
+  "licencia_real": "Copyright (c) 2023-present Papermark, Inc. / Portions of this software are licensed as follows:",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": [
+   "ee"
+  ]
+ },
+ "meilisearch": {
+  "repo": "meilisearch/meilisearch",
+  "licencia_real": "# License / Copyright (c) 2019-2025 Meili SAS",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": []
+ },
+ "formbricks": {
+  "repo": "formbricks/formbricks",
+  "licencia_real": "Copyright (c) 2024 Formbricks GmbH / Portions of this software are licensed as follows:",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": []
+ },
+ "growthbook": {
+  "repo": "growthbook/growthbook",
+  "licencia_real": "Copyright (c) 2025 GrowthBook, Inc. / Portions of this software are licensed as follows:",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": []
+ },
+ "posthog": {
+  "repo": "PostHog/posthog",
+  "licencia_real": "Copyright (c) 2020-2026 PostHog Inc. / Portions of this software are licensed as follows:",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": [
+   "ee"
+  ]
+ },
+ "twenty": {
+  "repo": "twentyhq/twenty",
+  "licencia_real": "This project is mostly licensed under the GNU Affero General Public License v3.0 (AGPLv3) as described below, with two qualifications: / 1. ",
+  "archivo": "LICENSE",
+  "carpetas_comerciales": []
+ }
+}
