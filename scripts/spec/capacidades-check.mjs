@@ -35,6 +35,17 @@ if (process.argv.includes("--vivas")) {
   if (muertas.length) { console.log("MUERTAS (404/sin respuesta; no inventes enlaces, abre la documentación y copia la URL real):"); for (const m of muertas.sort((a,b)=>a.fila-b.fila)) console.log(`  fila ${m.fila} [${m.sistema}] ${m.capacidad} -> ${m.estado} ${m.url}`); }
   if (vivas / filas.length < 0.95) e.push(`solo ${Math.round((100 * vivas) / filas.length)} % de las URLs existen (mínimo 95 %)`);
 }
+
+{
+  const BRIEF = JSON.parse(readFileSync(".viltrum/vre-os/design/pantallas-e1.json", "utf8").replace(/^﻿/, "")).screens.map((x) => x.id);
+  const pagina = (u) => String(u).split("#")[0];
+  const porPagina = {};
+  for (const f of filas) if (/^https?:/.test(String(f.fuente_url))) (porPagina[pagina(f.fuente_url)] ??= []).push(f);
+  for (const [pg, fs] of Object.entries(porPagina)) if (fs.length > 2) e.push(`${fs.length} filas apuntan a la misma página ${pg} (fragmentos inventados no cuentan como URL propia): ${fs.map((x) => x.capacidad).slice(0, 4).join("; ")}…`);
+  for (const [i, f] of filas.entries()) if (f.pantalla && !BRIEF.includes(f.pantalla) && f.pantalla !== "—") e.push(`fila ${i + 1} (${f.sistema}/${f.capacidad}): pantalla «${f.pantalla}» no existe en el brief (${BRIEF.length} ids SCR-…)`);
+  const unicas = new Set(filas.map((f) => pagina(f.fuente_url)));
+  if (unicas.size < 30) e.push(`solo ${unicas.size} páginas distintas sin contar fragmentos (mínimo 30)`);
+}
 console.log(`${filas.length} filas, ${Object.keys(por).length} sistemas, ${urls.size} URLs distintas`);
 if (e.length) { console.log("FALLA:\n- " + e.join("\n- ")); process.exit(1); }
 console.log("OK");

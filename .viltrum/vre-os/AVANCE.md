@@ -1,13 +1,13 @@
 # Avance · VRE-OS · Quisqueya Home CRM
 
-Actualizado: 2026-10-05 · **Global: 23.3 %** █████░░░░░░░░░░░░░░░
+Actualizado: 2026-10-05 · **Global: 23.0 %** █████░░░░░░░░░░░░░░░
 
 | Fase | Avance | Hechas | En curso | Pendientes | Bloqueadas |
 |---|---|---|---|---|---|
 | F0 Base y cimientos | ████████████ 100 % | 6 | 0 | 0 | 0 |
 | F1 Datos e higiene visual | ████████████ 100 % | 4 | 0 | 0 | 0 |
 | F2 Reportes reales e integración base | ████████░░░░ 70 % | 3 | 1 | 1 | 0 |
-| E1 E1 · Cinco entregas completas (plan de alto impacto) | █░░░░░░░░░░░ 11 % | 4 | 1 | 20 | 0 |
+| E1 E1 · Cinco entregas completas (plan de alto impacto) | █░░░░░░░░░░░ 10 % | 4 | 0 | 21 | 0 |
 | F3 Especificación (pasadas P0–P6) | ████░░░░░░░░ 35 % | 4 | 1 | 5 | 0 |
 | F4 Rediseño de pantallas existentes | █░░░░░░░░░░░ 6 % | 0 | 1 | 8 | 0 |
 | F5 Módulos nuevos del Blueprint | ░░░░░░░░░░░░ 0 % | 0 | 0 | 16 | 0 |
@@ -16,18 +16,19 @@ Actualizado: 2026-10-05 · **Global: 23.3 %** █████░░░░░░�
 
 ## Siguiente (dependencias cumplidas, se puede empezar ya)
 - **F2.1** Reportes e Inicio desde la base, sin cifras fijas (falta: guarda automática anti-hardcode y test:db) _(en curso)_ — D10
-- **E1.P4** Catálogo de capacidades de todos los sistemas open source (detección de funciones) _(en curso)_ — D21+D19 (Gemini)
+- **E1.P4** Catálogo de capacidades verificado por sistema (el borrador de Gemini no es fiable: portadas con fragmentos inventados; Twenty se rehace desde su OpenAPI viva) — D21+D19 (Gemini)
 - **E1.1a** Negocios (kanban real, reglas de etapa, evento al outbox) · ficha READY — D01+D03 (Codex)
 - **E1.2a** Leads (tabla, inspector, línea de tiempo, eventos) · ficha READY — D01+D03 (Codex)
 - **E1.3a** Propiedades (inventario, matriz torre/piso) · ficha READY — D01+D03 (Codex)
 - **E1.4a** Brokers (ranking y perfil con rendimiento) · ficha READY — D01+D03 (Codex)
+- **E1.5a** Integraciones (salud de puertos, cola de salida, reintentar/descartar) · ficha READY — D01+D03 (Codex)
 - **F3.3** P0 Inventario del CMS reutilizable _(en curso)_ — D22
 - **F6.1** Twenty detrás de CrmPort (TwentyAdapter): instancia local viva y clave de API verificada (200 en personas, oportunidades y empresas) — D19
 
 ## Bloqueado (necesita una decisión o acceso)
 - **F7.4** Migraciones y despliegue a staging en la VPS (requiere autorización de Wilber) — D16
 
-## Esperando dependencias (53)
+## Esperando dependencias (52)
 - F2.5 Leads, pipeline y actividades emiten eventos al outbox (se cubre en E1.1b y E1.2b) ← E1.1b, E1.2b
 - E1.1b Negocios (kanban real, reglas de etapa, evento al outbox) · backend y consultas con test:db ← E1.1a
 - E1.1c Negocios (kanban real, reglas de etapa, evento al outbox) · interfaz completa (6 estados, móvil, gráficas) ← E1.1b
@@ -40,6 +41,6 @@ Actualizado: 2026-10-05 · **Global: 23.3 %** █████░░░░░░�
 - E1.3d Propiedades (inventario, matriz torre/piso) · QA independiente con capturas y cierre (10 condiciones) ← E1.3c
 - E1.4b Brokers (ranking y perfil con rendimiento) · backend y consultas con test:db ← E1.4a
 - E1.4c Brokers (ranking y perfil con rendimiento) · interfaz completa (6 estados, móvil, gráficas) ← E1.4b
-- … y 41 más
+- … y 40 más
 
 ## Validación: sin errores

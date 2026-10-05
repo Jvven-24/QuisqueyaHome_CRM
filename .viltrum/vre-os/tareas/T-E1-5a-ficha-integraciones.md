@@ -32,6 +32,12 @@ La ficha especifica el módulo a su **máxima capacidad** (no a la de la demo). 
 - **Catálogo de capacidades de los sistemas open source**: `.viltrum/vre-os/spec/integraciones/CAPACIDADES.md` y `capacidades.json` (qué ofrece cada sistema, método del puerto, pantalla, evento, modo degradado). La §6 de la ficha dice, por cada capacidad de este módulo, **qué sistema la cubre, por qué puerto y qué se ve si el proveedor cae**, y declara qué banderas de `capacidades()` consume la pantalla.
 - Regla de la capa visual: los sistemas externos **nunca se incrustan**; se ven en nuestra interfaz alimentados por su puerto.
 
+
+## AVISO sobre el catálogo de capacidades
+`.viltrum/vre-os/spec/integraciones/CAPACIDADES.md` es un **BORRADOR NO VERIFICADO** (URLs con fragmentos inventados). No lo uses como fuente. Esta ficha cubre `CrmPort`, outbox/DLQ,
+`capacidades()` y el Centro de integraciones; para Twenty, la fuente es el **OpenAPI de la instancia viva** (`GET ${TWENTY_API_URL}/rest/open-api/core` con la clave de `.env`, que está
+disponible y verificada) y la documentación oficial `https://docs.twenty.com/developers/introduction`. Cita endpoints reales que hayas visto en esa respuesta.
+
 ## Qué entregar
 Un archivo `.viltrum/vre-os/spec/modulos/G10-integraciones.md` con la plantilla completa, **cabecera YAML incluida** (`id: G10`,
 `estado`, `riesgo`, `owner`, `revisores`, `fuente_de_verdad`, `depende_de`, `actualizado`) y las 9 secciones con contenido real:

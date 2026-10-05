@@ -1,3 +1,8 @@
+> **BORRADOR NO VERIFICADO (5-oct).** El verificador `scripts/spec/capacidades-check.mjs` demostró que las URLs de este catálogo son portadas de documentación con fragmentos
+> (`#algo`) inventados, y que las pantallas citadas no existen en el brief. La lista de capacidades es una **hipótesis plausible**, no una fuente. **No construir adaptadores
+> sobre él**: cada ficha de integración (I01…) valida sus capacidades contra la fuente autoritativa del sistema (Twenty: el OpenAPI de la instancia viva en `/rest/open-api/core`;
+> Chatwoot: su `swagger.json` oficial; Cal.com y Moodle: la referencia de su API) y entonces sí marca `verificado`.
+
 # Catálogo de Capacidades de Integraciones
 
 ## Matriz de Capacidades

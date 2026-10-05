@@ -211,8 +211,8 @@
     },
     {
      "id": "E1.P4",
-     "titulo": "Catálogo de capacidades de todos los sistemas open source (detección de funciones)",
-     "estado": "IN_PROGRESS",
+     "titulo": "Catálogo de capacidades verificado por sistema (el borrador de Gemini no es fiable: portadas con fragmentos inventados; Twenty se rehace desde su OpenAPI viva)",
+     "estado": "TODO",
      "depende": [],
      "peso": 1,
      "responsable": "D21+D19 (Gemini)"
@@ -425,8 +425,7 @@
      "estado": "TODO",
      "depende": [
       "F3.2",
-      "E1.P3",
-      "E1.P4"
+      "E1.P3"
      ],
      "peso": 1,
      "responsable": "D01+D03 (Codex)"
