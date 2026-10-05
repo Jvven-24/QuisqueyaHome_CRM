@@ -35,7 +35,7 @@ import { visibleRows } from "@/infrastructure/rbac-filter";
 import { Historial } from "../_ui/historial";
 import { PipelineVista } from "./vista";
 
-export const metadata = { title: "Pipeline · CRM Quisqueya Home" };
+export const metadata = { title: "Negocios · CRM Quisqueya Home" };
 
 function primero(valor: string | string[] | undefined): string | undefined {
   return Array.isArray(valor) ? valor[0] : valor;

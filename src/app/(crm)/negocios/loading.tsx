@@ -8,7 +8,7 @@ import { Esqueleto } from "../_ui/cargando";
 export default function Loading() {
   return (
     <section>
-      <h1>Pipeline</h1>
+      <h1>Negocios</h1>
       <Esqueleto filas={6} />
     </section>
   );

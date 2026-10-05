@@ -121,7 +121,7 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
   function reemplazarNegocio(id: number, cambios: Partial<Negocio>): Negocio {
     const indice = negocios.findIndex((n) => n.id === id);
     // Error de programación, no de usuario: el caso de uso ya leyó la fila.
-    if (indice === -1) throw new Error(`pipelineEnMemoria: no existe el negocio ${id}.`);
+    if (indice === -1) throw new Error(`Repositorio de negocios: no existe el negocio ${id}.`);
     const fila = { ...negocios[indice]!, ...cambios, updatedAt: FECHA_FIJA };
     negocios = negocios.map((n, i) => (i === indice ? fila : n));
     return fila;
@@ -129,7 +129,7 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
 
   function reemplazarPropiedad(id: number, cambios: Partial<PropiedadDeNegocio>): PropiedadDeNegocio {
     const indice = propiedades.findIndex((p) => p.id === id);
-    if (indice === -1) throw new Error(`pipelineEnMemoria: no existe la propiedad ${id}.`);
+    if (indice === -1) throw new Error(`Repositorio de negocios: no existe la propiedad ${id}.`);
     const fila = { ...propiedades[indice]!, ...cambios };
     propiedades = propiedades.map((p, i) => (i === indice ? fila : p));
     return fila;

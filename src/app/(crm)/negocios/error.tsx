@@ -21,7 +21,7 @@ export default function Error({
 
   return (
     <div className="empty">
-      <strong>No se pudo cargar Pipeline</strong>
+      <strong>No se pudieron cargar los negocios</strong>
       <p>Ocurrió un error inesperado. Intenta de nuevo.</p>
       <p>
         <button className="button primary" type="button" onClick={() => reset()}>

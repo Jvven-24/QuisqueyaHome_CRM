@@ -58,8 +58,8 @@ export function EtapasPanel({ etapas, puedeEditar }: { etapas: EtapaFila[]; pued
 
   return (
     <>
-      <p className="eyebrow">Pipeline</p>
-      <h2>Etapas del pipeline</h2>
+      <p className="eyebrow">Negocios</p>
+      <h2>Etapas de negocios</h2>
       <p className="section-intro">El nombre y el orden son editables. La naturaleza de la etapa (abierta, ganada o perdida) es fija: de ahí cuelgan las reglas de cierre.</p>
       {error && (
         <div className="permission-note" role="alert">

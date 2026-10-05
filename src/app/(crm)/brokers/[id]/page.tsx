@@ -203,8 +203,8 @@ export default async function BrokerDetallePage({ params }: { params: Promise<{ 
                     <td>{negocio.amountCents == null ? "Por definir" : formatearMonto(negocio.amountCents)}</td>
                     <td>{negocio.stageName}</td>
                     <td className="table-actions">
-                      <Link className="text-button" href={`/pipeline?deal=${negocio.dealId}`}>
-                        Ver en pipeline
+                      <Link className="text-button" href={`/negocios?deal=${negocio.dealId}`}>
+                        Ver en negocios
                       </Link>
                     </td>
                   </tr>

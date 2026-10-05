@@ -14,7 +14,7 @@ export type Tab = "usuarios" | "permisos" | "etapas" | "catalogos" | "papelera" 
 const ETIQUETAS_TAB: Record<Tab, string> = {
   usuarios: "Usuarios y roles",
   permisos: "Permisos",
-  etapas: "Etapas del pipeline",
+  etapas: "Etapas de negocios",
   catalogos: "Catálogos",
   papelera: "Papelera",
   integraciones: "Integraciones",

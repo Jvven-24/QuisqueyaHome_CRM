@@ -59,7 +59,7 @@ export function MetasVista({
       <PageHeader
         eyebrow="Rendimiento"
         title={esVistaCompleta ? "Metas y desempeño" : "Mis metas"}
-        subtitle="Cierres del pipeline contra los objetivos mensuales."
+        subtitle="Cierres de negocios contra los objetivos mensuales."
         action={
           <select
             className="header-select"

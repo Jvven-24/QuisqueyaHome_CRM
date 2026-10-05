@@ -80,8 +80,8 @@ export const MODULOS: readonly Modulo[] = [
   },
   {
     id: "M3",
-    ruta: "/pipeline",
-    nombre: "Pipeline",
+    ruta: "/negocios",
+    nombre: "Negocios",
     recurso: "deals",
     workspaceId: "comercial",
     icono: "Kanban",

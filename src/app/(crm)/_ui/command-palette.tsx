@@ -45,9 +45,9 @@ const QUICK_ACTIONS: QuickAction[] = [
   },
   {
     id: "act-pipeline",
-    title: "Ver Pipeline de Negocios",
+    title: "Ver negocios",
     description: "Consultar etapas de negociación y oportunidades activas",
-    ruta: "/pipeline",
+    ruta: "/negocios",
     icon: TrendingUp,
     badge: "Funnel",
   },
@@ -219,7 +219,7 @@ export function CommandPalette({
                 No se encontraron resultados para &ldquo;{query}&rdquo;
               </p>
               <small className="text-xs text-ink-muted block mt-1">
-                Intenta buscar &ldquo;Leads&rdquo;, &ldquo;Pipeline&rdquo;, &ldquo;Propiedades&rdquo;, &ldquo;Agenda&rdquo; o &ldquo;Metas&rdquo;.
+                Intenta buscar &ldquo;Leads&rdquo;, &ldquo;Negocios&rdquo;, &ldquo;Propiedades&rdquo;, &ldquo;Agenda&rdquo; o &ldquo;Metas&rdquo;.
               </small>
             </div>
           ) : (

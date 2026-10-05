@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
   poweredByHeader: false,
+  async redirects() {
+    return [
+      { source: "/pipeline", destination: "/negocios", permanent: true },
+      { source: "/pipeline/:path*", destination: "/negocios/:path*", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {
