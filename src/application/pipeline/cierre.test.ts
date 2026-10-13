@@ -22,6 +22,7 @@ import {
   DEFAULT_BROKER_SHARE_BASIS_POINTS,
 } from "../../domain/cierre-negocio.ts";
 import { fechaSantoDomingo } from "../../domain/zona-horaria.ts";
+import { outboxEnMemoria } from "../testing/outbox-en-memoria.ts";
 import { auditoriaEnMemoria } from "../testing/auditoria-en-memoria.ts";
 import { unidadDeTrabajoEnMemoria } from "../testing/unidad-de-trabajo-en-memoria.ts";
 import { cerrarNegocioGanado } from "./cierre.ts";
@@ -29,11 +30,9 @@ import { cambiarEtapaDeNegocio } from "./casos-de-uso.ts";
 import { pipelineEnMemoria, type ActividadEnMemoria, type SemillaPipeline } from "./en-memoria.ts";
 import type { EtapaPipeline, Negocio, PropiedadDeNegocio } from "./puertos.ts";
 
-const broker: Actor = { userId: 5, roleSlug: "broker", permissions: [] };
-const admin: Actor = { userId: 1, roleSlug: "administrador", permissions: [] };
+const broker: Actor = { userId: 5, roleSlug: "broker", permissions: [{ resource: "projects", action: "view", scope: "all" }] };
+const admin: Actor = { userId: 1, roleSlug: "administrador", permissions: [{ resource: "projects", action: "view", scope: "all" }] };
 
-const MENSAJE_DOBLE_CIERRE =
-  "Este negocio ya fue cerrado o marcado como perdido por otra operación mientras se procesaba este cambio.";
 const MENSAJE_SIN_COMISION = "Para cerrar el negocio hace falta el porcentaje de comisión.";
 
 function etapa(id: number, kind: EtapaPipeline["kind"], position: number): EtapaPipeline {
@@ -51,6 +50,20 @@ function etapa(id: number, kind: EtapaPipeline["kind"], position: number): Etapa
 }
 
 const ETAPAS = [etapa(1, "open", 1), etapa(5, "open", 5), etapa(6, "won", 6), etapa(7, "lost", 7)];
+test("S-303-H: legado no se reabre por esta vía; un legado reabierto exige unidad al cerrar", async () => {
+  const cerrado = montar({ negocios: [negocio({ id: 1, stageId: 6, closedAt: new Date() })], propiedades: [principal({ id: 1, unitId: null })] });
+  await assert.rejects(cambiarEtapaDeNegocio(cerrado.deps, broker, "own", 1, { stageId: 1 }), /ya está cerrado/);
+  // Estado reabierto representativo; no se introduce una vía de reapertura fuera de la tarea.
+  const { deps, pipeline, outbox, auditoria } = montar({ negocios: [negocio({ id: 1, stageId: 5, closedAt: new Date() })], propiedades: [principal({ id: 1, unitId: null })] });
+  const antes = structuredClone({ negocios: pipeline.negocios, historial: pipeline.historial, ventas: pipeline.ventas });
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 }), /unidad/i);
+  assert.deepEqual({ negocios: pipeline.negocios, historial: pipeline.historial, ventas: pipeline.ventas }, antes);
+  const eventos = outbox.eventos.length;
+  const registros = auditoria.registros.length;
+  await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6, unitId: 100 });
+  assert.equal(pipeline.ventas.length, 1);
+  assert.equal(outbox.eventos.length, eventos + 1); assert.equal(auditoria.registros.length, registros + 1);
+});
 
 function negocio(parcial: Partial<Negocio> & { id: number }): Negocio {
   return {
@@ -115,11 +128,13 @@ function montar(semilla: SemillaPipeline = {}) {
     propiedades: [principal({ id: 1 })],
     perfiles: [PERFIL],
     unidades: [UNIDAD],
+    proyectos: [{ id: 10, brokerId: 5, deletedAt: null }],
     ...semilla,
   });
   const auditoria = auditoriaEnMemoria();
-  const unidad = unidadDeTrabajoEnMemoria({ pipeline, auditoria }, [pipeline, auditoria]);
-  return { pipeline, auditoria, unidad, deps: { unidad }, repos: { pipeline, auditoria } };
+  const outbox = outboxEnMemoria();
+  const unidad = unidadDeTrabajoEnMemoria({ pipeline, auditoria, outbox }, [pipeline, auditoria, outbox]);
+  return { pipeline, auditoria, outbox, unidad, deps: { unidad }, repos: { pipeline, auditoria, outbox } };
 }
 
 /** Periodo (año, mes) de un instante en hora de Santo Domingo, como lo calcula el cierre. */
@@ -238,7 +253,7 @@ test("cierre sin unidad principal resuelta: ConflictError de transicion-etapa y 
     );
     return true;
   });
-  assert.deepEqual(pipeline.bloqueos, []);
+  assert.deepEqual(pipeline.bloqueos, [1]);
   assert.deepEqual(pipeline.comisiones, []);
   assert.deepEqual(auditoria.registros, []);
 });
@@ -348,11 +363,11 @@ test("defensa 2: si el bloqueo revela que la etapa ya no es open, ConflictError 
   const { deps, pipeline, auditoria, unidad } = montar();
   // La otra petición gana la carrera justo cuando esta pide el bloqueo: antes,
   // `validarTransicion` vio el negocio todavía abierto.
-  pipeline.alBloquear = (id) => pipeline.moverNegocioAEtapa(id, 6);
+  pipeline.alBloquear = (id) => pipeline.moverNegocioAEtapa(id, 7);
 
   await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 }), (error) => {
     assert.ok(error instanceof ConflictError);
-    assert.equal(error.message, MENSAJE_DOBLE_CIERRE);
+    assert.equal(error.message, "Este negocio ya está cerrado (ganado o perdido) y no puede cambiar de etapa.");
     return true;
   });
 
@@ -371,7 +386,7 @@ test("defensa 2 también frente a una pérdida que ganó la carrera", async () =
 
   await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 }), (error) => {
     assert.ok(error instanceof ConflictError);
-    assert.equal(error.message, MENSAJE_DOBLE_CIERRE);
+    assert.equal(error.message, "Este negocio ya está cerrado (ganado o perdido) y no puede cambiar de etapa.");
     return true;
   });
   assert.deepEqual(pipeline.comisiones, []);
@@ -452,8 +467,10 @@ function codigoDelAdaptador(nombre: string): string {
 test("el adaptador real bloquea la fila del negocio: bloquearNegocio usa .for(\"update\")", () => {
   const codigo = codigoDelAdaptador("pipeline.ts");
   const bloqueos = codigo.match(/\.for\(/g) ?? [];
-  assert.equal(bloqueos.length, 1, "bloquearNegocio es el único bloqueo del adaptador de pipeline");
-  assert.match(codigo, /\.for\("update"\)/);
+  assert.equal(bloqueos.length, 3, "bloqueos de negocio, unidad y proyecto para alta mínima");
+  assert.match(codigo, /async bloquearNegocio[\s\S]*?from\(deals\)[\s\S]*?\.for\("update"\)/);
+  assert.match(codigo, /async bloquearUnidad[\s\S]*?from\(units\)[\s\S]*?\.for\("update"\)/);
+  assert.match(codigo, /async resolverUnidadDeCierre[\s\S]*?from\(projects\)[\s\S]*?\.for\("update"\)/);
 });
 
 test("el upsert de la meta de compañía conserva el targetWhere de su índice parcial", () => {
@@ -471,4 +488,71 @@ test("el recálculo anual conserva la zona horaria de Santo Domingo", () => {
   // Arreglo del issue #24: con la hora del servidor (UTC en el VPS), un cierre
   // nocturno contaría en el año siguiente y el nivel del broker saldría mal.
   assert.match(codigoDelAdaptador("pipeline.ts"), /at time zone 'America\/Santo_Domingo'/);
+});
+
+test("b2: fallo del outbox revierte venta, unidad, negocio y los ocho efectos", async () => {
+  const { deps, pipeline, auditoria, outbox } = montar({ actividades: [actividad({ id: 1 })] });
+  const anterior = structuredClone({ negocios: pipeline.negocios, unidades: pipeline.unidades, perfiles: pipeline.perfiles, actividades: pipeline.actividades });
+  outbox.emitir = async () => { throw new Error("QA outbox"); };
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 }), /QA outbox/);
+  assert.deepEqual({ negocios: pipeline.negocios, unidades: pipeline.unidades, perfiles: pipeline.perfiles, actividades: pipeline.actividades }, anterior);
+  assert.deepEqual(pipeline.ventas, []); assert.deepEqual(pipeline.comisiones, []); assert.deepEqual(pipeline.metas, []);
+  assert.deepEqual(pipeline.historial, []); assert.deepEqual(auditoria.registros, []); assert.deepEqual(outbox.eventos, []);
+});
+test("b2: cierre repetido no duplica venta, comision, metas ni outbox", async () => {
+  const { deps, pipeline, outbox } = montar();
+  await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 });
+  await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 });
+  assert.equal(pipeline.ventas.length, 1); assert.equal(pipeline.comisiones.length, 1); assert.equal(pipeline.historial.length, 1);
+  assert.ok(pipeline.metas.every(m => m.achievedDeals === 1));
+  assert.deepEqual(outbox.eventos, [{ tipo: "NegocioCambioEtapa", aggregateId: 1, payload: { id: 1, stageId: 6 } }]);
+});
+test("b2: otro negocio no cierra la misma unidad vendida y no deja efectos", async () => {
+  const { deps, pipeline, outbox } = montar({ negocios: [negocio({ id: 1 }), negocio({ id: 2 })], propiedades: [principal({ id: 1 }), principal({ id: 2, dealId: 2 })] });
+  await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 });
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 2, { stageId: 6 }), ConflictError);
+  assert.equal(pipeline.negocios[1]!.stageId, 5);
+  assert.equal(pipeline.ventas.length, 1); assert.equal(pipeline.comisiones.length, 1); assert.equal(outbox.eventos.length, 1);
+});
+
+test("S-303-N: cierre crea unidad mínima y fija interés de proyecto sin unidad", async () => {
+  const { deps, pipeline } = montar({ unidades: [], propiedades: [principal({ id: 1, unitId: null })] });
+  await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6, unitCode: " á_101 " });
+  assert.equal(pipeline.unidades.length, 1);
+  assert.equal(pipeline.unidades[0]!.code, "A-101");
+  assert.equal(pipeline.propiedades[0]!.unitId, pipeline.unidades[0]!.id);
+  assert.equal(pipeline.ventas[0]!.unitCodeNormalized, "A-101");
+});
+
+test("S-303-N: reutiliza coincidencia activa; rechaza archivada y proyecto ajeno", async () => {
+  const active = montar({ unidades: [{ ...UNIDAD, code: "a 101" }], propiedades: [principal({ id: 1, unitId: null })] });
+  await cambiarEtapaDeNegocio(active.deps, broker, "own", 1, { stageId: 6, unitCode: "A–101" });
+  assert.equal(active.pipeline.unidades.length, 1); assert.equal(active.pipeline.propiedades[0]!.unitId, 100);
+  const archived = montar({ unidades: [{ ...UNIDAD, code: "a 101", deletedAt: new Date() }], propiedades: [principal({ id: 1, unitId: null })] });
+  await assert.rejects(cambiarEtapaDeNegocio(archived.deps, broker, "own", 1, { stageId: 6, unitCode: "A-101" }), /archivada/);
+  assert.equal(archived.pipeline.unidades.length, 1); assert.equal(archived.pipeline.ventas.length, 0);
+  const foreign = montar({ proyectos: [{ id: 10, brokerId: 99, deletedAt: null }], unidades: [], propiedades: [principal({ id: 1, unitId: null })] });
+  await assert.rejects(cambiarEtapaDeNegocio(foreign.deps, { ...broker, permissions: [{ resource: "projects", action: "view", scope: "own" }] }, "own", 1, { stageId: 6, unitCode: "A-101" }), NotFoundError);
+  assert.equal(foreign.pipeline.unidades.length, 0);
+});
+
+test("S-303-N: fallo outbox revierte también alta mínima y asignación de unidad", async () => {
+  const { deps, pipeline, outbox } = montar({ unidades: [], propiedades: [principal({ id: 1, unitId: null })] });
+  outbox.emitir = async () => { throw new Error("QA alta outbox"); };
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6, unitCode: "A-101" }), /QA alta/);
+  assert.equal(pipeline.unidades.length, 0); assert.equal(pipeline.propiedades[0]!.unitId, null);
+  assert.equal(pipeline.negocios[0]!.stageId, 5); assert.equal(pipeline.ventas.length, 0);
+});
+
+test("S-303-N: duplicados normalizados activos, código blanco y entradas ambiguas no dejan efectos", async () => {
+  const duplicate = montar({ unidades: [{ ...UNIDAD, code: "a 101" }, { ...UNIDAD, id: 101, code: "A-101" }], propiedades: [principal({ id: 1, unitId: null })] });
+  await assert.rejects(cambiarEtapaDeNegocio(duplicate.deps, broker, "own", 1, { stageId: 6, unitCode: "A-101" }), ConflictError);
+  const existing = montar({ propiedades: [principal({ id: 1, unitId: null }), principal({ id: 2, isPrimary: false })] });
+  await assert.rejects(cambiarEtapaDeNegocio(existing.deps, broker, "own", 1, { stageId: 6, unitId: 100 }), /márcala como principal/);
+  assert.equal(existing.pipeline.propiedades[0]!.unitId, null); assert.equal(existing.pipeline.ventas.length, 0);
+  for (const entrada of [{ stageId: 6, unitCode: "  " }, { stageId: 6, unitCode: "A-101", unitId: 100 }]) {
+    const m = montar({ propiedades: [principal({ id: 1, unitId: null })] });
+    await assert.rejects(cambiarEtapaDeNegocio(m.deps, broker, "own", 1, entrada));
+    assert.equal(m.pipeline.propiedades[0]!.unitId, null); assert.equal(m.pipeline.ventas.length, 0);
+  }
 });

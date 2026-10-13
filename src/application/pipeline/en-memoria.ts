@@ -20,6 +20,8 @@
  */
 
 import type { BrokerLevel } from "../../domain/catalogs.ts";
+import { ConflictError } from "../../domain/errors.ts";
+import { normalizarCodigoUnidad } from "../../domain/unidades.ts";
 import type { Actor, PermissionScope } from "../../domain/rbac.ts";
 import { fechaSantoDomingo } from "../../domain/zona-horaria.ts";
 import type { Reversible } from "../testing/reversible.ts";
@@ -64,7 +66,7 @@ export type MetaEnMemoria = {
   updatedBy: number | null;
 };
 
-export type UnidadEnMemoria = { id: number; projectId: number; status: string; deletedAt: Date | null; updatedBy?: number | null };
+export type UnidadEnMemoria = { id: number; projectId: number; code?: string; status: string; deletedAt: Date | null; updatedBy?: number | null };
 export type ProyectoEnMemoria = { id: number; brokerId: number | null; deletedAt: Date | null };
 export type HistorialEnMemoria = { dealId: number; fromStageId: number; toStageId: number; changedBy: number };
 
@@ -77,6 +79,7 @@ export type SemillaPipeline = {
   metas?: readonly MetaEnMemoria[];
   unidades?: readonly UnidadEnMemoria[];
   proyectos?: readonly ProyectoEnMemoria[];
+  motivos?: readonly { id: number; isActive: boolean }[];
 };
 
 export type PipelineEnMemoria = RepositorioPipeline &
@@ -91,6 +94,7 @@ export type PipelineEnMemoria = RepositorioPipeline &
     readonly historial: readonly HistorialEnMemoria[];
     /** Ids de los negocios que se bloquearon con `bloquearNegocio`, en orden. No se revierte: una llamada es una llamada aunque la transacción falle. */
     readonly bloqueos: readonly number[];
+    readonly ventas: readonly { unitId: number; dealId: number; projectId: number; unitCodeNormalized: string; actorId: number }[];
     /**
      * Simula a la otra petición que gana la carrera: se ejecuta dentro de
      * `bloquearNegocio`, ANTES de devolver la fila. Una lectura sin bloqueo
@@ -113,6 +117,8 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
   let metas: MetaEnMemoria[] = [...(semilla.metas ?? [])];
   let unidades: UnidadEnMemoria[] = [...(semilla.unidades ?? [])];
   const proyectos: ProyectoEnMemoria[] = [...(semilla.proyectos ?? [])];
+  const motivos = [...(semilla.motivos ?? [])];
+  let ventas: { unitId: number; dealId: number; projectId: number; unitCodeNormalized: string; actorId: number }[] = [];
   let comisiones: DatosNuevaComision[] = [];
   let historial: HistorialEnMemoria[] = [];
   const bloqueos: number[] = [];
@@ -163,6 +169,7 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
     get bloqueos() {
       return bloqueos;
     },
+    get ventas() { return ventas; },
     alBloquear: null,
     fallarEnCrearComision: null,
 
@@ -194,16 +201,43 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
       );
     },
 
-    async buscarProximaAccionVigente(actividadId) {
+    async buscarProximaAccionVigente(actividadId, dealId) {
       const a = actividades.find((x) => x.id === actividadId);
-      if (a && a.deletedAt === null && a.status === "pending" && a.assigneeId != null && a.startsAt != null) {
+      if (a && a.dealId === dealId && a.deletedAt === null && a.status === "pending" && a.assigneeId != null && a.startsAt != null) {
         return { responsableId: a.assigneeId, fecha: a.startsAt.toISOString() };
       }
       return null;
     },
 
     async propiedadesDelNegocio(dealId) {
-      return propiedades.filter((p) => p.dealId === dealId);
+      return propiedades.filter((p) => p.dealId === dealId && !p.deletedAt);
+    },
+    async motivoPerdidaActivo(id) { return motivos.some(m => m.id === id && m.isActive); },
+    async bloquearUnidad(unitId, projectId) {
+      const u = unidades.find(u => u.id === unitId && u.projectId === projectId && !u.deletedAt);
+      return u ? { ...u, code: u.code ?? String(u.id) } : undefined;
+    },
+    async resolverUnidadDeCierre({ projectId, code, actorId }) {
+      const normalized = normalizarCodigoUnidad(code);
+      const matches = unidades.filter(u => u.projectId === projectId && normalizarCodigoUnidad(u.code ?? String(u.id)) === normalized);
+      const activas = matches.filter(u => !u.deletedAt);
+      if (activas.length > 1) throw new ConflictError("Hay unidades con el mismo código; solicita conciliación del inventario.");
+      if (activas[0]) return activas[0].id;
+      if (matches.length) throw new ConflictError("La unidad está archivada; solicita revisar el inventario.");
+      const id = Math.max(0, ...unidades.map(u => u.id)) + 1;
+      unidades = [...unidades, { id, projectId, code: normalized, status: "available", deletedAt: null, updatedBy: actorId }];
+      return id;
+    },
+    async fijarUnidadPrincipal({ propiedadId, unitId }) {
+      const actual = propiedades.find(p => p.id === propiedadId);
+      if (propiedades.some(p => p.dealId === actual?.dealId && p.id !== propiedadId && p.unitId === unitId && !p.deletedAt)) {
+        throw new ConflictError("La unidad ya es un interés del negocio; márcala como principal antes de cerrar.");
+      }
+      reemplazarPropiedad(propiedadId, { unitId });
+    },
+    async registrarVenta(datos) {
+      if (ventas.some(v => v.unitId === datos.unitId || v.dealId === datos.dealId || (v.projectId === datos.projectId && v.unitCodeNormalized === datos.unitCodeNormalized))) throw new ConflictError("La unidad ya tiene una venta registrada.");
+      ventas = [...ventas, datos];
     },
 
     // --- cambio de etapa y cierre --------------------------------------------
@@ -234,6 +268,7 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
         stageId: etapaDestinoId,
         stageChangedAt: cuando,
         closedAt: cuando,
+        nextActivityId: null,
         amountCents,
         updatedBy: actorId,
       });
@@ -348,7 +383,7 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
     },
 
     async buscarPropiedad(dealId, propId) {
-      return propiedades.find((p) => p.id === propId && p.dealId === dealId);
+      return propiedades.find((p) => p.id === propId && p.dealId === dealId && !p.deletedAt);
     },
 
     async desmarcarPrincipales(dealId) {
@@ -373,8 +408,8 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
       return reemplazarPropiedad(propId, { isPrimary: true });
     },
 
-    async eliminarPropiedad(propId) {
-      propiedades = propiedades.filter((p) => p.id !== propId);
+    async eliminarPropiedad(propId, actorId, motivo) {
+      reemplazarPropiedad(propId, { deletedAt: new Date(), deletedBy: actorId, deletionReason: motivo, isPrimary: false });
     },
 
     instantanea() {
@@ -382,7 +417,7 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
       // restaurarla es devolver la referencia. `bloqueos` no se restaura a
       // propósito, y el contador de ids tampoco (una secuencia de Postgres no
       // retrocede tras un rollback).
-      const copia = { negocios, propiedades, actividades, perfiles, metas, unidades, comisiones, historial };
+      const copia = { negocios, propiedades, actividades, perfiles, metas, unidades, comisiones, historial, ventas };
       return () => {
         negocios = copia.negocios;
         propiedades = copia.propiedades;
@@ -392,6 +427,7 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
         unidades = copia.unidades;
         comisiones = copia.comisiones;
         historial = copia.historial;
+        ventas = copia.ventas;
       };
     },
   };

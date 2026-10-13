@@ -10,7 +10,8 @@
  * (`etapa/route.ts`), con sus propias validaciones de `validarTransicion`.
  */
 
-import { z } from "zod";
+import { editarNegocioSchema } from "@/application/pipeline/entrada";
+import { dtoMutacionNegocio } from "@/application/pipeline/dto";
 import { editarNegocio, type EntradaEditarNegocio } from "@/application/pipeline/casos-de-uso";
 import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
@@ -18,21 +19,15 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { pipelineParaEscritura } from "@/infrastructure/contenedor/pipeline";
 import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
 
-const EditarNegocioInput = z.object({
-  amountCents: z.union([z.coerce.number().int().nonnegative(), z.null()]).optional(),
-  probability: z.union([z.coerce.number().int().min(0).max(100), z.null()]).optional(),
-  commissionBasisPoints: z.union([z.coerce.number().int().min(0).max(10000), z.null()]).optional(),
-  expectedCloseDate: z.string().nullable().optional(),
-});
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idParam } = await params;
     const id = Number(idParam);
-    if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
+    if (!Number.isInteger(id) || id <= 0 || id > 2147483647) throw new NotFoundError();
 
     const datos = parseInput(
-      EditarNegocioInput,
+      editarNegocioSchema,
       vaciosANull(await request.json().catch(() => ({})), [
         "amountCents",
         "probability",
@@ -53,7 +48,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
     const negocio = await editarNegocio(pipelineParaEscritura(), actor, scope, id, entrada);
 
-    return Response.json({ ok: true, negocio });
+    return Response.json({ ok: true, negocio: dtoMutacionNegocio(actor, negocio) });
   } catch (error) {
     return errorResponse(error);
   }

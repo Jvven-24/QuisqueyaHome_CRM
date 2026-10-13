@@ -1,0 +1,19 @@
+# D14 · TOOL-001: suficiencia para READY antes del parche · 2026-10-04
+
+**Entrada revisada:** `specs/001-spec-check-catalogo-no-ficha/spec.md` actualizado por D03; revisión D12 posterior en `.viltrum/reviews/D12-preparacion-integraciones-locales-2026-10-04.md` §«Revisión posterior de TOOL-001»; repro D14 en `D14-revision-READY-I01-A-TOOL-001-2026-10-04.md`. Se evalúa si el **contrato permite despachar y verificar** la corrección, no si el código ya está corregido. D14 no edita ficha/código ni marca gate. Este dictamen **sustituye solo el FAIL previo de TOOL-001 para READY**; la evaluación de I01-A del informe anterior permanece.
+
+## Dictamen
+
+**PASS D14 para promover TOOL-001 a READY como tarea de corrección**, sujeto a que D00 registre la revisión independiente D12/D14, la ruta `specs/001-spec-check-catalogo-no-ficha/spec.md` en el seguimiento autorizado y el cambio formal de estado. La ficha identifica el AS-IS defectuoso, limita el parche a dos archivos, define el resultado exacto y tiene pruebas negativas suficientes para detectar el falso verde. El filtro actual incumple el contrato; ese es el defecto que el despacho READY debe corregir y verificar después. READY no significa BUILT ni verificación aprobada.
+
+La sección «Dependencias para READY» de la ficha conserva texto histórico que dice que D14 y D12 habían dictaminado FAIL. D12 ya emitió PASS de contrato y este documento emite PASS D14; D00/D03 deben actualizar esa referencia al registrar READY para evitar una contradicción documental. No cambia los criterios técnicos ni exige ejecutar el parche antes de promover.
+
+## Oráculos de QA exigidos al productor y comprobados por D14 después del parche
+
+1. **Excepción positiva y conteo:** fixture de directorio `integraciones/` con `CAPACIDADES.md` y dos fichas Ixx estructuralmente válidas; `runCheck().stats.total === 2`, `byType.integraciones.total === 2`, y ninguna `finding` bloqueante del catálogo. Hash/contenido de `CAPACIDADES.md` idéntico antes/después. Ixx mantienen sus estados originales. Salida CLI muestra aviso informativo que lo identifica como catálogo no probatorio.
+2. **Nombre inválido en integraciones:** añadir `OTRO.md` sin cabecera y ejecutar tanto `runCheck` como el proceso CLI: `finding` de nombre, cabecera y secciones; exit **1**. No filtrar por prefijo `I\d+` ni por «parece ficha».
+3. **Ficha Ixx inválida:** añadir `I03-defectuosa.md` sin cabecera/secciones: hallazgos estructurales y exit **1**. Con I03 válida, aumenta el total a 3. Así se prueba que la excepción no se extiende a otra Ixx.
+4. **Alcance del directorio:** poner un archivo llamado exactamente `CAPACIDADES.md` en `modulos/` y después en `globales/`; en ambos casos produce bloqueo de nombre/formato y exit **1**. `capacidades.md` en minúsculas bajo `integraciones/` tampoco debe coincidir con el basename exacto en un sistema de archivos que lo permita; la comparación debe ser estricta.
+5. **Regresión y reporte:** `node --test scripts/spec/check.test.mjs` incluye los fixtures anteriores, `npm run spec:check` enumera las fichas reales sin silenciar otras inválidas, `npm test` y `npm run typecheck` siguen verdes. `npm run lint` se informa por separado si el archivo ajeno `capture_b.cjs` continúa provocando los dos errores conocidos. Las advertencias de tareas heredadas sin `Ficha:` permanecen visibles. Ninguna salida de TOOL-001 convierte I01/I02/I01-A en READY.
+
+**Defecto AS-IS separado:** el diff local de `scripts/spec/check.mjs` tiene `if (!/^[MGI]\d+-/i.test(path.basename(filename))) continue;`. El fixture D14 ya mostró que omite `OTRO.md` en integraciones y `CAPACIDADES.md` en módulos. `node --test scripts/spec/check.test.mjs` pasó 5/5 sin esos casos y `npm run spec:check` dio 0 bloqueos. Es evidencia de la necesidad de TOOL-001 y criterio para rechazar el futuro parche si persiste, **no** motivo para bloquear el contrato previo al parche.

@@ -8,7 +8,8 @@
  * `application/pipeline/` (`cambiarEtapaDeNegocio`, `cierre.ts`).
  */
 
-import { z } from "zod";
+import { cambiarEtapaSchema } from "@/application/pipeline/entrada";
+import { dtoMutacionNegocio } from "@/application/pipeline/dto";
 import { cambiarEtapaDeNegocio, type EntradaCambiarEtapa } from "@/application/pipeline/casos-de-uso";
 import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
@@ -16,22 +17,14 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { pipelineParaEscritura } from "@/infrastructure/contenedor/pipeline";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
-const CambiarEtapaInput = z.object({
-  stageId: z.coerce.number().int().positive(),
-  /** Obligatorio cuando la etapa destino es `lost` — se valida en el caso de uso, no aquí: Zod no conoce todavía el `kind` de la etapa. */
-  lossReasonId: z.coerce.number().int().positive().optional(),
-  lossComment: z.string().optional(),
-  /** Monto final del cierre. Si no llega, se usa el que ya tenía el negocio (encargo, punto 4.1). */
-  amountCents: z.coerce.number().int().nonnegative().optional(),
-});
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idParam } = await params;
     const id = Number(idParam);
-    if (!Number.isInteger(id) || id <= 0) throw new NotFoundError();
+    if (!Number.isInteger(id) || id <= 0 || id > 2147483647) throw new NotFoundError();
 
-    const datos = parseInput(CambiarEtapaInput, await request.json().catch(() => ({})));
+    const datos = parseInput(cambiarEtapaSchema, await request.json().catch(() => ({})));
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
 
@@ -39,10 +32,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     if (datos.lossReasonId !== undefined) entrada.lossReasonId = datos.lossReasonId;
     if (datos.lossComment !== undefined) entrada.lossComment = datos.lossComment;
     if (datos.amountCents !== undefined) entrada.amountCents = datos.amountCents;
+    if (datos.unitId !== undefined) entrada.unitId = datos.unitId;
+    if (datos.unitCode !== undefined) entrada.unitCode = datos.unitCode;
 
     const deal = await cambiarEtapaDeNegocio(pipelineParaEscritura(), actor, scope, id, entrada);
 
-    return Response.json({ ok: true, deal });
+    return Response.json({ ok: true, deal: dtoMutacionNegocio(actor, deal) });
   } catch (error) {
     return errorResponse(error);
   }

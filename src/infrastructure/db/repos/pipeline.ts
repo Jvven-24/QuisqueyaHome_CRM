@@ -18,7 +18,9 @@
  */
 
 import { and, eq, gt, inArray, isNull, or, sql } from "drizzle-orm";
-import { NotFoundError } from "../../../domain/errors";
+import { ConflictError, NotFoundError } from "../../../domain/errors";
+import { normalizarCodigoUnidad } from "../../../domain/unidades";
+import { outboxDrizzle } from "../../integraciones/outbox/repositorio";
 import {
   TIPOS_ACTIVIDAD_DE_CONTACTO,
   type EtapaPipeline,
@@ -38,6 +40,8 @@ import {
   pipelineStages,
   projects,
   units,
+  unitSales,
+  lossReasons,
 } from "../schema";
 import { visibleRows } from "../../rbac-filter";
 import { auditoriaDrizzle, type Tx } from "./compartido";
@@ -81,10 +85,11 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
       return Boolean(fila);
     },
 
-    async buscarProximaAccionVigente(actividadId) {
+    async buscarProximaAccionVigente(actividadId, dealId) {
       const [actividad] = await tx.select().from(activities).where(eq(activities.id, actividadId)).limit(1);
       if (
         actividad &&
+        actividad.dealId === dealId &&
         !actividad.deletedAt &&
         actividad.status === "pending" &&
         actividad.assigneeId != null &&
@@ -96,7 +101,42 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
     },
 
     async propiedadesDelNegocio(dealId): Promise<PropiedadDeNegocio[]> {
-      return tx.select().from(dealProperties).where(eq(dealProperties.dealId, dealId));
+      return tx.select().from(dealProperties).where(and(eq(dealProperties.dealId, dealId), isNull(dealProperties.deletedAt)));
+    },
+    async motivoPerdidaActivo(id) {
+      const [fila] = await tx.select({ id: lossReasons.id }).from(lossReasons).where(and(eq(lossReasons.id, id), eq(lossReasons.isActive, true))).limit(1);
+      return Boolean(fila);
+    },
+    async bloquearUnidad(unitId, projectId) {
+      const [fila] = await tx.select({ id: units.id, status: units.status, code: units.code }).from(units)
+        .where(and(eq(units.id, unitId), eq(units.projectId, projectId), isNull(units.deletedAt))).for("update");
+      return fila;
+    },
+    async resolverUnidadDeCierre({ projectId, code, actorId }) {
+      const normalized = normalizarCodigoUnidad(code);
+      // También protege el caso sin fila: todos los cierres con código toman este lock.
+      await tx.select({ id: projects.id }).from(projects).where(eq(projects.id, projectId)).for("update");
+      const candidatas = await tx.select({ id: units.id, code: units.code, deletedAt: units.deletedAt }).from(units).where(eq(units.projectId, projectId));
+      const coincidencias = candidatas.filter(u => normalizarCodigoUnidad(u.code) === normalized);
+      const activas = coincidencias.filter(u => !u.deletedAt);
+      if (activas.length > 1) throw new ConflictError("Hay unidades con el mismo código; solicita conciliación del inventario.");
+      if (activas[0]) return activas[0].id;
+      if (coincidencias.length) throw new ConflictError("La unidad está archivada; solicita revisar el inventario.");
+      const [unidad] = await tx.insert(units).values({ projectId, code: normalized, brokerId: actorId, createdBy: actorId, updatedBy: actorId }).returning({ id: units.id });
+      return unidad!.id;
+    },
+    async fijarUnidadPrincipal({ propiedadId, unitId }) {
+      const [actual] = await tx.select({ dealId: dealProperties.dealId }).from(dealProperties)
+        .where(and(eq(dealProperties.id, propiedadId), isNull(dealProperties.deletedAt)));
+      if (!actual) throw new NotFoundError();
+      const [existente] = await tx.select({ id: dealProperties.id }).from(dealProperties)
+        .where(and(eq(dealProperties.dealId, actual.dealId), eq(dealProperties.unitId, unitId), isNull(dealProperties.deletedAt)));
+      if (existente && existente.id !== propiedadId) throw new ConflictError("La unidad ya es un interés del negocio; márcala como principal antes de cerrar.");
+      await tx.update(dealProperties).set({ unitId }).where(and(eq(dealProperties.id, propiedadId), isNull(dealProperties.deletedAt)));
+    },
+    async registrarVenta({ unitId, dealId, projectId, unitCodeNormalized, actorId }) {
+      const [venta] = await tx.insert(unitSales).values({ unitId, dealId, projectId, unitCodeNormalized, createdBy: actorId }).onConflictDoNothing().returning({ id: unitSales.id });
+      if (!venta) throw new ConflictError("La unidad ya tiene una venta registrada.");
     },
 
     // --- escrituras del cambio de etapa y del cierre -----------------------
@@ -139,6 +179,7 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
           stageId: etapaDestinoId,
           stageChangedAt: cuando,
           closedAt: cuando,
+          nextActivityId: null,
           amountCents,
           updatedBy: actorId,
         })
@@ -335,7 +376,7 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
       const [fila] = await tx
         .select()
         .from(dealProperties)
-        .where(and(eq(dealProperties.id, propId), eq(dealProperties.dealId, dealId)))
+        .where(and(eq(dealProperties.id, propId), eq(dealProperties.dealId, dealId), isNull(dealProperties.deletedAt)))
         .limit(1);
       return fila;
     },
@@ -344,7 +385,7 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
       await tx
         .update(dealProperties)
         .set({ isPrimary: false })
-        .where(and(eq(dealProperties.dealId, dealId), eq(dealProperties.isPrimary, true)));
+        .where(and(eq(dealProperties.dealId, dealId), eq(dealProperties.isPrimary, true), isNull(dealProperties.deletedAt)));
     },
 
     async crearPropiedad(datos): Promise<PropiedadDeNegocio> {
@@ -357,8 +398,10 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
           isPrimary: datos.isPrimary,
           createdBy: datos.createdBy,
         })
+        .onConflictDoNothing()
         .returning();
-      return fila!;
+      if (!fila) throw new ConflictError("El interés ya existe o entra en conflicto con la propiedad principal.");
+      return fila;
     },
 
     async marcarPrincipal(propId): Promise<PropiedadDeNegocio> {
@@ -370,13 +413,14 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
       return fila!;
     },
 
-    async eliminarPropiedad(propId): Promise<void> {
-      await tx.delete(dealProperties).where(eq(dealProperties.id, propId));
+    async eliminarPropiedad(propId, actorId, motivo): Promise<void> {
+      await tx.update(dealProperties).set({ deletedAt: new Date(), deletedBy: actorId, deletionReason: motivo, isPrimary: false })
+        .where(and(eq(dealProperties.id, propId), isNull(dealProperties.deletedAt)));
     },
   };
 }
 
 /** El juego transaccional: el repositorio del módulo más la auditoría, ambos ligados a `tx`. */
 export function reposPipeline(tx: Tx): ReposPipeline {
-  return { pipeline: repositorioPipeline(tx), auditoria: auditoriaDrizzle(tx) };
+  return { pipeline: repositorioPipeline(tx), auditoria: auditoriaDrizzle(tx), outbox: outboxDrizzle(tx) };
 }

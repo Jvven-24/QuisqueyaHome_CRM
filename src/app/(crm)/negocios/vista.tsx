@@ -10,60 +10,12 @@ import { ModuleTabs } from "../_ui/module-tabs";
 import { generarEnlaceWhatsApp } from "@/domain/comunicaciones";
 import { DealInspector } from "./inspector";
 
-export type Etapa = {
-  id: number;
-  slug: string;
-  name: string;
-  position: number;
-  kind: "open" | "won" | "lost";
-};
-
-export type MotivoPerdida = { id: number; name: string };
-
-export type ProyectoPrincipal = {
-  dealId: number;
-  projectName: string;
-  unitCode: string | null;
-  unitId: number | null;
-};
-
-export type PropiedadDeal = {
-  id: number;
-  projectId: number;
-  projectName: string;
-  unitId: number | null;
-  unitCode: string | null;
-  isPrimary: boolean;
-};
-
-/** Proyectos activos con sus unidades, para el formulario "Agregar propiedad de interés" (deuda de F1). */
-export type ProyectoOpcion = { id: number; name: string; unidades: { id: number; code: string }[] };
-
-export type NegocioFila = {
-  id: number;
-  contactId: number;
-  contactName: string;
-  contactPhone: string | null;
-  contactPhoneDisplay: string | null;
-  sourceName: string | null;
-  brokerId: number | null;
-  brokerName: string | null;
-  stageId: number;
-  operationType: "sale" | "rent";
-  currency: string;
-  amountCents: number | null;
-  probability: number | null;
-  commissionBasisPoints: number | null;
-  expectedCloseDate: string | null;
-  nextActivityTitle: string | null;
-  nextActivityStartsAt: Date | null;
-  stageChangedAt: Date | null;
-  closedAt: Date | null;
-  lossReasonId: number | null;
-  lossComment: string | null;
-  notes: string | null;
-  proyectoPrincipal: ProyectoPrincipal | null;
-};
+import type { CatalogosNegocios, CursorNegocios, FilaNegocio, InteresNegocio, ProyectoDisponibleNegocio, ResumenEtapaNegocio } from "@/application/pipeline/puertos";
+export type Etapa = CatalogosNegocios["etapas"][number];
+export type MotivoPerdida = CatalogosNegocios["motivos"][number];
+export type PropiedadDeal = InteresNegocio;
+export type ProyectoOpcion = ProyectoDisponibleNegocio;
+export type NegocioFila = FilaNegocio;
 
 const formateadorFecha = new Intl.DateTimeFormat("es-DO", { day: "2-digit", month: "short" });
 
@@ -90,7 +42,7 @@ export function PipelineVista({
   negocioSeleccionado,
   propiedades,
   proyectosDisponibles,
-  historial,
+  historial, resumen, siguiente, modo, catalogos,
 }: {
   negocios: NegocioFila[];
   etapas: Etapa[];
@@ -100,15 +52,31 @@ export function PipelineVista({
   /** Proyectos activos con sus unidades, para el formulario de propiedades de interés del inspector. */
   proyectosDisponibles: ProyectoOpcion[];
   historial: ReactNode;
+  resumen: ResumenEtapaNegocio[]; siguiente: CursorNegocios | null;
+  modo: "kanban" | "lista"; catalogos: CatalogosNegocios;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [brokerFiltro, setBrokerFiltro] = useState("");
-  const [proyectoFiltro, setProyectoFiltro] = useState("");
+  const brokerFiltro = searchParams.get("brokerId") ?? "";
+  const setBrokerFiltro = (valor: string) => filtrar("brokerId", valor);
+  const proyectoFiltro = searchParams.get("projectId") ?? "";
+  const setProyectoFiltro = (valor: string) => filtrar("projectId", valor);
   const [enviando, setEnviando] = useState(false);
-  const [vistaModo, setVistaModo] = useState<"kanban" | "lista">("kanban");
+  const vistaModo = modo;
+  const setVistaModo = (valor: "kanban" | "lista") => filtrar("vista", valor);
+  function filtrar(clave: string, valor: string) {
+    const params = new URLSearchParams(searchParams);
+    params.delete("cursor");
+    if (valor) params.set(clave, valor); else params.delete(clave);
+    router.push(`${pathname}?${params.toString()}`);
+  }
+  function limpiarFiltros() {
+    const params = new URLSearchParams(searchParams);
+    params.delete("cursor"); params.delete("projectId"); params.delete("brokerId");
+    router.push(`${pathname}?${params.toString()}`);
+  }
   // Negocio + etapa destino en espera del motivo de pérdida, o `null` si el
   // modal está cerrado.
   const [pendienteDePerdida, setPendienteDePerdida] = useState<{ dealId: number; etapaId: number } | null>(null);
@@ -122,28 +90,14 @@ export function PipelineVista({
     router.push(`${pathname}?${params.toString()}`);
   }
 
-  const brokers = useMemo(
-    () => Array.from(new Set(negocios.map((n) => n.brokerName).filter((n): n is string => Boolean(n)))).sort(),
-    [negocios],
-  );
-  const proyectos = useMemo(
-    () =>
-      Array.from(
-        new Set(negocios.map((n) => n.proyectoPrincipal?.projectName).filter((n): n is string => Boolean(n))),
-      ).sort(),
-    [negocios],
-  );
-
-  const negociosFiltrados = negocios.filter((negocio) => {
-    if (brokerFiltro && negocio.brokerName !== brokerFiltro) return false;
-    if (proyectoFiltro && negocio.proyectoPrincipal?.projectName !== proyectoFiltro) return false;
-    return true;
-  });
-
+  const brokers = catalogos.brokers;
+  const proyectos = catalogos.proyectos;
+  const negociosFiltrados = negocios;
   const etapaPorId = useMemo(() => new Map(etapas.map((e) => [e.id, e])), [etapas]);
-  const valorActivo = negociosFiltrados
-    .filter((n) => etapaPorId.get(n.stageId)?.kind === "open")
-    .reduce((suma, n) => suma + (n.amountCents ?? 0), 0);
+  const valorActivo = resumen.filter(n => n.kind === "open").reduce((totales, n) => {
+    if (n.amountCents !== undefined) totales.set(n.currency, (totales.get(n.currency) ?? 0) + n.amountCents);
+    return totales;
+  }, new Map<string, number>());
 
   async function cambiarEtapa(dealId: number, stageId: number, extra?: { lossReasonId?: number; lossComment?: string }) {
     setEnviando(true);
@@ -156,9 +110,10 @@ export function PipelineVista({
       const cuerpo = await respuesta.json().catch(() => ({}));
       if (!respuesta.ok) {
         alert(cuerpo.error ?? "No se pudo cambiar la etapa del negocio.");
-        return;
+        return false;
       }
       router.refresh();
+      return true;
     } catch {
       alert("Error de red o conexión al intentar mover el negocio. Por favor, reintenta.");
     } finally {
@@ -184,15 +139,15 @@ export function PipelineVista({
         action={
           <div className="pipeline-total">
             <span>Valor activo</span>
-            <strong>{formatearMonto(valorActivo, "USD")}</strong>
+            <strong>{[...valorActivo].map(([moneda, monto]) => formatearMonto(monto, moneda)).join(" · ") || "—"}</strong>
           </div>
         }
       />
       <div className="mb-3">
         <ModuleTabs
           tabs={[
-            { id: "kanban", label: "Tablero Kanban", icon: KanbanIcon, count: negociosFiltrados.length },
-            { id: "lista", label: "Vista Lista", icon: ListIcon, count: negociosFiltrados.length },
+            { id: "kanban", label: "Tablero Kanban", icon: KanbanIcon, count: resumen.reduce((s, n) => s + n.count, 0) },
+            { id: "lista", label: "Vista Lista", icon: ListIcon, count: resumen.reduce((s, n) => s + n.count, 0) },
           ]}
           activeTab={vistaModo}
           onTabChange={(id) => setVistaModo(id as "kanban" | "lista")}
@@ -209,8 +164,8 @@ export function PipelineVista({
             >
               <option value="">Todos los brokers</option>
               {brokers.map((broker) => (
-                <option key={broker} value={broker}>
-                  {broker}
+                <option key={broker.id} value={broker.id}>
+                  {broker.name}
                 </option>
               ))}
             </select>
@@ -225,8 +180,8 @@ export function PipelineVista({
             >
               <option value="">Todos los proyectos</option>
               {proyectos.map((proyecto) => (
-                <option key={proyecto} value={proyecto}>
-                  {proyecto}
+                <option key={proyecto.id} value={proyecto.id}>
+                  {proyecto.name}
                 </option>
               ))}
             </select>
@@ -236,8 +191,7 @@ export function PipelineVista({
             <button
               type="button"
               onClick={() => {
-                setBrokerFiltro("");
-                setProyectoFiltro("");
+                limpiarFiltros();
               }}
               className="h-8 px-2.5 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-800 bg-white border border-slate-200 rounded-lg shadow-2xs transition-colors cursor-pointer"
             >
@@ -252,14 +206,18 @@ export function PipelineVista({
         </span>
       </div>
 
+      {siguiente && <button className="button secondary" type="button" onClick={() => {
+        const params = new URLSearchParams(searchParams);
+        params.set("cursor", JSON.stringify(siguiente));
+        router.push(`${pathname}?${params.toString()}`);
+      }}>Siguiente página</button>}
       {negocios.length === 0 ? (
         <Vacio titulo="Sin negocios todavía" texto="Los negocios aparecen aquí al convertir un lead." />
       ) : negociosFiltrados.length === 0 ? (
         <SinResultados
           texto="No hay negocios que coincidan con los filtros seleccionados de broker o proyecto."
           onLimpiar={() => {
-            setBrokerFiltro("");
-            setProyectoFiltro("");
+            limpiarFiltros();
           }}
         />
       ) : (
@@ -331,7 +289,7 @@ export function PipelineVista({
                         </td>
                         <td>
                           <strong className="font-heading text-navy-950 font-bold">
-                            {formatearMonto(negocio.amountCents, negocio.currency)}
+                            {formatearMonto(negocio.amountCents ?? null, negocio.currency)}
                           </strong>
                         </td>
                         <td>
@@ -355,6 +313,8 @@ export function PipelineVista({
             <div className="kanban">
             {etapas.map((etapa) => {
               const negociosEtapa = negociosFiltrados.filter((negocio) => negocio.stageId === etapa.id);
+              const totalesEtapa = resumen.filter(n => n.stageId === etapa.id);
+              const conteoEtapa = totalesEtapa.reduce((sum, n) => sum + n.count, 0);
               return (
                 <section
                   className="kanban-column"
@@ -363,10 +323,17 @@ export function PipelineVista({
                   onDrop={(event) => alSoltar(etapa, Number(event.dataTransfer.getData("dealId")))}
                 >
                   <header>
-                    <span>{etapa.name}</span>
-                    <strong>{negociosEtapa.length}</strong>
+                    <div className="flex items-center gap-2">
+                      <span>{etapa.name}</span>
+                      <strong>{conteoEtapa}</strong>
+                    </div>
+                    {totalesEtapa.some(n => n.amountCents !== undefined) && (
+                      <span className="text-[11px] font-bold text-slate-500 font-mono tracking-tight">
+                        {totalesEtapa.map(n => n.amountCents === undefined ? "" : formatearMonto(n.amountCents, n.currency)).filter(Boolean).join(" · ")}
+                      </span>
+                    )}
                   </header>
-                  <div>
+                  <div className="kanban-column-body">
                     {negociosEtapa.map((negocio) => {
                       const tieneWhatsApp = Boolean(negocio.contactPhone);
                       const enlaceWa = tieneWhatsApp
@@ -378,64 +345,52 @@ export function PipelineVista({
 
                       return (
                         <div
-                          className="deal-card group relative bg-surface border border-line rounded-xl p-4 shadow-xs hover:border-gold-600/50 hover:shadow-md transition-all duration-150 cursor-pointer text-left block w-full mb-3"
+                          className="deal-card"
                           draggable={!enviando}
                           key={negocio.id}
                           onDragStart={(event) => event.dataTransfer.setData("dealId", String(negocio.id))}
                           onClick={() => irCon({ deal: String(negocio.id) })}
                         >
-                          {/* Header row: Source & Confotur tag */}
-                          <div className="flex items-center justify-between gap-1.5 mb-2 flex-wrap">
-                            <span className="deal-source text-[10px] font-semibold tracking-wider text-slate-500 uppercase bg-slate-100 px-2 py-0.5 rounded border border-slate-200/60 font-mono">
+                          {/* Fila 1: Contacto y Origen */}
+                          <div className="flex items-center justify-between gap-1.5">
+                            <strong className="text-sm font-bold text-navy-950 truncate hover:text-gold-700 transition-colors">
+                              {negocio.contactName}
+                            </strong>
+                            <span className="deal-source text-[10px] font-semibold text-slate-500 uppercase bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200/60 font-mono shrink-0">
                               {negocio.sourceName ?? "Directo"}
                             </span>
-                            <div className="flex items-center gap-1">
-                              <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50/80 px-1.5 py-0.5 rounded border border-emerald-200/60 uppercase tracking-tight">
+                          </div>
+
+                          {/* Fila 2: Proyecto e Interés */}
+                          <div className="flex items-center gap-1.5 text-xs text-ink-muted font-medium">
+                            <Building2 className="size-3 text-gold-600 shrink-0" />
+                            <span className="truncate">
+                              {negocio.proyectoPrincipal?.projectName ?? "Interés general RD"}
+                              {negocio.proyectoPrincipal?.unitCode ? ` · ${negocio.proyectoPrincipal.unitCode}` : ""}
+                            </span>
+                          </div>
+
+                          {/* Fila 3: Monto, Confotur y Comisión */}
+                          <div className="flex items-baseline justify-between gap-1.5 pt-0.5">
+                            <span className="text-sm font-extrabold text-navy-900 tracking-tight font-heading">
+                              {formatearMonto(negocio.amountCents ?? null, negocio.currency)}
+                            </span>
+                            <div className="flex items-center gap-1 shrink-0">
+                              <span className="text-[9px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 uppercase tracking-tight">
                                 Confotur
                               </span>
-                              {negocio.probability ? (
-                                <span className="text-[10px] font-medium text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200/60">
-                                  {negocio.probability}% prob.
+                              {negocio.commissionBasisPoints ? (
+                                <span className="text-[9px] font-bold text-gold-700 bg-gold-50 px-1.5 py-0.5 rounded border border-gold-200">
+                                  {(negocio.commissionBasisPoints / 100).toFixed(1)}%
                                 </span>
                               ) : null}
                             </div>
                           </div>
 
-                          {/* Contact Name & Project */}
-                          <strong className="block font-heading font-bold text-base text-navy-950 group-hover:text-gold-700 transition-colors leading-snug">
-                            {negocio.contactName}
-                          </strong>
-
-                          <div className="flex items-center gap-1.5 text-xs text-ink-muted mt-1.5 mb-2 font-medium">
-                            <Building2 className="size-3.5 text-gold-600 shrink-0" />
-                            <span className="truncate">
-                              {negocio.proyectoPrincipal?.projectName ?? "Interés en pozo RD"}
-                              {negocio.proyectoPrincipal?.unitCode ? ` · Unidad ${negocio.proyectoPrincipal.unitCode}` : ""}
-                            </span>
-                          </div>
-
-                          {/* Amount and Commission estimate */}
-                          <div className="flex items-baseline justify-between gap-2 mb-2">
-                            <span className="text-base font-extrabold text-navy-900 tracking-tight font-heading">
-                              {formatearMonto(negocio.amountCents, negocio.currency)}
-                            </span>
-                            {negocio.commissionBasisPoints && negocio.amountCents ? (
-                              <span className="text-[10px] font-bold text-gold-700 bg-gold-50 px-2 py-0.5 rounded-md border border-gold-200">
-                                Com: {formatearMonto((negocio.amountCents * negocio.commissionBasisPoints) / 10000, negocio.currency)} ({(negocio.commissionBasisPoints / 100).toFixed(1)}%)
-                              </span>
-                            ) : null}
-                          </div>
-
-                          {/* Pre-construction Dominican payment milestone bar */}
-                          <div className="mb-2.5 px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200/60 flex items-center justify-between text-[10px]">
-                            <span className="text-slate-500 font-medium">Pre-construcción</span>
-                            <span className="font-mono font-semibold text-slate-700">10 · 40 · 50</span>
-                          </div>
-
-                          {/* Next activity SLA pill */}
-                          <div className="flex items-center gap-1.5 text-xs text-ink-muted/90 bg-surface-alt/90 px-2.5 py-1.5 rounded-lg border border-line/60 mb-3">
+                          {/* Fila 4: Próxima Acción */}
+                          <div className="flex items-center gap-1.5 text-[11px] text-slate-600 bg-slate-50 px-2 py-1 rounded-md border border-slate-200/60">
                             <Calendar className="size-3 text-gold-600 shrink-0" />
-                            <span className="truncate">
+                            <span className="truncate font-medium">
                               {negocio.nextActivityTitle
                                 ? `${negocio.nextActivityTitle}${
                                     negocio.nextActivityStartsAt
@@ -446,11 +401,11 @@ export function PipelineVista({
                             </span>
                           </div>
 
-                          {/* Footer with broker avatar and fast WhatsApp action */}
-                          <footer className="flex items-center justify-between pt-2.5 border-t border-line/60">
-                            <div className="flex items-center gap-2 min-w-0">
+                          {/* Fila 5: Broker Responsable y WhatsApp rápido */}
+                          <footer>
+                            <div className="flex items-center gap-1.5 min-w-0">
                               <Avatar name={negocio.brokerName ?? "Sin asignar"} small />
-                              <span className="text-xs font-semibold text-ink-muted truncate max-w-[105px]">
+                              <span className="text-xs font-semibold text-slate-600 truncate max-w-[110px]">
                                 {negocio.brokerName?.split(" ")[0] ?? "Sin asignar"}
                               </span>
                             </div>
@@ -461,10 +416,10 @@ export function PipelineVista({
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-success hover:text-success/80 bg-success-bg px-2.5 py-1 rounded-md border border-success/30 transition-colors shrink-0"
-                                title="Contactar por WhatsApp con plantilla de proyecto"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2 py-1 rounded-md border border-emerald-300 transition-colors shrink-0"
+                                title="Contactar por WhatsApp"
                               >
-                                <MessageCircle className="size-3.5" />
+                                <MessageCircle className="size-3" />
                                 <span>WhatsApp</span>
                               </a>
                             ) : null}
@@ -504,8 +459,7 @@ export function PipelineVista({
           enviando={enviando}
           onCancelar={() => setPendienteDePerdida(null)}
           onConfirmar={async (lossReasonId, lossComment) => {
-            await cambiarEtapa(pendienteDePerdida.dealId, pendienteDePerdida.etapaId, { lossReasonId, lossComment });
-            setPendienteDePerdida(null);
+            if (await cambiarEtapa(pendienteDePerdida.dealId, pendienteDePerdida.etapaId, { lossReasonId, lossComment })) setPendienteDePerdida(null);
           }}
         />
       )}
@@ -539,7 +493,7 @@ function ModalMotivoPerdida({
         className="form-grid"
         onSubmit={(event) => {
           event.preventDefault();
-          if (!motivoId) return;
+          if (!motivoId || !comentario.trim()) return;
           void onConfirmar(Number(motivoId), comentario.trim() || undefined);
         }}
       >
@@ -549,7 +503,7 @@ function ModalMotivoPerdida({
             <option value="" disabled>
               Selecciona un motivo…
             </option>
-            {motivos.map((motivo) => (
+            {motivos.filter(m => m.isActive).map((motivo) => (
               <option key={motivo.id} value={motivo.id}>
                 {motivo.name}
               </option>
@@ -558,7 +512,7 @@ function ModalMotivoPerdida({
         </label>
         <label className="span-2">
           Comentario (opcional)
-          <textarea value={comentario} onChange={(event) => setComentario(event.target.value)} />
+          <textarea required value={comentario} onChange={(event) => setComentario(event.target.value)} />
         </label>
         <div className="form-actions">
           <button className="button" type="button" onClick={onCancelar}>

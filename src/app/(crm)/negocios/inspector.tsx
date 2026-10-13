@@ -72,8 +72,10 @@ export function DealInspector({
 
   async function quitarPropiedad(propiedad: PropiedadDeal) {
     if (!confirm(`¿Quitar ${propiedad.projectName}${propiedad.unitCode ? ` · ${propiedad.unitCode}` : ""} de los intereses del negocio?`)) return;
+    const motivo = prompt("Motivo de retirada del interés");
+    if (!motivo?.trim()) return;
     setOcupado(propiedad.id);
-    const respuesta = await fetch(`/api/pipeline/${negocio.id}/propiedades/${propiedad.id}`, { method: "DELETE" });
+    const respuesta = await fetch(`/api/pipeline/${negocio.id}/propiedades/${propiedad.id}`, { method: "DELETE", headers: { "content-type": "application/json" }, body: JSON.stringify({ motivo: motivo.trim() }) });
     setOcupado(null);
     if (!respuesta.ok) {
       const cuerpo = await respuesta.json().catch(() => ({}));
@@ -143,8 +145,8 @@ export function DealInspector({
           <dd>{negocio.probability != null ? `${negocio.probability}%` : "—"}</dd>
         </div>
         <div>
-          <dt>Comisión</dt>
-          <dd>{negocio.commissionBasisPoints != null ? `${(negocio.commissionBasisPoints / 100).toFixed(2)}%` : "—"}</dd>
+          {"commissionBasisPoints" in negocio && <dt>Comisión</dt>}
+          {"commissionBasisPoints" in negocio && <dd>{negocio.commissionBasisPoints != null ? `${(negocio.commissionBasisPoints / 100).toFixed(2)}%` : "—"}</dd>}
         </div>
         <div>
           <dt>Fecha estimada de cierre</dt>
@@ -269,23 +271,22 @@ function FormularioNegocio({ negocio, onClose }: { negocio: NegocioFila; onClose
     try {
       const form = formRef.current;
       const formData = new FormData(form);
-      const datos = Object.fromEntries(formData.entries());
+      const datos: Record<string, unknown> = {
+        probability: formData.get("probability"), expectedCloseDate: formData.get("expectedCloseDate"),
+      };
 
       // QA-06: Separar presentación comercial de enteros de base de datos
       const montoComercial = formData.get("amount");
       const amountCents = unidadACentavos(montoComercial ? String(montoComercial) : null);
 
-      const comision = form.elements.namedItem("commissionPercent") as HTMLInputElement;
-      const puntosBasicos = comision.value ? Math.round(Number(comision.value) * 100) : "";
+      const comision = form.elements.namedItem("commissionPercent") as HTMLInputElement | null;
+      if (comision) datos.commissionBasisPoints = comision.value ? Math.round(Number(comision.value) * 100) : "";
+      if ("amountCents" in negocio) datos.amountCents = amountCents;
 
       const respuesta = await fetch(`/api/pipeline/${negocio.id}`, {
         method: "PATCH",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          ...datos,
-          amountCents,
-          commissionBasisPoints: puntosBasicos,
-        }),
+        body: JSON.stringify(datos),
       });
       const cuerpo = await respuesta.json().catch(() => ({}));
 
@@ -330,14 +331,14 @@ function FormularioNegocio({ negocio, onClose }: { negocio: NegocioFila; onClose
             min="0"
             step="1"
             placeholder="Ej. 150000"
-            defaultValue={centavosAUnidad(negocio.amountCents)}
+            defaultValue={centavosAUnidad(negocio.amountCents ?? null)}
           />
         </label>
         <label>
           Probabilidad (%)
           <input name="probability" type="number" min="0" max="100" defaultValue={negocio.probability ?? ""} />
         </label>
-        <label>
+        {"commissionBasisPoints" in negocio && <label>
           Comisión (%)
           <input
             name="commissionPercent"
@@ -347,7 +348,7 @@ function FormularioNegocio({ negocio, onClose }: { negocio: NegocioFila; onClose
             step="0.01"
             defaultValue={negocio.commissionBasisPoints != null ? (negocio.commissionBasisPoints / 100).toString() : ""}
           />
-        </label>
+        </label>}
         <label>
           Fecha estimada de cierre
           <input name="expectedCloseDate" type="date" defaultValue={negocio.expectedCloseDate ?? ""} />

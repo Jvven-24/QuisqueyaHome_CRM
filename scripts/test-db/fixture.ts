@@ -7,7 +7,7 @@ import * as schema from '../../src/infrastructure/db/schema.ts';
 import { databaseUrl } from '../../src/infrastructure/env.ts';
 import type { Actor, Permission } from '../../src/domain/rbac.ts';
 
-type TestContext = { name: string; mode: 'database' | 'schema'; mutation: 'alias' | 'boolean' | null };
+type TestContext = { name: string; mode: 'database' | 'schema'; mutation: 'alias' | 'boolean' | 'negocios-join' | 'venta-unica' | null };
 const context = (globalThis as typeof globalThis & { [key: symbol]: TestContext })[Symbol.for('qh.test-db')];
 assert.ok(context && /^quisqueyahome_crm_test_[a-f0-9]{20}$/.test(context.name), 'ejecutar con npm run test:db');
 const destination = new URL(databaseUrl());

@@ -2,7 +2,8 @@
  * Casos de uso de Pipeline: cambio de etapa (con el cierre de ocho pasos de
  * `./cierre.ts`), edición del negocio y propiedades de interés.
  *
- * Son el comportamiento que antes vivía dentro de `api/pipeline/**`, movido tal
+ * Conservan los efectos heredados; b2 agrega bloqueos, baja logica y outbox.
+ * El comportamiento que antes vivía dentro de `api/pipeline/**`, movido tal
  * cual: mismo orden de operaciones, mismos mensajes y mismas filas de auditoría.
  * La autorización (`requireScope`) la hace quien llama, antes; el alcance
  * resultante entra como parámetro donde hace falta.
@@ -18,8 +19,8 @@
  * §10.2 dentro de la misma unidad de trabajo abierta aquí.
  */
 
-import { ConflictError, NotFoundError } from "../../domain/errors.ts";
-import { reaches, type Actor, type PermissionScope } from "../../domain/rbac.ts";
+import { ConflictError, ForbiddenError, NotFoundError } from "../../domain/errors.ts";
+import { reaches, scopeFor, type Actor, type PermissionScope } from "../../domain/rbac.ts";
 import {
   validarTransicion,
   type ContextoTransicion,
@@ -28,6 +29,7 @@ import {
 import type { UnidadDeTrabajo } from "../compartido/unidad-de-trabajo.ts";
 import { cerrarNegocioGanado } from "./cierre.ts";
 import type { CambiosNegocio, Negocio, PropiedadDeNegocio, RepositorioPipeline, ReposPipeline } from "./puertos.ts";
+import { asociarPropiedadSchema, cambiarEtapaSchema, editarNegocioSchema, validarEntrada } from "./entrada.ts";
 
 export type DepsPipeline = { unidad: UnidadDeTrabajo<ReposPipeline> };
 
@@ -38,6 +40,8 @@ export type EntradaCambiarEtapa = {
   lossComment?: string;
   /** Monto final del cierre. Si no llega, se usa el que ya tenía el negocio (encargo, punto 4.1). */
   amountCents?: number;
+  unitId?: number;
+  unitCode?: string;
 };
 
 export async function cambiarEtapaDeNegocio(
@@ -47,10 +51,11 @@ export async function cambiarEtapaDeNegocio(
   id: number,
   entrada: EntradaCambiarEtapa,
 ): Promise<Negocio> {
+  entrada = validarEntrada(cambiarEtapaSchema, entrada);
   return deps.unidad.ejecutar(async (repos) => {
     const { pipeline, auditoria } = repos;
 
-    const deal = await pipeline.buscarNegocio(id);
+    const deal = await pipeline.bloquearNegocio(id);
     if (!deal || deal.deletedAt) throw new NotFoundError();
     // Mismo criterio que `dentroDeAlcance` en `api/leads/[id]/convertir/route.ts`:
     // un id fuera del alcance del actor responde igual que uno inexistente.
@@ -63,6 +68,7 @@ export async function cambiarEtapaDeNegocio(
 
     const etapaDestino = await pipeline.buscarEtapaActiva(entrada.stageId);
     if (!etapaDestino) throw new NotFoundError("La etapa indicada no existe.");
+    if (deal.stageId === etapaDestino.id) return deal;
 
     // --- Resolver el `ContextoTransicion` que pide `validarTransicion` ----
     const tieneActividadDeContacto = await pipeline.tieneActividadDeContacto(id);
@@ -74,7 +80,7 @@ export async function cambiarEtapaDeNegocio(
     // repositorio en `buscarProximaAccionVigente`).
     let proximaAccion: ContextoTransicion["proximaAccion"] = null;
     if (deal.nextActivityId != null) {
-      proximaAccion = await pipeline.buscarProximaAccionVigente(deal.nextActivityId);
+      proximaAccion = await pipeline.buscarProximaAccionVigente(deal.nextActivityId, id);
     }
 
     const propiedades = await pipeline.propiedadesDelNegocio(id);
@@ -82,9 +88,21 @@ export async function cambiarEtapaDeNegocio(
     // esquema permite un interés a nivel de proyecto sin unidad todavía
     // (`deal_properties.unit_id` nulable), y esa fila no alcanza para
     // marcar nada como `sold`/`reserved` en el paso 3 del cierre.
-    const unidadPrincipal = propiedades.find(
+    let unidadPrincipal = propiedades.find(
       (fila): fila is PropiedadDeNegocio & { unitId: number } => fila.isPrimary && fila.unitId != null,
     );
+
+    // Resolver únicamente al cerrar, dentro de esta transacción y tras autorizar proyecto.
+    if (etapaDestino.kind === "won" && (entrada.unitId != null || entrada.unitCode != null)) {
+      const principal = propiedades.find(fila => fila.isPrimary);
+      if (!principal) throw new ConflictError("Falta el proyecto principal para cerrar el negocio.");
+      if (!await pipeline.proyectoVisible(actor, scopeFor(actor, "projects", "view"), principal.projectId)) throw new NotFoundError();
+      if (entrada.unitId != null && entrada.unitCode != null) throw new ConflictError("Elige una unidad o indica su código.");
+      const unitId = entrada.unitId ?? await pipeline.resolverUnidadDeCierre({ projectId: principal.projectId, code: entrada.unitCode!, actorId: actor.userId });
+      if (!await pipeline.bloquearUnidad(unitId, principal.projectId)) throw new NotFoundError();
+      await pipeline.fijarUnidadPrincipal({ propiedadId: principal.id, unitId });
+      unidadPrincipal = { ...principal, unitId };
+    }
 
     const negocio: NegocioParaTransicion = {
       etapaActualKind: etapaActual.kind,
@@ -117,23 +135,23 @@ export async function cambiarEtapaDeNegocio(
       // TypeScript lo sepa también, no para volver a decidir nada.
       if (!unidadPrincipal) throw new ConflictError("Falta la unidad principal para cerrar el negocio.");
       if (negocio.amountCents == null) throw new ConflictError("Falta el monto final para cerrar el negocio.");
+      if (!await pipeline.proyectoVisible(actor, scopeFor(actor, "projects", "view"), unidadPrincipal.projectId)) throw new NotFoundError();
 
       return cerrarNegocioGanado(repos, actor, {
         dealId: id,
         etapaDestino,
         unidadPrincipal,
         amountCentsFinal: negocio.amountCents,
+        negocioBloqueado: deal,
       });
     }
 
-    // No hace falta comprobar aquí que `entrada.lossReasonId` venga cuando
-    // `etapaDestino.kind === "lost"`: `negocio.lossReasonId` (arriba) ya es
-    // `entrada.lossReasonId ?? deal.lossReasonId`, y como un negocio recién
-    // llegado a "lost" nunca trae `deal.lossReasonId` de antes,
-    // `validarTransicion` ya lanzó el 409 exacto de §10.1 si no vino motivo.
-    // Repetir la comprobación aquí sería código muerto: ya se probó
-    // manualmente (ver informe de M3b) que el body sin `lossReasonId`
-    // nunca llega a este punto.
+    if (etapaDestino.kind === "lost") {
+      if (!entrada.lossReasonId || !await pipeline.motivoPerdidaActivo(entrada.lossReasonId)) {
+        throw new ConflictError("El motivo de pérdida debe estar activo.");
+      }
+      if (!entrada.lossComment?.trim()) throw new ConflictError("Para marcar el negocio como perdido hace falta un comentario.");
+    }
 
     // --- Cambio simple de etapa (open intermedio, o lost con motivo) -----
     const dealActualizado = await pipeline.aplicarCambioDeEtapa({
@@ -142,7 +160,7 @@ export async function cambiarEtapaDeNegocio(
       cuando: new Date(),
       perdida:
         etapaDestino.kind === "lost"
-          ? { lossReasonId: entrada.lossReasonId, lossComment: entrada.lossComment ?? null }
+          ? { lossReasonId: entrada.lossReasonId, lossComment: entrada.lossComment!.trim() }
           : undefined,
       actorId: actor.userId,
     });
@@ -161,6 +179,7 @@ export async function cambiarEtapaDeNegocio(
       antes: deal,
       despues: dealActualizado,
     });
+    await repos.outbox.emitir({ tipo: "NegocioCambioEtapa", aggregateId: id, payload: { id, stageId: etapaDestino.id } });
 
     return dealActualizado;
   });
@@ -184,6 +203,7 @@ async function negocioAbiertoVisible(
   actor: Actor,
   alcance: PermissionScope,
 ): Promise<Negocio> {
+  await pipeline.bloquearNegocio(dealId);
   const fila = await pipeline.buscarNegocioConEtapa(dealId);
 
   if (!fila || fila.negocio.deletedAt || !reaches(actor, alcance, fila.negocio.brokerId)) throw new NotFoundError();
@@ -217,6 +237,9 @@ export async function editarNegocio(
   id: number,
   entrada: EntradaEditarNegocio,
 ): Promise<Negocio> {
+  entrada = validarEntrada(editarNegocioSchema, entrada);
+  if ("commissionBasisPoints" in entrada && (actor.roleSlug !== "admin" || scopeFor(actor, "commissions", "view") === "none")) throw new ForbiddenError("Campo restringido.");
+  if ("amountCents" in entrada && actor.roleSlug !== "admin" && actor.roleSlug !== "broker") throw new ForbiddenError("Campo restringido.");
   return deps.unidad.ejecutar(async ({ pipeline, auditoria }) => {
     const anterior = await negocioAbiertoVisible(pipeline, id, actor, alcance);
 
@@ -269,6 +292,7 @@ export async function asociarPropiedad(
   dealId: number,
   entrada: EntradaAsociarPropiedad,
 ): Promise<PropiedadDeNegocio> {
+  entrada = validarEntrada(asociarPropiedadSchema, entrada);
   return deps.unidad.ejecutar(async ({ pipeline, auditoria }) => {
     await negocioAbiertoVisible(pipeline, dealId, actor, alcance);
 
@@ -330,25 +354,28 @@ export async function marcarPropiedadPrincipal(
   });
 }
 
-/**
- * Quitar una propiedad de interés. `deal_properties` no tiene `deleted_at` — es
- * una tabla de unión, no una entidad con historial propio (§9 aplica a
- * entidades, no a filas N:M); quitar un interés es un `DELETE` real.
- */
+/** Retirada logica con motivo y principal sustituta; conserva el vinculo historico. */
 export async function quitarPropiedad(
   deps: DepsPipeline,
   actor: Actor,
   alcance: PermissionScope,
   dealId: number,
   propId: number,
+  motivo: string,
 ): Promise<void> {
+  if (!motivo?.trim()) throw new ConflictError("Para retirar el interés hace falta un motivo.");
   await deps.unidad.ejecutar(async ({ pipeline, auditoria }) => {
     await negocioAbiertoVisible(pipeline, dealId, actor, alcance);
 
     const anterior = await pipeline.buscarPropiedad(dealId, propId);
     if (!anterior) throw new NotFoundError();
+    if (anterior.isPrimary) throw new ConflictError("Selecciona otra propiedad principal antes de retirar este interés.");
+    const intereses = await pipeline.propiedadesDelNegocio(dealId);
+    const negocio = await pipeline.buscarNegocio(dealId);
+    const etapa = negocio && await pipeline.buscarEtapa(negocio.stageId);
+    if (etapa?.kind === "open" && etapa.position >= 4 && intereses.length <= 1) throw new ConflictError("Esta etapa requiere conservar un interés activo.");
 
-    await pipeline.eliminarPropiedad(propId);
+    await pipeline.eliminarPropiedad(propId, actor.userId, motivo.trim());
 
     await auditoria.registrar(actor, { accion: "eliminar", entidad: "deal_property", entidadId: propId, antes: anterior });
   });

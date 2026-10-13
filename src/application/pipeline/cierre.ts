@@ -28,6 +28,7 @@ import {
   DEFAULT_BROKER_SHARE_BASIS_POINTS,
 } from "../../domain/cierre-negocio.ts";
 import { fechaSantoDomingo } from "../../domain/zona-horaria.ts";
+import { normalizarCodigoUnidad } from "../../domain/unidades.ts";
 import type { EtapaPipeline, Negocio, PropiedadDeNegocio, ReposPipeline } from "./puertos.ts";
 
 /**
@@ -41,7 +42,7 @@ import type { EtapaPipeline, Negocio, PropiedadDeNegocio, ReposPipeline } from "
  * ya no está `open`; la tercera es `commissions_deal_unq` en la base).
  */
 export async function cerrarNegocioGanado(
-  { pipeline, auditoria }: ReposPipeline,
+  { pipeline, auditoria, outbox }: ReposPipeline,
   actor: Actor,
   params: {
     dealId: number;
@@ -50,6 +51,7 @@ export async function cerrarNegocioGanado(
     unidadPrincipal: PropiedadDeNegocio & { unitId: number };
     /** `amountCents` ya resuelto (el del body si vino, si no el que ya tenía el negocio). `validarTransicion` garantiza que no es `null`. */
     amountCentsFinal: number;
+    negocioBloqueado?: Negocio;
   },
 ): Promise<Negocio> {
   const { dealId, etapaDestino, unidadPrincipal, amountCentsFinal } = params;
@@ -61,7 +63,7 @@ export async function cerrarNegocioGanado(
   // por fin lee, ve la etapa *real*, no la que leyó el caso de uso antes de que
   // la otra petición ganara la carrera. Por eso NO se usa `buscarNegocio`, que
   // lee sin bloquear: sería una defensa que solo parece estar.
-  const dealBloqueado = await pipeline.bloquearNegocio(dealId);
+  const dealBloqueado = params.negocioBloqueado ?? await pipeline.bloquearNegocio(dealId);
   if (!dealBloqueado || dealBloqueado.deletedAt) throw new NotFoundError();
 
   const etapaActual = await pipeline.buscarEtapa(dealBloqueado.stageId);
@@ -84,6 +86,13 @@ export async function cerrarNegocioGanado(
   }
 
   const now = new Date();
+  const unidad = await pipeline.bloquearUnidad(unidadPrincipal.unitId, unidadPrincipal.projectId);
+  if (!unidad) throw new NotFoundError();
+  if (unidad.status !== "available") throw new ConflictError("La unidad ya no está disponible para este cierre.");
+  if (dealBloqueado.operationType === "sale") {
+    await pipeline.registrarVenta({ unitId: unidad.id, dealId, projectId: unidadPrincipal.projectId,
+      unitCodeNormalized: normalizarCodigoUnidad(unidad.code), actorId: actor.userId });
+  }
   // Hora de Santo Domingo, no la del servidor (issue #24): en un VPS en UTC,
   // un cierre nocturno contaría en el día o el mes siguiente.
   const fechaCierre = fechaSantoDomingo(now);
@@ -207,6 +216,7 @@ export async function cerrarNegocioGanado(
     antes: dealBloqueado,
     despues: dealCerrado,
   });
+  await outbox.emitir({ tipo: "NegocioCambioEtapa", aggregateId: dealId, payload: { id: dealId, stageId: etapaDestino.id } });
 
   return dealCerrado;
 }

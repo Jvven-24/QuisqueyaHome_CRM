@@ -4,6 +4,11 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const root = new URL('../../', import.meta.url);
 export function mutate(source, mutation) {
+  if (mutation === 'negocios-join') {
+    const before = 'const PROJECT_FILTER_MODE: string = "exists";';
+    if (source.split(before).length !== 2) throw new Error('Mutación rechazada: sitio no único');
+    return source.replace(before, 'const PROJECT_FILTER_MODE: string = "join";');
+  }
   const before = mutation === 'alias'
     ? 'left join contacts on contacts.id = l.contact_id and'
     : 'const attributableSpend = scope === "all" && q.brokerId === undefined && q.projectId === undefined ? sql`true` : sql`false`;';
@@ -29,8 +34,8 @@ registerHooks({
   },
   load(url, context, nextLoad) {
     const mutation = globalThis[Symbol.for('qh.test-db')]?.mutation;
-    const target = mutation === 'alias' ? 'dashboard' : 'reportes';
-    if (mutation && url === new URL(`src/infrastructure/db/repos/${target}.ts`, root).href) {
+    const target = mutation === 'alias' ? 'dashboard' : mutation === 'negocios-join' ? 'pipeline-lectura' : 'reportes';
+    if (mutation && mutation !== 'venta-unica' && url === new URL(`src/infrastructure/db/repos/${target}.ts`, root).href) {
       return { format: 'module-typescript', source: mutate(readFileSync(new URL(url), 'utf8'), mutation), shortCircuit: true };
     }
     return nextLoad(url, context);

@@ -4,6 +4,10 @@ const count = number.int().nonnegative();
 const cents = number.int().nonnegative().safe();
 const id = number.int().positive();
 const text = z.string();
+export const negociosResumenShape = z.array(z.object({
+  stageId: id, kind: z.enum(['open', 'won', 'lost']), currency: text,
+  count, amountCents: cents.optional(),
+}).strict());
 const funnel = z.object({ stageId: id, label: text, kind: z.enum(['open', 'won', 'lost']), position: number.int(), count, reachedCount: count, previousReachedCount: count.nullable(), passedFromPreviousCount: count.nullable() }).strict();
 export const dashboardShape = z.object({
   fullName: text, myLeads: count, monthLeads: count, activeDeals: count, pipelineCents: cents,

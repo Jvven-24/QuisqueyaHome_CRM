@@ -1,0 +1,978 @@
+
+> quisqueya-home-crm@0.1.0 test:db:mutation:venta-unica
+> node scripts/test-db/run.mjs --mutation=venta-unica
+
+SERVER IDENTITY {"db":"quisqueyahome_crm","schema":"public","host":"127.0.0.1/32","port":5432}
+DEV BEFORE {"academy_checklist_items":"0","academy_checklist_progress":"0","academy_items":"0","academy_progress":"0","activities":"1803","activity_sync":"0","agencies":"3","audit_log":"4","broker_profiles":"13","campaign_spend":"152","commissions":"17","construction_phases":"0","contacts":"459","deal_properties":"184","deal_stage_history":"592","deals":"184","external_refs":"0","files":"0","goals":"247","integration_accounts":"0","lead_sources":"8","leads":"649","loss_reasons":"7","marketing_campaigns":"8","message_templates":"4","notifications":"3","outbox":"0","outbox_dead":"0","payment_methods":"3","permissions":"183","pipeline_stages":"7","projects":"24","roles":"3","sessions":"0","unit_inventory_states":"5","units":"404","users":"15","webhook_inbox":"0","zones":"13"}
+SERVER IDENTITY {"db":"quisqueyahome_crm_test_50f84540d1fb02898e81","schema":"public","host":"127.0.0.1/32","port":5432}
+ISOLATION PASS: database quisqueyahome_crm_test_50f84540d1fb02898e81; loopback:5432.
+POPULATED COPY: roles
+POPULATED READ: roles (3)
+POPULATED INSERTED: roles
+POPULATED COPY: pipeline_stages
+POPULATED READ: pipeline_stages (7)
+POPULATED INSERTED: pipeline_stages
+POPULATED COPY: lead_sources
+POPULATED READ: lead_sources (8)
+POPULATED INSERTED: lead_sources
+POPULATED COPY: loss_reasons
+POPULATED READ: loss_reasons (7)
+POPULATED INSERTED: loss_reasons
+POPULATED COPY: zones
+POPULATED READ: zones (13)
+POPULATED INSERTED: zones
+POPULATED COPY: agencies
+POPULATED READ: agencies (3)
+POPULATED INSERTED: agencies
+POPULATED COPY: payment_methods
+POPULATED READ: payment_methods (3)
+POPULATED INSERTED: payment_methods
+POPULATED COPY: unit_inventory_states
+POPULATED READ: unit_inventory_states (5)
+POPULATED INSERTED: unit_inventory_states
+POPULATED COPY: users
+POPULATED READ: users (15)
+POPULATED INSERTED: users
+POPULATED COPY: permissions
+POPULATED READ: permissions (183)
+POPULATED INSERTED: permissions
+POPULATED COPY: broker_profiles
+POPULATED READ: broker_profiles (13)
+POPULATED INSERTED: broker_profiles
+POPULATED COPY: marketing_campaigns
+POPULATED READ: marketing_campaigns (8)
+POPULATED INSERTED: marketing_campaigns
+POPULATED COPY: campaign_spend
+POPULATED READ: campaign_spend (152)
+POPULATED INSERTED: campaign_spend
+POPULATED COPY: projects
+POPULATED READ: projects (24)
+POPULATED INSERTED: projects
+POPULATED COPY: units
+POPULATED READ: units (404)
+POPULATED INSERTED: units
+POPULATED COPY: contacts
+POPULATED READ: contacts (459)
+POPULATED INSERTED: contacts
+POPULATED COPY: leads
+POPULATED READ: leads (649)
+POPULATED INSERTED: leads
+POPULATED COPY: deals
+POPULATED READ: deals (184)
+POPULATED INSERTED: deals
+POPULATED COPY: deal_properties
+POPULATED READ: deal_properties (184)
+POPULATED INSERTED: deal_properties
+POPULATED COPY: deal_stage_history
+POPULATED READ: deal_stage_history (592)
+POPULATED INSERTED: deal_stage_history
+POPULATED COPY: activities
+POPULATED READ: activities (1803)
+POPULATED INSERTED: activities
+POPULATED COPY: commissions
+POPULATED READ: commissions (17)
+POPULATED INSERTED: commissions
+POPULATED COPY: goals
+POPULATED READ: goals (247)
+POPULATED INSERTED: goals
+POPULATED BEFORE {"roles":3,"pipeline_stages":7,"lead_sources":8,"loss_reasons":7,"zones":13,"agencies":3,"payment_methods":3,"unit_inventory_states":5,"users":15,"permissions":183,"broker_profiles":13,"marketing_campaigns":8,"campaign_spend":152,"projects":24,"units":404,"contacts":459,"leads":649,"deals":184,"deal_properties":184,"deal_stage_history":592,"activities":1803,"commissions":17,"goals":247}
+MIGRATION NOTICE: S-303-H: 15 ventas historicas sin unidad; conservadas sin fila en unit_sales
+POPULATED LEGACY PASS: [1000000,1000001,1000002,1000003,1000004,1000005,1000006,1000007,1000008,1000009,1000010,1000011,1000012,1000013,1000014]; conservados ganados sin inventar unidades.
+POPULATED MIGRATION PASS: 184 negocios; 23 tablas conservan conteos y SHA256 de todas las columnas originales; 0 ventas con unidad concreta; mapa reanudado; 1318ms.
+SERVER IDENTITY {"db":"quisqueyahome_crm_test_50f84540d1fb02898e81","schema":"public","host":"127.0.0.1/32","port":5432}
+MIGRATION NOTICE: S-303-H: 1 ventas historicas sin unidad; conservadas sin fila en unit_sales
+SYNTHETIC S-303-H PASS: 3 ganados concretos backfilled (incluido archivado); 1 legado preservado sin venta.
+SYNTHETIC BACKFILL PASS: duplicado aborta sin pérdida; mapa interrumpido/reanudado; 3 ventas preservadas, incluida archivada; reejecución idempotente. NO acredita conciliación de base real.
+SERVER IDENTITY {"db":"quisqueyahome_crm_test_50f84540d1fb02898e81","schema":"public","host":"127.0.0.1/32","port":5432}
+MIGRATION NOTICE: S-303-H: 0 ventas historicas sin unidad; conservadas sin fila en unit_sales
+MIGRATIONS PASS: drizzle/ aplicado solo al destino temporal.
+SEED PASS: semilla 20261004; 640 leads, 176 negocios, 450 contactos, 400 unidades.
+MUTATION venta-unica: UNIQUE(unit_id) retirado solo en destino temporal.
+TAP version 13
+# Subtest: DB cierre carrera real: dos conexiones y negocios, una venta y un 409 sin efectos perdedores
+ok 1 - DB cierre carrera real: dos conexiones y negocios, una venta y un 409 sin efectos perdedores
+  ---
+  duration_ms: 338.1767
+  type: 'test'
+  ...
+# Subtest: DB cierre UNIQUE unitId durable rechaza INSERT directo aunque el negocio se archive (CA-29)
+not ok 2 - DB cierre UNIQUE unitId durable rechaza INSERT directo aunque el negocio se archive (CA-29)
+  ---
+  duration_ms: 10.5193
+  type: 'test'
+  location: 'C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\scripts\\test-db\\cierre.ts:37:61'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  stack: |-
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async file:///C:/Users/wilbe/Documents/QuisqueyaHome_CRM/scripts/test-db/cierre.ts:90:5
+    async file:///C:/Users/wilbe/Documents/QuisqueyaHome_CRM/scripts/test-db/fixture.ts:75:53
+    async scope (file:///C:/Users/wilbe/Documents/QuisqueyaHome_CRM/node_modules/postgres/src/index.js:260:18)
+    async sql.begin (file:///C:/Users/wilbe/Documents/QuisqueyaHome_CRM/node_modules/postgres/src/index.js:243:14)
+    async rollback (file:///C:/Users/wilbe/Documents/QuisqueyaHome_CRM/scripts/test-db/fixture.ts:75:9)
+    async file:///C:/Users/wilbe/Documents/QuisqueyaHome_CRM/scripts/test-db/cierre.ts:87:3
+    async checked (file:///C:/Users/wilbe/Documents/QuisqueyaHome_CRM/scripts/test-db/fixture.ts:55:16)
+    async TestContext.<anonymous> (file:///C:/Users/wilbe/Documents/QuisqueyaHome_CRM/scripts/test-db/cierre.ts:37:125)
+    async Test.run (node:internal/test_runner/test:1332:7)
+  ...
+# Subtest: DB cierre outbox falla: rollback de unidad, venta, comision, metas, historial y auditoria
+ok 3 - DB cierre outbox falla: rollback de unidad, venta, comision, metas, historial y auditoria
+  ---
+  duration_ms: 88.403
+  type: 'test'
+  ...
+# Subtest: DB cierre RLS habilitada y FK restrictiva en ventas; unidad/proyecto ajeno rechazados
+ok 4 - DB cierre RLS habilitada y FK restrictiva en ventas; unidad/proyecto ajeno rechazados
+  ---
+  duration_ms: 15.6086
+  type: 'test'
+  ...
+# Subtest: DB cierre S-303-N identidad durable rechaza segunda fila/código equivalente tras archivar
+ok 5 - DB cierre S-303-N identidad durable rechaza segunda fila/código equivalente tras archivar
+  ---
+  duration_ms: 61.6451
+  type: 'test'
+  ...
+# Subtest: DB cierre S-303-N crea/reutiliza unidad mínima sin precio y outbox revierte alta
+ok 6 - DB cierre S-303-N crea/reutiliza unidad mínima sin precio y outbox revierte alta
+  ---
+  duration_ms: 151.7015
+  type: 'test'
+  ...
+# Subtest: DB cierre S-303-N carrera de alta mínima con códigos equivalentes: una unidad, una venta
+ok 7 - DB cierre S-303-N carrera de alta mínima con códigos equivalentes: una unidad, una venta
+  ---
+  duration_ms: 61.3022
+  type: 'test'
+  ...
+# Subtest: DB dashboard.obtenerMetricasDashboard / admin (alias y alcance)
+ok 8 - DB dashboard.obtenerMetricasDashboard / admin (alias y alcance)
+  ---
+  duration_ms: 159.6254
+  type: 'test'
+  ...
+# Subtest: DB reportes.obtenerMetricasBi / admin (condición spend SQL)
+ok 9 - DB reportes.obtenerMetricasBi / admin (condición spend SQL)
+  ---
+  duration_ms: 53.9692
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros projectId / admin
+ok 10 - DB dashboard+reportes filtros projectId / admin
+  ---
+  duration_ms: 24.5243
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros brokerId / admin
+ok 11 - DB dashboard+reportes filtros brokerId / admin
+  ---
+  duration_ms: 13.9912
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros desde+hasta / admin
+ok 12 - DB dashboard+reportes filtros desde+hasta / admin
+  ---
+  duration_ms: 40.1063
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros projectId / admin
+ok 13 - DB dashboard+reportes filtros projectId / admin
+  ---
+  duration_ms: 12.9375
+  type: 'test'
+  ...
+# Subtest: DB leads.candidatosDuplicados / admin
+ok 14 - DB leads.candidatosDuplicados / admin
+  ---
+  duration_ms: 3.3553
+  type: 'test'
+  ...
+# Subtest: DB contactos.candidatosDuplicados / admin
+ok 15 - DB contactos.candidatosDuplicados / admin
+  ---
+  duration_ms: 2.0181
+  type: 'test'
+  ...
+# Subtest: DB leads.contactoExiste / admin
+ok 16 - DB leads.contactoExiste / admin
+  ---
+  duration_ms: 1.3422
+  type: 'test'
+  ...
+# Subtest: DB leads.candidatosBroker / admin
+ok 17 - DB leads.candidatosBroker / admin
+  ---
+  duration_ms: 1.1498
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarLead / admin
+ok 18 - DB leads.buscarLead / admin
+  ---
+  duration_ms: 1.3931
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarLeadParaConversion / admin
+ok 19 - DB leads.buscarLeadParaConversion / admin
+  ---
+  duration_ms: 2.7365
+  type: 'test'
+  ...
+# Subtest: DB leads.bloquearCapturaExterna / admin
+ok 20 - DB leads.bloquearCapturaExterna / admin
+  ---
+  duration_ms: 6.6437
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarContactoPorTelefonoOCorreo / admin
+ok 21 - DB leads.buscarContactoPorTelefonoOCorreo / admin
+  ---
+  duration_ms: 1.2274
+  type: 'test'
+  ...
+# Subtest: DB leads.primeraEtapaAbierta / admin
+ok 22 - DB leads.primeraEtapaAbierta / admin
+  ---
+  duration_ms: 1.8676
+  type: 'test'
+  ...
+# Subtest: DB contactos.buscarVisible / admin
+ok 23 - DB contactos.buscarVisible / admin
+  ---
+  duration_ms: 2.1009
+  type: 'test'
+  ...
+# Subtest: DB contactos.listado / admin
+ok 24 - DB contactos.listado / admin
+  ---
+  duration_ms: 9.1246
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarNegocio / admin
+ok 25 - DB pipeline.buscarNegocio / admin
+  ---
+  duration_ms: 1.704
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarEtapa / admin
+ok 26 - DB pipeline.buscarEtapa / admin
+  ---
+  duration_ms: 1.5279
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarEtapaActiva / admin
+ok 27 - DB pipeline.buscarEtapaActiva / admin
+  ---
+  duration_ms: 1.6623
+  type: 'test'
+  ...
+# Subtest: DB pipeline.tieneActividadDeContacto / admin
+ok 28 - DB pipeline.tieneActividadDeContacto / admin
+  ---
+  duration_ms: 2.4792
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarProximaAccionVigente / admin
+ok 29 - DB pipeline.buscarProximaAccionVigente / admin
+  ---
+  duration_ms: 2.0931
+  type: 'test'
+  ...
+# Subtest: DB pipeline.propiedadesDelNegocio / admin
+ok 30 - DB pipeline.propiedadesDelNegocio / admin
+  ---
+  duration_ms: 1.302
+  type: 'test'
+  ...
+# Subtest: DB pipeline.bloquearNegocio / admin
+ok 31 - DB pipeline.bloquearNegocio / admin
+  ---
+  duration_ms: 1.3242
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarPerfilDeBroker / admin
+ok 32 - DB pipeline.buscarPerfilDeBroker / admin
+  ---
+  duration_ms: 1.2292
+  type: 'test'
+  ...
+# Subtest: DB pipeline.totalGanadoDelAnio / admin
+ok 33 - DB pipeline.totalGanadoDelAnio / admin
+  ---
+  duration_ms: 2.4058
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarNegocioConEtapa / admin
+ok 34 - DB pipeline.buscarNegocioConEtapa / admin
+  ---
+  duration_ms: 1.6713
+  type: 'test'
+  ...
+# Subtest: DB pipeline.proyectoVisible / admin
+ok 35 - DB pipeline.proyectoVisible / admin
+  ---
+  duration_ms: 1.5775
+  type: 'test'
+  ...
+# Subtest: DB pipeline.unidadDelProyecto / admin
+ok 36 - DB pipeline.unidadDelProyecto / admin
+  ---
+  duration_ms: 4.1731
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarPropiedad / admin
+ok 37 - DB pipeline.buscarPropiedad / admin
+  ---
+  duration_ms: 2.4718
+  type: 'test'
+  ...
+# Subtest: DB proyectos.proyectoVisible / admin
+ok 38 - DB proyectos.proyectoVisible / admin
+  ---
+  duration_ms: 2.8166
+  type: 'test'
+  ...
+# Subtest: DB proyectos.unidadVisible / admin
+ok 39 - DB proyectos.unidadVisible / admin
+  ---
+  duration_ms: 2.1673
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fasesDelProyecto / admin
+ok 40 - DB proyectos.fasesDelProyecto / admin
+  ---
+  duration_ms: 2.409
+  type: 'test'
+  ...
+# Subtest: DB proyectos.faseVisible / admin
+ok 41 - DB proyectos.faseVisible / admin
+  ---
+  duration_ms: 1.5374
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fotosDeFase / admin
+ok 42 - DB proyectos.fotosDeFase / admin
+  ---
+  duration_ms: 2.1918
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fotoVisible / admin
+ok 43 - DB proyectos.fotoVisible / admin
+  ---
+  duration_ms: 2.959
+  type: 'test'
+  ...
+# Subtest: DB comisiones.bloquearComision / admin
+ok 44 - DB comisiones.bloquearComision / admin
+  ---
+  duration_ms: 1.4936
+  type: 'test'
+  ...
+# Subtest: DB metas.existePerfilDeBroker / admin
+ok 45 - DB metas.existePerfilDeBroker / admin
+  ---
+  duration_ms: 2.0908
+  type: 'test'
+  ...
+# Subtest: DB metas.fijarMetaMensual lectura anterior broker / admin
+ok 46 - DB metas.fijarMetaMensual lectura anterior broker / admin
+  ---
+  duration_ms: 4.617
+  type: 'test'
+  ...
+# Subtest: DB metas.fijarMetaMensual lectura anterior compañía / admin
+ok 47 - DB metas.fijarMetaMensual lectura anterior compañía / admin
+  ---
+  duration_ms: 2.0028
+  type: 'test'
+  ...
+# Subtest: DB brokers.buscarBroker / admin
+ok 48 - DB brokers.buscarBroker / admin
+  ---
+  duration_ms: 2.4097
+  type: 'test'
+  ...
+# Subtest: DB brokers.proyectosRelevantes sin ids / admin
+ok 49 - DB brokers.proyectosRelevantes sin ids / admin
+  ---
+  duration_ms: 1.508
+  type: 'test'
+  ...
+# Subtest: DB brokers.proyectosRelevantes con ids / admin
+ok 50 - DB brokers.proyectosRelevantes con ids / admin
+  ---
+  duration_ms: 1.3123
+  type: 'test'
+  ...
+# Subtest: DB dashboard.obtenerMetricasDashboard / broker (alias y alcance)
+ok 51 - DB dashboard.obtenerMetricasDashboard / broker (alias y alcance)
+  ---
+  duration_ms: 45.8408
+  type: 'test'
+  ...
+# Subtest: DB reportes.obtenerMetricasBi / broker (condición spend SQL)
+ok 52 - DB reportes.obtenerMetricasBi / broker (condición spend SQL)
+  ---
+  duration_ms: 14.4454
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros projectId / broker
+ok 53 - DB dashboard+reportes filtros projectId / broker
+  ---
+  duration_ms: 13.4016
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros brokerId / broker
+ok 54 - DB dashboard+reportes filtros brokerId / broker
+  ---
+  duration_ms: 20.6798
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros desde+hasta / broker
+ok 55 - DB dashboard+reportes filtros desde+hasta / broker
+  ---
+  duration_ms: 17.1846
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros projectId / broker
+ok 56 - DB dashboard+reportes filtros projectId / broker
+  ---
+  duration_ms: 11.6466
+  type: 'test'
+  ...
+# Subtest: DB leads.candidatosDuplicados / broker
+ok 57 - DB leads.candidatosDuplicados / broker
+  ---
+  duration_ms: 2.7801
+  type: 'test'
+  ...
+# Subtest: DB contactos.candidatosDuplicados / broker
+ok 58 - DB contactos.candidatosDuplicados / broker
+  ---
+  duration_ms: 2.2864
+  type: 'test'
+  ...
+# Subtest: DB leads.contactoExiste / broker
+ok 59 - DB leads.contactoExiste / broker
+  ---
+  duration_ms: 1.1546
+  type: 'test'
+  ...
+# Subtest: DB leads.candidatosBroker / broker
+ok 60 - DB leads.candidatosBroker / broker
+  ---
+  duration_ms: 0.8768
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarLead / broker
+ok 61 - DB leads.buscarLead / broker
+  ---
+  duration_ms: 0.8448
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarLeadParaConversion / broker
+ok 62 - DB leads.buscarLeadParaConversion / broker
+  ---
+  duration_ms: 1.8306
+  type: 'test'
+  ...
+# Subtest: DB leads.bloquearCapturaExterna / broker
+ok 63 - DB leads.bloquearCapturaExterna / broker
+  ---
+  duration_ms: 2.3225
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarContactoPorTelefonoOCorreo / broker
+ok 64 - DB leads.buscarContactoPorTelefonoOCorreo / broker
+  ---
+  duration_ms: 0.7385
+  type: 'test'
+  ...
+# Subtest: DB leads.primeraEtapaAbierta / broker
+ok 65 - DB leads.primeraEtapaAbierta / broker
+  ---
+  duration_ms: 1.1266
+  type: 'test'
+  ...
+# Subtest: DB contactos.buscarVisible / broker
+ok 66 - DB contactos.buscarVisible / broker
+  ---
+  duration_ms: 1.3466
+  type: 'test'
+  ...
+# Subtest: DB contactos.listado / broker
+ok 67 - DB contactos.listado / broker
+  ---
+  duration_ms: 13.0308
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarNegocio / broker
+ok 68 - DB pipeline.buscarNegocio / broker
+  ---
+  duration_ms: 1.6036
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarEtapa / broker
+ok 69 - DB pipeline.buscarEtapa / broker
+  ---
+  duration_ms: 1.2042
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarEtapaActiva / broker
+ok 70 - DB pipeline.buscarEtapaActiva / broker
+  ---
+  duration_ms: 1.4309
+  type: 'test'
+  ...
+# Subtest: DB pipeline.tieneActividadDeContacto / broker
+ok 71 - DB pipeline.tieneActividadDeContacto / broker
+  ---
+  duration_ms: 2.0766
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarProximaAccionVigente / broker
+ok 72 - DB pipeline.buscarProximaAccionVigente / broker
+  ---
+  duration_ms: 2.2164
+  type: 'test'
+  ...
+# Subtest: DB pipeline.propiedadesDelNegocio / broker
+ok 73 - DB pipeline.propiedadesDelNegocio / broker
+  ---
+  duration_ms: 1.1053
+  type: 'test'
+  ...
+# Subtest: DB pipeline.bloquearNegocio / broker
+ok 74 - DB pipeline.bloquearNegocio / broker
+  ---
+  duration_ms: 1.1845
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarPerfilDeBroker / broker
+ok 75 - DB pipeline.buscarPerfilDeBroker / broker
+  ---
+  duration_ms: 0.9593
+  type: 'test'
+  ...
+# Subtest: DB pipeline.totalGanadoDelAnio / broker
+ok 76 - DB pipeline.totalGanadoDelAnio / broker
+  ---
+  duration_ms: 2.0644
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarNegocioConEtapa / broker
+ok 77 - DB pipeline.buscarNegocioConEtapa / broker
+  ---
+  duration_ms: 1.3635
+  type: 'test'
+  ...
+# Subtest: DB pipeline.proyectoVisible / broker
+ok 78 - DB pipeline.proyectoVisible / broker
+  ---
+  duration_ms: 1.6248
+  type: 'test'
+  ...
+# Subtest: DB pipeline.unidadDelProyecto / broker
+ok 79 - DB pipeline.unidadDelProyecto / broker
+  ---
+  duration_ms: 1.8516
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarPropiedad / broker
+ok 80 - DB pipeline.buscarPropiedad / broker
+  ---
+  duration_ms: 2.3884
+  type: 'test'
+  ...
+# Subtest: DB proyectos.proyectoVisible / broker
+ok 81 - DB proyectos.proyectoVisible / broker
+  ---
+  duration_ms: 2.4417
+  type: 'test'
+  ...
+# Subtest: DB proyectos.unidadVisible / broker
+ok 82 - DB proyectos.unidadVisible / broker
+  ---
+  duration_ms: 1.7763
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fasesDelProyecto / broker
+ok 83 - DB proyectos.fasesDelProyecto / broker
+  ---
+  duration_ms: 0.6494
+  type: 'test'
+  ...
+# Subtest: DB proyectos.faseVisible / broker
+ok 84 - DB proyectos.faseVisible / broker
+  ---
+  duration_ms: 1.3511
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fotosDeFase / broker
+ok 85 - DB proyectos.fotosDeFase / broker
+  ---
+  duration_ms: 0.6424
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fotoVisible / broker
+ok 86 - DB proyectos.fotoVisible / broker
+  ---
+  duration_ms: 1.2631
+  type: 'test'
+  ...
+# Subtest: DB comisiones.bloquearComision / broker
+ok 87 - DB comisiones.bloquearComision / broker
+  ---
+  duration_ms: 1.3968
+  type: 'test'
+  ...
+# Subtest: DB metas.existePerfilDeBroker / broker
+ok 88 - DB metas.existePerfilDeBroker / broker
+  ---
+  duration_ms: 1.5732
+  type: 'test'
+  ...
+# Subtest: DB metas.fijarMetaMensual lectura anterior broker / broker
+ok 89 - DB metas.fijarMetaMensual lectura anterior broker / broker
+  ---
+  duration_ms: 2.1578
+  type: 'test'
+  ...
+# Subtest: DB metas.fijarMetaMensual lectura anterior compañía / broker
+ok 90 - DB metas.fijarMetaMensual lectura anterior compañía / broker
+  ---
+  duration_ms: 2.7032
+  type: 'test'
+  ...
+# Subtest: DB brokers.buscarBroker / broker
+ok 91 - DB brokers.buscarBroker / broker
+  ---
+  duration_ms: 1.1603
+  type: 'test'
+  ...
+# Subtest: DB brokers.proyectosRelevantes sin ids / broker
+ok 92 - DB brokers.proyectosRelevantes sin ids / broker
+  ---
+  duration_ms: 1.3028
+  type: 'test'
+  ...
+# Subtest: DB brokers.proyectosRelevantes con ids / broker
+ok 93 - DB brokers.proyectosRelevantes con ids / broker
+  ---
+  duration_ms: 1.5268
+  type: 'test'
+  ...
+# Subtest: DB own rechaza IDs ajenos en contactos/leads/proyectos/pipeline / broker
+ok 94 - DB own rechaza IDs ajenos en contactos/leads/proyectos/pipeline / broker
+  ---
+  duration_ms: 10.0955
+  type: 'test'
+  ...
+# Subtest: DB dashboard.obtenerMetricasDashboard / assistant (alias y alcance)
+ok 95 - DB dashboard.obtenerMetricasDashboard / assistant (alias y alcance)
+  ---
+  duration_ms: 167.2561
+  type: 'test'
+  ...
+# Subtest: DB reportes.obtenerMetricasBi / assistant (condición spend SQL)
+ok 96 - DB reportes.obtenerMetricasBi / assistant (condición spend SQL)
+  ---
+  duration_ms: 96.0091
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros projectId / assistant
+ok 97 - DB dashboard+reportes filtros projectId / assistant
+  ---
+  duration_ms: 36.9785
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros brokerId / assistant
+ok 98 - DB dashboard+reportes filtros brokerId / assistant
+  ---
+  duration_ms: 30.3527
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros desde+hasta / assistant
+ok 99 - DB dashboard+reportes filtros desde+hasta / assistant
+  ---
+  duration_ms: 91.6271
+  type: 'test'
+  ...
+# Subtest: DB dashboard+reportes filtros projectId / assistant
+ok 100 - DB dashboard+reportes filtros projectId / assistant
+  ---
+  duration_ms: 29.2595
+  type: 'test'
+  ...
+# Subtest: DB leads.candidatosDuplicados / assistant
+ok 101 - DB leads.candidatosDuplicados / assistant
+  ---
+  duration_ms: 5.4657
+  type: 'test'
+  ...
+# Subtest: DB contactos.candidatosDuplicados / assistant
+ok 102 - DB contactos.candidatosDuplicados / assistant
+  ---
+  duration_ms: 5.1424
+  type: 'test'
+  ...
+# Subtest: DB leads.contactoExiste / assistant
+ok 103 - DB leads.contactoExiste / assistant
+  ---
+  duration_ms: 3.1103
+  type: 'test'
+  ...
+# Subtest: DB leads.candidatosBroker / assistant
+ok 104 - DB leads.candidatosBroker / assistant
+  ---
+  duration_ms: 1.7887
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarLead / assistant
+ok 105 - DB leads.buscarLead / assistant
+  ---
+  duration_ms: 1.5539
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarLeadParaConversion / assistant
+ok 106 - DB leads.buscarLeadParaConversion / assistant
+  ---
+  duration_ms: 2.9698
+  type: 'test'
+  ...
+# Subtest: DB leads.bloquearCapturaExterna / assistant
+ok 107 - DB leads.bloquearCapturaExterna / assistant
+  ---
+  duration_ms: 10.0634
+  type: 'test'
+  ...
+# Subtest: DB leads.buscarContactoPorTelefonoOCorreo / assistant
+ok 108 - DB leads.buscarContactoPorTelefonoOCorreo / assistant
+  ---
+  duration_ms: 1.5233
+  type: 'test'
+  ...
+# Subtest: DB leads.primeraEtapaAbierta / assistant
+ok 109 - DB leads.primeraEtapaAbierta / assistant
+  ---
+  duration_ms: 2.3213
+  type: 'test'
+  ...
+# Subtest: DB contactos.buscarVisible / assistant
+ok 110 - DB contactos.buscarVisible / assistant
+  ---
+  duration_ms: 2.511
+  type: 'test'
+  ...
+# Subtest: DB contactos.listado / assistant
+ok 111 - DB contactos.listado / assistant
+  ---
+  duration_ms: 19.4844
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarNegocio / assistant
+ok 112 - DB pipeline.buscarNegocio / assistant
+  ---
+  duration_ms: 3.4232
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarEtapa / assistant
+ok 113 - DB pipeline.buscarEtapa / assistant
+  ---
+  duration_ms: 2.8325
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarEtapaActiva / assistant
+ok 114 - DB pipeline.buscarEtapaActiva / assistant
+  ---
+  duration_ms: 3.87
+  type: 'test'
+  ...
+# Subtest: DB pipeline.tieneActividadDeContacto / assistant
+ok 115 - DB pipeline.tieneActividadDeContacto / assistant
+  ---
+  duration_ms: 3.7445
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarProximaAccionVigente / assistant
+ok 116 - DB pipeline.buscarProximaAccionVigente / assistant
+  ---
+  duration_ms: 5.0644
+  type: 'test'
+  ...
+# Subtest: DB pipeline.propiedadesDelNegocio / assistant
+ok 117 - DB pipeline.propiedadesDelNegocio / assistant
+  ---
+  duration_ms: 2.3951
+  type: 'test'
+  ...
+# Subtest: DB pipeline.bloquearNegocio / assistant
+ok 118 - DB pipeline.bloquearNegocio / assistant
+  ---
+  duration_ms: 2.541
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarPerfilDeBroker / assistant
+ok 119 - DB pipeline.buscarPerfilDeBroker / assistant
+  ---
+  duration_ms: 2.1609
+  type: 'test'
+  ...
+# Subtest: DB pipeline.totalGanadoDelAnio / assistant
+ok 120 - DB pipeline.totalGanadoDelAnio / assistant
+  ---
+  duration_ms: 4.4947
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarNegocioConEtapa / assistant
+ok 121 - DB pipeline.buscarNegocioConEtapa / assistant
+  ---
+  duration_ms: 3.0432
+  type: 'test'
+  ...
+# Subtest: DB pipeline.proyectoVisible / assistant
+ok 122 - DB pipeline.proyectoVisible / assistant
+  ---
+  duration_ms: 3.1117
+  type: 'test'
+  ...
+# Subtest: DB pipeline.unidadDelProyecto / assistant
+ok 123 - DB pipeline.unidadDelProyecto / assistant
+  ---
+  duration_ms: 3.0988
+  type: 'test'
+  ...
+# Subtest: DB pipeline.buscarPropiedad / assistant
+ok 124 - DB pipeline.buscarPropiedad / assistant
+  ---
+  duration_ms: 3.9319
+  type: 'test'
+  ...
+# Subtest: DB proyectos.proyectoVisible / assistant
+ok 125 - DB proyectos.proyectoVisible / assistant
+  ---
+  duration_ms: 4.9247
+  type: 'test'
+  ...
+# Subtest: DB proyectos.unidadVisible / assistant
+ok 126 - DB proyectos.unidadVisible / assistant
+  ---
+  duration_ms: 4.2294
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fasesDelProyecto / assistant
+ok 127 - DB proyectos.fasesDelProyecto / assistant
+  ---
+  duration_ms: 4.2015
+  type: 'test'
+  ...
+# Subtest: DB proyectos.faseVisible / assistant
+ok 128 - DB proyectos.faseVisible / assistant
+  ---
+  duration_ms: 2.7894
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fotosDeFase / assistant
+ok 129 - DB proyectos.fotosDeFase / assistant
+  ---
+  duration_ms: 1.4542
+  type: 'test'
+  ...
+# Subtest: DB proyectos.fotoVisible / assistant
+ok 130 - DB proyectos.fotoVisible / assistant
+  ---
+  duration_ms: 2.7048
+  type: 'test'
+  ...
+# Subtest: DB comisiones.bloquearComision / assistant
+ok 131 - DB comisiones.bloquearComision / assistant
+  ---
+  duration_ms: 3.2258
+  type: 'test'
+  ...
+# Subtest: DB metas.existePerfilDeBroker / assistant
+ok 132 - DB metas.existePerfilDeBroker / assistant
+  ---
+  duration_ms: 2.7166
+  type: 'test'
+  ...
+# Subtest: DB metas.fijarMetaMensual lectura anterior broker / assistant
+ok 133 - DB metas.fijarMetaMensual lectura anterior broker / assistant
+  ---
+  duration_ms: 3.6716
+  type: 'test'
+  ...
+# Subtest: DB metas.fijarMetaMensual lectura anterior compañía / assistant
+ok 134 - DB metas.fijarMetaMensual lectura anterior compañía / assistant
+  ---
+  duration_ms: 3.5643
+  type: 'test'
+  ...
+# Subtest: DB brokers.buscarBroker / assistant
+ok 135 - DB brokers.buscarBroker / assistant
+  ---
+  duration_ms: 2.1979
+  type: 'test'
+  ...
+# Subtest: DB brokers.proyectosRelevantes sin ids / assistant
+ok 136 - DB brokers.proyectosRelevantes sin ids / assistant
+  ---
+  duration_ms: 2.36
+  type: 'test'
+  ...
+# Subtest: DB brokers.proyectosRelevantes con ids / assistant
+ok 137 - DB brokers.proyectosRelevantes con ids / assistant
+  ---
+  duration_ms: 2.5186
+  type: 'test'
+  ...
+# Subtest: DB negocios S-303-H legado: anti-venta, alcance, paginación y DTO por rol
+ok 138 - DB negocios S-303-H legado: anti-venta, alcance, paginación y DTO por rol
+  ---
+  duration_ms: 229.2306
+  type: 'test'
+  ...
+# Subtest: DB negocios control seed / admin
+ok 139 - DB negocios control seed / admin
+  ---
+  duration_ms: 434.9553
+  type: 'test'
+  ...
+# Subtest: DB negocios control seed / broker
+ok 140 - DB negocios control seed / broker
+  ---
+  duration_ms: 150.6876
+  type: 'test'
+  ...
+# Subtest: DB negocios 184 negocios (176 seed + 8 sintéticos rollback): N:M, USD/DOP y bordes inclusivos
+ok 141 - DB negocios 184 negocios (176 seed + 8 sintéticos rollback): N:M, USD/DOP y bordes inclusivos
+  ---
+  duration_ms: 154.9032
+  type: 'test'
+  ...
+# Subtest: DB negocios SELECT y DTO por rol: centinelas, own/none, ID ajeno, catálogos y orden
+ok 142 - DB negocios SELECT y DTO por rol: centinelas, own/none, ID ajeno, catálogos y orden
+  ---
+  duration_ms: 162.62
+  type: 'test'
+  ...
+# Subtest: DB negocios centinelas persistidos: admin recibe precio/comisión y broker no los lee
+ok 143 - DB negocios centinelas persistidos: admin recibe precio/comisión y broker no los lee
+  ---
+  duration_ms: 29.6487
+  type: 'test'
+  ...
+1..143
+# tests 143
+# suites 0
+# pass 142
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7926.7055
+CLEANUP PASS: database temporal eliminado.
+DEV AFTER {"academy_checklist_items":"0","academy_checklist_progress":"0","academy_items":"0","academy_progress":"0","activities":"1803","activity_sync":"0","agencies":"3","audit_log":"4","broker_profiles":"13","campaign_spend":"152","commissions":"17","construction_phases":"0","contacts":"459","deal_properties":"184","deal_stage_history":"592","deals":"184","external_refs":"0","files":"0","goals":"247","integration_accounts":"0","lead_sources":"8","leads":"649","loss_reasons":"7","marketing_campaigns":"8","message_templates":"4","notifications":"3","outbox":"0","outbox_dead":"0","payment_methods":"3","permissions":"183","pipeline_stages":"7","projects":"24","roles":"3","sessions":"0","unit_inventory_states":"5","units":"404","users":"15","webhook_inbox":"0","zones":"13"}
+DEV COUNTS PASS: todas las tablas public idénticas antes/después.
+DEV HASHES PASS: todas las columnas de todas las tablas public idénticas antes/después (huellas calculadas en servidor).

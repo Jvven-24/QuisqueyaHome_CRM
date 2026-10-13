@@ -25,3 +25,12 @@ test('mutación booleano: retira fragmentos SQL, conserva where interpolado', ()
   assert.ok(changed.includes('where ${attributableSpend}'));
   assert.throws(() => mutate(changed, 'boolean'));
 });
+
+
+test('mutación negocios: EXISTS pasa a JOIN multiplicador; sitio único, sin tocar fuente', () => {
+  const source = readFileSync(new URL('../../src/infrastructure/db/repos/pipeline-lectura.ts', import.meta.url), 'utf8');
+  const changed = mutate(source, 'negocios-join');
+  assert.ok(changed.includes('const PROJECT_FILTER_MODE: string = "join";'));
+  assert.ok(changed.includes('visibleRows(actor, scope, deals.brokerId, deals.deletedAt)'));
+  assert.throws(() => mutate(changed, 'negocios-join'));
+});

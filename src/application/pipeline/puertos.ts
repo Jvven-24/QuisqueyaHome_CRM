@@ -6,7 +6,7 @@
  * no conoce Drizzle (lo veta `arquitectura.test.ts`). La contrapartida es que
  * `Negocio`, `EtapaPipeline` y `PropiedadDeNegocio` deben coincidir columna por
  * columna con `deals`, `pipeline_stages` y `deal_properties`, porque la fila
- * entera viaja en la respuesta HTTP y en `antes`/`despues` de la auditoría.
+ * persistida se usa solo internamente; las respuestas HTTP pasan por DTO.
  *
  * ## Tres garantías que la FORMA de este puerto protege
  *
@@ -31,6 +31,7 @@
 import type { BrokerLevel, StageKind } from "../../domain/catalogs.ts";
 import type { Actor, PermissionScope } from "../../domain/rbac.ts";
 import type { Auditoria } from "../compartido/auditoria.ts";
+import type { OutboxCrm } from "../compartido/crm.ts";
 
 /**
  * Tipos de actividad que cuentan como "contacto" para el requisito de §10.1
@@ -91,6 +92,9 @@ export type PropiedadDeNegocio = {
   isPrimary: boolean;
   createdAt: Date;
   createdBy: number | null;
+  deletedAt?: Date | null;
+  deletedBy?: number | null;
+  deletionReason?: string | null;
 };
 
 /** Un negocio junto al `kind` de su etapa actual (lo que necesita el guardia de "negocio abierto"). */
@@ -143,13 +147,19 @@ export interface RepositorioPipeline {
   /** ¿Hay una actividad completada, sin borrar, de alguno de `TIPOS_ACTIVIDAD_DE_CONTACTO`? */
   tieneActividadDeContacto(dealId: number): Promise<boolean>;
   /** La próxima acción solo cuenta si sigue pendiente, sin borrar, y trae responsable y fecha. `fecha` es ISO. */
-  buscarProximaAccionVigente(actividadId: number): Promise<{ responsableId: number; fecha: string } | null>;
+  buscarProximaAccionVigente(actividadId: number, dealId: number): Promise<{ responsableId: number; fecha: string } | null>;
+  motivoPerdidaActivo(id: number): Promise<boolean>;
   propiedadesDelNegocio(dealId: number): Promise<PropiedadDeNegocio[]>;
 
   // --- escrituras del cambio de etapa y del cierre ---------------------------
 
   /** `SELECT ... FOR UPDATE`: bloquea la fila hasta el fin de la transacción. Defensa 2 contra el doble cierre; NO sustituir por `buscarNegocio`. */
   bloquearNegocio(id: number): Promise<Negocio | undefined>;
+  bloquearUnidad(unitId: number, projectId: number): Promise<{ id: number; status: string; code: string } | undefined>;
+  /** Serializa selección/alta por proyecto; incluye archivadas para no resucitarlas. */
+  resolverUnidadDeCierre(params: { projectId: number; code: string; actorId: number }): Promise<number>;
+  fijarUnidadPrincipal(params: { propiedadId: number; unitId: number }): Promise<void>;
+  registrarVenta(params: { unitId: number; dealId: number; projectId: number; unitCodeNormalized: string; actorId: number }): Promise<void>;
   /** Cambio simple de etapa. `perdida` solo viaja cuando el destino es `lost`. */
   aplicarCambioDeEtapa(params: {
     dealId: number;
@@ -211,9 +221,54 @@ export interface RepositorioPipeline {
   desmarcarPrincipales(dealId: number): Promise<void>;
   crearPropiedad(datos: DatosNuevaPropiedad): Promise<PropiedadDeNegocio>;
   marcarPrincipal(propId: number): Promise<PropiedadDeNegocio>;
-  /** `DELETE` real: `deal_properties` es una tabla de unión, sin `deleted_at`. */
-  eliminarPropiedad(propId: number): Promise<void>;
+  /** Baja lógica; nunca libera la identidad histórica. */
+  eliminarPropiedad(propId: number, actorId: number, motivo: string): Promise<void>;
 }
 
 /** El juego transaccional del módulo: lo que la unidad de trabajo entrega al caso de uso. La auditoría viaja aquí dentro, así no puede escribirse fuera de la transacción del cambio. */
-export type ReposPipeline = { pipeline: RepositorioPipeline; auditoria: Auditoria };
+export type ReposPipeline = { pipeline: RepositorioPipeline; auditoria: Auditoria; outbox: OutboxCrm };
+
+/** Contrato de lectura M03 / T-E1-1b1. Nunca devolver la fila persistida completa. */
+export type FiltrosNegocios = {
+  /** S-303-H: ganados de venta sin registro durable; conserva el alcance de lectura. */
+  historicasSinUnidad?: boolean;
+  projectId?: number; brokerId?: number; stageId?: number;
+  resultado?: StageKind; moneda?: string; montoMin?: number; montoMax?: number;
+  desde?: string; hasta?: string;
+  campoFecha?: "createdAt" | "closedAt" | "expectedCloseDate";
+};
+export type OrdenNegocios = { campo: "createdAt" | "amountCents" | "id"; direccion: "asc" | "desc" };
+export type CursorNegocios = { id: number; valor: string | number; orden: OrdenNegocios };
+export type ProyectoPrincipalNegocio = { dealId: number; projectName: string; unitCode: string | null; unitId: number | null };
+export type InteresNegocio = {
+  id: number; projectId: number; projectName: string; unitId: number | null;
+  unitCode: string | null; isPrimary: boolean; realPriceCents?: number | null;
+};
+export type ProyectoDisponibleNegocio = { id: number; name: string; unidades: { id: number; code: string }[] };
+export type FilaNegocio = {
+  id: number; contactId: number; contactName: string; contactPhone: string | null;
+  contactPhoneDisplay: string | null; sourceName: string | null; brokerId: number | null;
+  brokerName: string | null; stageId: number; stageKind: StageKind;
+  operationType: "sale" | "rent"; currency: string; amountCents?: number | null;
+  probability: number | null; commissionBasisPoints?: number | null;
+  totalCommissionCents?: number | null;
+  expectedCloseDate: string | null; nextActivityTitle: string | null;
+  nextActivityStartsAt: Date | null; stageChangedAt: Date | null; closedAt: Date | null;
+  lossReasonId: number | null; lossComment: string | null; notes: string | null;
+  createdAt: Date; proyectoPrincipal: ProyectoPrincipalNegocio | null;
+};
+export type ResumenEtapaNegocio = { stageId: number; kind: StageKind; currency: string; count: number; amountCents?: number };
+export type CatalogosNegocios = {
+  etapas: Pick<EtapaPipeline, "id" | "slug" | "name" | "position" | "kind" | "defaultProbability">[];
+  motivos: { id: number; name: string; isActive: boolean }[];
+  brokers: { id: number; name: string }[];
+  proyectos: { id: number; name: string }[];
+};
+export type FichaNegocio = { negocio: FilaNegocio; propiedades: InteresNegocio[]; proyectosDisponibles: ProyectoDisponibleNegocio[] };
+export type ListaNegocios = { filas: FilaNegocio[]; siguiente: CursorNegocios | null; resumen: ResumenEtapaNegocio[] };
+export interface LecturaPipeline {
+  listar(actor: Actor, alcance: PermissionScope, filtros: FiltrosNegocios, orden: OrdenNegocios, cursor: CursorNegocios | null, limite: number): Promise<FilaNegocio[]>;
+  resumir(actor: Actor, alcance: PermissionScope, filtros: FiltrosNegocios): Promise<ResumenEtapaNegocio[]>;
+  catalogos(actor: Actor, alcance: PermissionScope): Promise<CatalogosNegocios>;
+  ficha(actor: Actor, alcance: PermissionScope, id: number): Promise<FichaNegocio | undefined>;
+}

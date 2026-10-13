@@ -13,6 +13,12 @@
 import type { DepsPipeline } from "../../application/pipeline/casos-de-uso";
 import { unidadDeTrabajoDrizzle } from "../db/repos/compartido";
 import { reposPipeline } from "../db/repos/pipeline";
+import { lecturaPipeline } from "../db/repos/pipeline-lectura";
+import { getDb } from "../db/client";
+
+export function pipelineParaLectura() {
+  return lecturaPipeline(getDb());
+}
 
 export function pipelineParaEscritura(): DepsPipeline {
   return { unidad: unidadDeTrabajoDrizzle(reposPipeline) };

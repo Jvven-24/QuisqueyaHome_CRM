@@ -11,15 +11,19 @@ import * as schema from '../../src/infrastructure/db/schema.ts';
 import { localDatabaseUrl } from '../seed/local.ts';
 import { generateDataset } from '../seed/generator.ts';
 import { INSERT_ORDER, SEED } from '../seed/catalog.ts';
+import { prepararIdentidadesDeVenta } from './identidad-migracion.mjs';
+import { conMigracionesHasta, ensayarMigracionPoblada, ensayarBackfillSintetico } from './migracion-poblada.mjs';
 
 const root = new URL('../../', import.meta.url);
 const namePattern = /^quisqueyahome_crm_test_[a-f0-9]{20}$/;
 const args = process.argv.slice(2);
 const envFile = args.find(arg => arg.startsWith('--env-file='));
 if (envFile) process.loadEnvFile(envFile.slice('--env-file='.length));
-const mutation = args.includes('--mutation=alias') ? 'alias' : args.includes('--mutation=boolean') ? 'boolean' : null;
+const mutation = args.includes('--mutation=alias') ? 'alias' : args.includes('--mutation=boolean') ? 'boolean' : args.includes('--mutation=negocios-join') ? 'negocios-join' : args.includes('--mutation=venta-unica') ? 'venta-unica' : null;
 const forceSchema = args.includes('--schema');
-const options = { prepare: false, max: 1, connect_timeout: 5, idle_timeout: 10, onnotice: () => {}, connection: { statement_timeout: 60000, lock_timeout: 5000 } };
+const options = { prepare: false, max: 1, connect_timeout: 5, idle_timeout: 10, onnotice: notice => {
+  if (/^S-303-H: \d+ ventas historicas sin unidad; conservadas sin fila en unit_sales$/.test(notice.message ?? '')) console.log(`MIGRATION NOTICE: ${notice.message}`);
+}, connection: { statement_timeout: 60000, lock_timeout: 5000 } };
 let child;
 let interrupted = false;
 const stop = () => { interrupted = true; child?.kill('SIGTERM'); };
@@ -50,6 +54,19 @@ async function counts(connection) {
     return result;
   });
 }
+/** Huella en servidor: no envía columnas personales ni secretos al runner. */
+async function fingerprints(connection) {
+  return connection.begin('isolation level repeatable read read only', async tx => {
+    const tables = await tx`select tablename from pg_tables where schemaname = 'public' order by tablename`;
+    const result = {};
+    for (const { tablename } of tables) {
+      const [row] = await tx`select md5(coalesce(string_agg(h, ',' order by h), '')) as hash
+        from (select md5(row_to_json(t)::text) as h from ${tx('public')}.${tx(tablename)} t) rows`;
+      result[tablename] = row.hash;
+    }
+    return result;
+  });
+}
 async function seed(db, connection) {
   // Reutiliza el catálogo canónico; la parte Storage no pertenece a estos tests.
   const catalog = readFileSync(new URL('db/seed.sql', root), 'utf8').split('/* ---------------------------------------------- Storage')[0];
@@ -57,6 +74,8 @@ async function seed(db, connection) {
   await connection.unsafe(`${catalog}\nCOMMIT;`);
   const [role] = await db.select().from(schema.roles).where(sql`${schema.roles.slug} = 'broker'`);
   const dataset = generateDataset({ brokerRoleId: role.id, pipelineStages: await db.select().from(schema.pipelineStages), leadSources: await db.select().from(schema.leadSources), lossReasons: await db.select().from(schema.lossReasons) }, SEED);
+  // Fixtures representativas del nuevo contrato; no altera el generador comercial.
+  for (const deal of dataset.deals) if (deal.lossReasonId != null) deal.lossComment = 'QA motivo documentado';
   await db.transaction(async tx => {
     for (const key of INSERT_ORDER) for (let offset = 0; offset < dataset[key].length; offset += 200) {
       await tx.insert(schema[key]).values(dataset[key].slice(offset, offset + 200));
@@ -82,7 +101,7 @@ async function runTests(url, namespace, mode) {
   const context = { name: namespace, mode, mutation };
   const bootstrap = `data:text/javascript,${encodeURIComponent(`globalThis[Symbol.for('qh.test-db')]=${JSON.stringify(context)};`)}`;
   return new Promise((resolve, reject) => {
-    child = spawn(process.execPath, ['--import', bootstrap, '--import', './scripts/test-db/loader.mjs', '--test', '--test-reporter=tap', ...files], {
+    child = spawn(process.execPath, ['--import', bootstrap, '--import', './scripts/test-db/loader.mjs', '--test', '--test-concurrency=1', '--test-reporter=tap', ...files], {
       cwd: root, env: { ...process.env, DATABASE_URL: url }, stdio: 'inherit',
     });
     child.once('error', reject);
@@ -98,9 +117,12 @@ async function main() {
   let connection;
   let mode;
   let before;
+  let hashesBefore;
+  let populatedPassed = false;
   try {
     await identity(dev, 'quisqueyahome_crm');
     before = await counts(dev);
+    hashesBefore = await fingerprints(dev);
     console.log(`DEV BEFORE ${JSON.stringify(before)}`);
     if (!forceSchema) {
       try { await control`create database ${control(namespace)} template template0`; mode = 'database'; }
@@ -116,6 +138,24 @@ async function main() {
     await identity(connection, mode === 'schema' ? 'quisqueyahome_crm' : namespace, mode === 'schema' ? namespace : 'public');
     console.log(`ISOLATION PASS: ${mode} ${namespace}; loopback:5432.`);
     const db = drizzle(connection, { schema });
+    if (mode === 'database') {
+      await conMigracionesHasta(3, folder => migrate(db, { migrationsFolder: folder }));
+      populatedPassed = await ensayarMigracionPoblada(dev, connection, db);
+      // Solo destino aleatorio validado; no se toca el esquema de desarrollo.
+      await identity(connection, namespace, 'public');
+      assert.match(namespace, namePattern);
+      await connection`drop schema public cascade`;
+      await connection`drop schema drizzle cascade`;
+      await connection`create schema public`;
+      await prepararIdentidadesDeVenta(connection);
+      await ensayarBackfillSintetico(connection, db);
+      await identity(connection, namespace, 'public');
+      assert.match(namespace, namePattern);
+      await connection`drop schema public cascade`;
+      await connection`drop schema drizzle cascade`;
+      await connection`create schema public`;
+    } else console.log('POPULATED MIGRATION UNKNOWN: requiere permiso CREATE DATABASE para ensayo aislado.');
+    await prepararIdentidadesDeVenta(connection);
     if (mode === 'database') await migrate(db, { migrationsFolder: 'drizzle' });
     else {
       // Las migraciones canónicas califican FK con public; search_path solo no basta.
@@ -128,9 +168,15 @@ async function main() {
     }
     console.log('MIGRATIONS PASS: drizzle/ aplicado solo al destino temporal.');
     await seed(db, connection);
+    // Mutación DDL solo en destino temporal ya validado; se destruye al terminar.
+    if (mutation === 'venta-unica') {
+      await connection`drop index unit_sales_unit_unq`;
+      console.log('MUTATION venta-unica: UNIQUE(unit_id) retirado solo en destino temporal.');
+    }
     if (interrupted) throw new Error('Interrupted');
     const code = await runTests(url.href, namespace, mode);
-    process.exitCode = interrupted ? 130 : code;
+    process.exitCode = interrupted ? 130 : (populatedPassed ? code : 1);
+    if (!populatedPassed) console.log('TEST-DB BLOCKED: migración poblada no acreditada; fixtures verificadas por separado.');
   } finally {
     try {
       await connection?.end({ timeout: 5 });
@@ -144,9 +190,11 @@ async function main() {
           console.log(`DEV AFTER ${JSON.stringify(after)}`);
           assert.deepEqual(after, before, 'conteos de desarrollo cambiaron');
           console.log('DEV COUNTS PASS: todas las tablas public idénticas antes/después.');
+          assert.deepEqual(await fingerprints(dev), hashesBefore, 'contenido de desarrollo cambió');
+          console.log('DEV HASHES PASS: todas las columnas de todas las tablas public idénticas antes/después (huellas calculadas en servidor).');
         }
       } finally { await Promise.all([dev.end({ timeout: 5 }), control.end({ timeout: 5 })]); }
     }
   }
 }
-await main().catch(error => { console.error(`TEST-DB FAIL (${safeCode(error)}); detalles del driver omitidos.`); process.exitCode = 1; });
+await main().catch(error => { console.error(`TEST-DB FAIL (${safeCode(error)}); detalles del driver omitidos.`); console.error(error?.stack?.split('\n').filter(line => /^\s+at /.test(line)).slice(0, 8).join('\n')); process.exitCode = 1; });

@@ -11,6 +11,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { ConflictError, NotFoundError } from "../../domain/errors.ts";
 import type { Actor } from "../../domain/rbac.ts";
+import { outboxEnMemoria } from "../testing/outbox-en-memoria.ts";
 import { auditoriaEnMemoria } from "../testing/auditoria-en-memoria.ts";
 import { unidadDeTrabajoEnMemoria } from "../testing/unidad-de-trabajo-en-memoria.ts";
 import {
@@ -101,10 +102,11 @@ function propiedad(parcial: Partial<PropiedadDeNegocio> & { id: number }): Propi
 }
 
 function montar(semilla: SemillaPipeline = {}) {
-  const pipeline = pipelineEnMemoria({ etapas: ETAPAS, negocios: [negocio({ id: 1 })], ...semilla });
+  const pipeline = pipelineEnMemoria({ motivos: [{ id: 3, isActive: true }], etapas: ETAPAS, negocios: [negocio({ id: 1 })], ...semilla });
   const auditoria = auditoriaEnMemoria();
-  const unidad = unidadDeTrabajoEnMemoria({ pipeline, auditoria }, [pipeline, auditoria]);
-  return { pipeline, auditoria, unidad, deps: { unidad } };
+  const outbox = outboxEnMemoria();
+  const unidad = unidadDeTrabajoEnMemoria({ pipeline, auditoria, outbox }, [pipeline, auditoria, outbox]);
+  return { pipeline, auditoria, outbox, unidad, deps: { unidad } };
 }
 
 const llamadaDeContacto = {
@@ -136,7 +138,7 @@ test("cambio simple: escribe el historial y audita cambiar_etapa con antes y des
   // Un cambio simple no es un cierre: ni metas, ni comisión, ni bloqueo.
   assert.deepEqual(pipeline.metas, []);
   assert.deepEqual(pipeline.comisiones, []);
-  assert.deepEqual(pipeline.bloqueos, []);
+  assert.deepEqual(pipeline.bloqueos, [1]);
 });
 
 test("cambio a una etapa con requisito sin cumplir: ConflictError de transicion-etapa y nada escrito", async () => {
@@ -206,10 +208,10 @@ test("pérdida con motivo: audita marcar_perdido y guarda lossReasonId y lossCom
   assert.deepEqual(pipeline.comisiones, []);
 });
 
-test("pérdida sin comentario guarda lossComment en null", async () => {
-  const { deps } = montar();
-  const fila = await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 7, lossReasonId: 3 });
-  assert.equal(fila.lossComment, null);
+test("perdida sin comentario conserva el estado", async () => {
+  const { deps, pipeline } = montar();
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 7, lossReasonId: 3 }), /comentario/);
+  assert.equal(pipeline.negocios[0]!.stageId, 1);
 });
 
 test("pérdida sin motivo: el ConflictError de transicion-etapa y nada escrito", async () => {
@@ -232,8 +234,8 @@ test("pérdida sin motivo: el ConflictError de transicion-etapa y nada escrito",
 test("negocio de otro broker con alcance own: NotFoundError, igual que uno inexistente", async () => {
   const { deps, pipeline, auditoria } = montar();
 
-  await assert.rejects(cambiarEtapaDeNegocio(deps, otroBroker, "own", 1, { stageId: 7, lossReasonId: 3 }), NotFoundError);
-  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 99, { stageId: 7, lossReasonId: 3 }), NotFoundError);
+  await assert.rejects(cambiarEtapaDeNegocio(deps, otroBroker, "own", 1, { stageId: 7, lossReasonId: 3, lossComment: "Motivo documentado" }), NotFoundError);
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 99, { stageId: 7, lossReasonId: 3, lossComment: "Motivo documentado" }), NotFoundError);
 
   assert.equal(pipeline.negocios[0]!.stageId, 1);
   assert.deepEqual(auditoria.registros, []);
@@ -242,14 +244,14 @@ test("negocio de otro broker con alcance own: NotFoundError, igual que uno inexi
 test("con alcance all un administrador mueve el negocio de otro broker", async () => {
   const admin: Actor = { userId: 1, roleSlug: "administrador", permissions: [] };
   const { deps } = montar();
-  const fila = await cambiarEtapaDeNegocio(deps, admin, "all", 1, { stageId: 7, lossReasonId: 3 });
+  const fila = await cambiarEtapaDeNegocio(deps, admin, "all", 1, { stageId: 7, lossReasonId: 3, lossComment: "Motivo documentado" });
   assert.equal(fila.stageId, 7);
   assert.equal(fila.updatedBy, 1);
 });
 
 test("negocio en la papelera: NotFoundError", async () => {
   const { deps } = montar({ negocios: [negocio({ id: 1, deletedAt: new Date("2025-02-01T00:00:00Z") })] });
-  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 7, lossReasonId: 3 }), NotFoundError);
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 7, lossReasonId: 3, lossComment: "Motivo documentado" }), NotFoundError);
 });
 
 test("etapa destino inexistente o inactiva: NotFoundError con su mensaje", async () => {
@@ -400,17 +402,19 @@ test("marcar o quitar una propiedad de otro negocio: NotFoundError", async () =>
   const { deps, pipeline } = montar({ negocios: [negocio({ id: 1 }), negocio({ id: 2 })], propiedades: [ajena] });
 
   await assert.rejects(marcarPropiedadPrincipal(deps, broker, "own", 1, 5), NotFoundError);
-  await assert.rejects(quitarPropiedad(deps, broker, "own", 1, 5), NotFoundError);
+  await assert.rejects(quitarPropiedad(deps, broker, "own", 1, 5, "Retirado"), NotFoundError);
   assert.equal(pipeline.propiedades.length, 1);
 });
 
-test("quitar: borra la propiedad y audita eliminar solo con antes", async () => {
+test("quitar: archiva la propiedad y audita eliminar solo con antes", async () => {
   const a = propiedad({ id: 1, unitId: 100 });
   const { deps, pipeline, auditoria } = montar({ propiedades: [a] });
 
-  await quitarPropiedad(deps, broker, "own", 1, 1);
+  await quitarPropiedad(deps, broker, "own", 1, 1, "Retirado");
 
-  assert.deepEqual(pipeline.propiedades, []);
+  assert.equal(pipeline.propiedades.length, 1);
+  assert.equal(pipeline.propiedades[0]!.deletionReason, "Retirado");
+  assert.ok(pipeline.propiedades[0]!.deletedAt);
   assert.deepEqual(auditoria.registros, [
     { accion: "eliminar", entidad: "deal_property", entidadId: 1, antes: a, actorId: 5 },
   ]);
@@ -418,6 +422,39 @@ test("quitar: borra la propiedad y audita eliminar solo con antes", async () => 
 
 test("quitar en un negocio cerrado: ConflictError y la propiedad sigue", async () => {
   const { deps, pipeline } = montar({ negocios: [negocio({ id: 1, stageId: 7 })], propiedades: [propiedad({ id: 1 })] });
-  await assert.rejects(quitarPropiedad(deps, broker, "own", 1, 1), ConflictError);
+  await assert.rejects(quitarPropiedad(deps, broker, "own", 1, 1, "Retirado"), ConflictError);
   assert.equal(pipeline.propiedades.length, 1);
+});
+
+test("b2: misma etapa no escribe historial, auditoria ni evento", async () => {
+  const { deps, pipeline, auditoria, outbox } = montar();
+  await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 1 });
+  assert.deepEqual(pipeline.historial, []);
+  assert.deepEqual(auditoria.registros, []);
+  assert.deepEqual(outbox.eventos, []);
+});
+test("b2: motivo inactivo/inexistente y comentario blanco conservan todo", async () => {
+  for (const entrada of [{ stageId: 7, lossReasonId: 99, lossComment: "Detalle" }, { stageId: 7, lossReasonId: 3, lossComment: "  " }]) {
+    const { deps, pipeline, auditoria, outbox } = montar();
+    const anterior = structuredClone(pipeline.negocios);
+    await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, entrada), ConflictError);
+    assert.deepEqual(pipeline.negocios, anterior);
+    assert.deepEqual(pipeline.historial, []); assert.deepEqual(auditoria.registros, []); assert.deepEqual(outbox.eventos, []);
+  }
+});
+test("b2: actividad de otro negocio no suple proxima accion propia", async () => {
+  const { deps, pipeline, outbox } = montar({ negocios: [negocio({ id: 1, nextActivityId: 1 })], actividades: [{ ...llamadaDeContacto, dealId: 2, status: "pending" }] });
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 3 }), /próxima acción/);
+  assert.deepEqual(pipeline.historial, []); assert.deepEqual(outbox.eventos, []);
+});
+test("b2: intereses archivados no cuentan para Preseleccion", async () => {
+  const { deps, pipeline, outbox } = montar({ propiedades: [propiedad({ id: 1, deletedAt: new Date(), deletedBy: 5, deletionReason: "Retirado" })] });
+  await assert.rejects(cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 4 }), /propiedad de interés/);
+  assert.deepEqual(pipeline.historial, []); assert.deepEqual(outbox.eventos, []);
+});
+test("b2: retirada requiere motivo y principal sustituta", async () => {
+  const { deps, pipeline } = montar({ propiedades: [propiedad({ id: 1, isPrimary: true })] });
+  await assert.rejects(quitarPropiedad(deps, broker, "own", 1, 1, ""), /motivo/);
+  await assert.rejects(quitarPropiedad(deps, broker, "own", 1, 1, "Retirado"), /principal/);
+  assert.ok(!pipeline.propiedades[0]!.deletedAt);
 });

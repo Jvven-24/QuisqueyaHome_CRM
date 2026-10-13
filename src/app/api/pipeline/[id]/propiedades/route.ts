@@ -13,7 +13,8 @@
  * sobre proyectos no hay nada legítimo que asociar.
  */
 
-import { z } from "zod";
+import { asociarPropiedadSchema } from "@/application/pipeline/entrada";
+import { dtoMutacionPropiedad } from "@/application/pipeline/dto";
 import { asociarPropiedad, type EntradaAsociarPropiedad } from "@/application/pipeline/casos-de-uso";
 import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
@@ -21,19 +22,14 @@ import { requireActor } from "@/infrastructure/auth/actor";
 import { pipelineParaEscritura } from "@/infrastructure/contenedor/pipeline";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
-const AsociarPropiedadInput = z.object({
-  projectId: z.coerce.number().int().positive(),
-  unitId: z.coerce.number().int().positive().optional(),
-  isPrimary: z.coerce.boolean().optional(),
-});
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idParam } = await params;
     const dealId = Number(idParam);
-    if (!Number.isInteger(dealId) || dealId <= 0) throw new NotFoundError();
+    if (!Number.isInteger(dealId) || dealId <= 0 || dealId > 2147483647) throw new NotFoundError();
 
-    const datos = parseInput(AsociarPropiedadInput, await request.json().catch(() => ({})));
+    const datos = parseInput(asociarPropiedadSchema, await request.json().catch(() => ({})));
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
     // Alcance sobre `projects`, no sobre `deals`: son dos permisos distintos
@@ -46,7 +42,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
     const propiedad = await asociarPropiedad(pipelineParaEscritura(), actor, scope, projectScope, dealId, entrada);
 
-    return Response.json({ ok: true, propiedad });
+    return Response.json({ ok: true, propiedad: dtoMutacionPropiedad(actor, propiedad) });
   } catch (error) {
     return errorResponse(error);
   }

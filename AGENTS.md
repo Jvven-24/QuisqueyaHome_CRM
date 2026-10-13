@@ -4,6 +4,12 @@ Next.js 15 · React 19 · TypeScript · Supabase · Drizzle · Zod. El contexto
 completo vive en `docs/contexto/` (arquitectura, convenciones, decisiones,
 flujo de trabajo, errores conocidos). Léelo antes de cambiar código.
 
+## Coordinación entre agentes (léelo primero)
+
+**Antes de editar cualquier archivo lee `.viltrum/vre-os/EN-CURSO.md`.** Dice qué carpetas tiene reservadas
+el orquestador en este momento, qué puede tomar Codex desde su IDE sin chocar, y dónde reclamar archivos.
+Sin commit, push, `npm run dev` ni `build` por parte de los agentes productores.
+
 ## Milestone activo: Reestructuración con metodología SOLID
 
 **Empieza leyendo `docs/R_RELEVO.md`.** Describe el commit donde vive: en qué fase
@@ -96,7 +102,7 @@ Para coordinar todo el proyecto usa la skill `orquestar` o `viltrum orchestrate 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **QuisqueyaHome_CRM** (4364 symbols, 8767 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **QuisqueyaHome_CRM** (5372 symbols, 10349 relationships, 300 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

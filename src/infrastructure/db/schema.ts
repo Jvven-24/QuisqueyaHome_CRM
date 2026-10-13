@@ -709,6 +709,9 @@ export const deals = pgTable(
     index("deals_stage_idx").on(table.stageId),
     index("deals_broker_idx").on(table.brokerId),
     index("deals_closed_idx").on(table.closedAt),
+    check("deals_amount_nonnegative", sql`${table.amountCents} >= 0`),
+    check("deals_probability_range", sql`${table.probability} between 0 and 100`),
+    check("deals_loss_comment_required", sql`${table.lossReasonId} is null or length(btrim(${table.lossComment})) > 0 and ${table.lossComment} is not null`),
   ],
 );
 
@@ -722,7 +725,7 @@ export const dealProperties = pgTable(
     id: serial("id").primaryKey(),
     dealId: integer("deal_id")
       .notNull()
-      .references(() => deals.id, { onDelete: "cascade" }),
+      .references(() => deals.id, { onDelete: "restrict" }),
     projectId: integer("project_id")
       .notNull()
       .references(() => projects.id),
@@ -731,9 +734,12 @@ export const dealProperties = pgTable(
     isPrimary: boolean("is_primary").notNull().default(false),
     createdAt: instant("created_at").notNull().defaultNow(),
     createdBy: integer("created_by").references(() => users.id),
+    deletedAt: instant("deleted_at"),
+    deletedBy: integer("deleted_by").references(() => users.id, { onDelete: "restrict" }),
+    deletionReason: text("deletion_reason"),
   },
   (table) => [
-    uniqueIndex("deal_properties_deal_unit_unq").on(table.dealId, table.unitId),
+    uniqueIndex("deal_properties_deal_unit_unq").on(table.dealId, table.unitId).where(sql`${table.deletedAt} is null`),
     /**
      * Postgres, como SQLite, considera cada NULL distinto en un índice único,
      * así que el índice anterior no impide repetir un proyecto sin unidad.
@@ -741,10 +747,26 @@ export const dealProperties = pgTable(
      */
     uniqueIndex("deal_properties_deal_project_unq")
       .on(table.dealId, table.projectId)
-      .where(sql`${table.unitId} is null`),
+      .where(sql`${table.unitId} is null and ${table.deletedAt} is null`),
+    uniqueIndex("deal_properties_primary_live_unq").on(table.dealId).where(sql`${table.isPrimary} and ${table.deletedAt} is null`),
+    check("deal_properties_deletion_reason", sql`${table.deletedAt} is null or (${table.deletedBy} is not null and ${table.deletionReason} is not null and length(btrim(${table.deletionReason})) > 0)`),
     index("deal_properties_project_idx").on(table.projectId),
   ],
 );
+
+/** Venta durable: archivar unidad o negocio nunca libera esta exclusividad. */
+export const unitSales = pgTable("unit_sales", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  unitId: integer("unit_id").notNull().references(() => units.id, { onDelete: "restrict", onUpdate: "restrict" }),
+  dealId: integer("deal_id").notNull().references(() => deals.id, { onDelete: "restrict", onUpdate: "restrict" }),
+  projectId: integer("project_id").notNull().references(() => projects.id, { onDelete: "restrict", onUpdate: "restrict" }),
+  unitCodeNormalized: text("unit_code_normalized").notNull(),
+  createdAt: instant("created_at").notNull().defaultNow(),
+  createdBy: integer("created_by").notNull().references(() => users.id, { onDelete: "restrict", onUpdate: "restrict" }),
+}, t => [uniqueIndex("unit_sales_unit_unq").on(t.unitId), uniqueIndex("unit_sales_deal_unq").on(t.dealId),
+  uniqueIndex("unit_sales_identity_unq").on(t.projectId, t.unitCodeNormalized),
+  check("unit_sales_code_normalized", sql`length(btrim(${t.unitCodeNormalized})) > 0 and ${t.unitCodeNormalized} = upper(btrim(${t.unitCodeNormalized}))`),
+]).enableRLS();
 
 /**
  * Historial de etapas. Tabla propia y no `audit_log` porque los reportes de

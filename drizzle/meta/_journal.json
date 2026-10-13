@@ -29,6 +29,20 @@
       "when": 1791136378819,
       "tag": "0003_curly_charles_xavier",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791920582355,
+      "tag": "0004_cierre_venta_unica",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791920582356,
+      "tag": "0005_identidad_venta_durable",
+      "breakpoints": true
     }
   ]
 }

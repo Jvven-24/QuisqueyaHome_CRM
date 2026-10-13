@@ -1,0 +1,16 @@
+
+> quisqueya-home-crm@0.1.0 test:db:guards
+> node --test scripts/test-db/guards.mjs
+
+✔ destino: reutiliza la guarda local y rechaza cloud, query, puerto y base distintos (2.8911ms)
+✔ mutación alias: cambia solo JOIN/SELECT de contacto, conserva visibleRows (1.1751ms)
+✔ mutación booleano: retira fragmentos SQL, conserva where interpolado (0.9504ms)
+✔ mutación negocios: EXISTS pasa a JOIN multiplicador; sitio único, sin tocar fuente (45.1259ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 371.5144
