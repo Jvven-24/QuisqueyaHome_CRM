@@ -1,6 +1,6 @@
 {
  "programa": "VRE-OS · Quisqueya Home CRM",
- "actualizado": "2026-10-05",
+ "actualizado": "2026-10-13",
  "nota": "Estado: DONE|IN_PROGRESS|TODO|BLOCKED. DONE exige evidencia (commit o archivo). Editar con: npm run avance -- --set F2.4=DONE --commit <sha>",
  "fases": [
   {
@@ -253,25 +253,31 @@
     {
      "id": "E1.1a",
      "titulo": "Negocios (kanban real, reglas de etapa, evento al outbox) · ficha READY",
-     "estado": "TODO",
+     "estado": "DONE",
      "depende": [
       "F3.2",
       "E1.P1"
      ],
      "peso": 1,
-     "responsable": "D01+D03 (Codex)"
+     "responsable": "D01+D03 (Codex)",
+     "evidencia": {
+      "commit": "8db9d59"
+     }
     },
     {
      "id": "E1.1b",
      "titulo": "Negocios (kanban real, reglas de etapa, evento al outbox) · backend y consultas con test:db",
-     "estado": "TODO",
+     "estado": "DONE",
      "depende": [
       "E1.1a",
       "F2.4",
       "E1.0"
      ],
      "peso": 2,
-     "responsable": "D10/D11 (Codex)"
+     "responsable": "D10/D11 (Codex)",
+     "evidencia": {
+      "commit": "8db9d59"
+     }
     },
     {
      "id": "E1.1c",
