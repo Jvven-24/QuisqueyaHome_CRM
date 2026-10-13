@@ -11,7 +11,6 @@ import * as schema from '../../src/infrastructure/db/schema.ts';
 import { localDatabaseUrl } from '../seed/local.ts';
 import { generateDataset } from '../seed/generator.ts';
 import { INSERT_ORDER, SEED } from '../seed/catalog.ts';
-import { prepararIdentidadesDeVenta } from './identidad-migracion.mjs';
 import { conMigracionesHasta, ensayarMigracionPoblada, ensayarBackfillSintetico } from './migracion-poblada.mjs';
 
 const root = new URL('../../', import.meta.url);
@@ -147,7 +146,6 @@ async function main() {
       await connection`drop schema public cascade`;
       await connection`drop schema drizzle cascade`;
       await connection`create schema public`;
-      await prepararIdentidadesDeVenta(connection);
       await ensayarBackfillSintetico(connection, db);
       await identity(connection, namespace, 'public');
       assert.match(namespace, namePattern);
@@ -155,7 +153,6 @@ async function main() {
       await connection`drop schema drizzle cascade`;
       await connection`create schema public`;
     } else console.log('POPULATED MIGRATION UNKNOWN: requiere permiso CREATE DATABASE para ensayo aislado.');
-    await prepararIdentidadesDeVenta(connection);
     if (mode === 'database') await migrate(db, { migrationsFolder: 'drizzle' });
     else {
       // Las migraciones canónicas califican FK con public; search_path solo no basta.
@@ -166,6 +163,11 @@ async function main() {
         }
       });
     }
+    const emptyCols = await connection`select column_name, is_nullable from information_schema.columns where table_schema=current_schema() and table_name='unit_sales' and column_name in ('project_id', 'unit_code_normalized') order by column_name`;
+    assert.equal(emptyCols.length, 2, 'base vacia: project_id y unit_code_normalized existen');
+    assert.ok(emptyCols.every(c => c.is_nullable === 'NO'), 'base vacia: project_id y unit_code_normalized son NOT NULL');
+    const [emptySales] = await connection`select count(*)::int as n from unit_sales`;
+    assert.equal(emptySales.n, 0, 'base vacia: 0 ventas');
     console.log('MIGRATIONS PASS: drizzle/ aplicado solo al destino temporal.');
     await seed(db, connection);
     // Mutación DDL solo en destino temporal ya validado; se destruye al terminar.

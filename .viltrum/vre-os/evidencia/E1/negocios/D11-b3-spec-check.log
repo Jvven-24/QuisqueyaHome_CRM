@@ -1,0 +1,40 @@
+> quisqueya-home-crm@0.1.0 spec:check
+> node scripts/spec/check.mjs
+
+Spec Pack: 6 fichas; listas READY o superior: 17%
+Estados: DRAFT 4 · REVIEW 1 · READY 1 · BUILT 0 · VERIFIED 0
+Tipos: Módulo 3 · Global 0 · Integración 3
+Bloqueos: 0
+Aviso: .viltrum/vre-os/spec/integraciones/CAPACIDADES.md: catálogo histórico omitido; investigación no probatoria, no acredita APIs verificadas
+- .viltrum/vre-os/tareas/T-DS-1-negocios-leads.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-DS-2-propiedades-brokers.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-DS-3-integraciones-shell.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-E1-0-renombrar-negocios.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-E1-1a-ficha-negocios.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-E1-1a-r1-ficha-negocios.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-E1-2a-ficha-leads.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-E1-2a-r1-ficha-leads.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-E1-3a-ficha-propiedades.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-E1-4a-ficha-brokers.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-E1-5a-ficha-integraciones.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-I0-capacidades.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-P0-cms-reutilizable.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-P0-crm-inventario.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-P1-spec-check.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-QA-test-db.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-TW-D21-twenty-inventario.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W1-D05-graficas-movil.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W1-D09a-higiene-visual.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W1-D11-datos-seed.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W1-D11-rework-catalogos.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W1-D21-cobertura-modulos.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W1-D21-oss-intake.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W1-D21b-rework.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W2-D10-reportes-reales.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W2-D19-base-integraciones.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W3-D05-ux-visual-A.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W3-D05-ux-visual-B.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W3-D09-inicio-reportes.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W4b-D10-rentas.md: legado (sin Ficha:)
+- .viltrum/vre-os/tareas/T-W4b-D21-rentas-porte.md: legado (sin Ficha:)
+Sin bloqueos.

@@ -4,7 +4,6 @@ import { mkdtemp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promi
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import { prepararIdentidadesDeVenta } from './identidad-migracion.mjs';
 import { lecturaPipeline } from '../../src/infrastructure/db/repos/pipeline-lectura.ts';
 import { consultarVentasHistoricasSinUnidad } from '../../src/application/pipeline/consultas.ts';
 
@@ -62,16 +61,19 @@ export async function ensayarMigracionPoblada(source, target, db) {
   });
   assert.equal(baseline.deals.count, 184, 'fuente poblada esperada; variación exige actualizar evidencia');
   console.log(`POPULATED BEFORE ${JSON.stringify(Object.fromEntries(Object.entries(baseline).map(([table,b]) => [table,b.count])))}`);
-  await prepararIdentidadesDeVenta(target);
   const historicas = await target`select d.id from deals d join pipeline_stages s on s.id=d.stage_id
     where s.kind='won' and d.operation_type='sale' and not exists
     (select 1 from deal_properties p where p.deal_id=d.id and p.is_primary and p.unit_id is not null) order by d.id`;
   const idsHistoricos = Array.from({ length: 15 }, (_, i) => 1000000 + i);
   assert.deepEqual(historicas.map(r => r.id), idsHistoricos, 'legado real autorizado S-303-H');
-  // Ensayo de reanudación: interrumpir el mapa temporal y volver a prepararlo.
-  await target`delete from qh_sale_identity_backfill where unit_id=(select min(unit_id) from qh_sale_identity_backfill)`;
-  await prepararIdentidadesDeVenta(target);
   await migrate(db, { migrationsFolder: 'drizzle' });
+  const cols = await target`select column_name, is_nullable from information_schema.columns where table_schema=current_schema() and table_name='unit_sales' and column_name in ('project_id', 'unit_code_normalized') order by column_name`;
+  assert.equal(cols.length, 2);
+  assert.ok(cols.every(c => c.is_nullable === 'NO'), 'poblada: project_id y unit_code_normalized son NOT NULL');
+  const [unq] = await target`select count(*)::int as n from pg_indexes where schemaname=current_schema() and tablename='unit_sales' and indexname='unit_sales_identity_unq'`;
+  assert.equal(unq.n, 1, 'poblada: indice unit_sales_identity_unq existe');
+  const [legadosEnVentas] = await target`select count(*)::int as n from unit_sales where deal_id = any(${idsHistoricos})`;
+  assert.equal(legadosEnVentas.n, 0, '15 legados sin fila en unit_sales');
   for (const [table,b] of Object.entries(baseline)) {
     const rows = await target`select ${target(b.names)} from ${target(table)}`;
     assert.equal(rows.length, b.count, `conteos ${table}`);
@@ -95,7 +97,7 @@ export async function ensayarMigracionPoblada(source, target, db) {
   await migrate(db, { migrationsFolder: 'drizzle' });
   assert.deepEqual([...(await target`select deal_id,unit_id from unit_sales order by deal_id`)], [...sales], 'migrate repetida no duplica');
   console.log(`POPULATED LEGACY PASS: ${JSON.stringify(ids)}; conservados ganados sin inventar unidades.`);
-  console.log(`POPULATED MIGRATION PASS: 184 negocios; ${tables.length} tablas conservan conteos y SHA256 de todas las columnas originales; ${actual.n} ventas con unidad concreta; mapa reanudado; ${Math.round(performance.now()-started)}ms.`);
+  console.log(`POPULATED MIGRATION PASS: 184 negocios; ${tables.length} tablas conservan conteos y SHA256 de todas las columnas originales; ${actual.n} ventas con unidad concreta; migrador oficial; ${Math.round(performance.now()-started)}ms.`);
   return true;
 }
 
@@ -120,20 +122,23 @@ export async function ensayarBackfillSintetico(target, db) {
   await conMigracionesHasta(4, folder => migrate(db, { migrationsFolder: folder }));
   assert.deepEqual([...(await target`select deal_id from unit_sales order by deal_id`)].map(r => r.deal_id), [800001,800002,800003]);
   console.log('SYNTHETIC S-303-H PASS: 3 ganados concretos backfilled (incluido archivado); 1 legado preservado sin venta.');
-  await prepararIdentidadesDeVenta(target);
   await assert.rejects(migrate(db, { migrationsFolder: 'drizzle' }), e => (e.cause?.code ?? e.code)==='23505');
   const [aborted] = await target`select count(*)::int as n from unit_sales`; assert.equal(aborted.n,3);
-  const [columns] = await target`select count(*)::int as n from information_schema.columns where table_schema='public' and table_name='unit_sales' and column_name='project_id'`; assert.equal(columns.n,0);
+  const [columns] = await target`select count(*)::int as n from information_schema.columns where table_schema=current_schema() and table_name='unit_sales' and column_name='project_id'`; assert.equal(columns.n,0);
   // Corregir SOLO el vector sintético conflictivo creado arriba.
   await target`update units set code='b_202' where id=800002`;
-  await prepararIdentidadesDeVenta(target);
-  await target`delete from qh_sale_identity_backfill where unit_id=800001`;
-  await prepararIdentidadesDeVenta(target);
   await migrate(db, { migrationsFolder: 'drizzle' });
+  const synCols = await target`select column_name, is_nullable from information_schema.columns where table_schema=current_schema() and table_name='unit_sales' and column_name in ('project_id', 'unit_code_normalized') order by column_name`;
+  assert.equal(synCols.length, 2);
+  assert.ok(synCols.every(c => c.is_nullable === 'NO'), 'sintetico: project_id y unit_code_normalized son NOT NULL');
+  const [synUnq] = await target`select count(*)::int as n from pg_indexes where schemaname=current_schema() and tablename='unit_sales' and indexname='unit_sales_identity_unq'`;
+  assert.equal(synUnq.n, 1, 'sintetico: indice unit_sales_identity_unq existe');
+  const [synLegacy] = await target`select count(*)::int as n from unit_sales where deal_id = 800004`;
+  assert.equal(synLegacy.n, 0, 'sintetico: legado 800004 sin fila en unit_sales');
   const rows = await target`select unit_id,project_id,unit_code_normalized from unit_sales order by unit_id`;
   assert.deepEqual(rows.map(r=>r.unit_code_normalized),['A-101','B-202','C-303']);
   assert.ok(rows.every(r=>r.project_id===800001));
   await migrate(db, { migrationsFolder: 'drizzle' });
   const [again] = await target`select count(*)::int as n from unit_sales`; assert.equal(again.n,3);
-  console.log('SYNTHETIC BACKFILL PASS: duplicado aborta sin pérdida; mapa interrumpido/reanudado; 3 ventas preservadas, incluida archivada; reejecución idempotente. NO acredita conciliación de base real.');
+  console.log('SYNTHETIC BACKFILL PASS: duplicado aborta sin pérdida; migrador oficial exit 0 tras resolver conflicto; 3 ventas preservadas, incluida archivada; legado sin fila; reejecución idempotente.');
 }

@@ -184,3 +184,43 @@ check("S-303-N carrera de alta mínima con códigos equivalentes: una unidad, un
   const interests = await db.select().from(t.dealProperties).where(inArray(t.dealProperties.dealId, dealIds));
   assert.equal(interests.filter(p => p.unitId != null).length, 1, "asignación del perdedor revierte");
 });
+
+check("S-303-N paridad exacta SQL normalizar_codigo_unidad ↔ dominio normalizarCodigoUnidad", async () => {
+  const vectors: { input: string; valid: boolean }[] = [
+    { input: " a 101 ", valid: true },
+    { input: "a_101", valid: true },
+    { input: "A–101", valid: true },
+    { input: "áéíóú", valid: true },
+    { input: "ÁÉÍÓÚ", valid: true },
+    { input: "Torre   ñ  01", valid: true },
+    { input: "a\u0301", valid: true },
+    { input: "e\u0301", valid: true },
+    { input: "Ａ１０１", valid: true },
+    { input: "ａ_１０１", valid: true },
+    { input: "\ta\t101\t", valid: true },
+    { input: "  \t  a  \t  101  \t  ", valid: true },
+    { input: "\n\ra 101\r\n", valid: true },
+    { input: "A-‐-‑-–-—−101", valid: true },
+    { input: "Casa_101   Piso_2", valid: true },
+    { input: "Torre__A--B", valid: true },
+    { input: "", valid: false },
+    { input: "   ", valid: false },
+    { input: "\t\n", valid: false },
+    { input: "\u0301", valid: false },
+  ];
+
+  for (const { input, valid } of vectors) {
+    if (valid) {
+      const jsExpected = normalizarCodigoUnidad(input);
+      const [row] = await db.execute(sql`select normalizar_codigo_unidad(${input}) as code`);
+      assert.equal(row!.code, jsExpected, `paridad para vector ${JSON.stringify(input)}`);
+    } else {
+      assert.throws(() => normalizarCodigoUnidad(input), { name: "ValidationError" });
+      await assert.rejects(
+        db.execute(sql`select normalizar_codigo_unidad(${input}) as code`),
+        (err: unknown) => err instanceof Error && "cause" in err && (err.cause as { message?: string })?.message?.includes("blanco")
+      );
+    }
+  }
+});
+

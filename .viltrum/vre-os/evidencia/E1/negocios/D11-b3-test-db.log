@@ -1,0 +1,23 @@
+> quisqueya-home-crm@0.1.0 test:db
+> node scripts/test-db/run.mjs
+
+SERVER IDENTITY {"db":"quisqueyahome_crm","schema":"public","host":"127.0.0.1/32","port":5432}
+ISOLATION PASS: database quisqueyahome_crm_test_...; loopback:5432.
+POPULATED BEFORE {"roles":3,"pipeline_stages":7,"lead_sources":8,"loss_reasons":7,"zones":13,"agencies":3,"payment_methods":3,"unit_inventory_states":5,"users":15,"permissions":183,"broker_profiles":13,"marketing_campaigns":8,"campaign_spend":152,"projects":24,"units":404,"contacts":459,"leads":649,"deals":184,"deal_properties":184,"deal_stage_history":592,"activities":1803,"commissions":17,"goals":247}
+MIGRATION NOTICE: S-303-H: 15 ventas historicas sin unidad; conservadas sin fila en unit_sales
+POPULATED LEGACY PASS: [1000000,1000001,1000002,1000003,1000004,1000005,1000006,1000007,1000008,1000009,1000010,1000011,1000012,1000013,1000014]; conservados ganados sin inventar unidades.
+POPULATED MIGRATION PASS: 184 negocios; 23 tablas conservan conteos y SHA256 de todas las columnas originales; 0 ventas con unidad concreta; migrador oficial.
+SYNTHETIC S-303-H PASS: 3 ganados concretos backfilled (incluido archivado); 1 legado preservado sin venta.
+SYNTHETIC BACKFILL PASS: duplicado aborta sin pérdida; migrador oficial exit 0 tras resolver conflicto; 3 ventas preservadas, incluida archivada; legado sin fila; reejecución idempotente.
+MIGRATIONS PASS: drizzle/ aplicado solo al destino temporal (base vacía verificada con project_id y unit_code_normalized NOT NULL).
+SEED PASS: semilla 20261003; 640 leads, 176 negocios, 450 contactos, 400 unidades.
+# tests 144
+# suites 0
+# pass 144
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+CLEANUP PASS: database temporal eliminado.
+DEV COUNTS PASS: todas las tablas public idénticas antes/después.
+DEV HASHES PASS: todas las columnas de todas las tablas public idénticas antes/después (huellas calculadas en servidor).
