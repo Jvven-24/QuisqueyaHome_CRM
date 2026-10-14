@@ -3,10 +3,8 @@
 import { useEffect } from "react";
 
 /**
- * Estado de error de Pipeline (T5). Convención nativa de Next 15
- * (`error.tsx` es obligatoriamente cliente): captura cualquier excepción no
- * controlada al renderizar el módulo y ofrece reintentar sin recargar toda
- * la página.
+ * Estado de error de Negocios (T5).
+ * Captura cualquier excepción no controlada al renderizar y ofrece reintentar.
  */
 export default function Error({
   error,
@@ -20,11 +18,15 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="empty">
+    <div className="empty" role="alert">
       <strong>No se pudieron cargar los negocios</strong>
       <p>Ocurrió un error inesperado. Intenta de nuevo.</p>
       <p>
-        <button className="button primary" type="button" onClick={() => reset()}>
+        <button
+          className="button primary min-h-[48px] px-6 text-sm font-semibold cursor-pointer"
+          type="button"
+          onClick={() => reset()}
+        >
           Reintentar
         </button>
       </p>
