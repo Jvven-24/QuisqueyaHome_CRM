@@ -1,0 +1,963 @@
+{
+ "inicio@d": {
+  "ruta": "/inicio",
+  "status": 200,
+  "url": "/inicio",
+  "scrollX": false,
+  "smallCount": 23,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 58,
+  "lowContrast": 13,
+  "contrastSample": [
+   "2.56 Mes actual",
+   "2.56 Comparación anterior no d",
+   "2.56 Negocios abiertos visible",
+   "2.56 Comparación anterior no d",
+   "4.36 Valor en negocios abierto"
+  ],
+  "tiny12": 10,
+  "h1": 1,
+  "bodyH": 1275,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "leads@d": {
+  "ruta": "/leads",
+  "status": 200,
+  "url": "/leads",
+  "scrollX": false,
+  "smallCount": 72,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 167,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Captación"
+  ],
+  "tiny12": 84,
+  "h1": 1,
+  "bodyH": 1655,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "contactos@d": {
+  "ruta": "/contactos",
+  "status": 200,
+  "url": "/contactos",
+  "scrollX": false,
+  "smallCount": 68,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 134,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Relación"
+  ],
+  "tiny12": 56,
+  "h1": 1,
+  "bodyH": 1515,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "negocios@d": {
+  "ruta": "/negocios",
+  "status": 200,
+  "url": "/negocios",
+  "scrollX": false,
+  "smallCount": 20,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 998,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Ventas"
+  ],
+  "tiny12": 12,
+  "h1": 1,
+  "bodyH": 1265,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "negocios-lista@d": {
+  "ruta": "/negocios?vista=lista",
+  "status": 200,
+  "url": "/negocios?vista=lista",
+  "scrollX": false,
+  "smallCount": 20,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 472,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Ventas"
+  ],
+  "tiny12": 12,
+  "h1": 1,
+  "bodyH": 4090,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "negocios-analisis@d": {
+  "ruta": "/negocios?vista=analisis",
+  "status": 200,
+  "url": "/negocios?vista=analisis",
+  "scrollX": false,
+  "smallCount": 20,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 140,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Ventas"
+  ],
+  "tiny12": 12,
+  "h1": 1,
+  "bodyH": 2275,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "propiedades@d": {
+  "ruta": "/propiedades",
+  "status": 200,
+  "url": "/propiedades",
+  "scrollX": false,
+  "smallCount": 23,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 295,
+  "lowContrast": 49,
+  "contrastSample": [
+   "3.97 Inventario privado",
+   "1.00 0",
+   "2.63 Ver detalle",
+   "1.00 45",
+   "2.63 Ver detalle"
+  ],
+  "tiny12": 71,
+  "h1": 1,
+  "bodyH": 3804,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "proyecto@d": {
+  "ruta": "/propiedades/vre-araya-punta-cana",
+  "status": 200,
+  "url": "/propiedades/vre-araya-punta-cana",
+  "scrollX": false,
+  "smallCount": 64,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 227,
+  "lowContrast": 7,
+  "contrastSample": [
+   "3.97 Inventario privado",
+   "1.75 QH",
+   "1.09 0",
+   "4.36 Desarrollador",
+   "4.36 Unidades"
+  ],
+  "tiny12": 11,
+  "h1": 1,
+  "bodyH": 2082,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "avances@d": {
+  "ruta": "/avances",
+  "status": 200,
+  "url": "/avances",
+  "scrollX": false,
+  "smallCount": 22,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 7,
+  "lowContrast": 2,
+  "contrastSample": [
+   "3.97 Gestión manual",
+   "4.36 Empieza con la plantilla "
+  ],
+  "tiny12": 11,
+  "h1": 1,
+  "bodyH": 900,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "agenda@d": {
+  "ruta": "/agenda",
+  "status": 200,
+  "url": "/agenda",
+  "scrollX": false,
+  "smallCount": 25,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 23,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Seguimiento"
+  ],
+  "tiny12": 11,
+  "h1": 1,
+  "bodyH": 1026,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "tareas@d": {
+  "ruta": "/tareas",
+  "status": 200,
+  "url": "/tareas",
+  "scrollX": false,
+  "smallCount": 657,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 1957,
+  "lowContrast": 3,
+  "contrastSample": [
+   "3.97 Operación",
+   "4.33 Hoy",
+   "4.33 Carga del equipo"
+  ],
+  "tiny12": 647,
+  "h1": 1,
+  "bodyH": 44913,
+  "consoleErrors": 1,
+  "consoleSample": [
+   "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happe"
+  ]
+ },
+ "brokers@d": {
+  "ruta": "/brokers",
+  "status": 200,
+  "url": "/brokers",
+  "scrollX": false,
+  "smallCount": 47,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 192,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Equipo"
+  ],
+  "tiny12": 11,
+  "h1": 1,
+  "bodyH": 2189,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "broker-ficha@d": {
+  "ruta": "/brokers/2",
+  "status": 200,
+  "url": "/brokers/2",
+  "scrollX": false,
+  "smallCount": 33,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 66,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Equipo"
+  ],
+  "tiny12": 11,
+  "h1": 1,
+  "bodyH": 1645,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "comisiones@d": {
+  "ruta": "/comisiones",
+  "status": 200,
+  "url": "/comisiones",
+  "scrollX": false,
+  "smallCount": 24,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 13,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Finanzas internas"
+  ],
+  "tiny12": 11,
+  "h1": 1,
+  "bodyH": 900,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "metas@d": {
+  "ruta": "/metas",
+  "status": 200,
+  "url": "/metas",
+  "scrollX": false,
+  "smallCount": 34,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 118,
+  "lowContrast": 2,
+  "contrastSample": [
+   "3.97 Rendimiento",
+   "4.33 Meta del negocio"
+  ],
+  "tiny12": 23,
+  "h1": 1,
+  "bodyH": 1440,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "comunicaciones@d": {
+  "ruta": "/comunicaciones",
+  "status": 200,
+  "url": "/comunicaciones",
+  "scrollX": false,
+  "smallCount": 35,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 19,
+  "lowContrast": 11,
+  "contrastSample": [
+   "3.97 Mensajería multicanal",
+   "4.33 Catálogo",
+   "1.00 TODOS",
+   "4.33 Edición",
+   "1.00 Guardar Plantilla"
+  ],
+  "tiny12": 39,
+  "h1": 1,
+  "bodyH": 1158,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "reportes@d": {
+  "ruta": "/reportes",
+  "status": 200,
+  "url": "/reportes",
+  "scrollX": false,
+  "smallCount": 29,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 95,
+  "lowContrast": 8,
+  "contrastSample": [
+   "4.23 Canales",
+   "4.23 Tendencia",
+   "4.23 Zonas",
+   "4.23 Brokers",
+   "4.23 Velocidad"
+  ],
+  "tiny12": 10,
+  "h1": 1,
+  "bodyH": 1462,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "academy@d": {
+  "ruta": "/academy",
+  "status": 200,
+  "url": "/academy",
+  "scrollX": false,
+  "smallCount": 27,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 11,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Formación de brokers"
+  ],
+  "tiny12": 11,
+  "h1": 1,
+  "bodyH": 900,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "configuracion@d": {
+  "ruta": "/configuracion",
+  "status": 200,
+  "url": "/configuracion",
+  "scrollX": false,
+  "smallCount": 81,
+  "smallSample": [
+   "A:InicioG I 231x32",
+   "A:LeadsG L 231x32",
+   "A:NegociosG P 231x32",
+   "A:ContactosG C 231x32",
+   "A:PropiedadesG R 231x32"
+  ],
+  "textNodes": 167,
+  "lowContrast": 2,
+  "contrastSample": [
+   "3.97 Administración",
+   "4.33 RBAC"
+  ],
+  "tiny12": 11,
+  "h1": 1,
+  "bodyH": 1471,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "inicio@m": {
+  "ruta": "/inicio",
+  "status": 200,
+  "url": "/inicio",
+  "scrollX": false,
+  "smallCount": 7,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Resumen 83x37"
+  ],
+  "textNodes": 61,
+  "lowContrast": 13,
+  "contrastSample": [
+   "2.56 Mes actual",
+   "2.56 Comparación anterior no d",
+   "2.56 Negocios abiertos visible",
+   "2.56 Comparación anterior no d",
+   "4.36 Valor en negocios abierto"
+  ],
+  "tiny12": 0,
+  "h1": 1,
+  "bodyH": 1330,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "leads@m": {
+  "ruta": "/leads",
+  "status": 200,
+  "url": "/leads",
+  "scrollX": false,
+  "smallCount": 73,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Registrar lead 127x36"
+  ],
+  "textNodes": 163,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Captación"
+  ],
+  "tiny12": 87,
+  "h1": 1,
+  "bodyH": 4757,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "contactos@m": {
+  "ruta": "/contactos",
+  "status": 200,
+  "url": "/contactos",
+  "scrollX": false,
+  "smallCount": 69,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Nuevo contacto 366x42"
+  ],
+  "textNodes": 151,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Relación"
+  ],
+  "tiny12": 81,
+  "h1": 1,
+  "bodyH": 4109,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "negocios@m": {
+  "ruta": "/negocios",
+  "status": 200,
+  "url": "/negocios",
+  "scrollX": false,
+  "smallCount": 4,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32"
+  ],
+  "textNodes": 41,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Ventas"
+  ],
+  "tiny12": 2,
+  "h1": 1,
+  "bodyH": 1228,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "negocios-lista@m": {
+  "ruta": "/negocios?vista=lista",
+  "status": 200,
+  "url": "/negocios?vista=lista",
+  "scrollX": false,
+  "smallCount": 4,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32"
+  ],
+  "textNodes": 714,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Ventas"
+  ],
+  "tiny12": 2,
+  "h1": 1,
+  "bodyH": 11823,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "negocios-analisis@m": {
+  "ruta": "/negocios?vista=analisis",
+  "status": 200,
+  "url": "/negocios?vista=analisis",
+  "scrollX": false,
+  "smallCount": 4,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32"
+  ],
+  "textNodes": 141,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Ventas"
+  ],
+  "tiny12": 2,
+  "h1": 1,
+  "bodyH": 2891,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "propiedades@m": {
+  "ruta": "/propiedades",
+  "status": 200,
+  "url": "/propiedades",
+  "scrollX": false,
+  "smallCount": 7,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Nuevo proyecto 366x42"
+  ],
+  "textNodes": 298,
+  "lowContrast": 49,
+  "contrastSample": [
+   "3.97 Inventario privado",
+   "1.00 0",
+   "2.63 Ver detalle",
+   "1.00 45",
+   "2.63 Ver detalle"
+  ],
+  "tiny12": 61,
+  "h1": 1,
+  "bodyH": 11411,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "proyecto@m": {
+  "ruta": "/propiedades/vre-araya-punta-cana",
+  "status": 200,
+  "url": "/propiedades/vre-araya-punta-cana",
+  "scrollX": false,
+  "smallCount": 48,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "A:← Volver a propiedad 181x21"
+  ],
+  "textNodes": 230,
+  "lowContrast": 7,
+  "contrastSample": [
+   "3.97 Inventario privado",
+   "1.75 QH",
+   "1.09 0",
+   "4.36 Desarrollador",
+   "4.36 Unidades"
+  ],
+  "tiny12": 1,
+  "h1": 1,
+  "bodyH": 3251,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "avances@m": {
+  "ruta": "/avances",
+  "status": 200,
+  "url": "/avances",
+  "scrollX": false,
+  "smallCount": 6,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "SELECT:Araya Punta CanaCap  165x36"
+  ],
+  "textNodes": 10,
+  "lowContrast": 2,
+  "contrastSample": [
+   "3.97 Gestión manual",
+   "4.36 Empieza con la plantilla "
+  ],
+  "tiny12": 1,
+  "h1": 1,
+  "bodyH": 844,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "agenda@m": {
+  "ruta": "/agenda",
+  "status": 200,
+  "url": "/agenda",
+  "scrollX": false,
+  "smallCount": 6,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "A:Exportar .ics 366x42"
+  ],
+  "textNodes": 25,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Seguimiento"
+  ],
+  "tiny12": 1,
+  "h1": 1,
+  "bodyH": 1182,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "tareas@m": {
+  "ruta": "/tareas",
+  "status": 200,
+  "url": "/tareas",
+  "scrollX": false,
+  "smallCount": 641,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Nueva tarea 366x42"
+  ],
+  "textNodes": 1960,
+  "lowContrast": 3,
+  "contrastSample": [
+   "3.97 Operación",
+   "4.33 Hoy",
+   "4.33 Carga del equipo"
+  ],
+  "tiny12": 637,
+  "h1": 1,
+  "bodyH": 45846,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "brokers@m": {
+  "ruta": "/brokers",
+  "status": 200,
+  "url": "/brokers",
+  "scrollX": false,
+  "smallCount": 31,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Invitar broker 366x42"
+  ],
+  "textNodes": 195,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Equipo"
+  ],
+  "tiny12": 1,
+  "h1": 1,
+  "bodyH": 5111,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "broker-ficha@m": {
+  "ruta": "/brokers/2",
+  "status": 200,
+  "url": "/brokers/2",
+  "scrollX": false,
+  "smallCount": 17,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "A:Volver a Brokers 366x42"
+  ],
+  "textNodes": 69,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Equipo"
+  ],
+  "tiny12": 1,
+  "h1": 1,
+  "bodyH": 1793,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "comisiones@m": {
+  "ruta": "/comisiones",
+  "status": 200,
+  "url": "/comisiones",
+  "scrollX": false,
+  "smallCount": 8,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "A:Exportar reporte 366x42"
+  ],
+  "textNodes": 16,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Finanzas internas"
+  ],
+  "tiny12": 1,
+  "h1": 1,
+  "bodyH": 1116,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "metas@m": {
+  "ruta": "/metas",
+  "status": 200,
+  "url": "/metas",
+  "scrollX": false,
+  "smallCount": 18,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Editar meta de la co 205x42"
+  ],
+  "textNodes": 121,
+  "lowContrast": 2,
+  "contrastSample": [
+   "3.97 Rendimiento",
+   "4.33 Meta del negocio"
+  ],
+  "tiny12": 13,
+  "h1": 1,
+  "bodyH": 1948,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "comunicaciones@m": {
+  "ruta": "/comunicaciones",
+  "status": 200,
+  "url": "/comunicaciones",
+  "scrollX": false,
+  "smallCount": 19,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Nueva 70x40"
+  ],
+  "textNodes": 22,
+  "lowContrast": 11,
+  "contrastSample": [
+   "3.97 Mensajería multicanal",
+   "4.33 Catálogo",
+   "1.00 TODOS",
+   "4.33 Edición",
+   "1.00 Guardar Plantilla"
+  ],
+  "tiny12": 29,
+  "h1": 1,
+  "bodyH": 2225,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "reportes@m": {
+  "ruta": "/reportes",
+  "status": 200,
+  "url": "/reportes",
+  "scrollX": false,
+  "smallCount": 13,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Embudo 88x37"
+  ],
+  "textNodes": 91,
+  "lowContrast": 8,
+  "contrastSample": [
+   "4.23 Canales",
+   "4.23 Tendencia",
+   "4.23 Zonas",
+   "4.23 Brokers",
+   "4.23 Velocidad"
+  ],
+  "tiny12": 0,
+  "h1": 1,
+  "bodyH": 1166,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "academy@m": {
+  "ruta": "/academy",
+  "status": 200,
+  "url": "/academy",
+  "scrollX": false,
+  "smallCount": 11,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Todas 69x36"
+  ],
+  "textNodes": 14,
+  "lowContrast": 1,
+  "contrastSample": [
+   "3.97 Formación de brokers"
+  ],
+  "tiny12": 1,
+  "h1": 1,
+  "bodyH": 1102,
+  "consoleErrors": 0,
+  "consoleSample": []
+ },
+ "configuracion@m": {
+  "ruta": "/configuracion",
+  "status": 200,
+  "url": "/configuracion",
+  "scrollX": false,
+  "smallCount": 65,
+  "smallSample": [
+   "BUTTON:Toggle Sidebar 28x28",
+   "BUTTON:Buscar en el CRM (Ct 238x32",
+   "BUTTON:Nueva acción 36x32",
+   "BUTTON:Notificaciones del s 32x32",
+   "BUTTON:Invitar usuario 127x42"
+  ],
+  "textNodes": 170,
+  "lowContrast": 2,
+  "contrastSample": [
+   "3.97 Administración",
+   "4.33 RBAC"
+  ],
+  "tiny12": 1,
+  "h1": 1,
+  "bodyH": 2078,
+  "consoleErrors": 0,
+  "consoleSample": []
+ }
+}
