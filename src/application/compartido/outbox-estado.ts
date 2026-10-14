@@ -9,6 +9,11 @@ export type EstadoOutbox = {
   enviados: number;
   /** Eventos que agotaron reintentos (`dead_at` no nulo). */
   fallidos: number;
+  /**
+   * Pendientes cuyo tipo no tiene consumidor registrado. No se reclaman, no se reintentan
+   * ni van a la cola muerta: esperan a que su módulo registre el manejador. Subconjunto de `pendientes`.
+   */
+  sinConsumidor: number;
   ultimoEnviadoAt: Date | null;
 };
 
@@ -29,5 +34,8 @@ export function describirEstadoOutbox(estado: EstadoOutbox | null): string {
   const worker = `Worker manual: ejecuta "${COMANDO_WORKER_OUTBOX}" (no hay proceso en segundo plano).`;
   if (!estado) return `${worker} Estado de la cola no disponible.`;
   const ultimo = estado.ultimoEnviadoAt ? formato.format(estado.ultimoEnviadoAt) : "nunca";
-  return `${worker} Pendientes: ${estado.pendientes} · enviados: ${estado.enviados} · fallidos: ${estado.fallidos} · último procesado: ${ultimo}.`;
+  const base = `${worker} Pendientes: ${estado.pendientes} · enviados: ${estado.enviados} · fallidos: ${estado.fallidos} · último procesado: ${ultimo} · sin consumidor: ${estado.sinConsumidor}.`;
+  return estado.sinConsumidor > 0
+    ? `${base} Los eventos sin consumidor siguen pendientes e intactos hasta que su módulo registre un manejador.`
+    : base;
 }

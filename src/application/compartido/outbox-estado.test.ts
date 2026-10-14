@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { COMANDO_WORKER_OUTBOX, describirEstadoOutbox } from "./outbox-estado.ts";
 
 test("describirEstadoOutbox: dice que el worker es manual, nunca que esté activo", () => {
-  for (const estado of [null, { pendientes: 0, enviados: 0, fallidos: 0, ultimoEnviadoAt: null }]) {
+  for (const estado of [null, { pendientes: 0, enviados: 0, fallidos: 0, sinConsumidor: 0, ultimoEnviadoAt: null }]) {
     const texto = describirEstadoOutbox(estado);
     assert.ok(texto.includes(COMANDO_WORKER_OUTBOX));
     assert.match(texto, /no hay proceso en segundo plano/);
@@ -12,14 +12,23 @@ test("describirEstadoOutbox: dice que el worker es manual, nunca que esté activ
 });
 
 test("describirEstadoOutbox: muestra solo los conteos recibidos y 'nunca' sin envíos", () => {
-  const texto = describirEstadoOutbox({ pendientes: 4, enviados: 0, fallidos: 2, ultimoEnviadoAt: null });
+  const texto = describirEstadoOutbox({ pendientes: 4, enviados: 0, fallidos: 2, sinConsumidor: 0, ultimoEnviadoAt: null });
   assert.match(texto, /Pendientes: 4 · enviados: 0 · fallidos: 2 · último procesado: nunca/);
 });
 
 test("describirEstadoOutbox: formatea el último envío en hora de Santo Domingo", () => {
-  const texto = describirEstadoOutbox({ pendientes: 0, enviados: 1, fallidos: 0, ultimoEnviadoAt: new Date("2026-10-14T16:30:00Z") });
+  const texto = describirEstadoOutbox({ pendientes: 0, enviados: 1, fallidos: 0, sinConsumidor: 0, ultimoEnviadoAt: new Date("2026-10-14T16:30:00Z") });
   assert.match(texto, /2026/);
   assert.doesNotMatch(texto, /nunca/);
+});
+
+test("describirEstadoOutbox: reporta «sin consumidor» y explica que esos eventos esperan intactos", () => {
+  const con = describirEstadoOutbox({ pendientes: 5, enviados: 0, fallidos: 0, sinConsumidor: 3, ultimoEnviadoAt: null });
+  assert.match(con, /sin consumidor: 3\./);
+  assert.match(con, /siguen pendientes e intactos/);
+  const sin = describirEstadoOutbox({ pendientes: 1, enviados: 0, fallidos: 0, sinConsumidor: 0, ultimoEnviadoAt: null });
+  assert.match(sin, /sin consumidor: 0\./);
+  assert.doesNotMatch(sin, /intactos/);
 });
 
 test("describirEstadoOutbox: sin lectura de la cola lo dice y no inventa conteos", () => {

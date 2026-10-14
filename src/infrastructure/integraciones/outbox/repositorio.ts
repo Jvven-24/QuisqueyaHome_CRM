@@ -22,10 +22,16 @@ export function outboxDrizzle(tx: Tx): OutboxCrm {
 /** Solo adaptador local en esta fase. Una llamada externa no debe mantener el lock. */
 export function colaOutboxDrizzle(db: Db): ColaOutbox {
   return {
-    conSiguiente(cuando, procesar) {
+    conSiguiente(cuando, tipos, procesar) {
+      // Sin consumidores no hay nada que reclamar (y `in ()` no es SQL válido).
+      if (tipos.length === 0) return Promise.resolve(false);
       return db.transaction(async (tx) => {
         const [evento] = await tx.select().from(outbox)
-          .where(and(isNull(outbox.sentAt), isNull(outbox.deadAt), lte(outbox.availableAt, cuando)))
+          .where(and(
+            isNull(outbox.sentAt), isNull(outbox.deadAt), lte(outbox.availableAt, cuando),
+            // Solo tipos con consumidor: los demás quedan pendientes e intactos (nunca a cola muerta).
+            sql`${outbox.eventType} in (${sql.join(tipos.map((tipo) => sql`${tipo}`), sql`, `)})`,
+          ))
           .orderBy(asc(outbox.createdAt), asc(outbox.eventId)).limit(1).for("update", { skipLocked: true });
         if (!evento) return false;
         const intento = evento.attempts + 1;
