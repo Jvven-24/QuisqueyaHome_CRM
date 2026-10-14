@@ -21,6 +21,7 @@
     "test:db:mutation:negocios-join": "node scripts/test-db/run.mjs --mutation=negocios-join",
     "spec:check": "node scripts/spec/check.mjs",
     "avance": "node scripts/spec/avance.mjs",
+    "outbox:worker": "node scripts/outbox-worker.mjs",
     "test:spec": "node --test scripts/spec/check.test.mjs scripts/spec/avance.test.mjs",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",

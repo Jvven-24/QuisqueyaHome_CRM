@@ -113,6 +113,12 @@ export const AUDIT_ACTIONS = [
   "descartar",
   /** M2 · Leads: confirmar el responsable (`broker_id`), issue #22. */
   "asignar",
+  /**
+   * M11 · Comunicaciones: envío de un mensaje por un canal externo. Se
+   * registra con `entity_type = "user"` y `entity_id = quien envió`; el
+   * destinatario va enmascarado en `new_value` (hallazgo D21/D12, 2026-10-14).
+   */
+  "enviar",
 ] as const;
 
 /** Estado del lead antes de convertirse en negocio. */

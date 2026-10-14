@@ -3,6 +3,7 @@
  */
 
 import type { CanalComunicacion } from "../../domain/comunicaciones";
+import type { Actor } from "../../domain/rbac";
 
 export type PlantillaMensaje = {
   id: number;
@@ -58,4 +59,19 @@ export interface RepositorioComunicaciones {
 
 export interface ProveedorDespachoCanal {
   despachar(mensaje: MensajeADespachar): Promise<ResultadoDespacho>;
+}
+
+/** Lo que queda en el registro de auditoría de un despacho. Sin cuerpo del mensaje y con el destinatario enmascarado. */
+export type RegistroDespacho = {
+  canal: CanalComunicacion;
+  destinatarioEnmascarado: string;
+  ok: boolean;
+  mensajeId: string | null;
+  error: string | null;
+  enviadoAt: Date;
+};
+
+/** Escribe el rastro del despacho (quién, cuándo, canal, destinatario enmascarado, resultado). */
+export interface AuditoriaDespachos {
+  registrar(actor: Actor, registro: RegistroDespacho): Promise<void>;
 }

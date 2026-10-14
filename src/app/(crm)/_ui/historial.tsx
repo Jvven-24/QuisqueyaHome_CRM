@@ -39,6 +39,7 @@ const ETIQUETAS_ACCION: Record<string, string> = {
   cambiar_etapa: "Cambio de etapa",
   cerrar: "Cierre",
   marcar_perdido: "Marcado como perdido",
+  enviar: "Envío de mensaje",
 };
 
 const formateadorFecha = new Intl.DateTimeFormat("es-DO", {

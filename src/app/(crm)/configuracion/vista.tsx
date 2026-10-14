@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { EstadoOutbox } from "@/application/compartido/outbox-estado";
 import { PageHeader } from "../_ui/prototipo-ui";
 import { UsuariosPanel, type RolOpcion, type UsuarioFila } from "./_usuarios";
 import { PermisosPanel, type PermisoCelda } from "./_permisos";
@@ -40,6 +41,7 @@ export function ConfiguracionVista(props: {
   catalogos?: { motivos: CatalogoFila[]; canales: CatalogoFila[] };
   papelera?: PapeleraFila[];
   integraciones?: IntegracionFila[];
+  estadoOutbox?: EstadoOutbox | null;
 }) {
   const { tab, puedeEditar } = props;
   const router = useRouter();
@@ -74,7 +76,7 @@ export function ConfiguracionVista(props: {
           {tab === "etapas" && props.etapas && <EtapasPanel etapas={props.etapas} puedeEditar={puedeEditar} />}
           {tab === "catalogos" && props.catalogos && <CatalogosPanel {...props.catalogos} puedeEditar={puedeEditar} />}
           {tab === "papelera" && props.papelera && <PapeleraPanel filas={props.papelera} puedeEditar={puedeEditar} />}
-          {tab === "integraciones" && props.integraciones && <IntegracionesPanel integraciones={props.integraciones} />}
+          {tab === "integraciones" && props.integraciones && <IntegracionesPanel integraciones={props.integraciones} estadoOutbox={props.estadoOutbox ?? null} />}
         </section>
       </div>
     </>

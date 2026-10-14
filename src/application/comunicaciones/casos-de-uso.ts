@@ -3,11 +3,15 @@
  */
 
 import {
+  enmascararDestinatario,
   extraerVariablesDePlantilla,
   renderizarPlantilla,
+  sanitizarErrorDespacho,
   type CanalComunicacion,
 } from "../../domain/comunicaciones.ts";
+import type { Actor } from "../../domain/rbac.ts";
 import type {
+  AuditoriaDespachos,
   PlantillaMensaje,
   MensajeADespachar,
   ResultadoDespacho,
@@ -114,6 +118,50 @@ export async function prepararYDespacharMensaje(
   };
 
   return proveedor.despachar(payload);
+}
+
+/**
+ * Despacho con rastro: quien llama ya comprobó el permiso de envío. Envía y
+ * después registra quién, cuándo, por qué canal, a quién (enmascarado) y con
+ * qué resultado. Si el proveedor lanza, el fallo también queda registrado y el
+ * error se propaga. Si es la auditoría la que falla, el mensaje YA salió: no
+ * se oculta ese hecho al llamador (`auditado: false`) ni se le pide reenviar.
+ */
+export async function despacharMensajeAuditado(
+  deps: { proveedor: ProveedorDespachoCanal; auditoria: AuditoriaDespachos },
+  actor: Actor,
+  datos: Parameters<typeof prepararYDespacharMensaje>[1],
+): Promise<{ resultado: ResultadoDespacho; auditado: boolean }> {
+  const destinatarioEnmascarado = enmascararDestinatario(datos.canal, datos.destinatario);
+  let resultado: ResultadoDespacho;
+  try {
+    resultado = await prepararYDespacharMensaje(deps.proveedor, datos);
+  } catch (error) {
+    await deps.auditoria.registrar(actor, {
+      canal: datos.canal,
+      destinatarioEnmascarado,
+      ok: false,
+      mensajeId: null,
+      error: sanitizarErrorDespacho(error instanceof Error ? error.message : "Fallo del proveedor."),
+      enviadoAt: new Date(),
+    }).catch(() => undefined); // el error original del proveedor es el que importa
+    throw error;
+  }
+  try {
+    await deps.auditoria.registrar(actor, {
+      canal: datos.canal,
+      destinatarioEnmascarado,
+      ok: resultado.ok,
+      mensajeId: resultado.mensajeId ?? null,
+      error: sanitizarErrorDespacho(resultado.error),
+      enviadoAt: resultado.enviadoAt,
+    });
+    return { resultado, auditado: true };
+  } catch {
+    // Sin el detalle del error: puede arrastrar SQL o parámetros.
+    console.error("comunicaciones: el mensaje se despachó pero no se pudo registrar en auditoría.");
+    return { resultado, auditado: false };
+  }
 }
 
 export async function consultarEstadosCanales(

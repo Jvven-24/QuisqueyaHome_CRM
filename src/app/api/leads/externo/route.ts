@@ -13,6 +13,16 @@
  * La idempotencia (decisión #20) la da `capturarLeadExterno`
  * (`application/leads`) con un upsert atómico sobre `leads_external_id_unq`;
  * esta ruta solo autentica el token, valida el cuerpo y responde.
+ *
+ * **Contrato (cuerpo JSON).** Obligatorios: `externalId` (clave de idempotencia),
+ * `fullName`. Opcionales: `phone`, `email`; origen y proyecto: `sourceId`,
+ * `projectId`, `projectInterestText`, `zoneInterest`, `campaign`, `utmSource`,
+ * `utmMedium`, `utmCampaign`, `sourceVideoUrl`; `operationType`, presupuesto
+ * (`budgetMinCents`, `budgetMaxCents`, `currency`), `originalMessage`. Campos
+ * desconocidos se ignoran. **Respuesta 200:** `{ ok, lead, creado, leadId }`
+ * (`leadId === lead.id`; reintento con el mismo `externalId` y payload devuelve
+ * el mismo lead con `creado: false`). 401 token, 400 validación, 409 mismo
+ * `externalId` con otro payload.
  */
 
 import { z } from "zod";
@@ -95,7 +105,9 @@ export async function POST(request: Request) {
       sourceVideoUrl: datos.sourceVideoUrl,
     });
 
-    return Response.json({ ok: true, ...resultado });
+    // `leadId` es ADITIVO: el Portal lee `result.leadId` como acuse (D19, 2026-10-14);
+    // `lead` y `creado` se conservan tal cual para no romper a nadie más.
+    return Response.json({ ok: true, ...resultado, leadId: resultado.lead.id });
   } catch (error) {
     return errorResponse(error);
   }

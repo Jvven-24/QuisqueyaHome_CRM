@@ -1,12 +1,18 @@
 /**
  * M11 · Comunicaciones — API para despachar un mensaje multicanal.
+ *
+ * Enviar un mensaje a un tercero es una ESCRITURA con efecto externo, no una
+ * lectura: exige `communications:create` con alcance `all` (hallazgo D21/D12
+ * 2026-10-14: antes bastaba `view`). Con `all` y no `own` porque el destinatario
+ * es texto libre y no se puede acotar a "registros propios"; hoy lo tienen
+ * admin y asistente, no el broker. Cada despacho queda en `audit_log`.
  */
 
 import { z } from "zod";
-import { prepararYDespacharMensaje } from "@/application/comunicaciones/casos-de-uso";
-import { requireScope } from "@/domain/rbac";
+import { despacharMensajeAuditado } from "@/application/comunicaciones/casos-de-uso";
+import { requireFullScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { proveedorDespacho } from "@/infrastructure/contenedor/comunicaciones";
+import { auditoriaDespachos, proveedorDespacho } from "@/infrastructure/contenedor/comunicaciones";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
 const DespacharInput = z.object({
@@ -21,13 +27,13 @@ const DespacharInput = z.object({
 export async function POST(request: Request) {
   try {
     const actor = await requireActor();
-    requireScope(actor, "communications", "view");
+    requireFullScope(actor, "communications", "create");
 
     const cuerpo = await request.json().catch(() => ({}));
     const datos = parseInput(DespacharInput, cuerpo);
 
     const proveedor = proveedorDespacho();
-    const resultado = await prepararYDespacharMensaje(proveedor, {
+    const { resultado, auditado } = await despacharMensajeAuditado({ proveedor, auditoria: auditoriaDespachos() }, actor, {
       canal: datos.canal,
       destinatario: datos.destinatario,
       cuerpoOPlantilla: datos.cuerpoOPlantilla,
@@ -39,7 +45,7 @@ export async function POST(request: Request) {
       },
     });
 
-    return Response.json({ ok: resultado.ok, resultado });
+    return Response.json({ ok: resultado.ok, resultado, auditado });
   } catch (error) {
     return errorResponse(error);
   }

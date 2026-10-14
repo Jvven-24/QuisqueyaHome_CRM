@@ -3,10 +3,12 @@
  */
 
 import type {
+  AuditoriaDespachos,
   RepositorioComunicaciones,
   ProveedorDespachoCanal,
 } from "../../application/comunicaciones/puertos";
 import { transaction } from "../db/client";
+import { auditoriaDespachosDrizzle } from "../db/repos/auditoria-despachos";
 import { repositorioComunicaciones } from "../db/repos/comunicaciones";
 import { ProveedorDespachoMulticanal } from "../comunicaciones/proveedor-despacho";
 
@@ -32,4 +34,8 @@ export function proveedorDespacho(): ProveedorDespachoCanal {
     instanciaProveedor = new ProveedorDespachoMulticanal();
   }
   return instanciaProveedor;
+}
+
+export function auditoriaDespachos(): AuditoriaDespachos {
+  return auditoriaDespachosDrizzle();
 }

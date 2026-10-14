@@ -4,6 +4,7 @@ import {
   crearPlantillaMensaje,
   actualizarPlantillaMensaje,
   prepararYDespacharMensaje,
+  despacharMensajeAuditado,
 } from "./casos-de-uso.ts";
 import type {
   RepositorioComunicaciones,
@@ -12,7 +13,10 @@ import type {
   MensajeADespachar,
   ResultadoDespacho,
   EstadoCanal,
+  AuditoriaDespachos,
+  RegistroDespacho,
 } from "./puertos.ts";
+import type { Actor } from "../../domain/rbac.ts";
 
 class RepositorioComunicacionesFalso implements RepositorioComunicaciones {
   public plantillas: PlantillaMensaje[] = [];
@@ -164,4 +168,87 @@ test("actualizarPlantillaMensaje: actualiza y recalcula variables al cambiar el 
   });
 
   assert.deepEqual(actualizada.variables, ["nombre", "fecha_cita", "broker"]);
+});
+
+const admin: Actor = { userId: 7, roleSlug: "admin", permissions: [] };
+
+class AuditoriaDespachosEspia implements AuditoriaDespachos {
+  public registros: { actor: Actor; registro: RegistroDespacho }[] = [];
+  private readonly falla: boolean;
+  constructor(falla = false) { this.falla = falla; }
+  async registrar(actor: Actor, registro: RegistroDespacho): Promise<void> {
+    if (this.falla) throw new Error("select * from audit_log where password = 'x'");
+    this.registros.push({ actor, registro });
+  }
+}
+
+test("despacharMensajeAuditado: registra quién, canal, destinatario enmascarado y resultado, sin el cuerpo", async () => {
+  const proveedor = new ProveedorDespachoEspia();
+  const auditoria = new AuditoriaDespachosEspia();
+  const { resultado, auditado } = await despacharMensajeAuditado({ proveedor, auditoria }, admin, {
+    canal: "whatsapp",
+    destinatario: "+1 809 555 0142",
+    cuerpoOPlantilla: "Mensaje privado para {nombre}",
+    variables: { nombre: "Ana" },
+  });
+
+  assert.equal(resultado.ok, true);
+  assert.equal(auditado, true);
+  assert.equal(auditoria.registros.length, 1);
+  const { actor, registro } = auditoria.registros[0]!;
+  assert.equal(actor.userId, 7);
+  assert.equal(registro.canal, "whatsapp");
+  assert.equal(registro.destinatarioEnmascarado, "***142");
+  assert.equal(registro.ok, true);
+  assert.equal(registro.mensajeId, "msg_test_123");
+  assert.equal(registro.error, null);
+  const serializado = JSON.stringify(registro);
+  assert.ok(!serializado.includes("809 555"), "el teléfono completo no se guarda");
+  assert.ok(!serializado.includes("privado"), "el cuerpo no se guarda");
+});
+
+test("despacharMensajeAuditado: un resultado fallido del proveedor también queda registrado", async () => {
+  const proveedor: ProveedorDespachoCanal = {
+    despachar: async (m) => ({ ok: false, canal: m.canal, error: "Canal sin configurar", enviadoAt: new Date() }),
+  };
+  const auditoria = new AuditoriaDespachosEspia();
+  const { resultado, auditado } = await despacharMensajeAuditado({ proveedor, auditoria }, admin, {
+    canal: "email", destinatario: "ana@example.com", cuerpoOPlantilla: "Hola",
+  });
+  assert.equal(resultado.ok, false);
+  assert.equal(auditado, true);
+  assert.equal(auditoria.registros[0]!.registro.ok, false);
+  assert.equal(auditoria.registros[0]!.registro.error, "Canal sin configurar");
+  assert.equal(auditoria.registros[0]!.registro.destinatarioEnmascarado, "a***@example.com");
+});
+
+test("despacharMensajeAuditado: si el proveedor lanza, se registra el fallo y se propaga el error original", async () => {
+  const proveedor: ProveedorDespachoCanal = { despachar: async () => { throw new Error("boom"); } };
+  const auditoria = new AuditoriaDespachosEspia();
+  await assert.rejects(
+    () => despacharMensajeAuditado({ proveedor, auditoria }, admin, { canal: "telegram", destinatario: "@alguien", cuerpoOPlantilla: "Hola" }),
+    /boom/,
+  );
+  assert.equal(auditoria.registros.length, 1);
+  assert.equal(auditoria.registros[0]!.registro.ok, false);
+  assert.equal(auditoria.registros[0]!.registro.error, "boom");
+});
+
+test("despacharMensajeAuditado: si falla la auditoría el envío no se oculta ni se vuelve a intentar", async () => {
+  const proveedor = new ProveedorDespachoEspia();
+  const original = console.error;
+  const avisos: unknown[][] = [];
+  console.error = (...args: unknown[]) => { avisos.push(args); };
+  try {
+    const { resultado, auditado } = await despacharMensajeAuditado(
+      { proveedor, auditoria: new AuditoriaDespachosEspia(true) }, admin,
+      { canal: "telegram", destinatario: "@alguien", cuerpoOPlantilla: "Hola" },
+    );
+    assert.equal(resultado.ok, true);
+    assert.equal(auditado, false);
+    assert.equal(proveedor.despachados.length, 1);
+    assert.ok(!JSON.stringify(avisos).includes("audit_log"), "el log no arrastra el SQL del fallo");
+  } finally {
+    console.error = original;
+  }
 });

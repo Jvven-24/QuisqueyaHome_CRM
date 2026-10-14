@@ -164,3 +164,46 @@ export function validarConfiguracionCanal(
       return { valido: true };
   }
 }
+
+/**
+ * Destinatario apto para el registro de auditoría: suficiente para reconocer a
+ * quién se escribió, insuficiente para reconstruir el contacto (teléfono,
+ * correo, usuario de Telegram o URL del webhook completos son datos personales
+ * o secretos y no se guardan en `audit_log`).
+ */
+export function enmascararDestinatario(canal: CanalComunicacion, destinatario: string): string {
+  const valor = destinatario.trim();
+  if (!valor) return "***";
+  switch (canal) {
+    case "email": {
+      const arroba = valor.lastIndexOf("@");
+      if (arroba < 1) return "***";
+      return `${valor[0]}***${valor.slice(arroba)}`;
+    }
+    case "whatsapp":
+    case "sms": {
+      const digitos = valor.replace(/[^0-9]/g, "");
+      return digitos.length >= 4 ? `***${digitos.slice(-3)}` : "***";
+    }
+    case "telegram": {
+      const usuario = valor.replace(/^@/, "");
+      return usuario.length >= 3 ? `@${usuario.slice(0, 2)}***` : "@***";
+    }
+    case "webhook": {
+      try {
+        return `${new URL(valor).origin}/***`;
+      } catch {
+        return "***";
+      }
+    }
+  }
+}
+
+/**
+ * Los mensajes de error del proveedor viajan al registro de auditoría: se
+ * recortan y se les quitan fragmentos con forma de token de bot (`id:hash`).
+ */
+export function sanitizarErrorDespacho(error: string | undefined): string | null {
+  if (!error) return null;
+  return error.replace(/\d{6,}:[A-Za-z0-9_-]{20,}/g, "[token]").slice(0, 200);
+}

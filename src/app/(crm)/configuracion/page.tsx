@@ -16,6 +16,7 @@
 import { eq, isNotNull, isNull } from "drizzle-orm";
 import { can } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
+import { estadoOutbox } from "@/infrastructure/contenedor/outbox";
 import { getDb } from "@/infrastructure/db/client";
 import {
   brokerProfiles,
@@ -143,6 +144,10 @@ export default async function ConfiguracionPage({
   }
 
   // tab === "integraciones"
-  const integraciones = await db.select().from(integrationAccounts);
-  return <ConfiguracionVista tab={tab} puedeEditar={puedeEditar} integraciones={integraciones} />;
+  const [integraciones, estado] = await Promise.all([
+    db.select().from(integrationAccounts),
+    // Si la cola no se puede leer se dice "no disponible"; nunca se inventa un estado.
+    estadoOutbox().catch(() => null),
+  ]);
+  return <ConfiguracionVista tab={tab} puedeEditar={puedeEditar} integraciones={integraciones} estadoOutbox={estado} />;
 }

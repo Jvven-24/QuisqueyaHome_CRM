@@ -7,6 +7,8 @@ import {
   generarEnlaceWhatsApp,
   validarTokenTelegram,
   validarConfiguracionCanal,
+  enmascararDestinatario,
+  sanitizarErrorDespacho,
 } from "./comunicaciones.ts";
 
 test("renderizarPlantilla: reemplaza variables encontradas y deja intactas las ausentes", () => {
@@ -67,4 +69,25 @@ test("validarConfiguracionCanal: valida configuraciones por canal", () => {
     url: "https://api.quisqueyahome.com/leads",
   });
   assert.ok(webhookOk.valido);
+});
+
+test("enmascararDestinatario: no deja teléfono, correo, usuario ni URL completos", () => {
+  assert.equal(enmascararDestinatario("whatsapp", "+1 (809) 555-0142"), "***142");
+  assert.equal(enmascararDestinatario("sms", "8095550142"), "***142");
+  assert.equal(enmascararDestinatario("email", "maria.soto@example.com"), "m***@example.com");
+  assert.equal(enmascararDestinatario("telegram", "@inversionista_rd"), "@in***");
+  assert.equal(enmascararDestinatario("webhook", "https://hooks.example.com/abc/SECRETO?t=1"), "https://hooks.example.com/***");
+  for (const [canal, dest] of [["whatsapp", "12"], ["email", "sin-arroba"], ["webhook", "no-url"], ["telegram", ""]] as const) {
+    const m = enmascararDestinatario(canal, dest);
+    assert.ok(!m.includes(dest) || dest === "", `${canal}: ${m}`);
+  }
+});
+
+test("sanitizarErrorDespacho: recorta y oculta tokens de bot", () => {
+  assert.equal(sanitizarErrorDespacho(undefined), null);
+  assert.equal(
+    sanitizarErrorDespacho("fallo en https://api.telegram.org/bot123456789:ABCdefGHIjklMNOpqrSTUvwxYZ_0123456789/sendMessage"),
+    "fallo en https://api.telegram.org/bot[token]/sendMessage",
+  );
+  assert.equal(sanitizarErrorDespacho("x".repeat(500))!.length, 200);
 });
