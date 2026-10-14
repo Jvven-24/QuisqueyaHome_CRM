@@ -50,6 +50,17 @@
 - [ ] Describe qué se recolecta, para qué, cuánto se conserva y con quién se comparte
 - [ ] Alineada con la retención real documentada por D11, no una plantilla genérica
 
+## H. Landing, narrativa y medición
+
+Aplicar `core/design-experience-os.md` (§5 y flujo DG); esta checklist concreta la evidencia D08 sin sustituir los gates ni las decisiones de D02/D05.
+
+- [ ] La secuencia narrativa de §5 está vinculada a audiencia, preguntas del usuario, promesa dominante y objetivo D02; omisiones o cambios de orden tienen razón documentada
+- [ ] Cada afirmación y pieza de prueba social (testimonio, cifra, logo o caso) tiene fuente, propietario y fecha; su uso está autorizado y el texto corresponde a la fuente, sin presentar contenido no verificado como prueba
+- [ ] La variante móvil conserva una historia comprensible y el CTA principal; documenta contenido omitido/reordenado con capturas de la versión en los puntos de corte vigentes de D05
+- [ ] Cada idioma/variante regional tiene revisión lingüística en pantalla: formatos, expansión de texto y ausencia de truncado que elimine promesa, prueba, condiciones u objeciones
+- [ ] Evidencia de comprensión comprueba propuesta y siguiente paso con la misma tarea para baseline y variante; una checklist completa no demuestra por sí sola calidad del copy
+- [ ] Versión, eventos, denominador, periodo, muestra y consentimiento de la medición están registrados; si se experimenta, existe la ficha del SOP con hipótesis, métrica primaria, guardrails, asignación, duración/parada y decisión, sin afirmar causalidad con datos insuficientes
+
 ---
 
 ## Veredicto

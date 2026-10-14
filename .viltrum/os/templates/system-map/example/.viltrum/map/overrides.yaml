@@ -1,0 +1,6 @@
+overrides:
+- node: SCR-001
+  field: plain
+  value: La pantalla donde el cliente elige día y hora y deja sus datos
+  reason: Wilber prefiere decirlo así
+  date: '2026-10-06'

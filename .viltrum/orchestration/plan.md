@@ -1,6 +1,6 @@
 # Plan de orquestación
 
-Objetivo: Refactorizacion integral de diseno y arquitectura de QuisqueyaHome CRM bajo estandar Viltrum Studio y sincronizacion Obsidian
+Objetivo: Implementar frente E1.2 Leads e integrar Timeline enriquecido en Ficha 360 Negocios con perfiles Viltrum
 
 Intención: INTEGRACION (provisional). Etapa: F0 / G0.
 

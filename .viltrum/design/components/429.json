@@ -1,0 +1,28 @@
+{
+  "author": "keen333",
+  "description": "A Next.js 15 / React 19 app template built with Shadcn, ReUI and Tailwind, featuring a Reddit-style layout with sidebars, feed list, account management and messaging. Includes dark mode and RTL support.",
+  "framework": "",
+  "id": "429",
+  "metadata": {
+    "author": "keen333",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yd0laRXlncTJmRWNIaERDWFZPVk5RUEw4SGsifQ",
+    "description": "A Next.js 15 / React 19 app template built with Shadcn, ReUI and Tailwind, featuring a Reddit-style layout with sidebars, feed list, account management and messaging. Includes dark mode and RTL support.",
+    "id": 429,
+    "name": "Summit - Next.js App Template",
+    "previewUrl": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/templates/user_2nElBLvklOKlAURm6W1PTu6yYFh/summit-next-js-app-template/preview.jpg",
+    "price": 99,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/summit-next-js-app-template"
+  },
+  "name": "Summit - Next.js App Template",
+  "previewUrl": null,
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:51.456598+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "ffd2b72c577a4ea276daac194d9cfe9266b138d0b41d2b51a3d299fc00e317c6"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/summit-next-js-app-template"
+}

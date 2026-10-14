@@ -104,6 +104,7 @@ borrador. Documentar la excepción y la recuperación, sin prometer conservació
 
 - [ ] Sin permiso de lectura: el elemento no se muestra, o se muestra deshabilitado con explicación — nunca falla al cargar sin decir por qué
 - [ ] Sin permiso de acción: deshabilitado con razón visible, nunca se deja intentar y falla después
+- [ ] Acción primaria deshabilitada por cualquier causa (validación incompleta, dependencia): razón visible que nombra qué falta, o no se deshabilita y se responde con resumen de errores (R2); obligatorios marcados (R1)
 - [ ] Permiso revocado en sesión activa: la interfaz se degrada sin romperse (no crashea, no queda en un estado inconsistente)
 - [ ] **El permiso se verifica siempre en el servidor.** Ocultar el botón en el cliente no es control de acceso, es apenas una ayuda visual
 
@@ -130,7 +131,7 @@ Cada componente se revisa contra sus estados obligatorios de interacción y de d
 
 | Componente | Estados obligatorios |
 |---|---|
-| Botón | reposo, hover, foco visible, activo, deshabilitado (con razón), cargando (bloquea doble clic) |
+| Botón | reposo, hover, foco visible, activo, deshabilitado (con razón: permiso, validación, dependencia u operación en curso; nombra qué falta), cargando (bloquea doble clic), éxito. Contrato R1–R8 en `core/doctrine/ux-states.md` |
 | Input | vacío, con valor, foco, error (con mensaje), deshabilitado, de solo lectura |
 | Tabla | cargando (skeleton de filas), vacía, con datos, error parcial por fila/columna, ordenada, filtrada |
 | Select / combobox | cerrado, abierto, buscando (si tiene búsqueda), sin resultados, cargando opciones remotas |
@@ -201,6 +202,7 @@ no una verificación.
 | Estado documentado pero nunca reproducido en ejecución | Verificación propia obligatoria antes de handoff — paso 13 |
 | Error de carga de archivos reportado como todo-o-nada | Error parcial por archivo, cada uno con su propio estado |
 | Estado comunicado solo con color | Texto real siempre, color es refuerzo, nunca la única señal |
+| Guardar deshabilitado sin decir por qué / obligatorios sin marca | Ver sección "Contrato de retroalimentación de acciones y formularios" de `core/doctrine/ux-states.md` |
 
 
 ## Integración PXIL (2026-09-30)
@@ -209,3 +211,8 @@ Antes de diseño o revisión de experiencia, cargar `skills/viltrum-pxil-design/
 Las skills complementarias del contrato son: pxil-experience-contract, pxil-permission-matrix.
 Consultar `registry/design-resources.json` y la plantilla de contrato de experiencia.
 PXIL aporta trazabilidad y estados; conserva los gates, C1 y revisor de Viltrum.
+
+Activa la guía revisada por D00 (HND-012) de [`core/design-experience-os.md` §9](../../core/design-experience-os.md#portfolio-editorial-motion)
+si el scroll añade navegación, capítulo activo o comportamiento de tema; define anclas y
+acuerda con D02 el requisito de persistencia antes de implementarlo. El scroll pasivo no crea
+por sí mismo un estado de negocio.

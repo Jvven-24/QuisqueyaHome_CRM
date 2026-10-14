@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D11",
+  "gate": "G5",
+  "actor": "codex-gpt-6.1-sol-d11",
+  "createdAt": "2026-10-04T17:32:51.633819+00:00",
+  "state": "review_pending",
+  "reviewer": "D12",
+  "summary": {
+    "path": ".viltrum/vre-os/D11-rework-catalogos.md",
+    "sha256": "f032846ec4c16ba96b83efd794789adf5cf7871f34ee562b0e49e3e9229fe788",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T171111Z-D11-codex/evidence.json",
+      "sha256": "92ac46a4d7d1b38005afbd782e29e93ed495bf6b47aefe3ae25d9922b962f14f",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-020"
+}

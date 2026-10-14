@@ -5,6 +5,149 @@
   "status": "methodology_available",
   "source": "VILTRUM DESING",
   "snapshotDate": "2026-09-30",
+  "ecosystemRoot": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem",
+  "paths": {
+    "onlook": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/visual-engine/onlook",
+    "storybook": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/visual-engine/storybook",
+    "penpot": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/optional/penpot",
+    "xstate": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/experience-engine/xstate",
+    "private-library": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/private-library"
+  },
+  "creation": {
+    "verified_at": "2026-10-06",
+    "scope": "Documentación y existencia de rutas; no acredita runtime, instalación de Open Design, adopción ni aprobación de gates.",
+    "ecosystemEvidence": [
+      "E:/VILTRUM/VILTRUM DESING/AGENTS.md",
+      "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/AI-CONTEXT.md"
+    ],
+    "tools": [
+      {
+        "id": "open-design",
+        "role": "creador local",
+        "url": "https://github.com/nexu-io/open-design",
+        "license": "Apache-2.0",
+        "status": "pilot-installed",
+        "owner": "D05",
+        "verified": {
+          "documentation": true,
+          "installation": true,
+          "provenance": "Instalador oficial open-design-0.24.1-win-x64-setup.exe, SHA-256 3a544dca…a441 igual al digest publicado por GitHub; sin firma Authenticode. Instalado por usuario el 2026-10-06 con autorización de Wilber.",
+          "source": ".viltrum/dispatch/20261006T194257Z-D00-codex/TAREA.md"
+        },
+        "notes": [
+          "PILOT instalado; ADOPT solo tras bake-off y decisión humana.",
+          "D12 (2026-10-06): solo proyectos ficticios/internos. La instalación trae consentimiento metrics/content=true; el lanzador fuerza false en un OD_DATA_DIR propio y aborta si no se confirma. Sink de telemetría efectivo 'none'. Datos de clientes: no, hasta medir conexiones salientes.",
+          "Motor: Codex (gpt-6.1-sol según ~/.codex/config.toml) detectado por PATH; 163 skills con OD_RESOURCE_ROOT. Uso sin GUI: `od automation create|run` (rutinas disabled, ejecución manual).",
+          "El sandbox de Codex en Windows bloquea loopback: los perfiles no llaman al daemon desde dispatch; el orquestador dispara rutinas y los perfiles revisan los archivos generados.",
+          "Límite de uso de Codex compartido: lanzar corridas en serie (2 de 5 fallaron por RATE_LIMITED en paralelo el 2026-10-06)."
+        ],
+        "version": "0.24.1",
+        "launcher": "integrations/open-design/start-daemon.ps1"
+      },
+      {
+        "id": "claude-design",
+        "role": "benchmark",
+        "url": "https://claude.com/product/design",
+        "license": "proprietary",
+        "status": "benchmark",
+        "owner": "D05",
+        "verified": {
+          "documentation": true,
+          "runtime": "not-verified",
+          "provenance": "Benchmark propietario definido por TAREA.md; documentación oficial consultada por Codex confirma /design y /design-sync en Claude Code.",
+          "source": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design"
+        },
+        "notes": [
+          "Acceso, plan, ejecución y bake-off no verificados en este host; no acredita adopción."
+        ]
+      },
+      {
+        "id": "onlook",
+        "role": "edición visual",
+        "path": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/visual-engine/onlook",
+        "license": "Apache-2.0",
+        "status": "available-in-pxil",
+        "owner": "D09",
+        "verified": {
+          "directory": true,
+          "license": true,
+          "runtime": "not-verified",
+          "source": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/visual-engine/onlook/LICENSE.md"
+        },
+        "notes": [
+          "Repositorio local presente; ajustes visuales sobre código implementado por D09. No se ejecutó el proyecto."
+        ]
+      },
+      {
+        "id": "penpot",
+        "role": "canvas",
+        "path": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/optional/penpot",
+        "license": "MPL-2.0",
+        "status": "available-in-pxil",
+        "owner": "D05",
+        "verified": {
+          "directory": true,
+          "license": true,
+          "runtime": "not-verified",
+          "source": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/optional/penpot/LICENSE"
+        },
+        "notes": [
+          "PILOT/decisión de licencia: MPL-2.0 exige revisión humana según registry/system-map.json; presencia local no significa ADOPT. No se ejecutó el proyecto."
+        ],
+        "license_decision": {
+          "decided_by": "Wilber",
+          "date": "2026-10-06",
+          "evidence": "transcripción de la sesión: «de acuerdo con las 4 e intégralas»",
+          "license": "MPL-2.0",
+          "scope": "canvas opcional autoalojado para uso propio"
+        }
+      },
+      {
+        "id": "21st",
+        "role": "componentes",
+        "url": "https://21st.dev",
+        "license": "proprietary; revisar la licencia de cada componente",
+        "status": "available-in-pxil",
+        "owner": "D04",
+        "verified": {
+          "methodology": true,
+          "runtime": "not-verified",
+          "source": "E:/VILTRUM/VILTRUM DESING/AGENTS.md"
+        },
+        "notes": [
+          "Referencia del ecosistema; acceso CLI/MCP y componentes no verificados en esta ejecución. Consultar primero la biblioteca privada.",
+          "Cero inventos: solo CLI/MCP oficiales reales; conservar autor, licencia y código original. No simular resultados ni hacer scraping."
+        ]
+      },
+      {
+        "id": "private-library",
+        "role": "componentes",
+        "path": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/private-library",
+        "license": "per-component; verificar autor y licencia antes de integrar",
+        "status": "in-use",
+        "owner": "D04",
+        "verified": {
+          "directory": true,
+          "policy": true,
+          "runtime": "not-verified",
+          "source": "registry/design-resources.json#library/privateLibrary"
+        },
+        "notes": [
+          "in-use expresa la política de consulta vigente del registro, no una prueba de ejecución del catálogo en esta sesión.",
+          "D04/D05/D09/D10 consultan antes de crear desde cero y evalúan ajuste visual, responsive, estados y licencia."
+        ]
+      }
+    ],
+    "license_decisions": {
+      "growthbook": {
+        "decided_by": "Wilber",
+        "date": "2026-10-06",
+        "evidence": "transcripción de la sesión: «de acuerdo con las 4 e intégralas»",
+        "license": "MIT (núcleo) / comercial (enterprise)",
+        "scope": "solo núcleo MIT, autoalojado, cuando un proyecto tenga experimentos; funciones enterprise excluidas; D12/D19 revisan eventos/privacidad antes de integrar"
+      }
+    }
+  },
   "entrypoint": "skills/viltrum-pxil-design/SKILL.md",
   "reference": "integrations/pxil/reference",
   "provenance": "integrations/pxil/provenance.json",
@@ -91,6 +234,20 @@
     "ranking": "lexical_candidates_require_visual_review",
     "construction": "authorized_host_D09",
     "externalSourceRequired": false,
-    "remoteJevConfigured": false
+    "remoteJevConfigured": false,
+    "privateLibrary": {
+      "path": "E:/Viltrum/VILTRUM DESING/pxil-ecosystem/private-library",
+      "catalog": "CATALOGO_VISUAL.md",
+      "query": "python query_library.py --search <términos> [--family enterprise-dense|saas-modern|creative-motion] --json",
+      "components": 4041,
+      "profiles": [
+        "D04",
+        "D05",
+        "D09",
+        "D10"
+      ],
+      "rule": "Consultar antes de crear componentes o pantallas desde cero; evaluar ajuste visual, responsive, estados y licencia antes de integrar.",
+      "verified_at": "2026-10-05"
+    }
   }
 }

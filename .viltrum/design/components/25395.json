@@ -1,0 +1,29 @@
+{
+  "author": "diceui",
+  "description": "A pill-shaped status badge with a pulsing indicator dot and color variants for signaling online, error, warning, info, and idle states.",
+  "framework": "",
+  "id": "25395",
+  "metadata": {
+    "author": "diceui",
+    "authorImage": "https://github.com/sadmann7.png",
+    "description": "A pill-shaped status badge with a pulsing indicator dot and color variants for signaling online, error, warning, info, and idle states.",
+    "id": 25395,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/diceui/status?[REDACTED]",
+    "name": "Status",
+    "previewUrl": "https://cdn.21st.dev/user_diceui/status/status-variants-demo/preview.1787679953245.webp",
+    "type": "component",
+    "url": "https://21st.dev/@diceui/components/status",
+    "videoUrl": "https://cdn.21st.dev/user_diceui/status/status-variants-demo/video.1787679957767.mp4"
+  },
+  "name": "Status",
+  "previewUrl": "https://cdn.21st.dev/user_diceui/status/status-variants-demo/preview.1787679953245.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:10.840854+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4e0c54be2018c8c69120c747718eaf4a105dca71fd45c5d532f5f54f6d464fd9"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@diceui/components/status"
+}

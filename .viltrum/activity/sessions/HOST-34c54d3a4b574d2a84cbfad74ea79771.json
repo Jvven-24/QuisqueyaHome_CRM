@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-34c54d3a4b574d2a84cbfad74ea79771",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D00",
+  "actor": "codex-root",
+  "goal": "Reanudar Academy CORE-0 desde chat interrumpido, coordinar contrato y revision independiente",
+  "status": "running",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T02:32:38.621321+00:00",
+  "updatedAt": "2026-10-05T02:43:46.690210+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T02:32:38.621383+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T02:43:46.690192+00:00",
+      "status": "running",
+      "message": "D03 produjo CORE-0; D14 y D12 de Claude aprobaron revision documental; revisor canonico D03 es humano antes de READY"
+    }
+  ]
+}

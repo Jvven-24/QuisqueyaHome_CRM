@@ -1,0 +1,29 @@
+{
+  "author": "cnippet-dev",
+  "description": "An alert dialog that notifies users about an available system update, showing the release version badge and \"Update Now\" / \"Remind Me Later\" actions.",
+  "framework": "",
+  "id": "24835",
+  "metadata": {
+    "author": "cnippet-dev",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_36Tbt0v8JdD4jEycmBFhR8tojnR/avatar.png",
+    "description": "An alert dialog that notifies users about an available system update, showing the release version badge and \"Update Now\" / \"Remind Me Later\" actions.",
+    "id": 24835,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/cnippet-dev/v-alert-dialog-8?[REDACTED]",
+    "name": "System Update Notification Alert Dialog",
+    "previewUrl": "https://cdn.21st.dev/user_36Tbt0v8JdD4jEycmBFhR8tojnR/v-alert-dialog-8/default/preview.1787745659774.png",
+    "type": "component",
+    "url": "https://21st.dev/@cnippet-dev/components/v-alert-dialog-8",
+    "videoUrl": "https://cdn.21st.dev/user_36Tbt0v8JdD4jEycmBFhR8tojnR/v-alert-dialog-8/default/video.1787745678683.mp4"
+  },
+  "name": "System Update Notification Alert Dialog",
+  "previewUrl": "https://cdn.21st.dev/user_36Tbt0v8JdD4jEycmBFhR8tojnR/v-alert-dialog-8/default/preview.1787745659774.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:07.843248+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6dff87db7e2176ba4e8387824f9cb00c26c1808f13ef79e2dcb343f3d9a1115a"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@cnippet-dev/components/v-alert-dialog-8"
+}

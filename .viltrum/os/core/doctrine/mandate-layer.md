@@ -47,10 +47,27 @@ Una frase que describa el **resultado** que la persona quiere, no la acción que
 |---|---|
 | "Hazme un formulario de registro" | Que un usuario nuevo pueda crear su cuenta con datos válidos y sin abandonar a mitad |
 | "Ponle base de datos" | Que los datos persistan y sobrevivan a reinicios, con posibilidad de cambiar el motor |
-| "Arregla que se ve feo en el celular" | Que la pantalla sea usable a 390 px sin desbordes ni texto ilegible |
+| "Arregla que se ve feo en el celular" | Que la pantalla sea usable de 320 a 390 px sin desbordes ni texto ilegible |
 
 Si hay dos intenciones plausibles que llevan a trabajos **materialmente distintos**, se
 anotan las dos: esa es una pregunta bloqueante.
+
+### 2b. Ampliar — de lo dicho a todo lo que implica
+Quien pide no siempre es técnico y suele hablar con ejemplos; lo que dice conlleva más de lo que nombra. Antes de seguir:
+
+1. **Ejemplo → clase.** Un ejemplo ("un botón", "Quisqueya", "el formulario de registro") nunca es el límite: se generaliza a la clase a la
+   que pertenece (todo componente interactivo, todo proyecto, todo formulario) y se aplica a toda la clase.
+2. **Lo implícito.** Recorrer las ocho caras de `skills/alcance-completo` y los efectos externos, y listar lo que la petición **conlleva**
+   aunque no se haya dicho: datos, permisos, estados, errores, idioma, accesibilidad, pruebas, operación, legal, costo, reversión y la
+   comunicación entre departamentos.
+3. **Ambigüedad → lecturas.** Cada término vago se resuelve con la lectura más completa razonable y se escribe como supuesto; solo se
+   pregunta lo bloqueante (paso 4).
+4. **Prompt mejorado.** La petición se reescribe como el encargo completo que habría escrito un ingeniero con experiencia (sección
+   "Prompt mejorado" del mandato). Eso es lo que se ejecuta; la petición original queda para verificar al cierre (paso 9).
+5. **Eco corto.** Al responder se muestran, en pocas líneas, la idea extraída y lo implícito que se agregó, para que el humano corrija
+   lo que no quiso.
+
+Proporción: una línea para lo trivial; la ampliación completa para lo sustancial. Esta ampliación es obligatoria y permanente.
 
 ### 3. Verificar en el código — hechos antes que supuestos
 Antes de proponer nada se mira el estado real:
@@ -60,7 +77,7 @@ Antes de proponer nada se mira el estado real:
 - ¿Qué se rompe si se cambia? (análisis de impacto)
 - ¿Qué dice el estado del proyecto? (`.viltrum/status.md`, preguntas abiertas, decisiones)
 
-**Herramienta según el caso:** búsqueda de texto para literales; GitNexus para relaciones,
+**Herramienta según el caso:** búsqueda de texto para literales; `viltrum repo-context`/`repo-impact` para relaciones,
 llamadas e impacto; un subagente con modelo pequeño si la exploración es amplia y solo
 interesa la conclusión. Ver `core/doctrine/context-budget.md`.
 
@@ -85,6 +102,10 @@ le toca a la IA.
 ### 6. Clasificar y enrutar
 Intención, tipo, riesgo y fase según `core/routing.md`. Departamentos que intervienen y en
 qué orden. Modelo para cada paso.
+
+Si la petición nombra una funcionalidad (no un cambio puntual), el mandato **cita la matriz de impacto** de la skill
+`alcance-completo`: etapa vigente, efectos externos (contenido, datos, funciones, integraciones, permisos, idioma, soporte,
+reversión) y qué departamentos quedan afectados. Sin esa matriz el mandato describe la punta de la función, no la función.
 
 ### 7. Escribir el mandato
 Con la plantilla `templates/mandate.md`. Es el prompt real de trabajo.
@@ -122,6 +143,9 @@ el trabajo correctamente. Esa es la prueba.
 |---|---|
 | Petición original | Qué se pidió, palabra por palabra |
 | Intención | Qué resultado se busca |
+| Ejemplos tratados como clase | Qué ejemplos dio la persona y a qué clase completa se generalizan |
+| Alcance implícito | Qué conlleva la petición aunque no se dijera |
+| Prompt mejorado | El encargo completo que se ejecuta realmente |
 | Hechos verificados | Cómo está el sistema hoy, con evidencia |
 | Supuestos | Qué se asume sin poder verificarlo |
 | Preguntas bloqueantes | Qué solo el humano puede decidir |
@@ -140,6 +164,8 @@ el trabajo correctamente. Esa es la prueba.
 | Fallo | Corrección |
 |---|---|
 | Ejecutar la acción literal sin extraer la intención | Paso 2 siempre, aunque sea mental en tareas acotadas |
+| Tomar el ejemplo del humano como el límite del alcance | Paso 2b: el ejemplo se generaliza a su clase |
+| Hacer solo lo nombrado y dejar fuera lo que conlleva | Paso 2b: listar lo implícito y decidir qué entra, qué se difiere y qué se pregunta |
 | Proponer sin haber mirado el código | Hechos verificados antes que plan |
 | Preguntar lo que se puede averiguar leyendo el repositorio | Se averigua; solo se pregunta lo que el humano sabe y el código no |
 | Diez preguntas antes de empezar | Solo las bloqueantes; el resto son supuestos escritos |

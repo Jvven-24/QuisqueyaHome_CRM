@@ -1,0 +1,28 @@
+{
+  "author": "creativetimofficial",
+  "description": "A React and shadcn/ui Material Design admin dashboard with analytics cards, charts, tables, profiles, notifications, subscriptions, and safe demo-only authentication flows.",
+  "framework": "",
+  "id": "908",
+  "metadata": {
+    "author": "creativetimofficial",
+    "authorImage": "https://avatars.githubusercontent.com/creativetimofficial",
+    "description": "A React and shadcn/ui Material Design admin dashboard with analytics cards, charts, tables, profiles, notifications, subscriptions, and safe demo-only authentication flows.",
+    "id": 908,
+    "name": "Material Dashboard Shadcn",
+    "previewUrl": "https://cdn.21st.dev/user_vendor_creativetimofficial/templates/material-dashboard-shadcn/preview-1789156505596.png",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/material-dashboard-shadcn"
+  },
+  "name": "Material Dashboard Shadcn",
+  "previewUrl": "https://cdn.21st.dev/user_vendor_creativetimofficial/templates/material-dashboard-shadcn/preview-1789156505596.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:07.864260+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6dff87db7e2176ba4e8387824f9cb00c26c1808f13ef79e2dcb343f3d9a1115a"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/material-dashboard-shadcn"
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D21",
+  "gate": "G2",
+  "actor": "antigravity-gemini-3.1-pro-low-d21",
+  "createdAt": "2026-10-04T16:38:48.252433+00:00",
+  "state": "review_pending",
+  "reviewer": "D03",
+  "summary": {
+    "path": ".viltrum/vre-os/D21-oss-intake.md",
+    "sha256": "fb974077387dee43ec711e8dbb5575e4bc8e59bb5a41adbb69fe33f8354a5d28",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T161033Z-D21-antigravity/evidence.json",
+      "sha256": "97ed27c05aa7eba36bf4c163798d0e61c366baebba386e8a446de53e8f72f1c7",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-012"
+}

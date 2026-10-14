@@ -1,0 +1,29 @@
+{
+  "author": "appica-dev",
+  "description": "A compact inline chart (line, area, or column) that shows a data trend at a glance inside a KPI card, table row, or dashboard header, with an optional hover tooltip and live-updating value/label.",
+  "framework": "",
+  "id": "34511",
+  "metadata": {
+    "author": "appica-dev",
+    "authorImage": "https://avatars.githubusercontent.com/u/280778463?v=4",
+    "description": "A compact inline chart (line, area, or column) that shows a data trend at a glance inside a KPI card, table row, or dashboard header, with an optional hover tooltip and live-updating value/label.",
+    "id": 34511,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/appica-dev/sparkline?[REDACTED]",
+    "name": "Sparkline",
+    "previewUrl": "https://cdn.21st.dev/appica-dev/sparkline/stat/preview.1790806738139-8b81dc7f-a8ef-4d5e-b61f-1af42983086e.png",
+    "type": "component",
+    "url": "https://21st.dev/@appica-dev/components/sparkline",
+    "videoUrl": "https://cdn.21st.dev/appica-dev/sparkline/stat/video.1790806738139-8b81dc7f-a8ef-4d5e-b61f-1af42983086e.mp4"
+  },
+  "name": "Sparkline",
+  "previewUrl": "https://cdn.21st.dev/appica-dev/sparkline/stat/preview.1790806738139-8b81dc7f-a8ef-4d5e-b61f-1af42983086e.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:41.918500+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "a6ac8fa98475b655b86304642a87e26478c04d91656142fa9f9f030a64701890"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@appica-dev/components/sparkline"
+}

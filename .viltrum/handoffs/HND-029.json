@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D14",
+  "gate": "G5",
+  "actor": "codex-gpt-6.1-sol-d14",
+  "createdAt": "2026-10-04T22:45:09.958422+00:00",
+  "state": "review_pending",
+  "reviewer": "D00",
+  "summary": {
+    "path": ".viltrum/vre-os/D14-test-db.md",
+    "sha256": "ea9d77f63378017f0bf37954110ea44ee7447730f54705eac4f93f3fc8111884",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T221347Z-D14-codex/evidence.json",
+      "sha256": "5a18731a7506c8c08cf674fb9ee96a047201d57e2e5e46f0687a5ffc88297350",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-029"
+}

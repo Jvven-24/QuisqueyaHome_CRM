@@ -1,0 +1,29 @@
+{
+  "author": "terrae",
+  "description": "A set of overlay buttons (zoom in/out, compass reset, geolocate, fullscreen) placed on top of an interactive Mapbox map.",
+  "framework": "",
+  "id": "29284",
+  "metadata": {
+    "author": "terrae",
+    "authorImage": "https://github.com/alamenai.png",
+    "description": "A set of overlay buttons (zoom in/out, compass reset, geolocate, fullscreen) placed on top of an interactive Mapbox map.",
+    "id": 29284,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/terrae/controls?[REDACTED]",
+    "name": "Map Controls",
+    "previewUrl": "https://cdn.21st.dev/user_registry_terrae_1783477908386/controls/default/preview.1790096360934.webp",
+    "type": "component",
+    "url": "https://21st.dev/@terrae/components/controls",
+    "videoUrl": "https://cdn.21st.dev/user_registry_terrae_1783477908386/controls/default/video.1790096348149.mp4"
+  },
+  "name": "Map Controls",
+  "previewUrl": "https://cdn.21st.dev/user_registry_terrae_1783477908386/controls/default/preview.1790096360934.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.897717+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "10301f6225d9265c01a686de8cdd24644b354d16041fcfedfc524907d54adf3f"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@terrae/components/controls"
+}

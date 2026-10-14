@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-09-29",
+  "updated": "2026-10-06",
   "purpose": "Catálogo de herramientas y estándares candidatos por capacidad para los perfiles Viltrum.",
   "policy": {
     "auto_install": false,
@@ -39,17 +39,170 @@
         "Repositorio autorizado e indexado; SHA/estado del índice identificado",
         "Lectura del código dentro del mandato; no subir fuentes privadas sin autorización"
       ],
-      "fallback": "rg y lectura de archivos/contratos y git diff del commit.",
+      "fallback": "viltrum-repo-map (ripgrep + ast + dependency-cruiser).",
+      "license": "PolyForm-Noncommercial-1.0.0",
+      "license_verified": "package.json de gitnexus@1.6.2 instalado (npm global), 2026-10-04",
+      "license_note": "Licencia no comercial y el repositorio no estaba indexado (`gitnexus status`: Repository not indexed). Retirado por decisión de Wilber el 2026-10-05; sustituido por viltrum-repo-map. No es dictamen legal.",
       "sources": [
         {
           "title": "Repositorio oficial GitNexus",
           "url": "https://github.com/abhigyanpatwari/GitNexus"
+        },
+        {
+          "title": "Licencia publicada de GitNexus",
+          "url": "https://github.com/abhigyanpatwari/GitNexus/blob/main/LICENSE"
+        }
+      ],
+      "status": "excluded",
+      "access": "not_used",
+      "enabled": false,
+      "verified_at": "2026-10-05"
+    },
+    {
+      "id": "archify",
+      "name": "Archify",
+      "kind": "diagramming",
+      "capabilities": [
+        "documentation"
+      ],
+      "profiles": [
+        "D03",
+        "D04",
+        "D11",
+        "D16",
+        "D19",
+        "D20"
+      ],
+      "purpose": "Motor oficial de diagramas: arquitectura, workflow, secuencia, flujo de datos y ciclo de vida como HTML interactivo validado (acepta Mermaid).",
+      "connection_requirements": [
+        "Node.js; paquete en E:/archify_repo/archify (copia instalada en .viltrum/os/skills/archify)",
+        "Comando: node <ruta>/bin/archify.mjs finalize <tipo> <candidate.json> <salida.html> --quality showcase --json"
+      ],
+      "fallback": "Mermaid en Markdown, declarando que no pasó la validación de Archify.",
+      "license": "MIT",
+      "license_verified": "package.json archify 3.0.1 y LICENSE en E:/archify_repo, 2026-10-05",
+      "sources": [
+        {
+          "title": "Skill Archify (SKILL.md local)",
+          "url": "E:/archify_repo/archify/SKILL.md"
         }
       ],
       "status": "verified",
       "access": "local_cli_verified",
       "enabled": true,
-      "verified_at": "2026-09-30"
+      "verified_at": "2026-10-05"
+    },
+    {
+      "id": "dependency-cruiser",
+      "name": "dependency-cruiser",
+      "kind": "code_intelligence",
+      "capabilities": [
+        "repository"
+      ],
+      "profiles": [
+        "D03",
+        "D09",
+        "D10",
+        "D13",
+        "D15"
+      ],
+      "purpose": "Grafo de módulos y reglas arquitectónicas en JS/TS (`viltrum repo-impact --modules`).",
+      "connection_requirements": [
+        "`depcruise` en PATH y package.json en el proyecto"
+      ],
+      "fallback": "Impacto por símbolos de viltrum-repo-map sin grafo de módulos.",
+      "license": "MIT",
+      "sources": [
+        {
+          "title": "dependency-cruiser — repositorio oficial",
+          "url": "https://github.com/sverweij/dependency-cruiser"
+        }
+      ],
+      "status": "verified",
+      "access": "local_cli_verified",
+      "enabled": true,
+      "verified_at": "2026-10-05"
+    },
+    {
+      "id": "ripgrep",
+      "name": "ripgrep",
+      "kind": "code_search",
+      "capabilities": [
+        "repository"
+      ],
+      "profiles": [
+        "D00",
+        "D03",
+        "D09",
+        "D10",
+        "D11",
+        "D12",
+        "D13",
+        "D18",
+        "D19",
+        "D20",
+        "D21",
+        "D22"
+      ],
+      "purpose": "Búsqueda de texto por palabra completa que usa viltrum-repo-map para referencias.",
+      "connection_requirements": [
+        "Binario `rg` en PATH (verificado 15.1.0)"
+      ],
+      "fallback": "Escaneo en Python de viltrum-repo-map.",
+      "license": "MIT OR Unlicense",
+      "sources": [
+        {
+          "title": "ripgrep — repositorio oficial",
+          "url": "https://github.com/BurntSushi/ripgrep"
+        }
+      ],
+      "status": "verified",
+      "access": "local_cli_verified",
+      "enabled": true,
+      "verified_at": "2026-10-05"
+    },
+    {
+      "id": "viltrum-repo-map",
+      "name": "Mapa de repositorio Viltrum",
+      "kind": "code_intelligence",
+      "capabilities": [
+        "repository",
+        "git"
+      ],
+      "profiles": [
+        "D00",
+        "D03",
+        "D09",
+        "D10",
+        "D11",
+        "D12",
+        "D13",
+        "D18",
+        "D19",
+        "D20",
+        "D21",
+        "D22"
+      ],
+      "purpose": "Inventario, símbolos, referencias, impacto transitivo y paquete de contexto mínimo del commit actual, sin índice previo.",
+      "connection_requirements": [
+        "Python 3 y git; ripgrep acelera la búsqueda si está en PATH"
+      ],
+      "fallback": "Búsqueda en Python incluida en el propio módulo.",
+      "license": "propio (Viltrum)",
+      "sources": [
+        {
+          "title": "viltrum_sdk/repo_map.py",
+          "url": "viltrum_sdk/repo_map.py"
+        },
+        {
+          "title": "Skill viltrum-repo-map",
+          "url": "skills/viltrum-repo-map/SKILL.md"
+        }
+      ],
+      "status": "verified",
+      "access": "local_cli_verified",
+      "enabled": true,
+      "verified_at": "2026-10-05"
     },
     {
       "id": "context7",
@@ -151,7 +304,15 @@
       "status": "candidate",
       "access": "no_access_granted",
       "enabled": false,
-      "verified_at": "2026-09-29"
+      "verified_at": "2026-09-29",
+      "license_decision": {
+        "decided_by": "Wilber",
+        "date": "2026-10-06",
+        "evidence": "transcripción de la sesión: «de acuerdo con las 4 e intégralas»",
+        "license": "MPL-2.0",
+        "scope": "uso como herramienta de auditoría; modificar sus archivos obliga a publicar esos cambios"
+      },
+      "local_copy": "E:/VILTRUM/VILTRUM DESING/pxil-ecosystem/verification/axe-core"
     },
     {
       "id": "owasp-asvs",
@@ -336,10 +497,20 @@
           "url": "https://github.com/grafana/k6"
         }
       ],
-      "status": "candidate",
-      "access": "no_access_granted",
-      "enabled": false,
-      "verified_at": "2026-09-29"
+      "status": "verified",
+      "access": "local_binary",
+      "enabled": true,
+      "verified_at": "2026-10-06",
+      "license_decision": {
+        "decided_by": "Wilber",
+        "date": "2026-10-06",
+        "evidence": "transcripción de la sesión: «de acuerdo con las 4 e intégralas»",
+        "license": "AGPL-3.0",
+        "scope": "herramienta de prueba local; no se modifica ni se ofrece como servicio"
+      },
+      "version": "2.3.0",
+      "binary": "%LOCALAPPDATA%/Programs/k6/k6-v2.3.0-windows-amd64/k6.exe",
+      "install_evidence": "SHA-256 del release oficial v2.3.0 verificado; smoke local 3/3 HTTP 200 (no acredita capacidad): .viltrum/pruebas/open-design/k6-install.json"
     },
     {
       "id": "github-actions",
@@ -506,10 +677,32 @@
       "id": "viltrum_channels",
       "name": "Viltrum Channels (Slack para IAs)",
       "kind": "agent_messaging",
-      "profiles": ["D00", "D01", "D02", "D03", "D09", "D10", "D11", "D12", "D14", "D15", "D16", "D20", "D21", "D22"],
+      "profiles": [
+        "D00",
+        "D01",
+        "D02",
+        "D03",
+        "D09",
+        "D10",
+        "D11",
+        "D12",
+        "D14",
+        "D15",
+        "D16",
+        "D20",
+        "D21",
+        "D22"
+      ],
       "purpose": "Bus de comunicación multi-agente local en SQLite WAL con canales temáticos (#d00 a #d14).",
-      "capabilities": ["runtime", "repository"],
-      "connection_requirements": ["Python 3.10+", "SQLite local", "viltrum_sdk.channels"],
+      "capabilities": [
+        "runtime",
+        "repository"
+      ],
+      "connection_requirements": [
+        "Python 3.10+",
+        "SQLite local",
+        "viltrum_sdk.channels"
+      ],
       "fallback": "Handoffs estándar en .viltrum/handoffs/",
       "status": "verified",
       "enabled": true,
@@ -520,10 +713,19 @@
       "id": "viltrum_intake",
       "name": "Viltrum Meeting Intake & Gap Detector",
       "kind": "requirements_intelligence",
-      "profiles": ["D01", "D02", "D22"],
+      "profiles": [
+        "D01",
+        "D02",
+        "D22"
+      ],
       "purpose": "Ingesta semántica de minutas, detección de faltantes en 4 dimensiones y cálculo determinista de completitud de F1.",
-      "capabilities": ["repository"],
-      "connection_requirements": ["viltrum_sdk.intake", "Archivo de minuta/transcripción"],
+      "capabilities": [
+        "repository"
+      ],
+      "connection_requirements": [
+        "viltrum_sdk.intake",
+        "Archivo de minuta/transcripción"
+      ],
       "fallback": "Checklist manual client-meeting-intake.md",
       "status": "verified",
       "enabled": true,
@@ -534,10 +736,18 @@
       "id": "viltrum_legal",
       "name": "Viltrum Legal & Pagaré Generator",
       "kind": "contract_generation",
-      "profiles": ["D01", "D02", "D03"],
+      "profiles": [
+        "D01",
+        "D02",
+        "D03"
+      ],
       "purpose": "Generación automatizada de contratos C0, C1, C4 y pagarés notariales con cálculo de amortización y hash SHA256.",
-      "capabilities": ["repository"],
-      "connection_requirements": ["viltrum_sdk.legal"],
+      "capabilities": [
+        "repository"
+      ],
+      "connection_requirements": [
+        "viltrum_sdk.legal"
+      ],
       "fallback": "Plantillas markdown estáticas en core/doctrine/",
       "status": "verified",
       "enabled": true,
@@ -548,10 +758,19 @@
       "id": "viltrum_services",
       "name": "Viltrum Services Manager & Watchdog",
       "kind": "resource_orchestration",
-      "profiles": ["D00", "D16", "D17"],
+      "profiles": [
+        "D00",
+        "D16",
+        "D17"
+      ],
       "purpose": "Arranque y apagado bajo demanda de servicios locales con perro guardián por inactividad y limpieza de procesos huérfanos.",
-      "capabilities": ["runtime"],
-      "connection_requirements": ["PowerShell 5.1/7+", "Manage-ViltrumServices.ps1"],
+      "capabilities": [
+        "runtime"
+      ],
+      "connection_requirements": [
+        "PowerShell 5.1/7+",
+        "Manage-ViltrumServices.ps1"
+      ],
       "fallback": "Detención manual de procesos con Taskkill",
       "status": "verified",
       "enabled": true,
@@ -562,15 +781,71 @@
       "id": "viltrum_audit_master",
       "name": "Viltrum Audit Master Suite (21 Herramientas)",
       "kind": "assurance_automation",
-      "profiles": ["D03", "D07", "D09", "D10", "D11", "D12", "D14", "D15"],
+      "profiles": [
+        "D03",
+        "D07",
+        "D09",
+        "D10",
+        "D11",
+        "D12",
+        "D14",
+        "D15"
+      ],
       "purpose": "Orquestador unificado de análisis estático, seguridad, dependencias, E2E y rendimiento con manifiesto criptográfico SHA256.",
-      "capabilities": ["runtime", "ci", "browser"],
-      "connection_requirements": ["Invoke-ViltrumAudit.ps1", "Node.js / Python"],
+      "capabilities": [
+        "runtime",
+        "ci",
+        "browser"
+      ],
+      "connection_requirements": [
+        "Invoke-ViltrumAudit.ps1",
+        "Node.js / Python"
+      ],
       "fallback": "Ejecución individual de ESLint, Biome y Playwright",
       "status": "verified",
       "enabled": true,
       "access": "local_powershell_verified",
       "verified_at": "2026-09-30"
+    },
+    {
+      "id": "spec-kit",
+      "name": "GitHub Spec Kit",
+      "kind": "spec_driven_workflow",
+      "capabilities": [
+        "specification",
+        "planning",
+        "tasks",
+        "consistency-analysis"
+      ],
+      "profiles": [
+        "D00",
+        "D01",
+        "D02",
+        "D03",
+        "D05",
+        "D09",
+        "D10",
+        "D11",
+        "D14",
+        "D19"
+      ],
+      "purpose": "Constitución, especificación, plan, tareas y análisis de coherencia antes de construir; la skill spec-driven reparte las fases entre perfiles.",
+      "connection_requirements": [
+        "CLI specify instalada y versión comprobada (specify version)",
+        "specify init en el proyecto con integraciones claude, codex y gemini",
+        "Constitución del proyecto en .specify/memory/constitution.md"
+      ],
+      "fallback": "Plantillas de ficha del Spec Pack del proyecto y revisión manual de coherencia.",
+      "sources": [
+        {
+          "title": "Repositorio oficial GitHub Spec Kit (MIT)",
+          "url": "https://github.com/github/spec-kit"
+        }
+      ],
+      "status": "verified",
+      "access": "local_cli_verified",
+      "enabled": true,
+      "verified_at": "2026-10-04"
     }
   ]
 }

@@ -63,8 +63,12 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const devRole = request.cookies.get("qh_dev_role")?.value;
-  const hasDevSession = evaluationLoginAllowed(request.headers.get("host")) && Boolean(devRole);
+  const host = request.headers.get("host");
+  const canEval = evaluationLoginAllowed(host);
+  const rawDevRole = request.cookies.get("qh_dev_role")?.value;
+  const isNoRole = rawDevRole === undefined;
+  const devRole = isNoRole ? (canEval ? "admin" : undefined) : rawDevRole;
+  const hasDevSession = canEval && Boolean(devRole);
 
   const path = request.nextUrl.pathname;
   const isPublic = PUBLIC_PATHS.some(
@@ -89,7 +93,25 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/inicio";
     url.search = "";
-    return NextResponse.redirect(url);
+    const redirectResponse = NextResponse.redirect(url);
+    if (isNoRole && canEval) {
+      redirectResponse.cookies.set("qh_dev_role", "admin", {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true,
+        sameSite: "lax",
+      });
+    }
+    return redirectResponse;
+  }
+
+  if (isNoRole && canEval && !user) {
+    response.cookies.set("qh_dev_role", "admin", {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: true,
+      sameSite: "lax",
+    });
   }
 
   return response;

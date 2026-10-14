@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, X, ChevronRight } from "lucide-react";
+import { Search, X } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -45,6 +45,7 @@ export function CrmSidebarMenu({ modulosVisibles }: CrmSidebarMenuProps) {
             placeholder="Buscar..."
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
+            suppressHydrationWarning
             className="w-full h-8 pl-8 pr-7 text-xs bg-white/[0.04] hover:bg-white/[0.07] focus:bg-white/[0.08] border border-white/[0.08] rounded-md text-slate-200 placeholder:text-slate-400/60 focus:outline-none focus:border-white/20 transition-all"
           />
           {filterQuery ? (

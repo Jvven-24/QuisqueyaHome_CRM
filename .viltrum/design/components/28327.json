@@ -1,0 +1,29 @@
+{
+  "author": "ephraimduncan",
+  "description": "A sortable, searchable data table with row selection checkboxes, status badges, per-row actions dropdown, and pagination controls.",
+  "framework": "",
+  "id": "28327",
+  "metadata": {
+    "author": "ephraimduncan",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ydlpleGRQN3BiSlVlSnp3R3FmbzdZbTJMT04ifQ",
+    "description": "A sortable, searchable data table with row selection checkboxes, status badges, per-row actions dropdown, and pagination controls.",
+    "id": 28327,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/ephraimduncan/table-05?[REDACTED]",
+    "name": "Data Table",
+    "previewUrl": "https://cdn.21st.dev/ephraimduncan/table-05/default/preview.1789963457631-6486542d-c830-47c5-9486-a598097dfc25.png",
+    "type": "component",
+    "url": "https://21st.dev/@ephraimduncan/components/table-05",
+    "videoUrl": "https://cdn.21st.dev/ephraimduncan/table-05/default/video.1789963457631-6486542d-c830-47c5-9486-a598097dfc25.mp4"
+  },
+  "name": "Data Table",
+  "previewUrl": "https://cdn.21st.dev/ephraimduncan/table-05/default/preview.1789963457631-6486542d-c830-47c5-9486-a598097dfc25.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:25.603508+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "61bac2a93cbefce0148ef4039c1af3528674913f3128e819881803c35c007623"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@ephraimduncan/components/table-05"
+}

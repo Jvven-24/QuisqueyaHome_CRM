@@ -1,0 +1,28 @@
+{
+  "author": "salmanshahriar",
+  "description": "An open source Nextjs Boilerplate and Starter Kit with Frontend-focused + Developer-experience : Next.js 16.3 + TypeScript + React 19, Oxlint, Oxfmt, Tailwind v4, Shadcn, Better-auth, RBAC, i18n, Playwright, Vitest, SEO + PWA.",
+  "framework": "",
+  "id": "819",
+  "metadata": {
+    "author": "salmanshahriar",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18zRW96a1NtVnZIaWxOYVBjbDhhY3lOakVvaGoifQ",
+    "description": "An open source Nextjs Boilerplate and Starter Kit with Frontend-focused + Developer-experience : Next.js 16.3 + TypeScript + React 19, Oxlint, Oxfmt, Tailwind v4, Shadcn, Better-auth, RBAC, i18n, Playwright, Vitest, SEO + PWA.",
+    "id": 819,
+    "name": "Next Elite - Frontend-focused Next.js starter with custom UI components, auth & dashboard layouts, i18n,  DX and more.",
+    "previewUrl": "https://cdn.21st.dev/user_3EozkTFObtXYh2AvWC2ETrNeatR/templates/next-elite-frontend-focused-next-js-starter/preview-1787335587325.webp",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/next-elite-frontend-focused-next-js-starter"
+  },
+  "name": "Next Elite - Frontend-focused Next.js starter with custom UI components, auth & dashboard layouts, i18n,  DX and more.",
+  "previewUrl": "https://cdn.21st.dev/user_3EozkTFObtXYh2AvWC2ETrNeatR/templates/next-elite-frontend-focused-next-js-starter/preview-1787335587325.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:38.818811+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "360e93bfb9f1a992b9a45beee2ed6a207e7e7ba2567a60d52f3f26fecc6c0e2c"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/next-elite-frontend-focused-next-js-starter"
+}

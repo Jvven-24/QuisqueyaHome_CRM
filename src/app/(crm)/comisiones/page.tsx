@@ -1,10 +1,10 @@
 /**
  * M9 · Comisiones (`docs/F3_ANALISIS_Y_PLAN.md` §4.2, issue #31). Conecta
  * `/comisiones` a `commissions`: filtros reales por broker, periodo
- * (`closed_date`) y estado vía `searchParams`, KPI calculados con una sola
- * consulta agregada, y la tabla que ya arma `./_consulta.ts` (compartida con
- * el CSV de `api/comisiones/export`, para que los dos nunca vean filas
- * distintas). El JSX visual vive en `./vista.tsx` (cliente).
+ * (`closed_date`) y estado vía `searchParams`, KPI calculados con consulta
+ * agregada respetando la regla multimoneda M22 (sin mezclar USD con DOP),
+ * y la tabla que ya arma `./_consulta.ts` (compartida con el CSV de
+ * `api/comisiones/export`). El JSX visual vive en `./vista.tsx` (cliente).
  */
 
 import { and, eq, isNull, sql } from "drizzle-orm";
@@ -36,13 +36,10 @@ export default async function ComisionesPage({
 
   const [filas, kpiFilas, brokers] = await Promise.all([
     consultarFilas(actor, scope, filtros),
-    // Una sola consulta agregada para los tres KPI (sin `estado` en el
-    // filtro: cada KPI desglosa por estado con su propio `filter`, no tiene
-    // sentido que el selector de estado de la tabla también se lo aplique a
-    // ellos — "pagadas" seguiría queriendo su total aunque la tabla filtre
-    // por "pendiente").
+    // Consulta agrupada por moneda para respetar la regla M22 (sin mezclar USD con DOP).
     db
       .select({
+        currency: commissions.currency,
         totalCents: sql<string>`coalesce(sum(${commissions.totalCommissionCents}), 0)`,
         totalCount: sql<number>`count(*)::int`,
         pendientesCents: sql<string>`coalesce(sum(${commissions.totalCommissionCents}) filter (where ${commissions.status} in ('pending', 'approved')), 0)`,
@@ -50,14 +47,11 @@ export default async function ComisionesPage({
         pagadasCents: sql<string>`coalesce(sum(${commissions.totalCommissionCents}) filter (where ${commissions.status} = 'paid'), 0)`,
       })
       .from(commissions)
-      // `condicionBase` filtra `deals.deleted_at`: sin este join, esa
-      // condición referenciaría una tabla fuera del `FROM` y Postgres
-      // fallaría con "missing FROM-clause entry".
       .innerJoin(deals, eq(deals.id, commissions.dealId))
-      .where(condicionBase(actor, scope, filtros)),
+      .where(condicionBase(actor, scope, filtros))
+      .groupBy(commissions.currency),
     // Selector de broker: solo tiene sentido con alcance `all` (con `own` el
-    // actor solo se ve a sí mismo). Mismo query que `contactos/page.tsx` para
-    // la lista de brokers activos.
+    // actor solo se ve a sí mismo).
     scope === "all"
       ? db
           .select({ id: users.id, fullName: users.fullName })
@@ -68,16 +62,26 @@ export default async function ComisionesPage({
       : Promise.resolve([]),
   ]);
 
-  // `coalesce(sum(...), 0)` sin `GROUP BY` siempre trae una fila (mismo
-  // comentario que `_cierre.ts`), pero postgres.js devuelve `bigint` como
-  // texto para no perder precisión — se convierte aquí, una sola vez.
-  const kpiFila = kpiFilas[0]!;
+  // Si no hay filas aún, asegurar fallback en USD con ceros
+  const filaUsd = kpiFilas.find((f) => f.currency === "USD") ?? kpiFilas[0];
+  const totalCountGeneral = kpiFilas.reduce((acc, f) => acc + f.totalCount, 0);
+  const porAprobarCountGeneral = kpiFilas.reduce((acc, f) => acc + f.porAprobarCount, 0);
+
   const kpis = {
-    totalCents: Number(kpiFila.totalCents),
-    totalCount: kpiFila.totalCount,
-    pendientesCents: Number(kpiFila.pendientesCents),
-    porAprobarCount: kpiFila.porAprobarCount,
-    pagadasCents: Number(kpiFila.pagadasCents),
+    totalCents: filaUsd ? Number(filaUsd.totalCents) : 0,
+    totalCount: totalCountGeneral,
+    pendientesCents: filaUsd ? Number(filaUsd.pendientesCents) : 0,
+    porAprobarCount: porAprobarCountGeneral,
+    pagadasCents: filaUsd ? Number(filaUsd.pagadasCents) : 0,
+    monedaPrincipal: filaUsd?.currency ?? "USD",
+    porMoneda: kpiFilas.map((f) => ({
+      currency: f.currency,
+      totalCents: Number(f.totalCents),
+      totalCount: f.totalCount,
+      pendientesCents: Number(f.pendientesCents),
+      porAprobarCount: f.porAprobarCount,
+      pagadasCents: Number(f.pagadasCents),
+    })),
   };
 
   const opcionesPeriodo = Array.from({ length: 12 }, (_, indice) => {

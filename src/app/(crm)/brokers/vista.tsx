@@ -2,17 +2,29 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { BrokerLevel } from "@/domain/catalogs";
 import { BROKER_LEVEL_LABELS } from "@/domain/cierre-negocio";
 import { FormularioUsuario, type RolOpcion } from "../configuracion/_usuarios";
 import { formatearMonto } from "../_ui/formato";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
+import {
+  Award,
+  Briefcase,
+  DollarSign,
+  Plus,
+  Search,
+  SlidersHorizontal,
+  Sparkles,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 
 export type BrokerFila = {
   userId: number;
   fullName: string;
+  email?: string;
   jobTitle: string;
   specialty: string | null;
   level: BrokerLevel;
@@ -20,16 +32,53 @@ export type BrokerFila = {
   negociosActivos: number;
   /** `null` = sin meta fijada este mes (`domain/metas.ts#cumplimientoPorcentaje`). */
   porcentajeMeta: number | null;
+  targetDeals?: number;
+  achievedDeals?: number;
 };
 
 export type ProyectoAsignable = { id: number; name: string; brokerId: number | null; brokerName: string | null };
 
+const LEVEL_ORDER: BrokerLevel[] = ["junior", "senior", "senior_plus", "top_producer", "top_leader"];
+
+const LEVEL_STYLES: Record<
+  BrokerLevel,
+  { label: string; tone: "neutral" | "gold" | "green" | "blue"; accent: string; badgeCls: string }
+> = {
+  junior: {
+    label: "Junior",
+    tone: "neutral",
+    accent: "border-slate-200 bg-slate-50 text-slate-700",
+    badgeCls: "bg-slate-100 text-slate-800 border-slate-300",
+  },
+  senior: {
+    label: "Senior",
+    tone: "blue",
+    accent: "border-blue-200 bg-blue-50/50 text-blue-800",
+    badgeCls: "bg-blue-50 text-blue-700 border-blue-200 font-semibold",
+  },
+  senior_plus: {
+    label: "Senior+",
+    tone: "blue",
+    accent: "border-indigo-200 bg-indigo-50/50 text-indigo-800",
+    badgeCls: "bg-indigo-50 text-indigo-700 border-indigo-200 font-semibold",
+  },
+  top_producer: {
+    label: "Top Producer",
+    tone: "gold",
+    accent: "border-gold-300 bg-gold-50/60 text-gold-900",
+    badgeCls: "bg-gold-100 text-gold-900 border-gold-400 font-bold",
+  },
+  top_leader: {
+    label: "Top Leader",
+    tone: "gold",
+    accent: "border-amber-400 bg-amber-50/80 text-amber-950",
+    badgeCls: "bg-amber-100 text-amber-950 border-amber-400 font-extrabold shadow-2xs",
+  },
+};
+
 /**
- * M7 · Brokers (`docs/F3_ANALISIS_Y_PLAN.md` §4.4, issue #33). Tarjetas con
- * datos reales de `broker_profiles` — el mock y su comentario `ponytail:` de
- * T7 se reemplazan aquí. `proyectosAsignables` y `roles` llegan vacíos cuando
- * el actor no tiene el permiso correspondiente (decidido en `page.tsx`,
- * nunca aquí: ocultar un botón no es el control de acceso, solo su reflejo).
+ * M7 · Brokers — Roster ejecutivo de la fuerza comercial.
+ * Cumple: Controles >= 44-48px, texto >= 13px, foco gold-700, sin alerts nativos, regla multimoneda M22.
  */
 export function BrokersVista({
   brokers,
@@ -46,84 +95,326 @@ export function BrokersVista({
 }) {
   const [invitando, setInvitando] = useState(false);
   const [asignando, setAsignando] = useState<BrokerFila | null>(null);
+  const [filtroTexto, setFiltroTexto] = useState("");
+  const [nivelSeleccionado, setNivelSeleccionado] = useState<BrokerLevel | "todos">("todos");
+
+  // Métricas maestras del equipo comercial visible
+  const resumen = useMemo(() => {
+    const totalBrokers = brokers.length;
+    const carteraTotal = brokers.reduce((sum, b) => sum + b.negociosActivos, 0);
+    const volumenTotalCents = brokers.reduce((sum, b) => sum + b.annualSalesCents, 0);
+    const conMeta = brokers.filter((b) => b.porcentajeMeta !== null);
+    const cumplimientoPromedio =
+      conMeta.length > 0 ? Math.round(conMeta.reduce((sum, b) => sum + (b.porcentajeMeta ?? 0), 0) / conMeta.length) : null;
+
+    return { totalBrokers, carteraTotal, volumenTotalCents, cumplimientoPromedio };
+  }, [brokers]);
+
+  // Filtrado reactivo en cliente
+  const brokersFiltrados = useMemo(() => {
+    return brokers.filter((broker) => {
+      const matchNivel = nivelSeleccionado === "todos" || broker.level === nivelSeleccionado;
+      const textoLower = filtroTexto.toLowerCase().trim();
+      const matchTexto =
+        !textoLower ||
+        broker.fullName.toLowerCase().includes(textoLower) ||
+        (broker.specialty ?? "").toLowerCase().includes(textoLower) ||
+        broker.jobTitle.toLowerCase().includes(textoLower);
+      return matchNivel && matchTexto;
+    });
+  }, [brokers, nivelSeleccionado, filtroTexto]);
 
   return (
     <>
       <PageHeader
-        eyebrow="Equipo"
-        title="Brokers"
-        subtitle="Asignación, especialidad y desarrollo del equipo comercial."
+        eyebrow="Equipo y Asesoría"
+        title="Brokers y Asesores"
+        subtitle="Roster del equipo comercial, niveles de desarrollo profesional, cartera activa y cumplimiento de metas."
         action={
           puedeInvitar && (
-            <button className="button primary" type="button" onClick={() => setInvitando(true)}>
-              Invitar broker
+            <button
+              className="inline-flex items-center justify-center gap-2 px-5 min-h-[46px] rounded-xl bg-navy-950 hover:bg-navy-900 text-white text-[13.5px] font-semibold tracking-wide border border-gold-500/30 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-gold-700 focus:border-gold-700 cursor-pointer"
+              type="button"
+              onClick={() => setInvitando(true)}
+            >
+              <Plus className="size-4 text-gold-400" />
+              <span>Invitar broker</span>
             </button>
           )
         }
       />
-      <div className="level-scale">
-        <span>Junior</span>
-        <i />
-        <span>Senior</span>
-        <i />
-        <span>Senior+</span>
-        <i />
-        <span>Top Producer</span>
-        <i />
-        <span>Top Leader</span>
+
+      {/* KPI Maestros del Equipo Comercial */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="bg-surface border border-line/80 rounded-2xl p-5 shadow-xs hover:border-gold-600/40 transition-colors">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[13px] font-bold text-ink-muted uppercase tracking-wider">Fuerza Comercial</span>
+            <div className="size-9 rounded-xl bg-navy-50 flex items-center justify-center text-navy-800">
+              <Users className="size-5" />
+            </div>
+          </div>
+          <strong className="block font-heading font-black text-2xl md:text-3xl text-navy-950 tabular-nums">
+            {resumen.totalBrokers}
+          </strong>
+          <small className="text-[13px] text-ink-muted mt-1 block">Asesores activos en roster</small>
+        </div>
+
+        <div className="bg-surface border border-line/80 rounded-2xl p-5 shadow-xs hover:border-gold-600/40 transition-colors">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[13px] font-bold text-ink-muted uppercase tracking-wider">Cartera en Gestión</span>
+            <div className="size-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700">
+              <Briefcase className="size-5" />
+            </div>
+          </div>
+          <strong className="block font-heading font-black text-2xl md:text-3xl text-navy-950 tabular-nums">
+            {resumen.carteraTotal}
+          </strong>
+          <small className="text-[13px] text-ink-muted mt-1 block">Negocios activos asignados</small>
+        </div>
+
+        <div className="bg-surface border border-line/80 rounded-2xl p-5 shadow-xs hover:border-gold-600/40 transition-colors">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[13px] font-bold text-ink-muted uppercase tracking-wider">Volumen Acumulado</span>
+            <div className="size-9 rounded-xl bg-gold-100 flex items-center justify-center text-gold-800">
+              <DollarSign className="size-5" />
+            </div>
+          </div>
+          <strong className="block font-heading font-black text-2xl md:text-3xl text-navy-950 tabular-nums">
+            {formatearMonto(resumen.volumenTotalCents, "USD")}
+          </strong>
+          <small className="text-[13px] text-ink-muted mt-1 block">Ventas cerradas del año (USD)</small>
+        </div>
+
+        <div className="bg-surface border border-line/80 rounded-2xl p-5 shadow-xs hover:border-gold-600/40 transition-colors">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[13px] font-bold text-ink-muted uppercase tracking-wider">Cumplimiento Medio</span>
+            <div className="size-9 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700">
+              <TrendingUp className="size-5" />
+            </div>
+          </div>
+          <strong className="block font-heading font-black text-2xl md:text-3xl text-navy-950 tabular-nums">
+            {resumen.cumplimientoPromedio === null ? "—" : `${resumen.cumplimientoPromedio}%`}
+          </strong>
+          <small className="text-[13px] text-ink-muted mt-1 block">Avance contra metas del mes</small>
+        </div>
+      </section>
+
+      {/* Escala Interactiva de Carrera */}
+      <div className="bg-surface border border-line/80 rounded-2xl p-4 md:p-5 mb-6 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Award className="size-5 text-gold-600 shrink-0" />
+            <div>
+              <h2 className="text-[14px] font-bold text-navy-950 m-0">Niveles de Carrera y Escalamiento</h2>
+              <p className="text-[13px] text-ink-muted m-0">
+                Filtra por jerarquía para evaluar la distribución del talento.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+            <button
+              type="button"
+              onClick={() => setNivelSeleccionado("todos")}
+              className={`px-3.5 min-h-[44px] rounded-xl text-[13px] font-semibold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 ${
+                nivelSeleccionado === "todos"
+                  ? "bg-navy-950 text-white border-navy-950 shadow-xs"
+                  : "bg-surface-alt hover:bg-navy-100 text-ink-muted border-line"
+              }`}
+            >
+              Todos ({brokers.length})
+            </button>
+            {LEVEL_ORDER.map((nivel) => {
+              const cant = brokers.filter((b) => b.level === nivel).length;
+              const activo = nivelSeleccionado === nivel;
+              return (
+                <button
+                  key={nivel}
+                  type="button"
+                  onClick={() => setNivelSeleccionado(nivel)}
+                  className={`px-3.5 min-h-[44px] rounded-xl text-[13px] font-semibold border whitespace-nowrap transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 ${
+                    activo
+                      ? "bg-gold-600 text-white border-gold-600 shadow-xs"
+                      : "bg-surface-alt hover:bg-navy-100 text-ink-muted border-line"
+                  }`}
+                >
+                  {BROKER_LEVEL_LABELS[nivel]} ({cant})
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
-      {brokers.length === 0 ? (
-        <Vacio titulo="Sin brokers todavía" texto="No hay brokers activos con perfil para este alcance." />
+
+      {/* Barra de Búsqueda y Filtros Rápidos */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
+        <div className="relative w-full sm:max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-ink-muted pointer-events-none" />
+          <input
+            type="text"
+            value={filtroTexto}
+            onChange={(e) => setFiltroTexto(e.target.value)}
+            placeholder="Buscar asesor por nombre, especialidad o cargo…"
+            className="w-full min-h-[46px] pl-10 pr-4 rounded-xl border border-line bg-surface text-[13.5px] text-navy-950 placeholder:text-ink-muted focus:outline-none focus:ring-2 focus:ring-gold-700 focus:border-gold-700 transition-colors shadow-2xs"
+          />
+        </div>
+        <div className="text-[13px] text-ink-muted shrink-0 w-full sm:w-auto text-right">
+          Mostrando <strong className="text-navy-950">{brokersFiltrados.length}</strong> de{" "}
+          <strong className="text-navy-950">{brokers.length}</strong> asesores
+        </div>
+      </div>
+
+      {/* Roster de Brokers en Tarjetas */}
+      {brokersFiltrados.length === 0 ? (
+        <Vacio
+          titulo="Sin brokers encontrados"
+          texto={
+            filtroTexto || nivelSeleccionado !== "todos"
+              ? "No hay asesores comerciales que coincidan con los criterios de búsqueda seleccionados."
+              : "No hay brokers activos con perfil para este alcance."
+          }
+        />
       ) : (
-        <div className="broker-grid">
-          {brokers.map((broker) => (
-            <article className="broker-card" key={broker.userId}>
-              <div className="broker-card-head">
-                <Avatar name={broker.fullName} />
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {brokersFiltrados.map((broker) => {
+            const nivelInfo = LEVEL_STYLES[broker.level];
+            const esElite = broker.level === "top_producer" || broker.level === "top_leader";
+            const porcentaje = broker.porcentajeMeta ?? 0;
+
+            return (
+              <article
+                className={`group relative bg-surface border rounded-2xl p-6 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between ${
+                  esElite ? "border-gold-400/70 hover:border-gold-500" : "border-line/80 hover:border-gold-500/50"
+                }`}
+                key={broker.userId}
+              >
+                {/* Cabecera de la tarjeta con foto/avatar y nivel */}
                 <div>
-                  <h2>{broker.fullName}</h2>
-                  <p>{broker.jobTitle}</p>
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <div className="flex items-center gap-3.5">
+                      <div className="relative">
+                        <Avatar name={broker.fullName} />
+                        {esElite && (
+                          <span
+                            className="absolute -bottom-1 -right-1 size-5 rounded-full bg-gold-600 text-white flex items-center justify-center border-2 border-white shadow-2xs"
+                            title="Asesor Élite"
+                          >
+                            <Sparkles className="size-2.5" />
+                          </span>
+                        )}
+                      </div>
+                      <div>
+                        <h2 className="font-heading font-bold text-lg text-navy-950 leading-snug group-hover:text-gold-700 transition-colors m-0">
+                          {broker.fullName}
+                        </h2>
+                        <p className="text-[13px] text-ink-muted leading-tight mt-0.5 mb-0">
+                          {broker.jobTitle}
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-[13px] border ${nivelInfo.badgeCls}`}
+                    >
+                      {nivelInfo.label}
+                    </span>
+                  </div>
+
+                  {/* Cuadrícula de detalles y métricas clave */}
+                  <div className="grid grid-cols-2 gap-2.5 bg-surface-alt/70 border border-line/60 rounded-xl p-3.5 mb-4">
+                    <div>
+                      <dt className="text-[13px] font-semibold text-ink-muted flex items-center gap-1">
+                        Especialidad
+                      </dt>
+                      <dd className="text-[13.5px] font-medium text-navy-950 mt-0.5 truncate">
+                        {broker.specialty ?? "General"}
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt className="text-[13px] font-semibold text-ink-muted flex items-center gap-1">
+                        Cartera Activa
+                      </dt>
+                      <dd className="text-[13.5px] font-bold text-navy-950 mt-0.5 tabular-nums flex items-center gap-1.5">
+                        <Briefcase className="size-3.5 text-blue-600" />
+                        <span>{broker.negociosActivos} negocios</span>
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt className="text-[13px] font-semibold text-ink-muted">
+                        Ventas del Año
+                      </dt>
+                      <dd className="text-[13.5px] font-black text-navy-950 mt-0.5 tabular-nums">
+                        {formatearMonto(broker.annualSalesCents, "USD")}
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt className="text-[13px] font-semibold text-ink-muted">
+                        Meta Mensual
+                      </dt>
+                      <dd className="text-[13.5px] font-bold text-navy-950 mt-0.5 tabular-nums">
+                        {broker.porcentajeMeta === null ? (
+                          <span className="text-ink-muted font-normal">Sin meta</span>
+                        ) : (
+                          <span className={porcentaje >= 100 ? "text-emerald-700" : "text-gold-700"}>
+                            {porcentaje}%
+                          </span>
+                        )}
+                      </dd>
+                    </div>
+                  </div>
+
+                  {/* Barra de Progreso hacia la Meta */}
+                  <div className="mb-5">
+                    <div className="flex items-center justify-between text-[13px] text-ink-muted mb-1.5">
+                      <span>Progreso del mes</span>
+                      <span className="font-semibold tabular-nums text-navy-950">
+                        {broker.achievedDeals ?? 0} / {broker.targetDeals ?? 0} logrados
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden p-0.5 border border-line/60">
+                      <div
+                        className={`h-full rounded-full transition-all duration-300 ${
+                          porcentaje >= 100
+                            ? "bg-gradient-to-r from-emerald-500 to-teal-400"
+                            : "bg-gradient-to-r from-gold-600 to-amber-400"
+                        }`}
+                        style={{ width: `${Math.min(porcentaje, 100)}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <Badge tone={broker.level === "top_producer" || broker.level === "top_leader" ? "gold" : "blue"}>
-                  {BROKER_LEVEL_LABELS[broker.level]}
-                </Badge>
-              </div>
-              <dl className="detail-grid">
-                <div>
-                  <dt>Especialidad</dt>
-                  <dd>{broker.specialty ?? "—"}</dd>
-                </div>
-                <div>
-                  <dt>Ventas del año</dt>
-                  <dd>{formatearMonto(broker.annualSalesCents)}</dd>
-                </div>
-                <div>
-                  <dt>Negocios activos</dt>
-                  <dd>{broker.negociosActivos}</dd>
-                </div>
-                <div>
-                  <dt>Meta mensual</dt>
-                  <dd>{broker.porcentajeMeta === null ? "Sin meta" : `${broker.porcentajeMeta}%`}</dd>
-                </div>
-              </dl>
-              <div className="progress-line">
-                <span style={{ width: `${Math.min(broker.porcentajeMeta ?? 0, 100)}%` }} />
-              </div>
-              <footer>
-                <Link className="button secondary" href={`/brokers/${broker.userId}`}>
-                  Ver perfil
-                </Link>
-                {puedeAsignar && (
-                  <button className="text-button" type="button" onClick={() => setAsignando(broker)}>
-                    Asignar propiedades
-                  </button>
-                )}
-              </footer>
-            </article>
-          ))}
+
+                {/* Acciones principales con controles >= 44px */}
+                <footer className="pt-3 border-t border-line/70 flex items-center justify-between gap-2">
+                  <Link
+                    className="inline-flex items-center justify-center min-h-[44px] px-4 rounded-xl border border-line bg-surface hover:bg-surface-alt text-navy-950 text-[13px] font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700"
+                    href={`/brokers/${broker.userId}`}
+                  >
+                    Ver perfil
+                  </Link>
+                  {puedeAsignar && (
+                    <button
+                      className="inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3.5 rounded-xl text-[13px] font-semibold text-gold-700 hover:text-gold-800 hover:bg-gold-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700 cursor-pointer"
+                      type="button"
+                      onClick={() => setAsignando(broker)}
+                    >
+                      <SlidersHorizontal className="size-3.5" />
+                      <span>Asignar propiedades</span>
+                    </button>
+                  )}
+                </footer>
+              </article>
+            );
+          })}
         </div>
       )}
+
+      {/* Modal para invitar broker */}
       {invitando && <FormularioUsuario roles={roles} onClose={() => setInvitando(false)} />}
+
+      {/* Modal para asignar propiedades */}
       {asignando && (
         <AsignarPropiedadesModal broker={asignando} proyectos={proyectosAsignables} onClose={() => setAsignando(null)} />
       )}
@@ -167,11 +458,13 @@ function AsignarPropiedadesModal({
       });
       const cuerpo = await respuesta.json().catch(() => ({}));
       if (!respuesta.ok) {
-        setError(cuerpo.error ?? "No se pudo guardar la asignación.");
+        setError(cuerpo.error ?? "No se pudo guardar la asignación de propiedades.");
         return;
       }
       router.refresh();
       onClose();
+    } catch {
+      setError("Error de conexión al guardar la asignación.");
     } finally {
       setEnviando(false);
     }
@@ -179,51 +472,69 @@ function AsignarPropiedadesModal({
 
   return (
     <Modal title={`Asignar propiedades a ${broker.fullName}`} onClose={onClose}>
+      <p className="text-[13.5px] text-ink-muted mb-4 leading-relaxed">
+        Selecciona los desarrollos inmobiliarios y proyectos que estarán bajo la responsabilidad directa de este asesor.
+      </p>
+
       {proyectos.length === 0 ? (
-        <Vacio titulo="Sin proyectos activos" texto="No hay proyectos para asignar todavía." />
+        <Vacio titulo="Sin proyectos activos" texto="No hay proyectos disponibles para asignar en el catálogo actual." />
       ) : (
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Proyecto</th>
-                <th>Asignado a</th>
-              </tr>
-            </thead>
-            <tbody>
-              {proyectos.map((proyecto) => (
-                <tr key={proyecto.id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={seleccionados.has(proyecto.id)}
-                      onChange={() => alternar(proyecto.id)}
-                      aria-label={`Asignar ${proyecto.name}`}
-                    />
-                  </td>
-                  <td>{proyecto.name}</td>
-                  <td>
-                    {proyecto.brokerId == null ? (
-                      "—"
-                    ) : proyecto.brokerId === broker.userId ? (
-                      <Badge tone="blue">Este broker</Badge>
-                    ) : (
-                      proyecto.brokerName
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="max-h-72 overflow-y-auto border border-line rounded-xl mb-4 divide-y divide-line">
+          {proyectos.map((proyecto) => {
+            const estaAsignadoAEste = seleccionados.has(proyecto.id);
+
+            return (
+              <label
+                key={proyecto.id}
+                className="flex items-center justify-between gap-3 p-3.5 hover:bg-surface-alt/70 transition-colors cursor-pointer min-h-[48px]"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <input
+                    type="checkbox"
+                    className="size-5 rounded border-line text-gold-600 focus:ring-2 focus:ring-gold-700 cursor-pointer"
+                    checked={estaAsignadoAEste}
+                    onChange={() => alternar(proyecto.id)}
+                    aria-label={`Asignar ${proyecto.name}`}
+                  />
+                  <span className="text-[13.5px] font-semibold text-navy-950 truncate">{proyecto.name}</span>
+                </div>
+                <div className="shrink-0 text-right">
+                  {proyecto.brokerId == null ? (
+                    <span className="text-[13px] text-ink-muted">Sin asignar</span>
+                  ) : estaAsignadoAEste ? (
+                    <Badge tone="blue">Asignado a este broker</Badge>
+                  ) : (
+                    <span className="text-[13px] text-ink-muted">
+                      De: <strong className="text-navy-900">{proyecto.brokerName}</strong>
+                    </span>
+                  )}
+                </div>
+              </label>
+            );
+          })}
         </div>
       )}
-      {error && <small style={{ color: "#b42318" }}>{error}</small>}
-      <div className="form-actions">
-        <button className="button" type="button" onClick={onClose}>
+
+      {error && (
+        <div className="p-3 mb-4 rounded-xl bg-danger-bg text-danger border border-danger/20 text-[13px] font-medium">
+          {error}
+        </div>
+      )}
+
+      <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
+        <button
+          className="inline-flex items-center justify-center min-h-[46px] px-5 rounded-xl border border-line bg-surface hover:bg-surface-alt text-navy-950 text-[13.5px] font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700 cursor-pointer"
+          type="button"
+          onClick={onClose}
+        >
           Cancelar
         </button>
-        <button className="button primary" type="button" disabled={enviando} onClick={() => void guardar()}>
+        <button
+          className="inline-flex items-center justify-center min-h-[46px] px-6 rounded-xl bg-navy-950 hover:bg-navy-900 text-white text-[13.5px] font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700 disabled:opacity-50 cursor-pointer shadow-sm"
+          type="button"
+          disabled={enviando}
+          onClick={() => void guardar()}
+        >
           {enviando ? "Guardando…" : "Guardar asignación"}
         </button>
       </div>

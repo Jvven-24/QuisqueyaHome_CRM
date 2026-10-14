@@ -1,0 +1,28 @@
+{
+  "author": "maxleiter",
+  "description": "Developer personal site laid out as a desktop: folder icons open blog, notes, projects and talks, with a working terminal and calculator, markdown posts, a generated RSS feed and project cards that pull their GitHub stars.",
+  "framework": "",
+  "id": "803",
+  "metadata": {
+    "author": "maxleiter",
+    "authorImage": "https://avatars.githubusercontent.com/MaxLeiter",
+    "description": "Developer personal site laid out as a desktop: folder icons open blog, notes, projects and talks, with a working terminal and calculator, markdown posts, a generated RSS feed and project cards that pull their GitHub stars.",
+    "id": 803,
+    "name": "Max Leiter Personal Site",
+    "previewUrl": "https://cdn.21st.dev/user_vendor_maxleiter/templates/maxleiter-personal-site/preview-frame-7c1bac27dd.jpg",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/maxleiter-personal-site"
+  },
+  "name": "Max Leiter Personal Site",
+  "previewUrl": "https://cdn.21st.dev/user_vendor_maxleiter/templates/maxleiter-personal-site/preview-frame-7c1bac27dd.jpg",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:38.857569+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4c715ae6007b11706bed0fed8684ebdffa33ca741e964311f5d774e17d1ed517"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/maxleiter-personal-site"
+}

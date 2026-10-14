@@ -1,0 +1,151 @@
+{
+  "timestamp": "2026-10-09T19:48:40.570Z",
+  "totalScreens": 18,
+  "passedScreens": 18,
+  "passRate": "100.0%",
+  "findingsCount": 0,
+  "criticalFindings": 0,
+  "telemetry": {
+    "consoleErrorsCount": 0,
+    "hydrationWarningsCount": 5,
+    "networkFailuresCount": 0
+  },
+  "findings": [],
+  "screens": [
+    {
+      "name": "Inicio / Dashboard",
+      "path": "/inicio",
+      "httpStatus": 200,
+      "elapsedMs": 1187,
+      "domCount": 464,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_inicio.png"
+    },
+    {
+      "name": "Leads Inmobiliarios",
+      "path": "/leads",
+      "httpStatus": 200,
+      "elapsedMs": 1543,
+      "domCount": 1685,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_leads.png"
+    },
+    {
+      "name": "Contactos & Clientes",
+      "path": "/contactos",
+      "httpStatus": 200,
+      "elapsedMs": 1347,
+      "domCount": 1345,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_contactos.png"
+    },
+    {
+      "name": "Negocios & Pipeline Kanban",
+      "path": "/negocios",
+      "httpStatus": 200,
+      "elapsedMs": 2890,
+      "domCount": 7042,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_negocios.png"
+    },
+    {
+      "name": "Propiedades & Inventario",
+      "path": "/propiedades",
+      "httpStatus": 200,
+      "elapsedMs": 1521,
+      "domCount": 1126,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_propiedades.png"
+    },
+    {
+      "name": "Brokers & Agentes",
+      "path": "/brokers",
+      "httpStatus": 200,
+      "elapsedMs": 1152,
+      "domCount": 705,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_brokers.png"
+    },
+    {
+      "name": "Agenda & Citas",
+      "path": "/agenda",
+      "httpStatus": 200,
+      "elapsedMs": 1013,
+      "domCount": 449,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_agenda.png"
+    },
+    {
+      "name": "Tareas Operativas",
+      "path": "/tareas",
+      "httpStatus": 200,
+      "elapsedMs": 1509,
+      "domCount": 2346,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_tareas.png"
+    },
+    {
+      "name": "Comisiones & Cierres",
+      "path": "/comisiones",
+      "httpStatus": 200,
+      "elapsedMs": 1021,
+      "domCount": 426,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_comisiones.png"
+    },
+    {
+      "name": "Comunicaciones Multicanal",
+      "path": "/comunicaciones",
+      "httpStatus": 200,
+      "elapsedMs": 1011,
+      "domCount": 542,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_comunicaciones.png"
+    },
+    {
+      "name": "Metas Comerciales",
+      "path": "/metas",
+      "httpStatus": 200,
+      "elapsedMs": 1376,
+      "domCount": 634,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_metas.png"
+    },
+    {
+      "name": "Reportes & Analíticas",
+      "path": "/reportes",
+      "httpStatus": 200,
+      "elapsedMs": 1362,
+      "domCount": 544,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_reportes.png"
+    },
+    {
+      "name": "Avances de Proyectos",
+      "path": "/avances",
+      "httpStatus": 200,
+      "elapsedMs": 1742,
+      "domCount": 399,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_avances.png"
+    },
+    {
+      "name": "Quisqueya Academy",
+      "path": "/academy",
+      "httpStatus": 200,
+      "elapsedMs": 1087,
+      "domCount": 405,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_academy.png"
+    },
+    {
+      "name": "Configuración del Sistema",
+      "path": "/configuracion",
+      "httpStatus": 200,
+      "elapsedMs": 1265,
+      "domCount": 661,
+      "passed": true,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\auditoria_crm_configuracion.png"
+    }
+  ]
+}

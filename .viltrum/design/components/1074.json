@@ -1,0 +1,29 @@
+{
+  "author": "nyxbui",
+  "description": "Displays a list of events in chronological order.",
+  "framework": "",
+  "id": "1074",
+  "metadata": {
+    "author": "nyxbui",
+    "authorImage": "https://avatars.githubusercontent.com/u/173634696?s=200&v=4",
+    "description": "Displays a list of events in chronological order.",
+    "id": 1074,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/nyxbui/timeline?[REDACTED]",
+    "name": "Timeline",
+    "previewUrl": "https://cdn.21st.dev/user_nyxbui/timeline/default/preview.png",
+    "type": "component",
+    "url": "https://21st.dev/@nyxbui/components/timeline",
+    "videoUrl": null
+  },
+  "name": "Timeline",
+  "previewUrl": "https://cdn.21st.dev/user_nyxbui/timeline/default/preview.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.142940+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "225809cbbf79b547206776c7a1984689c7afbcd8edb9fe8fb6d401b377bd5d40"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@nyxbui/components/timeline"
+}

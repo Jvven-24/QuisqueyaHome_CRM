@@ -72,8 +72,17 @@ D00 → D01 (acotado) → D02 (¿entra en alcance?) → D21 (¿ya existe?)
     → D14 → [D12 si R2+] → D20
 ```
 **Regla:** una función nueva que no pasa por D03 es deuda técnica desde el día uno.
+Si el módulo o función toca UI, aplica `core/design-experience-os.md` (flujo y DG): los DG aportan evidencia al gate del ciclo de vida correspondiente,
+con revisión independiente; no sustituyen C1 ni aceptaciones humanas.
+
+**Alcance completo antes de D02/D03.** Toda petición que nombre una funcionalidad ("integra X", "agrega asesores", "haz un botón de
+registrarse") ejecuta primero la skill `alcance-completo`: arquetipo, estado real, referencias y la **matriz de impacto por
+departamento** (etapa vigente, efectos externos, filas D01–D22). D00 usa esa matriz para activar solo los departamentos afectados y
+no cierra el módulo hasta que cada fila afectada tenga handoff que la cite, o `N/A` con razón. Lo mismo aplica a `INTEGRACION` y a
+un `CAMBIO_UI` que añada comportamiento nuevo (no a un ajuste puramente visual).
 
 ### CAMBIO_UI
+Aplica `core/design-experience-os.md` (flujo y DG), según el alcance del cambio y con evidencia vigente.
 ```
 D00 → D04 (¿el problema es de flujo o de estética?) → D05 → D06 → D07 → D09 → D14
 ```

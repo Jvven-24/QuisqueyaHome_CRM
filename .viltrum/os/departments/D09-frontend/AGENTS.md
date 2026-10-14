@@ -8,7 +8,7 @@ De D05 exijo antes de empezar:
   deshabilitado, cargando)
 - **Matriz pantalla × estado completa**, con mensajes reales (no "TBD")
 - Checklist de formularios de D05 aprobada, si hay formularios
-- Composición verificada en los cinco puntos de corte (390 / 430 / 768 / 1024 / 1440)
+- Composición verificada en los puntos de corte de D05 (paso 2, token 7: de 320 a 1440)
 
 De D03 exijo:
 - Contrato del módulo: responsabilidad, qué expone, qué no conoce
@@ -48,10 +48,12 @@ Regla de ubicación:
 | Si es... | Vive en... |
 |---|---|
 | Marcado, estilos, manejo de evento de UI puro (abrir/cerrar, hover) | Componente |
-| "¿Puedo enviar este formulario?", "¿qué total muestro?" | Capa de dominio del cliente |
+| "¿Puedo enviar este formulario?", "¿qué total muestro?" | Capa de dominio del cliente; "¿puedo enviar?" devuelve `{ ok, reasons[] }` con `{ field, code, messageKey }`, nunca solo un booleano |
 | "¿Este usuario puede ver este botón?" | Capa de dominio, verificado también en servidor |
 | Llamada HTTP, transformación de payload | Capa de datos |
 | Nombre de librería de terceros, credenciales de SDK | Adaptador, nunca en el componente |
+
+**Motivos de acción (específico de D09):** la vista muestra los `reasons[]` del dominio; mapea `errors[]` del servidor a su campo por `field`; bloquea el doble envío en vuelo. Las reglas viven en `core/doctrine/ux-states.md` § "Contrato de retroalimentación de acciones y formularios" y no se copian aquí.
 
 **Prueba de salida:** describir qué hace el componente sin usar "y". Si un componente
 "muestra el formulario y calcula el descuento y decide si el botón está habilitado", son
@@ -272,6 +274,14 @@ sheet nombra `dangerouslySetInnerHTML` en React, `bypassSecurityTrustAs*` en Ang
 
 ---
 
+### 13. Hidratación resiliente y Cero Pantallas Vacías (Zero-Empty-State)
+
+- [ ] **Hidratación inmediata:** La tienda de datos del portal público debe hidratar de inmediato desde el snapshot pre-empaquetado o caché local (localStorage) para renderizado instantáneo sin pantallas de bloqueo.
+- [ ] **Preservación de datos ante fallo:** Si una sincronización en segundo plano falla (red caída, error 503 del backend o cold boot), la interfaz DEBE conservar el catálogo existente en memoria y en pantalla. Queda prohibido vaciar el catálogo o sustituir una interfaz con proyectos por una pantalla de bloqueo "0 proyectos encontrados" o "Catálogo no disponible".
+- [ ] **Aviso no destructivo:** Ante caídas transitorias del backend, el sistema degrada con avisos discretos (toasts/banners informativos), permitiendo al visitante continuar explorando y consultando.
+
+---
+
 ## Skills y herramientas aplicables
 
 | Situación | Skill / herramienta |
@@ -282,10 +292,10 @@ sheet nombra `dangerouslySetInnerHTML` en React, `bypassSecurityTrustAs*` en Ang
 | Verificar visualmente y contra estándares web | `browser-automation`, `playwright-cli`, `web-design-guidelines` |
 | Pruebas de componente y de comportamiento | `playwright-best-practices` |
 | Remediar accesibilidad antes del handoff a D07 | `accessibility` |
-| Entender impacto de un cambio en código ya existente | `gitnexus-impact-analysis` |
-| Explorar cómo está armado un módulo antes de tocarlo | `gitnexus-exploring` |
-| Depurar un bug de interfaz con trazabilidad | `gitnexus-debugging` |
-| Refactor seguro de un componente o de su estructura de archivos | `gitnexus-refactoring` |
+| Entender impacto de un cambio en código ya existente | `viltrum-repo-map` (impacto) |
+| Explorar cómo está armado un módulo antes de tocarlo | `viltrum-repo-map` (explorar) |
+| Depurar un bug de interfaz con trazabilidad | `viltrum-repo-map` (depurar) |
+| Refactor seguro de un componente o de su estructura de archivos | `viltrum-repo-map` (refactor) |
 | Revisión de código propio antes de entregar a D14 | `code-review` |
 | Revisión de seguridad puntual (XSS, secretos en bundle) | `security-review` |
 | Simplificar código repetido entre componentes | `simplify` |
@@ -311,6 +321,7 @@ especificación incompleta o un catálogo hardcodeado.
 - [ ] Los seis estados implementados y verificables en ejecución, no solo en diseño
 - [ ] Foco gestionado en navegación SPA y tras acciones asíncronas
 - [ ] División de código aplicada donde corresponde; imágenes modernas y responsivas
+- [ ] Hidratación resiliente activa: tienda con snapshot base, sin bloqueo ante 503 o caída de red
 - [ ] Sin `dangerouslySetInnerHTML`/`innerHTML` sin sanitizar y sin razón escrita
 - [ ] Sin secretos ni claves privadas en el bundle
 - [ ] Pruebas de componente cubriendo los seis estados, aisladas de la lógica de negocio
@@ -328,3 +339,8 @@ Antes de diseño o revisión de experiencia, cargar `skills/viltrum-pxil-design/
 Las skills complementarias del contrato son: pxil-compose.
 Consultar `registry/design-resources.json` y la plantilla de contrato de experiencia.
 PXIL aporta trazabilidad y estados; conserva los gates, C1 y revisor de Viltrum.
+
+Para implementar narrativa de scroll o temas duales, sigue la guía común revisada por D00
+(HND-012) de
+[`core/design-experience-os.md` §9](../../core/design-experience-os.md#portfolio-editorial-motion);
+mantén scroll nativo y fallback accesible según la especificación aprobada por D05/D07.

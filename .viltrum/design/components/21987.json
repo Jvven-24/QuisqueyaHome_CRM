@@ -1,0 +1,29 @@
+{
+  "author": "dev.shejanmahamud",
+  "description": "An interactive location card with a subtle 3D tilt that expands on click to reveal real map tiles, coordinates, and a location marker.",
+  "framework": "",
+  "id": "21987",
+  "metadata": {
+    "author": "dev.shejanmahamud",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zMklBWlhiYWVIdkJFNjByVDdqSW5mUDJZdmoifQ",
+    "description": "An interactive location card with a subtle 3D tilt that expands on click to reveal real map tiles, coordinates, and a location marker.",
+    "id": 21987,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/dev.shejanmahamud/expanded-map?[REDACTED]",
+    "name": "Expanded Map",
+    "previewUrl": "https://cdn.21st.dev/user_32IAZZ0jCu5Ox98TEx5aAsxVNyq/expanded-map/expanded-map-locations/preview.1787663442745.png",
+    "type": "component",
+    "url": "https://21st.dev/@dev.shejanmahamud/components/expanded-map",
+    "videoUrl": "https://cdn.21st.dev/user_32IAZZ0jCu5Ox98TEx5aAsxVNyq/expanded-map/expanded-map-locations/video.1787663532161.mp4"
+  },
+  "name": "Expanded Map",
+  "previewUrl": "https://cdn.21st.dev/user_32IAZZ0jCu5Ox98TEx5aAsxVNyq/expanded-map/expanded-map-locations/preview.1787663442745.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.923710+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "10301f6225d9265c01a686de8cdd24644b354d16041fcfedfc524907d54adf3f"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@dev.shejanmahamud/components/expanded-map"
+}

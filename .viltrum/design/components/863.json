@@ -1,0 +1,28 @@
+{
+  "author": "bevelui",
+  "description": "A boutique hotel template built around a WebGL hero that renders a sheet of silk drifting toward the horizon, shaded by thin-film interference — real iridescence computed per pixel, not a gradient. A dark cinematic hero flowing into a light editorial body: rooms with pricing, an asymmetric gallery, directions, and a booking band.\n\nNo external assets. No stock photography, no 3D models, no textures, no HDRI maps. The silk is simplex noise displaced in the vertex stage; the imagery is drawn — seeded contour lines over tinted grounds, like a depth chart. A hotel site lives on its photographs and the surest way to look cheap is a bad stock photo, so this commits to graphics instead. Pass a src prop to any plate and your own photography takes over.\n\nBuilt with Next.js 16, React 19, Tailwind 4 and Motion. Adaptive quality tiers scale by device, the render loop stops when the hero scrolls off screen, reduced motion is fully respected, and the hero sizes to its container rather than the viewport — so it works dropped into a section as well as full screen.\n\nAccessibility is measured, not claimed: 73 text elements audited against the ground each one actually sits on, zero WCAG AA failures.\n\n",
+  "framework": "",
+  "id": "863",
+  "metadata": {
+    "author": "bevelui",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zSWpDcFNUV2Rqd0Vaamx0ZERVc3g2VG1TQkcifQ",
+    "description": "A boutique hotel template built around a WebGL hero that renders a sheet of silk drifting toward the horizon, shaded by thin-film interference — real iridescence computed per pixel, not a gradient. A dark cinematic hero flowing into a light editorial body: rooms with pricing, an asymmetric gallery, directions, and a booking band.\n\nNo external assets. No stock photography, no 3D models, no textures, no HDRI maps. The silk is simplex noise displaced in the vertex stage; the imagery is drawn — seeded contour lines over tinted grounds, like a depth chart. A hotel site lives on its photographs and the surest way to look cheap is a bad stock photo, so this commits to graphics instead. Pass a src prop to any plate and your own photography takes over.\n\nBuilt with Next.js 16, React 19, Tailwind 4 and Motion. Adaptive quality tiers scale by device, the render loop stops when the hero scrolls off screen, reduced motion is fully respected, and the hero sizes to its container rather than the viewport — so it works dropped into a section as well as full screen.\n\nAccessibility is measured, not claimed: 73 text elements audited against the ground each one actually sits on, zero WCAG AA failures.\n\nHow you receive it: after checkout you connect your GitHub account, then accept an invitation to the private repository. Two quick steps and you have lifetime access, including every future update. Use it on unlimited sites, client work included.",
+    "id": 863,
+    "name": "Bevel — Boutique Hotel & Retreat",
+    "previewUrl": "https://cdn.21st.dev/user_3IjCpVbxRcIwkjuop9OQilz37Z4/templates/bevel-boutique-hotel-retreat/preview-1788900773280.png",
+    "price": 79,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/bevel-boutique-hotel-retreat"
+  },
+  "name": "Bevel — Boutique Hotel & Retreat",
+  "previewUrl": "https://cdn.21st.dev/user_3IjCpVbxRcIwkjuop9OQilz37Z4/templates/bevel-boutique-hotel-retreat/preview-1788900773280.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.952614+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "10301f6225d9265c01a686de8cdd24644b354d16041fcfedfc524907d54adf3f"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/bevel-boutique-hotel-retreat"
+}

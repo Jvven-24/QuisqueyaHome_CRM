@@ -1,0 +1,161 @@
+{
+  "timestamp": "2026-10-09T18:36:30.459Z",
+  "total": 15,
+  "passed": 15,
+  "failed": 0,
+  "pageErrors": [],
+  "consoleErrors": [],
+  "requestErrors": [],
+  "screens": [
+    {
+      "name": "Dashboard Inicio",
+      "route": "/inicio",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 1563,
+      "domCount": 467,
+      "actionsCount": 2,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\inicio.png"
+    },
+    {
+      "name": "Leads (M01)",
+      "route": "/leads",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 6528,
+      "domCount": 1686,
+      "actionsCount": 6,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\leads.png"
+    },
+    {
+      "name": "Negocios (M03)",
+      "route": "/negocios",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2331,
+      "domCount": 7042,
+      "actionsCount": 4,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\negocios.png"
+    },
+    {
+      "name": "Contactos",
+      "route": "/contactos",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 1119,
+      "domCount": 1345,
+      "actionsCount": 2,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\contactos.png"
+    },
+    {
+      "name": "Propiedades & Proyectos",
+      "route": "/propiedades",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 4338,
+      "domCount": 1126,
+      "actionsCount": 1,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\propiedades.png"
+    },
+    {
+      "name": "Agenda & Citas",
+      "route": "/agenda",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 769,
+      "domCount": 448,
+      "actionsCount": 0,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\agenda.png"
+    },
+    {
+      "name": "Tareas de Seguimiento",
+      "route": "/tareas",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 1829,
+      "domCount": 2343,
+      "actionsCount": 0,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\tareas.png"
+    },
+    {
+      "name": "Reportes & Métricas",
+      "route": "/reportes",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2407,
+      "domCount": 549,
+      "actionsCount": 1,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\reportes.png"
+    },
+    {
+      "name": "Comisiones",
+      "route": "/comisiones",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2311,
+      "domCount": 426,
+      "actionsCount": 1,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\comisiones.png"
+    },
+    {
+      "name": "Configuración & Integraciones",
+      "route": "/configuracion",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2694,
+      "domCount": 660,
+      "actionsCount": 0,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\configuracion.png"
+    },
+    {
+      "name": "Metas de Ventas",
+      "route": "/metas",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2299,
+      "domCount": 634,
+      "actionsCount": 0,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\metas.png"
+    },
+    {
+      "name": "Equipo de Brokers",
+      "route": "/brokers",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2522,
+      "domCount": 704,
+      "actionsCount": 0,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\brokers.png"
+    },
+    {
+      "name": "Avances de Obra",
+      "route": "/avances",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2225,
+      "domCount": 399,
+      "actionsCount": 0,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\avances.png"
+    },
+    {
+      "name": "Comunicaciones & Plantillas",
+      "route": "/comunicaciones",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2342,
+      "domCount": 542,
+      "actionsCount": 0,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\comunicaciones.png"
+    },
+    {
+      "name": "Academy & Moodle LMS",
+      "route": "/academy",
+      "status": "PASS",
+      "httpStatus": 200,
+      "navTime": 2300,
+      "domCount": 405,
+      "actionsCount": 0,
+      "screenshot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\evidencia\\e2e\\academy.png"
+    }
+  ]
+}

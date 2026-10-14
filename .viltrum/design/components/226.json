@@ -1,0 +1,28 @@
+{
+  "author": "tailwindlabs",
+  "description": "An official Tailwind team changelog template built with Next.js and Tailwind CSS. Presents product updates in a timeline format suited to release notes.",
+  "framework": "",
+  "id": "226",
+  "metadata": {
+    "author": "tailwindlabs",
+    "authorImage": "https://avatars.githubusercontent.com/u/67109815?s=200&v=4",
+    "description": "An official Tailwind team changelog template built with Next.js and Tailwind CSS. Presents product updates in a timeline format suited to release notes.",
+    "id": 226,
+    "name": "Commit",
+    "previewUrl": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/templates/user_2nElBLvklOKlAURm6W1PTu6yYFh/tailwindui-commit/preview.jpg",
+    "price": 99,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/tailwindui-commit"
+  },
+  "name": "Commit",
+  "previewUrl": null,
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.206565+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "225809cbbf79b547206776c7a1984689c7afbcd8edb9fe8fb6d401b377bd5d40"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/tailwindui-commit"
+}

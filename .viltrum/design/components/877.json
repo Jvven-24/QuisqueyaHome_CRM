@@ -1,0 +1,28 @@
+{
+  "author": "laziekiki",
+  "description": "Ask a question, watch the answer stream in with inline numbered citations, and open a docked Sources inspector where hovering a source traces its citation in the answer (and vice-versa). Responsive from desktop split-view down to a mobile sheet, light/dark with a cinematic pinhole toggle, and fully bring-your-own-data: wire your own retrieval into one typed shape. No color, no external assets. React + Tailwind + framer-motion + lucide.",
+  "framework": "",
+  "id": "877",
+  "metadata": {
+    "author": "laziekiki",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_3J39TADh2eUXcUqIKX6ozU6RE62/avatar.jpeg",
+    "description": "Ask a question, watch the answer stream in with inline numbered citations, and open a docked Sources inspector where hovering a source traces its citation in the answer (and vice-versa). Responsive from desktop split-view down to a mobile sheet, light/dark with a cinematic pinhole toggle, and fully bring-your-own-data: wire your own retrieval into one typed shape. No color, no external assets. React + Tailwind + framer-motion + lucide.",
+    "id": 877,
+    "name": "Cite - AI Answer with Citations",
+    "previewUrl": "https://cdn.21st.dev/user_3J39TADh2eUXcUqIKX6ozU6RE62/templates/cite-ai-answer-with-citations/preview-1789404674917.png",
+    "price": 49,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/cite-ai-answer-with-citations"
+  },
+  "name": "Cite - AI Answer with Citations",
+  "previewUrl": "https://cdn.21st.dev/user_3J39TADh2eUXcUqIKX6ozU6RE62/templates/cite-ai-answer-with-citations/preview-1789404674917.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:52.097595+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "0397cdb3c97d0e03935cc11c066cbd7726aa97cfe74142365b7048b1785d69f7"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/cite-ai-answer-with-citations"
+}

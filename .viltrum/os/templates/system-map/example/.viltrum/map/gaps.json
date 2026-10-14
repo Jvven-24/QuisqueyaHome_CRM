@@ -1,0 +1,336 @@
+{
+  "gaps": [
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "GOAL-001",
+      "department": "D00",
+      "message": "falta la celda de D00"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "GOAL-001",
+      "department": "D02",
+      "message": "falta la celda de D02"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "GOAL-001",
+      "department": "D22",
+      "message": "falta la celda de D22"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "REQ-001",
+      "department": "D02",
+      "message": "falta la celda de D02"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "REQ-001",
+      "department": "D03",
+      "message": "falta la celda de D03"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "REQ-001",
+      "department": "D14",
+      "message": "falta la celda de D14"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D02",
+      "message": "falta la celda de D02"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D03",
+      "message": "falta la celda de D03"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D09",
+      "message": "falta la celda de D09"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D10",
+      "message": "falta la celda de D10"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D11",
+      "message": "falta la celda de D11"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D13",
+      "message": "falta la celda de D13"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D14",
+      "message": "falta la celda de D14"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D15",
+      "message": "falta la celda de D15"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "MOD-001",
+      "department": "D16",
+      "message": "falta la celda de D16"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "FN-001",
+      "department": "D02",
+      "message": "falta la celda de D02"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "FN-001",
+      "department": "D03",
+      "message": "falta la celda de D03"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "FN-001",
+      "department": "D11",
+      "message": "falta la celda de D11"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "FN-001",
+      "department": "D12",
+      "message": "falta la celda de D12"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "SCR-001",
+      "department": "D04",
+      "message": "falta la celda de D04"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "SCR-001",
+      "department": "D05",
+      "message": "falta la celda de D05"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "SCR-001",
+      "department": "D07",
+      "message": "falta la celda de D07"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "SCR-001",
+      "department": "D14",
+      "message": "falta la celda de D14"
+    },
+    {
+      "rule": "G04",
+      "severity": "P2",
+      "node": "SCR-001",
+      "department": "D06",
+      "message": "estados sin cubrir: sin_conexion"
+    },
+    {
+      "rule": "G17",
+      "severity": "P2",
+      "node": "ENT-001",
+      "department": "D10",
+      "message": "D10 aún no aportó (pendiente)"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "ENT-001",
+      "department": "D11",
+      "message": "falta la celda de D11"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "ENT-001",
+      "department": "D12",
+      "message": "falta la celda de D12"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "CTR-001",
+      "department": "D03",
+      "message": "falta la celda de D03"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "CTR-001",
+      "department": "D14",
+      "message": "falta la celda de D14"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "INT-001",
+      "department": "D03",
+      "message": "falta la celda de D03"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "INT-001",
+      "department": "D12",
+      "message": "falta la celda de D12"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "INT-001",
+      "department": "D13",
+      "message": "falta la celda de D13"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "INT-001",
+      "department": "D14",
+      "message": "falta la celda de D14"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "INT-001",
+      "department": "D17",
+      "message": "falta la celda de D17"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "INT-001",
+      "department": "D19",
+      "message": "falta la celda de D19"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "INT-001",
+      "department": "D21",
+      "message": "falta la celda de D21"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "BHV-001",
+      "department": "D06",
+      "message": "falta la celda de D06"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "BHV-001",
+      "department": "D09",
+      "message": "falta la celda de D09"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "BHV-001",
+      "department": "D10",
+      "message": "falta la celda de D10"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "BHV-001",
+      "department": "D14",
+      "message": "falta la celda de D14"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "BHV-002",
+      "department": "D06",
+      "message": "falta la celda de D06"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "BHV-002",
+      "department": "D09",
+      "message": "falta la celda de D09"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "BHV-002",
+      "department": "D10",
+      "message": "falta la celda de D10"
+    },
+    {
+      "rule": "G01",
+      "severity": "P2",
+      "node": "BHV-002",
+      "department": "D14",
+      "message": "falta la celda de D14"
+    },
+    {
+      "rule": "G21",
+      "severity": "P3",
+      "node": "FN-001",
+      "department": "D10",
+      "message": "D10 declara entregar a D14, pero D14 no lo declara de vuelta"
+    }
+  ],
+  "stats": {
+    "nodes": 11,
+    "required_cells": 52,
+    "closed_cells": 4,
+    "gaps_by_severity": {
+      "P2": 44,
+      "P3": 1
+    },
+    "completeness_note": "informativo: no aprueba nada",
+    "completeness": 0.077
+  },
+  "ready_for_review": false,
+  "human_decisions": [
+    "REQ-001 tiene riesgo R2: pide tu revisión",
+    "FN-001 tiene riesgo R2: pide tu revisión",
+    "INT-001 tiene riesgo R3: pide tu revisión"
+  ]
+}

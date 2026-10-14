@@ -1,5 +1,8 @@
 # D07 — Registro de cambios
 
+## Integración aprobada — 2026-10-07 (revisión D00 HND-012)
+- Guía fuente canónica aprobada; referencia los criterios comunes para motion, temas duales y contenido accesible con `prefers-reduced-motion`.
+
 Formato basado en Keep a Changelog. Versiones según SemVer 2.0.0: mayor cambia el
 contrato de entrada o salida, menor añade checklist o procedimiento, parche corrige.
 

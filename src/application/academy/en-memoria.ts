@@ -190,7 +190,7 @@ export class RepositorioAcademyEnMemoria implements RepositorioAcademy {
 
   async obtenerResumenProgreso(userId: number): Promise<ResumenProgresoAcademy> {
     const totalItems = this.items.length;
-    if (totalItems === 0) return { totalItems: 0, completedItems: 0, percent: 0, isCertified: false };
+    if (totalItems === 0) return { totalItems: 0, completedItems: 0, percent: 0 };
 
     let completedItems = 0;
     for (const item of this.items) {
@@ -199,13 +199,10 @@ export class RepositorioAcademyEnMemoria implements RepositorioAcademy {
     }
 
     const percent = Math.round((completedItems / totalItems) * 100);
-    const isCertified = percent === 100;
-
     return {
       totalItems,
       completedItems,
       percent,
-      isCertified,
     };
   }
 }

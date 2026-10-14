@@ -28,7 +28,8 @@
     "laboratorio diferenciado de campo",
     "revision independiente D02 registrada",
     "cada métrica de éxito del PRD tiene evento, fuente de datos y dueño",
-    "revisión de resultados aprobada por D02 y un humano; la analítica no sustituye la voz del usuario"
+    "revisión de resultados aprobada por D02 y un humano; la analítica no sustituye la voz del usuario",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

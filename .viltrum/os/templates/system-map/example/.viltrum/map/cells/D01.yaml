@@ -1,0 +1,19 @@
+department: D01
+cells:
+- node: GOAL-001
+  status: validado
+  reviewer: D02
+  review_ref: handoff:HND-demo-01
+  reviewed_on: '2026-10-06'
+  deliverable: Alcance y criterios del cliente
+- node: REQ-001
+  status: validado
+  reviewer: D02
+  review_ref: handoff:HND-demo-01
+  reviewed_on: '2026-10-06'
+  deliverable: Requisito con criterio medible
+- node: FN-001
+  status: propuesto
+  deliverable: 'Reglas de reserva: anticipación mínima y cancelación'
+  delivers_to:
+  - D10

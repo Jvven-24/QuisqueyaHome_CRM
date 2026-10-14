@@ -1,0 +1,13 @@
+department: D14
+cells:
+- node: TST-001
+  status: propuesto
+  deliverable: Escenario de reserva de punta a punta
+- node: FN-001
+  status: n/a
+  reviewer: D03
+  review_ref: handoff:HND-demo-03
+  reviewed_on: '2026-10-06'
+  na_reason: Se cubre con TST-001
+  evidence:
+  - TST-001

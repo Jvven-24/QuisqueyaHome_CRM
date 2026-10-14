@@ -1,0 +1,212 @@
+{
+  "/": {
+    "320": {
+      "hasOverflow": false
+    },
+    "390": {
+      "hasOverflow": false
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/leads": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": true
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/contactos": {
+    "320": {
+      "hasOverflow": false
+    },
+    "390": {
+      "hasOverflow": false
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/pipeline": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": false
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/propiedades": {
+    "320": {
+      "hasOverflow": false
+    },
+    "390": {
+      "hasOverflow": false
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/agenda": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": true
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/tareas": {
+    "320": {
+      "hasOverflow": false
+    },
+    "390": {
+      "hasOverflow": false
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/avances": {
+    "320": {
+      "hasOverflow": false
+    },
+    "390": {
+      "hasOverflow": false
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/comunicaciones": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": true
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/reportes": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": false
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/metas": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": false
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/comisiones": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": true
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/brokers": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": true
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/academy": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": true
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  },
+  "/configuracion": {
+    "320": {
+      "hasOverflow": true
+    },
+    "390": {
+      "hasOverflow": true
+    },
+    "768": {
+      "hasOverflow": true
+    },
+    "1440": {
+      "hasOverflow": false
+    }
+  }
+}

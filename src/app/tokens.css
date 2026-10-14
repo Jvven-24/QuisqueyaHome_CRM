@@ -195,24 +195,76 @@
   .analytics-page-header h1 { font: 700 32px/1.2 var(--font-heading); margin: 0 0 8px; overflow-wrap: anywhere; }
   .analytics-page-header p, .analytics-context { color: var(--muted-foreground); font-size: 14px; line-height: 1.5; margin: 0 0 12px; }
   .analytics-eyebrow { font-weight: 600; }
-  .analytics-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; min-width: 48px; padding: 8px 16px; border: 1px solid var(--input); border-radius: var(--radius-field); background: var(--card); color: var(--secondary-foreground); font: 600 14px/1.3 var(--font-sans); text-decoration: none; cursor: pointer; white-space: normal; text-align: center; }
-  .analytics-button:hover { background: var(--secondary); }
-  .analytics-primary { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
-  .analytics-primary:hover { background: var(--primary); filter: brightness(0.96); }
+  .analytics-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; min-width: 44px; padding: 8px 18px; border: 1px solid var(--input); border-radius: 8px; background: var(--card); color: var(--secondary-foreground); font: 600 13px/1.3 var(--font-sans); text-decoration: none; cursor: pointer; white-space: normal; text-align: center; transition: all 140ms ease; }
+  .analytics-button:hover { background: var(--secondary); border-color: #CBD5E1; }
+  .analytics-primary { background: #10172D; color: #FFFFFF; border-color: #1D2B53; box-shadow: 0 1px 3px rgba(16, 23, 45, 0.18); }
+  .analytics-primary:hover { background: #1D2B53; border-color: var(--primary); color: #FFFFFF; filter: none; transform: translateY(-1px); }
   .analytics-button:disabled { opacity: 0.6; cursor: not-allowed; }
   .analytics-page :is(button, a, input, select, summary, [role=tabpanel]):focus-visible, .analytics-sheet :is(button, a, input, select):focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; box-shadow: none; }
-  .analytics-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); margin: 16px 0 24px; overflow: hidden; }
-  .analytics-kpi { min-width: 0; padding: 20px; border-right: 1px solid var(--border); }
-  .analytics-kpi h2 { font: 600 14px/1.4 var(--font-sans); margin: 0 0 12px; }
-  .analytics-kpi > strong { display: block; font: 700 clamp(26px, 2.4vw, 40px)/1.1 var(--font-heading); color: var(--secondary-foreground); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-  .analytics-kpi p, .analytics-kpi small { display: block; color: var(--muted-foreground); font-size: 13px; line-height: 18px; margin: 12px 0 0; }
-  .analytics-kpis:has(> .analytics-kpi:nth-child(5)) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .analytics-kpi[data-kind=pipeline] { grid-column: span 2; }
-  .analytics-kpi[data-kind=pipeline] > strong { font-size: clamp(22px, 2vw, 34px); white-space: nowrap; }
+  .analytics-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    margin: 16px 0 24px;
+    overflow: visible;
+  }
+  .analytics-kpi {
+    min-width: 0;
+    padding: 20px 22px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px rgba(15, 23, 42, 0.02);
+    transition: transform 160ms var(--ease-standard), box-shadow 160ms var(--ease-standard), border-color 160ms var(--ease-standard);
+  }
+  .analytics-kpi:hover {
+    background: #FFFFFF;
+    transform: translateY(-2px);
+    border-color: rgba(199, 153, 14, 0.45);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+  }
+  .analytics-kpi h2 {
+    font: 700 12px/1.4 var(--font-sans);
+    margin: 0 0 10px;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .analytics-kpi > strong {
+    display: block;
+    font: 700 clamp(24px, 2.2vw, 34px)/1.1 var(--font-heading);
+    color: var(--navy-950);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+    letter-spacing: -0.02em;
+  }
+  .analytics-kpi p, .analytics-kpi small {
+    display: block;
+    color: #94A3B8;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 8px 0 0;
+  }
+  .analytics-kpis:has(> .analytics-kpi:nth-child(5)) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .analytics-kpi[data-kind=pipeline] {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FAF9F6 100%);
+    border-color: rgba(199, 153, 14, 0.25);
+  }
+  .analytics-kpi[data-kind=pipeline] > strong {
+    font-size: clamp(22px, 2vw, 32px);
+    white-space: nowrap;
+    color: #10172D;
+  }
   .analytics-tabs-scroll { min-width: 0; max-width: 100%; overflow-x: auto; padding: 4px; }
-  .analytics-tabs { display: inline-flex; width: max-content; height: auto; min-height: 48px; gap: 4px; background: var(--secondary); border: 1px solid var(--border); box-shadow: none; }
-  .analytics-tab { min-height: 48px; min-width: 48px; height: auto; padding: 10px 16px; font-size: 14px; color: var(--secondary-foreground); box-shadow: none; }
-  .analytics-tab[data-state=active] { background: var(--primary); color: var(--primary-foreground); box-shadow: none; }
+  .analytics-tabs { display: inline-flex; width: max-content; height: auto; min-height: 42px; gap: 4px; background: #EEF2F6; border: 1px solid var(--border); border-radius: 8px; padding: 3px; box-shadow: none; }
+  .analytics-tab { min-height: 36px; min-width: 44px; height: auto; padding: 8px 16px; font-size: 13px; font-weight: 600; color: #64748B; border-radius: 6px; box-shadow: none; transition: all 140ms ease; }
+  .analytics-tab[data-state=active] { background: #10172D; color: #FFFFFF; box-shadow: 0 1px 3px rgba(16, 23, 45, 0.15); }
   .analytics-tab::after { display: none; }
   .analytics-main-tabs { gap: 16px; min-width: 0; }
   .analytics-dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; }

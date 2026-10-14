@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:47:55.746165+00:00",
+  "author": "olewandowski1",
+  "codeSha256": "ffbbee2b09fb9387e05e89fa7d36ee41e9dcd02194d620de1d4853d1ca2459b4",
+  "demoSha256": "8f4dedbadd12810e1fb4fdc4f1a77a6edb46f8b0f5ed549cc61091ead8b52ad2",
+  "description": "A vertical timeline that groups a team's recent activity by day, showing each actor's avatar, action, target, and relative timestamp connected by a rail.",
+  "framework": "",
+  "id": "28340",
+  "metadata": {
+    "author": "olewandowski1",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18zSXV3Vm5MVGx6UjZ5SG1oNXZnYWh1R0Mza28ifQ",
+    "description": "A vertical timeline that groups a team's recent activity by day, showing each actor's avatar, action, target, and relative timestamp connected by a rail.",
+    "id": 28340,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/olewandowski1/timeline-3?[REDACTED]",
+    "name": "Activity Timeline",
+    "previewUrl": "https://cdn.21st.dev/user_registry_7ovr_1782691739820/timeline-3/default/preview.1789994227656.png",
+    "type": "component",
+    "url": "https://21st.dev/@olewandowski1/components/timeline-3",
+    "videoUrl": null
+  },
+  "name": "Activity Timeline",
+  "previewUrl": "https://cdn.21st.dev/user_registry_7ovr_1782691739820/timeline-3/default/preview.1789994227656.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:47:55.746315+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "b07180611a239dd69ade64909d8d6809a6b8e27074589efb660c6e481cdbf7f1",
+    "importedAt": "2026-10-04T22:47:31.169414+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "225809cbbf79b547206776c7a1984689c7afbcd8edb9fe8fb6d401b377bd5d40"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@olewandowski1/components/timeline-3"
+}

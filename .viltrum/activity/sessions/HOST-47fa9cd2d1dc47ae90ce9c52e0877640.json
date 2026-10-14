@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-47fa9cd2d1dc47ae90ce9c52e0877640",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D03",
+  "actor": "codex-scope-specs",
+  "goal": "Diseñar contratos propuestos I01 Twenty e I02 Moodle para C1 local",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:41:29.845641+00:00",
+  "updatedAt": "2026-10-05T01:42:44.309019+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:41:29.845704+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:42:44.308990+00:00",
+      "status": "finished",
+      "message": "I01 e I02 DRAFT con contratos, precondiciones, lotes y pruebas; spec:check sin hallazgos en ambas, 11 bloqueos heredados del paquete; revisión independiente pendiente"
+    }
+  ]
+}

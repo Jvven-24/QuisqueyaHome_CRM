@@ -34,7 +34,14 @@ export const getActor = cache(async (): Promise<Actor | null> => {
 
   if (!user) {
     const cookieStore = await cookies().catch(() => null);
-    const devRole = cookieStore?.get("qh_dev_role")?.value;
+    const rawDevRole = cookieStore?.get("qh_dev_role")?.value;
+    let devRole = rawDevRole;
+    if (rawDevRole === undefined) {
+      const requestHeaders = await headers().catch(() => null);
+      if (evaluationLoginAllowed(requestHeaders?.get("host") ?? null)) {
+        devRole = "admin";
+      }
+    }
     return devRole ? getEvaluationActor(devRole) : null;
   }
 

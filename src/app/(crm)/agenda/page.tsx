@@ -35,7 +35,7 @@ export default async function AgendaPage({
   const params = await searchParams;
   const semanaParam = primero(params.semana);
   const lunes = lunesDeLaSemana(semanaParam || fechaSantoDomingo(new Date()));
-  const sabado = sumarDias(lunes, 5);
+  const sabado = sumarDias(lunes, 6); // Lunes a sábado completo (hasta medianoche del domingo)
 
   const db = getDb();
   const [citas, personas] = await Promise.all([
@@ -43,9 +43,14 @@ export default async function AgendaPage({
       .select({
         id: activities.id,
         title: activities.title,
+        description: activities.description,
+        activityType: activities.activityType,
         startsAt: activities.startsAt,
         endsAt: activities.endsAt,
         location: activities.location,
+        meetingUrl: activities.meetingUrl,
+        priority: activities.priority,
+        status: activities.status,
         assigneeId: activities.assigneeId,
         assigneeName: users.fullName,
       })

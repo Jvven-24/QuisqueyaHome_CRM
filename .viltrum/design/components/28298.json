@@ -1,0 +1,29 @@
+{
+  "author": "slide-cn",
+  "description": "A horizontal or vertical timeline for displaying ordered events, process steps, milestones, or roadmaps, with optional custom markers and alternating layout.",
+  "framework": "",
+  "id": "28298",
+  "metadata": {
+    "author": "slide-cn",
+    "authorImage": "https://github.com/prithvi-rajan-222.png",
+    "description": "A horizontal or vertical timeline for displaying ordered events, process steps, milestones, or roadmaps, with optional custom markers and alternating layout.",
+    "id": 28298,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/slide-cn/timeline?[REDACTED]",
+    "name": "Timeline",
+    "previewUrl": "https://cdn.21st.dev/slide-cn/timeline/default/preview.1789960564301-88a04004-296e-44ca-a688-c1b292e04ad3.png",
+    "type": "component",
+    "url": "https://21st.dev/@slide-cn/components/timeline",
+    "videoUrl": null
+  },
+  "name": "Timeline",
+  "previewUrl": "https://cdn.21st.dev/slide-cn/timeline/default/preview.1789960564301-88a04004-296e-44ca-a688-c1b292e04ad3.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.180615+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "225809cbbf79b547206776c7a1984689c7afbcd8edb9fe8fb6d401b377bd5d40"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@slide-cn/components/timeline"
+}

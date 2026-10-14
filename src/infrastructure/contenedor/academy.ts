@@ -3,8 +3,14 @@
  */
 
 import type { RepositorioAcademy } from "../../application/academy/puertos";
+import type { PuertoAprendizaje } from "../../application/aprendizaje/puertos";
 import { transaction } from "../db/client";
 import { repositorioAcademy } from "../db/repos/academy";
+import { MoodleAdaptador } from "../integraciones/moodle/cliente";
+
+export function lmsAdaptador(): PuertoAprendizaje {
+  return new MoodleAdaptador();
+}
 
 export function academyRepositorio(): {
   ejecutar<T>(operacion: (repo: RepositorioAcademy) => Promise<T>): Promise<T>;

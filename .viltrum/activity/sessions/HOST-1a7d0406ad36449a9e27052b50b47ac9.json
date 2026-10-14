@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-1a7d0406ad36449a9e27052b50b47ac9",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D12",
+  "actor": "codex-security-review",
+  "goal": "Revisión independiente de seguridad para servicios locales y primer vertical C1",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:42:59.560625+00:00",
+  "updatedAt": "2026-10-05T01:46:48.709574+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:42:59.560709+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:46:48.709553+00:00",
+      "status": "finished",
+      "message": "Revisión D12 documentada: sin P0 confirmado; P1 de exposición Twenty, PII/RLS, outbox, identidad Moodle y scans pendientes. I01/I02 siguen DRAFT."
+    }
+  ]
+}

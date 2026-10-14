@@ -27,7 +27,7 @@ skills:
   postgres_avanzado:    supabase-postgres-best-practices
   auth_quickstart:      auth0:auth0-quickstart
   auth_api_bearer:      auth0:express-oauth2-jwt-bearer
-  impacto_de_cambio:    gitnexus-impact-analysis
+  impacto_de_cambio:    viltrum-repo-map
   revision_seguridad:   security-review
   revision_codigo:      code-review
   simplificacion:       simplify

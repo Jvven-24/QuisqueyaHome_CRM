@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:48:07.294173+00:00",
+  "author": "lovesickfromthe6ix",
+  "codeSha256": "1e677a616e220e9ce624192159e673e44e765301dbdd6666b2f684f9ca737de6",
+  "demoSha256": "418b32141740db9c3db48b282f20c6b341357d38034ed2913b0e5d5ca362ba0a",
+  "description": "A functional calculator with history and  proper display formatting",
+  "framework": "",
+  "id": "3029",
+  "metadata": {
+    "author": "lovesickfromthe6ix",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yeTBvckljaDhWbUFvT2FvejVkU3ZGUDZhaGkifQ",
+    "description": "A functional calculator with history and  proper display formatting",
+    "id": 3029,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/lovesickfromthe6ix/calculator?[REDACTED]",
+    "name": "Calculator",
+    "previewUrl": "https://cdn.21st.dev/lovesickfromthe6ix/calculator/default/preview.1750392718262.png",
+    "type": "component",
+    "url": "https://21st.dev/@lovesickfromthe6ix/components/calculator",
+    "videoUrl": "https://cdn.21st.dev/lovesickfromthe6ix/calculator/default/video.1750467487534.mp4"
+  },
+  "name": "Calculator",
+  "previewUrl": "https://cdn.21st.dev/lovesickfromthe6ix/calculator/default/preview.1750392718262.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:48:07.294302+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "33d807c226d1d9efb49c78a8a368a3dbb5cbc80464967402d6c4c840647b0761",
+    "importedAt": "2026-10-04T22:47:38.807124+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4c715ae6007b11706bed0fed8684ebdffa33ca741e964311f5d774e17d1ed517"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@lovesickfromthe6ix/components/calculator"
+}

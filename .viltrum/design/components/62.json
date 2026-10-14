@@ -1,0 +1,28 @@
+{
+  "author": "shuvamk",
+  "description": "Nuggets is a premium Next.js template crafted for modern digital agencies. With its sleek design, smooth animations, and comprehensive features, it provides everything needed to establish a compelling online presence.\n\nKey Features:\n\nModern Technology Stack\nNext.js 14 with App Router\nTypeScript for robust development\nTailwind CSS for styling\nFramer Motion animations\nSupabase backend integration\nLucide React icons\nProfessional Design\nClean, modern aesthetics\nMicro-interactions throughout\nFully responsive design\nCustom animations\nInteractive components\nBold typography system\nComplete Feature Set\nDynamic blog platform\nContact form with database integration\nService showcases\nProcess timeline\nClient statistics\nTeam section\nPrivacy Policy & Terms pages\nComprehensive footer\nPerformance & SEO\nOptimized meta tags\nSEO-friendly structure\nOpen Graph support\nTwitter Card integration\nPWA-ready\nCross-browser compatible\nBusiness Features\nLead capture system\nService presentation\nClient statistics\nProcess explanation\nContent management\nSocial integration\nDeveloper Experience\nClean, modular code\nTypeScript integration\nComponent architecture\nUtility-first CSS\nEasy customization\nDetailed documentation\n",
+  "framework": "",
+  "id": "62",
+  "metadata": {
+    "author": "shuvamk",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ydnhXUWE0d3c2RnVpa3R4aGxzQ3QwT2pRQWwifQ",
+    "description": "Nuggets is a premium Next.js template crafted for modern digital agencies. With its sleek design, smooth animations, and comprehensive features, it provides everything needed to establish a compelling online presence.\n\nKey Features:\n\nModern Technology Stack\nNext.js 14 with App Router\nTypeScript for robust development\nTailwind CSS for styling\nFramer Motion animations\nSupabase backend integration\nLucide React icons\nProfessional Design\nClean, modern aesthetics\nMicro-interactions throughout\nFully responsive design\nCustom animations\nInteractive components\nBold typography system\nComplete Feature Set\nDynamic blog platform\nContact form with database integration\nService showcases\nProcess timeline\nClient statistics\nTeam section\nPrivacy Policy & Terms pages\nComprehensive footer\nPerformance & SEO\nOptimized meta tags\nSEO-friendly structure\nOpen Graph support\nTwitter Card integration\nPWA-ready\nCross-browser compatible\nBusiness Features\nLead capture system\nService presentation\nClient statistics\nProcess explanation\nContent management\nSocial integration\nDeveloper Experience\nClean, modular code\nTypeScript integration\nComponent architecture\nUtility-first CSS\nEasy customization\nDetailed documentation\nPerfect For:\n\nDigital agencies\nDesign studios\nMarketing firms\nCreative agencies\nTech consultancies\nService businesses\nTechnical Benefits:\n\nServer-side rendering\nAPI integration\nDatabase connectivity\nForm processing\nAnimation system\nIcon library\nResponsive framework\nSEO optimization\nPerformance tuning\nSave weeks of development time with this production-ready solution that combines beautiful design with powerful functionality. Launch your agency website quickly while maintaining the flexibility to customize every aspect to match your brand.",
+    "id": 62,
+    "name": "Nuggets: Design Agency Website",
+    "previewUrl": "https://cdn.21st.dev/user_2vxWQUOBsE2vYFeIonhiuv7vdnV/nuggets-design-agency-website/preview.png",
+    "price": 35,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/nuggets-design-agency-website"
+  },
+  "name": "Nuggets: Design Agency Website",
+  "previewUrl": "https://cdn.21st.dev/user_2vxWQUOBsE2vYFeIonhiuv7vdnV/nuggets-design-agency-website/preview.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.218561+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "225809cbbf79b547206776c7a1984689c7afbcd8edb9fe8fb6d401b377bd5d40"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/nuggets-design-agency-website"
+}

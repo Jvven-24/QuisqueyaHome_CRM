@@ -21,7 +21,8 @@
     "Licencia/mantenimiento verificados",
     "Costos e incertidumbre declarados",
     "Prueba sandbox reproducible si necesaria",
-    "D03 revisa recomendación"
+    "D03 revisa recomendación",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

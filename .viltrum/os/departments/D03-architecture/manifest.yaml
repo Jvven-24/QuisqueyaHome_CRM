@@ -22,9 +22,9 @@ tools:
     - aprobar su propia arquitectura
 
 skills:
-  explorar_codigo_existente: [gitnexus-exploring, gitnexus-impact-analysis]
-  analisis_de_impacto:       gitnexus-impact-analysis
-  refactor_seguro:           gitnexus-refactoring
+  explorar_codigo_existente: viltrum-repo-map
+  analisis_de_impacto:       viltrum-repo-map
+  refactor_seguro:           viltrum-repo-map
   diagramas:                 artifact-diagramming
 
 subagents:

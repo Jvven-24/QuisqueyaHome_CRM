@@ -8,6 +8,6 @@ Inventaría arquitectura/requisitos y herramientas del host. Activa únicamente 
 necesarios; sus contratos están en `departments/*/delivery.json`. Delegación real cuando
 esté autorizada; productor y revisión independientes. No crear aceptación humana ficticia.
 
-Objetivo autorizado: Refactorizacion integral de diseno y arquitectura de QuisqueyaHome CRM bajo estandar Viltrum Studio y sincronizacion Obsidian
+Objetivo autorizado: Implementar frente E1.2 Leads e integrar Timeline enriquecido en Ficha 360 Negocios con perfiles Viltrum
 
 Inventario inicial: README.md, AGENTS.md, CLAUDE.md, package.json

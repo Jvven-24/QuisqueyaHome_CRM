@@ -1,0 +1,28 @@
+{
+  "author": "kedhareswer",
+  "description": "A calm, minimal personal website: floating pill nav with command palette and light/dark toggle, intro, work history, essays with a reading progress line and recent work. React, one file, no dependencies. Install the code: npx shadcn@latest add https://21st.dev/r/kedhareswer/quiet-portfolio-template",
+  "framework": "",
+  "id": "1081",
+  "metadata": {
+    "author": "kedhareswer",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_30fkm37UoBFJx1GiK2Q4Sy8lSrO/avatar.jpeg",
+    "description": "A calm, minimal personal website: floating pill nav with command palette and light/dark toggle, intro, work history, essays with a reading progress line and recent work. React, one file, no dependencies. Install the code: npx shadcn@latest add https://21st.dev/r/kedhareswer/quiet-portfolio-template",
+    "id": 1081,
+    "name": "Minimal Personal Portfolio Website Template",
+    "previewUrl": "https://cdn.21st.dev/kedhareswer/quiet-portfolio-template/default/preview.1790787378940-1f3920ce-f0c7-47ad-9ec2-9e122450e3d6.png",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/minimal-personal-portfolio-website-template"
+  },
+  "name": "Minimal Personal Portfolio Website Template",
+  "previewUrl": "https://cdn.21st.dev/kedhareswer/quiet-portfolio-template/default/preview.1790787378940-1f3920ce-f0c7-47ad-9ec2-9e122450e3d6.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:01.866785+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "734815b6383485fcc826adf6bfe6c746c44c0446f930001438eebc40ea1563c2"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/minimal-personal-portfolio-website-template"
+}

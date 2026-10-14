@@ -1,0 +1,29 @@
+{
+  "author": "arihantcodes_1f7b8c4d",
+  "description": "Here is Kanban Board component",
+  "framework": "",
+  "id": "4901",
+  "metadata": {
+    "author": "arihantcodes_1f7b8c4d",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yeG1JVU5OMFdtUE1yYWxOWW12VzdUVHY5ZmUifQ",
+    "description": "Here is Kanban Board component",
+    "id": 4901,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/arihantcodes_1f7b8c4d/kanban-board?[REDACTED]",
+    "name": "Kanban Board",
+    "previewUrl": "https://cdn.21st.dev/larsen66/kanban-board/default/preview.1754084030513.png",
+    "type": "component",
+    "url": "https://21st.dev/@arihantcodes_1f7b8c4d/components/kanban-board",
+    "videoUrl": "https://cdn.21st.dev/larsen66/kanban-board/default/video.1754084030513.mp4"
+  },
+  "name": "Kanban Board",
+  "previewUrl": "https://cdn.21st.dev/larsen66/kanban-board/default/preview.1754084030513.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:22.870202+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "b71d99cd3e43f6b47301d6ea72606361e2fe986edb85ba77d4c4980460e2ecec"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@arihantcodes_1f7b8c4d/components/kanban-board"
+}

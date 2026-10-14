@@ -2,9 +2,9 @@
 
 Ficha: M03
 
-Perfil: **D09 Frontend** (skill `patron-consola`). Productor: Codex (gpt-6.1-sol, HAPI). Revisión independiente: Antigravity (D14, capturas) + D07 accesibilidad + orquestador con comandos.
+Perfil: **D09 Frontend** (skill `patron-consola`). Productor: **Antigravity** (gemini-3.8-flash-high, HAPI; Codex sin cuota hasta las 19:46 del 13-oct). Revisión independiente: orquestador con comandos y capturas reales + Codex (D07/D14) cuando recupere cuota.
 Ficha: `M03-negocios.md` (READY) §3 «Contrato común», SCR-NEG-TABLERO, SCR-NEG-LISTA, matriz de seis estados; CA-01, 02, 15, 16, 17, 18, 19. Diseño: `.viltrum/vre-os/design/DS-1-negocios-leads.md`, `docs/DESIGN.md`, `D05-graficas-movil.md`.
-Requisito previo: T-E1-1b1 y T-E1-1b2 entregadas y en verde. Sin eso, para y avisa.
+Requisito previo cumplido: backend b1+b2 en `develop` (commit 8db9d59), 542 pruebas y `test:db` exit 0. **Esta tarea se parte en dos para caber en 45 min: c1a = solo Tablero (alcance de los puntos 1, 2, 5, 6, 7 aplicados al Tablero); c1b = Lista y Análisis (puntos 3, 4).** Haz solo la parte indicada en tu objetivo.
 Modo: fix, escribes código en `src/app/(crm)/negocios/**` y componentes propios que necesites. **Sin git, sin commit, sin `npm run dev`/`build`**, sin tocar la VPS ni `.env*`. Máximo 45 min.
 
 ## Qué construir

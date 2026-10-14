@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-7e1a4fd403f140968cfbf5c0aa2535a4",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D02",
+  "actor": "codex-scope-specs",
+  "goal": "Incorporar respuestas humanas Q-C1-01 a Q-C1-04 al alcance local",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:49:49.384913+00:00",
+  "updatedAt": "2026-10-05T01:50:43.198366+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:49:49.385000+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:50:43.198340+00:00",
+      "status": "finished",
+      "message": "Q-C1-01..04 respondidas según confirmación humana; Q-C1-05 pendiente por PII; plan e I01/I02 ajustados"
+    }
+  ]
+}

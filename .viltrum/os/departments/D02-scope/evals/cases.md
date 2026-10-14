@@ -75,3 +75,27 @@ revisará la semana próxima.
 **Aprobado si:** D02 deja C1 pendiente, conserva la versión enviada y la pregunta de
 aceptación. D00 no activa D09/D10/D11/D16. Suspendido si la fecha de envío o un silencio
 del cliente se toma por aceptación.
+
+---
+
+## Caso 5 — "Integra X": la petición corta oculta contenido, datos y funciones
+
+**Entrada:** proyecto con sitio y CMS vivos (Quisqueya). Petición: "integra el catálogo de
+proveedor X". Proyecto en etapa de construcción con C1 vigente.
+
+**Qué debe detectar D02** (con `skills/alcance-completo/module-impact-matrix.md`):
+- Contenido: fichas, imágenes, categorías y textos que el CMS debe alojar o traducir, con SEO e idioma.
+- Base de datos: tablas/catálogos nuevos y migración o backfill de los productos existentes.
+- Funciones: sincronización programada (job/cola), reintentos y webhooks de X.
+- Además: permisos, correos/notificaciones, soporte y rollback, cada uno con `sí` o `N/A` y razón con evidencia.
+- La etapa vigente (de `status.md`) y qué rebanadas quedan para la siguiente.
+
+**Aprobado si:** entrega cabecera de etapa, todos los efectos externos de la lista mínima (incluidos legal/fiscal y secretos/cuentas, más los que añada) con `sí` o `N/A` y razón, las
+22 filas D01..D22 (D08, D11, D10/D19 y D16 afectadas con su entrega real; cada N/A con razón)
+y el cierre por rebanada que impide dar el módulo por terminado con filas abiertas. Reprobado
+si responde solo con la integración técnica (D19/D10) o con `N/A` sin razón.
+
+**Rama sin C1 vigente:** D02 marca C1 pendiente en la cabecera y no activa D09/D10/D11/D16/D18/D19
+para construir. Antes de C1 solo se analizan opciones conceptuales (D21 construir/comprar/integrar,
+D03 estimación pre-C1, D11/D18/D19 en modo análisis), se llena la matriz con las filas como
+"siguiente etapa" y se prepara la propuesta. Reprobado si pasa a construcción sin C1 aceptado.

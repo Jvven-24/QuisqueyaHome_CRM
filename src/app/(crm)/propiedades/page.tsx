@@ -68,6 +68,10 @@ export default async function PropiedadesPage({
         publicRangeMinCents: projects.publicRangeMinCents,
         publicRangeMaxCents: projects.publicRangeMaxCents,
         currency: projects.currency,
+        confoturEligible: projects.confoturEligible,
+        developer: projects.developer,
+        estimatedDeliveryDate: projects.estimatedDeliveryDate,
+        description: projects.description,
         brokerId: projects.brokerId,
         brokerName: users.fullName,
       })
@@ -82,6 +86,8 @@ export default async function PropiedadesPage({
         projectId: units.projectId,
         total: sql<number>`count(*)`.mapWith(Number),
         disponibles: sql<number>`count(*) filter (where ${units.status} = 'available')`.mapWith(Number),
+        reservadas: sql<number>`count(*) filter (where ${units.status} = 'reserved')`.mapWith(Number),
+        vendidas: sql<number>`count(*) filter (where ${units.status} = 'sold')`.mapWith(Number),
       })
       .from(units)
       .where(isNull(units.deletedAt))
@@ -102,6 +108,8 @@ export default async function PropiedadesPage({
       ...fila,
       unidadesDisponibles: disp?.disponibles ?? 0,
       unidadesTotal: disp?.total ?? 0,
+      unidadesReservadas: disp?.reservadas ?? 0,
+      unidadesVendidas: disp?.vendidas ?? 0,
     });
   });
 

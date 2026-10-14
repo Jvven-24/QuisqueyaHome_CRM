@@ -25,7 +25,8 @@
     "contratos coherentes y version compatibles",
     "aislamiento tenant en datos/cache/jobs",
     "plan de fallos, concurrencia y restauracion",
-    "revision humana independiente"
+    "revision humana independiente",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",
@@ -34,8 +35,8 @@
   ],
   "sources": [
     {
-      "title": "GitNexus — official repository",
-      "url": "https://github.com/abhigyanpatwari/GitNexus"
+      "title": "ripgrep — official repository (MIT/Unlicense)",
+      "url": "https://github.com/BurntSushi/ripgrep"
     },
     {
       "title": "Context7 — official repository",

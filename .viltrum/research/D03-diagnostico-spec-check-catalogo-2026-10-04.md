@@ -1,0 +1,23 @@
+# D03 · `spec:check` confunde catálogo exploratorio con ficha de integración
+
+**Estado:** diagnóstico y propuesta, sin cambiar `scripts/spec/check.mjs` ni promover fichas a READY. **Riesgo:** P1 de trazabilidad del gate, no funcionamiento probado. Insumos: salida de `npm run spec:check` del 2026-10-04 (America/Santo_Domingo), `scripts/spec/check.mjs:52,99–128`, `spec/integraciones/CAPACIDADES.md`, `scripts/spec/capacidades-check.mjs`, revisión D14 de línea base y expedientes D21/D12.
+
+## Reproducción y causa exacta
+
+**Estado anterior a un cambio concurrente:** `npm run spec:check` informaba **11 bloqueos**, todos sobre `.viltrum/vre-os/spec/integraciones/CAPACIDADES.md`: cabecera YAML ausente, siete campos ausentes (id, sistema, estado, riesgo, owner, revisores, actualizado), estado inválido, nombre no `INN-descripcion.md` y secciones Ixx 1–10 ausentes. `CAPACIDADES.md` es catálogo exploratorio D21, no ficha; las tareas antiguas sin `Ficha:` son advertencias.
+
+**AS-IS del checkout revisado después:** `scripts/spec/check.mjs` ya añade `if (!/^[MGI]\d+-/i.test(path.basename(filename))) continue;` antes de analizar cada `.md` de primer nivel. El filtro oculta el catálogo, **pero también `OTRO.md` y cualquier archivo inválido sin prefijo en los tres directorios**. D14 reprodujo el falso verde en fixture: `runCheck()` contó una sola ficha defectuosa I03 y silenció `OTRO.md` y `CAPACIDADES.md` bajo módulos (`.viltrum/reviews/D14-revision-READY-I01-A-TOOL-001-2026-10-04.md`). Las cinco pruebas actuales de `check.test.mjs` pasan, pero no cubren estos negativos. `spec:check` puede mostrar 0 bloqueos hoy sin garantizar enumeración completa. I01/I02 no generan hallazgos estructurales, pero siguen DRAFT.
+
+El encabezado del propio catálogo lo declara **BORRADOR NO VERIFICADO**: enlaces con fragmentos `#capacidad-N` inventados y pantallas ajenas al brief. Su JSON compañero usa `verificado:true` en URLs que no prueban capacidad. Por tanto, **añadirle un frontmatter `Ixx`, renombrarlo para engañar al validador o declararlo READY sería incorrecto**. `spec:check` es estructural; no comprueba API viva, fuente documental ni que una función OSS esté integrada.
+
+## Corrección mínima recomendada, tras ficha de herramienta READY y revisión
+
+Mantener los dos archivos históricos en su ruta por trazabilidad. En `scripts/spec/check.mjs`, **retirar el filtro amplio existente** y excluir **solo** el basename exacto `CAPACIDADES.md` de la enumeración de fichas de `integraciones`, con aviso informativo «catálogo D21 no probatorio; verificar contra API/versiones en Ixx». Seguir validando todo otro `.md` de primer nivel, incluso si viola patrón. Una prueba debe demostrar que `CAPACIDADES.md` no entra al denominador; I01/I02 sí; `OTRO.md` e `I03-defectuosa.md` bloquean; otro `CAPACIDADES.md` bajo módulos/globales bloquea; el proceso CLI devuelve exit 1 para fixture inválido. No cambiar `capacidades.json` a verdadero ni editar URLs para fabricar aprobación.
+
+Esta intervención modifica código de herramienta y requiere su propia ficha `READY`/tarea pequeña conforme a constitución; D14 revisa el cambio, D12 verifica que no relaja controles y D00 actualiza el índice. El resultado esperado es **0 bloqueos estructurales del Spec Pack vigente** si no aparecen otros, sin afirmar que ninguna integración esté READY. La exclusión no sustituye el expediente D21, PoC local ni revisión de licencias.
+
+## Por qué no mover el archivo ahora
+
+La alternativa limpia futura es mover catálogo y JSON a `.viltrum/research/legacy/` o `spec/integraciones/fuentes/` (subdirectorio no enumerado), pero requiere actualizar referencias en tareas, fichas M01/M03, `MAPA-SISTEMAS-OSS.md`, síntesis D21 y registros de handoff `HND-032/035` cuyos hashes apuntan a la ruta actual. Un `rg 'CAPACIDADES.md' .viltrum docs scripts src` muestra decenas de referencias, incluidas evidencias históricas que no deben reescribirse sin auditoría. Moverlo ahora sin paquete de migración rompería trazabilidad y no validaría su contenido. La exclusión explícita es menor y reversible; después de sustituir el catálogo por fuentes verificadas podrá retirarse.
+
+**Bloqueo vigente:** la ficha técnica `specs/001-spec-check-catalogo-no-ficha/spec.md` permanece DRAFT. Sin READY y revisión D12/D14, no editar el validador. El `spec:check` actual puede salir **0 por filtro general inseguro**; no tratarlo como gate robusto ni como prueba de I01-A/I02. La subficha I01-A está en `integraciones/lotes/`, fuera de la enumeración actual de `spec:check`, por lo que requiere mecanismo separado de índice y validación antes de READY.

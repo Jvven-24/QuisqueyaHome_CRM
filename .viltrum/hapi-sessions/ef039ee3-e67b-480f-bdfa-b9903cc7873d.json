@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "projectRoot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D01",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "permissionMode": "yolo",
+  "role": "producer",
+  "mode": "code",
+  "yolo": true,
+  "goal": "Tarea T-E1-1a-R2 (D01): aplica SOLO estas 3 correcciones documentales a .viltrum/vre-os/spec/modulos/M03-negocios.md, pedidas por la revision independiente .viltrum/reviews/D02-revision-M03-negocios-2026-10-13.md (lee su tabla de hallazgos). HAL-M03-01: en la seccion 2 cambia las referencias src/app/(crm)/pipeline/ por src/app/(crm)/negocios/ (lineas ~68 y ~78), reconoce que en HEAD (commit 6c610e3) los textos visibles ya dicen Negocios, y retira la cita del hito 10-40-50 (vista.tsx:429, eliminado en e045c83); verifica cada cita contra el codigo real antes de escribirla. HAL-M03-02: añade a la tabla de consultas de la seccion 5 consultarPropuestasNegocio(actor, dealId, estado) y consultarEstadoSincronizacionNegocio(actor, id) para que coincida con la seccion 9. HAL-M03-03: en la seccion 3 aclara que /negocios es la URL canonica y /pipeline redirige 308 (next.config.ts:14-15). No toques nada mas, sin git, sin servidores, sin secretos. Al terminar ejecuta npm run spec:check y pega su salida final en la seccion Verificacion de la ficha. No cambies el estado a READY: eso lo hace el orquestador. Responde con la lista de lineas cambiadas.",
+  "packetHash": "82b573d04edc8a665ba80ac9ecc102922abb50706d1661fce4164895f3005d77",
+  "sources": [
+    {
+      "path": ".viltrum\\project.md",
+      "sha256": "3b20a8911ad6d82c0d1ad0d377767b3e8254e2a0db6ac90436c07061c3cac889"
+    },
+    {
+      "path": ".viltrum\\status.md",
+      "sha256": "13c9df42a0e9fdeb41e2a3424d79b7474996ecd586178551dc42c51a76046b27"
+    },
+    {
+      "path": ".viltrum\\os\\CLAUDE.md",
+      "sha256": "237594693cf0cbf680a60e9352ee900b8d38970951a25ab3aa6e00b7c9bcb027"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D01-discovery\\SOUL.md",
+      "sha256": "59d2f4ed775fc72f8823e5557f140939822713be0ba2b5dda1f3e60a01a973b5"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D01-discovery\\AGENTS.md",
+      "sha256": "3c81e8e2876c41835ce4e51569046a6c417cb6a44183a79765c0c38637cf40a2"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D01-discovery\\sops\\delivery.md",
+      "sha256": "7db8e77fa9da2f468cc9766b4091b3b0af916efa79b2e473c8c5971a4ba5f318"
+    },
+    {
+      "path": ".viltrum\\os\\skills\\viltrum-discovery\\SKILL.md",
+      "sha256": "e0bb28478b756778c4b138f15b1b49a9ddc7ab0453f3af9f8520784593a2b655"
+    }
+  ],
+  "reviewer": "D02",
+  "supervisedOnly": false,
+  "bridgeId": "ef039ee3-e67b-480f-bdfa-b9903cc7873d",
+  "actor": "hapi:165919e0-7bce-4165-a48c-77bcbfa7bbd2",
+  "machineId": "6881833d-f840-4f9d-bb13-da22e3d59ace",
+  "sessionId": "165919e0-7bce-4165-a48c-77bcbfa7bbd2",
+  "localId": "viltrum-ef039ee3-e67b-480f-bdfa-b9903cc7873d",
+  "launchDirectory": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "state": "message_accepted",
+  "createdAt": "2026-10-13T19:02:54.806250+00:00",
+  "url": "http://127.0.0.1:3006/sessions/165919e0-7bce-4165-a48c-77bcbfa7bbd2"
+}

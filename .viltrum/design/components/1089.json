@@ -1,0 +1,28 @@
+{
+  "author": "kedhareswer",
+  "description": "Designer portfolio website template built from colourful file folders and frosted glass: folder-tab cover, chapter catalog, tilting about card with timeline, filterable work cabinet with a details sheet, process steps, testimonials and contact, with a sliding sticky nav and dark mode. React, one file, no dependencies. Install the code: npx shadcn@latest add https://21st.dev/r/kedhareswer/folder-tab-portfolio-template",
+  "framework": "",
+  "id": "1089",
+  "metadata": {
+    "author": "kedhareswer",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_30fkm37UoBFJx1GiK2Q4Sy8lSrO/avatar.jpeg",
+    "description": "Designer portfolio website template built from colourful file folders and frosted glass: folder-tab cover, chapter catalog, tilting about card with timeline, filterable work cabinet with a details sheet, process steps, testimonials and contact, with a sliding sticky nav and dark mode. React, one file, no dependencies. Install the code: npx shadcn@latest add https://21st.dev/r/kedhareswer/folder-tab-portfolio-template",
+    "id": 1089,
+    "name": "Folder Tab Designer Portfolio Template",
+    "previewUrl": "https://cdn.21st.dev/user_30fkm37UoBFJx1GiK2Q4Sy8lSrO/templates/folder-tab-designer-portfolio-template/preview-1790894798524.png",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/folder-tab-designer-portfolio-template"
+  },
+  "name": "Folder Tab Designer Portfolio Template",
+  "previewUrl": "https://cdn.21st.dev/user_30fkm37UoBFJx1GiK2Q4Sy8lSrO/templates/folder-tab-designer-portfolio-template/preview-1790894798524.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.194662+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "225809cbbf79b547206776c7a1984689c7afbcd8edb9fe8fb6d401b377bd5d40"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/folder-tab-designer-portfolio-template"
+}

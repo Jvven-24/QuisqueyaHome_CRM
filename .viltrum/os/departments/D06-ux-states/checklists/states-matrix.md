@@ -8,6 +8,7 @@
 - [ ] Toda pantalla del inventario de D04 tiene su fila en la matriz
 - [ ] Los seis estados están presentes en cada fila: carga, vacío, error, sin conexión, éxito, permisos
 - [ ] Ninguna celda dice "TBD", "pendiente" o queda en blanco
+- [ ] Cada estado aplicable enlaza un escenario reproducible, resultado esperado y real, y referencia de evidencia; `N/A` incluye justificación. Clasificar evidencia MSW como mock y distinguirla de backend real (ver plantilla en `../sops/delivery.md`)
 
 ## B. Carga
 

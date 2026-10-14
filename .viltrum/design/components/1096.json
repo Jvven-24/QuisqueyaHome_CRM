@@ -1,0 +1,28 @@
+{
+  "author": "larsen66",
+  "description": "Full-stack CRM: accounts, contacts, deal pipeline, tasks, shared lists and notes, plus an AI chat that can @mention records and propose changes you approve. Next.js, Bun API, Postgres and email sign-in.",
+  "framework": "",
+  "id": "1096",
+  "metadata": {
+    "author": "larsen66",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2wdgsmfD3BNOOm4oOqUDUS9IXZI/avatar.jpeg",
+    "description": "Full-stack CRM: accounts, contacts, deal pipeline, tasks, shared lists and notes, plus an AI chat that can @mention records and propose changes you approve. Next.js, Bun API, Postgres and email sign-in.",
+    "id": 1096,
+    "name": "AI CRM dashboard",
+    "previewUrl": "https://cdn.21st.dev/user_vendor_httpslinus/templates/ai-crm-dashboard/preview-d6aaa586f007.png",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/ai-crm-dashboard"
+  },
+  "name": "AI CRM dashboard",
+  "previewUrl": "https://cdn.21st.dev/user_vendor_httpslinus/templates/ai-crm-dashboard/preview-d6aaa586f007.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:38.778405+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "360e93bfb9f1a992b9a45beee2ed6a207e7e7ba2567a60d52f3f26fecc6c0e2c"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/ai-crm-dashboard"
+}

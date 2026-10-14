@@ -29,7 +29,7 @@ skills:
   entregables_en_pdf: anthropic-skills:pdf
   presentaciones_de_capacitacion: anthropic-skills:pptx
   diagramas_de_arquitectura_y_flujo: artifact-diagramming
-  explorar_codigo_para_documentar_con_precision: gitnexus-exploring
+  explorar_codigo_para_documentar_con_precision: viltrum-repo-map
 
 subagents:
   can_create: true

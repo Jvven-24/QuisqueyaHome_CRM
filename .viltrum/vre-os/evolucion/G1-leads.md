@@ -102,6 +102,7 @@ Cada lote ≤ 45 min con prueba. Productor Claude; revisor de otro proveedor (An
 | **LD-12** | Análisis de leads: `consultarMetricasLeads` (por canal, por periodo, conversión, tiempo a primer contacto) bajo permiso, con `ChartCard` | `src/application/leads/metricas.ts`, `repos/leads-lectura.ts`, `src/app/(crm)/leads/analisis.tsx` | M01 §3.1 «Gráficas» | Sonnet | Codex | LD-1, LD-3 |
 | **LD-13** | Reglas de distribución (rotación con cupo por broker y ventana «first to claim») y pool de sin dueño; preferiblemente por `ReglasPort` con tabla de decisión | `src/application/leads/distribucion.ts`, `src/domain/distribucion-lead.ts` y test, `schema.ts`, `drizzle/` | **Decisión de Wilber** que enmiende #21 («el broker se sugiere, no se asigna solo») y #47 | Sonnet | D12 + Antigravity | LD-0, LD-5 |
 | **LD-14** | Titularidad de leads de brokers externos | `schema.ts`, `src/application/leads/**` | Ficha nueva «Titularidad» (A1.5), depende de Brokers y Portal | Sonnet | D12 + Antigravity | LD-9 y G2-brokers |
+| **LD-15** | Propuestas del asistente para leads (asignar, descartar, convertir) con aprobación de administrador, reutilizando `proponerCambio`/`resolverPropuesta` de `NG-4a`; el asistente deja de poder publicar directo (REQ L05, Decisión #47) | `src/application/leads/casos-de-uso.ts`, `src/app/api/leads/**`, `leads/inspector.tsx` | M01 §4 (REQ-L05, tramo construible) | Sonnet | Antigravity + D12 | NG-4a |
 
 ## 8. No verificado
 - No se ejecutó la aplicación: «Diseño» y «Experiencia» salen del código y de las fichas, no de capturas.

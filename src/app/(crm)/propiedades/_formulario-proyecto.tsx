@@ -64,6 +64,16 @@ export function FormularioProyecto({
         datos.internalPriceCents = val ? unidadACentavos(Number(val)) : null;
         delete datos.internalPrice;
       }
+      if (datos.publicRangeMin !== undefined) {
+        const val = String(datos.publicRangeMin).trim();
+        datos.publicRangeMinCents = val ? unidadACentavos(Number(val)) : null;
+        delete datos.publicRangeMin;
+      }
+      if (datos.publicRangeMax !== undefined) {
+        const val = String(datos.publicRangeMax).trim();
+        datos.publicRangeMaxCents = val ? unidadACentavos(Number(val)) : null;
+        delete datos.publicRangeMax;
+      }
       const url = editando ? `/api/proyectos/${proyecto!.id}` : "/api/proyectos";
       const respuesta = await fetch(url, {
         method: editando ? "PATCH" : "POST",
@@ -113,17 +123,17 @@ export function FormularioProyecto({
             </div>
           )}
           <label className="span-2">
-            Nombre del proyecto
-            <input name="name" defaultValue={proyecto?.name} required />
-            {errores.name && <small style={{ color: "#b42318" }}>{errores.name}</small>}
+            <span className="text-[13px] font-medium text-ink">Nombre del proyecto *</span>
+            <input name="name" defaultValue={proyecto?.name} required className="min-h-[44px] text-[13px]" placeholder="Ej. Residencial Vista Bávaro" />
+            {errores.name && <small style={{ color: "#b42318", fontSize: "13px" }}>{errores.name}</small>}
           </label>
           <label>
-            Zona
-            <input name="zone" defaultValue={proyecto?.zone ?? ""} placeholder="Punta Cana" />
+            <span className="text-[13px] font-medium text-ink">Zona</span>
+            <input name="zone" defaultValue={proyecto?.zone ?? ""} placeholder="Punta Cana, Bávaro…" className="min-h-[44px] text-[13px]" />
           </label>
           <label>
-            Tipo
-            <select name="projectType" defaultValue={proyecto?.projectType ?? "blueprint"}>
+            <span className="text-[13px] font-medium text-ink">Tipo de desarrollo</span>
+            <select name="projectType" defaultValue={proyecto?.projectType ?? "blueprint"} className="min-h-[44px] text-[13px]">
               {PROJECT_TYPES.map((tipo) => (
                 <option key={tipo} value={tipo}>
                   {ETIQUETAS_TIPO[tipo]}
@@ -132,35 +142,60 @@ export function FormularioProyecto({
             </select>
           </label>
           <label>
-            Desarrollador
-            <input name="developer" defaultValue={proyecto?.developer ?? ""} />
+            <span className="text-[13px] font-medium text-ink">Desarrollador / Constructora</span>
+            <input name="developer" defaultValue={proyecto?.developer ?? ""} placeholder="Ej. Noval Properties" className="min-h-[44px] text-[13px]" />
           </label>
           <label>
-            Entrega estimada
-            <input name="estimatedDeliveryDate" type="date" defaultValue={proyecto?.estimatedDeliveryDate ?? ""} />
+            <span className="text-[13px] font-medium text-ink">Fecha estimada de entrega</span>
+            <input name="estimatedDeliveryDate" type="date" defaultValue={proyecto?.estimatedDeliveryDate ?? ""} className="min-h-[44px] text-[13px]" />
           </label>
           {editando && (
             <label>
-              Avance de obra (%)
-              <input name="progressPercent" type="number" min="0" max="100" defaultValue={proyecto!.progressPercent} />
+              <span className="text-[13px] font-medium text-ink">Avance de obra acumulado (%)</span>
+              <input name="progressPercent" type="number" min="0" max="100" defaultValue={proyecto!.progressPercent} className="min-h-[44px] text-[13px]" />
             </label>
           )}
           {puedeEditarPrecioReal && (
             <label>
-              Precio interno (real)
+              <span className="text-[13px] font-medium text-ink">Precio interno real (Confidencial Admin)</span>
               <input
                 name="internalPrice"
                 type="number"
                 min="0"
                 step="0.01"
-                placeholder="Ej. 140,000"
+                placeholder="Ej. 140000"
                 defaultValue={proyecto?.internalPriceCents != null ? centavosAUnidad(proyecto.internalPriceCents) : ""}
+                className="min-h-[44px] text-[13px]"
               />
             </label>
           )}
           <label>
-            Broker responsable
-            <select name="brokerId" defaultValue={proyecto?.brokerId ?? ""}>
+            <span className="text-[13px] font-medium text-ink">Rango público mínimo (USD)</span>
+            <input
+              name="publicRangeMin"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Ej. 135000"
+              defaultValue={proyecto?.publicRangeMinCents != null ? centavosAUnidad(proyecto.publicRangeMinCents) : ""}
+              className="min-h-[44px] text-[13px]"
+            />
+          </label>
+          <label>
+            <span className="text-[13px] font-medium text-ink">Rango público máximo (USD)</span>
+            <input
+              name="publicRangeMax"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Ej. 250000"
+              defaultValue={proyecto?.publicRangeMaxCents != null ? centavosAUnidad(proyecto.publicRangeMaxCents) : ""}
+              className="min-h-[44px] text-[13px]"
+            />
+          </label>
+          <label>
+            <span className="text-[13px] font-medium text-ink">Broker asignado</span>
+            <select name="brokerId" defaultValue={proyecto?.brokerId ?? ""} className="min-h-[44px] text-[13px]">
               <option value="">Sin asignar</option>
               {brokers.map((broker) => (
                 <option key={broker.id} value={broker.id}>
@@ -169,12 +204,12 @@ export function FormularioProyecto({
               ))}
             </select>
           </label>
-          {errores._ && <small style={{ color: "#b42318" }}>{errores._}</small>}
-          <div className="form-actions span-2">
-            <button className="button" type="button" onClick={onClose} disabled={enviando}>
+          {errores._ && <small style={{ color: "#b42318", fontSize: "13px" }}>{errores._}</small>}
+          <div className="form-actions span-2 flex items-center justify-end gap-3 pt-3">
+            <button className="button min-h-[44px] px-5 text-[13px]" type="button" onClick={onClose} disabled={enviando}>
               Cancelar
             </button>
-            <button className="button primary" type="submit" disabled={enviando}>
+            <button className="button primary min-h-[44px] px-6 text-[13px] font-semibold" type="submit" disabled={enviando}>
               {enviando ? "Guardando…" : editando ? "Guardar cambios" : "Crear proyecto"}
             </button>
           </div>

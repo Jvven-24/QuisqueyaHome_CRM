@@ -87,12 +87,17 @@ Salida mínima: sitemap, recorridos, wireframes, diseño visual sobre tokens, ma
 estados, comportamiento responsive, accesibilidad, prototipo aprobado.
 
 **Gate G3 — Diseño**
+Para alcance con UI aplica `core/design-experience-os.md` (tabla DG → gate del ciclo de vida): DG0 Brief, DG1 Research y DG2 IA como base vigente;
+DG3 Sistema, DG4 Responsive, DG5 Estados, DG6 Accesibilidad y DG7 Motion sobre diseño/prototipo; DG10 Revisión independiente y DG11 Evidencia de esta entrega.
+Todo `N/A` exige razón y revisión. DG8 QA visual y DG9 Performance UX se acreditan en los gates posteriores indicados en esa tabla;
+los PXIL-G0..G8 son solo referencia. Un DG no sustituye la aprobación de G3.
+
 - [ ] Sitemap y recorridos críticos definidos antes del pixel
 - [ ] Tokens y componentes antes que pantallas
 - [ ] **Matriz pantalla × estado completa** (los seis estados obligatorios)
 - [ ] Presupuesto de campos respetado en cada formulario — ninguno monolítico
 - [ ] Máscaras, validaciones y formatos definidos por campo
-- [ ] Responsive verificado en 390 / 430 / 768 / 1024 / 1440
+- [ ] Responsive verificado en los puntos de corte de D05 (de 320 a 1440)
 - [ ] Contraste y navegación por teclado verificados
 - [ ] Prototipo aprobado por el cliente o el dueño de producto
 

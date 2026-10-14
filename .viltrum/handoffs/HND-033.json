@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D05",
+  "gate": "G3",
+  "actor": "antigravity-gemini-3.1-pro-high-d05",
+  "createdAt": "2026-10-04T23:01:37.954381+00:00",
+  "state": "review_pending",
+  "reviewer": "D07",
+  "summary": {
+    "path": ".viltrum/vre-os/design/DS-2-propiedades-brokers.md",
+    "sha256": "306ccefed9d38e67706b8e2013146322a68b4b779affacbe0dc5f2156f7e6b22",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T225624Z-D05-antigravity/evidence.json",
+      "sha256": "b969f6af39390d3102e4267755607feccdfef6e16368f378447bc04afb896dec",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-033"
+}

@@ -1,0 +1,29 @@
+{
+  "author": "laziekiki",
+  "description": "A compact agent tool-call row that expands into readable input and result panels, with running and completed states for AI product interfaces.",
+  "framework": "",
+  "id": "27026",
+  "metadata": {
+    "author": "laziekiki",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_3J39TADh2eUXcUqIKX6ozU6RE62/avatar.jpeg",
+    "description": "A compact agent tool-call row that expands into readable input and result panels, with running and completed states for AI product interfaces.",
+    "id": 27026,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/laziekiki/tool-call-inspector?[REDACTED]",
+    "name": "Tool Call Inspector",
+    "previewUrl": "https://cdn.21st.dev/user_3J39TADh2eUXcUqIKX6ozU6RE62/tool-call-inspector/default/preview.1789375557735.png",
+    "type": "component",
+    "url": "https://21st.dev/@laziekiki/components/tool-call-inspector",
+    "videoUrl": "https://cdn.21st.dev/user_3J39TADh2eUXcUqIKX6ozU6RE62/tool-call-inspector/default/video.1789375999664.mp4"
+  },
+  "name": "Tool Call Inspector",
+  "previewUrl": "https://cdn.21st.dev/user_3J39TADh2eUXcUqIKX6ozU6RE62/tool-call-inspector/default/preview.1789375557735.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:38.820323+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4c715ae6007b11706bed0fed8684ebdffa33ca741e964311f5d774e17d1ed517"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@laziekiki/components/tool-call-inspector"
+}

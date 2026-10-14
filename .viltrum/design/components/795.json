@@ -1,0 +1,28 @@
+{
+  "author": "mohammadshehadeh",
+  "description": "Dark, premium landing page for an electric RV brand: a full-screen video hero with liquid-glass navigation, a centered tagline, a split feature card with switchable tabs, an HLS streaming statement with a stats row, a video preorder call to action and a multi-column footer.",
+  "framework": "",
+  "id": "795",
+  "metadata": {
+    "author": "mohammadshehadeh",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18zNEV4OTFvT2tWTW1ISXJWNnBVaEQwbDNzNGkifQ",
+    "description": "Dark, premium landing page for an electric RV brand: a full-screen video hero with liquid-glass navigation, a centered tagline, a split feature card with switchable tabs, an HLS streaming statement with a stats row, a video preorder call to action and a multi-column footer.",
+    "id": 795,
+    "name": "Velorah",
+    "previewUrl": "https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/templates/hirael-velorah/preview-frame.jpg",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/hirael-velorah"
+  },
+  "name": "Velorah",
+  "previewUrl": "https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/templates/hirael-velorah/preview-frame.jpg",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:46.958802+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6834ca5bee29259d3c4ac915eea6fe2a0d79c0935b59bd2505c5dbe26710f145"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/hirael-velorah"
+}

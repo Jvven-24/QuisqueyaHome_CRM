@@ -1,5 +1,8 @@
 # D05 — Registro de cambios
 
+## Integración aprobada — 2026-10-07 (revisión D00 HND-012)
+- Guía fuente canónica aprobada: la composición comp-first puede explorarse antes del código; Component Scout/reuse debe cerrarse antes de construir. Se enlaza el patrón de portfolios, motion y temas.
+
 Formato basado en Keep a Changelog. Versiones según SemVer 2.0.0: mayor cambia el
 contrato de entrada o salida, menor añade checklist o procedimiento, parche corrige.
 

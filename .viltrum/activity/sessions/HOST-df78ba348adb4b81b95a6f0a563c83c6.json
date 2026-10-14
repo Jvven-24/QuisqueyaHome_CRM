@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-df78ba348adb4b81b95a6f0a563c83c6",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D16",
+  "actor": "codex-local-runtime",
+  "goal": "Inventario de servicios locales y viabilidad de PoC con datos sintéticos para CRM Quisqueya",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:38:28.576689+00:00",
+  "updatedAt": "2026-10-05T01:41:36.220268+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:38:28.576755+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:41:36.220242+00:00",
+      "status": "finished",
+      "message": "Inventario D16 local y secuencia PoC C1 registrados en .viltrum/research/D16-servicios-locales-2026-10-04.md; sin instalación ni conexión de datos"
+    }
+  ]
+}

@@ -1,0 +1,519 @@
+{
+  "waves": {
+    "1": 51
+  },
+  "tasks": [
+    {
+      "wave": 1,
+      "node": "BHV-001",
+      "type": "behavior",
+      "department": "D06",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "BHV-001",
+      "type": "behavior",
+      "department": "D09",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "BHV-001",
+      "type": "behavior",
+      "department": "D10",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "BHV-001",
+      "type": "behavior",
+      "department": "D14",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "BHV-002",
+      "type": "behavior",
+      "department": "D06",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "BHV-002",
+      "type": "behavior",
+      "department": "D09",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "BHV-002",
+      "type": "behavior",
+      "department": "D10",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "BHV-002",
+      "type": "behavior",
+      "department": "D14",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "CTR-001",
+      "type": "contract",
+      "department": "D03",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "CTR-001",
+      "type": "contract",
+      "department": "D10",
+      "status": "validado",
+      "action": "construir",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "CTR-001",
+      "type": "contract",
+      "department": "D14",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "ENT-001",
+      "type": "entity",
+      "department": "D10",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "ENT-001",
+      "type": "entity",
+      "department": "D11",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "ENT-001",
+      "type": "entity",
+      "department": "D12",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "FN-001",
+      "type": "function",
+      "department": "D01",
+      "status": "propuesto",
+      "action": "revisar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "FN-001",
+      "type": "function",
+      "department": "D02",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "FN-001",
+      "type": "function",
+      "department": "D03",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "FN-001",
+      "type": "function",
+      "department": "D10",
+      "status": "propuesto",
+      "action": "revisar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "FN-001",
+      "type": "function",
+      "department": "D11",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "FN-001",
+      "type": "function",
+      "department": "D12",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "GOAL-001",
+      "type": "goal",
+      "department": "D00",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "GOAL-001",
+      "type": "goal",
+      "department": "D01",
+      "status": "validado",
+      "action": "construir",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "GOAL-001",
+      "type": "goal",
+      "department": "D02",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "GOAL-001",
+      "type": "goal",
+      "department": "D22",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "INT-001",
+      "type": "integration",
+      "department": "D03",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": "adopt"
+    },
+    {
+      "wave": 1,
+      "node": "INT-001",
+      "type": "integration",
+      "department": "D12",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": "adopt"
+    },
+    {
+      "wave": 1,
+      "node": "INT-001",
+      "type": "integration",
+      "department": "D13",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": "adopt"
+    },
+    {
+      "wave": 1,
+      "node": "INT-001",
+      "type": "integration",
+      "department": "D14",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": "adopt"
+    },
+    {
+      "wave": 1,
+      "node": "INT-001",
+      "type": "integration",
+      "department": "D17",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": "adopt"
+    },
+    {
+      "wave": 1,
+      "node": "INT-001",
+      "type": "integration",
+      "department": "D19",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": "adopt"
+    },
+    {
+      "wave": 1,
+      "node": "INT-001",
+      "type": "integration",
+      "department": "D21",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": "adopt"
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D02",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D03",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D09",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D10",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D11",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D13",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D14",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D15",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "MOD-001",
+      "type": "module",
+      "department": "D16",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "REQ-001",
+      "type": "requirement",
+      "department": "D01",
+      "status": "validado",
+      "action": "construir",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "REQ-001",
+      "type": "requirement",
+      "department": "D02",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "REQ-001",
+      "type": "requirement",
+      "department": "D03",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "REQ-001",
+      "type": "requirement",
+      "department": "D14",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "SCR-001",
+      "type": "screen",
+      "department": "D04",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "SCR-001",
+      "type": "screen",
+      "department": "D05",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "SCR-001",
+      "type": "screen",
+      "department": "D06",
+      "status": "propuesto",
+      "action": "revisar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "SCR-001",
+      "type": "screen",
+      "department": "D07",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "SCR-001",
+      "type": "screen",
+      "department": "D09",
+      "status": "propuesto",
+      "action": "revisar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "SCR-001",
+      "type": "screen",
+      "department": "D14",
+      "status": "pendiente",
+      "action": "aportar",
+      "priority": "must",
+      "reuse": null
+    },
+    {
+      "wave": 1,
+      "node": "TST-001",
+      "type": "test",
+      "department": "D14",
+      "status": "propuesto",
+      "action": "revisar",
+      "priority": "should",
+      "reuse": null
+    }
+  ],
+  "map_ready_for_review": false,
+  "note": "plan derivado del mapa; no autoriza construcción: C1 y los gates siguen siendo humanos. El mapa aún tiene huecos P1/P2: el plan es provisional"
+}

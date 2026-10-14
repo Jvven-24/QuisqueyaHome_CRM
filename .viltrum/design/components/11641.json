@@ -1,0 +1,29 @@
+{
+  "author": "coss.com",
+  "description": "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+  "framework": "",
+  "id": "11641",
+  "metadata": {
+    "author": "coss.com",
+    "authorImage": "https://www.google.com/s2/favicons?domain=coss.com&sz=128",
+    "description": "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+    "id": 11641,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/coss.com/tabs?[REDACTED]",
+    "name": "Tabs",
+    "previewUrl": "https://cdn.21st.dev/coss.com/tabs/pill/preview.1774357976645.png",
+    "type": "component",
+    "url": "https://21st.dev/@coss.com/components/tabs",
+    "videoUrl": "https://cdn.21st.dev/coss.com/tabs/pill/video.1774357976645.mp4"
+  },
+  "name": "Tabs",
+  "previewUrl": "https://cdn.21st.dev/coss.com/tabs/pill/preview.1774357976645.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:53.663776+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "7cc0749a637c4ed889242313e7681b387d695cfbdfb0a1711daba769f7f040be"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@coss.com/components/tabs"
+}

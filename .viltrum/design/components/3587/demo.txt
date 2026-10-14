@@ -1,0 +1,31 @@
+import { Alert, AlertContent, AlertDescription, AlertIcon, AlertTitle } from '@/components/ui/alert-1';
+import { RiAlertFill } from '@remixicon/react';
+
+export default function AlertDemo() {
+  return (
+     <div className="flex flex-col gap-5 p-10 w-full mx-auto max-w-[600px] h-screen justify-center items-center">
+      <Alert variant="primary" close={true}>
+        <AlertIcon>
+          <RiAlertFill />
+        </AlertIcon>
+        <AlertContent>
+          <AlertTitle>Example Alert Title</AlertTitle>
+          <AlertDescription>
+            Insert the alert description here. It would look better as two lines of text.
+          </AlertDescription>
+        </AlertContent>
+      </Alert>
+      <Alert variant="destructive" appearance="light" close={true}>
+        <AlertIcon>
+          <RiAlertFill />
+        </AlertIcon>
+        <AlertContent>
+          <AlertTitle>Example Alert Title</AlertTitle>
+          <AlertDescription>
+            Insert the alert description here. It would look better as two lines of text.
+          </AlertDescription>
+        </AlertContent>
+      </Alert>
+    </div>
+  );
+}

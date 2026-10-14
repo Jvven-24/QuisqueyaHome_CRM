@@ -25,7 +25,8 @@
     "Secretos y dependencias escaneados con evidencia",
     "Privacidad minimizada y decisiones legales atribuidas",
     "Ningún P0 abierto; riesgos altos requieren firma",
-    "Revisión humana independiente registrada"
+    "Revisión humana independiente registrada",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",
@@ -61,4 +62,3 @@
     }
   ]
 }
-

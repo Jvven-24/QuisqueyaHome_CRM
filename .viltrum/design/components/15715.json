@@ -1,0 +1,29 @@
+{
+  "author": "starc007",
+  "description": "",
+  "framework": "",
+  "id": "15715",
+  "metadata": {
+    "author": "starc007",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zR01iekluZ3JmNGtUYUM1ZVpQNm5mMUYyazEifQ",
+    "description": "",
+    "id": 15715,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/starc007/beui-bottom-sheet?[REDACTED]",
+    "name": "BeUI Bottom Sheet",
+    "previewUrl": "https://cdn.21st.dev/larsen66/beui-bottom-sheet/default/preview.1782299659191.png",
+    "type": "component",
+    "url": "https://21st.dev/@starc007/components/beui-bottom-sheet",
+    "videoUrl": "https://cdn.21st.dev/larsen66/beui-bottom-sheet/default/video.1782299659191.mp4"
+  },
+  "name": "BeUI Bottom Sheet",
+  "previewUrl": "https://cdn.21st.dev/larsen66/beui-bottom-sheet/default/preview.1782299659191.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:52.063074+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "0397cdb3c97d0e03935cc11c066cbd7726aa97cfe74142365b7048b1785d69f7"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@starc007/components/beui-bottom-sheet"
+}

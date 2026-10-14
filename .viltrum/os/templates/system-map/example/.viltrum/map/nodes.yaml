@@ -1,0 +1,103 @@
+nodes:
+- id: GOAL-001
+  type: goal
+  title: Reservas en línea
+  plain: Que el cliente reserve y pague solo, y el equipo vea todo en un panel
+  acceptance:
+  - El cliente completa una reserva pagada sin ayuda humana
+  priority: must
+- id: REQ-001
+  type: requirement
+  parent: GOAL-001
+  title: Reservar una cita
+  plain: El cliente elige día y hora y queda confirmada
+  acceptance:
+  - Una reserva válida queda confirmada en menos de 3 minutos
+  priority: must
+  risk: R2
+  links:
+    verifies:
+    - TST-001
+- id: MOD-001
+  type: module
+  parent: GOAL-001
+  title: Reservas
+  plain: La parte del sistema que agenda y cobra
+  priority: must
+- id: FN-001
+  type: function
+  parent: MOD-001
+  title: Crear reserva
+  plain: Guarda la reserva si el horario sigue libre
+  acceptance:
+  - No se puede reservar un horario ocupado
+  priority: must
+  risk: R2
+  links:
+    uses:
+    - CTR-001
+    - ENT-001
+    implements:
+    - REQ-001
+- id: SCR-001
+  type: screen
+  parent: MOD-001
+  title: Formulario de reserva
+  plain: La pantalla donde el cliente llena sus datos y elige la hora
+  priority: must
+  links:
+    implements:
+    - FN-001
+- id: ENT-001
+  type: entity
+  parent: MOD-001
+  title: Reserva
+  plain: El registro de cada cita con cliente, hora y estado
+  priority: must
+- id: CTR-001
+  type: contract
+  parent: MOD-001
+  title: POST /reservas
+  plain: La orden que la pantalla le manda al servidor para crear la reserva
+  priority: must
+- id: INT-001
+  type: integration
+  parent: MOD-001
+  title: Cobro con tarjeta
+  plain: Cobrar la reserva con una pasarela de pago
+  priority: must
+  risk: R3
+  reuse:
+    decision: adopt
+    candidates:
+    - name: stripe-node
+      url: https://github.com/stripe/stripe-node
+      license: MIT
+      verified: true
+      chosen: true
+- id: BHV-001
+  type: behavior
+  parent: SCR-001
+  title: Guardar explica por qué no puede
+  plain: Si faltan datos, el botón dice cuáles faltan en vez de quedarse apagado sin motivo
+  acceptance:
+  - El botón nunca queda deshabilitado sin un texto que nombre lo que falta
+  priority: must
+- id: BHV-002
+  type: behavior
+  parent: FN-001
+  title: Horario ocupado
+  plain: Si el horario ya fue tomado, se avisa junto al campo de la hora y se conserva lo escrito
+  acceptance:
+  - El servidor responde 422 con errors[] apuntando al campo de la hora
+  priority: must
+- id: TST-001
+  type: test
+  parent: GOAL-001
+  title: Reserva de punta a punta
+  plain: Prueba que una reserva completa funciona de principio a fin
+  acceptance:
+  - Pasa en móvil de 390 px y en escritorio de 1440 px
+  links:
+    verifies:
+    - REQ-001

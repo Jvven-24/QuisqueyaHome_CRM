@@ -1,0 +1,28 @@
+{
+  "author": "monolythdev",
+  "description": "Qronos is a polished, responsive landing-page template for SaaS, AI, and autonomous agent-related product marketing sites. It pairs a dark, high-contrast visual system with product-led dashboard previews, scheduling workflows, pricing, customer stories, and conversion-focused calls to action.\n\nTemplate features:\n\n* Responsive hero with animated scheduling visual, partner marquee, and primary CTAs\n* Product overview with agent schedule, guardrails, inbox, and multi-agent pipeline previews\n* Agent insights dashboard with KPI cards, budget meter, activity chart, and project table\n* Pricing tiers with monthly/yearly billing toggles and annual savings messaging\n* Customer-story cards, testimonial logos, and supplied avatar assets\n* CTA and footer sections with responsive navigation\n* Mobile-specific static dashboard previews for schedule and tracking views, preserving visual clarity on smaller screens\n* Reusable shadcn/Radix-based UI primitives and custom motion effects\n\nStack\n\n* Next.js 16\n* React 19\n* TypeScript\n* Tailwind CSS 4\n* Radix UI\n* Framer Motion\n* Hugeicons\n* pnpm\n\nQuick Start Guide\n\nPrerequisites\n* Node.js 20 or later\n* pnpm 10 or later",
+  "framework": "",
+  "id": "764",
+  "metadata": {
+    "author": "monolythdev",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zRWlUVHpuWjE2cWdEbW90VlM5QlhZaXFobTAifQ",
+    "description": "Qronos is a polished, responsive landing-page template for SaaS, AI, and autonomous agent-related product marketing sites. It pairs a dark, high-contrast visual system with product-led dashboard previews, scheduling workflows, pricing, customer stories, and conversion-focused calls to action.\n\nTemplate features:\n\n* Responsive hero with animated scheduling visual, partner marquee, and primary CTAs\n* Product overview with agent schedule, guardrails, inbox, and multi-agent pipeline previews\n* Agent insights dashboard with KPI cards, budget meter, activity chart, and project table\n* Pricing tiers with monthly/yearly billing toggles and annual savings messaging\n* Customer-story cards, testimonial logos, and supplied avatar assets\n* CTA and footer sections with responsive navigation\n* Mobile-specific static dashboard previews for schedule and tracking views, preserving visual clarity on smaller screens\n* Reusable shadcn/Radix-based UI primitives and custom motion effects\n\nStack\n\n* Next.js 16\n* React 19\n* TypeScript\n* Tailwind CSS 4\n* Radix UI\n* Framer Motion\n* Hugeicons\n* pnpm\n\nQuick Start Guide\n\nPrerequisites\n* Node.js 20 or later\n* pnpm 10 or later",
+    "id": 764,
+    "name": "Qronos AI/SaaS Product Template",
+    "previewUrl": "https://cdn.21st.dev/user_3EiTTxMOCiZGxbAlgIREvkoJcyF/templates/qronos-ai-agent-scheduler-template/preview-1786452419048.png",
+    "price": 69,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/qronos-ai-agent-scheduler-template"
+  },
+  "name": "Qronos AI/SaaS Product Template",
+  "previewUrl": "https://cdn.21st.dev/user_3EiTTxMOCiZGxbAlgIREvkoJcyF/templates/qronos-ai-agent-scheduler-template/preview-1786452419048.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:41.965956+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "a6ac8fa98475b655b86304642a87e26478c04d91656142fa9f9f030a64701890"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/qronos-ai-agent-scheduler-template"
+}

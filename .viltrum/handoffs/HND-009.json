@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D14",
+  "gate": "G5",
+  "actor": "antigravity-gemini-3.1-pro-low-d14",
+  "createdAt": "2026-10-03T22:36:50.375978+00:00",
+  "state": "review_pending",
+  "reviewer": "D00",
+  "summary": {
+    "path": ".viltrum/crm-ux/D14-qa-rediseno.md",
+    "sha256": "6472e726235200eba491b6535c2106fbe888c8bb7bfd05256b8b435a05d7cc14",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261003T223136Z-D14-antigravity/evidence.json",
+      "sha256": "ba80aad430fdabc2014ea97dea76182ea5f8f869cdd61dd1e97f438a8902f64a",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-009"
+}

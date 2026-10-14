@@ -1,0 +1,29 @@
+{
+  "author": "haydenbleasel",
+  "description": "A kanban board is a visual tool that helps you manage and visualize your work. It is a board with columns, and each column represents a status, e.g. \"Backlog\", \"In Progress\", \"Done\".",
+  "framework": "",
+  "id": "1088",
+  "metadata": {
+    "author": "haydenbleasel",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ycmRRTHE3eEdwT0hJZmZKV01ScGl0eUpGUVkifQ",
+    "description": "A kanban board is a visual tool that helps you manage and visualize your work. It is a board with columns, and each column represents a status, e.g. \"Backlog\", \"In Progress\", \"Done\".",
+    "id": 1088,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/haydenbleasel/kanban?[REDACTED]",
+    "name": "Kanban",
+    "previewUrl": "https://cdn.21st.dev/user_haydenbleasel/kanban/default/preview.png",
+    "type": "component",
+    "url": "https://21st.dev/@haydenbleasel/components/kanban",
+    "videoUrl": "https://cdn.21st.dev/user_haydenbleasel/kanban/default/video.mp4"
+  },
+  "name": "Kanban",
+  "previewUrl": "https://cdn.21st.dev/user_haydenbleasel/kanban/default/preview.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:22.900304+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "b71d99cd3e43f6b47301d6ea72606361e2fe986edb85ba77d4c4980460e2ecec"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@haydenbleasel/components/kanban"
+}

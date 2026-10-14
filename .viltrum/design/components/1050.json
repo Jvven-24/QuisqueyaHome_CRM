@@ -1,0 +1,29 @@
+{
+  "author": "shadcn",
+  "description": "Powerful table and datagrids built using TanStack Table.",
+  "framework": "",
+  "id": "1050",
+  "metadata": {
+    "author": "shadcn",
+    "authorImage": "https://github.com/shadcn-ui.png",
+    "description": "Powerful table and datagrids built using TanStack Table.",
+    "id": 1050,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/shadcn/data-table?[REDACTED]",
+    "name": "Data Table",
+    "previewUrl": "https://cdn.21st.dev/user_shadcn/data-table/default/preview.1786653676029.png",
+    "type": "component",
+    "url": "https://21st.dev/@shadcn/components/data-table",
+    "videoUrl": "https://cdn.21st.dev/user_shadcn/data-table/default/video.1786653716267.mp4"
+  },
+  "name": "Data Table",
+  "previewUrl": "https://cdn.21st.dev/user_shadcn/data-table/default/preview.1786653676029.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:25.636718+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "61bac2a93cbefce0148ef4039c1af3528674913f3128e819881803c35c007623"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@shadcn/components/data-table"
+}

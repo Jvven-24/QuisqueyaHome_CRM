@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-891b2633191045e4b73861c7e4645c3b",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D00",
+  "actor": "codex-root",
+  "goal": "Coordinar implementación local y QA del C1 completo, sin nube ni push",
+  "status": "running",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:42:25.283543+00:00",
+  "updatedAt": "2026-10-05T02:14:07.061798+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:42:25.283633+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:45:55.592383+00:00",
+      "status": "running",
+      "message": "C1 priorizado por el usuario; línea base 512 unitarias y 130 DB verdes, I01/I02 en revisión, respuestas de etapas/iCalendar/certificado recibidas"
+    },
+    {
+      "at": "2026-10-05T02:14:07.061774+00:00",
+      "status": "running",
+      "message": "TOOL-001 implementado en worktree D10, revisado PASS D12/D14, aplicado local sin commit/push; 8/8 pruebas dirigidas en checkout principal. spec:check revela ahora bloqueo M03 §§8-9; Academy M13-CORE y outbox I00 continúan DRAFT bajo revisión."
+    }
+  ]
+}

@@ -24,7 +24,8 @@
     "Latencia percentil junto con throughput/error",
     "Escenarios carga/estrés/pico/resistencia aplicables",
     "Generador no limita la medición sin advertir",
-    "Presupuestos aprobados y evidencia reproducible"
+    "Presupuestos aprobados y evidencia reproducible",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",
@@ -63,4 +64,3 @@
     }
   ]
 }
-

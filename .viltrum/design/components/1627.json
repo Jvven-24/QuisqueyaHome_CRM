@@ -1,0 +1,29 @@
+{
+  "author": "shadcn",
+  "description": "Sidebar",
+  "framework": "",
+  "id": "1627",
+  "metadata": {
+    "author": "shadcn",
+    "authorImage": "https://github.com/shadcn-ui.png",
+    "description": "Sidebar",
+    "id": 1627,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/shadcn/sidebar?[REDACTED]",
+    "name": "Sidebar",
+    "previewUrl": "https://cdn.21st.dev/user_shadcn/sidebar/default/preview.png?v=1",
+    "type": "component",
+    "url": "https://21st.dev/@shadcn/components/sidebar",
+    "videoUrl": ""
+  },
+  "name": "Sidebar",
+  "previewUrl": "https://cdn.21st.dev/user_shadcn/sidebar/default/preview.png?v=1",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:51.441369+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "ffd2b72c577a4ea276daac194d9cfe9266b138d0b41d2b51a3d299fc00e317c6"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@shadcn/components/sidebar"
+}

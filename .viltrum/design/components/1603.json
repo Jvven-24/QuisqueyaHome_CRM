@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:48:21.581551+00:00",
+  "author": "andrewlu0",
+  "codeSha256": "ee9f4bdfd5c5a1ec1d830b9ad1eeeedc2db1f62f0f94a916c9f6d1786f0f35cd",
+  "demoSha256": "fc7bb4b6296cd6757c73059122c1a9ffa3e0f84949c904bfc6e4451a107b1f5c",
+  "description": "A hover sidebar, inspired by Supabase's sidebar. ",
+  "framework": "",
+  "id": "1603",
+  "metadata": {
+    "author": "andrewlu0",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yc1VwRHR0cW93bVpkZDB4ZUtnRW5mRmpYZkcifQ",
+    "description": "A hover sidebar, inspired by Supabase's sidebar. ",
+    "id": 1603,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/andrewlu0/sidebar?[REDACTED]",
+    "name": "Sidebar",
+    "previewUrl": "https://cdn.21st.dev/user_2sUpDx8JMTC3m5cKaN6Z3Uhc8Q4/sidebar/default/preview.1740068916305.png",
+    "type": "component",
+    "url": "https://21st.dev/@andrewlu0/components/sidebar",
+    "videoUrl": "https://cdn.21st.dev/user_2sUpDx8JMTC3m5cKaN6Z3Uhc8Q4/sidebar/default/video.1740068918013.mp4"
+  },
+  "name": "Sidebar",
+  "previewUrl": "https://cdn.21st.dev/user_2sUpDx8JMTC3m5cKaN6Z3Uhc8Q4/sidebar/default/preview.1740068916305.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:48:21.581814+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "53fdc34af34e48cc094166451d17d6b4497d506218d55bc168292bbd106a5419",
+    "importedAt": "2026-10-04T22:47:51.427144+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "ffd2b72c577a4ea276daac194d9cfe9266b138d0b41d2b51a3d299fc00e317c6"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@andrewlu0/components/sidebar"
+}

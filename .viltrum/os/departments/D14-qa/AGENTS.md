@@ -51,6 +51,8 @@ Aplico `checklists/e2e-forms.md`:
 - [ ] Máscaras respetan el formato declarado por D05 y rechazan lo que no cumple
 - [ ] Validación de servidor rechaza lo que la de cliente dejó pasar (probado saltándose el cliente, vía petición directa)
 - [ ] Restricción de base de datos rechaza lo que el servidor dejó pasar (probado con inserción directa cuando es viable)
+- [ ] Prueba negativa **por capa** (cliente, API directa sin cliente, restricción de BD) con el mismo dato inválido; una capa sin prueba propia = no verificada
+- [ ] Retroalimentación según "Contrato de retroalimentación de acciones y formularios" (`core/doctrine/ux-states.md`): botón primario deshabilitado sin motivo visible = P2; obligatorio sin marca visible/programática = P2; error de servidor solo genérico/efímero = P2; el error del servidor aparece en su campo
 - [ ] Al fallar la validación, **todo lo escrito se conserva** — campo por campo
 - [ ] Doble envío no crea doble registro
 - [ ] Guardado parcial funciona si el formulario tiene más de un paso
@@ -66,8 +68,13 @@ Aplico `checklists/e2e-forms.md`:
 
 - [ ] Capturas de referencia de las pantallas y componentes críticos, versionadas
 - [ ] Comparación automática en cada cambio que toca UI — diferencia visual inesperada bloquea, no se aprueba "a ojo"
-- [ ] Verificado en los puntos de corte de `core/doctrine/ux-states.md` heredados de D05 (390/430/768/1024/1440)
+- [ ] Verificado en los puntos de corte definidos en D05 (token 7: de 320 a 1440)
 - [ ] Cambios de diseño intencionales actualizan la referencia con aprobación explícita, nunca de forma automática
+
+Para portfolios con narrativa de scroll o temas duales, usa la evidencia adicional de la guía
+revisada por D00 (HND-012),
+[`core/design-experience-os.md` §9](../../core/design-experience-os.md#portfolio-editorial-motion):
+capturas por viewport/tema y con movimiento reducido, build/commit y diferencias revisadas.
 
 ### 7. Exploración con carta (*charter*)
 
@@ -136,6 +143,14 @@ antes de reportarlo como hallazgo cerrado.
 - [ ] El reporte incluye una sección de prácticas sólidas verificadas, no solo defectos
 - [ ] Evita dar una imagen distorsionada del estado real del producto
 
+
+### 12. Pruebas de Resiliencia Catastrófica y Fallback (BD Caída / Cold Boot / Migraciones Faltantes)
+
+- [ ] **Simulación de Cold Boot con BD caída:** Prueba unitaria obligatoria donde el pool de BD rechaza conexiones (`ECONNREFUSED` / timeout). El endpoint de catálogo público DEBE responder HTTP 200 con el snapshot pre-empaquetado y cabeceras `X-Catalog-Fallback: snapshot` y `X-Catalog-Stale: 1`. Cero 503 a visitantes.
+- [ ] **Aislamiento de tablas secundarias:** Prueba unitaria donde las tablas auxiliares (`project_videos`, `construction_updates`, `amenities`) arrojan error de tabla inexistente. El catálogo debe resolverse exitosamente con las entidades principales (proyectos y zonas).
+- [ ] **Frontend Zero-Empty-State:** Verificación de que el Store del portal se hidrata inmediatamente desde el snapshot base o caché local, impidiendo que el usuario vea un pantallazo de "0 proyectos encontrados" o "Catálogo no disponible" ante fallos de conexión.
+- [ ] **Veto de Gate G6:** Si la desconexión de BD provoca que el portal público colapse en 503 o pantalla vacía existiendo un snapshot en disco, el release queda **inmediatamente rechazado (NO-GO)**.
+
 ---
 
 ## Herramientas y skills
@@ -155,7 +170,7 @@ antes de reportarlo como hallazgo cerrado.
 
 - [ ] Recorridos críticos cubiertos por E2E, corriendo en CI
 - [ ] Matriz pantalla × estado verificada en ejecución, no solo en diseño
-- [ ] Formularios atacados: máscaras, tres capas de validación, dato conservado
+- [ ] Formularios atacados: máscaras, tres capas de validación con prueba por capa, dato conservado, retroalimentación (obligatorios marcados, motivo del botón, error en su campo)
 - [ ] Pruebas de permisos que intentan cruzar límites, con resultado documentado
 - [ ] Regresión visual con referencias versionadas y comparación automática
 - [ ] Sesiones exploratorias con carta en áreas de riesgo alto, documentadas

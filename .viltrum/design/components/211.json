@@ -1,0 +1,28 @@
+{
+  "author": "kiranism",
+  "description": "An open-source admin dashboard built on Next.js and shadcn/ui with charts, data tables, and forms. Includes Clerk auth and a feature-based folder structure.",
+  "framework": "",
+  "id": "211",
+  "metadata": {
+    "author": "kiranism",
+    "authorImage": "https://avatars.githubusercontent.com/u/68379183?v=4",
+    "description": "An open-source admin dashboard built on Next.js and shadcn/ui with charts, data tables, and forms. Includes Clerk auth and a feature-based folder structure.",
+    "id": 211,
+    "name": "Next.js Shadcn Dashboard Starter",
+    "previewUrl": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/templates/user_2nElBLvklOKlAURm6W1PTu6yYFh/next-shadcn-dashboard-starter/preview.jpg",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/next-shadcn-dashboard-starter"
+  },
+  "name": "Next.js Shadcn Dashboard Starter",
+  "previewUrl": null,
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:25.679630+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "61bac2a93cbefce0148ef4039c1af3528674913f3128e819881803c35c007623"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/next-shadcn-dashboard-starter"
+}

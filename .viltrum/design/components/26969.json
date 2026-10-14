@@ -1,0 +1,29 @@
+{
+  "author": "n1m4mz",
+  "description": "CSV import mapper built like a patchbay: each file column is a jack that patches a cable into one of your schema fields. It reads the sample values, so a column named col_7 full of dates still finds Signed up; matches it is unsure of hang dashed. Zero deps, drag or keyboard.",
+  "framework": "",
+  "id": "26969",
+  "metadata": {
+    "author": "n1m4mz",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zSXpvNTJxYkI1SHRhVU1XbTJmbURSQ1NQZDQifQ",
+    "description": "CSV import mapper built like a patchbay: each file column is a jack that patches a cable into one of your schema fields. It reads the sample values, so a column named col_7 full of dates still finds Signed up; matches it is unsure of hang dashed. Zero deps, drag or keyboard.",
+    "id": 26969,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/n1m4mz/import-patchbay?[REDACTED]",
+    "name": "Import Patchbay",
+    "previewUrl": "https://cdn.21st.dev/user_3Izo5234T0BJDljP4PlvhMIlSc3/import-patchbay/default/preview.1789374791209.png",
+    "type": "component",
+    "url": "https://21st.dev/@n1m4mz/components/import-patchbay",
+    "videoUrl": "https://cdn.21st.dev/user_3Izo5234T0BJDljP4PlvhMIlSc3/import-patchbay/default/video.1789374812550.mp4"
+  },
+  "name": "Import Patchbay",
+  "previewUrl": "https://cdn.21st.dev/user_3Izo5234T0BJDljP4PlvhMIlSc3/import-patchbay/default/preview.1789374791209.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.911061+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "10301f6225d9265c01a686de8cdd24644b354d16041fcfedfc524907d54adf3f"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@n1m4mz/components/import-patchbay"
+}

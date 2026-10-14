@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "department": "D21",
+  "gate": "G2",
+  "actor": "codex-d21-research",
+  "createdAt": "2026-10-05T01:32:38.549674+00:00",
+  "state": "review_approved",
+  "reviewer": "D03",
+  "summary": {
+    "path": ".viltrum/research/D21-sintesis-cobertura-integral-2026-10-04.md",
+    "sha256": "7b78ef3d52f5fc73f1cfaf5a0a12f5bc3df0f9a709a487184eabeedd6e07dda3",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/research/D21-cobertura-oss-crm-2026-10-04.csv",
+      "sha256": "61d3bd8299bf813704a914ed95b93be9591475790ee99e38d28ec48086cf83b9",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    },
+    {
+      "path": ".viltrum/research/D21-cobertura-transversal-vre-2026-10-04.csv",
+      "sha256": "999747fff25c55e39b71a7413869e27488cf8872d1919d9b05b5edacb73ee410",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    },
+    {
+      "path": ".viltrum/research/D21-cobertura-oss-brechas-2026-10-04.csv",
+      "sha256": "233a9dfac5e4c9618bfbf3786d40b330867fc55b3ec59f5001658af6d0068e80",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    },
+    {
+      "path": ".viltrum/research/D21-firma-digital-oss-2026-10-04.md",
+      "sha256": "09290628d49e504466d2f0058c55f339b7327afc56ae96df74333672f30133fa",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-038",
+  "review": {
+    "reviewer": "D03",
+    "actor": "codex-d03-review",
+    "result": "approved",
+    "report": {
+      "path": ".viltrum/reviews/D03-revision-hnd-038-cobertura-integral-2026-10-04.md",
+      "sha256": "2e5785db957f1c9a9b3f693f7e413cb7fb1062b10abf9a1caa93cc15aae451ff",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    },
+    "createdAt": "2026-10-05T01:34:34.762057+00:00"
+  }
+}

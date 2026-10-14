@@ -1,0 +1,7 @@
+department: D09
+cells:
+- node: SCR-001
+  status: propuesto
+  deliverable: Formulario con motivo visible del botón y errores por campo
+  needs_from:
+  - D06

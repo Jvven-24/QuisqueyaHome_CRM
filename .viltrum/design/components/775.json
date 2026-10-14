@@ -1,0 +1,28 @@
+{
+  "author": "arhamkhnz",
+  "description": "Admin dashboard on Next.js and shadcn/ui: multiple dashboard layouts, auth screens, data tables and theme presets.",
+  "framework": "",
+  "id": "775",
+  "metadata": {
+    "author": "arhamkhnz",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yeGRHRDJCa0F3Ukp0MHB6RjlRUFNvcXh0ZFIifQ",
+    "description": "Admin dashboard on Next.js and shadcn/ui: multiple dashboard layouts, auth screens, data tables and theme presets.",
+    "id": 775,
+    "name": "Next Shadcn Admin Dashboard",
+    "previewUrl": "https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/templates/next-shadcn-admin-dashboard/preview-frame.jpg",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/next-shadcn-admin-dashboard"
+  },
+  "name": "Next Shadcn Admin Dashboard",
+  "previewUrl": "https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/templates/next-shadcn-admin-dashboard/preview-frame.jpg",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:25.655900+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "61bac2a93cbefce0148ef4039c1af3528674913f3128e819881803c35c007623"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/next-shadcn-admin-dashboard"
+}

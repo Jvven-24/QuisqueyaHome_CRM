@@ -1,0 +1,28 @@
+{
+  "author": "larsen66",
+  "description": "A standalone React marketing homepage adapted from the MIT-licensed Payload website. Dark architectural grid, layered product screenshots, animated glass background, responsive navigation, feature tabs, carousel and accordion. Local assets and OFL fonts; no CMS or account setup required. Includes source and attribution.",
+  "framework": "",
+  "id": "875",
+  "metadata": {
+    "author": "larsen66",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2wdgsmfD3BNOOm4oOqUDUS9IXZI/avatar.jpeg",
+    "description": "A standalone React marketing homepage adapted from the MIT-licensed Payload website. Dark architectural grid, layered product screenshots, animated glass background, responsive navigation, feature tabs, carousel and accordion. Local assets and OFL fonts; no CMS or account setup required. Includes source and attribution.",
+    "id": 875,
+    "name": "Payload Marketing - Standalone",
+    "previewUrl": "https://cdn.21st.dev/user_2wdgsmfD3BNOOm4oOqUDUS9IXZI/templates/payload-marketing/preview-1789155518451.png",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/payload-marketing"
+  },
+  "name": "Payload Marketing - Standalone",
+  "previewUrl": "https://cdn.21st.dev/user_2wdgsmfD3BNOOm4oOqUDUS9IXZI/templates/payload-marketing/preview-1789155518451.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:46.946927+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6834ca5bee29259d3c4ac915eea6fe2a0d79c0935b59bd2505c5dbe26710f145"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/payload-marketing"
+}

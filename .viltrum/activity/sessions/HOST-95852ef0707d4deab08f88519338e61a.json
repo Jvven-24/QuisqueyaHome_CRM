@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-95852ef0707d4deab08f88519338e61a",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D00",
+  "actor": "claude-orquestador",
+  "goal": "E1.1 Negocios: orquestar Codex (producción) y Antigravity (QA); alinear modelos de proveedores",
+  "status": "running",
+  "source": "host_reported",
+  "startedAt": "2026-10-13T18:17:26.830124+00:00",
+  "updatedAt": "2026-10-13T18:17:26.830124+00:00",
+  "events": [
+    {
+      "at": "2026-10-13T18:17:26.830204+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    }
+  ]
+}

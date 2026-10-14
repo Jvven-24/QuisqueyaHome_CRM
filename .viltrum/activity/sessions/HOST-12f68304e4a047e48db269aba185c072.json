@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-12f68304e4a047e48db269aba185c072",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D11",
+  "actor": "codex-data-contract",
+  "goal": "Contrato de datos C1 para outbox y PII Twenty/Moodle",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:50:48.907826+00:00",
+  "updatedAt": "2026-10-05T01:53:03.495028+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:50:48.907886+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:53:03.495006+00:00",
+      "status": "finished",
+      "message": "Contrato D11 escrito en .viltrum/research/D11-contrato-datos-integraciones-C1-2026-10-04.md; requiere revisión D12/D14 y decisión Q-C1-05 antes de READY"
+    }
+  ]
+}

@@ -31,7 +31,6 @@ export type ResumenProgresoAcademy = {
   totalItems: number;
   completedItems: number;
   percent: number;
-  isCertified: boolean;
 };
 
 export interface RepositorioAcademy {

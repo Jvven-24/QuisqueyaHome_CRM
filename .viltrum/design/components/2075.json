@@ -1,0 +1,29 @@
+{
+  "author": "rafa-porto",
+  "description": "A versatile component inspired by Raycast, enabling global search across pages, content, and actions on your website. Perfect for enhancing navigation, productivity, and accessibility through quick commands and keyboard shortcuts.",
+  "framework": "",
+  "id": "2075",
+  "metadata": {
+    "author": "rafa-porto",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ydVZLQlMyV2J6OTFqY0tiajc0WGZGdklaRnEifQ",
+    "description": "A versatile component inspired by Raycast, enabling global search across pages, content, and actions on your website. Perfect for enhancing navigation, productivity, and accessibility through quick commands and keyboard shortcuts.",
+    "id": 2075,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/rafa-porto/command-palette?[REDACTED]",
+    "name": "Command Palette",
+    "previewUrl": "https://cdn.21st.dev/user_2uVKBUXqwkcxZZN4Qj9wxzr7maQ/command-palette/default/preview.1747219889226.png",
+    "type": "component",
+    "url": "https://21st.dev/@rafa-porto/components/command-palette",
+    "videoUrl": "https://cdn.21st.dev/user_2uVKBUXqwkcxZZN4Qj9wxzr7maQ/command-palette/default/video.1747219895597.mp4"
+  },
+  "name": "Command Palette",
+  "previewUrl": "https://cdn.21st.dev/user_2uVKBUXqwkcxZZN4Qj9wxzr7maQ/command-palette/default/preview.1747219889226.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:01.800449+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "734815b6383485fcc826adf6bfe6c746c44c0446f930001438eebc40ea1563c2"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@rafa-porto/components/command-palette"
+}

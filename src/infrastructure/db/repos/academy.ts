@@ -275,6 +275,13 @@ export function repositorioAcademy(tx: Tx): RepositorioAcademy {
           total: sql<number>`count(*)::int`,
         })
         .from(academyProgress)
+        .innerJoin(
+          academyItems,
+          and(
+            eq(academyItems.id, academyProgress.academyItemId),
+            eq(academyItems.isActive, true),
+          ),
+        )
         .where(
           and(
             eq(academyProgress.userId, userId),
@@ -285,13 +292,10 @@ export function repositorioAcademy(tx: Tx): RepositorioAcademy {
       const totalItems = Number(cuenta?.total || 0);
       const completedItems = Number(completados?.total || 0);
       const percent = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
-      const isCertified = totalItems > 0 && completedItems >= totalItems;
-
       return {
         totalItems,
         completedItems,
         percent,
-        isCertified,
       };
     },
   };

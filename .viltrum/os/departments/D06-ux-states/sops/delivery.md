@@ -18,6 +18,14 @@ En F3 se entrega comportamiento y escenarios reproducibles. Tras F4 se ejecutan 
 6. **Mutaciones y concurrencia.** Distinguir actualización optimista de confirmación del servidor; revertir con explicación al rechazo. Pago, publicación y otras acciones de alto impacto usan confirmación verificable. Deshacer necesita contrato real y ventana explícita. Ante conflicto, versión/ETag o regla acordada evita sobrescritura; las reglas ausentes vuelven a D01/D11.
 7. **Escenarios de comprobación.** Preparar fixtures por error 4xx/5xx, latencia, desconexión, respuesta fuera de orden, doble envío, cierre de pestaña, sesión vencida, permiso revocado y cambio concurrente. D14 ejecuta o revisa ejecución tras implementación con datos sintéticos y sin afectar producción. Captura, resultado esperado/real y estado quedan vinculados a la matriz.
 
+   **Trazabilidad por estado** (una fila por estado aplicable; `N/A` requiere justificación):
+
+   | Matriz (pantalla/estado) | Story / test | Fixture MSW | Clasificación | Esperado | Real | Evidencia de ejecución |
+   |---|---|---|---|---|---|---|
+   | `<referencia>` | `<ID / ruta>` | `<ID / ruta o N/A>` | `mock` / `backend real` | `<resultado>` | `<resultado o pendiente>` | `<ruta / captura / log o pendiente>` |
+
+   MSW verifica el comportamiento de interfaz con respuestas simuladas; clasificarlo como `mock`, no como backend real. Usar `backend real` solo cuando la ejecución alcanzó un servicio real autorizado; registrar por separado cada nivel y no presentar una simulación como verificación de servidor.
+
 ## Salidas y handoff
 
 `.viltrum/design/states-matrix.md`: matriz y transiciones. `error-catalog.md`: mensajes/códigos/acciones. `state-verification-plan.md`: disparadores y fixtures. Tras ejecución, enlazar reportes en `.viltrum/departments/D06-ux-states.md`, distinguiendo especificado, implementado, ejecutado y revisado.

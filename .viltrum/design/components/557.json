@@ -1,0 +1,28 @@
+{
+  "author": "larsen66",
+  "description": "Free, no-signup calculator that reveals your real Customer Acquisition Cost across channels and benchmarks it against global industry averages, with AI-powered recommendations. A customizable template version is also offered.",
+  "framework": "",
+  "id": "557",
+  "metadata": {
+    "author": "larsen66",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2wdgsmfD3BNOOm4oOqUDUS9IXZI/avatar.jpeg",
+    "description": "Free, no-signup calculator that reveals your real Customer Acquisition Cost across channels and benchmarks it against global industry averages, with AI-powered recommendations. A customizable template version is also offered.",
+    "id": 557,
+    "name": "The CACulator: CAC & ROI Benchmarking Tool",
+    "previewUrl": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/templates/user_2nElBLvklOKlAURm6W1PTu6yYFh/the-caculator-cac-roi-benchmarking-tool/preview.jpg",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/the-caculator-cac-roi-benchmarking-tool"
+  },
+  "name": "The CACulator: CAC & ROI Benchmarking Tool",
+  "previewUrl": null,
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:38.871007+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4c715ae6007b11706bed0fed8684ebdffa33ca741e964311f5d774e17d1ed517"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/the-caculator-cac-roi-benchmarking-tool"
+}

@@ -101,7 +101,7 @@ Cinco caminos, en orden de preferencia cuando empatan:
 2. Mismo tipo de solución (`core/routing.md` 1.2)
 3. Licencia que permita reutilizar código, no solo leerlo
 4. Actividad reciente y pruebas propias
-5. Se clona en un directorio aparte, **nunca dentro del proyecto**, se indexa (GitNexus) y
+5. Se clona en un directorio aparte, **nunca dentro del proyecto**, se mapea (`viltrum repo-inventory`) y
    se inventarían sus módulos antes de decidir qué se porta
 
 **Regla de todas las estrategias:** nada se pega. Todo entra detrás de un contrato propio,

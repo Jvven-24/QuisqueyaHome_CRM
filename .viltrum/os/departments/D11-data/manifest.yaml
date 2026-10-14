@@ -24,7 +24,7 @@ tools:
 skills:
   postgres:  supabase-postgres-best-practices
   supabase:  supabase
-  impacto_de_cambio: gitnexus-impact-analysis
+  impacto_de_cambio: viltrum-repo-map
 
 subagents:
   can_create: true

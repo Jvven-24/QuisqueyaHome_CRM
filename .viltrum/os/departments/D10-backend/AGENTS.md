@@ -61,6 +61,12 @@ integridad y seguridad.
 - [ ] Reglas de negocio (no solo forma del dato) validadas en servidor: fechas coherentes,
       montos dentro de límite, transición de estado permitida
 - [ ] Rechazo explícito con detalle de qué campo falló y por qué — nunca un 500 genérico
+- [ ] La validación de servidor es independiente de la del cliente: no importa su resultado
+      ni se salta si "el cliente ya validó". Reglas compartidas solo desde el mismo
+      esquema/catálogo, evaluadas otra vez en el servidor (R5 de "Contrato de retroalimentación
+      de acciones y formularios", `core/doctrine/ux-states.md`)
+- [ ] Un rechazo de validación responde 422 con `errors[]` por campo (punto 7); el texto
+      sale de claves de catálogo, nunca incrustado en el handler (P2)
 - [ ] La restricción que importa también vive en la base (coordinación con D11) — el
       servidor es la segunda capa, no la única
 
@@ -145,6 +151,27 @@ detail:   explicación específica de esta instancia del problema
 instance: URI que identifica esta ocurrencia (útil para soporte/trazabilidad)
 ```
 
+**Errores de validación (422) — extensión `errors[]`.** RFC 9457 permite extender el objeto
+con miembros propios del tipo de problema y exige que el cliente ignore los que no
+reconozca (sección 3.2, verificado 2026-10-06); su ejemplo de validación usa `errors` con
+`detail` y `pointer`. Nuestra forma, que consume el cliente (R4 de "Contrato de
+retroalimentación de acciones y formularios", `core/doctrine/ux-states.md`), es una
+extensión propia, no parte del estándar:
+```
+type/title/status(422)/detail/instance + errors: [ { field, code, messageKey, params } ]
+```
+`field` es una ruta PÚBLICA del contrato (JSON Pointer o nombre del DTO), nunca una columna,
+tabla o campo interno; ausente si el error no es de un campo. `code` es estable y
+documentado en OpenAPI; `messageKey` es una clave del catálogo de mensajes y `params` sus
+valores (`{ "min": 3 }`). Ni `code`, `messageKey` ni `params` filtran datos internos, repiten
+el valor enviado ni revelan una restricción de base de datos (un unique que se traduce a
+"el email existe"). La regla anti-enumeración del `detail` aplica igual a `errors[]`: donde
+distinguir "existe" de "no existe" ayude a un atacante, ambos casos devuelven el mismo
+elemento. El servidor no envía texto localizado incrustado: el texto lo resuelve el
+catálogo (P2). Se devuelven todos los errores de la petición, no solo el primero. Media type
+`application/problem+json`. JSON no parseable o `Content-Type` inválido sigue siendo 400/415,
+no 422.
+
 - [ ] Ningún error expone stack trace, mensaje interno del motor de base de datos, ruta de
       archivo del servidor ni nombre de librería interna
 - [ ] El `detail` es humano y específico sin filtrar información que ayude a un atacante
@@ -152,6 +179,14 @@ instance: URI que identifica esta ocurrencia (útil para soporte/trazabilidad)
       de autenticación, enumeración de usuarios)
 - [ ] Cada clase de error de negocio tiene un `type` estable y documentado en el contrato
       OpenAPI
+- [ ] Prueba de contrato por endpoint que muta, que puede fallar de forma verificable: una
+      petición inválida devuelve 422 y, por cada elemento de `errors[]`, (a) `code` y
+      `messageKey` pertenecen a un catálogo cerrado (la prueba lo carga, no lo copia) y
+      `field` a las rutas públicas del contrato OpenAPI; (b) `params` no contiene el valor
+      enviado; (c) ninguna cadena de la respuesta casa con una expresión de SQL, nombre de
+      tabla/columna o stack (`SELECT|INSERT|constraint|relation "|at .*\(.*:\d+`); (d) dos
+      entradas que no deben distinguirse (p. ej. email existente y nuevo) producen
+      respuestas idénticas salvo `instance`
 - [ ] El error interno no planeado (excepción no controlada) se captura, se registra con
       su detalle completo **en el log del servidor**, y al cliente se le devuelve una
       versión genérica con código de referencia para soporte
@@ -193,6 +228,15 @@ En **cada mutación**, sin excepción de "esto es menor":
 - [ ] La auditoría no es editable desde la aplicación (coordinación con D11)
 - [ ] La auditoría no contiene datos sensibles en claro
 
+### 11. Resiliencia de catálogos públicos — Doctrina Zero-Downtime y Cold-Boot Fallback
+
+La vitrina pública no puede colapsar por un reinicio en frío, intermitencia de red con la base de datos o tablas secundarias no migradas:
+
+- [ ] **Aislamiento de consultas secundarias:** Las consultas a tablas relacionales o enriquecidas (videos, avances, amenidades, taxonomías) deben ejecutarse con tolerancia a fallos individual (`.catch`). Un error en una tabla auxiliar nunca debe abortar la entrega de las entidades principales (proyectos y zonas).
+- [ ] **Fallback estático en frío (Cold-Boot Recovery):** Si la base de datos está caída o inaccesible durante el arranque en frío del servidor, el endpoint de catálogo debe cargar el snapshot estático pre-empaquetado en disco (`catalog.json`) y responder HTTP 200 con cabecera `X-Catalog-Fallback: snapshot` y `X-Catalog-Stale: 1`.
+- [ ] **Prohibición de 503:** Queda estrictamente prohibido responder 503 Service Unavailable a visitantes en endpoints de catálogo público mientras exista un snapshot estático disponible en el repositorio.
+- [ ] **Reintento transparente:** El caché mantiene el estado invalidado tras un fallback para que, en cuanto la base de datos se restablezca, la siguiente petición cargue automáticamente los datos vivos.
+
 ---
 
 ## Contrato de salida
@@ -203,10 +247,12 @@ En **cada mutación**, sin excepción de "esto es menor":
 - [ ] Idempotencia implementada en toda mutación reintentable
 - [ ] Paginación definida por endpoint, con límite máximo fijado
 - [ ] Límite de peticiones activo en endpoints sensibles y públicos
-- [ ] Errores en formato RFC 9457, sin fuga de información interna
+- [ ] Errores en formato RFC 9457, sin fuga de información interna; validación en 422 con
+      `errors[]` y prueba de contrato de su forma
 - [ ] Transacciones y estrategia de concurrencia documentadas por operación crítica
 - [ ] Trabajo asíncrono identificado y llevado a cola, con reintento idempotente
 - [ ] Auditoría de mutaciones activa desde el primer endpoint, no agregada después
+- [ ] Resiliencia de catálogo público con fallback estático y aislamiento de consultas probado con test unitario de desconexión forzada
 - [ ] Handoff a D12 con el mapa de endpoints, roles permitidos y superficie de riesgo
 
 ---
@@ -217,7 +263,7 @@ En **cada mutación**, sin excepción de "esto es menor":
 |---|---|
 | Modelar y consultar Postgres/Supabase desde el backend | `supabase`, `supabase-postgres-best-practices` |
 | Autenticación/autorización con proveedor externo | `auth0:auth0-quickstart`, `auth0:express-oauth2-jwt-bearer` |
-| Verificar impacto de un cambio de contrato antes de tocarlo | `gitnexus-impact-analysis` |
+| Verificar impacto de un cambio de contrato antes de tocarlo | `viltrum-repo-map` (impacto) |
 | Revisión de seguridad del propio código antes de handoff a D12 | `security-review` |
 | Revisión de correctitud, reuso y eficiencia | `code-review` |
 | Limpieza y simplificación tras implementar | `simplify` |
@@ -243,6 +289,7 @@ la revisión de D12 en autenticación/autorización.
 | Auditoría agregada "después" | Se decide en el primer endpoint o no existe nunca |
 | Job de cola no idempotente | Reintento duplica efecto — se diseña idempotente desde el inicio |
 | Aprobar su propio control de acceso | D12 revisa siempre; nunca autoaprobación en auth |
+| 503 en catálogo público en cold boot o tablas no migradas | Fallback obligatorio a snapshot estático en disco (HTTP 200) y aislamiento de consultas |
 
 ## Protocolo especializado de entrega
 

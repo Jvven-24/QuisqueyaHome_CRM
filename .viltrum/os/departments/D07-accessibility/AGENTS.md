@@ -69,6 +69,15 @@ En al menos un lector de referencia (NVDA, VoiceOver o equivalente según plataf
 - [ ] Las tablas de datos exponen su estructura (encabezados asociados a celdas)
 - [ ] El orden de lectura coincide con el orden visual y con el orden lógico de la tarea
 
+Registrar cada patrón interactivo contrastándolo con ARIA APG. Completar combinaciones y
+evidencia solo después de probarlas; cada caso debe apuntar a la ruta y al estado de la
+matriz D06 correspondiente. Si falta esa matriz o no se ejecutó la prueba, indicarlo como
+bloqueado o no verificado.
+
+| Patrón APG | Teclado / nombre, rol y valor | Combinaciones probadas | Ruta y estado D06 | Evidencia |
+|---|---|---|---|---|
+| <patrón y referencia APG> | <comportamiento y exposición accesible observados> | <teclas y resultado observado> | <ruta · estado> | <reporte, captura o registro; o no verificado> |
+
 ### 5 — Contraste, zoom y reflow
 
 - [ ] Contraste de texto normal ≥ 4.5:1, texto grande (≥18pt o 14pt negrita) ≥ 3:1 (1.4.3)
@@ -186,3 +195,7 @@ Antes de diseño o revisión de experiencia, cargar `skills/viltrum-pxil-design/
 Las skills complementarias del contrato son: pxil-a11y-qa, pxil-permission-matrix.
 Consultar `registry/design-resources.json` y la plantilla de contrato de experiencia.
 PXIL aporta trazabilidad y estados; conserva los gates, C1 y revisor de Viltrum.
+
+Cuando haya narrativa animada o temas claro/oscuro, verifica también la guía revisada por D00
+(HND-012) de [`core/design-experience-os.md` §9](../../core/design-experience-os.md#portfolio-editorial-motion),
+incluida la alternativa `prefers-reduced-motion` y el contenido con movimiento desactivado.

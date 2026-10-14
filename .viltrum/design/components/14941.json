@@ -1,0 +1,29 @@
+{
+  "author": "arunjdass",
+  "description": "A premium, dual-theme dashboard & sidebar shell featuring the Charcoal Ink (dark) and Alabaster (light) architectural palettes. Includes collapsible multi-tiered navigation, workspace content frames, and micro-contrast layout spacing. Fully responsive scaffolding for SaaS or AI p",
+  "framework": "",
+  "id": "14941",
+  "metadata": {
+    "author": "arunjdass",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_39o4wVmT0Y5zTgtujcn7Fxw3uiT/avatar.png",
+    "description": "A premium, dual-theme dashboard & sidebar shell featuring the Charcoal Ink (dark) and Alabaster (light) architectural palettes. Includes collapsible multi-tiered navigation, workspace content frames, and micro-contrast layout spacing. Fully responsive scaffolding for SaaS or AI p",
+    "id": 14941,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/arunjdass/dashboard-sidebar?[REDACTED]",
+    "name": "Dashboard Sidebar",
+    "previewUrl": "https://cdn.21st.dev/arunjdass/dashboard-sidebar/default/preview.1781812420625.png",
+    "type": "component",
+    "url": "https://21st.dev/@arunjdass/components/dashboard-sidebar",
+    "videoUrl": "https://cdn.21st.dev/arunjdass/dashboard-sidebar/default/video.1781812420625.mp4"
+  },
+  "name": "Dashboard Sidebar",
+  "previewUrl": "https://cdn.21st.dev/arunjdass/dashboard-sidebar/default/preview.1781812420625.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:38.765282+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "360e93bfb9f1a992b9a45beee2ed6a207e7e7ba2567a60d52f3f26fecc6c0e2c"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@arunjdass/components/dashboard-sidebar"
+}

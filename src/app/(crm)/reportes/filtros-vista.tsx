@@ -4,7 +4,7 @@ import type { ReportFilters } from "@/application/reportes/puertos";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { analyticsCopy, reportPeriods } from "../_ui/analitica-copy";
 
-export type FilterOption = { id: number; label: string };
+export type FilterOption = { id: number; label: string; count?: number };
 type Props = { filters: ReportFilters; periodo: string; tab: string; projects: FilterOption[]; brokers: FilterOption[]; online: boolean };
 
 function FilterFields({ filters, periodo, projects, brokers, prefix }: Props & { prefix: string }) {

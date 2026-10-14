@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-af5bad6e65394e96b50e04cf239e3c6a",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D19",
+  "actor": "Codex-outbox-plan",
+  "goal": "Analizar outbox y plan de integracion Twenty C1",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:42:22.356640+00:00",
+  "updatedAt": "2026-10-05T01:46:52.781084+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:42:22.356728+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:46:52.781064+00:00",
+      "status": "finished",
+      "message": "Plan D19 local completado; codigo no editado; requiere revision D12/D14 y ficha READY"
+    }
+  ]
+}

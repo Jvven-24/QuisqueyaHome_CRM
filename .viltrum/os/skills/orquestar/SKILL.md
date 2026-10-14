@@ -16,6 +16,16 @@ Lee `.viltrum/orchestration/context.md`, el plan, el estado y
 `.viltrum/os/core/orchestration.md`. Confirma la clasificación con los archivos reales;
 el plan automático es orientativo. Usa `--intent` para corregir la ruta si corresponde.
 
+Si el objetivo nombra una funcionalidad, antes de delegar carga la skill `alcance-completo` y produce su matriz de impacto
+por departamento (etapa vigente, efectos externos, filas D01–D22): decide qué perfiles se activan ahora y cuáles después, y
+no declares el módulo terminado hasta que cada fila afectada cierre con handoff o `N/A` justificado.
+
+En un proyecto con código, empieza por `viltrum snapshot <proyecto>` y lee `.viltrum/snapshot/SNAPSHOT.md` antes de explorar
+archivos (P5); al cerrar cada tarea, regenéralo y revisa `look_here` y los nodos del mapa cuyo código cambió.
+
+Para un sistema o módulo grande construye y mantén el mapa maestro (skill `mapa-maestro`, `viltrum map`): es la fuente
+de qué falta, quién aporta y cuál es la meta final.
+
 Actúa sobre el siguiente entregable autorizado. Carga contrato, skill y SOP del perfil
 seleccionado; crea subagentes mediante las herramientas del host cuando la tarea lo
 justifique y esté autorizada. Declara límites de edición, evidencia de salida y revisor.

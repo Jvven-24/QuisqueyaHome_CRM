@@ -18,7 +18,8 @@
     "Ruta confirmada contra evidencia",
     "Productor y revisor distintos",
     "No avanzar con P0 ni aceptación humana fabricada",
-    "Recursos del host comprobados antes de delegar"
+    "Recursos del host comprobados antes de delegar",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",
@@ -51,4 +52,3 @@
     }
   ]
 }
-

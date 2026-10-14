@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "projectRoot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D14",
+  "provider": "antigravity",
+  "model": "gemini-3.8-flash-medium",
+  "permissionMode": null,
+  "role": "producer",
+  "mode": "analysis",
+  "yolo": false,
+  "goal": "Prueba de arranque: responde solo LISTO.",
+  "packetHash": "529782c8cc6ea2c08478965040c61d3aa7cf11684cf50cb214113c685cc15e0b",
+  "sources": [
+    {
+      "path": ".viltrum\\project.md",
+      "sha256": "3b20a8911ad6d82c0d1ad0d377767b3e8254e2a0db6ac90436c07061c3cac889"
+    },
+    {
+      "path": ".viltrum\\status.md",
+      "sha256": "13c9df42a0e9fdeb41e2a3424d79b7474996ecd586178551dc42c51a76046b27"
+    },
+    {
+      "path": ".viltrum\\os\\CLAUDE.md",
+      "sha256": "237594693cf0cbf680a60e9352ee900b8d38970951a25ab3aa6e00b7c9bcb027"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D14-qa\\SOUL.md",
+      "sha256": "eb2d0df36f23fbd70d37eb69454c5139d158cee50fb8df65d307145d84bd637c"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D14-qa\\AGENTS.md",
+      "sha256": "d8e711adf5bfd915e4fa6af5b39110ec0b46f54a69256f85977ea73e13fac0d3"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D14-qa\\sops\\delivery.md",
+      "sha256": "bb465df2707a31c79dd206451f49c5d09235ec541083dfd0b4358155638146ad"
+    },
+    {
+      "path": ".viltrum\\os\\skills\\viltrum-qa\\SKILL.md",
+      "sha256": "08f2ebb9d69b6900d66dfe4308ab87ce85b0c6519adcdf39ad272892d36fa86d"
+    }
+  ],
+  "reviewer": "D00",
+  "supervisedOnly": true,
+  "bridgeId": "30042e4c-b763-441f-912f-87fe7ac4ba1e",
+  "actor": "hapi:c1fe5912-4e3c-478d-bd10-cf35498129c2",
+  "machineId": "6881833d-f840-4f9d-bb13-da22e3d59ace",
+  "sessionId": "c1fe5912-4e3c-478d-bd10-cf35498129c2",
+  "localId": "viltrum-30042e4c-b763-441f-912f-87fe7ac4ba1e",
+  "launchDirectory": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "state": "message_accepted",
+  "createdAt": "2026-10-13T20:25:24.012205+00:00",
+  "url": "http://127.0.0.1:3006/sessions/c1fe5912-4e3c-478d-bd10-cf35498129c2"
+}

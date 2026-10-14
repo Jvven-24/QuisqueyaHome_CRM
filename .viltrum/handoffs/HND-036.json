@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D01",
+  "gate": "G1",
+  "actor": "codex-gpt-6.1-sol-d01",
+  "createdAt": "2026-10-05T00:16:03.249799+00:00",
+  "state": "review_pending",
+  "reviewer": "D02",
+  "summary": {
+    "path": ".viltrum/vre-os/spec/modulos/M03-negocios.md",
+    "sha256": "a39b49d88d686268a8aa9bf1739239bb9fd8eb9400788b9c72c79ad263b67f23",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T235540Z-D01-codex/evidence.json",
+      "sha256": "c696b518a2e7a4f9ba244f6db762a194215d32ac360118ab6ccdbeb5aae19e7c",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-036"
+}

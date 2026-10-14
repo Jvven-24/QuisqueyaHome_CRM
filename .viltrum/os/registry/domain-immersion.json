@@ -1,0 +1,2682 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-06",
+  "authority": "Protocolo de inmersión de dominio de cada departamento (core/domain-immersion.md, skill inmersion-de-dominio). Lo propuso cada perfil con gpt-6-luna el 2026-10-06; es la base que D00 usa para generar las tareas de inmersión de un proyecto. Pendiente de revisión independiente por departamento; lo no verificado en las fuentes se marca así.",
+  "capability_kinds": [
+    "acceso",
+    "dato",
+    "herramienta",
+    "mcp",
+    "skill",
+    "stack"
+  ],
+  "departments": {
+    "D00": {
+      "focus": "Volverme experto en clasificar el negocio, el producto, el mercado y el riesgo del proyecto para enrutar a los perfiles correctos con contexto de dominio y cobertura verificable.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué problema de negocio y resultado medible motivan el proyecto?",
+        "¿Cuál es el vertical, el arquetipo del producto, sus usuarios y compradores, y su modelo operativo?",
+        "¿En qué países y jurisdicciones opera? ¿Qué idioma, moneda, normas y prácticas locales aplican?",
+        "¿Qué capacidades y estándares son básicos en ese mercado y cuáles distinguen a sus referentes?",
+        "¿Qué especialistas requiere el dominio y qué entregables, dependencias y revisores corresponden?",
+        "¿Qué datos, pagos, decisiones o acciones externas determinan el riesgo R0–R4?",
+        "¿Qué sistemas, requisitos, decisiones, gates y hallazgos previos siguen vigentes?",
+        "¿Qué accesos, stack, herramientas y conexiones están disponibles y autorizados para este alcance?",
+        "¿Qué incertidumbres requieren respuesta de Wilber y qué decisión humana bloquea el avance?"
+      ],
+      "research": [
+        {
+          "what": "Identificar el negocio, productos comparables, flujos operativos, roles y capacidades esperadas. Separar hechos del proyecto, referencias e hipótesis.",
+          "sources": [
+            "brief y entrevistas atribuibles",
+            "sitios y documentación de competidores directos",
+            "informes sectoriales identificables",
+            "artefactos y telemetría autorizados"
+          ]
+        },
+        {
+          "what": "Identificar el país, las obligaciones regulatorias y los estándares pertinentes a los datos, transacciones y actividad; registrar jurisdicción y versión.",
+          "sources": [
+            "reguladores y legislación oficial del país",
+            "estándares oficiales aplicables",
+            "asesor legal del cliente cuando se requiera interpretación"
+          ]
+        },
+        {
+          "what": "Inventariar estado del sistema, gates, decisiones, mapa, capacidades y dependencias para reutilizar análisis vigente.",
+          "sources": [
+            "repositorio y artefactos del proyecto",
+            ".viltrum/capabilities.json",
+            ".viltrum/os/registry/toolchain.json",
+            "documentación oficial de stack y proveedor"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "D01/D21 comparan al menos dos referentes pertinentes y fuentes sectoriales; registran patrones comunes, diferenciales, país, fecha y límites de comparación. Una referencia no se convierte por sí sola en requisito.",
+        "Convertir expectativas confirmadas en requisitos, criterios de aceptación, nodos y departamentos del mapa; lo no validado queda como pregunta o hipótesis."
+      ],
+      "capabilities": [
+        {
+          "name": "Orquestar y clasificar ruta y riesgo",
+          "kind": "skill",
+          "why": "Aplicar mandato, intención, tipo de solución, fase, gates, revisión independiente y escalación.",
+          "check": "Comprobar skill orquestar y reglas vigentes en .viltrum/os; contrastar la ruta con core/routing.md y registry/orchestration.json."
+        },
+        {
+          "name": "Inventario del repositorio",
+          "kind": "herramienta",
+          "why": "Encontrar implementación, evidencia y cambios existentes antes de activar trabajo.",
+          "check": "Comprobar disponibilidad de viltrum repo-inventory/repo-impact o repo-map y verificar binario, versión, commit y permisos con el host. rg figura en toolchain.json; capabilities.json declara solo repository disponible."
+        },
+        {
+          "name": "Mapa maestro y matriz de impacto",
+          "kind": "skill",
+          "why": "Conectar objetivo, requisitos, riesgos, entregables departamentales y handoffs sin cerrar celdas propias.",
+          "check": "Comprobar core/system-map.md, registry/system-map.json y skill alcance-completo; crear o aportar solo con autorización del proyecto."
+        },
+        {
+          "name": "Documentos, Git y accesos del cliente",
+          "kind": "acceso",
+          "why": "Consultar evidencia primaria y registrar decisiones con procedencia.",
+          "check": "delivery.json los requiere, pero capabilities.json no acredita documents ni git. Confirmar alcance y autorización con el host o Wilber, sin pedir ni registrar secretos."
+        }
+      ],
+      "outputs": [
+        "Ficha de inmersión con vertical, producto, mercado/país, actores, modelo, objetivos y fuentes fechadas; distingue confirmado, inferido y desconocido.",
+        "Expectativas y referencias trazables convertidas en preguntas, requisitos candidatos y decisiones pendientes; no inventa aceptación del cliente.",
+        "Clasificación de intención, tipo, fase y riesgo con evidencia; ruta D01–D22, entregables, insumos, revisores y dependencias.",
+        "Inventario de artefactos, gates y hallazgos reutilizables; bloqueos, capacidades verificadas y faltantes con dueño y siguiente paso.",
+        "Nodos y celdas D00 del mapa, y handoffs; las celdas se cierran solo mediante revisión independiente."
+      ],
+      "feeds_map": [
+        "GOAL y REQ: contexto de negocio, criterio de aceptación, riesgo y procedencia; coordinación D00 y aportes D01/D02/D22.",
+        "Módulos, funciones, integraciones, roles, legal y operaciones: departamentos afectados, dependencias, impacto y needs_from/delivers_to."
+      ],
+      "notify": [
+        "D01/D21: vertical, mercado, comparables, fuentes y desconocidos para validar expectativas y viabilidad.",
+        "D02/D03: objetivo, arquetipo, límites, etapa, riesgos, dependencias y decisiones humanas.",
+        "Perfiles activados: contexto de dominio y evidencia pertinente, sin sustituir su análisis ni duplicar paquetes cerrados.",
+        "D12/D11/D16/D17/D19, según mapa y riesgo: datos, jurisdicción, acciones externas, dependencias y capacidades no verificadas."
+      ],
+      "refresh": "Revisar si cambian alcance, país, usuarios o modelo de negocio, datos o acciones, integraciones o stack, fase o riesgo; reutilizar evidencia vigente y revalidar antes de cada gate.",
+      "anti_patterns": [
+        "Inferir país, obligación legal, riesgo o expectativa de mercado por el idioma o la categoría del producto.",
+        "Confundir un catálogo de herramientas con instalación, conexión, permiso o acceso disponibles.",
+        "Activar todos los perfiles, ignorar dependencias o repetir investigación vigente.",
+        "Tratar competidores como prueba de requisitos, inventar fuentes o convertir hipótesis en hechos.",
+        "Cerrar celdas propias, aprobar trabajo propio, decidir aceptación comercial o aprobar producción."
+      ]
+    },
+    "D01": {
+      "focus": "Convertir evidencia del negocio y del mercado en requisitos verificables, específicos del vertical, con sus actores, procesos, reglas, excepciones, métricas y preguntas pendientes.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué vertical, subvertical, tipo de producto y mercado geográfico atiende el proyecto?",
+        "¿Quién compra, quién usa, quién administra y quién puede aprobar excepciones?",
+        "¿Qué problema observable ocurre, a quién, con qué frecuencia y con qué evidencia?",
+        "¿Cuál es el proceso actual de principio a fin, incluidos los pasos manuales y sistemas existentes?",
+        "¿Qué reglas de negocio, casos límite, disputas y excepciones cambian el resultado?",
+        "¿Qué volúmenes, estacionalidad, picos, tiempos y métricas de éxito se conocen?",
+        "¿Qué datos personales, financieros o regulados se recogen; quién decide su retención y eliminación?",
+        "¿Qué prácticas del mercado son expectativas básicas y cuáles son diferenciadores pertinentes para este negocio?",
+        "¿Qué restricciones de país, idioma, moneda, impuestos, accesibilidad o conectividad condicionan los requisitos?"
+      ],
+      "research": [
+        {
+          "what": "Clasificación de vertical, arquetipo de solución, actores, procesos, vocabulario y módulos aplicables.",
+          "sources": [
+            "entrevistas y documentos del cliente",
+            "sitio y materiales del negocio",
+            "D21 para investigación de mercado"
+          ]
+        },
+        {
+          "what": "Flujos, capacidades y patrones que ofrecen productos comparables; separar práctica observada de recomendación.",
+          "sources": [
+            "competidores directos",
+            "productos sustitutos",
+            "documentación y demos públicas de productos"
+          ]
+        },
+        {
+          "what": "Obligaciones y prácticas locales que podrían afectar requisitos; no emitir dictamen legal.",
+          "sources": [
+            "organismos oficiales del país",
+            "normativa primaria vigente",
+            "asesor competente del cliente"
+          ]
+        },
+        {
+          "what": "Capacidades candidatas de fábrica y preguntas específicas del tipo de solución y módulos activados.",
+          "sources": [
+            "departments/D01-discovery/reference/question-bank.md",
+            "departments/D01-discovery/reference/expected-capabilities.md",
+            "domain-packs aplicables"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Clasificar primero la solución según core/routing.md y activar solo bancos y paquetes cuyo criterio explícito se cumpla.",
+        "Contrastar capacidades de expected-capabilities.md con al menos dos productos comparables investigados; registrar fuente, fecha, aplicabilidad e incertidumbre.",
+        "Tratar las capacidades de referencia como línea base propuesta para PRD; D02 decide alcance y toda exclusión requiere razón.",
+        "Convertir patrones pertinentes en criterios verificables por rol, flujo, estados, excepción y mercado; no asumir que todo competidor define el estándar."
+      ],
+      "capabilities": [
+        {
+          "name": "Viltrum Meeting Intake",
+          "kind": "herramienta",
+          "why": "Clasificación reproducible de afirmaciones y faltantes para ingesta de minutas.",
+          "check": "Comprobar instalación/CLI y versión con el host; el catálogo lo declara verificado en registry/toolchain.json al 2026-09-30, sujeto a reconfirmación local."
+        },
+        {
+          "name": "Bancos de preguntas y paquetes D01",
+          "kind": "skill",
+          "why": "Guiar entrevistas por arquetipo y vertical activado, evitando cuestionarios genéricos.",
+          "check": "Leer departments/D01-discovery/reference/question-bank.md y domain-packs/README.md; confirmar que existe el archivo del pack requerido."
+        },
+        {
+          "name": "Fuentes del negocio",
+          "kind": "acceso",
+          "why": "Atribuir procesos, métricas y decisiones a quien puede confirmarlos.",
+          "check": "Preguntar a Wilber/D00 quién responderá y qué documentos están autorizados; si falta acceso, dejar preguntas abiertas."
+        },
+        {
+          "name": "Viltrum Legal",
+          "kind": "herramienta",
+          "why": "Apoyar generación de documentos contractuales cuando el flujo lo requiera, sin convertir salida en aprobación legal.",
+          "check": "Comprobar módulo y plantillas localmente; toolchain lo declara disponible, no acredita validez jurídica."
+        },
+        {
+          "name": "Investigación web",
+          "kind": "herramienta",
+          "why": "Verificar referencias vigentes de mercado y fuentes regulatorias oficiales del país pertinente.",
+          "check": "Confirmar capacidad web en el host y registrar título, fecha, procedencia y hallazgo; sin acceso, marcar investigación pendiente."
+        }
+      ],
+      "outputs": [
+        "Ficha de inmersión: vertical, producto, mercado/país, actores, vocabulario, fuentes fechadas y nivel de confianza.",
+        "Mapa del proceso actual y deseado con roles, entradas, estados, decisiones, excepciones y sistemas existentes.",
+        "Inventario de expectativas de mercado: observación, fuente, relevancia, propuesta y decisión pendiente de D02/cliente.",
+        "Preguntas Q con destinatario, gate, dependencia y prioridad; insumos CI separados; desconocidos conservados como pendientes.",
+        "Requisitos trazables a fuente y criterio de aceptación, NFR medibles, métricas de éxito y exclusiones decididas por D02.",
+        "Estado de cobertura por módulo y preguntas abiertas por gate; handoff a D02 y aportes pertinentes a D04, D03, D11 y D12."
+      ],
+      "feeds_map": [
+        "Meta y problema → requisitos y criterios de aceptación → módulos, procesos, roles, reglas, datos y métricas.",
+        "Celdas D01 del mapa maestro: alcance de requisitos, actores/procesos, evidencia, dependencias y entregas a otros departamentos."
+      ],
+      "notify": [
+        "D02: requisitos, criterios, prioridades solo en borrador, supuestos, métricas y exclusiones pendientes de decisión.",
+        "D21: vertical, geografía, preguntas de mercado, comparables por investigar y fuentes verificadas o faltantes.",
+        "D04/D05: actores, contexto de uso, procesos, restricciones de canal e idioma.",
+        "D03/D11/D12: invariantes, volúmenes, datos, roles, retención y riesgos señalados; sin decidir arquitectura ni controles."
+      ],
+      "refresh": "Reabrir la inmersión ante cambio de vertical, país, modelo de negocio, alcance, actor principal o integración que altere procesos/datos; revisar expectativas y requisitos al inicio de cada fase que dependa de ellos.",
+      "anti_patterns": [
+        "Aceptar como problema la solución sugerida sin identificar quién sufre qué y con qué evidencia.",
+        "Activar un paquete de dominio por una palabra ambigua o mezclar preguntas de sectores no aplicables.",
+        "Presentar capacidades candidatas o inferencias como compromisos confirmados.",
+        "Confundir prácticas de competidores con obligación legal o estándar universal.",
+        "Preguntar al cliente datos verificables en documentos/código, o cerrar una respuesta sin fuente, fecha y responsable.",
+        "Usar métricas vagas, omitir excepciones, o declarar avance por porcentaje con bloqueos críticos abiertos.",
+        "Decidir alcance, arquitectura, modelo de datos, precio o plazo fuera de la responsabilidad de D01.",
+        "Afirmar disponibilidad de herramientas, accesos o conexiones solo porque aparecen en el catálogo."
+      ]
+    },
+    "D02": {
+      "focus": "Volverme experto en cómo se crea y captura valor en el negocio del proyecto para priorizar su alcance, definir un MVP vendible y explicitar exclusiones y riesgos comerciales.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué vertical, tipo de producto, mercado y país atiende el proyecto, y qué evidencia confirma cada uno?",
+        "¿Quién compra, quién usa y quién puede aprobar el alcance y el compromiso comercial?",
+        "¿Qué problema y resultado de negocio están respaldados por evidencia de D01?",
+        "¿Qué alternativas usan hoy los clientes y qué diferencia la propuesta?",
+        "¿Qué capacidades son expectativas de mercado y cuáles son ventajas opcionales?",
+        "¿Qué obligaciones legales, fiscales o comerciales aplican y quién las confirma?",
+        "¿Qué capacidad, presupuesto, dependencias del cliente y restricciones de plazo condicionan el MVP?",
+        "¿Qué requisitos pasan la prueba DSDM, qué se desplaza a fases posteriores y qué queda excluido?"
+      ],
+      "research": [
+        {
+          "what": "Identificar el modelo de negocio, segmentos, alternativas y diferenciadores que afectan valor, prioridad y disposición a pagar.",
+          "sources": [
+            "entrevistas y evidencia atribuible de D01",
+            "competidores directos",
+            "alternativas sustitutivas",
+            "material público de producto y precios"
+          ]
+        },
+        {
+          "what": "Establecer expectativas funcionales y comerciales del arquetipo, registrando qué es evidencia y qué es hipótesis.",
+          "sources": [
+            "productos comparables",
+            "documentación pública de planes y funciones",
+            "paquetes de dominio D01 cuando se activen"
+          ]
+        },
+        {
+          "what": "Detectar obligaciones del país y dependencias que alteran alcance, costo o aceptación; no emitir dictamen legal.",
+          "sources": [
+            "normativa oficial del país",
+            "asesor competente del cliente",
+            "proveedores relevantes y sus condiciones públicas"
+          ]
+        },
+        {
+          "what": "Contrastar prioridades con capacidad, estimaciones y costo de oportunidad; no inferir esfuerzo técnico por número de pantallas.",
+          "sources": [
+            "capacidad declarada",
+            "estimaciones D03 y departamentos técnicos",
+            "costos y cotizaciones verificables"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Usar el arquetipo y el país confirmados para comparar capacidades y condiciones recurrentes; registrar fuentes, fecha y confianza.",
+        "Separar requisito validado, expectativa observada e hipótesis; someter cada requisito priorizado a la prueba DSDM.",
+        "Convertir expectativas excluidas en exclusiones explícitas con razón y hito de revisión; no tratarlas como alcance tácito."
+      ],
+      "capabilities": [
+        {
+          "name": "viltrum-scope y checklists D02",
+          "kind": "skill",
+          "why": "Guían priorización, MVP, exclusiones, propuesta y control de cambios.",
+          "check": "Verificar archivos locales en .viltrum/os/skills/viltrum-scope/ y .viltrum/os/departments/D02-scope/checklists/; disponibilidad efectiva en cada host: no verificado."
+        },
+        {
+          "name": "viltrum_intake",
+          "kind": "herramienta",
+          "why": "Apoya la ingesta de minutas y la detección de preguntas faltantes.",
+          "check": "El catálogo lo marca habilitado y verificado localmente; confirmar CLI y versión en el host y que existe una minuta autorizada."
+        },
+        {
+          "name": "viltrum_legal",
+          "kind": "herramienta",
+          "why": "Puede preparar documentos comerciales; la aceptación y validez requieren autoridad humana competente.",
+          "check": "El catálogo lo marca habilitado y verificado localmente; comprobar comando y versión. No inferir validez jurídica."
+        },
+        {
+          "name": "Trello u hoja de cálculo",
+          "kind": "herramienta",
+          "why": "Pueden ayudar a seguir escenarios de capacidad, costo y cambios si el proyecto ya los usa.",
+          "check": "Preguntar a Wilber o revisar capacidades declaradas; comprobar licencia, costo y acceso antes de adoptar."
+        },
+        {
+          "name": "Fuentes del cliente: PRD, decisiones, propuesta, capacidad y costos",
+          "kind": "dato",
+          "why": "Sustentan prioridad, cotización por rango, dependencias y línea base comercial.",
+          "check": "Solicitar rutas o evidencia al host; ausencia de evidencia se registra como no verificada."
+        }
+      ],
+      "outputs": [
+        "Expediente de expertise: vertical, producto, mercado y país con evidencia, fecha e incertidumbres.",
+        "Expectativas de mercado y comparación de alternativas, separando hechos de hipótesis.",
+        "Backlog MoSCoW con prueba DSDM, límite de capacidad, MVP vendible y fases ordenadas por valor/esfuerzo.",
+        "Exclusiones con razón y revisión prevista; Definition of Done de negocio.",
+        "Rango de costo/plazo con supuestos, dependencias, condiciones que mueven el rango y riesgos comerciales con dueño.",
+        "Preguntas devueltas a D01, decisiones registrables y propuesta/C1 pendiente de aprobación humana."
+      ],
+      "feeds_map": [
+        "Nodos de meta, requisito, módulo y función: valor, prioridad, MVP, fases y exclusiones.",
+        "Nodos de aceptación, legal, riesgo y operación: DoD de negocio, dependencias y quién acepta.",
+        "Celdas D02: alcance y prioridad; comunicación needs_from D01/D03 y delivers_to D01/D21/D03/D00."
+      ],
+      "notify": [
+        "D01: devolver requisitos sin aceptación verificable y comunicar expectativas de mercado como evidencia o hipótesis.",
+        "D03: comunicar prioridades, límites de capacidad, incertidumbres y supuestos comerciales para estimación.",
+        "D21: indicar capacidades priorizadas que requieren investigación de alternativas antes de construir.",
+        "D00: comunicar riesgos comerciales, dependencias, exclusiones y estado de C1."
+      ],
+      "refresh": "Reinvestigar si cambia vertical, país, segmento, modelo de negocio, alcance aprobado, integración o regulación aplicable; revisar expectativas y costos en cada fase y antes de una nueva cotización.",
+      "anti_patterns": [
+        "Tratar lo pedido o lo visto en un competidor como Must sin prueba DSDM.",
+        "Confundir funciones frecuentes del mercado con requisitos confirmados del cliente.",
+        "Declarar el MVP por cantidad de pantallas o dejar exclusiones implícitas.",
+        "Inventar esfuerzo, precio, fecha, norma aplicable o capacidad disponible.",
+        "Aceptar cambios sin impacto registrado y decisión de una persona con autoridad.",
+        "Considerar una propuesta enviada como aceptación C1."
+      ]
+    },
+    "D03": {
+      "focus": "Al iniciar un proyecto, especializarme en sus límites de dominio, contratos, decisiones irreversibles y riesgos arquitectónicos según el negocio, el país y el producto.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué problema de negocio resuelve el producto y cuáles son sus verbos, actores, entidades, reglas y excepciones?",
+        "¿Qué tipo de producto, vertical, mercado y país cubre? ¿Qué jurisdicciones y obligaciones aplican? (no verificado hasta recibir evidencia)",
+        "¿Qué requisitos funcionales y criterios de aceptación están aprobados, y qué queda explícitamente fuera?",
+        "¿Qué volumen, concurrencia, latencia, disponibilidad y retención se esperan, con qué cifras y fuente?",
+        "¿Qué datos personales, financieros o regulados se procesan, y qué acciones son irreversibles?",
+        "¿Qué roles, permisos, tenants y límites de aislamiento exige el negocio?",
+        "¿Qué capacidades externas se necesitan y qué alternativas evaluó D21?",
+        "¿Qué decisiones existentes sobre datos, identificadores, fechas, borrado, auditoría, moneda e idioma ya están aprobadas?",
+        "¿Qué restricciones reales de equipo, operación, infraestructura, presupuesto y stack condicionan la arquitectura?"
+      ],
+      "research": [
+        {
+          "what": "Modelos de dominio, flujos, actores, excepciones, límites entre módulos y patrones de fallo del vertical.",
+          "sources": [
+            "requisitos y entrevistas atribuibles",
+            "paquetes de dominio aplicables de D01",
+            "documentación del producto existente"
+          ]
+        },
+        {
+          "what": "Productos comparables: capacidades, límites del producto, flujos principales e integraciones habituales.",
+          "sources": [
+            "competidores directos",
+            "documentación pública de productos de referencia",
+            "expedientes de D21"
+          ]
+        },
+        {
+          "what": "Obligaciones de datos, privacidad, pagos, conservación y operación según país y vertical.",
+          "sources": [
+            "normativa oficial del país",
+            "reguladores competentes",
+            "asesoría del cliente (no verificado)"
+          ]
+        },
+        {
+          "what": "Compatibilidad, soporte y límites de tecnologías propuestas antes de fijar contratos.",
+          "sources": [
+            "documentación oficial del proveedor",
+            "especificaciones abiertas pertinentes",
+            "pruebas y mediciones del proyecto"
+          ]
+        },
+        {
+          "what": "Arquitectura existente, dependencias, ciclos, puntos de acoplamiento y ADR vigentes.",
+          "sources": [
+            "repositorio y commit declarado",
+            "mapa maestro",
+            "ADRs y entregas aprobadas"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar capacidades esperadas de dos o más referencias comparables y separar lo común del diferenciador; registrar fuente y fecha.",
+        "Contrastar flujos y restricciones del vertical con normativa oficial y expedientes D21; marcar vacíos como preguntas, no como requisitos.",
+        "Traducir expectativas confirmadas a contratos, responsabilidades, permisos, estados, errores y criterios verificables.",
+        "Ajustar profundidad al riesgo de datos y acciones; los criterios de referencia no equivalen a aceptación del cliente."
+      ],
+      "capabilities": [
+        {
+          "name": "Paquetes de dominio D01",
+          "kind": "skill",
+          "why": "Reutilizar preguntas y riesgos específicos cuando el arquetipo coincida.",
+          "check": "Revisar .viltrum/os/departments/D01-discovery/domain-packs/README.md y confirmar activación en el mandato."
+        },
+        {
+          "name": "Mapa de repositorio Viltrum",
+          "kind": "herramienta",
+          "why": "Trazar imports, dependencias y ciclos en código existente.",
+          "check": "Verificar comando disponible con Get-Command viltrum y su subcomando repo-*; disponibilidad efectiva por proyecto (no verificado)."
+        },
+        {
+          "name": "Documentación técnica oficial",
+          "kind": "acceso",
+          "why": "Comprobar contratos, compatibilidad y límites de capacidades externas.",
+          "check": "Confirmar fuentes y acceso en expediente D21; conectividad remota (no verificado)."
+        },
+        {
+          "name": "Context7",
+          "kind": "herramienta",
+          "why": "Consultar documentación de bibliotecas por versión cuando esté disponible.",
+          "check": "Comprobar integración en el host y versión objetivo; instalación y acceso (no verificado)."
+        },
+        {
+          "name": "Repositorio y artefactos del proyecto",
+          "kind": "acceso",
+          "why": "Verificar estado real, requisitos aprobados, ADR y restricciones.",
+          "check": "Confirmar ruta, commit, permisos de lectura y documentos versionados en el mandato."
+        },
+        {
+          "name": "Diagramación de arquitectura",
+          "kind": "skill",
+          "why": "Expresar límites y dependencias para revisión independiente.",
+          "check": "Comprobar disponibilidad de artifact-diagramming en el host; disponibilidad efectiva (no verificado)."
+        }
+      ],
+      "outputs": [
+        "Expediente de inmersión: vertical, tipo de producto, mercado, país, fuentes fechadas, hallazgos y desconocidos.",
+        "Mapa de dominio: actores, entidades, verbos, reglas, excepciones, eventos y catálogos con fuente.",
+        "Mapa de módulos con responsabilidad, dependencias, contratos y límites explícitos.",
+        "Matriz de capacidades externas con puerto requerido, alternativas investigadas por D21 y estado de disponibilidad.",
+        "Lista priorizada de decisiones irreversibles con ADR requerido, dueño y evidencia pendiente.",
+        "Riesgos arquitectónicos del vertical, NFR medibles faltantes y handoffs a D01, D02, D11, D12, D21 y equipos implementadores según impacto."
+      ],
+      "feeds_map": [
+        "Celda D03 del mapa maestro: dominio, módulos, contratos, dependencias y ADR.",
+        "Celdas de integración, datos, seguridad, despliegue y riesgos cuando la arquitectura del dominio las afecte."
+      ],
+      "notify": [
+        "D01: ambigüedades de negocio, actores, reglas, excepciones y país que requieran decisión.",
+        "D02: supuestos de alcance o NFR sin cifra; D03 no los decide.",
+        "D21: capacidades externas por investigar, alternativas y límites por verificar.",
+        "D11: ownership de datos, aislamiento, retención, auditoría y decisiones de persistencia.",
+        "D12: fronteras de confianza, datos sensibles y amenazas del dominio."
+      ],
+      "refresh": "Al cambiar país, vertical, tipo de producto, alcance, riesgo, NFR, proveedor externo, modelo de datos o fase; revisar también al recibir resultados D21 y antes de cerrar cada diseño.",
+      "anti_patterns": [
+        "Elegir framework, base de datos o proveedor antes de modelar el dominio.",
+        "Convertir expectativas de competidores o normativa no confirmada en requisitos aprobados.",
+        "Diseñar contratos copiando el API del proveedor o filtrar su SDK al dominio.",
+        "Omitir tenants, permisos, concurrencia, fallos, reversión o ownership de datos.",
+        "Inventar cifras de carga, latencia, costo o retención.",
+        "Crear abstracciones especulativas sin caso actual.",
+        "Marcar herramientas, conexiones o accesos como disponibles sin comprobarlos.",
+        "Cerrar ADR o arquitectura sin revisión independiente."
+      ]
+    },
+    "D04": {
+      "focus": "Volverme experto en la arquitectura de información, expectativas de uso y recorridos por rol del producto y mercado del proyecto, traduciendo evidencia del dominio en vistas, navegación y flujos verificables.",
+      "depth": "profunda",
+      "questions": [
+        "¿Cuál es el vertical, tipo de producto, mercado y país; qué vocabulario y tareas usa cada segmento?",
+        "¿Qué objetivo medible y tareas críticas debe soportar la experiencia?",
+        "¿Qué actores, roles, permisos, excepciones y reglas de negocio afectan cada recorrido?",
+        "¿Qué patrones de navegación y organización de contenido usan productos comparables del mismo vertical?",
+        "¿Qué vistas públicas, operativas, administrativas, de configuración y soporte requiere el módulo completo?",
+        "¿Qué expectativas de accesibilidad, idioma, dispositivo y conectividad corresponden al público y mercado?",
+        "¿Qué datos de analítica, soporte o investigación directa respaldan los problemas y prioridades?",
+        "¿Qué fallos, interrupciones, permisos insuficientes y acciones irreversibles debe poder resolver cada flujo?"
+      ],
+      "research": [
+        {
+          "what": "Clasificar dominio, audiencias, tareas, vocabulario, canales, dispositivos y restricciones culturales relevantes para la experiencia.",
+          "sources": [
+            "mandato y requisitos D01/D02",
+            "entrevistas o investigación atribuible",
+            "soporte y analítica entregados",
+            "documentación del negocio"
+          ]
+        },
+        {
+          "what": "Mapear navegación, jerarquía de información, patrones de vistas, búsqueda, formularios y estados en competidores comparables.",
+          "sources": [
+            "sitios y aplicaciones de competidores directos",
+            "documentación y demos públicas del producto",
+            "repositorios de referencia investigados por D21"
+          ]
+        },
+        {
+          "what": "Contrastar convenciones de interacción y accesibilidad aplicables al canal y mercado.",
+          "sources": [
+            "W3C WCAG y ARIA APG",
+            "guías oficiales de plataformas",
+            "normativa local aplicable identificada con D01/D12 (no verificada para un proyecto hasta conocer país y dominio)"
+          ]
+        },
+        {
+          "what": "Revisar componentes reutilizables y restricciones antes de proponer vistas.",
+          "sources": [
+            "galería PXIL privada (disponibilidad/acceso no verificados)",
+            "catálogo de componentes del proyecto",
+            "referencias y licencias verificadas por D21/D05"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Comparar al menos dos productos reales por capacidad crítica; registrar fuente, tarea observada, patrón, estados visibles y oportunidad, sin copiar apariencia.",
+        "Separar convención repetida del mercado de evidencia de necesidad del usuario; validar esta última con fuentes del proyecto.",
+        "Traducir expectativas a vistas, criterios de éxito, navegación y seis estados: carga, vacío, error, sin conexión, éxito y permiso insuficiente.",
+        "Identificar fricciones y oportunidades por rol, móvil/escritorio, idioma y frecuencia de tarea; no declarar una expectativa como estándar sin evidencia."
+      ],
+      "capabilities": [
+        {
+          "name": "viltrum-ux-research",
+          "kind": "skill",
+          "why": "Procedimiento D04 para inventario, matriz pantalla × rol, sitemap, recorridos y validación.",
+          "check": "Comprobar archivo de skill en el paquete fuente D04 y disponibilidad declarada en .viltrum/capabilities.json; estado de este host no verificado."
+        },
+        {
+          "name": "Navegador para mapear referencias",
+          "kind": "herramienta",
+          "why": "Observar navegación, contenido, formularios y estados de productos comparables.",
+          "check": "Verificar navegador y acceso autorizado al sitio de referencia; no asumir que una declaración en delivery.json acredita conectividad."
+        },
+        {
+          "name": "Fuentes de investigación de usuarios",
+          "kind": "acceso",
+          "why": "Distinguir problemas reales de hipótesis o simulaciones.",
+          "check": "Solicitar a Wilber/cliente entrevistas, analítica y soporte atribuibles, con permiso y datos minimizados; disponibilidad no verificada."
+        },
+        {
+          "name": "Galería PXIL",
+          "kind": "acceso",
+          "why": "Revisar componentes existentes antes de recomendar crear o adaptar patrones.",
+          "check": "Comprobar acceso en el host, procedencia, compatibilidad y licencia; acceso de esta sesión no verificado."
+        },
+        {
+          "name": "Archify",
+          "kind": "herramienta",
+          "why": "Entregar diagramas interactivos de sitemap y recorridos cuando el contrato lo requiera.",
+          "check": "Comprobar Node.js, ruta y versión siguiendo registry/toolchain.json; disponibilidad en este host no verificada."
+        },
+        {
+          "name": "D01/D02 y D03 validados",
+          "kind": "dato",
+          "why": "Roles, objetivos, reglas y límites de módulos son insumos bloqueantes para flujos y matriz de permisos.",
+          "check": "Verificar entregables y procedencia; escalar a D01/D02 lo indefinido, sin inventar reglas."
+        }
+      ],
+      "outputs": [
+        "Expediente de expertise con vertical, producto, mercado, país, segmentos, tareas, vocabulario, fuentes, fecha y nivel de confianza.",
+        "Comparativa de referencias por tarea con patrones observados, diferencias y oportunidades trazables.",
+        "Inventario completo de vistas por módulo con propósito, patrón, roles, entrada, salida, datos y acciones.",
+        "Matriz pantalla × rol, sitemap sin huérfanas y recorridos críticos con caminos feliz, alterno, error e interrupción.",
+        "Hallazgos de usabilidad por heurística y preguntas abiertas de negocio con dueño/bloqueo; simulaciones separadas de evidencia real.",
+        "Lista de capacidades UX necesarias frente a disponibles, con comprobación, responsable y brechas no verificadas."
+      ],
+      "feeds_map": [
+        "Core system-map: celda D04, arquitectura de información, vistas, roles y recorridos; ruta y estructura actuales no verificadas.",
+        "Matriz de módulos y dependencias: vistas que afectan D05 diseño, D06 estados, D07 accesibilidad, D08 contenido y D14 QA.",
+        "Mapa de actores, tareas y evidencia UX enlazado a requisitos, aceptación y contratos."
+      ],
+      "notify": [
+        "D01/D02: reglas, vocabulario, prioridades o roles sin validar que bloquean recorridos.",
+        "D05: inventario, patrones por vista, referencias, componentes candidatos y hallazgos que condicionan el diseño.",
+        "D06/D07/D14: errores, permisos, estados faltantes y escenarios de usabilidad/accesibilidad para estados y pruebas.",
+        "D08: estructura de contenido, etiquetas de dominio, búsquedas y necesidades de idioma/SEO observadas.",
+        "D22: fuentes, procedencia, fecha, contradicciones y lecciones UX reutilizables."
+      ],
+      "refresh": "Reinvestigar si cambia vertical, país, audiencia, objetivo, roles, módulo, canal, integración o normativa; actualizar referencias y expectativas al iniciar cada fase de diseño y cuando datos de soporte/analítica contradigan la hipótesis vigente.",
+      "anti_patterns": [
+        "Diseñar solo la pantalla solicitada sin inventariar el módulo, administración, configuración y estados.",
+        "Inferir roles, reglas, tareas o estándares del mercado desde una demo o un competidor.",
+        "Confundir simulación o benchmark con investigación directa de usuarios.",
+        "Copiar navegación de un referente sin contrastarla con tareas y contexto locales.",
+        "Entregar vistas huérfanas, formularios extensos sin segmentar o recorridos sin error y salida.",
+        "Decidir estética/tokens finales de D05 o reglas de negocio reservadas a D01/D02.",
+        "Afirmar disponibilidad de navegador, PXIL, MCP o datos de usuario sin comprobación del host."
+      ]
+    },
+    "D05": {
+      "focus": "Volverme especialista en la experiencia visual y el sistema de diseño que mejor resuelven las tareas, expectativas y restricciones del mercado específico del producto.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué tipo de producto es, quién lo usa y qué tareas necesita completar?",
+        "¿En qué país y mercado se ofrece, y qué idiomas, formatos y convenciones locales debe cubrir?",
+        "¿Qué marca, posicionamiento y restricciones visuales aprobó D02?",
+        "¿Qué páginas, pantallas y patrones esperan los usuarios de productos comparables?",
+        "¿Qué recorridos, vistas, datos y roles documentó D04?",
+        "¿Qué requisitos de accesibilidad, dispositivos y condiciones de uso aplican?",
+        "¿Qué estados, contenido y mensajes entregan D06 y D08?",
+        "¿Qué sistema visual, componentes, stack y herramientas existen ya en el proyecto?",
+        "¿Qué estándares o normas locales afectan la presentación de datos y formularios?"
+      ],
+      "research": [
+        {
+          "what": "Patrones de páginas, navegación, densidad, formularios y funciones visibles en productos comparables; registrar diferencias por audiencia y tarea.",
+          "sources": [
+            "competidores directos",
+            "productos líderes del mismo arquetipo",
+            "investigación de D21 si está disponible"
+          ]
+        },
+        {
+          "what": "Convenciones de interacción, formatos locales y requisitos de accesibilidad relevantes para las vistas.",
+          "sources": [
+            "normativa y estándares oficiales del país",
+            "W3C WCAG",
+            "fuentes oficiales de formatos locales"
+          ]
+        },
+        {
+          "what": "Compatibilidad, comportamiento y licencias de componentes candidatos antes de recomendar reutilización.",
+          "sources": [
+            "biblioteca del proyecto",
+            "documentación oficial del framework",
+            "catálogos como shadcn y 21st.dev"
+          ]
+        },
+        {
+          "what": "Marca y dirección estética disponibles, distinguiendo decisiones aprobadas de referencias o propuestas.",
+          "sources": [
+            "guías y activos de marca entregados por D02 o Wilber",
+            "referencias visuales identificadas por el proyecto"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar expectativas de patrones repetidos entre competidores y productos líderes del mismo tipo; citar ejemplos observados y separar observación de propuesta.",
+        "Comparar cobertura de tareas y estados, no solo semejanza visual: navegación, búsqueda, filtros, formularios, errores, permisos y adaptación móvil según aplique.",
+        "Contrastar necesidades locales de idioma, moneda, fecha, entrada de datos y accesibilidad con fuentes verificables.",
+        "Proponer un valor diferencial coherente con la marca y el negocio; validar prioridades con D02 y no convertir tendencias en requisitos."
+      ],
+      "capabilities": [
+        {
+          "name": "viltrum-ui-design-system y supporting skills PXIL",
+          "kind": "skill",
+          "why": "Estructurar tokens, componentes, composición, trazabilidad y verificación visual.",
+          "check": "Inspeccionar el manifest y skills disponibles del host; que aparezcan en el paquete no demuestra que estén instaladas o activas."
+        },
+        {
+          "name": "21st-cli-use / catálogo 21st.dev",
+          "kind": "herramienta",
+          "why": "Buscar componentes reutilizables y comparar alternativas.",
+          "check": "Comprobar CLI, acceso al catálogo y conectividad; verificar licencia y costo antes de adoptar herramientas externas."
+        },
+        {
+          "name": "Figma y Figma MCP",
+          "kind": "mcp",
+          "why": "Consultar o sincronizar archivos de diseño cuando el proyecto los use.",
+          "check": "Comprobar MCP disponible, acceso autorizado al archivo y permisos; disponibilidad no verificada para este entorno."
+        },
+        {
+          "name": "Playwright y navegador",
+          "kind": "herramienta",
+          "why": "Renderizar y capturar vistas en anchos y preferencias relevantes.",
+          "check": "Comprobar runtime, navegador y una vista ejecutable del proyecto; no afirmar pruebas sin capturas."
+        },
+        {
+          "name": "Datos de mercado, marca y requisitos locales",
+          "kind": "dato",
+          "why": "Ajustar patrones y formatos a negocio, audiencia, país y producto.",
+          "check": "Revisar mandato, entregas D01/D02/D04 y fuentes citadas; solicitar a Wilber los datos ausentes."
+        },
+        {
+          "name": "Stack, tokens y biblioteca existentes",
+          "kind": "stack",
+          "why": "Mapear el sistema visual a componentes y convenciones que el producto ya puede mantener.",
+          "check": "Inspeccionar manifiestos, dependencias, tokens y biblioteca del repositorio; disponibilidad específica del proyecto no verificada."
+        }
+      ],
+      "outputs": [
+        "Expediente de expertise con tipo de producto, audiencia, mercado, país, expectativas observadas, fuentes y cuestiones no verificadas.",
+        "Inventario comparativo de patrones de páginas y componentes, con procedencia, licencia y recomendación de reutilizar, adaptar o crear.",
+        "Dirección creativa propuesta y decisiones pendientes de marca o negocio remitidas a D02/D01.",
+        "Requisitos visuales por vista y rol, enlazados a recorridos D04, estados D06, contenido D08 y nodos pertinentes del mapa.",
+        "Necesidades de skills, herramientas, conexiones, accesos y stack, con comprobación de disponibilidad y alternativas.",
+        "Supuestos, riesgos, límites de evidencia y preguntas abiertas para el siguiente handoff."
+      ],
+      "feeds_map": [
+        "Meta, requisito, módulo, función, pantalla y componente: intención visual, jerarquía, variantes y trazabilidad.",
+        "Comportamiento y estado: especificación visual coordinada con D06, incluidos carga, vacío, error, desconexión, éxito y permisos cuando apliquen.",
+        "Rol y permisos: visibilidad y presentación de controles según reglas recibidas; no definir reglas de negocio.",
+        "Prueba de aceptación: condiciones visuales y responsive observables, con evidencia y anchos inspeccionados.",
+        "Reutilización: decisión de adoptar, adaptar, crear o no aplicar, sujeta a búsqueda y verificación de licencia."
+      ],
+      "notify": [
+        "D04: brechas entre recorridos, datos por vista o wireframes recibidos y páginas que el análisis de mercado sugiere considerar.",
+        "D02: referencias, expectativas de marca y decisiones de dirección creativa que requieren prioridad o validación.",
+        "D06 y D08: necesidades de estados, mensajes y contenido que condicionan la composición visual.",
+        "D07: riesgos de accesibilidad visual o interacción que requieren revisión independiente.",
+        "D09: tokens, componentes, variantes y especificaciones implementables tras los gates aplicables.",
+        "D21: candidatos externos cuya viabilidad, mantenimiento o licencia requieran investigación."
+      ],
+      "refresh": "Reinvestigar cuando cambien país, audiencia, arquetipo, marca, recorridos, stack o integraciones; revisar expectativas al abrir una nueva fase o añadir vistas críticas. Fechas de revisión periódica: por definir con el mandato del proyecto.",
+      "anti_patterns": [
+        "Inferir páginas o recorridos sin el inventario y los wireframes requeridos de D04.",
+        "Tomar una tendencia aislada o un competidor como estándar de todo el mercado.",
+        "Confundir una referencia visual con una decisión aprobada de marca o negocio.",
+        "Diseñar solo el estado feliz o validar el diseño únicamente en escritorio.",
+        "Crear componentes antes de inspeccionar la biblioteca propia, el framework y los catálogos.",
+        "Recomendar dependencias sin verificar compatibilidad, licencia, mantenimiento, costo y disponibilidad.",
+        "Presentar herramientas, accesos, mediciones o capturas como disponibles sin evidencia.",
+        "Convertir patrones visuales en reglas de negocio o arquitectura de información.",
+        "Declarar aprobada la propia entrega o tratar una evaluación no ejecutada como validación."
+      ]
+    },
+    "D06": {
+      "focus": "Al iniciar cada proyecto, dominar los estados, errores y rutas de recuperación propios del flujo de usuario de ese producto, según sus roles, reglas de negocio, país y riesgo.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué tipo de producto y vertical es, en qué país o mercado opera y quiénes son sus usuarios?",
+        "¿Qué tareas críticas realizan los usuarios y qué resultados espera el negocio?",
+        "¿Qué pantallas, acciones, roles y caminos alternos inventarió D04?",
+        "¿Qué componentes y variantes definió D05?",
+        "¿Qué estados de carga, vacío, error, desconexión, éxito y permisos corresponden a cada pantalla?",
+        "¿Qué errores, tiempos de espera, límites de peticiones y resultados parciales pueden ocurrir en los contratos reales?",
+        "¿Qué debe pasar ante sesión expirada, pérdida de conexión, edición concurrente o permiso revocado?",
+        "¿Qué datos pueden conservarse como borrador y qué acciones requieren confirmación o reversión?",
+        "¿Qué comportamientos espera el mercado en este flujo y cuáles serían una mejora útil sin contradecir el negocio?"
+      ],
+      "research": [
+        {
+          "what": "Patrones de flujo, pantallas, estados de recuperación y microinteracciones para productos comparables del mismo vertical.",
+          "sources": [
+            "productos competidores",
+            "documentación pública de producto",
+            "investigación de usuarios del proyecto si existe"
+          ]
+        },
+        {
+          "what": "Normas y convenciones que condicionan formularios, mensajes, permisos, sesión y conservación de datos.",
+          "sources": [
+            "normativa del país (no verificado)",
+            "políticas del proyecto",
+            "D12 y D01"
+          ]
+        },
+        {
+          "what": "Contratos y restricciones que determinan los estados reales, reintentos, idempotencia, conflictos y borradores.",
+          "sources": [
+            "recorridos y matriz de roles D04",
+            "composición D05",
+            "garantías D10/D19",
+            "reglas D11",
+            "política D12"
+          ]
+        },
+        {
+          "what": "Capacidad disponible para especificar y reproducir los estados en un entorno autorizado.",
+          "sources": [
+            "departments/D06-ux-states/AGENTS.md",
+            "departments/D06-ux-states/delivery.json",
+            "registry/toolchain.json",
+            "skills disponibles y capacidades del host"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Comparar flujos equivalentes de productos del mismo tipo; registrar evidencia observable y separar convenciones comunes de decisiones propias de cada competidor.",
+        "Contrastar patrones con tareas, roles, mercado y restricciones confirmados por D01/D02; no tratar una función popular como requisito sin validar su pertinencia.",
+        "Proponer mejoras sobre recuperación, claridad de errores, progreso, permisos y prevención de pérdida de trabajo; marcar hipótesis hasta validarlas."
+      ],
+      "capabilities": [
+        {
+          "name": "viltrum-ux-states y contrato PXIL",
+          "kind": "skill",
+          "why": "Estructurar matriz de estados, errores, recuperación y trazabilidad de experiencia.",
+          "check": "Comprobar la skill local y las referencias en departments/D06-ux-states/AGENTS.md; AGENTS.md instruye cargar viltrum-pxil-design y consultar registry/design-resources.json."
+        },
+        {
+          "name": "Playwright",
+          "kind": "herramienta",
+          "why": "Reproducir en navegador errores, desconexión y recorridos de estados después de implementados.",
+          "check": "Comprobar runner, navegador, staging autorizado y cuentas/datos sintéticos; registry/toolchain.json lo registra como candidate, disabled y no_access_granted (registro leído; disponibilidad actual no verificada). Verificar licencia y costo antes de adoptar."
+        },
+        {
+          "name": "Acceso a build de prueba, escenarios y cuentas con roles",
+          "kind": "acceso",
+          "why": "Verificar estados reales sin afectar datos o usuarios de producción.",
+          "check": "Confirmar con D00/Wilber el entorno autorizado, actores, roles y dataset; no inferir acceso por la presencia de un candidato en el catálogo."
+        },
+        {
+          "name": "Contratos API, política de borradores y reglas de concurrencia",
+          "kind": "dato",
+          "why": "Evitar prometer reintentos seguros, persistencia o resolución de conflictos sin garantías del sistema.",
+          "check": "Solicitar entregas vigentes a D10/D19, D11 y D12; si faltan, registrar pregunta abierta y escalar."
+        },
+        {
+          "name": "XState",
+          "kind": "herramienta",
+          "why": "Candidato para formalizar estados y eventos si el proyecto lo necesita.",
+          "check": "Solo candidato en registry/toolchain.json, deshabilitado y sin acceso concedido; verificar compatibilidad, licencia y costo antes de adoptar."
+        }
+      ],
+      "outputs": [
+        "Expediente de dominio con vertical, producto, mercado, país, roles, fuentes, supuestos y preguntas abiertas; separar hechos verificados de hipótesis.",
+        "Matriz pantalla × estado enlazada al inventario D04 y composición D05, con inaplicabilidades justificadas.",
+        "Catálogo de mensajes y recuperación, contratos requeridos, casos de sesión, concurrencia, desconexión, permisos y acciones reversibles.",
+        "Plan por escenario para verificar en ejecución, indicando entorno, prerrequisitos y evidencia; distinguir especificado, implementado y reproducido.",
+        "Recomendaciones de patrón esperado y mejoras propuestas, con procedencia y validación pendiente."
+      ],
+      "feeds_map": [
+        "Mapa maestro: experiencia de usuario → flujos, pantallas, roles, estados, recuperación y criterios de verificación.",
+        "Mapa maestro: riesgos de pérdida de datos, sesión, concurrencia, permisos y dependencias D10/D11/D12/D19."
+      ],
+      "notify": [
+        "D04: pantallas o caminos alternos insuficientes para completar estados.",
+        "D05: variantes de componentes y patrones de carga/error requeridos por el dominio.",
+        "D07: estados que requieren comunicación accesible y verificación asistiva.",
+        "D09: especificación de estados, reversión y condiciones reproducibles.",
+        "D10/D19: falta de garantías de timeout, reintento, idempotencia o resultado incierto.",
+        "D11: estrategia de conflicto o consistencia sin definir.",
+        "D12: límites de conservación de borradores, sesión o datos sensibles.",
+        "D14: matriz y escenarios listos para revisión independiente; D06 no se autoaprueba."
+      ],
+      "refresh": "Reinvestigar si cambia vertical, país, mercado, roles, flujo, política de datos o integración; revisar en cada fase cuando cambien contratos o aparezcan resultados de pruebas, y volver a contrastar patrones antes de ampliar alcance.",
+      "anti_patterns": [
+        "Aplicar patrones SaaS genéricos sin revisar el flujo y los productos comparables del vertical.",
+        "Completar estados inventando recorridos, garantías API o reglas de negocio ausentes.",
+        "Confundir una propuesta de patrón con una expectativa de mercado validada.",
+        "Prometer que un reintento no duplica una escritura sin garantía de idempotencia.",
+        "Conservar secretos o datos cuyo acceso fue revocado en borradores.",
+        "Documentar errores y desconexión como si se hubieran reproducido.",
+        "Tratar un candidato del toolchain como herramienta instalada, conectada o autorizada.",
+        "Usar solo color, códigos técnicos o un spinner genérico para explicar un estado."
+      ]
+    },
+    "D07": {
+      "focus": "Volverme experto en las barreras de accesibilidad propias del producto, sus usuarios y su mercado, y verificar la experiencia contra WCAG 2.2 A/AA con evidencia automática y manual.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué producto, vertical, tareas críticas y perfiles de usuario se atienden?",
+        "¿En qué países y bajo qué normas de accesibilidad debe operar?",
+        "¿Qué tecnologías de asistencia, dispositivos, navegadores e idiomas son relevantes para esos usuarios?",
+        "¿Qué recorridos, roles, pantallas y estados son críticos, incluidos errores, carga, vacío y confirmación?",
+        "¿Hay autenticación, pagos, formularios extensos, contenido multimedia o acciones irreversibles?",
+        "¿Qué compromisos de accesibilidad, auditorías o declaración formal exige el contrato?",
+        "¿Qué tecnologías de asistencia y entornos de prueba están disponibles y autorizados?"
+      ],
+      "research": [
+        {
+          "what": "Criterios WCAG aplicables, requisitos legales locales y alcance contractual; separar requisitos técnicos de declaraciones formales de conformidad.",
+          "sources": [
+            "W3C WCAG 2.2 y Understanding WCAG",
+            "normativa oficial del país (por identificar)",
+            "contrato y requisitos del cliente"
+          ]
+        },
+        {
+          "what": "Patrones accesibles y barreras comunes en productos equivalentes, especialmente en recorridos críticos del mismo vertical.",
+          "sources": [
+            "productos competidores y referentes directos",
+            "documentación de accesibilidad de proveedores",
+            "informes públicos de auditoría, si existen"
+          ]
+        },
+        {
+          "what": "Comportamiento de componentes y patrones de interacción con tecnología asistiva.",
+          "sources": [
+            "WAI-ARIA Authoring Practices Guide",
+            "documentación oficial de navegador y tecnología asistiva",
+            "pruebas manuales del producto"
+          ]
+        },
+        {
+          "what": "Compatibilidad y disponibilidad de herramientas para el stack concreto.",
+          "sources": [
+            "manifiestos y configuración del proyecto",
+            "catálogo registry/toolchain.json",
+            "comprobación del host y del entorno autorizado"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Comparar tareas equivalentes en productos del mismo vertical y registrar patrones comunes sin asumir que popularidad implica accesibilidad.",
+        "Contrastar expectativas del mercado con WCAG aplicable, obligaciones del país y necesidades de usuarios; marcar jurisdicción y evidencia faltantes como no verificado.",
+        "Probar flujos y estados reales con teclado y lector de pantalla; un escaneo automático no demuestra conformidad."
+      ],
+      "capabilities": [
+        {
+          "name": "WCAG 2.2 A/AA y auditoría manual con teclado y lector de pantalla",
+          "kind": "skill",
+          "why": "Evaluar barreras que un escáner no determina, como orden de foco y anuncios de cambios.",
+          "check": "Leer departments/D07-accessibility/AGENTS.md y la checklist activa; confirmar alcance, navegador y lector disponibles."
+        },
+        {
+          "name": "axe-core",
+          "kind": "herramienta",
+          "why": "Detectar problemas automatizables en rutas, componentes y estados.",
+          "check": "Candidato en registry/toolchain.json, no disponible confirmado; verificar instalación, versión, integración y licencia/costo antes de adoptarlo."
+        },
+        {
+          "name": "Playwright",
+          "kind": "herramienta",
+          "why": "Automatizar recorridos reproducibles cuando el proyecto y el runner lo permitan.",
+          "check": "Candidato en registry/toolchain.json, no disponible confirmado; comprobar runner, navegador y entorno autorizado."
+        },
+        {
+          "name": "Rutas, estados y datos de prueba autorizados",
+          "kind": "acceso",
+          "why": "Probar la matriz real sin exponer datos personales ni afectar producción.",
+          "check": "Solicitar a D00/propietario el staging, roles y datos sintéticos autorizados; disponibilidad no verificada."
+        },
+        {
+          "name": "Tecnología asistiva de referencia",
+          "kind": "herramienta",
+          "why": "Escuchar etiquetas, errores y cambios de estado en ejecución.",
+          "check": "Confirmar lector y navegador por plataforma con el host; NVDA+Chrome y VoiceOver+Safari son referencias, no disponibilidad confirmada."
+        }
+      ],
+      "outputs": [
+        "Expediente del dominio: producto, vertical, países, usuarios, recorridos y requisitos de accesibilidad, con fuentes y desconocidos explícitos.",
+        "Plan y matriz WCAG A/AA por pantalla, rol y estado; distinguir automático, manual y no verificado.",
+        "Hallazgos reproducibles con criterio, ubicación, severidad, evidencia y departamento responsable.",
+        "Registro de pruebas manuales de teclado y lector, herramientas/versiones, límites y retest pendiente.",
+        "Necesidades de herramientas, accesos y stack frente a lo disponible; candidatos externos sujetos a verificación de licencia y costo."
+      ],
+      "feeds_map": [
+        "Celdas de D07 sobre criterios WCAG, barreras, recorridos/estados, evidencia, herramientas y dependencias; nombres exactos de nodos/celdas no verificados en esta revisión."
+      ],
+      "notify": [
+        "D00: jurisdicción, riesgos, accesos pendientes y efecto en gates.",
+        "D04: recorridos críticos que requieren cobertura o ajustes.",
+        "D05: barreras de composición, contraste, foco y objetivos táctiles.",
+        "D06: etiquetas, errores, ayuda y anuncios de estados.",
+        "D09: correcciones de implementación y condiciones de retest.",
+        "D14: evidencia, cobertura manual/automática y revisión independiente.",
+        "D08: texto alternativo, etiquetas o mensajes cuyo tono de marca requiera decisión editorial."
+      ],
+      "refresh": "Al cambiar país, vertical, usuarios, recorridos, estados, tecnología asistiva, integración o requisito contractual; repetir la revisión en cada fase con cambio relevante y antes de G3/G5.",
+      "anti_patterns": [
+        "Tratar un escaneo sin errores como prueba de conformidad.",
+        "Revisar solo el estado feliz o solo la interfaz visual.",
+        "Atribuir a una herramienta o lector disponibilidad no comprobada.",
+        "Aplicar una obligación legal sin verificar país, alcance y fuente oficial.",
+        "Mezclar recomendaciones AAA con requisitos AA sin identificarlas.",
+        "Declarar conformidad formal sin alcance, evidencia completa y autorización contractual."
+      ]
+    },
+    "D08": {
+      "focus": "Volverme experto en cómo el negocio, su mercado y sus usuarios encuentran, entienden y convierten en acción el contenido público, respetando SEO técnico, consentimiento y privacidad.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué vertical, producto, países, idiomas y mercados atiende el proyecto, y qué fuentes lo confirman?",
+        "¿Quién busca cada página, qué necesita saber y qué acción de negocio debe poder completar?",
+        "¿Qué páginas son públicas e indexables, y qué rutas requieren acceso o deben excluirse de búsqueda?",
+        "¿Qué competidores y referentes del mismo mercado cubren las mismas búsquedas y recorridos?",
+        "¿Qué afirmaciones, cifras, testimonios y marcas tienen fuente, propietario, fecha y autorización?",
+        "¿Qué objetivo y métrica de éxito fijó D02, y qué pasos del embudo necesitan medición?",
+        "¿Qué datos recogen formularios o analítica, dónde se procesan, cuánto se conservan y quién confirmó la política?",
+        "¿Qué consentimiento está implementado y bloquea scripts de analítica o marketing hasta que exista?",
+        "¿Qué stack, CMS, accesos autorizados y herramientas disponibles permiten verificar páginas y eventos?"
+      ],
+      "research": [
+        {
+          "what": "Inspeccionar páginas, intención de búsqueda, contenido, metadatos, indexación y recorridos comparables; separar patrones observados de propuestas.",
+          "sources": [
+            "sitios y documentación pública de competidores directos",
+            "productos sustitutos",
+            "brief, sitemap y artefactos autorizados del proyecto",
+            "documentación oficial de buscadores y schema.org"
+          ]
+        },
+        {
+          "what": "Contrastar afirmaciones, voz de marca y evidencia social antes de redactar contenido persuasivo.",
+          "sources": [
+            "fuentes primarias del negocio",
+            "materiales de marca aprobados",
+            "propietarios de testimonios y datos"
+          ]
+        },
+        {
+          "what": "Identificar obligaciones de privacidad, cookies y transferencias aplicables sin emitir dictamen legal.",
+          "sources": [
+            "normativa y reguladores oficiales del país",
+            "D11 para recolección y retención real",
+            "D12 y asesoría legal para interpretación"
+          ]
+        },
+        {
+          "what": "Revisar rendimiento observado y límites de medición; distinguir datos de campo de laboratorio.",
+          "sources": [
+            "telemetría autorizada",
+            "D15/D09",
+            "documentación oficial de métricas web"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Comparar referentes del mismo vertical, país, idioma e intención; registrar fecha, páginas revisadas y límites de acceso.",
+        "Extraer patrones recurrentes de arquitectura de información, contenido, metadatos y CTA; proponerlos como requisitos, sujetos a decisión de D02.",
+        "Comprobar que cada página pública responda a la intención y que su recorrido móvil conserve promesa, prueba, condiciones y acción principal.",
+        "Tratar accesibilidad, consentimiento y veracidad de afirmaciones como criterios de revisión, no como extras de conversión."
+      ],
+      "capabilities": [
+        {
+          "name": "Skill viltrum-content-seo y checklists D08",
+          "kind": "skill",
+          "why": "Aplicar el orden de SEO técnico, contenido, conversión, consentimiento y handoff.",
+          "check": "Verificar departments/D08-content-seo/delivery.json y checklists/content-conversion.md y seo-technical.md; disponibilidad en el host (no verificado)."
+        },
+        {
+          "name": "Skill browser-automation / playwright-cli",
+          "kind": "skill",
+          "why": "Inspeccionar contenido y metadatos publicados por ruta y viewport.",
+          "check": "Comprobar skill y navegador disponibles en el host; el catálogo no acredita acceso al sitio del proyecto."
+        },
+        {
+          "name": "Acceso de solo lectura a sitio, sitemap y entorno de previsualización",
+          "kind": "acceso",
+          "why": "Verificar rutas, canonical, robots, hreflang, schema y comportamiento del consentimiento.",
+          "check": "Confirmar URL y alcance autorizado con Wilber/D00; disponibilidad por proyecto (no verificado)."
+        },
+        {
+          "name": "Objetivos, afirmaciones y métricas aprobados",
+          "kind": "dato",
+          "why": "Alinear cada pieza y evento con estrategia real sin decidir prioridades de negocio.",
+          "check": "Solicitar handoff de D02 y fuentes con propietario; si faltan, dejar CTA/eventos pendientes."
+        },
+        {
+          "name": "Inventario de datos y consentimiento",
+          "kind": "dato",
+          "why": "Evitar redactar política o instrumentar eventos que no reflejen la recolección real.",
+          "check": "Revisar artefactos autorizados de D11/D12 y verificar banner/scripts en el sitio; evidencia actual del proyecto (no verificado)."
+        },
+        {
+          "name": "Investigación web",
+          "kind": "herramienta",
+          "why": "Contrastar referentes y normativa vigente del mercado identificado.",
+          "check": "Confirmar capacidad web del host; registrar fuentes y fecha. No se afirma una conexión MCP disponible."
+        }
+      ],
+      "outputs": [
+        "Expediente D08 con vertical, mercado, audiencias, intención por página, glosario y preguntas abiertas; cada hecho con fuente o marcado como no verificado.",
+        "Matriz por ruta de indexabilidad, metadatos, contenido, afirmaciones, CTA, prueba social y brechas.",
+        "Propuestas de contenido y SEO con procedencia, objetivo de negocio y decisiones pendientes de D02.",
+        "Catálogo de eventos por paso del embudo, dato mínimo, disparador y dependencia de consentimiento; estado de medición explícito.",
+        "Revisión de formularios, privacidad y consentimiento coordinada con D11/D12, con asuntos para asesoría legal cuando corresponda.",
+        "Capacidades requeridas, estado available/missing/unknown, comprobación y responsable; handoff implementable a D09."
+      ],
+      "feeds_map": [
+        "GOAL/REQ: audiencia, intención, promesa, objetivo, fuentes y criterios de contenido.",
+        "Pantalla/página: copy, metadatos, canonical, indexación, CTA y evidencia.",
+        "Evento/analítica: pasos del embudo, disparadores, consentimiento y datos mínimos.",
+        "Legal/datos: formularios, avisos, retención y dependencias de privacidad."
+      ],
+      "notify": [
+        "D00: cambio de vertical, mercado, alcance, riesgo, integraciones o capacidad faltante.",
+        "D02: patrones observados, propuestas de contenido/conversión, evidencia y decisiones de prioridad pendientes.",
+        "D04/D05/D06: necesidades de contenido por página, jerarquía de CTA y microcopy/estados coherentes.",
+        "D09: especificación SEO, schema y eventos; problemas observados en páginas implementadas.",
+        "D11/D12: datos recogidos, retención, consentimiento y jurisdicciones por confirmar.",
+        "D07/D15: alternativas de texto, Core Web Vitals medidos o pendientes."
+      ],
+      "refresh": "Reiniciar si cambia vertical, país, idioma, marca, sitemap, objetivo de conversión, consentimiento, datos, integración o stack; revalidar fuentes y métricas antes de cada gate dependiente.",
+      "anti_patterns": [
+        "Redactar antes de comprobar indexabilidad, audiencia y propósito de la página.",
+        "Convertir prácticas de competidores en requisitos aprobados o copiar afirmaciones sin fuente y autorización.",
+        "Inventar objetivo, CTA o evento sin métrica de D02 y catálogo estable.",
+        "Dar por disponible una herramienta, acceso, CMP o conexión porque figura en un manifiesto.",
+        "Cargar analítica o marketing antes de verificar consentimiento; declarar cumplimiento legal sin asesoría competente.",
+        "Confundir datos de laboratorio con métricas de campo o atribuir causalidad con muestra insuficiente.",
+        "Aprobar el trabajo propio o cerrar celdas del mapa sin revisión independiente."
+      ]
+    },
+    "D09": {
+      "focus": "Volverse experto en cómo debe ejecutarse en el cliente la experiencia de este producto y vertical, convirtiendo los contratos y diseños aprobados en interfaces tipadas, resilientes, seguras y verificables.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué tipo de producto, vertical, mercado, país, idiomas y dispositivos cubre el proyecto?",
+        "¿Quiénes usan cada recorrido, con qué objetivos y qué barreras de conectividad o capacidad tienen?",
+        "¿Qué páginas, flujos y patrones de interfaz son estándar en productos competidores comparables?",
+        "¿Qué expectativas de interacción, respuesta, accesibilidad y soporte móvil tiene ese mercado?",
+        "¿Qué estados, roles, permisos y reglas llegan definidos por D03, D05, D06, D08 y D10?",
+        "¿Qué datos sensibles toca el navegador y qué límites aplican a su almacenamiento, exposición y sesión?",
+        "¿Qué requisitos locales afectan formatos, máscaras, moneda, fechas, idioma o conectividad?",
+        "¿Qué framework, sistema de diseño, i18n, caché, pruebas y contratos ya existen en el repositorio?",
+        "¿Qué dependencias faltan para implementar y verificar la interfaz, y quién puede habilitarlas?"
+      ],
+      "research": [
+        {
+          "what": "Recorridos y patrones de interacción en productos del mismo vertical, tipo de producto y mercado; registrar patrones comunes y oportunidades de diferenciación para evaluación de producto/diseño.",
+          "sources": [
+            "productos competidores y referentes identificados para el proyecto",
+            "capturas y recorridos accesibles",
+            "expediente de dominio y especificaciones D04/D05"
+          ]
+        },
+        {
+          "what": "Estándares técnicos de accesibilidad, seguridad del navegador, formularios y rendimiento pertinentes a los flujos.",
+          "sources": [
+            "WCAG vigente y documentación W3C",
+            "OWASP Cheat Sheets",
+            "documentación oficial del framework y librerías realmente adoptadas"
+          ]
+        },
+        {
+          "what": "Reglas locales que cambian cómo se representan o capturan datos en cliente; no interpretar requisitos legales fuera del contrato del departamento responsable.",
+          "sources": [
+            "normativa oficial del país",
+            "catálogos y contratos aprobados por D03/D10",
+            "especificaciones de D05 y negocio"
+          ]
+        },
+        {
+          "what": "Arquitectura de frontend existente, componentes reutilizables, adaptadores, configuración y automatización disponible.",
+          "sources": [
+            "repositorio y mapa de código con viltrum repo-*",
+            "registry/toolchain.json",
+            "manifest y delivery.json de D09"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Comparar recorridos equivalentes de varios referentes: navegación, búsqueda, filtros, formularios, confirmaciones y recuperación ante errores; separar convenciones repetidas de rasgos propios de marca.",
+        "Contrastar cada expectativa con evidencia del mercado y con los seis estados, permisos, teclado, móvil, red lenta y recuperación definidos para el proyecto; proponer requisitos priorizados, no incorporarlos como alcance aprobado.",
+        "Registrar el plus de experiencia como propuesta revisable por D04/D05 y Wilber, sin inventar copy, catálogos ni reglas de negocio."
+      ],
+      "capabilities": [
+        {
+          "name": "Especificación de experiencia y contratos",
+          "kind": "dato",
+          "why": "D09 implementa la UI aprobada; necesita diseños, flujos, contratos, estados, permisos, schemas y criterios de aceptación coherentes.",
+          "check": "Revisar artefactos de handoff D03-D08/D10 y estado de C1; confirmar vigencia con el owner si hay discrepancias."
+        },
+        {
+          "name": "Mapa y exploración del repositorio",
+          "kind": "herramienta",
+          "why": "Identificar framework, estructura, componentes existentes e impacto antes de proponer cambios.",
+          "check": "Comprobar disponibilidad de viltrum repo-* y acceso autorizado al repositorio; consultar registry/toolchain.json."
+        },
+        {
+          "name": "Skill local de frontend",
+          "kind": "skill",
+          "why": "Aplicar el procedimiento de entrega propio de D09.",
+          "check": "Verificar el manifest de D09 y que viltrum-frontend esté disponible en el entorno de ejecución."
+        },
+        {
+          "name": "Sistema de diseño y PXIL",
+          "kind": "herramienta",
+          "why": "Reutilizar componentes aprobados y comprobar su ajuste visual, responsive, estados y licencia.",
+          "check": "Consultar registry/design-resources.json y acceso a la galería PXIL; disponibilidad por proyecto (no verificado)."
+        },
+        {
+          "name": "Navegador y pruebas aisladas",
+          "kind": "herramienta",
+          "why": "Inspeccionar estados y anchos de pantalla y probar componentes sin depender de lógica real del servidor.",
+          "check": "Comprobar browser/runtime y comandos de pruebas en el proyecto; capabilities del contrato D09 no prueban que estén habilitados en cada ejecución."
+        },
+        {
+          "name": "Accesibilidad y rendimiento especializado",
+          "kind": "mcp",
+          "why": "Complementar implementación de D09 con auditoría manual de D07 y medición de campo de D15; no asumir que D09 sustituye esas revisiones.",
+          "check": "Confirmar herramientas y conexiones concedidas para el proyecto con D07/D15; disponibilidad de MCP (no verificado)."
+        },
+        {
+          "name": "Stack de cliente",
+          "kind": "stack",
+          "why": "Framework, compilador, i18n, caché, schemas y estrategia de sesión deben ajustarse a decisiones aprobadas y contratos compartidos.",
+          "check": "Inspeccionar package manifests, configuración TypeScript y dependencias; pedir decisión a D03 si el stack o arquitectura modular no están definidos."
+        }
+      ],
+      "outputs": [
+        "Expediente D09 con respuestas sustentadas, glosario de interacción y diferencias relevantes por vertical, mercado, país y dispositivo.",
+        "Inventario de recorridos y patrones observados, con fuentes, fecha y límites de verificación.",
+        "Matriz de expectativas del mercado: evidencia, propuesta priorizada, impacto frontend y departamento que debe aceptar el alcance.",
+        "Inventario de capacidades requeridas y estado available/missing/unknown, método de comprobación y responsable de resolver brechas.",
+        "Implicaciones frontend para nodos del mapa: pantallas, comportamientos, estados, permisos, datos, integraciones y pruebas; celdas D09 quedan propuestas, nunca auto-validadas.",
+        "Riesgos y dependencias del cliente: datos sensibles, resiliencia, internacionalización, accesibilidad, rendimiento y contratos faltantes, con handoffs."
+      ],
+      "feeds_map": [
+        "Pantalla, comportamiento, componente y prueba de aceptación: requisitos de interfaz vinculados a nodos upstream y contratos.",
+        "Integración, rol y permisos: consumo en cliente únicamente de contratos aprobados; indicar dependencia de D03/D10/D12.",
+        "Operación: fallos de red, caché, carga, expiración de sesión y degradación visible, en coordinación con D15/D17.",
+        "Reutilización: candidato existente, decisión adopt/adapt/build/none y licencia por verificar, sin sustituir el gate P0."
+      ],
+      "notify": [
+        "D00: hallazgos del vertical que cambian nodos, prioridad, riesgo o departamentos activados.",
+        "D04/D05: convenciones de interacción, restricciones del mercado y oportunidades de experiencia sustentadas.",
+        "D03/D10: contratos, schemas, catálogos, permisos o datos necesarios ausentes o incompatibles.",
+        "D07/D14/D15/D12: necesidades de verificación de accesibilidad, cobertura, rendimiento y exposición en cliente."
+      ],
+      "refresh": "Al inicio del proyecto tras G0; al cambiar vertical, país, tipo de producto, mercado, marca, integración o contrato de UI; y al comenzar cada fase si cambian recorridos, estados o riesgos. Confirmar vigencia de fuentes antes de convertir hallazgos en propuestas.",
+      "anti_patterns": [
+        "Tratar referentes de otro país o vertical como prueba de expectativa local.",
+        "Confundir patrón de competidor con requisito aprobado o copiar su interfaz sin evaluar marca, accesibilidad y licencia.",
+        "Investigar solo la pantalla feliz: omitir carga, vacío, error, desconexión, éxito y permiso insuficiente.",
+        "Proponer componentes antes de revisar especificación D05, contratos D03/D10, repositorio y PXIL.",
+        "Inventar copy, máscaras, catálogos, roles o reglas de negocio para completar huecos.",
+        "Dar por disponible una skill, herramienta, MCP, acceso o stack por estar mencionado en un manifest.",
+        "Declarar seguridad, accesibilidad o rendimiento verificados cuando corresponden a D12, D07 o D15.",
+        "Presentar como hecho una observación sin fuente, fecha o alcance comprobable."
+      ]
+    },
+    "D10": {
+      "focus": "Volverme experto en las reglas de negocio, contratos de API, permisos y efectos operativos que el backend debe hacer cumplir en la vertical, mercado y país del proyecto.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué entidades, estados y transiciones definen el negocio, y qué reglas no puede el cliente saltarse?",
+        "¿Qué actores, roles, tenants y relaciones de propiedad limitan cada lectura y mutación?",
+        "¿Qué operaciones pueden repetirse, cobrar, notificar o producir otros efectos externos?",
+        "¿Qué datos personales, financieros o regulados procesa cada endpoint, y cuál es el riesgo R0–R4?",
+        "¿Qué volumen, concurrencia, paginación y límites de uso se esperan?",
+        "¿Qué país, monedas, zonas horarias, retención y normativa afectan las reglas del servidor?",
+        "¿Qué contratos de D03 y restricciones/diccionario de D11 están definidos o siguen pendientes?",
+        "¿Qué integraciones, fallos de terceros y tareas largas requieren cola, reintentos o estado consultable?"
+      ],
+      "research": [
+        {
+          "what": "Modelos de dominio, flujos de API y manejo de errores en productos comparables del mismo vertical.",
+          "sources": [
+            "documentación pública de competidores directos",
+            "documentación pública de API"
+          ]
+        },
+        {
+          "what": "Obligaciones aplicables a autenticación, privacidad, pagos, auditoría y retención según país y actividad.",
+          "sources": [
+            "normativa oficial del país",
+            "reguladores competentes",
+            "D12 para interpretación de controles"
+          ]
+        },
+        {
+          "what": "Controles verificables de API ajustados al riesgo: validación, autorización por objeto, idempotencia y errores seguros.",
+          "sources": [
+            "OWASP ASVS (versión a fijar con D12)",
+            "checklists D10 de autenticación y autorización"
+          ]
+        },
+        {
+          "what": "Contratos, stack, reglas persistentes, catálogos y capacidades ya disponibles en el proyecto.",
+          "sources": [
+            "contratos/ADR de D03",
+            "modelo y diccionario de D11",
+            "repositorio y configuración no secreta del proyecto"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Comparar endpoints y flujos de negocio de varios productos del mismo tipo; registrar patrones observados y fuente, sin convertirlos automáticamente en alcance.",
+        "Proponer como requisitos trazables la validación del servidor, aislamiento por recurso, idempotencia, paginación acotada y errores seguros cuando correspondan al dominio y riesgo.",
+        "Separar requisito regulatorio confirmado, expectativa observada y propuesta; marcar lo no comprobado."
+      ],
+      "capabilities": [
+        {
+          "name": "Contrato y validador OpenAPI",
+          "kind": "herramienta",
+          "why": "Acordar antes de implementar rutas, entradas, respuestas, errores, roles y efectos secundarios.",
+          "check": "Revisar contrato versionado del proyecto y comprobar CLI/validador realmente instalado; OpenAPI figura como candidato en registry/toolchain.json, no acredita disponibilidad."
+        },
+        {
+          "name": "Búsqueda de código Viltrum",
+          "kind": "herramienta",
+          "why": "Localizar handlers, validadores, permisos y dependencias existentes antes de proponer cambios.",
+          "check": "Comprobar viltrum repo-map y rg en PATH y contrastar resultado con el commit actual; validar acceso autorizado al repositorio."
+        },
+        {
+          "name": "Supabase/Postgres",
+          "kind": "stack",
+          "why": "Coordinar reglas que también requieren restricciones de datos con D11; Supabase es stack insignia, no requisito universal.",
+          "check": "Confirmar stack y versión en archivos del proyecto; verificar solo presencia de configuración, nunca imprimir secretos."
+        },
+        {
+          "name": "Entorno de pruebas aislado",
+          "kind": "acceso",
+          "why": "Probar permisos cruzados, concurrencia, reintentos e integraciones sin tocar producción.",
+          "check": "Confirmar sandbox/staging autorizado, datos sintéticos y alcance con Wilber/D14."
+        },
+        {
+          "name": "Documentación contextual",
+          "kind": "mcp",
+          "why": "Contrastar comportamiento de frameworks y librerías contra sus versiones usadas.",
+          "check": "Comprobar transporte, acceso y cuota de Context7; consta como candidato sin acceso concedido en registry/toolchain.json."
+        }
+      ],
+      "outputs": [
+        "Expediente D10 con vertical, reglas de dominio, endpoints/actores, riesgos, investigación y propuestas trazables.",
+        "Matriz de rutas: actor/permiso, pertenencia, validación, efectos, idempotencia, paginación, límites y errores.",
+        "Lista de capacidades necesarias frente a disponibles, missing o unknown, con método de comprobación; no asumir disponibilidad por catálogo.",
+        "Pendientes y dependencias explícitas para D03 (contratos/ADR), D11 (restricciones/diccionario) y D12 (revisión independiente de auth).",
+        "Referencias de base: departments/D10-backend/SOUL.md; AGENTS.md; checklists/authentication.md y authorization.md; core/routing.md; core/domain-immersion.md."
+      ],
+      "feeds_map": [
+        "Celdas D10 de reglas, endpoints/contratos, validación, roles/permisos, entidades relacionadas, integraciones, notificaciones, aceptación y operación.",
+        "Nodos de riesgo y trazabilidad de reglas a pruebas; propuestas quedan propuestas hasta revisión ajena."
+      ],
+      "notify": [
+        "D03: contratos, límites de módulo o ADR ausentes que impiden definir endpoints sin acoplamiento.",
+        "D11: reglas que requieren restricciones, aislamiento, unicidad, idempotencia o auditoría en datos.",
+        "D12: superficie de endpoints, roles, datos sensibles, riesgo y pruebas de acceso cruzado para revisión independiente.",
+        "D14: criterios de aceptación para validación, permisos, reintentos, errores y fallos de integración."
+      ],
+      "refresh": "Reabrir la inmersión D10 al cambiar vertical, país/mercado, roles, reglas, riesgo, contrato, proveedor integrado o flujo de datos; revisar de nuevo al cerrar diseño de API y antes de aceptación.",
+      "anti_patterns": [
+        "Confiar en validaciones o permisos del frontend.",
+        "Tratar un ID recibido como autorización; omitir pruebas entre usuarios o tenants.",
+        "Diseñar endpoints sin contrato de D03 o reglas persistentes sin coordinación con D11.",
+        "Asumir stack, controles regulatorios o expectativas por analogía sin fuente.",
+        "Ignorar duplicados, concurrencia, paginación, límites, auditoría o fallos de terceros.",
+        "Exponer detalles internos en errores o declarar disponibilidad de herramientas solo porque aparecen en un catálogo."
+      ]
+    },
+    "D11": {
+      "focus": "Volverme experto en cómo este negocio representa, gobierna, protege, consulta, migra y recupera sus datos, según vertical, país, producto y riesgo.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué entidades, identidades de negocio, ciclos de vida, relaciones y excepciones rigen los procesos?",
+        "¿Qué datos personales, financieros, sensibles o regulados se recogen, con qué propósito, autoridad, responsable y plazo? (requisitos legales: validar con D01 y un humano)",
+        "¿Qué roles y límites de tenant pueden leer o cambiar datos, incluidos jobs, APIs, reportes, archivos e IA/RAG?",
+        "¿Qué reglas deben hacerse cumplir en la base: unicidad, integridad, estados, dinero, tiempo, concurrencia e idempotencia?",
+        "¿Qué catálogos, monedas, calendarios, identificadores y convenciones son propios del país o vertical?",
+        "¿Qué motor, versión, stack, volumen, consultas críticas, picos y crecimiento están confirmados?",
+        "¿Qué disponibilidad, RPO/RTO, auditoría, residencia, borrado y continuidad requiere el negocio?",
+        "¿Qué fuentes autorizadas, entornos de prueba, skills, herramientas y accesos están disponibles, y quién los concede?"
+      ],
+      "research": [
+        {
+          "what": "Modelo del negocio: entidades, terminología, estados, excepciones, sistemas de registro y flujos de datos.",
+          "sources": [
+            "entregas aprobadas de D01 y D03",
+            "usuarios o experto del negocio",
+            "documentación funcional autorizada"
+          ]
+        },
+        {
+          "what": "Obligaciones de privacidad, retención, residencia, pagos y conservación; separar requisitos confirmados de interpretaciones.",
+          "sources": [
+            "normativa y autoridad oficial del país",
+            "asesoría legal o validación humana",
+            "D12"
+          ]
+        },
+        {
+          "what": "Patrones de datos y controles esperados en productos comparables; tratarlos como propuestas, no como alcance aprobado.",
+          "sources": [
+            "documentación pública de competidores directos",
+            "estándares oficiales del vertical",
+            "D21"
+          ]
+        },
+        {
+          "what": "Capacidades del motor y la plataforma, límites por versión y rutas de migración y recuperación.",
+          "sources": [
+            "documentación oficial versionada del motor",
+            "migraciones y esquema del proyecto",
+            "entorno de pruebas autorizado"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivo invariantes, datos requeridos, reportes, auditoría e interoperabilidad de fuentes del vertical y país. Registro fuente, versión, prioridad propuesta y decisión humana.",
+        "Comparo flujos de datos, privacidad, historial, exportación y continuidad de referentes públicos. No convierto funciones de competidores en requisitos sin validar necesidad y reglas del negocio."
+      ],
+      "capabilities": [
+        {
+          "name": "Método y checklist de modelo de datos D11",
+          "kind": "skill",
+          "why": "Inventariar entidades, normalización, restricciones, privacidad, migraciones y recuperación.",
+          "check": "Consultar departments/D11-data/AGENTS.md y checklists/data-model-review.md. La skill disponible no acredita ejecución."
+        },
+        {
+          "name": "PostgreSQL/Supabase (solo si el proyecto lo elige)",
+          "kind": "stack",
+          "why": "Aplicar capacidades específicas de esquema, permisos, RLS y migración sin imponer plataforma.",
+          "check": "Confirmar manifest o lockfile, CLI y versión; ejecutar supabase --version si está instalado y comprobar el entorno con viltrum doctor. Disponibilidad para el proyecto: (no verificado)."
+        },
+        {
+          "name": "Documentación oficial del motor y versión",
+          "kind": "herramienta",
+          "why": "Verificar tipos, restricciones, permisos, planes, locks, backup y restore aplicables.",
+          "check": "Identificar motor y versión en configuración no secreta y consultar su documentación oficial. Context7 figura como candidate en registry/toolchain.json; acceso para el proyecto: (no verificado)."
+        },
+        {
+          "name": "Esquema y datos de prueba autorizados",
+          "kind": "acceso",
+          "why": "Revisar migraciones, constraints, RLS y volumen sin exponer datos productivos.",
+          "check": "Inventariar esquema y migraciones; confirmar sandbox, fixture sintético o copia anonimizada autorizada. Acceso: (no verificado)."
+        },
+        {
+          "name": "Reglas de privacidad, retención y riesgo",
+          "kind": "dato",
+          "why": "Evitar inferir obligaciones legales, borrado o clasificación de datos.",
+          "check": "Obtener decisiones documentadas de D01/D12 y validación humana o legal del país. Estado: (no verificado)."
+        }
+      ],
+      "outputs": [
+        "Expediente D11 con respuestas, fuentes fechadas, incógnitas con responsable, riesgos y propuesta específica del dominio.",
+        "Inventario de entidades, relaciones y ciclos de vida; ERD y diccionario con clasificación, origen, retención y reglas.",
+        "Matriz de invariantes, permisos por rol y tenant, restricciones, catálogos, auditoría, consultas medidas, migración compatible y plan de restauración; incluir evidencia o estado pendiente.",
+        "Capacidades requeridas frente a available/missing/unknown, con método de comprobación y responsable. Verificar costo y licencia antes de adoptar herramientas externas."
+      ],
+      "feeds_map": [
+        "Nodos de entidades, catálogos, requisitos, funciones, contratos, integraciones, roles/permisos, auditoría, legal, operación, recuperación y pruebas de aceptación; celdas D11 con evidencia y needs_from/delivers_to."
+      ],
+      "notify": [
+        "D01/D03: reglas, excepciones, entidades, decisiones irreversibles y dudas del negocio.",
+        "D10/D19: esquema, contratos, restricciones, consultas, idempotencia/outbox y cambios compatibles.",
+        "D12: clasificación, retención, exposición, RLS/tenancy y revisión independiente.",
+        "D16/D17: capacidad, backup/restore, RPO/RTO, métricas y límites operativos."
+      ],
+      "refresh": "Reabrir ante cambios materiales de vertical, país, datos o retención, tenancy, procesos, motor/versión, integración, IA/RAG, consultas o carga; revisar también en cada fase que aporte evidencia nueva.",
+      "anti_patterns": [
+        "Modelar con reglas o excepciones supuestas, o convertir una checklist en esquema sin las entradas de D01/D03.",
+        "Confundir estándar de mercado con alcance aprobado, o interpretar normativa como asesoría legal.",
+        "Afirmar capacidad o acceso por tener una skill, CLI o producto candidato en el inventario.",
+        "Validar solo en la aplicación; usar texto libre para catálogos, exponer identificadores secuenciales, usar flotantes para dinero u omitir zona horaria.",
+        "Añadir índices sin medición, desnormalizar sin plan de consistencia, probar migraciones solo en bases vacías o dar un backup por verificado sin restaurarlo.",
+        "Dar por aislados los tenants sin probar con el rol real, dejar datos personales en auditoría/logs o prometer purga inmediata de copias retenidas."
+      ]
+    },
+    "D12": {
+      "focus": "Volverme experto en las amenazas, controles, datos y obligaciones de seguridad propios del vertical, mercado, país y arquitectura del proyecto.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué producto, vertical, actores, países y mercados atiende, y qué amenazas son típicas de ese contexto?",
+        "¿Qué datos personales, sensibles, financieros o regulados se recogen, por qué, dónde fluyen y cuánto se retienen?",
+        "¿Qué exige el marco legal y sectorial aplicable, y qué cuestiones necesitan asesoría legal local?",
+        "¿Cuáles son las entradas y fronteras: UI, API, webhooks, integraciones, colas, jobs y administración?",
+        "¿Qué roles pueden leer, crear, modificar, exportar, pagar o borrar cada recurso y tenant?",
+        "¿Qué activos, adversarios, abuso de negocio e impactos de confidencialidad, integridad y disponibilidad son plausibles?",
+        "¿Qué controles son estándar en productos comparables y qué evidencia pública o técnica los acredita?",
+        "¿Qué stack, despliegue, terceros, controles existentes, incidentes conocidos y limitaciones de acceso condicionan la revisión?"
+      ],
+      "research": [
+        {
+          "what": "Amenazas y patrones de ataque específicos por flujo, activo, actor y modelo de negocio; contrastar controles con requisitos verificables.",
+          "sources": [
+            "documentación y advisories oficiales del stack",
+            "OWASP Top 10 / API Security / ASVS con versión fijada",
+            "avisos de CERT y fabricantes",
+            "informes públicos de incidentes del sector"
+          ]
+        },
+        {
+          "what": "Obligaciones de privacidad, pagos y regulación; separar requisitos técnicos de interpretaciones jurídicas.",
+          "sources": [
+            "normativa oficial del país y regulador sectorial",
+            "asesoría legal del cliente",
+            "registro de datos y finalidades de D01/D02/D11"
+          ]
+        },
+        {
+          "what": "Superficie real, controles y procedencia de dependencias en el commit y entorno autorizados.",
+          "sources": [
+            "repositorio e historial Git",
+            "manifiestos/lockfiles y SBOM",
+            "configuración de despliegue y respuestas reales",
+            "reportes de scanners y pruebas autorizadas"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar controles de los flujos y activos que el mercado del vertical considera críticos; corroborar con requisitos ASVS versionados, documentos técnicos de competidores y advisories públicos, sin asumir que una función promocional prueba seguridad.",
+        "Comprobar autenticación, autorización por objeto/tenant, privacidad, auditoría, recuperación y comunicación de incidentes donde el flujo o regulación lo exijan; registrar brechas como riesgo, no como estándar universal."
+      ],
+      "capabilities": [
+        {
+          "name": "security-review / viltrum-security",
+          "kind": "skill",
+          "why": "Método y checklists D12 para STRIDE, baseline, hardening y privacidad.",
+          "check": "Verificar skill instalada en catálogo del host y leer su SKILL.md; registry/departments.yaml la lista como security-review (disponibilidad del host no comprobada)."
+        },
+        {
+          "name": "Escáneres Gitleaks, Trivy, CodeQL y OWASP ZAP",
+          "kind": "herramienta",
+          "why": "Evidencia reproducible de secretos, dependencias/imágenes, patrones de código y superficie dinámica.",
+          "check": "Consultar viltrum doctor/capabilities del proyecto y comprobar binario, versión, licencia/costo, runner y alcance autorizado; toolchain no acredita instalación. No mostrar valores secretos."
+        },
+        {
+          "name": "Repositorio e historial Git autorizados",
+          "kind": "acceso",
+          "why": "Detectar superficie, cambios y exposición histórica de secretos.",
+          "check": "Confirmar mandato, commit y permisos de lectura; capabilities.json solo acredita repositorio local para este proyecto."
+        },
+        {
+          "name": "Inventarios de D03/D11/D01-D02/D16 y entorno de prueba",
+          "kind": "dato",
+          "why": "STRIDE requiere entradas/fronteras; permisos y privacidad requieren datos, roles, finalidad y topología.",
+          "check": "Comprobar artefactos recibidos; solicitar faltantes a sus dueños. Verificar autorización y aislamiento antes de cualquier prueba activa."
+        }
+      ],
+      "outputs": [
+        "Expediente de dominio con vertical, producto, mercado/país, riesgo R0-R4, fuentes fechadas y preguntas no resueltas.",
+        "Inventario de entradas y fronteras; STRIDE por entrada con amenaza, impacto, control, dueño, severidad y evidencia o estado no verificado.",
+        "Matriz actor/recurso/acción/tenant y control → requisito ASVS/version → prueba/evidencia; privacidad por dato y cuestiones legales escaladas.",
+        "Brechas de capacidades/accesos, riesgos residuales, pruebas autorizadas, límites del análisis y handoff a D14, D16, D17 y revisor humano."
+      ],
+      "feeds_map": [
+        "Nodos del mapa: requisito, módulo, función, integración, rol/permisos, entidad/dato, contrato, legal, prueba de aceptación y operación; aporta celdas D12 con evidencia y dependencias."
+      ],
+      "notify": [
+        "D00: riesgo del dominio, entradas no inventariadas, bloqueos y activación requerida.",
+        "D01/D02: minimización, finalidad/base legal pendiente y preguntas al cliente; no decido recolección ni legalidad.",
+        "D03/D11: frontera insegura, controles de autorización/RLS y diseño que requiere decisión del dueño.",
+        "D14: casos negativos por rol, objeto y tenant; D16/D17: hardening, incidentes y señales a operar."
+      ],
+      "refresh": "Reabrir ante cambio de alcance, país/vertical, dato, rol, entrada, integración, dependencia, arquitectura, infraestructura o amenaza; revisar en cada fase de riesgo y antes de release.",
+      "anti_patterns": [
+        "Aplicar STRIDE al sistema abstracto o dejar entradas omitidas.",
+        "Afirmar que un control existe porque está configurado, sin prueba en la capa y entorno reales.",
+        "Probar solo UI feliz; omitir acceso directo a objeto/tenant, replay de webhook y abuso de límites.",
+        "Tomar como vigente una ley, estándar, CVE o práctica de mercado sin verificar fuente y versión.",
+        "Tratar una fuente sintética, herramienta catalogada o scanner no ejecutado como evidencia del cliente.",
+        "Copiar datos sensibles a prompts/reportes, inspeccionar secretos en claro o confundir eliminación con rotación.",
+        "Resolver interpretación legal, aceptar riesgo alto/crítico o aprobar producción desde D12.",
+        "Proponer herramienta externa sin verificar nombre, licencia, costo, procedencia y compatibilidad."
+      ]
+    },
+    "D13": {
+      "focus": "Volverme experto en la trazabilidad y las reglas de integración, revisión y release que requiere el dominio del proyecto, su repositorio y su plataforma de alojamiento.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué tipo de producto, vertical, país y nivel de regulación condicionan la entrega y el historial auditable?",
+        "¿Qué plataforma aloja el código y qué reglas de PR, ramas protegidas y revisores están realmente configuradas?",
+        "¿Qué convención de ramas y commits usa ya el repositorio?",
+        "¿Qué checks son obligatorios y para qué SHA se ejecutaron? ¿Hay jobs omitidos o solo resultados locales?",
+        "¿Cómo se separan los cambios no confiables de los secretos y permisos de CI?",
+        "¿Cómo se versionan y documentan cambios incompatibles, prereleases y releases?",
+        "¿Qué evidencia y aprobaciones se requieren para revertir y promover un release?",
+        "¿Qué controles de historial, retención, firma o auditoría exige el sector o el país? (no verificado)"
+      ],
+      "research": [
+        {
+          "what": "Convenciones existentes de ramas, commits, PR, protección, checks, releases, tags y reversión en el repositorio y host.",
+          "sources": [
+            "configuración del repositorio y CI",
+            "historial y changelog del proyecto",
+            "documentación oficial del host"
+          ]
+        },
+        {
+          "what": "Estándares de versionado y changelog aplicables, contrastados con la política actual del proyecto.",
+          "sources": [
+            "SemVer",
+            "Keep a Changelog",
+            "versionado y changelog del repositorio"
+          ]
+        },
+        {
+          "what": "Prácticas de seguridad de pipelines y controles de promoción relevantes para el stack y riesgo identificados.",
+          "sources": [
+            "documentación oficial de la plataforma CI/CD",
+            "normativa del país (si aplica)",
+            "D12 y D16"
+          ]
+        },
+        {
+          "what": "Patrones de trazabilidad de productos del mismo tipo y mercado, limitados a gobierno del código y release.",
+          "sources": [
+            "repositorios públicos de competidores directos",
+            "notas de release públicas",
+            "documentación técnica pública"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar expectativas de evidencias observables en repositorios comparables y documentación oficial; registrar cada práctica con fuente, fecha y pertinencia, sin convertir popularidad en requisito.",
+        "Contrastar checks requeridos, revisión independiente, trazabilidad SHA→resultado, changelog, versionado y reversión con la política real del proyecto.",
+        "Separar requisitos legales/contractuales confirmados de buenas prácticas propuestas; validar los primeros con D12 y responsables humanos."
+      ],
+      "capabilities": [
+        {
+          "name": "Viltrum git governance y Git/GitHub CLI",
+          "kind": "skill",
+          "why": "Inspeccionar diff, convenciones, PR, checks y preparar evidencia trazable.",
+          "check": "Leer departments/D13-git-governance/delivery.json y ejecutar viltrum doctor .; comprobar git --version y gh --version. Disponibilidad efectiva (no verificado)."
+        },
+        {
+          "name": "Acceso de lectura al repositorio y su configuración CI",
+          "kind": "acceso",
+          "why": "Verificar reglas de rama, SHA, aprobaciones, jobs omitidos y artefactos.",
+          "check": "Comprobar acceso autorizado al repositorio, PR y configuración CI; no inferir protección desde un archivo YAML."
+        },
+        {
+          "name": "CI con resultados asociados al SHA",
+          "kind": "herramienta",
+          "why": "Acreditar checks reproducibles para el commit exacto.",
+          "check": "Revisar .github/workflows y la interfaz de ejecuciones del host; registry/toolchain.json marca GitHub Actions como candidate, enabled: false, no_access_granted."
+        },
+        {
+          "name": "Política de release y reversión del proyecto",
+          "kind": "dato",
+          "why": "Alinear SemVer, tags, changelog y reversión al producto y sus dependencias.",
+          "check": "Buscar CHANGELOG.md, archivos de versión, tags y runbooks; preguntar al responsable por política ausente."
+        }
+      ],
+      "outputs": [
+        "Expediente D13 con respuestas, fuentes fechadas, expectativas propuestas, riesgos y desconocidos.",
+        "Matriz de controles del repositorio: control, evidencia, SHA/alcance, estado y responsable.",
+        "Lista de capacidades requeridas frente a disponibilidad comprobada, faltante o desconocida.",
+        "Propuesta de trazabilidad para PR, checks, release y reversión, sin aprobar funcionalidad ni autorizar publicación."
+      ],
+      "feeds_map": [
+        "Celda D13: gobierno de ramas, PR, revisión, CI, trazabilidad y release.",
+        "Celdas D03 y D12: convenciones/contratos y controles de seguridad del pipeline.",
+        "Celdas D14 y D16: evidencia QA y artefactos/condiciones de promoción."
+      ],
+      "notify": [
+        "D00: dominio, plataforma y expectativas propuestas con sus fuentes e incertidumbres.",
+        "D03: convención de commits/versionado, cambios de contrato y necesidades de revisión independiente.",
+        "D12: separación CI/secretos, permisos y requisitos de seguridad o regulación.",
+        "D14: SHA y checks de regresión esperados.",
+        "D16: artefacto, tag y plan de reversión que requieran coordinación de promoción."
+      ],
+      "refresh": "Al iniciar el proyecto y tras cambios de alcance, país/regulación, host de repositorio, CI, política de ramas, stack de release o mecanismo de promoción; revisar también en cada fase que dependa de evidencia D13.",
+      "anti_patterns": [
+        "Asumir GitHub Actions, branch protection, acceso remoto o licencias por aparecer en el catálogo.",
+        "Tratar un job omitido, una ejecución local o un check de otro SHA como aprobado.",
+        "Imponer Conventional Commits sin comprobar primero la convención existente.",
+        "Presentar checks verdes como aprobación funcional o autorización de release.",
+        "Confundir tags y changelog con evidencia de que el artefacto desplegado corresponde al commit.",
+        "Dar por probada una obligación legal sin fuente del país y revisión responsable."
+      ]
+    },
+    "D14": {
+      "focus": "Adaptar QA funcional y E2E a los recorridos, reglas de negocio, datos, permisos e integraciones del dominio, y verificar el comportamiento contra criterios de aceptación en ejecución.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué vertical, tipo de producto, mercado y país cubre el proyecto?",
+        "¿Quiénes son los usuarios y qué recorridos generan o protegen el valor principal?",
+        "¿Qué reglas, excepciones, cálculos, fechas, monedas y límites rigen esos recorridos?",
+        "¿Qué datos personales, financieros o regulados se usan y qué riesgo asignó D00?",
+        "¿Qué roles, tenants y límites de autorización deben probarse por interfaz y API?",
+        "¿Qué resultado persistido define el éxito de cada operación y qué evidencia lo demuestra?",
+        "¿Qué integraciones, proveedores, callbacks, reintentos o modos degradados intervienen?",
+        "¿Qué navegadores, dispositivos, idiomas, zonas horarias y condiciones de red importan?",
+        "¿Qué entorno aislado, cuentas sintéticas y servicios de prueba están autorizados?"
+      ],
+      "research": [
+        {
+          "what": "Riesgos de fallo propios del vertical: errores de transacción, cálculo, identidad, inventario, reservas o entrega de valor, según aplique.",
+          "sources": [
+            "criterios y reglas aprobados por D01/D02",
+            "contratos de D03",
+            "expertos o responsables de negocio",
+            "casos de soporte e incidentes autorizados"
+          ]
+        },
+        {
+          "what": "Recorridos y expectativas funcionales habituales del tipo de producto, incluidos estados vacíos, errores, recuperación y confirmación.",
+          "sources": [
+            "productos competidores directos",
+            "documentación pública de productos del mismo vertical",
+            "estudios/casos sectoriales con procedencia identificable"
+          ]
+        },
+        {
+          "what": "Obligaciones verificables que afectan los datos y acciones del producto en el país definido.",
+          "sources": [
+            "normativa y guías oficiales del país",
+            "asesoría o responsable legal del proyecto"
+          ]
+        },
+        {
+          "what": "Comportamiento real de las APIs, navegadores, proveedores y versiones incluidas en el alcance.",
+          "sources": [
+            "documentación oficial de las versiones usadas",
+            "sandbox autorizado",
+            "contratos y esquemas del proyecto"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar una lista de recorridos y resultados esperados de productos comparables; registrar fuente, fecha y diferencias de mercado, sin tratarlos como aceptación del cliente.",
+        "Contrastar funciones frecuentes con requisitos aprobados y señalar cuáles son expectativa observada, decisión pendiente o fuera de alcance.",
+        "Convertir exigencias del país en casos verificables solo cuando exista fuente oficial aplicable y confirmación del responsable correspondiente.",
+        "Priorizar por impacto de negocio y riesgo, no por porcentaje global de cobertura."
+      ],
+      "capabilities": [
+        {
+          "name": "Playwright y navegador de prueba",
+          "kind": "herramienta",
+          "why": "Explorar y automatizar recorridos críticos, formularios, estados y regresión visual.",
+          "check": "Comprobar instalación, versión y navegador ejecutable en el host; las skills registradas no prueban disponibilidad."
+        },
+        {
+          "name": "Skill viltrum-qa y checklists D14",
+          "kind": "skill",
+          "why": "Planificar cobertura por riesgo, seis estados, formularios y matriz pantalla-módulo.",
+          "check": "Revisar skills/viltrum-qa y departments/D14-qa/checklists; disponibilidad confirmada en el repositorio fuente, ejecución no verificada."
+        },
+        {
+          "name": "Entorno aislado con datos sintéticos y roles de prueba",
+          "kind": "acceso",
+          "why": "Verificar persistencia, permisos, validación por capa y concurrencia sin afectar usuarios reales.",
+          "check": "Confirmar con D00/propietario el ambiente, alcance autorizado, cuentas y limpieza; no usar credenciales de producción."
+        },
+        {
+          "name": "CI del proyecto",
+          "kind": "herramienta",
+          "why": "Ejecutar regresión reproducible en cambios que afectan recorridos críticos.",
+          "check": "Inspeccionar configuración y ejecuciones recientes del CI del proyecto; acceso y estado no verificados."
+        },
+        {
+          "name": "Contrato y sandbox de cada integración bajo prueba",
+          "kind": "mcp",
+          "why": "Probar respuestas, errores, reintentos y callbacks con el comportamiento del proveedor.",
+          "check": "Inventariar capacidades del host y configuración no secreta; confirmar acceso y autorización con el dueño. Conexión no verificada."
+        }
+      ],
+      "outputs": [
+        "Expediente de dominio: vertical, país, usuarios, recorridos críticos, reglas, riesgos y fuentes con procedencia.",
+        "Matriz requisito/amenaza → caso, nivel de prueba, rol/datos sintéticos, entorno, resultado esperado y evidencia.",
+        "Registro de expectativas de mercado separadas de requisitos aceptados, con preguntas abiertas y responsables.",
+        "Inventario de capacidades necesarias frente a disponibilidad comprobada, brechas y alternativas pendientes.",
+        "Cobertura de seis estados y formularios; defectos reproducibles, exclusiones razonadas y prácticas sólidas verificadas."
+      ],
+      "feeds_map": [
+        "Nodos de requisito, función, comportamiento/estado, contrato, integración, rol/permisos, entidad de datos, prueba de aceptación y operación de core/system-map.md.",
+        "Celdas D14: casos, evidencia de ejecución, cobertura residual, riesgos y handoff al dueño y a D00; no cerrar ni aprobar la propia celda."
+      ],
+      "notify": [
+        "D00: clasificación de riesgo, límites de cobertura, bloqueos y evidencia para revisión independiente.",
+        "D01/D02: criterios de aceptación ambiguos, reglas del negocio sin fuente o expectativa de mercado confundida con requisito.",
+        "D03/D09/D10/D11/D19: defectos reproducibles en contrato, persistencia, concurrencia o integración, dirigidos al dueño.",
+        "D12: hallazgos con implicación de seguridad; D15: hallazgos de rendimiento con evidencia."
+      ],
+      "refresh": "Al cambiar vertical, país, usuario, recorrido crítico, regla de negocio, rol, integración, contrato o riesgo; volver a evaluar en cada fase y antes de regresión/release.",
+      "anti_patterns": [
+        "Copiar casos de un vertical vecino sin comprobar reglas, actores, país ni criterios aprobados.",
+        "Tomar patrones de competidores o normativa sin fuente verificable como aceptación.",
+        "Probar solo el camino feliz, la interfaz o mocks y declarar validado el servidor, la base de datos o el proveedor.",
+        "Confundir skill registrada con herramienta instalada, acceso concedido o sandbox conectado.",
+        "Usar datos o credenciales reales, o dejar secretos en capturas, trazas y reportes.",
+        "Cerrar bug sin regresión nueva, ocultar flakiness con reintentos o aceptar riesgo residual por cuenta propia."
+      ]
+    },
+    "D15": {
+      "focus": "Volverme experto en los patrones de latencia, capacidad y degradación propios del vertical, producto, mercado y país del proyecto para fijar y medir presupuestos de rendimiento con carga representativa.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué vertical, tipo de producto, países y segmentos de usuario atiende?",
+        "¿Cuáles son los recorridos y operaciones críticos, y qué latencia percibe cada actor?",
+        "¿Qué mezcla de operaciones, concurrencia, tasas de llegada, picos, horarios y estacionalidad se espera, y quién lo confirmó?",
+        "¿Qué dispositivos, redes y geografías representan a la mayoría de usuarios?",
+        "¿Qué compromisos de rendimiento o disponibilidad publican el negocio, proveedores y competidores?",
+        "¿Qué límites de costo, infraestructura, dependencias, cuotas y ventanas de operación condicionan la capacidad?",
+        "¿Qué presupuesto previo, SLI/SLO, telemetría, RUM y mediciones de línea base existen?",
+        "¿Qué antigüedad de datos admite el negocio y qué invalidación requiere cada caché?",
+        "¿Qué ambiente aislado, dataset sintético y autorización están disponibles para medir?"
+      ],
+      "research": [
+        {
+          "what": "Recorridos, mezcla de carga y tolerancia a latencia por actor y operación; separar evidencia del negocio de hipótesis.",
+          "sources": [
+            "D01/D02 y entrevistas o analítica atribuible",
+            "mandato y mapa del proyecto"
+          ]
+        },
+        {
+          "what": "Presupuestos, disponibilidad y límites de API publicados para productos comparables del mismo vertical.",
+          "sources": [
+            "documentación y páginas de estado oficiales de competidores directos",
+            "contratos/SLA del proveedor"
+          ]
+        },
+        {
+          "what": "Patrones de capacidad, datos, consultas, dependencias, colas, caché y topología que puedan causar cuellos de botella.",
+          "sources": [
+            "repositorio y configuración autorizados",
+            "D03/D11/D16/D17",
+            "trazas y planes de ejecución del entorno permitido"
+          ]
+        },
+        {
+          "what": "Técnicas y límites específicos de versiones en uso para medición web y carga.",
+          "sources": [
+            "documentación oficial versionada de Lighthouse CI y k6",
+            "documentación oficial del stack detectado"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar expectativas de percentiles, disponibilidad y respuesta desde compromisos publicados comparables y necesidades confirmadas; no trasladar números de otro vertical sin validar.",
+        "Separar Web Vitals de laboratorio y datos de campo; segmentar por dispositivo, red y geografía cuando haya muestra suficiente.",
+        "Comparar latencia con throughput, tasa de error, saturación y costo para evitar declarar capacidad por un percentil aislado.",
+        "Documentar tamaño de muestra, ventana, versión, dataset y límites del generador; marcar benchmarks no reproducibles como hipótesis."
+      ],
+      "capabilities": [
+        {
+          "name": "Perfil de tráfico, criticidad y SLO confirmados",
+          "kind": "dato",
+          "why": "Define mezcla y límites de prueba; sin contexto confirmado no se inventa carga ni presupuesto.",
+          "check": "Solicitar a D01/D02 y negocio fuente, responsable y fecha; revisar artefactos del proyecto."
+        },
+        {
+          "name": "k6 para carga sostenida, estrés, picos y resistencia",
+          "kind": "herramienta",
+          "why": "Mide latencia, errores, throughput y umbrales bajo perfiles declarados.",
+          "check": "Comprobar binario y versión en el host/CI autorizado y consultar capabilities; disponibilidad en este proyecto: no verificado."
+        },
+        {
+          "name": "Lighthouse CI y medición de campo",
+          "kind": "herramienta",
+          "why": "Contrasta presupuesto web en laboratorio y, si existe muestra válida, con datos reales.",
+          "check": "Comprobar configuración CI, páginas objetivo, versión, RUM y permisos; disponibilidad del proyecto: no verificado."
+        },
+        {
+          "name": "Trazas, métricas y perfiles de runtime",
+          "kind": "acceso",
+          "why": "Relaciona síntomas con saturación, colas, memoria, pools y dependencias.",
+          "check": "Revisar capabilities y pedir a D16/D17 acceso de solo lectura al ambiente autorizado, con campos no secretos."
+        },
+        {
+          "name": "Plan de consulta y entorno aislado",
+          "kind": "acceso",
+          "why": "Permite evaluar consultas con D11 sin riesgo a datos reales ni ejecutar mutaciones accidentalmente.",
+          "check": "Pedir consulta crítica, dataset sintético y staging; verificar que el plan no ejecuta escrituras."
+        },
+        {
+          "name": "Context7",
+          "kind": "mcp",
+          "why": "Puede aportar documentación acorde a versiones de bibliotecas.",
+          "check": "El catálogo lo declara candidato sin acceso concedido; verificar MCP y versión en host antes de usarlo."
+        }
+      ],
+      "outputs": [
+        "Expediente del dominio: vertical, producto, mercado, país, actores, recorridos críticos, fuentes y nivel de confianza.",
+        "Perfil de tráfico confirmado o hipótesis pendientes con responsable; mezcla, concurrencia, tasa, picos, duración, geografía y datos.",
+        "Presupuestos medibles y aprobadores; baseline, plan, thresholds, abortos, límites de costo y target autorizado.",
+        "Matriz de capacidades requeridas/disponibles/pendientes, versiones, permisos y alternativas.",
+        "Evidencia de rendimiento comparable, limitaciones, cuellos medidos, capacidad y degradación; no declarar mediciones no ejecutadas.",
+        "Riesgos de caché, terceros y degradación, con tolerancia de obsolescencia acordada."
+      ],
+      "feeds_map": [
+        "Nodos de requisito, módulo, API/evento, integración, datos, operación y aceptación del proyecto; celdas D15 para presupuesto, baseline, carga y capacidad.",
+        "Requisitos de latencia y capacidad para D03; restricciones medidas para D16; SLI e hipótesis para D17."
+      ],
+      "notify": [
+        "D01/D02: confirmar actores, recorridos, mezcla de tráfico, picos y geografía.",
+        "D03: cuellos arquitectónicos medidos, presupuestos y límites que requieren decisión.",
+        "D11: consultas, pool, caché y planes de ejecución que requieren análisis conjunto.",
+        "D16: recursos, límites, costo, abortos y recomendación de capacidad medida.",
+        "D17: SLI, percentiles, señales de saturación y limitaciones de observabilidad.",
+        "D09/D10: regresiones o límites medidos en frontend/API y condiciones comparables."
+      ],
+      "refresh": "Al cambiar alcance, vertical, país, recorrido crítico, mezcla o escala de tráfico, proveedor/stack, infraestructura o política de datos; repetir baseline ante cambios relevantes y medir antes/después de optimizaciones.",
+      "anti_patterns": [
+        "Usar concurrencia inventada o benchmark de otro negocio como demanda real.",
+        "Confundir usuarios virtuales con tasa de llegada o ignorar el límite del generador.",
+        "Medir solo promedio o latencia sin errores, throughput, saturación y tamaño de muestra.",
+        "Tomar Lighthouse de laboratorio como RUM o capacidad de producción.",
+        "Probar carga en producción o activar efectos reales sin alcance y autorización.",
+        "Recomendar caché/índice/escalado antes de medir causa y definir invalidación, costo y tolerancia de datos.",
+        "Declarar mejora sin baseline comparable o ajustar presupuesto después para pasar el check."
+      ]
+    },
+    "D16": {
+      "focus": "Volverse experto en operar y publicar el producto del proyecto con seguridad: CI/CD, infraestructura, disponibilidad, recuperación y reversión, adaptados al riesgo y al modelo operativo del negocio.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué tipo de producto, vertical, mercado y países atiende, y qué procesos de negocio deben seguir disponibles?",
+        "¿Qué impacto tiene una interrupción, pérdida de datos o publicación defectuosa para sus usuarios y operación?",
+        "¿Qué ventanas de mantenimiento, picos de tráfico y objetivos de disponibilidad, RTO y RPO están definidos y aceptados?",
+        "¿Qué alojamiento, runtime, red, DNS, TLS, base de datos y servicios externos existen, y quién los opera?",
+        "¿Qué entornos hay y qué tan fiel es staging a producción en versiones, configuración, carga y datos anonimizados o sintéticos?",
+        "¿Cómo se construye, identifica, verifica y promueve el artefacto entre entornos? ¿Qué aprobaciones humanas requiere cada release?",
+        "¿Cómo se respaldan y restauran los datos, y cuándo se ensayaron por última vez la restauración y el rollback?",
+        "¿Qué restricciones regulatorias, contractuales, de residencia, retención o auditoría afectan operación y recuperación?",
+        "¿Qué señales, alertas, responsables y runbooks permiten detectar y atender fallos durante y después del release?"
+      ],
+      "research": [
+        {
+          "what": "Mapear la topología desplegada, los límites de confianza y dependencias críticas para el servicio.",
+          "sources": [
+            "repositorio y manifiestos de infraestructura autorizados",
+            "diagramas y documentación del proyecto",
+            "inventario de proveedores y servicios"
+          ]
+        },
+        {
+          "what": "Contrastar la estrategia de despliegue, rollback y continuidad con las obligaciones y el riesgo del dominio.",
+          "sources": [
+            "requisitos y acuerdos del cliente",
+            "normativa oficial del país aplicable (por determinar)",
+            "documentación oficial de proveedores y estándares pertinentes"
+          ]
+        },
+        {
+          "what": "Revisar prácticas de CI/CD, aislamiento de ambientes, respaldo y recuperación con evidencia del proyecto.",
+          "sources": [
+            "workflows CI/CD",
+            "runbooks y registros de ensayos",
+            "documentación oficial de la plataforma elegida"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar expectativas operativas del impacto del servicio, SLA/contratos, horarios críticos y prácticas documentadas de productos comparables; registrar fuente, fecha y diferencia frente al proyecto.",
+        "Convertirlas en objetivos verificables de disponibilidad, latencia, recuperación, seguridad del pipeline y comunicación de incidentes; no inferir objetivos sin aprobación del responsable de negocio.",
+        "Comparar la operación con documentación oficial y estándares aplicables al sector y país identificados; requisitos legales concretos quedan no verificados hasta confirmar jurisdicción y actividad."
+      ],
+      "capabilities": [
+        {
+          "name": "viltrum-devops y método D16",
+          "kind": "skill",
+          "why": "Aplicar contratos, gates, despliegue gradual, recuperación y handoff definidos por el departamento.",
+          "check": "Comprobar la skill disponible y sus instrucciones en el host; el paquete D16 declara viltrum-devops en departments/D16-devops/manifest.yaml (ruta exacta no verificada)."
+        },
+        {
+          "name": "Mapa de repositorio e infraestructura",
+          "kind": "herramienta",
+          "why": "Inventariar workflows, manifiestos, runtime y runbooks antes de proponer cambios.",
+          "check": "Verificar `viltrum repo-*` y acceso de lectura autorizado al repositorio; el mandato identifica esa familia como herramienta oficial."
+        },
+        {
+          "name": "CI/CD y artefactos",
+          "kind": "herramienta",
+          "why": "Asociar checks, imagen y promoción a un commit o digest reproducible.",
+          "check": "Confirmar proveedor, runners, permisos, artefactos y protección de ambientes en el repositorio y consola del proyecto; GitHub Actions es candidato en registry/toolchain.json, no disponibilidad confirmada."
+        },
+        {
+          "name": "Telemetría y observabilidad",
+          "kind": "mcp",
+          "why": "Coordinar señales operativas, alertas y readiness con D17.",
+          "check": "Comprobar backend, endpoint y permisos autorizados sin revelar secretos; OpenTelemetry figura como candidato deshabilitado en registry/toolchain.json."
+        },
+        {
+          "name": "Acceso aislado a staging y respaldos",
+          "kind": "acceso",
+          "why": "Ensayar despliegue, restauración y reversión sin tocar producción.",
+          "check": "Solicitar confirmación del responsable del proyecto sobre entorno, autorización y datos sintéticos; no asumir acceso."
+        },
+        {
+          "name": "Stack de despliegue del proyecto",
+          "kind": "stack",
+          "why": "Ejecutar los procedimientos sobre la plataforma y versiones realmente seleccionadas.",
+          "check": "Leer manifiestos y decisión aprobada de D03; Docker Compose/VPS aparece como alcance habitual del paquete D16, no como hecho de todo proyecto."
+        }
+      ],
+      "outputs": [
+        "Expediente D16: dominio, jurisdicción y procesos críticos identificados; riesgos operativos y supuestos con fuente y estado de verificación.",
+        "Mapa de entornos, dependencias y responsables; diferencias de paridad, accesos y capacidades faltantes.",
+        "Matriz de expectativas operativas y objetivos de recuperación, con aceptación y evidencia pendientes claramente señaladas.",
+        "Inventario de pipeline, artefactos, controles, respaldos, observabilidad y runbooks; plan de brechas priorizado y coordinado con D03, D11, D12, D14 y D17."
+      ],
+      "feeds_map": [
+        "Core del mapa maestro: despliegue, infraestructura, ambientes, pipeline, backup/restore, rollback y dependencias operativas.",
+        "Celdas de dominio/producto, país/regulación, criticidad, SLO/RTO/RPO, proveedores y responsables; nombres exactos de celdas no verificados."
+      ],
+      "notify": [
+        "D00: dominio operativo, supuestos, bloqueos de acceso y capacidades faltantes.",
+        "D03: topología y requisitos operativos que condicionan la estrategia de despliegue.",
+        "D11: criticidad de datos, ventanas de migración y requisitos de recuperación.",
+        "D12: riesgos de acceso, cadena de suministro, secretos y controles del entorno.",
+        "D14: condiciones de staging, artefactos y observabilidad necesarias para verificar.",
+        "D17: señales, alertas, responsables y runbooks requeridos para operación."
+      ],
+      "refresh": "Reabrir la inmersión cuando cambien país, vertical, criticidad, arquitectura, proveedor, integraciones, objetivos de recuperación o modelo de tráfico; revisar en cada fase de release y después de incidentes o ensayos con hallazgos.",
+      "anti_patterns": [
+        "Asumir que todos los dominios toleran la misma interrupción o pérdida de datos.",
+        "Tomar el stack habitual de D16 como arquitectura confirmada del proyecto.",
+        "Dar por probados backup, restore o rollback porque hay scripts o configuración.",
+        "Declarar paridad de staging sin comparar versiones, recursos y configuración.",
+        "Convertir expectativas de mercado o normativa en requisito sin fuente, país y aplicabilidad comprobados.",
+        "Registrar credenciales, valores de secretos o cadenas de conexión en el expediente."
+      ]
+    },
+    "D17": {
+      "focus": "Volverme experto en cómo se mide la salud de los recorridos críticos del negocio, cómo se detectan sus fallos y cómo se coordinan incidentes y aprendizaje operativo.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué vertical, tipo de producto, mercado y países cubre el proyecto, y qué recorridos de usuario son críticos?",
+        "¿Qué resultado de negocio debe mantener disponible cada recorrido y quién es su dueño?",
+        "¿Qué servicios, fronteras de red, terceros y dependencias participan en esos recorridos?",
+        "¿Qué volumen, horarios, estacionalidad y patrones de tráfico se esperan?",
+        "¿Qué SLI, SLO, ventana de medición y política de presupuesto de error acepta el negocio?",
+        "¿Qué datos personales o regulados podrían llegar a logs, trazas, métricas o reportes, y qué retención y acceso aplican?",
+        "¿Qué señales, alertas, chequeos externos, canales y runbooks existen y quién los atiende?",
+        "¿Cómo se declaran incidentes, se asigna severidad, se mitiga y se informa a las partes afectadas?",
+        "¿Qué cobertura de staging permite ensayar fallos y comprobar que las alertas realmente suenan?"
+      ],
+      "research": [
+        {
+          "what": "Modelos operativos, recorridos críticos, patrones de fallo, estacionalidad y señales relevantes para la vertical.",
+          "sources": [
+            "documentación y métricas del producto",
+            "entrevistas con dueño de negocio y operación",
+            "competidores directos y referentes del mismo tipo de producto (no verificado para un proyecto concreto)"
+          ]
+        },
+        {
+          "what": "Obligaciones que condicionan telemetría, acceso, retención y notificación de incidentes.",
+          "sources": [
+            "normativa oficial de cada país",
+            "políticas contractuales y de privacidad del proyecto",
+            "asesoría legal cuando aplique"
+          ]
+        },
+        {
+          "what": "Prácticas de medición, instrumentación y respuesta compatibles con el stack real.",
+          "sources": [
+            "código y configuración autorizados",
+            "documentación oficial de OpenTelemetry y del backend elegido",
+            "runbooks e historial de incidentes"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Comparar recorridos y expectativas de disponibilidad con productos equivalentes; registrar fuente, país y fecha, sin convertir la práctica de un competidor en SLO propio.",
+        "Derivar señales desde tareas de usuario y criterios de éxito del negocio; acordar objetivos y ventanas con su dueño.",
+        "Revisar que los runbooks permitan actuar, que el monitoreo externo cubra endpoints críticos y que un simulacro confirme la entrega de alertas."
+      ],
+      "capabilities": [
+        {
+          "name": "OpenTelemetry compatible con el runtime y correlación de trazas, métricas y logs",
+          "kind": "stack",
+          "why": "Permite validar señales correlacionadas y mantener la instrumentación desacoplada del backend.",
+          "check": "Revisar dependencias, configuración y evidencia de exportación por servicio; disponibilidad en el proyecto actual no verificada."
+        },
+        {
+          "name": "Acceso de solo lectura a telemetría y alertas del entorno autorizado",
+          "kind": "acceso",
+          "why": "Necesario para comprobar señales, cobertura, retención y entrega de alertas.",
+          "check": "Confirmar con Wilber el entorno, permisos mínimos y alcance; no inferir acceso por la presencia de una herramienta en un catálogo."
+        },
+        {
+          "name": "Runbooks, canal de incidentes y responsables de escalamiento",
+          "kind": "dato",
+          "why": "Cada alerta urgente necesita un primer paso y un responsable claros.",
+          "check": "Revisar el inventario del proyecto y confirmar responsables con D16/Wilber; existencia por proyecto no verificada."
+        },
+        {
+          "name": "viltrum-repo-map",
+          "kind": "herramienta",
+          "why": "Localizar servicios, fronteras e instrumentación declarada en el repositorio.",
+          "check": "Comprobar CLI y versión en el host y ejecutar solo sobre repositorio autorizado; el catálogo lo registra verificado, pero su disponibilidad en cada host debe comprobarse."
+        },
+        {
+          "name": "OpenTelemetry",
+          "kind": "herramienta",
+          "why": "Estándar candidato para instrumentación y exportación desacopladas.",
+          "check": "Comprobar SDK, Collector/exporter, endpoint y permisos efectivos; el catálogo lo marca candidato, no habilitado."
+        }
+      ],
+      "outputs": [
+        "Expediente de dominio con vertical, país, recorridos críticos, dependencias y riesgos operativos, distinguiendo hechos de hipótesis.",
+        "Mapa de señales por servicio y recorrido: trazas, métricas RED, logs estructurados, correlación, fuentes y huecos.",
+        "Propuesta de SLI/SLO, ventana, presupuesto de error y política de consumo pendiente de acuerdo del dueño de negocio.",
+        "Matriz de alertas accionables, runbooks, canales, severidades, cobertura externa y evidencia de simulacro.",
+        "Revisión de datos sensibles, acceso y retención; hallazgos y verificaciones pendientes.",
+        "Plan de respuesta y plantilla de postmortem sin culpables, con tiempos, impacto y acciones con dueño y fecha."
+      ],
+      "feeds_map": [
+        "Aporta al mapa maestro: nodos de recorrido/comportamiento, servicio, integración, operación, riesgo, señal, alerta, runbook, incidente y prueba de aceptación."
+      ],
+      "notify": [
+        "D16: despliegue/tag, cambios de esquema, runbook de reversión y preparación operativa para G7.",
+        "D01/D02: recorridos de negocio, medidas de éxito y dueño que debe acordar el SLO.",
+        "D03: recorridos críticos, fronteras y dependencias necesarias para definir cobertura.",
+        "D09/D10: señales y puntos de instrumentación requeridos; ellos instrumentan su código.",
+        "D11/D12: retención, acceso y riesgos de datos observados en telemetría.",
+        "D22: lecciones de incidentes que deban persistir en memoria."
+      ],
+      "refresh": "Al cambiar vertical, país, recorrido crítico, stack, integración, política de datos, patrón de tráfico o responsable; revisar en cada fase de release/G7 y después de incidentes relevantes.",
+      "anti_patterns": [
+        "Definir SLO por costumbre o sin el dueño de negocio.",
+        "Medir solo uptime técnico y omitir el recorrido de usuario.",
+        "Dar por existente una herramienta, conexión o permiso porque aparezca en el catálogo.",
+        "Registrar datos personales o secretos en logs, métricas o atributos de traza.",
+        "Crear alertas sin umbral justificado, runbook, responsable o prueba de entrega.",
+        "Confundir dashboard, configuración presente o checklist marcada con señal operativa verificada.",
+        "Asignar severidad tarde, cerrar sin verificar recuperación o redactar postmortem culpando a personas."
+      ]
+    },
+    "D18": {
+      "focus": "Adaptar guardrails, grounding, evaluación y límites de agentes de IA al riesgo, los datos, las acciones y las obligaciones del negocio concreto.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué tarea realiza la IA, para quién y qué queda fuera de alcance?",
+        "¿Qué daños podría causar una respuesta falsa, sesgada, tardía o indisponible en este vertical?",
+        "¿Qué datos personales, regulados o comerciales entran al prompt, retrieval, memoria, herramientas y logs?",
+        "¿Qué acciones externas puede ejecutar el agente y cuáles requieren confirmación humana?",
+        "¿Qué fuentes son autoritativas, quién mantiene sus permisos y cómo se comprueba una cita?",
+        "¿Qué ataques son plausibles aquí: inyección, abuso de herramientas, fuga, poisoning o consumo ilimitado?",
+        "¿Cómo debe responder el sistema ante evidencia insuficiente, fuentes en conflicto o una solicitud de humano?",
+        "¿Qué umbrales medibles de calidad, seguridad, latencia, costo y retención aprueba el dueño del negocio?"
+      ],
+      "research": [
+        {
+          "what": "Amenazas y controles aplicables a la tarea, con versión vigente.",
+          "sources": [
+            "OWASP Top 10 for LLM Applications y documentación oficial OWASP",
+            "modelo de amenazas y arquitectura del proyecto",
+            "incidentes públicos del vertical (no verificado hasta investigar)"
+          ]
+        },
+        {
+          "what": "Obligaciones sobre datos, decisiones automatizadas, conservación y revisión humana; confirmar aplicabilidad con D12.",
+          "sources": [
+            "normativa y reguladores oficiales del país confirmado",
+            "políticas aprobadas del cliente",
+            "D12 y responsable legal"
+          ]
+        },
+        {
+          "what": "Patrones de seguridad, evaluación, citas y fallback de productos comparables.",
+          "sources": [
+            "documentación de seguridad de competidores directos",
+            "evaluaciones publicadas y repositorios oficiales",
+            "datos autorizados del producto"
+          ]
+        },
+        {
+          "what": "Riesgos de permisos y datos en retrieval, memoria, herramientas y proveedores.",
+          "sources": [
+            "inventario de datos y ACL de D11/D22",
+            "documentación oficial de APIs/SDK elegidos por D03",
+            "registro de herramientas y scopes"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar expectativas de flujos del vertical y productos comparables; registrar cada requisito como propuesta con evidencia y criterio comprobable, sujeto a decisión de negocio.",
+        "Para respuestas basadas en fuentes, evaluar citas verificables, abstención útil, respeto de ACL y escalamiento humano cuando corresponda.",
+        "Para agentes con acciones, evaluar mínimo privilegio, validación backend, confirmación de efectos irreversibles, límites y trazabilidad redactada."
+      ],
+      "capabilities": [
+        {
+          "name": "Skill viltrum-ai-agents y checklist D18",
+          "kind": "skill",
+          "why": "Procedimiento de guardrails, grounding, evaluación y handoff.",
+          "check": "Revisar departments/D18-*/AGENTS.md y delivery.json; comprobar la skill en el host con viltrum doctor . (no verificado en este análisis)."
+        },
+        {
+          "name": "Fuentes actuales de seguridad y normativa",
+          "kind": "herramienta",
+          "why": "Verificar estándares y obligaciones vigentes.",
+          "check": "Comprobar acceso autorizado a fuentes oficiales y registrar versión y fecha; aplicabilidad legal requiere D12 (no verificado)."
+        },
+        {
+          "name": "Dataset reproducible del dominio",
+          "kind": "dato",
+          "why": "Medir casos normales, abstenciones, ataques, permisos, regresiones y límites.",
+          "check": "Localizar evals/cases.md, runner y resultados fechados; runner disponible no verificado."
+        },
+        {
+          "name": "Sandbox y fixtures aislados",
+          "kind": "acceso",
+          "why": "Probar herramientas sin afectar producción ni datos reales innecesarios.",
+          "check": "Solicitar a D03/D16 sandbox, scopes mínimos y datos sintéticos; acceso no verificado."
+        },
+        {
+          "name": "Telemetría redactada",
+          "kind": "stack",
+          "why": "Reconstruir decisiones, escalaciones, latencia y costo sin registrar secretos.",
+          "check": "Revisar evidencia con D17/D12. OpenTelemetry aparece como candidato en registry/toolchain.json; instalación y conexión no verificadas."
+        },
+        {
+          "name": "Revisión independiente D12",
+          "kind": "dato",
+          "why": "Evitar autoaprobación de prompt safety, permisos y privacidad.",
+          "check": "Confirmar revisor en registry/departments.yaml y handoff/review; firma no presumida."
+        }
+      ],
+      "outputs": [
+        "Expediente del dominio con alcance IA, riesgo, supuestos y desconocidos.",
+        "Matriz de amenazas, controles y evidencia para inyección, privacidad, grounding, herramientas y fallback.",
+        "Expectativas propuestas con fuentes, criterio verificable y decisión pendiente del dueño.",
+        "Inventario de capacidades disponibles, faltantes o desconocidas, comprobación y responsable; sin credenciales.",
+        "Diseño del dataset, criterios, límites de costo/iteración y señales operativas; resultados solo con evidencia de ejecución.",
+        "Handoff a D12 y avisos a departamentos afectados; D18 no aprueba su trabajo."
+      ],
+      "feeds_map": [
+        "Celdas D18 de requisitos, funciones IA, integraciones, permisos, datos, pruebas, operación y legal presentes en el mapa del proyecto; IDs concretos no verificados.",
+        "Proponer entregable, evidencia y dependencias por celda; no cerrar la propia celda."
+      ],
+      "notify": [
+        "D01: límites de respuesta, abstenciones, escalaciones y expectativas que requieren decisión de producto.",
+        "D03: contrato del adaptador, herramientas, efectos, idempotencia y límites; D18 no elige proveedor.",
+        "D11/D22: datos, ACL, retención, redacción y fuentes autorizadas.",
+        "D12: amenazas y pruebas para revisión independiente.",
+        "D17: eventos, métricas, alertas y requisitos de redacción."
+      ],
+      "refresh": "Al cambiar vertical, país, caso de uso, canal, retrieval, memoria, herramienta, dato o ACL; ante incidente o regresión; y antes de gates/releases relevantes.",
+      "anti_patterns": [
+        "Aplicar riesgos LLM genéricos sin relacionarlos con daño, datos y acciones del negocio.",
+        "Tratar instrucciones del prompt o citas generadas como controles verificados.",
+        "Usar casos sintéticos como aceptación del cliente o probar solo el caso feliz.",
+        "Dar permisos amplios o de producción al agente; confiar en argumentos generados por el modelo.",
+        "Registrar prompts sin redactar o tratar contenido recuperado como instrucción confiable.",
+        "Asumir que una herramienta, conexión, norma o runner existe porque aparece en un catálogo.",
+        "Elegir proveedor, definir requisitos de negocio o aprobar el guardrail desde D18."
+      ]
+    },
+    "D19": {
+      "focus": "Volverme experto en los límites, contratos y modos de fallo de los sistemas externos relevantes para el negocio del proyecto, y en cómo conectarlos con adaptadores recuperables, seguros y operables.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué vertical, tipo de producto, país y mercado atiende el proyecto, y qué procesos de negocio cruzan sistemas externos?",
+        "¿Qué proveedor, producto, versión de API y modalidad de integración propone D21, y qué alternativas evaluó?",
+        "¿Qué puerto, entradas, salidas, errores y responsabilidad del adaptador definió D03?",
+        "¿Qué eventos entran o salen, cómo se identifican y qué garantías documentadas hay sobre firma, orden, duplicados y reintentos?",
+        "¿Qué operaciones externas mutan estado o producen cobros, facturas, mensajes u otras consecuencias?",
+        "¿Qué datos, cuentas o tenants se comparten, con qué permisos, retención y restricciones del país?",
+        "¿Qué volumen, latencia, cuotas, costos y ventanas de indisponibilidad debe soportar la integración?",
+        "¿Cómo se reconcilian divergencias, eventos fuera de orden, timeouts ambiguos y efectos parcialmente completados?",
+        "¿Qué sandbox, credenciales autorizadas, observabilidad, responsable de la cola fallida y procedimiento de reversión existen?"
+      ],
+      "research": [
+        {
+          "what": "Contrato vigente del proveedor: autenticación, permisos, webhooks, esquemas, límites, errores, reintentos, versiones y cambios incompatibles.",
+          "sources": [
+            "documentación oficial versionada del proveedor",
+            "notas oficiales de versión y avisos de retiro",
+            "sandbox o fixtures autorizados"
+          ]
+        },
+        {
+          "what": "Expectativas operativas y patrones de integración habituales para el flujo concreto del vertical.",
+          "sources": [
+            "competidores directos e indirectos",
+            "documentación pública de sus flujos",
+            "estándares abiertos aplicables",
+            "casos de soporte y operación aportados por el proyecto"
+          ]
+        },
+        {
+          "what": "Obligaciones que afectan intercambio, almacenamiento y operación de los datos.",
+          "sources": [
+            "normativa del país y sector",
+            "guías oficiales del regulador",
+            "D12 para amenazas y permisos",
+            "D11 para retención y modelo de datos"
+          ]
+        },
+        {
+          "what": "Viabilidad de integrar, adaptar o construir, incluidos salida y costo operativo.",
+          "sources": [
+            "expediente D21",
+            "contrato y mapa de dependencias D03",
+            "licencia y precios publicados por el proveedor",
+            "inventario del stack y capacidades del proyecto"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Para cada flujo, contrastar una ruta de éxito completa y sus fallos visibles con productos comparables del mismo vertical; registrar funciones como propuestas con fuente, prioridad sugerida y decisión pendiente de Wilber.",
+        "Comparar garantías publicadas y observables: confirmación, estado consultable, límites, sandbox, documentación, soporte y manejo de errores; no inferir garantías ausentes.",
+        "Proponer una mejora concreta al estándar del mercado solo cuando reduzca fricción o riesgo del flujo de negocio y pueda verificarse con criterios de aceptación."
+      ],
+      "capabilities": [
+        {
+          "name": "Expediente D21 y puerto de integración D03",
+          "kind": "dato",
+          "why": "Evitan elegir o codificar un proveedor sin decisión, contrato ni límites propios.",
+          "check": "Comprobar el handoff del proyecto: candidatos, decisión y plan de salida de D21; puerto, responsabilidad y amenazas aplicables de D03."
+        },
+        {
+          "name": "Documentación oficial del proveedor y sandbox autorizado",
+          "kind": "acceso",
+          "why": "Permiten verificar el contrato real y probar sin asumir comportamiento ni afectar producción.",
+          "check": "Preguntar a Wilber qué proveedor, versión, tenant y ambiente están autorizados; contrastar el acceso con la consola o configuración del proyecto sin revelar credenciales."
+        },
+        {
+          "name": "Referencia especializada del proveedor",
+          "kind": "skill",
+          "why": "D19 registra que no hay skills dedicadas para WhatsApp Business Cloud API, pasarelas de pago, e-CF de DGII ni n8n; cobertura actual es investigación manual por proyecto.",
+          "check": "Revisar catálogo de skills aplicable y confirmar cobertura y versión; ausencia observada en departments/D19-integrations/AGENTS.md."
+        },
+        {
+          "name": "Viltrum repo-map / búsqueda local",
+          "kind": "herramienta",
+          "why": "Localiza adaptadores, dependencias, contratos y fugas del proveedor en el dominio.",
+          "check": "Comprobar `viltrum repo-map --help` y versión; verificar que el repositorio actual está autorizado. La disponibilidad general está descrita en el catálogo, pero no se comprobó aquí en el host."
+        },
+        {
+          "name": "OpenAPI o AsyncAPI, según el contrato",
+          "kind": "stack",
+          "why": "Explicita y versiona contratos HTTP o de eventos cuando aporte valor al equipo.",
+          "check": "Inspeccionar especificaciones y validadores del proyecto; el catálogo los registra como candidatos, así que instalación y disponibilidad son no verificadas."
+        },
+        {
+          "name": "Persistencia de inbox, deduplicación e idempotencia",
+          "kind": "stack",
+          "why": "Hace recuperables los webhooks duplicados, caídas parciales y reintentos.",
+          "check": "Revisar esquema y migraciones con D11; confirmar unicidad, estados y atomicidad. No asumir que Supabase u otra plataforma está presente."
+        },
+        {
+          "name": "Observabilidad correlacionada",
+          "kind": "herramienta",
+          "why": "Permite reconstruir intentos, latencia, throttling y eventos en cola fallida sin exponer secretos.",
+          "check": "Preguntar a D17 por backend, retención, redacción y acceso; OpenTelemetry figura como candidato, no como conexión verificada."
+        },
+        {
+          "name": "Revisión de seguridad independiente D12",
+          "kind": "acceso",
+          "why": "La firma, los secretos, el aislamiento por cuenta y la superficie expuesta requieren validación fuera de D19.",
+          "check": "Confirmar revisor asignado en registry/departments.yaml y solicitar su handoff cuando exista evidencia concreta."
+        }
+      ],
+      "outputs": [
+        "Expediente D19 con proveedor, versión, flujos, fuentes fechadas y puntos explícitamente no verificados.",
+        "Matriz de capacidades necesarias frente a disponibles, missing o unknown, con comprobación y responsable.",
+        "Expectativas del mercado formuladas como propuestas trazables; no fijar alcance ni reglas de negocio.",
+        "Mapa de operaciones, eventos, estados, límites, errores, retries, idempotencia, reconciliación y cola fallida.",
+        "Riesgos y dependencias para D03, D11 y D12; criterios de prueba y escenarios que requieren sandbox."
+      ],
+      "feeds_map": [
+        "Nodos de integración, contrato/API/evento y dependencias del proveedor.",
+        "Nodos de requisito propuesto, riesgo, aceptación y prueba de integración.",
+        "Celdas D19 con estado propuesto, evidencia, needs_from D03/D11/D12 y delivers_to D12/D14/D17.",
+        "Registro de capacidades para herramientas, skills, accesos y stack requeridos."
+      ],
+      "notify": [
+        "D21: decisión integrar/adaptar/construir, evidencia del proveedor, costos y plan de salida faltantes.",
+        "D03: límites del contrato externo, puerto, versión, errores y dependencias que afectan arquitectura.",
+        "D01/D02: ambigüedad de negocio en duplicados, conflictos, orden, cancelaciones o efectos repetidos.",
+        "D11: persistencia requerida para inbox, idempotencia, deduplicación, reconciliación y retención.",
+        "D12: firma, permisos, secretos, datos personales, pagos y superficie expuesta; revisión independiente obligatoria.",
+        "D14: escenarios reproducibles de firma, duplicado, timeout, throttling, evento fuera de orden y caída parcial.",
+        "D17/D16: métricas, alertas, operación de cola fallida, recuperación y reversión."
+      ],
+      "refresh": "Reabrir ante cambio de proveedor, versión, flujo, país, tipo de dato, volumen, contrato o marca; volver a verificar cuotas y documentación antes de cada fase que dependa de ellas y al investigar incidentes. La vigencia concreta de cada dato queda fechada en el expediente.",
+      "anti_patterns": [
+        "Dar por existente una integración, skill, credencial o sandbox porque aparece en un catálogo.",
+        "Diseñar antes del expediente D21 o implementar sin el puerto D03.",
+        "Confundir recepción de un evento con su procesamiento confirmado.",
+        "Reintentar un timeout de una mutación remota sin idempotencia o reconciliación.",
+        "Deduplicar por contenido, ignorar cuenta/tenant o asumir orden de entrega.",
+        "Aceptar firma calculada sobre JSON reserializado, o tráfico sin validar origen.",
+        "Tratar un ejemplo de competidor o una práctica general como requisito aprobado.",
+        "Afirmar límites, precios, retención o garantías del proveedor sin fuente y fecha.",
+        "Probar efectos reales sin sandbox y autorización, o registrar tokens y payloads sensibles.",
+        "Cerrar la revisión propia; D12 revisa seguridad y secretos, D14 verifica escenarios."
+      ]
+    },
+    "D20": {
+      "focus": "Volverme experto en cómo documentar, enseñar y mantener el conocimiento operativo del proyecto para sus audiencias, dominio y nivel de riesgo.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Qué producto, vertical, país, mercado y audiencias cubre el proyecto?",
+        "¿Qué tareas necesitan completar usuarios, administradores, soporte y operadores?",
+        "¿Qué términos del negocio requieren un glosario y cuáles son ambiguos?",
+        "¿Qué roles y permisos determinan qué manual puede consultar cada audiencia?",
+        "¿Qué obligaciones regulatorias o contractuales afectan la documentación, retención o entrega? (no verificado hasta identificar país y sector)",
+        "¿Qué decisiones, contratos, datos y comandos tienen fuentes canónicas y responsables?",
+        "¿Qué procedimientos críticos de release, rollback, restauración y escalamiento existen y qué ensayos reales los respaldan?",
+        "¿Qué documentos espera el mercado o exige el handoff del cliente?"
+      ],
+      "research": [
+        {
+          "what": "Términos, tareas, roles y flujos habituales del negocio para construir glosario, manuales y ejemplos pertinentes.",
+          "sources": [
+            "documentación y entrevistas autorizadas del proyecto",
+            "material oficial del sector",
+            "expertos del negocio identificados por el cliente"
+          ]
+        },
+        {
+          "what": "Estructura de documentación y capacitación usada en productos comparables; distinguir convenciones de mercado de requisitos del proyecto.",
+          "sources": [
+            "manuales públicos de competidores directos",
+            "centros de ayuda y documentación oficial de productos comparables"
+          ]
+        },
+        {
+          "what": "Obligaciones de documentación, privacidad, retención y accesibilidad según país, sector y riesgo.",
+          "sources": [
+            "normativa y reguladores oficiales del país",
+            "contratos y políticas aprobados del proyecto",
+            "D12 para interpretación de seguridad"
+          ]
+        },
+        {
+          "what": "Exactitud y vigencia de procedimientos, contratos, arquitectura, versiones y runbooks.",
+          "sources": [
+            "repositorio y build identificados",
+            "artefactos aprobados de D03, D11, D16 y D17",
+            "ensayos y reportes atribuibles"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Contrastar manuales y centros de ayuda de productos comparables para proponer tareas, vocabulario y cobertura documental; registrar fuente y prioridad.",
+        "Verificar que la documentación por audiencia corresponda a roles y permisos reales; elevar brechas como propuestas, no como requisitos aprobados.",
+        "Usar Diátaxis para clasificar tutoriales, guías prácticas, referencias y explicaciones; comprobar que los pasos operativos enlacen sus fuentes canónicas.",
+        "Tratar accesibilidad, idiomas y formatos alternativos como expectativas pendientes hasta confirmarlas para el mercado y el contrato."
+      ],
+      "capabilities": [
+        {
+          "name": "viltrum-repo-map",
+          "kind": "herramienta",
+          "why": "Localizar contratos, comandos y cambios del repositorio para documentar desde fuentes verificables.",
+          "check": "Comprobar comando y versión disponibles en el host; el registro menciona viltrum repo-* como alternativa oficial. Disponibilidad de esta sesión: (no verificado)."
+        },
+        {
+          "name": "Diátaxis",
+          "kind": "skill",
+          "why": "Clasificar documentación por necesidad lectora y evitar mezclar propósitos.",
+          "check": "Consultar la guía oficial Diátaxis enlazada en el contrato D20; confirmar versión aplicable."
+        },
+        {
+          "name": "Archify",
+          "kind": "herramienta",
+          "why": "Generar diagramas documentales cuando el entregable los necesite.",
+          "check": "El registro lo declara verificado para uso local; confirmar ruta, versión y ejecución en el host del proyecto."
+        },
+        {
+          "name": "fuentes aprobadas D03/D11/D16/D17",
+          "kind": "acceso",
+          "why": "Obtener arquitectura, decisiones, datos, restauración, release, rollback, alertas y SLO sin inferencias.",
+          "check": "Solicitar los artefactos y permisos mínimos a sus responsables; estado del proyecto destino: (no verificado)."
+        },
+        {
+          "name": "contexto de dominio, audiencia y país",
+          "kind": "dato",
+          "why": "Adaptar lenguaje, obligaciones, ejemplos y capacitación al negocio real.",
+          "check": "Contrastar `.viltrum/expertise/DOMINIO.md`, contrato y preguntas abiertas; aquí no se recibió expediente de cliente."
+        }
+      ],
+      "outputs": [
+        "Expediente D20 con respuestas, fuentes, expectativas, riesgos documentales y propuestas específicas del dominio.",
+        "Mapa de documentos por audiencia y cuadrante Diátaxis, con dueños, versión y fuentes canónicas.",
+        "Inventario de capacidades requeridas frente a available, missing o unknown, con evidencia de comprobación.",
+        "Propuestas documentales para el mapa maestro y handoff; separar pendientes de hechos verificados.",
+        "Registro de lector en frío: bloqueos, alcance de ensayo, evidencia y límites; nunca presentar revisión documental como restauración probada."
+      ],
+      "feeds_map": [
+        "Celdas de documentación, capacitación y handoff asociadas a nodos de requisito, módulo, función, rol, operación, legal y aceptación.",
+        "Enlaces desde nodos de release, rollback, restore y alertas a runbooks canónicos; proponer, no cerrar, las celdas D20."
+      ],
+      "notify": [
+        "D00: expediente, huecos de cobertura documental, fuentes y propuestas para el mapa; revisión independiente.",
+        "D01/D02: términos, tareas, audiencias o alcance de manuales que requieren aclaración.",
+        "D03/D11/D16/D17: fuente ausente, contradicción, cambio o runbook sin referencia suficiente; pedir corrección al dueño.",
+        "D12: exposición potencial por permisos, datos personales, normativa o contenido administrativo.",
+        "D22: lección reutilizable sobre documentación, soporte o lector en frío."
+      ],
+      "refresh": "Al iniciar el proyecto y cuando cambien vertical, país, mercado, audiencia, marca, alcance, roles, integración, arquitectura, esquema, runbook o contrato; revisar documentación afectada en el mismo cambio que introduce la modificación.",
+      "anti_patterns": [
+        "Describir flujos del negocio, comandos o políticas sin fuente aprobada.",
+        "Copiar un runbook en varios manuales y permitir que diverjan; enlazar la fuente canónica.",
+        "Mezclar instrucciones de usuario con operaciones administrativas.",
+        "Confundir benchmark de competidores con requisito aprobado.",
+        "Afirmar cumplimiento normativo sin país, sector y validación del responsable.",
+        "Presentar lectura en frío como ensayo de restore o rollback.",
+        "Publicar ejemplos, capturas o expedientes con secretos o datos personales reales."
+      ]
+    },
+    "D21": {
+      "focus": "Volverme experto en las capacidades y soluciones disponibles para el dominio del proyecto, comparando opciones con evidencia para entregar a D03 una recomendación reversible y un plan de salida.",
+      "depth": "profunda",
+      "questions": [
+        "¿Qué capacidad necesita el negocio y qué queda explícitamente fuera?",
+        "¿Cuál es la vertical, subvertical, tipo de producto, país y mercado?",
+        "¿Qué volumen, actores, flujos y criterios de aceptación aplican?",
+        "¿Qué requisitos regulatorios, de licencia, privacidad y seguridad afectan esta capacidad?",
+        "¿Qué stack, infraestructura, plazo y presupuesto están confirmados?",
+        "¿Qué soluciones o componentes de Viltrum ya cubren parte de la necesidad?",
+        "¿Qué alternativas nativas, open source y SaaS/API existen y qué evidencia respalda su ajuste?",
+        "¿Cómo se exportan datos y se sustituye cada opción si deja de servir?",
+        "¿Qué incertidumbre requiere una prueba aislada y qué mediría su éxito?"
+      ],
+      "research": [
+        {
+          "what": "Capacidad, restricciones, prácticas del dominio, competidores funcionales y criterios de mercado; separar necesidad propia del negocio de capacidades reutilizables.",
+          "sources": [
+            "requisitos y paquete de dominio D01",
+            "documentación oficial del stack",
+            "productos de referencia del mismo vertical",
+            "normativa oficial del país"
+          ]
+        },
+        {
+          "what": "Reutilización interna y opciones de implementación; verificar cobertura, procedencia, licencia, mantenimiento, seguridad, integración, costo a tres años y exportación.",
+          "sources": [
+            "repositorios y componentes internos",
+            "catálogo de dependencias",
+            "repositorios oficiales open source",
+            "documentación y precios oficiales SaaS/API",
+            "registry/toolchain.json"
+          ]
+        },
+        {
+          "what": "Compatibilidad de versión y límites técnicos; preparar PoC acotada si persiste incertidumbre significativa.",
+          "sources": [
+            "documentación oficial versionada",
+            "Context7 si está disponible y verificado",
+            "sandbox autorizado"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Derivar expectativas de productos comparables, documentación y estándares del vertical; registrar fuente, fecha y alcance.",
+        "Proponer requisitos al mapa con prioridad y evidencia; no convertir una observación de mercado en alcance aprobado.",
+        "Contrastar expectativas con necesidades, país, riesgo y marca del proyecto; anotar discrepancias y desconocidos."
+      ],
+      "capabilities": [
+        {
+          "name": "Skill viltrum-research y paquete de investigación D21",
+          "kind": "skill",
+          "why": "Aplicar el método, los umbrales, las estrategias E1–E5 y el expediente de decisión.",
+          "check": "Comprobar la skill y los archivos del paquete en el repositorio; la skill D21 existe, el template research-dossier.md en la ruta indicada por el método no fue localizado (no verificado)."
+        },
+        {
+          "name": "Acceso de lectura a repositorios y componentes internos",
+          "kind": "acceso",
+          "why": "Buscar primero soluciones ya existentes y comprobar procedencia y dependencias.",
+          "check": "Usar viltrum repo-inventory/repo-impact y verificar rutas accesibles; no asumir acceso a otros repositorios."
+        },
+        {
+          "name": "Documentación web oficial",
+          "kind": "herramienta",
+          "why": "Verificar licencias, versiones, mantenimiento, políticas, límites y precios que cambian.",
+          "check": "Comprobar disponibilidad del navegador/MCP del host y registrar fuente y fecha; si no, declarar la verificación pendiente."
+        },
+        {
+          "name": "Context7",
+          "kind": "mcp",
+          "why": "Consultar documentación de bibliotecas ligada a versión cuando la conexión esté habilitada.",
+          "check": "Verificar catálogo MCP, transporte y acceso; aparece como candidato en toolchain, no como conexión disponible (no verificado)."
+        },
+        {
+          "name": "Sandbox sin datos privados ni credenciales del proyecto",
+          "kind": "acceso",
+          "why": "Probar compatibilidad e incertidumbres técnicas sin incorporar el candidato al producto.",
+          "check": "Solicitar/verificar un entorno autorizado, límites de ejecución y datos sintéticos antes de proponer PoC."
+        }
+      ],
+      "outputs": [
+        "Expediente de expertise D21 con respuestas, fuentes fechadas, hechos, inferencias y desconocidos.",
+        "Comparación de al menos tres candidatos o justificación documentada; descartes y puntuación según buy-vs-build.",
+        "Recomendación reversible con estrategia E1–E5, riesgos, licencias, costo estimado a tres años y plan de salida.",
+        "Criterios y duración de PoC aislada cuando el puntaje o la incertidumbre lo requieran.",
+        "Capacidades necesarias frente a disponibles, con método de comprobación y responsable sugerido.",
+        "Celdas propuestas del mapa maestro y avisos a los departamentos afectados."
+      ],
+      "feeds_map": [
+        "Nodo de capacidad/requisito: candidatos, reutilización, evidencia y decisión adopt/adapt/build/none.",
+        "Nodo de módulo e integración: procedencia, licencia, contrato/adaptador propuesto y salida.",
+        "Celda D21: expediente, fuentes, riesgos, estado y handoff a D03."
+      ],
+      "notify": [
+        "D03: comparación, puntuación, incertidumbres, estrategia y plan de salida; D03 decide el encaje y contrato.",
+        "D12: revisión de licencia, seguridad, datos o superficie de herramientas cuando corresponda.",
+        "D11: implicaciones de almacenamiento, exportación, migración o retención de datos.",
+        "D00: capacidades faltantes, bloqueos de acceso y cambios que reabren la inmersión."
+      ],
+      "refresh": "Al cambiar capacidad o alcance, vertical, país/mercado, stack, riesgo o integración; repetir verificaciones de datos cambiantes antes de recomendar y al inicio de cada fase que dependa de ellas.",
+      "anti_patterns": [
+        "Buscar primero una marca o librería en vez de formular la capacidad.",
+        "Tratar toolchain candidato como conexión, licencia o acceso ya concedido.",
+        "Confundir estrellas, popularidad o README con mantenimiento, seguridad y ajuste.",
+        "Omitir la búsqueda interna, la licencia, la exportación o el costo operativo a tres años.",
+        "Presentar expectativas del mercado como requisitos aprobados.",
+        "Usar datos privados en una PoC, recomendar con un candidato sin justificarlo o integrar en vez de entregar investigación.",
+        "Marcar como verificado un dato cambiante sin fuente, fecha y versión aplicable."
+      ]
+    },
+    "D22": {
+      "focus": "adaptada: volverte experto en el flujo de conocimiento del negocio (fuentes, decisiones, documentación, repositorio y herramientas) para entregar contexto mínimo, trazable y vigente a cada perfil, sin asumir decisiones de negocio.",
+      "depth": "adaptada",
+      "questions": [
+        "¿Cuál es la vertical, producto, país, audiencias y vocabulario del proyecto, y qué fuentes autorizadas los describen?",
+        "¿Quién es dueño de cada documento, decisión y sistema fuente (Drive, Notion, Obsidian, Git u otro), y cuál es la fuente de verdad?",
+        "¿Qué decisiones están aprobadas, quién las tomó y cuándo; qué elementos son solo peticiones, hipótesis o simulaciones?",
+        "¿Qué documentos, minutas o historiales contienen evidencia, y cuáles deben resumirse, archivarse o excluirse por privacidad?",
+        "¿Qué perfiles entran en la siguiente etapa y cuáles son exactamente sus cinco piezas de contexto?",
+        "¿Qué contradicciones, duplicados, documentos sin fecha/autor o referencias caducadas pueden alterar el trabajo?",
+        "¿Qué accesos, conectores y comandos están realmente disponibles, y qué comprobación no requiere revelar credenciales?",
+        "¿Hay datos personales, secretos, retención o restricciones de residencia que limiten el almacenamiento o envío de fuentes?"
+      ],
+      "research": [
+        {
+          "what": "Flujo documental real: procedencia, fecha, autor, autoridad de decisión, versiones, duplicados, enlaces y trazabilidad desde fuente hasta handoff.",
+          "sources": [
+            "documentos y registros autorizados del proyecto",
+            "owners entrevistados por D01/D02",
+            "git log y hashes cuando estén disponibles"
+          ]
+        },
+        {
+          "what": "Prácticas vigentes para paquetes de contexto concisos, taxonomía, archivo y gestión de decisiones; separar doctrina comprobada de propuesta.",
+          "sources": [
+            "CLAUDE.md y core/doctrine/context-budget.md del repositorio",
+            "documentación oficial de las plataformas que el proyecto ya usa",
+            "D01 domain-packs cuando existan"
+          ]
+        },
+        {
+          "what": "Cobertura de conocimiento del código y relaciones de impacto para perfiles receptores, acotadas al commit actual.",
+          "sources": [
+            "viltrum snapshot/repo-inventory/repo-pack si el CLI está disponible",
+            "manifiestos y referencias del repositorio",
+            "handoff del departamento anterior"
+          ]
+        },
+        {
+          "what": "Expectativas y requisitos locales de privacidad, retención y tratamiento documental para el país/vertical; elevar interpretación jurídica a D12/D01.",
+          "sources": [
+            "normativa oficial del país",
+            "políticas del dueño del dato",
+            "D12 y asesoría competente"
+          ]
+        }
+      ],
+      "market_expectations": [
+        "Contrasta workflows y capacidades declaradas por competidores directos y plataformas ya elegidas: captura con procedencia, búsqueda, permisos, versionado, enlaces y exportabilidad; verifica cada capacidad en documentación oficial o demo, no en marketing solamente.",
+        "Comprueba con usuarios/owners si pueden localizar una decisión, su autor, fecha y fuente sin releer la transcripción; úsalo como señal de encontrabilidad, no como requisito aprobado automáticamente.",
+        "Evalúa paquetes contra el criterio Viltrum de tres archivos y dos enlaces, resumen primero y exclusión de historial/transcripciones; propone gaps al mapa con evidencia y prioridad para decisión humana.",
+        "Registra país, idioma, retención y privacidad como expectativas condicionadas por fuente oficial; si falta jurisdicción o autoridad, marca (no verificado)."
+      ],
+      "capabilities": [
+        {
+          "name": "Skill viltrum-knowledge",
+          "kind": "skill",
+          "why": "Clasificar fuentes, distinguir decisiones atribuibles y preparar contexto mínimo/versionado.",
+          "check": "Verificar skills/viltrum-knowledge/SKILL.md en la raíz; presente en esta revisión."
+        },
+        {
+          "name": "Skill viltrum-repo-map y comandos repo-*",
+          "kind": "skill",
+          "why": "Generar inventario y paquetes de código por commit sin cargar el árbol completo.",
+          "check": "Archivo skills/viltrum-repo-map/SKILL.md presente; disponibilidad del ejecutable: (no verificado), comprobar con Get-Command viltrum y viltrum --help en el host."
+        },
+        {
+          "name": "Git para procedencia y hash",
+          "kind": "herramienta",
+          "why": "Comprobar versiones y fijar identidad de los artefactos consultados, sin tratar el hash como prueba de autoría.",
+          "check": "Comprobar git --version y acceso de lectura al repositorio; ambos (no verificado) en esta inmersión."
+        },
+        {
+          "name": "Acceso de lectura a fuentes autorizadas (Drive/Notion/vault/conectores del proyecto)",
+          "kind": "acceso",
+          "why": "Leer únicamente documentos relevantes y respetar permisos y política de retención.",
+          "check": "Revisar .viltrum/capabilities.json y catálogo MCP del host; validar acceso por recurso sin imprimir tokens ni credenciales. Disponibilidad (no verificado)."
+        },
+        {
+          "name": "Metadatos de dominio y autoridad",
+          "kind": "dato",
+          "why": "Evitar atribuir decisiones o requisitos al negocio sin responsable, jurisdicción y fuente.",
+          "check": "Pedir a D01/D02 owner, país, fuentes permitidas y autoridades de decisión; no consta para un proyecto cliente en esta tarea."
+        }
+      ],
+      "outputs": [
+        "Expediente D22 con fuentes citadas, respuestas, hechos/declaraciones/hipótesis separados, gaps y expectativas propuestas.",
+        "Inventario breve de fuentes con ruta, versión/hash, fecha/autor cuando estén disponibles; sin copiar secretos ni material personal innecesario.",
+        "Paquete para cada perfil receptor: objetivo, estado, cinco piezas, decisiones vigentes, referencias, contradicciones, bloqueos y preguntas con owner.",
+        "Registro de cobertura/recencia, enlaces rotos, duplicados y transcripciones sin decisión extraída; propuestas al mapa claramente no aprobadas.",
+        "Lista de capacidades con estado available/missing/unknown, comprobación segura, owner y costo/licencia por verificar antes de adoptar herramientas externas."
+      ],
+      "feeds_map": [
+        "Nodos de fuente, decisión, evidencia, handoff, requisito y riesgo; enlazar procedencia y vigencia, dejando alcance/aceptación a sus dueños.",
+        "Celda D22: expediente de contexto, needs_from (D01/D02/D21 y owner de fuentes) y delivers_to (perfiles activos, D00); no cerrar la celda propia."
+      ],
+      "notify": [
+        "D00: huecos de paquete, conflictos, caducidad y límites de acceso; pedir revisión independiente del expediente antes de promoverlo.",
+        "D01/D02: decisión de negocio sin atribución, dominio/owner/jurisdicción faltante o expectativa de mercado propuesta que requiere aceptación.",
+        "D12: indicio de secreto/dato sensible o duda de retención; no replicar el valor sensible en el aviso.",
+        "Perfiles receptores: versión del paquete, fuente de verdad, cambios que invalidan su contexto y capacidades desconocidas."
+      ],
+      "refresh": "Al inicio de proyecto y antes de sembrar el mapa; al cambiar vertical, país, marca, fuentes, integración, política de retención, etapa o perfil receptor; al invalidarse un contrato/enlace/hash; y en cada cierre de fase. La cadencia para datos vivos es >90 días sin revisión, según D22 AGENTS.md.",
+      "anti_patterns": [
+        "Convertir una petición, resumen de IA o escenario sintético en decisión aprobada.",
+        "Mezclar fuente, interpretación y requisito; deduplicar borrando la procedencia o elegir arbitrariamente una fuente de verdad.",
+        "Entregar transcripciones completas, historial o árboles enteros cuando bastan decisiones enlazadas y paquetes pequeños.",
+        "Declarar disponible un MCP, vault, CLI o acceso por estar mencionado en catálogo o skill, sin comprobarlo.",
+        "Copiar secretos/datos personales al expediente, hash como prueba de autoría, o archivar un secreto en vez de escalarlo a D12.",
+        "Marcar una expectativa como aprobada, cerrar celda propia o aprobar el trabajo de D22."
+      ]
+    }
+  },
+  "pending": []
+}

@@ -30,10 +30,10 @@ skills:
   experiencia_movil_nativa:     mobile-native-experience
   verificacion_visual:          [browser-automation, playwright-cli]
   pruebas_de_componente:        playwright-best-practices
-  explorar_codigo_existente:    gitnexus-exploring
-  analisis_de_impacto:          gitnexus-impact-analysis
-  depuracion:                   gitnexus-debugging
-  refactor_seguro:               gitnexus-refactoring
+  explorar_codigo_existente:    viltrum-repo-map
+  analisis_de_impacto:          viltrum-repo-map
+  depuracion:                   viltrum-repo-map
+  refactor_seguro:               viltrum-repo-map
   revision_de_codigo_propia:    code-review
   revision_de_seguridad:        security-review
   simplificacion:               simplify

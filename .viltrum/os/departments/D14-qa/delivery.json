@@ -25,7 +25,8 @@
     "Datos y cuentas aislados de producción",
     "Pruebas negativas de permisos y concurrencia",
     "Flakiness visible y acotada",
-    "Revisión independiente D00"
+    "Revisión independiente D00",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

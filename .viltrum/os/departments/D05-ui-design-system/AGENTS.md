@@ -43,11 +43,15 @@ En este orden, sin saltar:
 | 4 | Radios, bordes, sombras | Un conjunto corto y consistente |
 | 5 | Duraciones y curvas de movimiento | Tres duraciones máximo |
 | 6 | Modo claro y oscuro | Definidos a la vez, no uno después del otro |
-| 7 | Puntos de corte responsive | 390 / 430 / 768 / 1024 / 1440 |
+| 7 | Puntos de corte responsive | 320 / 390 / 430 / 768 / 1024 / 1440 — **fuente única**; 320 es el reflow de WCAG 1.4.10 |
 
 Todo como **tokens**. Un valor literal en una pantalla es un hallazgo P2.
 
-### Paso 3 — Componentes antes que composición
+### Paso 3 — Component Scout antes de construir
+
+La composición puede explorarse primero en 2–3 opciones comp-first para fijar jerarquía y
+estructura antes de implementar. El Component Scout y la reutilización/licencia de
+componentes se resuelven antes de construir la composición seleccionada.
 
 Cada componente se entrega con **todas** sus variantes y estados:
 
@@ -57,6 +61,9 @@ Cada componente se entrega con **todas** sus variantes y estados:
 - Estado de error cuando aplique
 
 **El foco visible no es opcional y no se elimina nunca.**
+
+Para portfolios editoriales con narrativa de scroll, aplica la guía común revisada por D00
+(HND-012) en [`core/design-experience-os.md` §9](../../core/design-experience-os.md#portfolio-editorial-motion).
 
 ### Paso 4 — Composición de pantallas
 

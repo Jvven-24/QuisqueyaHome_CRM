@@ -1,0 +1,29 @@
+{
+  "author": "properui",
+  "description": "A searchable ⌘K-style command palette for filtering and selecting actions, settings or people from a keyboard-first popover or inline list.",
+  "framework": "",
+  "id": "33493",
+  "metadata": {
+    "author": "properui",
+    "authorImage": "https://github.com/properui.png",
+    "description": "A searchable ⌘K-style command palette for filtering and selecting actions, settings or people from a keyboard-first popover or inline list.",
+    "id": 33493,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/properui/command-menu?[REDACTED]",
+    "name": "Command Menu",
+    "previewUrl": "https://cdn.21st.dev/properui/command-menu/users/preview.1790642178546-5152e689-3e67-4273-80c8-61490dd23fc9.png",
+    "type": "component",
+    "url": "https://21st.dev/@properui/components/command-menu",
+    "videoUrl": "https://cdn.21st.dev/properui/command-menu/users/video.1790642178546-5152e689-3e67-4273-80c8-61490dd23fc9.mp4"
+  },
+  "name": "Command Menu",
+  "previewUrl": "https://cdn.21st.dev/properui/command-menu/users/preview.1790642178546-5152e689-3e67-4273-80c8-61490dd23fc9.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:01.834715+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "734815b6383485fcc826adf6bfe6c746c44c0446f930001438eebc40ea1563c2"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@properui/components/command-menu"
+}

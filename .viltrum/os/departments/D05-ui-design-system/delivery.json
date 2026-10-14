@@ -23,7 +23,8 @@
     "evidencia de anchos G3",
     "formularios y formatos definidos",
     "licencia y compatibilidad para reutilizacion",
-    "revision independiente D07 registrada"
+    "revision independiente D07 registrada",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

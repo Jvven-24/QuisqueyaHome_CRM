@@ -3,6 +3,12 @@
 Formato basado en Keep a Changelog. Versiones según SemVer 2.0.0: mayor cambia el
 contrato de entrada o salida, menor añade checklist o procedimiento, parche corrige.
 
+## [1.2.0] — 2026-10-06
+
+### Añadido
+- Paquete de plataforma `platform-packs/supabase.md` (stack insignia): cambio obligatorio de Data API del 2026-10-30, esquema `realtime` bloqueado, analítica/replicación (Pipelines, ETL, Analytics Buckets) y lista de salida.
+- Pendiente de revisión independiente D12; `eval_score` sigue sin medirse.
+
 ## [1.1.0] — 2026-09-29
 
 ### Añadido

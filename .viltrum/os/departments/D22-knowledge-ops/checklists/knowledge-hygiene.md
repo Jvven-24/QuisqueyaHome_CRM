@@ -42,7 +42,7 @@
 
 ## F. Código indexado
 
-- [ ] El repositorio del proyecto está indexado con `gitnexus` si el proyecto lo requiere
+- [ ] Existe `repo-inventory` del repositorio del proyecto si el proyecto tiene código
 - [ ] Fecha del último índice registrada
 - [ ] El índice se reconstruyó después de un cambio estructural significativo, no quedó
       desactualizado en silencio

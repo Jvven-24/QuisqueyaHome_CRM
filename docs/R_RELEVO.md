@@ -16,25 +16,27 @@ Diseño que lo gobierna:
 
 | | |
 |---|---|
-| **Rama** | `dev/reestructuracion-solid` |
-| **Fecha** | 2026-10-02 |
-| **Fase** | **R3 CERRADA**, 7 de 7. Siguiente: R4 (consultas de lectura) |
-| **Pruebas** | **334 en verde**, `typecheck`, `lint` y `build` limpios |
+| **Rama** | `develop` |
+| **Fecha** | 2026-10-14 |
+| **Fase** | **TRANSFORMACIÓN DE DISEÑO Y MÓDULOS 360 COMPLETADA (Private Desk)** |
+| **Pruebas** | **617 en verde**, `typecheck` y `lint` limpios (0 errores) |
 
-### Módulos ya migrados a `src/application/`
-
-`contactos` (R1.3, piloto) · `pipeline` (R3.1) · `leads` (R3.2) ·
-`actividades` (R3.3) · `proyectos` (R3.4) · `usuarios` y `roles` (R3.5) ·
-`comisiones`, `metas` y `brokers` (R3.6) ·
-`catalogos`, `etapas` y `papelera` (R3.7)
-
-Todos integrados en la rama: comprobado con `git merge-base --is-ancestor`.
-
-### Lo que falta de la reestructuración
-
-- **R4.1 a R4.3** (#52, #53, #54) — consultas de lectura. **R4.1 es el siguiente.**
-- **R5.2 a R5.8** (#55 a #60, #44) — migración de vistas a Tailwind v4 + shadcn.
-- **R6.1** (#45) — cierre y PR a `develop`.
+### Módulos completados y elevados al estándar Private Desk
+- `/inicio`: Dashboard Ejecutivo 360 con 4 KPIs maestros, embudo comercial, agenda del día y ranking de proyectos.
+- `/negocios`: Tablero Kanban de 7 columnas, totales tabulares dorados, DealInspector 360 con auditoría cronológica, y vista de lista TanStack.
+- `/leads`: Franja de métricas, chips temáticos de canales, semáforo de temperatura comercial y botón «Tomar lead» concurrente.
+- `/contactos`: Directorio con avatares de lujo, ficha patrimonial 360 y acciones WhatsApp/llamada de 48px.
+- `/propiedades` & `/propiedades/[slug]`: Bento Grid en Navy profundo, sello Confotur (Ley 158-01), barra de absorción, doble esquema de precios (Admin ve precio real con candado, Broker ve rango público) y matriz interactiva de unidades.
+- `/avances`: Línea constructiva de 8 fases con nodos interactivos (`✓` completada, `%` en vivo), editor con slider ARIA accesible y bóveda de evidencia fotográfica con lightbox modal.
+- `/brokers` & `/brokers/[id]`: Roster con avatares, niveles de carrera (`Junior`, `Senior`, `Top Producer`, `Top Leader`), cartera activa y ficha individual con histórico de metas.
+- `/metas`: Donut circular SVG (*Goal Ring*), podio de medallas de honor (🥇, 🥈, 🥉), sparklines SVG de tendencia anual y comparativa de ventas mes a mes.
+- `/comisiones`: 3 KPIs financieros multimoneda (USD vs DOP, regla M22), desglose de Split dual (Broker vs Agencia) y modal interactivo de porcentajes.
+- `/agenda`: Calendario semanal (8:00 a 18:00) con código cromático, descarga `.ics` individual y semanal, y enlace a Google Calendar.
+- `/tareas`: Checklist operativo con animación de tachado suave (`completed`), semáforo de urgencia y widget lateral de balance de carga.
+- `/comunicaciones`: Catálogo de plantillas, simulador realista de smartphone para WhatsApp con variables dinámicas en vivo y monitor de canales.
+- `/reportes`: Embudo secuencial con retención y caída porcentual entre etapas, gráfico de fuga comercial, ranking de proyectos y botón de impresión limpia ejecutiva en PDF.
+- `/configuracion`: Navegación lateral interna, matriz RBAC con candados inmutables (`Lock`), selectores de alcance accesibles y papelera de reciclaje lógica (cero borrado físico).
+- `/academy`: Hub sincronizado con Moodle 4.5 LMS local, avance circular SVG, checklists de inducción para nuevos asesores, bóveda de constancias oficiales con hash criptográfico SHA-256 y salvaguarda Q-C1-03 (aprobación de un solo nivel por Administrador, nadie se autoaprueba).
 
 Después de R6.1: limpieza completa del repositorio y, al final, despliegue al
 VPS para validación por módulos con el cliente (decisión #17).

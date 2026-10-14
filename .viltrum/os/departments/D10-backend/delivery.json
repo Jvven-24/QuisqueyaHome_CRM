@@ -25,7 +25,8 @@
     "colas/deduplicacion sobreviven crash",
     "cache aislada y paginacion limitada",
     "NFR medidos con dataset y ambiente",
-    "revision independiente D12 y handoff D14/D13"
+    "revision independiente D12 y handoff D14/D13",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

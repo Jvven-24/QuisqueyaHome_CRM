@@ -1,0 +1,29 @@
+{
+  "author": "uvain",
+  "description": "Revenue dashboard kit: KPI cards that know whether up is good, area, bar and donut charts on Recharts, each with a text description and a hidden data table for screen readers. Follows your chart colours. Part of the Layro System: layro.vercel.app",
+  "framework": "",
+  "id": "33507",
+  "metadata": {
+    "author": "uvain",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_3AAcYdXInfTxs5akkUBbQIUQdhX/avatar.png",
+    "description": "Revenue dashboard kit: KPI cards that know whether up is good, area, bar and donut charts on Recharts, each with a text description and a hidden data table for screen readers. Follows your chart colours. Part of the Layro System: layro.vercel.app",
+    "id": 33507,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/uvain/revenue-charts-kpi?[REDACTED]",
+    "name": "Charts & KPI Cards",
+    "previewUrl": "https://cdn.21st.dev/uvain/revenue-charts-kpi/default/preview.1790667019181-592211b0-3aa6-4cb6-9c28-cd62c5494a2b.jpg",
+    "type": "component",
+    "url": "https://21st.dev/@uvain/components/revenue-charts-kpi",
+    "videoUrl": "https://cdn.21st.dev/user_3AAcYdXInfTxs5akkUBbQIUQdhX/revenue-charts-kpi/default/video.1790666593365.mp4"
+  },
+  "name": "Charts & KPI Cards",
+  "previewUrl": "https://cdn.21st.dev/uvain/revenue-charts-kpi/default/preview.1790667019181-592211b0-3aa6-4cb6-9c28-cd62c5494a2b.jpg",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:41.937696+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "a6ac8fa98475b655b86304642a87e26478c04d91656142fa9f9f030a64701890"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@uvain/components/revenue-charts-kpi"
+}

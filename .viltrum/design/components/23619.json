@@ -1,0 +1,29 @@
+{
+  "author": "cnippet-dev",
+  "description": "A warning alert callout with a triangle icon, title and description for surfacing cautionary messages.",
+  "framework": "",
+  "id": "23619",
+  "metadata": {
+    "author": "cnippet-dev",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_36Tbt0v8JdD4jEycmBFhR8tojnR/avatar.png",
+    "description": "A warning alert callout with a triangle icon, title and description for surfacing cautionary messages.",
+    "id": 23619,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/cnippet-dev/v-alert-6?[REDACTED]",
+    "name": "Warning Alert",
+    "previewUrl": "https://cdn.21st.dev/cnippet.dev/v-alert-6/default/preview.1785491150683-565f4c5b-6151-4261-b852-314b5dfabf5c.png",
+    "type": "component",
+    "url": "https://21st.dev/@cnippet-dev/components/v-alert-6",
+    "videoUrl": null
+  },
+  "name": "Warning Alert",
+  "previewUrl": "https://cdn.21st.dev/cnippet.dev/v-alert-6/default/preview.1785491150683-565f4c5b-6151-4261-b852-314b5dfabf5c.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:07.853643+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6dff87db7e2176ba4e8387824f9cb00c26c1808f13ef79e2dcb343f3d9a1115a"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@cnippet-dev/components/v-alert-6"
+}

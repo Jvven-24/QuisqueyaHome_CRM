@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-84bd99ff493d4323842cb14676bd7067",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D03",
+  "actor": "codex-scope-specs",
+  "goal": "Subficha outbox I01-A y diagnóstico spec:check",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:50:50.966827+00:00",
+  "updatedAt": "2026-10-05T01:53:11.699370+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:50:50.966892+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:53:11.699349+00:00",
+      "status": "finished",
+      "message": "I01-A DRAFT detallada; TOOL-001 DRAFT creada para corrección mínima de spec:check; 11 bloqueos históricos documentados, sin editar código ni aprobar"
+    }
+  ]
+}

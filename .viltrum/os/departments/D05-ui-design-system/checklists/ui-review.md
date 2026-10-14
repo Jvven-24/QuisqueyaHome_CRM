@@ -36,7 +36,7 @@ Por cada pantalla:
 - [ ] **Error** — mensaje específico, lo escrito se conserva
 - [ ] **Sin conexión** — página propia, no el error del navegador
 - [ ] **Éxito** — confirmación específica, estado final visible
-- [ ] **Permisos** — deshabilitado con razón visible, no falla después de intentar
+- [ ] **Permisos** — deshabilitado con razón visible, no falla después de intentar; acciones y obligatorios según R1–R2 de `core/doctrine/ux-states.md` § "Contrato de retroalimentación de acciones y formularios"
 
 - [ ] Los mensajes son texto real, no "TBD"
 - [ ] Matriz pantalla × estado completa
@@ -48,7 +48,7 @@ Por cada pantalla:
 ## F. Responsive
 
 Verificado y capturado en:
-- [ ] 390 px — el que más duele
+- [ ] 320 y 390 px — los que más duelen
 - [ ] 430 px
 - [ ] 768 px
 - [ ] 1024 px

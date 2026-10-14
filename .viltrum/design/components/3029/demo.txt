@@ -1,0 +1,5 @@
+import { Component } from "@/components/ui/calculator";
+
+export default function DemoOne() {
+  return <Component />;
+}

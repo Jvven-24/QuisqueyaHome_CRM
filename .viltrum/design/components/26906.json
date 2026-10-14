@@ -1,0 +1,29 @@
+{
+  "author": "openstatusHQ",
+  "description": "An interactive uptime timeline of color-coded daily status bars with hover cards showing incident/maintenance details, keyboard navigation, and touch support, used on status pages to visualize service history.",
+  "framework": "",
+  "id": "26906",
+  "metadata": {
+    "author": "openstatusHQ",
+    "authorImage": "https://github.com/openstatusHQ.png",
+    "description": "An interactive uptime timeline of color-coded daily status bars with hover cards showing incident/maintenance details, keyboard navigation, and touch support, used on status pages to visualize service history.",
+    "id": 26906,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/openstatusHQ/status-bar?[REDACTED]",
+    "name": "Status Bar",
+    "previewUrl": "https://cdn.21st.dev/openstatusHQ/status-bar/default/preview.1788991387985-d1093371-a908-4db0-8a78-f61a6cf0f0e9.png",
+    "type": "component",
+    "url": "https://21st.dev/@openstatusHQ/components/status-bar",
+    "videoUrl": "https://cdn.21st.dev/openstatusHQ/status-bar/default/video.1788991387985-d1093371-a908-4db0-8a78-f61a6cf0f0e9.mp4"
+  },
+  "name": "Status Bar",
+  "previewUrl": "https://cdn.21st.dev/openstatusHQ/status-bar/default/preview.1788991387985-d1093371-a908-4db0-8a78-f61a6cf0f0e9.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:10.819802+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4e0c54be2018c8c69120c747718eaf4a105dca71fd45c5d532f5f54f6d464fd9"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@openstatusHQ/components/status-bar"
+}

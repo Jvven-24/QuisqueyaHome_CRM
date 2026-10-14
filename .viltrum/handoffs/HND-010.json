@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D21",
+  "gate": "G1",
+  "actor": "codex-gpt-6.1-sol-d21",
+  "createdAt": "2026-10-03T22:42:49.209504+00:00",
+  "state": "review_pending",
+  "reviewer": "D03",
+  "summary": {
+    "path": ".viltrum/crm-ux/D21-academy-opensource.md",
+    "sha256": "bd1848edccc0f9c11d435fe086c9f6b11d4bd2619b77bd18b03e0707272f046c",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261003T223257Z-D21-codex/evidence.json",
+      "sha256": "4e7586e3d23c61cdd3ea2c72836be78c93e0b21b77efa267150decaf5946e254",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-010"
+}

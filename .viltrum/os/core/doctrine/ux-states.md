@@ -7,6 +7,16 @@
 
 Cada elemento se evalúa contra esta tabla. La salida es una matriz **pantalla × estado**.
 
+Reglas de la matriz:
+- Una celda **N/A** solo es válida con una razón escrita (ej. "pantalla pública: no hay
+  permiso insuficiente"). N/A sin razón cuenta como estado sin resolver.
+- **Reintentar es un evento, no un estado**: lleva de error o sin conexión a carga. Se
+  diseña el disparador (botón, automático, con qué límite) dentro de esos estados.
+- Los subcasos *inicial* (antes de la primera acción) y *parcial* (unos datos cargaron,
+  otros fallaron) se resuelven dentro de CARGA, SIN DATOS y ERROR; no son estados extra.
+- Esta lista es la única fuente: la matriz de D06, los casos de D14 y el monitor la
+  consumen; ninguno mantiene su propia variante.
+
 ### 1. CARGA
 
 | Caso | Solución |
@@ -140,4 +150,38 @@ Cada elemento se evalúa contra esta tabla. La salida es una matriz **pantalla �
 - [ ] Doble envío bloqueado
 - [ ] Navegable por teclado en orden lógico
 - [ ] Errores anunciados a tecnología asistiva
-- [ ] Probado en 390px de ancho
+- [ ] Probado en los puntos de corte de D05, incluido 320px
+- [ ] Obligatorios marcados y acción primaria sin deshabilitar en silencio (R1–R2, sección siguiente)
+
+---
+
+## Contrato de retroalimentación de acciones y formularios
+
+> Fuente única del contrato R1–R8. D05, D09, D10 y D14 lo **refieren**; ninguno lo copia.
+> Origen: caso Quisqueya (2026-10-06), campos obligatorios sin marca y Guardar deshabilitado sin decir por qué.
+
+| # | Regla | Contrato |
+|---|---|---|
+| R1 | **Obligatorio visible y programático** | Todo campo obligatorio lleva marca visible consistente (asterisco + leyenda, o la palabra "Obligatorio") y `required` / `aria-required`. La marca y su leyenda salen del catálogo de textos, no del componente |
+| R2 | **Ninguna acción primaria deshabilitada sin razón** | Preferido: **no deshabilitar por validación**. Se permite enviar y se responde con resumen de errores arriba (enlace a cada campo), foco al primer campo inválido y datos conservados. Si se deshabilita (permiso, operación en curso, dependencia sin cumplir), la razón va junto al botón, enlazada con `aria-describedby`, y **nombra qué falta** ("Falta: Teléfono, Dirección") |
+| R3 | **Mensaje en tres partes** | Qué pasó + cómo corregirlo + referencia si el error es de servidor. Por clave de catálogo, localizable |
+| R4 | **Contrato de error de servidor** | RFC 9457 con extensión `errors[]` = `{ field, code, messageKey, params }`. Validación = 422. El cliente mapea cada elemento a su campo; el error sin campo va al resumen general; nunca solo un aviso efímero |
+| R5 | **Validación redundante en tres capas, con prueba por capa** | El servidor rechaza lo que el cliente dejaría pasar; la base de datos rechaza lo que el servidor dejaría pasar. Reglas compartidas desde el mismo esquema o catálogo cuando sea posible |
+| R6 | **Estados del botón** | Reposo, hover, foco visible, activo, deshabilitado (con razón), cargando (bloquea doble envío), éxito |
+| R7 | **Guardar** | Éxito: confirmación específica de qué se guardó. Error: se conserva todo lo escrito |
+| R8 | **Hallazgos** | Ver tabla siguiente |
+
+### Hallazgos R8
+
+| Hallazgo | Severidad | Regla violada |
+|---|---|---|
+| Botón primario deshabilitado sin razón visible | P2 | R2 |
+| Campo obligatorio sin marca visible o sin `required` / `aria-required` | P2 | R1 |
+| Error de servidor mostrado solo como mensaje genérico o efímero (toast sin campo ni resumen) | P2 | R3, R4 |
+| Error de campo que pierde lo escrito | P1 (no proviene de R8) | Sección ERROR: "**Prohibido:** perder lo que el usuario escribió"; Presupuesto de formularios, regla 6: "Perder el progreso es P1" (formularios de más de un paso) |
+
+Notas:
+- La razón de un botón deshabilitado nunca se limita a un tooltip: debe ser texto visible y
+  accesible por teclado y lector de pantalla (verificación profunda: D07).
+- Deshabilitado por **permiso** sigue la fila de PERMISOS; R2 extiende la misma exigencia a
+  validación, dependencias y operación en curso.

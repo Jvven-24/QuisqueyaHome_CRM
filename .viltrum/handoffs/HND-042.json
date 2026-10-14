@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "department": "D09",
+  "gate": "G4",
+  "actor": "codex-d09-academy-ui",
+  "createdAt": "2026-10-05T03:34:46.096972+00:00",
+  "state": "review_approved",
+  "reviewer": "D14",
+  "summary": {
+    "path": "src/app/(crm)/academy/vista.tsx",
+    "sha256": "665dd84a5e1395a834075eeddd422c58d8bb648b6ed5b1804fb83cbb906f75ab",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/reviews/CORE-0-verificacion-integrada-2026-10-04.md",
+      "sha256": "c754242f928718cae74191e275cc37e4cbdf96918657092f00bc059ac96161bb",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-042",
+  "review": {
+    "reviewer": "D14",
+    "actor": "claude-d14-independent",
+    "result": "approved",
+    "report": {
+      "path": ".viltrum/reviews/D14-revision-CORE-0-code-r2-2026-10-04.md",
+      "sha256": "ecad72316e84d0a02e57447ddd878cdb1039e8b7fbb97cad87951ce90d622f3b",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    },
+    "createdAt": "2026-10-05T03:34:55.320842+00:00"
+  }
+}

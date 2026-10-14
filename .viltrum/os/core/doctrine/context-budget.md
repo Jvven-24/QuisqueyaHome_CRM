@@ -8,11 +8,11 @@ Un departamento arranca con **cinco piezas** y nada más:
 
 | # | Pieza | Tamaño objetivo |
 |---|---|---|
-| 1 | `CLAUDE.md` raíz — doctrina | ~6 KB, estable, cacheable |
-| 2 | `SOUL.md` + `AGENTS.md` del departamento | ~4 KB |
+| 1 | `CLAUDE.md` raíz — doctrina | ~6 KB (hoy ~11 KB), estable, cacheable |
+| 2 | `SOUL.md` + núcleo `AGENTS.md` del departamento (referencias aparte) | ~6 KB |
 | 3 | Checklist activa de la fase | ~2 KB |
 | 4 | Paquete de handoff del departamento anterior | variable, resumido |
-| 5 | `current-status.md` del proyecto | ~1 KB |
+| 5 | `.viltrum/status.md` del proyecto (resumen) | ≤ 1,5 KB |
 
 **Nunca** entra: el historial de la conversación anterior completo, documentos de otros
 departamentos, transcripciones sin procesar, ni el árbol completo del repositorio.
@@ -69,6 +69,32 @@ Subir de nivel: requiere la condición `escalate.when` del perfil, registrada.
 
 Cada subagente arranca en frío: pagar por re-derivar contexto que ya tienes es
 exactamente el desperdicio que esta doctrina evita.
+
+## Reglas de forma (2026-10-05)
+
+- **Una sola doctrina por sesión.** En el repositorio del OS la doctrina es `CLAUDE.md` de la
+  raíz; en un proyecto instalado, `.viltrum/os/CLAUDE.md`. Nunca ambas.
+- **`status.md` es un resumen ≤ 1,5 KB.** Cada sesión añade como máximo 5 líneas; lo anterior
+  pasa a `status-history.md`, que no se carga por defecto.
+- **Perfil = núcleo + referencias.** `AGENTS.md` conserva contrato de entrada y salida, reglas
+  que aplican siempre y checklist de salida. Lo que solo aplica a un proveedor, stack o caso va
+  a `departments/<Dxx>/references/*.md`, con una línea en el núcleo que diga **cuándo** cargarlo.
+  Se mueve sin reescribir; la evaluación del perfil se repite antes y después.
+- **Código: consulta antes que lectura.** `viltrum repo-pack`/`repo-context` antes de abrir
+  archivos completos; nunca el árbol entero.
+
+## Línea base medida (bytes, 2026-10-05; tokens pendientes de medir con el proveedor)
+
+| Pieza | Antes | Ahora | Meta |
+|---|---|---|---|
+| Arranque en el repo del OS: `CLAUDE.md` + `AGENTS.md` + `.viltrum/status.md` (+ `.viltrum/os/CLAUDE.md` antes) | 9,8 + 1,9 + 17,0 + 11,2 ≈ 40 KB | 10,9 + 2,0 + 1,3 ≈ 14 KB | ≤ 12 KB |
+| `SOUL.md` + `AGENTS.md` por perfil, promedio | 14 KB | 14 KB | ~6 KB |
+| D19 (piloto núcleo + referencias) | 28 KB | 19,6 KB | ~10 KB |
+
+La métrica que manda es el **costo por entrega aceptada** (tokens de entrada, salida y caché
+más revisiones y reintentos), no los bytes de un archivo. La PoC de memoria contextual
+(`experiments/context-memory-poc/`) midió 33,6 % menos tokens de entrada en corrida
+sintética; no se adopta hasta completar su evaluación.
 
 ## Criterio de terminado
 

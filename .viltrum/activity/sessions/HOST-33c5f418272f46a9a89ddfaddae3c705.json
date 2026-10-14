@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-33c5f418272f46a9a89ddfaddae3c705",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D16",
+  "actor": "codex-local-runtime",
+  "goal": "Limitar publicación local de Twenty 9320 a loopback con rollback y verificación",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:48:23.618840+00:00",
+  "updatedAt": "2026-10-05T01:53:48.817920+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:48:23.618903+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:53:48.817899+00:00",
+      "status": "finished",
+      "message": "Twenty :9320 limitado a 127.0.0.1; copia/rollback preparados; /healthz 200 y Docker healthy; CRM/PortalWeb conservan respuestas; evidencia D16 actualizada"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "author": "ssychui",
+  "description": "An exchange terminal on one ruled workspace: candle chart under an interval bar, book or tape as tabs, ticket and account on the right, and a full-width positions register at the fold.",
+  "framework": "",
+  "id": "943",
+  "metadata": {
+    "author": "ssychui",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_3CdJgTW8geRShR3gegqAjY0JB3B/avatar.png",
+    "description": "An exchange terminal on one ruled workspace: candle chart under an interval bar, book or tape as tabs, ticket and account on the right, and a full-width positions register at the fold.",
+    "id": 943,
+    "name": "Trading Terminal",
+    "previewUrl": "https://cdn.21st.dev/user_3CdJgTW8geRShR3gegqAjY0JB3B/templates/trading-terminal/preview-1789404342734.png",
+    "price": 99,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/trading-terminal"
+  },
+  "name": "Trading Terminal",
+  "previewUrl": "https://cdn.21st.dev/user_3CdJgTW8geRShR3gegqAjY0JB3B/templates/trading-terminal/preview-1789404342734.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:46.934241+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6834ca5bee29259d3c4ac915eea6fe2a0d79c0935b59bd2505c5dbe26710f145"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/trading-terminal"
+}

@@ -120,7 +120,7 @@ nota aclaratoria verbal.
 | Entrega de manuales o reportes en PDF | `anthropic-skills:pdf` |
 | Presentación de capacitación o handoff | `anthropic-skills:pptx` |
 | Diagramas de arquitectura, flujo o dependencias | `artifact-diagramming` |
-| Explorar el código existente para documentar con precisión, no por inferencia | `gitnexus-exploring` |
+| Explorar el código existente para documentar con precisión, no por inferencia | `viltrum-repo-map` (explorar) |
 
 ---
 

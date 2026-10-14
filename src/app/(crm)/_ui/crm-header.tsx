@@ -1,8 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+interface NotificacionItem {
+  id: number;
+  notificationType: string;
+  title: string;
+  body: string | null;
+  entityType: string | null;
+  entityId: number | null;
+  isRead: boolean;
+  createdAt: string;
+}
 import {
   Search,
   Plus,
@@ -39,7 +50,60 @@ export function CrmHeader({
 }: CrmHeaderProps) {
   const pathname = usePathname();
   const [commandOpen, setCommandOpen] = useState(false);
-  const [unreadNotifications, setUnreadNotifications] = useState(3);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [notificaciones, setNotificaciones] = useState<NotificacionItem[]>([]);
+  const [cargandoNotificaciones, setCargandoNotificaciones] = useState(false);
+
+  useEffect(() => {
+    let montado = true;
+    async function cargar() {
+      try {
+        setCargandoNotificaciones(true);
+        const res = await fetch("/api/notificaciones");
+        if (res.ok) {
+          const data = await res.json();
+          if (montado && data.ok) {
+            setNotificaciones(data.notificaciones ?? []);
+            setUnreadNotifications(data.unreadCount ?? 0);
+          }
+        }
+      } catch {
+        // Fallo suave de red
+      } finally {
+        if (montado) setCargandoNotificaciones(false);
+      }
+    }
+    void cargar();
+    return () => {
+      montado = false;
+    };
+  }, []);
+
+  async function marcarTodasLeidas() {
+    setUnreadNotifications(0);
+    setNotificaciones((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    try {
+      await fetch("/api/notificaciones", { method: "PATCH" });
+    } catch {
+      // Ignorar
+    }
+  }
+
+  async function marcarUnaLeida(id: number) {
+    setNotificaciones((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+    );
+    setUnreadNotifications((prev) => Math.max(0, prev - 1));
+    try {
+      await fetch("/api/notificaciones", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+    } catch {
+      // Ignorar
+    }
+  }
 
   // Determine current active module and workspace
   const currentModule = MODULOS.find(
@@ -92,6 +156,11 @@ export function CrmHeader({
 
         {/* Right section: Quick actions, notifications */}
         <div className="flex items-center gap-2 shrink-0">
+          {etiquetaRol ? (
+            <span className="hidden lg:inline-flex items-center px-2 py-0.5 text-[11px] font-medium text-slate-600 bg-slate-100 rounded-md border border-slate-200/80">
+              {etiquetaRol}
+            </span>
+          ) : null}
           {/* Quick Action button */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -176,7 +245,7 @@ export function CrmHeader({
                 {unreadNotifications > 0 && (
                   <button
                     type="button"
-                    onClick={() => setUnreadNotifications(0)}
+                    onClick={marcarTodasLeidas}
                     className="text-[11px] font-medium text-slate-500 hover:text-slate-800 cursor-pointer"
                   >
                     Marcar leídas
@@ -184,54 +253,55 @@ export function CrmHeader({
                 )}
               </div>
               <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
-                <div className="p-3 hover:bg-slate-50 transition-colors">
-                  <div className="flex items-start gap-2.5">
-                    <span className="size-2 rounded-full bg-gold-600 mt-1.5 shrink-0" />
-                    <div>
-                      <strong className="text-xs text-slate-900 block font-medium">
-                        Nuevo Lead desde el Portal
-                      </strong>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
-                        Interesado en proyecto Bávaro Beach Lofts.
-                      </p>
-                      <small className="text-[10px] text-slate-400 block mt-1">
-                        Hace 12 minutos
-                      </small>
-                    </div>
+                {cargandoNotificaciones && notificaciones.length === 0 ? (
+                  <div className="p-4 text-center text-xs text-slate-400">
+                    Cargando notificaciones...
                   </div>
-                </div>
-                <div className="p-3 hover:bg-slate-50 transition-colors">
-                  <div className="flex items-start gap-2.5">
-                    <span className="size-2 rounded-full bg-sky-500 mt-1.5 shrink-0" />
-                    <div>
-                      <strong className="text-xs text-slate-900 block font-medium">
-                        Cita programada hoy
-                      </strong>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
-                        Reunión virtual con comprador internacional a las 4:00 PM.
-                      </p>
-                      <small className="text-[10px] text-slate-400 block mt-1">
-                        Hace 45 minutos
-                      </small>
-                    </div>
+                ) : notificaciones.length === 0 ? (
+                  <div className="p-4 text-center text-xs text-slate-400">
+                    No tienes notificaciones pendientes.
                   </div>
-                </div>
-                <div className="p-3 hover:bg-slate-50 transition-colors">
-                  <div className="flex items-start gap-2.5">
-                    <span className="size-2 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                    <div>
-                      <strong className="text-xs text-slate-900 block font-medium">
-                        Actualización de obra
-                      </strong>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
-                        Fase 3 validada por ingeniería en Punta Cana Hills.
-                      </p>
-                      <small className="text-[10px] text-slate-400 block mt-1">
-                        Hoy 10:20 AM
-                      </small>
+                ) : (
+                  notificaciones.map((n) => (
+                    <div
+                      key={n.id}
+                      onClick={() => !n.isRead && marcarUnaLeida(n.id)}
+                      className={`p-3 transition-colors cursor-pointer ${
+                        n.isRead ? "bg-white hover:bg-slate-50/60 opacity-80" : "bg-gold-50/20 hover:bg-gold-50/40"
+                      }`}
+                    >
+                      <div className="flex items-start gap-2.5">
+                        <span
+                          className={`size-2 rounded-full mt-1.5 shrink-0 ${
+                            n.isRead
+                              ? "bg-slate-300"
+                              : n.notificationType.includes("lead")
+                              ? "bg-gold-600"
+                              : n.notificationType.includes("meeting")
+                              ? "bg-sky-500"
+                              : "bg-emerald-500"
+                          }`}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <strong className="text-xs text-slate-900 block font-medium truncate">
+                            {n.title}
+                          </strong>
+                          {n.body && (
+                            <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-2">
+                              {n.body}
+                            </p>
+                          )}
+                          <small className="text-[10px] text-slate-400 block mt-1 font-mono">
+                            {new Date(n.createdAt).toLocaleDateString("es-DO", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </small>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
               <div className="p-2 border-t border-slate-100 text-center bg-slate-50/50">
                 <Link

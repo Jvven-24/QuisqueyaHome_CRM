@@ -147,7 +147,7 @@ estar activas desde el minuto uno, y el runbook de reversión listo por si hace 
 
 | Necesidad | Skill/herramienta |
 |---|---|
-| Explorar infraestructura y pipelines existentes | `gitnexus-exploring` |
+| Explorar infraestructura y pipelines existentes | `viltrum-repo-map` (explorar) |
 | Revisión de seguridad de pipeline, secretos y contenedores | `security-review` |
 | Diagramas de pipeline, topología de ambientes y flujo de despliegue | `artifact-diagramming` |
 

@@ -30,14 +30,34 @@
 
 ## E. Heurísticas de Nielsen aplicadas
 
-Por cada recorrido, verificación explícita:
-- [ ] Visibilidad del estado del sistema en cada paso
-- [ ] Lenguaje del recorrido coincide con el vocabulario del usuario, no con el del sistema
-- [ ] Existe salida o cancelación en cada paso donde tiene sentido
-- [ ] El mismo tipo de acción se resuelve igual que en otros recorridos del mismo producto
-- [ ] El recorrido previene el error antes de tener que explicarlo (validación temprana, confirmación en lo irreversible)
-- [ ] El usuario no necesita recordar información de un paso anterior sin que esté visible
-- [ ] Existe atajo para el usuario frecuente sin obligar al usuario nuevo a usarlo
+Fuente: Nielsen Norman Group, [“10 Usability Heuristics for User Interface Design”](https://www.nngroup.com/articles/ten-usability-heuristics/). Por cada recorrido, registra cada heurística por separado con hallazgo (o «sin hallazgo»), severidad, evidencia/localizador, decisión y estado (pendiente, en curso, resuelto o aceptado con motivo). Usa la escala de severidad 0–4 de NN/g: 0 = no es un problema de usabilidad; 1 = problema cosmético; 2 = problema menor; 3 = problema mayor; 4 = catástrofe de usabilidad.
+
+Plantilla (una fila por heurística):
+
+| Heurística | Hallazgo | Severidad 0–4 | Evidencia | Decisión | Estado |
+|---|---|---:|---|---|---|
+| 1. Visibilidad del estado del sistema |  |  |  |  |  |
+| 2. Correspondencia entre el sistema y el mundo real |  |  |  |  |  |
+| 3. Control y libertad del usuario |  |  |  |  |  |
+| 4. Consistencia y estándares |  |  |  |  |  |
+| 5. Prevención de errores |  |  |  |  |  |
+| 6. Reconocimiento antes que recuerdo |  |  |  |  |  |
+| 7. Flexibilidad y eficiencia de uso |  |  |  |  |  |
+| 8. Diseño estético y minimalista |  |  |  |  |  |
+| 9. Ayudar a reconocer, diagnosticar y recuperarse de errores |  |  |  |  |  |
+| 10. Ayuda y documentación |  |  |  |  |  |
+
+Criterios operativos para orientar la revisión:
+- **1. Visibilidad del estado:** verifica que el usuario conozca el estado del sistema en cada paso.
+- **2. Correspondencia:** comprueba que el lenguaje del recorrido coincida con el vocabulario del usuario, no con el del sistema.
+- **3. Control y libertad:** confirma que exista salida o cancelación en cada paso donde tiene sentido.
+- **4. Consistencia:** comprueba que el mismo tipo de acción se resuelva igual que en otros recorridos del producto.
+- **5. Prevención de errores:** verifica que el recorrido prevenga el error antes de tener que explicarlo (validación temprana, confirmación en lo irreversible).
+- **6. Reconocimiento:** comprueba que el usuario no necesite recordar información de un paso anterior sin que esté visible.
+- **7. Flexibilidad y eficiencia:** confirma que exista un atajo para el usuario frecuente sin obligar al usuario nuevo a usarlo.
+- **8. Diseño minimalista:** comprueba que cada información o acción mostrada sea pertinente al objetivo del paso.
+- **9. Recuperación de errores:** verifica que los errores expliquen qué ocurrió y permitan retomar la tarea.
+- **10. Ayuda y documentación:** comprueba que la orientación necesaria esté disponible y sea localizable cuando el usuario la necesite.
 
 ## F. Formularios dentro del recorrido
 

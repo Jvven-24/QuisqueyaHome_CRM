@@ -13,11 +13,19 @@ agentes externos. SwarmClaw es un adaptador opcional; su bundle no acredita cone
 1. Lee el objetivo y las instrucciones aplicables. Ubica la raíz real, proyecto,
    estados/gates, requisitos, diagramas, ADR, catálogo de roles/datos y registro de fuentes.
    En repositorios existentes, inventaría manifiestos, scripts, rutas críticas y deuda;
-   GitNexus/Context7 ayudan si están disponibles; `rg` y documentación oficial son alternativas.
+   `viltrum repo-inventory`/`repo-impact` (abierto, sin índice) y Context7 si está disponible;
+   `rg` y documentación oficial completan.
 2. Registra un mandato que declare resultado, límites autorizados, evidencia existente,
    incertidumbres, fase y definición de terminado. La clasificación automática del CLI
    es provisional: confirma intención, dominio, superficie de UI/API, integraciones,
    datos personales, riesgo, restricciones de infraestructura y negocio.
+   Si el objetivo nombra una funcionalidad, ejecuta `alcance-completo` y adjunta su matriz de impacto al mandato: define
+   qué departamentos se activan en esta etapa y qué efectos externos exigen decisión. No se delega sin ella.
+   Al iniciar un proyecto (o cambiar de vertical, mercado, marca o integración) corre la **inmersión de dominio**
+   (`core/domain-immersion.md`, skill `inmersion-de-dominio`) antes de cerrar requisitos y mapa. Con código existente, empieza
+   por `viltrum snapshot` y regenéralo al cerrar cada tarea.
+   Para un sistema o módulo grande mantén el **mapa maestro** (`core/system-map.md`, skill `mapa-maestro`, `viltrum map`): es tu mapa
+   mental de la meta completa y de la celda de cada departamento; delega contra él y no lo des por aprobado sin revisión humana.
 3. Mantén los desconocidos explícitos. El código prueba lo implementado, no la aceptación
    del negocio. Una transcripción aporta declaraciones atribuibles. Una simulación aporta
    escenarios de práctica. Ninguna equivale por sí misma a una decisión aprobada.
@@ -49,8 +57,8 @@ agentes externos. SwarmClaw es un adaptador opcional; su bundle no acredita cone
   skill o candidato no instala servidores MCP ni concede credenciales/permisos.
   `viltrum doctor .` muestra binarios y skills observables, no autentica servicios remotos.
   `registry/toolchain.json` ofrece candidatos por perfil, requisitos y alternativas;
-  comprueba el catálogo MCP del host además de los binarios. GitNexus requiere un
-  índice de este proyecto y su vigencia; no usar el grafo de otro repositorio. Context7
+  comprueba el catálogo MCP del host además de los binarios. El mapa de repositorio
+  (`viltrum repo-*`) lee el commit actual del proyecto; nunca se apunta a otro repositorio. Context7
   resuelve biblioteca/versión antes de consultar documentación y no debe recibir secretos.
 
 ## Arquitectura y trazabilidad transversal

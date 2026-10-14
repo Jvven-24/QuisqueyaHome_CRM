@@ -1,0 +1,29 @@
+{
+  "author": "daiwiikharihar",
+  "description": "Neo‑brutalist animated dashboard showcasing system load, weekly traffic, health radar, and interactive metrics using React, Tailwind, and Framer Motion.",
+  "framework": "",
+  "id": "9758",
+  "metadata": {
+    "author": "daiwiikharihar",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_332oxzW8MyPod4IDIdKq9rbPYuk/avatar.jpeg",
+    "description": "Neo‑brutalist animated dashboard showcasing system load, weekly traffic, health radar, and interactive metrics using React, Tailwind, and Framer Motion.",
+    "id": 9758,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/daiwiikharihar/bento-dashboard?[REDACTED]",
+    "name": "Bento Dashboard",
+    "previewUrl": "https://cdn.21st.dev/user_332oxzW8MyPod4IDIdKq9rbPYuk/bento-dashboard/default/preview.1787862280504.png",
+    "type": "component",
+    "url": "https://21st.dev/@daiwiikharihar/components/bento-dashboard",
+    "videoUrl": "https://cdn.21st.dev/user_332oxzW8MyPod4IDIdKq9rbPYuk/bento-dashboard/default/video.1787862617024.mp4"
+  },
+  "name": "Bento Dashboard",
+  "previewUrl": "https://cdn.21st.dev/user_332oxzW8MyPod4IDIdKq9rbPYuk/bento-dashboard/default/preview.1787862280504.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:38.755354+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "360e93bfb9f1a992b9a45beee2ed6a207e7e7ba2567a60d52f3f26fecc6c0e2c"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@daiwiikharihar/components/bento-dashboard"
+}

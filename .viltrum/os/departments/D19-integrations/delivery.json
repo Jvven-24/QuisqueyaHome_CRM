@@ -26,7 +26,8 @@
     "out of order y version manejados",
     "retry budget/cuotas y DLQ trazables",
     "tenant/account/scopes aislados",
-    "revision independiente D12"
+    "revision independiente D12",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

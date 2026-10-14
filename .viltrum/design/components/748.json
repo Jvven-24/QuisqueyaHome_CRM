@@ -1,0 +1,28 @@
+{
+  "author": "senommu",
+  "description": "A polished SaaS admin UI you can run today — auth, analytics, CRM-style modules, and a custom design system included.\n\nWhat’s inside\n\n- 🔐  Clerk auth — sign-in, sign-up, OTP, forgot password\n\n- 📊  Dashboard & Analytics — KPIs, charts, world map\n\n- 👥  Workspaces, Customers, Orders\n\n- ✅  Tasks, Calendar, Notes, Chats, Apps\n\n- ⚙️  Full settings — account, theme, team, billing & more\n\n- 🎨  Homlu design kit — light/dark, brand colors, RTL\n\n- ⌘  Command menu, sidebar layouts, polished tables\n\n\nStack\n\nReact 19 · Vite · TypeScript · TanStack Router/Query · Shadcn UI · Tailwind v4 · Clerk · Recharts · FullCalendar",
+  "framework": "",
+  "id": "748",
+  "metadata": {
+    "author": "senommu",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_39720J8FZrHCoGeL23ljF4x20L3/avatar.jpeg",
+    "description": "A polished SaaS admin UI you can run today — auth, analytics, CRM-style modules, and a custom design system included.\n\nWhat’s inside\n\n- 🔐  Clerk auth — sign-in, sign-up, OTP, forgot password\n\n- 📊  Dashboard & Analytics — KPIs, charts, world map\n\n- 👥  Workspaces, Customers, Orders\n\n- ✅  Tasks, Calendar, Notes, Chats, Apps\n\n- ⚙️  Full settings — account, theme, team, billing & more\n\n- 🎨  Homlu design kit — light/dark, brand colors, RTL\n\n- ⌘  Command menu, sidebar layouts, polished tables\n\n\nStack\n\nReact 19 · Vite · TypeScript · TanStack Router/Query · Shadcn UI · Tailwind v4 · Clerk · Recharts · FullCalendar",
+    "id": 748,
+    "name": "Dash by Motoko UI",
+    "previewUrl": "https://cdn.21st.dev/user_39720J8FZrHCoGeL23ljF4x20L3/templates/homlu-admin-react-dashboard-template/preview-1786266894661.png",
+    "price": 49,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/homlu-admin-react-dashboard-template"
+  },
+  "name": "Dash by Motoko UI",
+  "previewUrl": "https://cdn.21st.dev/user_39720J8FZrHCoGeL23ljF4x20L3/templates/homlu-admin-react-dashboard-template/preview-1786266894661.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.980928+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "10301f6225d9265c01a686de8cdd24644b354d16041fcfedfc524907d54adf3f"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/homlu-admin-react-dashboard-template"
+}

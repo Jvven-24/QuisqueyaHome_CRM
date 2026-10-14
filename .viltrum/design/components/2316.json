@@ -1,0 +1,29 @@
+{
+  "author": "TomIsLoading",
+  "description": "here is interactive kanban board",
+  "framework": "",
+  "id": "2316",
+  "metadata": {
+    "author": "TomIsLoading",
+    "authorImage": "https://avatars.githubusercontent.com/u/108590766?v=4",
+    "description": "here is interactive kanban board",
+    "id": 2316,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/TomIsLoading/kanban?[REDACTED]",
+    "name": "Kanban",
+    "previewUrl": "https://cdn.21st.dev/user_TomIsLoading/kanban/default/preview.1785486593442.png",
+    "type": "component",
+    "url": "https://21st.dev/@TomIsLoading/components/kanban",
+    "videoUrl": "https://cdn.21st.dev/user_TomIsLoading/kanban/default/video.1785486580122.mp4"
+  },
+  "name": "Kanban",
+  "previewUrl": "https://cdn.21st.dev/user_TomIsLoading/kanban/default/preview.1785486593442.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:22.885311+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "b71d99cd3e43f6b47301d6ea72606361e2fe986edb85ba77d4c4980460e2ecec"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@TomIsLoading/components/kanban"
+}

@@ -37,6 +37,7 @@ export default async function BrokersPage() {
       .select({
         userId: users.id,
         fullName: users.fullName,
+        email: users.email,
         jobTitle: users.jobTitle,
         roleName: roles.name,
         specialty: brokerProfiles.specialty,
@@ -92,12 +93,15 @@ export default async function BrokersPage() {
     return {
       userId: broker.userId,
       fullName: broker.fullName,
+      email: broker.email,
       jobTitle: broker.jobTitle ?? broker.roleName,
       specialty: broker.specialty,
       level: broker.level,
       annualSalesCents: broker.annualSalesCents,
       negociosActivos: negociosPorId.get(broker.userId) ?? 0,
       porcentajeMeta: cumplimientoPorcentaje(achievedDeals, targetDeals),
+      targetDeals,
+      achievedDeals,
     };
   });
 

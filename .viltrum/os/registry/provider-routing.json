@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-01",
+  "authority": "Única fuente de proveedor externo, modelo y línea headless para tools/profile_dispatch.py (P2). Modelos verificados en la CLI de cada proveedor el 2026-10-01; un modelo nuevo se evalúa con la suite interna (viltrum eval-*) antes de cambiarlo aquí.",
+  "playbook": "Viltrum AI Engineering Playbook 2026, ed. 1.0 (30-sep-2026): Codex/Sol columna vertebral; Claude especialista premium y revisión; Gemini fuerza paralela de QA; Kimi repo grande y UI; Grok crítica e investigación. Primer modelo que resuelve con pruebas en verde detiene el escalamiento.",
+  "providers": {
+    "codex": {
+      "executable": "codex",
+      "model": "gpt-6.1-sol",
+      "model_verified_by": "~/.codex/config.toml model = gpt-6.1-sol",
+      "effort": "xhigh",
+      "argv": {
+        "analysis": [
+          "exec",
+          "--sandbox",
+          "read-only",
+          "--skip-git-repo-check",
+          "-m",
+          "{model}",
+          "-c",
+          "model_reasoning_effort={effort}",
+          "-c",
+          "mcp_servers={{}}",
+          "-C",
+          "{project}",
+          "-o",
+          "{deliverable_abs}",
+          "-"
+        ],
+        "fix": [
+          "exec",
+          "--sandbox",
+          "workspace-write",
+          "--skip-git-repo-check",
+          "-m",
+          "{model}",
+          "-c",
+          "model_reasoning_effort={effort}",
+          "-c",
+          "mcp_servers={{}}",
+          "-C",
+          "{project}",
+          "-"
+        ]
+      },
+      "prompt_via": "stdin",
+      "mcp_note": "mcp_servers={} desde 2026-10-04: con los ~20 MCP del config del usuario (Hostinger, Figma, Linear...) codex exec se colgaba 27 min sin tocar archivos (CPU ~0) o caía con 'memory allocation failed'. Sin MCP responde en 12 s. Las tareas headless no usan MCP.",
+      "areas": [
+        "backend",
+        "api",
+        "db",
+        "migraciones",
+        "full-stack",
+        "refactor",
+        "debug",
+        "pruebas-unitarias"
+      ],
+      "notes": "Sandbox read-only bloquea red: no sirve para auditar la VPS por SSH. En read-only no puede escribir archivos: el entregable sale por -o (último mensaje), escrito por el CLI fuera del sandbox.",
+      "tiers": {
+        "small": {
+          "model": "gpt-6-luna",
+          "effort": "medium"
+        },
+        "medium": {
+          "model": "gpt-6.1-sol",
+          "effort": "high"
+        },
+        "large": {
+          "model": "gpt-6.1-sol",
+          "effort": "xhigh"
+        }
+      },
+      "tiers_verified_by": "codex exec -m gpt-6-luna → OK (2026-10-02); gpt-6.1-luna no admitido con cuenta ChatGPT",
+      "web_search_flag": "--search"
+    },
+    "kimi": {
+      "executable": "kimi",
+      "model": "kimi-code/k3",
+      "model_verified_by": "~/.kimi-code/config.toml [models.\"kimi-code/k3\"] (playbook: Kimi K3)",
+      "argv": {
+        "analysis": [
+          "-m",
+          "{model}",
+          "-p",
+          "{prompt}"
+        ],
+        "fix": [
+          "-m",
+          "{model}",
+          "-p",
+          "{prompt}"
+        ]
+      },
+      "prompt_via": "argv",
+      "areas": [
+        "repo-grande",
+        "frontend",
+        "ui",
+        "refactor-multiarchivo",
+        "trazabilidad",
+        "documentacion",
+        "revision"
+      ],
+      "notes": "Ni --auto ni -y se combinan con -p (\"Cannot combine --prompt with --yolo\"); en modo -p ya edita archivos. Abre subagentes propios.",
+      "tiers": {
+        "small": {
+          "model": "kimi-code/kimi-for-coding-highspeed"
+        },
+        "medium": {
+          "model": "kimi-code/kimi-for-coding"
+        },
+        "large": {
+          "model": "kimi-code/k3"
+        }
+      }
+    },
+    "antigravity": {
+      "executable": "agy",
+      "model": "gemini-3.1-pro-low",
+      "model_verified_by": "agy models",
+      "argv": {
+        "analysis": [
+          "-p",
+          "{prompt}",
+          "--model",
+          "{model}",
+          "--mode",
+          "accept-edits",
+          "--dangerously-skip-permissions"
+        ],
+        "fix": [
+          "-p",
+          "{prompt}",
+          "--model",
+          "{model}",
+          "--mode",
+          "accept-edits",
+          "--dangerously-skip-permissions"
+        ]
+      },
+      "prompt_via": "argv",
+      "areas": [
+        "qa",
+        "qa-masivo",
+        "e2e",
+        "navegador",
+        "multimodal",
+        "edge-cases"
+      ],
+      "notes": "Headless deniega en silencio las herramientas de terminal y sale con 0 si no se aprueban; la aprobación queda dentro de --sandbox. --mode plan no escribe archivos (probado 2026-10-02): el análisis también usa accept-edits y el prompt limita la escritura al entregable. gemini-3.8-flash-high devolvió 503 \"No capacity available\": reintentar con medium/low.",
+      "status": "activo con gemini-3.1-pro-low SIN --sandbox (2026-10-02): con --sandbox un comando de terminal se cuelga (node --version: 302 s sin resultado); sin sandbox 85 s y correcto. Mismo modelo de confianza que Grok/Kimi: la restricción la pone el prompt (archivos asignados, sin producción, sin secretos, sin commits).",
+      "tiers": {
+        "small": {
+          "model": "gemini-3.1-pro-low"
+        },
+        "medium": {
+          "model": "gemini-3.1-pro-low"
+        },
+        "large": {
+          "model": "gemini-3.1-pro-high"
+        }
+      }
+    },
+    "grok": {
+      "executable": "grok",
+      "model": "grok-4.7",
+      "model_verified_by": "grok models (default)",
+      "effort": "xhigh",
+      "argv": {
+        "analysis": [
+          "-p",
+          "{prompt}",
+          "--model",
+          "{model}",
+          "--always-approve",
+          "--max-turns",
+          "100",
+          "--output-format",
+          "plain"
+        ],
+        "fix": [
+          "-p",
+          "{prompt}",
+          "--model",
+          "{model}",
+          "--always-approve",
+          "--max-turns",
+          "150",
+          "--output-format",
+          "plain"
+        ]
+      },
+      "prompt_via": "argv",
+      "areas": [
+        "investigacion",
+        "research",
+        "segunda-opinion",
+        "revision-adversarial",
+        "debug-largo"
+      ],
+      "notes": "-p es de un turno: sin --always-approve y --max-turns solo devuelve el preámbulo. build-fast gasta muchos turnos cortos: 40 turnos no bastaron para revisar un catálogo de 514 claves (2026-10-02).",
+      "tiers": {
+        "small": {
+          "model": "grok-4.7-build-fast",
+          "effort": "low"
+        },
+        "medium": {
+          "model": "grok-4.7",
+          "effort": "high"
+        },
+        "large": {
+          "model": "grok-4.7",
+          "effort": "xhigh"
+        }
+      }
+    }
+  },
+  "routing": {
+    "D01": [
+      "kimi",
+      "grok"
+    ],
+    "D02": [
+      "kimi",
+      "codex"
+    ],
+    "D03": [
+      "codex",
+      "grok"
+    ],
+    "D04": [
+      "kimi",
+      "grok"
+    ],
+    "D05": [
+      "kimi",
+      "codex"
+    ],
+    "D06": [
+      "kimi",
+      "codex",
+      "antigravity"
+    ],
+    "D07": [
+      "kimi",
+      "codex",
+      "antigravity"
+    ],
+    "D08": [
+      "grok",
+      "kimi"
+    ],
+    "D09": [
+      "kimi",
+      "codex"
+    ],
+    "D10": [
+      "codex",
+      "kimi"
+    ],
+    "D11": [
+      "codex",
+      "kimi"
+    ],
+    "D12": [
+      "grok",
+      "codex"
+    ],
+    "D13": [
+      "codex",
+      "kimi"
+    ],
+    "D14": [
+      "kimi",
+      "codex",
+      "antigravity"
+    ],
+    "D15": [
+      "codex",
+      "kimi",
+      "antigravity"
+    ],
+    "D16": [
+      "codex",
+      "grok"
+    ],
+    "D17": [
+      "codex",
+      "kimi"
+    ],
+    "D18": [
+      "grok",
+      "codex"
+    ],
+    "D19": [
+      "codex",
+      "kimi"
+    ],
+    "D20": [
+      "kimi",
+      "grok"
+    ],
+    "D21": [
+      "grok",
+      "kimi"
+    ],
+    "D22": [
+      "kimi",
+      "grok"
+    ]
+  },
+  "review_rule": "El revisor es otro proveedor distinto del productor (P4). Claude (host) revisa y mejora el sistema de perfiles; producción y C1 siempre requieren humano.",
+  "task_tiers": {
+    "_regla": "Tarea mecánica → small; producción con criterio y revisiones → medium; arquitectura, seguridad, datos, investigación profunda o revisión adversarial → large. Escalar solo con evidencia de fallo (playbook).",
+    "traduccion": "small",
+    "paridad": "small",
+    "documentacion": "small",
+    "qa-contenido": "small",
+    "revision": "medium",
+    "frontend": "medium",
+    "backend": "large",
+    "datos": "large",
+    "seguridad": "large",
+    "arquitectura": "large",
+    "investigacion": "large"
+  }
+}

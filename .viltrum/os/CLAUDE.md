@@ -37,6 +37,14 @@ perfil con un evaluador independiente y citas verificadas (`docs/architecture/HA
 
 ---
 
+## Regla de oro (Wilber, 2026-10-03)
+
+**Cada perfil es meticuloso, modular y cumple solo su función.** Un perfil no hace el trabajo de otro:
+produce lo que su contrato (`departments/<Dxx>/delivery.json`) declara, verifica cada afirmación con
+evidencia (archivo:línea, comando, captura en los puntos de corte de D05, de 320 a 1440), entrega piezas pequeñas y reemplazables,
+y pasa el resto por handoff. Información ordenada de D00 a D22: cada salida dice qué perfil la produjo,
+quién la revisa y qué falta. Lo que no está verificado se marca, nunca se presenta como hecho.
+
 ## Los 8 principios
 
 ### P0 — Todo está creado
@@ -91,6 +99,25 @@ Auditoría desde el primer día, no como "fase 2". Secretos fuera del repositori
 
 ---
 
+## Órdenes permanentes del dueño (no se pierden)
+
+Cada orden apunta a lo que la hace cumplir. Una orden sin mecanismo es una brecha, no una nota.
+
+| Orden de Wilber | Se cumple con |
+|---|---|
+| Extraer siempre la idea y mejorar el prompt con todo lo que implica; sus ejemplos son ejemplos, no límites | `core/doctrine/mandate-layer.md` (paso 2b), `templates/mandate.md` |
+| D00 tiene un mapa maestro vivo del sistema completo; cada departamento aporta su parte; Wilber lo lee y lo corrige | `core/system-map.md`, `skills/mapa-maestro`, `viltrum map` |
+| Al iniciar un proyecto cada perfil se vuelve experto en ese negocio y declara qué skills/herramientas/conexiones necesita | `core/domain-immersion.md`, `skills/inmersion-de-dominio`, `registry/domain-immersion.json` |
+| Entender todo el código rápido y sin gastar tokens; actualizarlo al cerrar cada tarea | `viltrum snapshot` (`.viltrum/snapshot/SNAPSHOT.md`, `delta.json`) |
+| Ante "integra X": alcance, etapa y efectos externos determinados solos; cada departamento cierra su parte | `skills/alcance-completo`, `core/routing.md` |
+| Formularios y acciones que explican: obligatorio marcado, botón nunca deshabilitado sin motivo, error en su campo | `core/doctrine/ux-states.md` (Contrato R1–R8) |
+| Robusto y escalable "como en el mercado"; validación en tres capas con prueba por capa | checklists de D05, D09, D10 y D14 |
+| Supabase es el stack insignia | `departments/D11-data/platform-packs/supabase.md` |
+| Gastar pocos tokens grandes: pre-gates gratuitos primero, el grande recibe lo filtrado | `registry/free-gates.json`, `tools/free_gates.py` |
+| Lo aprendido se persiste y se avisa a los departamentos afectados | `registry/lessons.json`, `tools/check_lessons.py` |
+| Se trabaja sobre la fuente, nunca sobre la copia instalada `.viltrum/os` | `tools/check_install_drift.py`, `viltrum upgrade` |
+| Diseño senior y creación local: Design & Experience OS; Open Design como creador local (piloto), Claude Design como benchmark, PXIL/VILTRUM DESING como base | `core/design-experience-os.md`, `registry/design-resources.json` |
+
 ## Cómo se trabaja aquí
 
 0. **Entender antes de hacer — capa de mandato.** Ninguna petición no trivial se ejecuta
@@ -116,6 +143,12 @@ Auditoría desde el primer día, no como "fase 2". Secretos fuera del repositori
    genera una skill, un cambio de SOP, un test o la deprecación de una práctica. Se escribe
    en el `MEMORY.md` del departamento. Si no se escribe, no ocurrió.
 
+5. **Lo aprobado se integra con commit al cierre.** Toda entrega termina en un commit a la rama
+   principal cuando, y solo cuando, su revisor independiente la aprobó y la verificación está en
+   verde (build, pruebas, verificadores). Nada aprobado queda sin commit; nada sin aprobar entra.
+   Los agentes productores no hacen commit: lo hace el orquestador tras la aprobación, con mensaje
+   que nombre productor, revisor y evidencia. Así cada ciclo deja el sistema integrado y reversible.
+
 ---
 
 ## Antipatrones prohibidos
@@ -134,6 +167,23 @@ Estos son errores concretos y repetidos. Cometerlos es un hallazgo, no una prefe
 | Borrado físico sin rastro | Borrado lógico + auditoría, salvo requisito legal contrario |
 | "Después le ponemos tests" | Criterio de aceptación con prueba desde el diseño |
 | Escalar copiando y pegando el módulo anterior | Extraer el patrón, parametrizarlo, reutilizarlo |
+| Catálogo público en 503 o pantalla vacía si cae la base de datos | Fallback a snapshot estático con HTTP 200 y consultas secundarias aisladas; la vitrina pública nunca se bloquea |
+
+---
+
+## Herramientas oficiales
+
+Rutas, versiones y licencias viven en `registry/toolchain.json` y `registry/design-resources.json`;
+aquí solo la regla.
+
+- **Diagramas → Archify.** Arquitectura, PRD/RFC/ADR, flujos de datos, secuencias y ciclos
+  de vida se entregan como HTML validado con `finalize --quality showcase`. Sin receipt de
+  Archify en verde, el diagrama no cuenta como evidencia; Mermaid solo como borrador declarado.
+- **Componentes → Galería PXIL privada.** D04, D05, D09 y D10 la consultan
+  antes de crear componentes o pantallas desde cero, y evalúan ajuste visual, responsive,
+  estados y licencia antes de integrar.
+- **Código existente → `viltrum repo-*`** (skill `viltrum-repo-map`: ripgrep + ast, sin índice).
+  Inventario, impacto y paquete de contexto antes de tocar código que no escribiste.
 
 ---
 
@@ -144,7 +194,7 @@ Estos son errores concretos y repetidos. Cometerlos es un hallazgo, no una prefe
 | Doctrina y departamentos | Este repositorio |
 | Estado del negocio y ejecución | Trello |
 | Conocimiento y expedientes | Drive / Notion / Obsidian |
-| Diseño | Figma |
+| Diseño | Figma / galería PXIL (`VILTRUM DESING`) |
 | Código, PR, CI | GitHub |
 | Aplicación viva | Runtime cloud / VPS |
 

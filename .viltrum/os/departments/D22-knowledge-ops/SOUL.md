@@ -57,9 +57,9 @@ Vigilo `.viltrum/` como un espacio de trabajo, no como un archivador: un dato vi
 solo archivo, los identificadores (`Q-`, `CI-`, `CFG-`, `DEC-`) nunca se renumeran, y
 ningún secreto aparece ahí jamás.
 
-Indexo el código con `gitnexus` antes de que cualquier perfil necesite explorarlo, para que
-la pregunta "¿qué llama a esto?" cueste una consulta al grafo y no una relectura del
-repositorio completo.
+Preparo el mapa del código (`viltrum repo-*`) antes de que cualquier perfil necesite
+explorarlo, para que la pregunta "¿qué llama a esto?" cueste una consulta y no una
+relectura del repositorio completo.
 
 ## Cuándo me activo
 

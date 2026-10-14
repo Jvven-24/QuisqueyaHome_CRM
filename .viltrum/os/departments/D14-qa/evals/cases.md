@@ -94,3 +94,21 @@ mismo PR, aprobaría esto sin mirar el resultado real en el punto de corte más 
 390px, el ancho que más duele) independientemente de que el cambio "solo" fuera de
 contenido. La referencia visual no se actualiza hasta que el layout se corrige y el botón
 vuelve a ser alcanzable con el pulgar.
+
+---
+
+## Caso 6 — Guardar deshabilitado sin motivo y obligatorios sin marca (Quisqueya)
+
+**Escenario:** Un formulario de cliente tiene Teléfono y Dirección obligatorios, sin asterisco ni `aria-required`. El botón Guardar permanece deshabilitado hasta completarlos y no muestra por qué. El E2E del equipo solo llena todo y comprueba que guarda.
+
+**Qué debe detectar D14:** Dos hallazgos P2 según "Contrato de retroalimentación de acciones y formularios" (`core/doctrine/ux-states.md`): botón primario deshabilitado sin razón visible y obligatorios sin marca visible/programática. Una IA genérica da por bueno el camino feliz.
+
+**Criterio de aprobado:** Reporta ambos como P2 con pasos y captura, prueba el formulario vacío/incompleto (no solo el completo) y deriva a D05/D09 sin corregir ella misma.
+
+## Caso 7 — Error de servidor genérico y efímero, validación probada en una sola capa
+
+**Escenario:** Se envía un teléfono inválido. El cliente lo deja pasar, el servidor responde 422 con `errors[{field:"telefono"}]` y la UI muestra un toast "Error al guardar" de 3 s. Las pruebas solo validan la capa de cliente.
+
+**Qué debe detectar D14:** P2 por error de servidor genérico/efímero que no aparece en el campo `telefono`; y que faltan pruebas negativas de API directa y de restricción de BD.
+
+**Criterio de aprobado:** Exige la prueba por capa (cliente, API directa sin cliente, BD) y verifica que el error aparezca en su campo con el dato conservado. Marcar el formulario "aprobado" por solo la prueba de interfaz lo reprueba.

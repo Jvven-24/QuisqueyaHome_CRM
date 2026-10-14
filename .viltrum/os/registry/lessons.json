@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-06",
+  "authority": "Bus de lecciones de la colmena. Una lección que afecta a varios departamentos no se cierra hasta que cada uno la aplicó en su paquete (checklist, SOP, eval o MEMORY) con una ruta verificable. Lo no aplicado queda como `pending` con dueño: nunca implícito. Lo valida tools/check_lessons.py.",
+  "lessons": [
+    {
+      "id": "L-2026-10-06-forms-feedback",
+      "title": "Formularios que explican: obligatorios marcados y acción primaria nunca deshabilitada sin motivo",
+      "origin": "Quisqueya, pedido de Wilber 2026-10-06",
+      "rule": "core/doctrine/ux-states.md#Contrato de retroalimentación de acciones y formularios",
+      "status": "abierta",
+      "affects": [
+        "D02",
+        "D05",
+        "D06",
+        "D07",
+        "D09",
+        "D10",
+        "D14"
+      ],
+      "applied": {
+        "D02": "departments/D02-scope/evals/cases.md",
+        "D05": "departments/D05-ui-design-system/checklists/form-design.md",
+        "D06": "core/doctrine/ux-states.md",
+        "D09": "departments/D09-frontend/AGENTS.md",
+        "D10": "departments/D10-backend/AGENTS.md",
+        "D14": "departments/D14-qa/checklists/e2e-forms.md"
+      },
+      "pending": {
+        "D07": "aria-required, aria-describedby del motivo y WCAG 3.3.1/3.3.3 (fuera de la ronda del 2026-10-06)"
+      },
+      "opened": "2026-10-06",
+      "evidence_terms": [
+        "Contrato de retroalimentación",
+        "Quisqueya"
+      ]
+    },
+    {
+      "id": "L-2026-10-04-catalogo-503",
+      "title": "Catálogo público nunca en 503 ni vacío si cae la base de datos: snapshot estático y consultas secundarias aisladas",
+      "origin": "Incidente de arranque en frío en el portal de Quisqueya, 2026-10-04",
+      "rule": "CLAUDE.md#Antipatrones prohibidos",
+      "status": "abierta",
+      "affects": [
+        "D09",
+        "D10",
+        "D14",
+        "D16",
+        "D17"
+      ],
+      "applied": {
+        "D09": "departments/D09-frontend/AGENTS.md",
+        "D10": "departments/D10-backend/MEMORY.md",
+        "D14": "departments/D14-qa/AGENTS.md"
+      },
+      "pending": {
+        "D16": "ensayo de arranque en frío con base caída dentro del runbook de release (por evaluar)",
+        "D17": "alerta de catálogo servido desde snapshot (por evaluar)"
+      },
+      "opened": "2026-10-04",
+      "evidence_terms": [
+        "503",
+        "snapshot"
+      ]
+    },
+    {
+      "id": "L-2026-10-06-copia-instalada-desfasada",
+      "title": "Los perfiles despachados leen la copia instalada: si queda atrás o recibe ediciones, lo establecido se pierde",
+      "origin": "Medición del 2026-10-06: 90 archivos desfasados y trabajo del 2026-10-04 solo en .viltrum/os",
+      "rule": "tools/check_install_drift.py",
+      "status": "abierta",
+      "affects": [
+        "D00",
+        "D13",
+        "D16",
+        "D22",
+        "D03"
+      ],
+      "applied": {
+        "D00": "tools/check_install_drift.py"
+      },
+      "pending": {
+        "D13": "ejecutar check_install_drift y check_lessons en el hook previo al commit o en CI",
+        "D16": "paso de `viltrum upgrade` y alarma de desfase en el runbook de despliegue de perfiles",
+        "D22": "regla de la capa de conocimiento: nunca editar .viltrum/os, solo la fuente",
+        "D03": "decidir cómo se vincula Archify (herramienta externa MIT de 11 MB, hoy solo en .viltrum/os/skills/archify): vendorizarla o declararla como dependencia en registry/toolchain.json; hasta entonces el enlace D03/D22→archify vive solo en la copia instalada"
+      },
+      "opened": "2026-10-06",
+      "evidence_terms": [
+        "desfase"
+      ]
+    },
+    {
+      "id": "L-2026-10-06-supabase-data-api",
+      "title": "Supabase: tablas nuevas de public ya no se exponen a la Data API por defecto (obligatorio desde 2026-10-30)",
+      "origin": "Changelog oficial de Supabase, verificado 2026-10-06",
+      "rule": "departments/D11-data/platform-packs/supabase.md",
+      "status": "abierta",
+      "affects": [
+        "D10",
+        "D11",
+        "D16"
+      ],
+      "applied": {
+        "D11": "departments/D11-data/platform-packs/supabase.md"
+      },
+      "pending": {
+        "D10": "el contrato de API asume el GRANT explícito por tabla",
+        "D16": "las migraciones del despliegue verifican el GRANT antes de publicar"
+      },
+      "opened": "2026-10-06",
+      "evidence_terms": [
+        "GRANT",
+        "Data API"
+      ]
+    },
+    {
+      "id": "L-2026-10-06-luna-entrega-excusa",
+      "title": "Un modelo pequeño en entorno de solo lectura entrega una excusa ('no pude guardar') en vez del informe si la tarea no dice que el entregable es su último mensaje",
+      "origin": "Despachos de gpt-6-luna del 2026-10-06 (D04, D11)",
+      "rule": "skills/mapa-maestro/contribution-task.md",
+      "status": "abierta",
+      "opened": "2026-10-06",
+      "evidence_terms": [
+        "último mensaje"
+      ],
+      "affects": [
+        "D00",
+        "D22"
+      ],
+      "applied": {
+        "D00": "skills/mapa-maestro/contribution-task.md"
+      },
+      "pending": {
+        "D22": "plantilla común de tareas para despacho que fije el formato de entrega (último mensaje, YAML) y el validador de tamaño mínimo"
+      }
+    },
+    {
+      "id": "L-2026-10-06-perfiles-citan-copia-instalada",
+      "title": "Los perfiles despachados citaban y proponían editar .viltrum/os (copia generada) en el repositorio fuente",
+      "origin": "Auditoría de diseño con gpt-6-luna, 2026-10-06",
+      "rule": "AGENTS.md",
+      "status": "abierta",
+      "opened": "2026-10-06",
+      "evidence_terms": [
+        "copia generada"
+      ],
+      "affects": [
+        "D00",
+        "D13"
+      ],
+      "applied": {
+        "D00": "AGENTS.md"
+      },
+      "pending": {
+        "D13": "rechazar en la validación previa al commit cualquier cambio versionado bajo .viltrum/os del repositorio fuente"
+      }
+    }
+  ],
+  "limits": {
+    "max_pending_days": 30
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:51:46.368387+00:00",
+  "author": "sean0205",
+  "codeSha256": "16a1cb30168be2af8c4fc0cfe35e99895da663e23d74c2a485abfea1419ee7d9",
+  "demoSha256": "ca9e0b2d382909fc1c9c94c955ecb859747a02a695256bae81256bc27cb724af",
+  "description": "Displays a callout for user attention, such as a success message, warning, or error.",
+  "framework": "",
+  "id": "3587",
+  "metadata": {
+    "author": "sean0205",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2wpPk1CyWKAxM46S7k5UoCQhmqF/avatar.png",
+    "description": "Displays a callout for user attention, such as a success message, warning, or error.",
+    "id": 3587,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/sean0205/alert-1?[REDACTED]",
+    "name": "Alert",
+    "previewUrl": "https://cdn.21st.dev/sean0205/alert-1/extended/preview.1751434599073.png",
+    "type": "component",
+    "url": "https://21st.dev/@sean0205/components/alert-1",
+    "videoUrl": null
+  },
+  "name": "Alert",
+  "previewUrl": "https://cdn.21st.dev/sean0205/alert-1/extended/preview.1751434599073.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:51:46.368523+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "6e68d4e8ffe71778eda2b1e7c539814e8f26d1f43b66406ef06e22a91aeff531",
+    "importedAt": "2026-10-04T22:51:07.821651+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6dff87db7e2176ba4e8387824f9cb00c26c1808f13ef79e2dcb343f3d9a1115a"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@sean0205/components/alert-1"
+}

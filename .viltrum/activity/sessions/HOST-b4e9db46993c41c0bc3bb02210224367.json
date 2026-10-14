@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-b4e9db46993c41c0bc3bb02210224367",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D14",
+  "actor": "codex-qa-ready-review",
+  "goal": "Revisión independiente I01-A y TOOL-001 para READY",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:54:35.460696+00:00",
+  "updatedAt": "2026-10-05T01:56:03.825846+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:54:35.461139+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:56:03.825824+00:00",
+      "status": "finished",
+      "message": "Revisión independiente I01-A y TOOL-001 cerrada: ambas FAIL READY; filtro general spec-check oculta fichas inválidas"
+    }
+  ]
+}

@@ -45,7 +45,13 @@ export default async function AvancesDeObraPage({
   const db = getDb();
 
   const proyectos = await db
-    .select({ id: projects.id, slug: projects.slug, name: projects.name, estimatedDeliveryDate: projects.estimatedDeliveryDate })
+    .select({
+      id: projects.id,
+      slug: projects.slug,
+      name: projects.name,
+      estimatedDeliveryDate: projects.estimatedDeliveryDate,
+      progressPercent: projects.progressPercent,
+    })
     .from(projects)
     .where(visibleRows(actor, scope, projects.brokerId, projects.deletedAt))
     .orderBy(projects.name);

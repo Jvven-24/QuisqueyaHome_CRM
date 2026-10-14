@@ -18,7 +18,7 @@ reviewer: D00
 tools:
   read:   [drive, notion, obsidian vault, repositorio, .viltrum]
   write:  [taxonomia del vault, decisiones extraidas, paquetes de contexto por perfil, indice de codigo]
-  execute: [indexado de repositorio via gitnexus]
+  execute: [mapa de repositorio via viltrum repo-*]
   forbidden:
     - decidir el contenido de una decision de negocio
     - modificar codigo de producto
@@ -27,9 +27,9 @@ tools:
 
 skills:
   metodo: viltrum-knowledge
-  indexar_repositorio: gitnexus-cli
-  explorar_arquitectura: gitnexus-exploring
-  guia_de_uso: gitnexus-guide
+  indexar_repositorio: viltrum-repo-map
+  explorar_arquitectura: viltrum-repo-map
+  guia_de_uso: viltrum-repo-map
 
 subagents:
   can_create: true
@@ -41,7 +41,7 @@ outputs:
   - decisiones extraidas de transcripciones, con fuente enlazada
   - paquetes de contexto por perfil (cinco piezas de context-budget.md)
   - historial de versiones de documentos clave
-  - indice de codigo actualizado (gitnexus)
+  - inventario y paquete de contexto de codigo (viltrum repo-inventory/repo-pack)
   - reporte de cobertura e higiene de conocimiento
 
 checklists:
@@ -52,12 +52,12 @@ source_manifest:
   - core/doctrine/context-budget.md
   - core/project-workspace.md
   - "Vault Obsidian del dueño — estructura 0-Inbox/1-Daily/2-Atomic/3-Maps/4-Archive, observada 2026-09-24"
-  - gitnexus (skill instalada — gitnexus-cli, gitnexus-exploring, gitnexus-guide)
+  - viltrum-repo-map (skill propia; ripgrep + ast, sin indice)
 
 known_limits:
   - Depende de que el dueño del vault mantenga la disciplina de triage; no puede forzar el orden fuera de lo que se le entrega
   - No decide taxonomia de negocio nueva; aplica la ya definida en core/project-workspace.md
-  - gitnexus requiere indexacion previa del repositorio; sin ese paso inicial, la exploracion vuelve a costar tokens completos
+  - el mapa de repositorio resuelve referencias por nombre; llamadas dinamicas y alias requieren lectura o prueba
   - No administra permisos de Drive/Notion/Obsidian; solo lee y clasifica lo que ya es accesible
   - Sin integracion automatica con Trello todavia; el cruce con el estado del negocio es manual
 

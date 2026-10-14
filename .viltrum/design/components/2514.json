@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:51:51.374569+00:00",
+  "author": "isaiahbjork",
+  "codeSha256": "8245ba9dd88153440cfdf6a4acc2b6314567d8eee797066249a7b500f1adb04d",
+  "demoSha256": "761fc38f1c1f4c64da57d36005fd8a081c4c395b96cadc32d2b28423f6bbc26c",
+  "description": "This component displays a dynamic list of status-driven cards with built-in syncing animations, hover-activated actions, and staggered motion transitions using framer-motion. It supports syncing state transitions (updates-found → syncing → completed), animated status indicators, and optional back/add button callbacks. Perfect for onboarding flows, document indexing, status updates, guided setup sequences, or any app section where users must complete a set of progressive tasks.",
+  "framework": "",
+  "id": "2514",
+  "metadata": {
+    "author": "isaiahbjork",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ydGtiQlBjalhzMzl1eGNmR2h3c3VTWE1VU1YifQ",
+    "description": "This component displays a dynamic list of status-driven cards with built-in syncing animations, hover-activated actions, and staggered motion transitions using framer-motion. It supports syncing state transitions (updates-found → syncing → completed), animated status indicators, and optional back/add button callbacks. Perfect for onboarding flows, document indexing, status updates, guided setup sequences, or any app section where users must complete a set of progressive tasks.",
+    "id": 2514,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/isaiahbjork/card-status-list?[REDACTED]",
+    "name": "Card Status List",
+    "previewUrl": "https://cdn.21st.dev/user_2tkbBPFWYn8YMjZNHwgIuP3yzvd/card-status-list/default/preview.1750810684673.png",
+    "type": "component",
+    "url": "https://21st.dev/@isaiahbjork/components/card-status-list",
+    "videoUrl": "https://cdn.21st.dev/user_2tkbBPFWYn8YMjZNHwgIuP3yzvd/card-status-list/default/video.1750810727518.mp4"
+  },
+  "name": "Card Status List",
+  "previewUrl": "https://cdn.21st.dev/user_2tkbBPFWYn8YMjZNHwgIuP3yzvd/card-status-list/default/preview.1750810684673.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:51:51.374754+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "0a1726574ef2ef0ef59fd766052afcc016dc387d03f1b2a390d3ea6bc57f1289",
+    "importedAt": "2026-10-04T22:51:10.803676+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4e0c54be2018c8c69120c747718eaf4a105dca71fd45c5d532f5f54f6d464fd9"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@isaiahbjork/components/card-status-list"
+}

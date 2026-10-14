@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D09",
+  "gate": "G5",
+  "actor": "codex-gpt-6.1-sol-d09",
+  "createdAt": "2026-10-04T22:43:18.664515+00:00",
+  "state": "review_pending",
+  "reviewer": "D14",
+  "summary": {
+    "path": ".viltrum/vre-os/D09-renombrar-negocios.md",
+    "sha256": "71f0af5e5f7f5c510fdd3e845c08759ef2d5fe47b9363d37e5b63515373acbf0",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T223540Z-D09-codex/evidence.json",
+      "sha256": "7bcab551b6959461ec84da12770e22e8732153b65b8e81f88d5f77d5394ff54a",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-028"
+}

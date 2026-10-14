@@ -1,0 +1,29 @@
+{
+  "author": "ddoemonn",
+  "description": "A keyboard-driven command palette with fuzzy search, arrow-key navigation, and an animated overlay for triggering app actions.",
+  "framework": "",
+  "id": "23522",
+  "metadata": {
+    "author": "ddoemonn",
+    "authorImage": "https://github.com/ddoemonn.png",
+    "description": "A keyboard-driven command palette with fuzzy search, arrow-key navigation, and an animated overlay for triggering app actions.",
+    "id": 23522,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/ddoemonn/command-palette?[REDACTED]",
+    "name": "Command Palette",
+    "previewUrl": "https://cdn.21st.dev/user_2y2pjLtk7oS33zts6BqhEIOHrAj/command-palette/default/preview.1787346187676.png",
+    "type": "component",
+    "url": "https://21st.dev/@ddoemonn/components/command-palette",
+    "videoUrl": "https://cdn.21st.dev/user_2y2pjLtk7oS33zts6BqhEIOHrAj/command-palette/default/video.1787346202766.mp4"
+  },
+  "name": "Command Palette",
+  "previewUrl": "https://cdn.21st.dev/user_2y2pjLtk7oS33zts6BqhEIOHrAj/command-palette/default/preview.1787346187676.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:01.817750+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "734815b6383485fcc826adf6bfe6c746c44c0446f930001438eebc40ea1563c2"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@ddoemonn/components/command-palette"
+}

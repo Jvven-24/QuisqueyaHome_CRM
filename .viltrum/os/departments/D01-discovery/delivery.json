@@ -20,7 +20,8 @@
     "Métrica de éxito atribuida",
     "Excepciones/datos/permisos por capacidad",
     "Fuente y criterio por requisito",
-    "Sin preguntas P0 abiertas para G0"
+    "Sin preguntas P0 abiertas para G0",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",
@@ -52,4 +53,3 @@
     }
   ]
 }
-

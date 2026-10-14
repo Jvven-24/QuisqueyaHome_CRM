@@ -1,0 +1,28 @@
+{
+  "author": "larsen66",
+  "description": "Pilates studio site with instructor profiles, a filterable class schedule, pricing, reviews and booking links. Runs on sample data or live classes and prices from Mindbody.",
+  "framework": "",
+  "id": "1094",
+  "metadata": {
+    "author": "larsen66",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2wdgsmfD3BNOOm4oOqUDUS9IXZI/avatar.jpeg",
+    "description": "Pilates studio site with instructor profiles, a filterable class schedule, pricing, reviews and booking links. Runs on sample data or live classes and prices from Mindbody.",
+    "id": 1094,
+    "name": "Forma pilates studio",
+    "previewUrl": "https://cdn.21st.dev/user_vendor_httpslinus/templates/forma-pilates-studio/preview-0baa1cac7e8d.png",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/forma-pilates-studio"
+  },
+  "name": "Forma pilates studio",
+  "previewUrl": "https://cdn.21st.dev/user_vendor_httpslinus/templates/forma-pilates-studio/preview-0baa1cac7e8d.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:48.923156+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "e189222e8f62d9d6805c696a79c855140dc0156440b7cccff4fb599175bdec1b"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/forma-pilates-studio"
+}

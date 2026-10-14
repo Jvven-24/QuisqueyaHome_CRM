@@ -26,7 +26,7 @@ tools:
 skills:
   revision_seguridad:      security-review
   revision_codigo:         code-review
-  impacto_de_cambio:       gitnexus-impact-analysis
+  impacto_de_cambio:       viltrum-repo-map
   estado_o_cola_en_datos:  supabase
 
 subagents:

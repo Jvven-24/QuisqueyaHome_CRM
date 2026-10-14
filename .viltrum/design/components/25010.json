@@ -1,0 +1,29 @@
+{
+  "author": "shadcnspace",
+  "description": "A side sheet (drawer) that opens from the right with a long, vertically scrollable body — ideal for terms & conditions, policies, or any lengthy content with header and footer actions.",
+  "framework": "",
+  "id": "25010",
+  "metadata": {
+    "author": "shadcnspace",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zOHFBT3VLQWpSb3c5SjlUdGttSGhYZnBiZ28ifQ",
+    "description": "A side sheet (drawer) that opens from the right with a long, vertically scrollable body — ideal for terms & conditions, policies, or any lengthy content with header and footer actions.",
+    "id": 25010,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/shadcnspace/sheet-02?[REDACTED]",
+    "name": "Sheet with Scrollable Content",
+    "previewUrl": "https://cdn.21st.dev/user_38qAOtph5HovpSn2yjNYXjbTOm2/sheet-02/default/preview.1787762237746.webp",
+    "type": "component",
+    "url": "https://21st.dev/@shadcnspace/components/sheet-02",
+    "videoUrl": "https://cdn.21st.dev/user_38qAOtph5HovpSn2yjNYXjbTOm2/sheet-02/default/video.1787762226075.mp4"
+  },
+  "name": "Sheet with Scrollable Content",
+  "previewUrl": "https://cdn.21st.dev/user_38qAOtph5HovpSn2yjNYXjbTOm2/sheet-02/default/preview.1787762237746.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:52.042623+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "0397cdb3c97d0e03935cc11c066cbd7726aa97cfe74142365b7048b1785d69f7"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@shadcnspace/components/sheet-02"
+}

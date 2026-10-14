@@ -1,0 +1,18 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:51:42.242102+00:00",
+  "author": "user_2vZexZytBe3Vo4fbfmzWgvCugbB",
+  "codeSha256": "db56c6a12d48b33336209f32e86bae080f1d2b337b28a2affbbbc2113d1d17c3",
+  "demoSha256": "17bdbbaed2828dd05aeea28977764241dd74ea76daa835502211c4267a803df8",
+  "description": "A searchable command palette dialog that lets users find chats, images, documents, and projects across an app, with type filters and recent/last-opened sections.",
+  "id": "27378",
+  "metadata": {},
+  "name": "Command Menu with Global Search",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:51:42.242301+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "fb427ca1530905c1bbcae45454857be050257846f72068c9178f5051bb30e03e"
+  },
+  "source": "21st",
+  "status": "code_acquired"
+}

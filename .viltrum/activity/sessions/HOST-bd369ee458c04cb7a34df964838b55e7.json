@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-bd369ee458c04cb7a34df964838b55e7",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D11",
+  "actor": "codex-academy-data-review",
+  "goal": "Revisión de datos M13-CORE para READY",
+  "status": "running",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T02:14:18.649066+00:00",
+  "updatedAt": "2026-10-05T02:14:18.649066+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T02:14:18.649132+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "author": "makviesainte",
+  "description": "A KPI stat card pairing a large headline figure with a data-driven chart, rendered with Recharts and switchable between a smooth progression curve and bars.",
+  "framework": "",
+  "id": "15024",
+  "metadata": {
+    "author": "makviesainte",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_34NFsS8hd1hg1HU1ITd2sd7GyQW/avatar.png",
+    "description": "A KPI stat card pairing a large headline figure with a data-driven chart, rendered with Recharts and switchable between a smooth progression curve and bars.",
+    "id": 15024,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/makviesainte/progress-metric-card?[REDACTED]",
+    "name": "Progress Metric Card",
+    "previewUrl": "https://cdn.21st.dev/makviesainte/progress-metric-card/default/preview.1782062854405.png",
+    "type": "component",
+    "url": "https://21st.dev/@makviesainte/components/progress-metric-card",
+    "videoUrl": "https://cdn.21st.dev/makviesainte/progress-metric-card/default/video.1782062854405.mp4"
+  },
+  "name": "Progress Metric Card",
+  "previewUrl": "https://cdn.21st.dev/makviesainte/progress-metric-card/default/preview.1782062854405.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:41.926663+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "a6ac8fa98475b655b86304642a87e26478c04d91656142fa9f9f030a64701890"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@makviesainte/components/progress-metric-card"
+}

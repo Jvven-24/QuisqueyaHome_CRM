@@ -22,7 +22,8 @@ test("Academy: listar contenidos devuelve los módulos iniciales con 0% de progr
   assert.equal(resumen.totalItems, 4);
   assert.equal(resumen.completedItems, 0);
   assert.equal(resumen.percent, 0);
-  assert.equal(resumen.isCertified, false);
+  assert.deepEqual(resumen, { totalItems: 4, completedItems: 0, percent: 0 });
+  assert.equal(Object.hasOwn(resumen, "isCertified"), false);
 });
 
 test("Academy: filtrar contenidos por categoría", async () => {
@@ -53,7 +54,7 @@ test("Academy: completar un video actualiza el estado y la fecha de finalizació
   const resumen = await obtenerResumenProgresoBroker(repo, userId);
   assert.equal(resumen.completedItems, 1);
   assert.equal(resumen.percent, 25);
-  assert.equal(resumen.isCertified, false);
+  assert.equal(Object.hasOwn(resumen, "isCertified"), false);
 });
 
 test("Academy: marcar pasos de un checklist recalcula el porcentaje del módulo", async () => {
@@ -80,7 +81,7 @@ test("Academy: marcar pasos de un checklist recalcula el porcentaje del módulo"
   assert.equal(detalleFinal.isCompleted, true);
 });
 
-test("Academy: al completar todos los contenidos se otorga la certificación del broker", async () => {
+test("Academy: completar todos los contenidos solo indica progreso educativo", async () => {
   const repo = new RepositorioAcademyEnMemoria();
   const userId = 42;
 
@@ -92,5 +93,15 @@ test("Academy: al completar todos los contenidos se otorga la certificación del
   const resumen = await obtenerResumenProgresoBroker(repo, userId);
   assert.equal(resumen.completedItems, 4);
   assert.equal(resumen.percent, 100);
-  assert.equal(resumen.isCertified, true);
+  assert.deepEqual(resumen, { totalItems: 4, completedItems: 4, percent: 100 });
+  assert.equal(Object.hasOwn(resumen, "isCertified"), false);
+});
+
+test("Academy: un catálogo vacío tiene 0% y no expone certificación", async () => {
+  const repo = new RepositorioAcademyEnMemoria();
+  Reflect.set(repo, "items", []);
+
+  const resumen = await obtenerResumenProgresoBroker(repo, 42);
+  assert.deepEqual(resumen, { totalItems: 0, completedItems: 0, percent: 0 });
+  assert.equal(Object.hasOwn(resumen, "isCertified"), false);
 });

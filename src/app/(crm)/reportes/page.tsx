@@ -20,6 +20,6 @@ export default async function ReportesPage({ searchParams }: { searchParams: Pro
     dashboardScope === "none" ? Promise.resolve(null) : consultarDashboard(dashboardRepositorio(), actor, dashboardScope, {}),
   ]);
   const initialTab = reportTabs.find(t => t.id === params.tab)?.id ?? "embudo";
-  return <ReportesVista key={`${actor.userId}:${metricas.asOf}`} metricas={metricas} canExport={can(actor, "reports", "export")} periodo={typeof params.periodo === "string" ? params.periodo : "todo"} projects={dashboard?.projects.map(p => ({ id: p.id, label: p.name })) ?? []} initialTab={initialTab} />;
+  return <ReportesVista key={`${actor.userId}:${metricas.asOf}`} metricas={metricas} canExport={can(actor, "reports", "export")} periodo={typeof params.periodo === "string" ? params.periodo : "todo"} projects={dashboard?.projects.map(p => ({ id: p.id, label: p.name, count: p.leads })) ?? []} initialTab={initialTab} />;
 }
 

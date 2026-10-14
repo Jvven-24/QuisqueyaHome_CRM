@@ -26,7 +26,8 @@
     "evals holdout y casos adversariales con evidencia",
     "cancel/timeout/retry no duplican efectos",
     "budget max pasos/costo enforceado",
-    "revision independiente D12"
+    "revision independiente D12",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

@@ -1,0 +1,29 @@
+{
+  "author": "elements-",
+  "description": "Compound component for displaying AI tool and function invocations with status badges, JSON input/output, and a collapsible interface for MCP and function-calling workflows.",
+  "framework": "",
+  "id": "20078",
+  "metadata": {
+    "author": "elements-",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yeXhrZXd5TzRJS25yTjVRbUVQZlFWSnhKSUUifQ",
+    "description": "Compound component for displaying AI tool and function invocations with status badges, JSON input/output, and a collapsible interface for MCP and function-calling workflows.",
+    "id": 20078,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/elements-/tool-call?[REDACTED]",
+    "name": "AI Tool Call",
+    "previewUrl": "https://cdn.21st.dev/elements-/tool-call/default/preview.1784317893529.png",
+    "type": "component",
+    "url": "https://21st.dev/@elements-/components/tool-call",
+    "videoUrl": "https://cdn.21st.dev/elements-/tool-call/default/video.1784287390993-d8ef5295-9ec9-4823-9bb8-fb0c183b59e2.mp4"
+  },
+  "name": "AI Tool Call",
+  "previewUrl": "https://cdn.21st.dev/elements-/tool-call/default/preview.1784317893529.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:38.846085+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4c715ae6007b11706bed0fed8684ebdffa33ca741e964311f5d774e17d1ed517"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@elements-/components/tool-call"
+}

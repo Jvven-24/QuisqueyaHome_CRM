@@ -1,0 +1,29 @@
+{
+  "author": "theshanelevine",
+  "description": "A compact CRM-style data table with colored tag chips, a sticky first column, row selection, sortable columns, connection-strength indicators, and a calculations footer.",
+  "framework": "",
+  "id": "23604",
+  "metadata": {
+    "author": "theshanelevine",
+    "authorImage": "https://www.google.com/s2/favicons?domain=beautiful-ui-five.vercel.app&sz=128",
+    "description": "A compact CRM-style data table with colored tag chips, a sticky first column, row selection, sortable columns, connection-strength indicators, and a calculations footer.",
+    "id": 23604,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/theshanelevine/records-table?[REDACTED]",
+    "name": "Records Table",
+    "previewUrl": "https://cdn.21st.dev/user_registry_theshanelevine_1785470434583/records-table/default/preview.1785759813209.png",
+    "type": "component",
+    "url": "https://21st.dev/@theshanelevine/components/records-table",
+    "videoUrl": "https://cdn.21st.dev/user_registry_theshanelevine_1785470434583/records-table/default/video.1785759826197.mp4"
+  },
+  "name": "Records Table",
+  "previewUrl": "https://cdn.21st.dev/user_registry_theshanelevine_1785470434583/records-table/default/preview.1785759813209.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:25.587642+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "61bac2a93cbefce0148ef4039c1af3528674913f3128e819881803c35c007623"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@theshanelevine/components/records-table"
+}

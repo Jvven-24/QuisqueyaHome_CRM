@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:48:22.027585+00:00",
+  "author": "sean0205",
+  "codeSha256": "40de40d76b5125a6d5082a38eabaebb9e9cbd71eb9d5f7cd657178ca4285778a",
+  "demoSha256": "ce6d026ee787c6ac46c9845e71552e7c6d25982e283cddfe549508a238f101d9",
+  "description": "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+  "framework": "",
+  "id": "4086",
+  "metadata": {
+    "author": "sean0205",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2wpPk1CyWKAxM46S7k5UoCQhmqF/avatar.png",
+    "description": "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+    "id": 4086,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/sean0205/tabs?[REDACTED]",
+    "name": "Tabs",
+    "previewUrl": "https://cdn.21st.dev/sean0205/tabs/pill/preview.1752749357400.png",
+    "type": "component",
+    "url": "https://21st.dev/@sean0205/components/tabs",
+    "videoUrl": null
+  },
+  "name": "Tabs",
+  "previewUrl": "https://cdn.21st.dev/sean0205/tabs/pill/preview.1752749357400.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:48:22.027735+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "2ebfd06b706319ea7dee75bd340d6b4c16753011ce6bfaf0a27ee9f185d6fb16",
+    "importedAt": "2026-10-04T22:47:53.646235+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "7cc0749a637c4ed889242313e7681b387d695cfbdfb0a1711daba769f7f040be"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@sean0205/components/tabs"
+}

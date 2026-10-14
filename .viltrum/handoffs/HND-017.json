@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D09",
+  "gate": "G5",
+  "actor": "codex-gpt-6-luna-d09",
+  "createdAt": "2026-10-04T17:06:18.887348+00:00",
+  "state": "review_pending",
+  "reviewer": "D14",
+  "summary": {
+    "path": ".viltrum/vre-os/D09a-higiene-visual.md",
+    "sha256": "5cdc818cdab07f1859d2469a33129685e30841845dcf6e4f4e3de747f4f3925e",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T164612Z-D09-codex/evidence.json",
+      "sha256": "19cb133750b3cedfee3fa3c4a09dd3e8fdad73a72b9dbe5e44b4db1c2e766033",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-017"
+}

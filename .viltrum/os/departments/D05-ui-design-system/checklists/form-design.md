@@ -13,8 +13,8 @@
 - [ ] Se puede volver atrás sin perder lo escrito
 - [ ] **Guardado parcial** si hay más de un paso — perder el progreso es P1
 - [ ] Orden de los campos coincide con el orden mental de la tarea, no con el de la tabla
-- [ ] Campos opcionales marcados como opcionales (no al revés)
-- [ ] Una sola acción primaria, visualmente inequívoca
+- [ ] Marca de obligatorio visible y programática en cada campo obligatorio, según `core/doctrine/ux-states.md` § "Contrato de retroalimentación de acciones y formularios" (R1); los opcionales se rotulan solo si evita ambigüedad
+- [ ] Una sola acción primaria, visualmente inequívoca; si puede quedar deshabilitada, el diseño incluye el motivo junto al botón (R2)
 
 ## B. Contrato por campo
 
@@ -28,9 +28,9 @@ Cada campo tiene esta ficha completa **antes** de existir en pantalla:
 | Validación en cliente | [ ] |
 | Validación en servidor | [ ] |
 | Restricción en base de datos | [ ] |
-| Obligatorio u opcional | [ ] |
+| Obligatorio u opcional (con marca visible y `required`/`aria-required`, R1) | [ ] |
 | Valor por defecto (explícito, aunque sea vacío) | [ ] |
-| Mensaje de error específico | [ ] |
+| Mensaje de error específico (por clave de catálogo, localizable; R3) | [ ] |
 | Texto de ayuda, si el campo no es obvio | [ ] |
 | Catálogo asociado, si es enumerado | [ ] |
 | Permiso: quién puede verlo y editarlo | [ ] |
@@ -67,7 +67,9 @@ Cada campo tiene esta ficha completa **antes** de existir en pantalla:
 - [ ] La validación de cliente es para comodidad; **la de servidor es la que manda**
 - [ ] Se valida al salir del campo, no en cada tecla ni solo al enviar
 - [ ] Mensaje específico por campo: qué está mal y cómo corregirlo
-- [ ] Resumen de errores accesible al inicio, con enlace a cada campo
+- [ ] Resumen de errores accesible al inicio, con enlace a cada campo, y foco al primer campo inválido al enviar (R2)
+- [ ] Preferencia por **no deshabilitar** el envío por validación incompleta; se permite enviar y se explican los errores (R2)
+- [ ] Mensajes de error y de ayuda por clave de catálogo, no texto en el componente (R3)
 - [ ] Validaciones cruzadas identificadas (fecha fin > fecha inicio, etc.)
 - [ ] Reglas de negocio validadas en servidor, nunca solo en cliente
 
@@ -80,6 +82,8 @@ Cada campo tiene esta ficha completa **antes** de existir en pantalla:
 - [ ] **Sin conexión:** el intento no se pierde; se encola o se avisa
 - [ ] **Éxito:** confirmación específica y estado final visible
 - [ ] **Permisos:** campos que el rol no puede editar están deshabilitados con razón visible
+- [ ] **Botón primario:** estados y motivo de deshabilitado diseñados según el Contrato de retroalimentación de acciones y formularios (R2, R6)
+- [ ] **Guardar:** éxito con confirmación específica; en error no se pierde lo escrito (R7)
 - [ ] **Sesión expirada:** se guarda el contenido y se recupera tras reingresar
 
 ## F. Catálogos y enumeraciones
@@ -111,7 +115,7 @@ Cada campo tiene esta ficha completa **antes** de existir en pantalla:
 
 ## I. Responsive
 
-- [ ] Verificado en 390px — el ancho que más duele
+- [ ] Verificado en 320 y 390 px — los anchos que más duelen
 - [ ] Verificado en 768px y 1024px
 - [ ] Los campos no se desbordan ni se comprimen a ilegibles
 - [ ] El teclado apropiado se abre en móvil (numérico, correo, teléfono)

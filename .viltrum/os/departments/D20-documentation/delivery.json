@@ -29,7 +29,8 @@
     "Revisor nuevo identifica bloqueos de uso",
     "Recepción/capacitación reales o pendientes explícitos",
     "notas de versión y guía de migración publicadas antes del go/no-go",
-    "runbook de soporte probado por un lector en frío (G7)"
+    "runbook de soporte probado por un lector en frío (G7)",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

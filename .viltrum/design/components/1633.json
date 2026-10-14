@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:48:10.105452+00:00",
+  "author": "andrewlu0",
+  "codeSha256": "c7d44de91bb15ef53b5694263e84610dadb78624dcd902806c348e2e792a1b1a",
+  "demoSha256": "0588ddab97ac1b297648376293ff41e72126622b14c7c1f9f7506f6ec52de89d",
+  "description": "A Linear inspired component to add / edit filters",
+  "framework": "",
+  "id": "1633",
+  "metadata": {
+    "author": "andrewlu0",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yc1VwRHR0cW93bVpkZDB4ZUtnRW5mRmpYZkcifQ",
+    "description": "A Linear inspired component to add / edit filters",
+    "id": 1633,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/andrewlu0/filters?[REDACTED]",
+    "name": "Filters",
+    "previewUrl": "https://cdn.21st.dev/user_2sUpDx8JMTC3m5cKaN6Z3Uhc8Q4/filters/default/preview.1740483874850.png",
+    "type": "component",
+    "url": "https://21st.dev/@andrewlu0/components/filters",
+    "videoUrl": "https://cdn.21st.dev/user_2sUpDx8JMTC3m5cKaN6Z3Uhc8Q4/filters/default/video.1740483876174.mp4"
+  },
+  "name": "Filters",
+  "previewUrl": "https://cdn.21st.dev/user_2sUpDx8JMTC3m5cKaN6Z3Uhc8Q4/filters/default/preview.1740483874850.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:48:10.105772+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "604a657df9bfedbe5f31ae336a3adcc82aad5b9fc75fd501cd03ad1f873ee866",
+    "importedAt": "2026-10-04T22:47:48.895303+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "e189222e8f62d9d6805c696a79c855140dc0156440b7cccff4fb599175bdec1b"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@andrewlu0/components/filters"
+}

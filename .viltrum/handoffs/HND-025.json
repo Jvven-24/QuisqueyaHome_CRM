@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D13",
+  "gate": "G4",
+  "actor": "codex-gpt-6-luna-d13",
+  "createdAt": "2026-10-04T22:13:32.785993+00:00",
+  "state": "review_pending",
+  "reviewer": "D03",
+  "summary": {
+    "path": ".viltrum/vre-os/D13-spec-check.md",
+    "sha256": "f52527c40f02e994fc9a9c4eb8365c404ef63627fdf801686d1e4571e10b3069",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T220027Z-D13-codex/evidence.json",
+      "sha256": "50d94fba2fc792dce8e55d5ac83fb24c6cd77639d748a900d3e3c961928acc25",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-025"
+}

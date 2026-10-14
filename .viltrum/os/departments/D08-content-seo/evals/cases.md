@@ -81,3 +81,59 @@ precio (requiere cotización) y no indica disponibilidad.
 **Criterio de aprobado:** el hallazgo compara explícitamente el marcado estructurado
 contra el contenido visible de la página y no aprueba datos estructurados que la página no
 respalda visualmente.
+
+---
+
+## Caso 5 — Landing con testimonio sin fuente
+
+**Escenario:** Una landing presenta una cita atribuida a un cliente y una cifra de mejora,
+pero no hay fuente, propietario, fecha ni autorización de uso. El equipo pide mantenerlas
+porque hacen más convincente la oferta.
+
+**Qué debe detectar/producir:**
+- D08 contrasta cada afirmación con su fuente y marca testimonio/cifra como no verificados
+- Pide procedencia y autorización; propone retirar la prueba sin respaldo de la entrega
+  pública hasta que exista evidencia, sin inventar un testimonio de reemplazo
+- Comprueba la narrativa según `core/design-experience-os.md` (§5) y la sección H de la
+  checklist, sin confundir persuasión con prueba verificable
+
+**Criterio de aprobado:** registra qué evidencia falta y quién debe aportarla; no presenta
+la cita o cifra como auténticas ni aprueba su uso por apariencia o conveniencia comercial.
+
+---
+
+## Caso 6 — Narrativa móvil truncada
+
+**Escenario:** La landing de escritorio explica la promesa, la prueba y las condiciones de
+la oferta. En móvil, el contenido reordenado oculta la prueba y trunca una condición; el
+CTA permanece visible. La revisión solo adjunta una captura de escritorio.
+
+**Qué debe detectar/producir:**
+- D08 pide evidencia de la versión móvil en los puntos de corte vigentes de D05 y revisa
+  orden, texto omitido y comprensión de propuesta/siguiente paso
+- Identifica prueba y condición perdidas; entrega ajuste de contenido/orden a D05/D09,
+  preservando el significado y las variantes de idioma, sin asumir su implementación
+- Registra capturas y prueba de comprensión comparable; aplica §5 de
+  `core/design-experience-os.md` y sección H de la checklist
+
+**Criterio de aprobado:** no acepta la variante por tener CTA visible ni por la captura de
+escritorio; el hallazgo identifica la pérdida narrativa y la evidencia móvil pendiente.
+
+---
+
+## Caso 7 — Experimento inconcluso declarado ganador
+
+**Escenario:** Una variante de copy registra más conversiones en una muestra pequeña. El
+equipo detiene la prueba al ver la mejora; no fijó regla de parada, no validó asignación y
+no comprobó los guardrails. Solicita anunciar un aumento causal de conversión.
+
+**Qué debe detectar/producir:**
+- D08 revisa la ficha del SOP: hipótesis, métrica primaria/denominador, guardrails,
+  asignación, consentimiento, muestra, duración/parada y decisión
+- Marca los datos insuficientes y la falta de diseño previo como **inconcluso/no
+  verificado**; no reconstruye un criterio retrospectivo para declarar ganadora la variante
+- Separa aumento observado de causalidad; propone siguiente prueba con criterio previo
+  o comprensión/usabilidad si falta tráfico, con dueño y revisión D02
+
+**Criterio de aprobado:** explicita incertidumbre y limitaciones de muestra/asignación/parada,
+no afirma impacto causal y entrega una decisión inconclusa con próxima acción verificable.

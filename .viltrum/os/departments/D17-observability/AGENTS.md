@@ -141,7 +141,7 @@ cumple.
 | Diagramas de arquitectura de observabilidad y línea de tiempo de incidentes | `artifact-diagramming` |
 | Dashboards de SLO, presupuesto de error y tendencias de error | `dataviz` |
 | Revisión de seguridad de lo que viaja en logs/trazas | `security-review` |
-| Rastrear en el código dónde falta instrumentación o dónde se originó un error | `gitnexus-exploring` |
+| Rastrear en el código dónde falta instrumentación o dónde se originó un error | `viltrum-repo-map` (explorar) |
 
 ---
 

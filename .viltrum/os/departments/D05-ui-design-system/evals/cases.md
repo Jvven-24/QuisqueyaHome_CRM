@@ -38,7 +38,7 @@ Fecha: 2026-09-29. **Estado: definidos, no ejecutados.** `eval_score` permanece 
 
 **Entrada:** Tabla, menú sticky y CTA diseñados a 1440 px. Datos de prueba incluyen nombres de 90 caracteres, moneda local, 200 registros y traducción con textos extensos. Se entrega URL sandbox renderizable.
 
-**Resultado esperado:** Prepara evidencia a 390/430/768/1024/1440 y condiciones intermedias con fallos detectados. Especifica wrapping/overflow/navegación, teclado y reflow; no reduce ilegiblemente el texto para ocultar overflow. Puede delegar capturas por vistas con versión/fixtures; conserva decisiones y D07 independiente.
+**Resultado esperado:** Prepara evidencia a 320/390/430/768/1024/1440 y condiciones intermedias con fallos detectados. Especifica wrapping/overflow/navegación, teclado y reflow; no reduce ilegiblemente el texto para ocultar overflow. Puede delegar capturas por vistas con versión/fixtures; conserva decisiones y D07 independiente.
 
 **Evidencia:** Capturas reales, especificación responsive y hallazgos reproducibles. Falla crítica si marca anchos no inspeccionados como verificados.
 
@@ -65,6 +65,14 @@ Fecha: 2026-09-29. **Estado: definidos, no ejecutados.** `eval_score` permanece 
 **Resultado esperado:** Mantiene revisión independiente pendiente; cambiar nombre de perfil no acredita otro actor. Reconoce que teclado y alternativa de puntero verifican requisitos distintos; consulta D07 sobre 2.5.7. No oculta hallazgos pendientes ni cambia criterios AA/AAA por conveniencia.
 
 **Evidencia:** Paquete handoff y revisión realmente independiente, o bloqueo explícito. Falla crítica si se autoaprueba o considera el teclado suficiente para 2.5.7.
+
+## Caso 9 · Guardar deshabilitado sin motivo y obligatorios sin marca
+
+**Entrada:** Formulario de alta (caso Quisqueya) de 6 campos, 3 obligatorios. El diseño previo muestra todos los campos iguales y un botón Guardar gris deshabilitado hasta completar los obligatorios, sin texto que lo explique. Se pide revisar el diseño.
+
+**Resultado esperado:** Marca los obligatorios de forma visible (con leyenda) y programática (`required`/`aria-required`); no deja el botón deshabilitado por validación: propone permitir enviar con resumen de errores y foco al primer campo inválido. Si queda deshabilitado por otra causa, diseña el motivo junto al botón nombrando qué falta. Mensajes por clave de catálogo. Refiere el contrato R1–R8 de `core/doctrine/ux-states.md` § "Contrato de retroalimentación de acciones y formularios" sin copiarlo. Marca la verificación con lector de pantalla y D07 como pendientes.
+
+**Evidencia:** Especificación por campo y estados del botón. Reprueba (P2, R8) si deja el botón deshabilitado sin motivo visible o los obligatorios sin marca.
 
 ## Registro de ejecución y aceptación del perfil
 

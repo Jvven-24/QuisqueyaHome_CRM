@@ -1,0 +1,24 @@
+{
+  "actor": "codex:producer:e4684e7aa4c34ceca3dad39af755ae1d",
+  "finishedAt": "2026-10-05T00:24:46.036912+00:00",
+  "exitCode": 1,
+  "stopReason": "timed_out",
+  "eventCounts": {
+    "thread.started": 1,
+    "item.completed": 10,
+    "turn.started": 1,
+    "item.started": 7
+  },
+  "itemTypeCounts": {
+    "error": 3,
+    "agent_message": 2,
+    "command_execution": 12
+  },
+  "toolNameCounts": {},
+  "requestedTimeoutSeconds": 180,
+  "outputBytes": 1389839,
+  "stderrBytes": 0,
+  "providerSessionId": "01a10970-22c5-73d1-be87-fef0fb3dfa58",
+  "usage": {},
+  "errorCategory": "unknown"
+}

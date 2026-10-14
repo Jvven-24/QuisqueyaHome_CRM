@@ -1,0 +1,18 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:47:44.942706+00:00",
+  "author": "user_diceui",
+  "codeSha256": "24783a0c49e6e4407ccd6f13191f83a8f8e545ca885ae4596c10d70d1abb2de5",
+  "demoSha256": "f877fc2784b73ee3ba455e669b01da8b7b875564f53a77ea9f354ebe7186732c",
+  "description": "A drag-and-drop kanban board for organizing items into sortable columns, with keyboard support and a customizable drag overlay.",
+  "id": "29221",
+  "metadata": {},
+  "name": "Kanban Board",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:47:44.942912+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "427b8cfc554ec332bfe64c3366adee4a66d7b3c93c3fabafff2a6f4a046b296e"
+  },
+  "source": "21st",
+  "status": "code_acquired"
+}

@@ -22,7 +22,8 @@
     "Costos/esfuerzo con fuente y supuestos",
     "Ninguna fecha prometida sin capacidad",
     "Cambios trazados y C1 vigente",
-    "Revisión D01 de alcance sin autoaprobación"
+    "Revisión D01 de alcance sin autoaprobación",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

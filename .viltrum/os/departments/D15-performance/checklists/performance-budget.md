@@ -18,6 +18,19 @@
 - [ ] Tamaño máximo de imagen por página o por componente declarado
 - [ ] Número máximo de peticiones de red en la carga inicial declarado
 - [ ] Fuentes web con estrategia de carga que no bloquea el renderizado del texto
+- [ ] Imagen candidata a LCP identificada por pantalla y priorizada; su recurso no se carga de forma diferida y la estrategia `fetchpriority`/preload aplicable se comprueba en HTML/DOM y reporte de red, sin precargas duplicadas
+- [ ] Imágenes con tamaños responsive definidos para los anchos/dispositivos previstos: verificar `srcset`/`sizes` cuando correspondan y el recurso seleccionado (`currentSrc`) en cada condición; alternativa o no aplicable justificados con evidencia
+- [ ] Formato de imagen declarado y verificado en el recurso servido (por ejemplo WebP/AVIF con fallback cuando haga falta), compatible con navegadores soportados y dentro del límite de bytes
+- [ ] Recursos fuera del viewport inicial cargados de forma diferida cuando corresponda
+- [ ] Dimensiones de imágenes y otros elementos visuales reservadas para evitar cambios de layout (CLS): verificar `width`/`height` o `aspect-ratio` y estabilidad durante carga en captura/traza
+
+### Plantilla por pantalla
+
+| Pantalla | Ruta | Build/versión | Tipo de medición (laboratorio/campo) | Dispositivo y red | Límites (LCP/INP/CLS, JS, imágenes, peticiones) | Evidencia (reporte/artefacto) |
+|---|---|---|---|---|---|---|
+|  |  |  |  |  |  |  |
+
+Registrar condiciones reproducibles de dispositivo/red en laboratorio y segmento/fuente disponible en campo. El artefacto incluye fecha, periodo/muestra y resultado; datos de campo o condiciones no disponibles se marcan pendientes/no verificados, sin presentar laboratorio como INP de campo.
 
 ## C. Presupuesto de API
 

@@ -1,0 +1,29 @@
+{
+  "author": "wensity",
+  "description": "A data table with search, column sorting, filtering, row selection, pagination, and expandable detail rows for admin dashboards, CRMs, and order lists.",
+  "framework": "",
+  "id": "31861",
+  "metadata": {
+    "author": "wensity",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_3JFJF7Mbb5ImA8DO9hE1FECx2fT/avatar.png",
+    "description": "A data table with search, column sorting, filtering, row selection, pagination, and expandable detail rows for admin dashboards, CRMs, and order lists.",
+    "id": 31861,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/wensity/data-table?[REDACTED]",
+    "name": "Data Table",
+    "previewUrl": "https://cdn.21st.dev/user_3JFJF7Mbb5ImA8DO9hE1FECx2fT/data-table/default/preview.1790598692899.webp",
+    "type": "component",
+    "url": "https://21st.dev/@wensity/components/data-table",
+    "videoUrl": "https://cdn.21st.dev/user_3JFJF7Mbb5ImA8DO9hE1FECx2fT/data-table/default/video.1790598688866.mp4"
+  },
+  "name": "Data Table",
+  "previewUrl": "https://cdn.21st.dev/user_3JFJF7Mbb5ImA8DO9hE1FECx2fT/data-table/default/preview.1790598692899.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:25.621235+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "61bac2a93cbefce0148ef4039c1af3528674913f3128e819881803c35c007623"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@wensity/components/data-table"
+}

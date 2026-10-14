@@ -23,7 +23,8 @@
     "Jobs omitidos no cuentan como aprobados",
     "CI separa código no confiable de secretos",
     "Sin reescritura de historial publicado",
-    "No publicación ni merge fuera de autorización"
+    "No publicación ni merge fuera de autorización",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",
@@ -53,4 +54,3 @@
     }
   ]
 }
-

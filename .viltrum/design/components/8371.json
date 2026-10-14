@@ -1,0 +1,29 @@
+{
+  "author": "uniquesonu",
+  "description": "Dashboard overview for the admin dashboard",
+  "framework": "",
+  "id": "8371",
+  "metadata": {
+    "author": "uniquesonu",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ydU9wY2lxTEpWMUh1MnZRVVRWQ0dHaWpkWjUifQ",
+    "description": "Dashboard overview for the admin dashboard",
+    "id": 8371,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/uniquesonu/dashboard-overview?[REDACTED]",
+    "name": "Dashboard Overview",
+    "previewUrl": "https://cdn.21st.dev/uniquesonu/dashboard-overview/default/preview.1759320014142.png",
+    "type": "component",
+    "url": "https://21st.dev/@uniquesonu/components/dashboard-overview",
+    "videoUrl": "https://cdn.21st.dev/uniquesonu/dashboard-overview/default/video.1759320014142.mp4"
+  },
+  "name": "Dashboard Overview",
+  "previewUrl": "https://cdn.21st.dev/uniquesonu/dashboard-overview/default/preview.1759320014142.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:38.725526+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "360e93bfb9f1a992b9a45beee2ed6a207e7e7ba2567a60d52f3f26fecc6c0e2c"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@uniquesonu/components/dashboard-overview"
+}

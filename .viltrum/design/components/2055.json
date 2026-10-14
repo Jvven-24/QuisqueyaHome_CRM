@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:48:23.729699+00:00",
+  "author": "designali-in",
+  "codeSha256": "e0c4d8b0d2b2e3a8887e3b6fe582d6129c950681e73a2049e6de53887b3817b4",
+  "demoSha256": "013d61aa08afcd6b75f26cbb821e75e64824e1996ed0da0881231b31e906be7d",
+  "description": "Gallery",
+  "framework": "",
+  "id": "2055",
+  "metadata": {
+    "author": "designali-in",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2rO0IUQINTfBex4xN8Ghho5dpr4/avatar.jpeg",
+    "description": "Gallery",
+    "id": 2055,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/designali-in/gallery?[REDACTED]",
+    "name": "Gallery",
+    "previewUrl": "https://cdn.21st.dev/user_2rO0IUQINTfBex4xN8Ghho5dpr4/gallery/gallery/preview.png?v=1",
+    "type": "component",
+    "url": "https://21st.dev/@designali-in/components/gallery",
+    "videoUrl": "https://cdn.21st.dev/user_2rO0IUQINTfBex4xN8Ghho5dpr4/gallery/gallery/video.mp4?v=1"
+  },
+  "name": "Gallery",
+  "previewUrl": "https://cdn.21st.dev/user_2rO0IUQINTfBex4xN8Ghho5dpr4/gallery/gallery/preview.png?v=1",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:48:23.729859+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "70628a4a2ddc2eb24d5cd66be0ab338b166ca64bb2753ad1bd8f80b4fec0cb4a",
+    "importedAt": "2026-10-04T22:47:55.493394+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "5d5868e75f195899206a74f59dcc3ae6b1ea472d4a1ac542b28623538a04f127"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@designali-in/components/gallery"
+}

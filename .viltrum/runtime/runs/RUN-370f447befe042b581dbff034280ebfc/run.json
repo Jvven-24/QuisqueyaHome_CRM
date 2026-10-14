@@ -1,0 +1,2353 @@
+{
+  "schema_version": 1,
+  "graphVersion": 1,
+  "id": "RUN-370f447befe042b581dbff034280ebfc",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "goal": "Acoplar al CRM principal los sistemas open source del mapa .viltrum/vre-os/MAPA-SISTEMAS-OSS.md (Twenty ya vivo, runtime propio de mensajeria, Schedule-X, react-pdf y GoRules Zen, Moodle, OpenProperty, Papermark) detras de puertos segun ARQ-VRE-002 y las decisiones 43 a 46 de docs/contexto/decisiones.md. Entregar por sistema: contrato de puerto con capacidades(), mapeo de datos contra la API real de Twenty (.viltrum/vre-os/spec/integraciones/fuentes/twenty-openapi-core.json), eventos, catalogo de fallos, pruebas de contrato, orden de construccion y riesgos. Senalar contradicciones o errores del mapa. No construir codigo: solo analisis verificado con archivo y linea.",
+  "intent": "INTEGRACION",
+  "phase": "F0",
+  "gate": "G0",
+  "backend": "codex",
+  "dataRoot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os",
+  "mode": "read_only_analysis",
+  "status": "blocked",
+  "createdAt": "2026-10-05T00:21:35.340302+00:00",
+  "updatedAt": "2026-10-05T00:24:46.048774+00:00",
+  "tasks": [
+    {
+      "id": "TASK-D01",
+      "department": "D01",
+      "reviewer": "D02",
+      "status": "failed",
+      "actor": null,
+      "summary": null,
+      "evidence": [],
+      "review": null,
+      "handoffId": null,
+      "contract": {
+        "schema_version": 1,
+        "id": "D01",
+        "skill": "viltrum-discovery",
+        "stage": "F0",
+        "inputs": [
+          "fuentes del cliente con procedencia",
+          "proceso actual",
+          "objetivo y restricciones"
+        ],
+        "outputs": [
+          "PRD",
+          "mapa de actores/procesos",
+          "requisitos con criterios de aceptación",
+          "NFR medibles",
+          "Q/CI y trazabilidad"
+        ],
+        "checks": [
+          "Hechos/hipótesis/peticiones distinguidos",
+          "Métrica de éxito atribuida",
+          "Excepciones/datos/permisos por capacidad",
+          "Fuente y criterio por requisito",
+          "Sin preguntas P0 abiertas para G0"
+        ],
+        "capabilities": [
+          "repository",
+          "documents",
+          "web"
+        ],
+        "sources": [
+          {
+            "title": "GOV.UK Service Manual — Discovery",
+            "url": "https://www.gov.uk/service-manual/agile-delivery/how-the-discovery-phase-works"
+          }
+        ],
+        "subagents": [
+          {
+            "name": "extractor-reunion",
+            "purpose": "clasificar afirmaciones y preguntas",
+            "when": "transcripción larga o varias reuniones",
+            "outputs": [
+              "tabla con fragmentos y timestamps"
+            ]
+          },
+          {
+            "name": "revisor-dominio",
+            "purpose": "detectar requisitos sectoriales faltantes",
+            "when": "sector con obligaciones/restricciones relevantes",
+            "outputs": [
+              "preguntas y fuentes oficiales, sin dictamen legal"
+            ]
+          }
+        ]
+      },
+      "mode": "read_only_analysis",
+      "collaboration": null,
+      "prompt": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\runtime\\runs\\RUN-370f447befe042b581dbff034280ebfc\\prompts\\TASK-D01-producer.md",
+      "promptHash": "598097e4e97e8a0620a817fdb9fd4970a3c03b46ec87de352ad2a4d54e876f4c",
+      "peerArtifacts": [],
+      "error": "Proceso detenido: timed_out."
+    },
+    {
+      "id": "TASK-D22",
+      "department": "D22",
+      "reviewer": "D00",
+      "status": "pending",
+      "actor": null,
+      "summary": null,
+      "evidence": [],
+      "review": null,
+      "handoffId": null,
+      "contract": {
+        "schema_version": 1,
+        "id": "D22",
+        "skill": "viltrum-knowledge",
+        "stage": "F8",
+        "inputs": [
+          "fuentes/artefactos nuevos",
+          "decisiones atribuibles",
+          "estado y handoffs",
+          "inventario de código"
+        ],
+        "outputs": [
+          "índice de fuentes y hashes",
+          "paquete de contexto por perfil",
+          "registro de contradicciones",
+          "trazabilidad/recencia",
+          "lecciones para revisión"
+        ],
+        "checks": [
+          "Procedencia/fecha/autor conservados",
+          "Decisión distinta de petición o simulación",
+          "Secretos y datos innecesarios excluidos",
+          "Enlaces/hashes vigentes",
+          "D00 revisa paquete antes de promoción"
+        ],
+        "capabilities": [
+          "repository",
+          "documents",
+          "git"
+        ],
+        "sources": [
+          {
+            "title": "Git hash-object",
+            "url": "https://git-scm.com/docs/git-hash-object"
+          }
+        ],
+        "subagents": [
+          {
+            "name": "triage-fuentes",
+            "purpose": "clasificar y detectar duplicados",
+            "when": "volumen documental alto",
+            "outputs": [
+              "índice/duplicados",
+              "contradicciones y desconocidos"
+            ]
+          },
+          {
+            "name": "auditor-trazabilidad",
+            "purpose": "localizar enlaces rotos/evidencia desactualizada",
+            "when": "cierre de fase o cambio arquitectura",
+            "outputs": [
+              "mapa de impactos",
+              "fuentes obsoletas"
+            ]
+          }
+        ],
+        "supporting_skills": [
+          "viltrum-pxil-design",
+          "pxil-library-curation"
+        ],
+        "design_resources": "registry/design-resources.json"
+      },
+      "mode": "read_only_analysis",
+      "collaboration": null,
+      "prompt": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\runtime\\runs\\RUN-370f447befe042b581dbff034280ebfc\\prompts\\TASK-D22-producer.md",
+      "promptHash": "eca8cc2f2b2cd2a0d59f40f5e161c327051c7bc78b4b0f3d965f6c88eb70c953"
+    }
+  ],
+  "blocked": [
+    "La ruta solicitada depende de puertas previas sin evidencia/revisión vigente; se retoma F0"
+  ],
+  "activeProfiles": [
+    {
+      "id": "D00",
+      "name": "Orquestación, cobertura y riesgo",
+      "slug": "orchestrator",
+      "reviewer": "human",
+      "autonomy": "A2",
+      "mode": "within_authorized_scope",
+      "skill": "orquestar",
+      "protocol": ".viltrum/os/departments/D00-orchestrator/sops/delivery.md",
+      "inputs": [
+        "objetivo autorizado",
+        "estado y gates",
+        "inventario de arquitectura/requisitos/hallazgos"
+      ],
+      "outputs": [
+        "mandato",
+        "plan de activación",
+        "mapa de cobertura",
+        "handoffs y bloqueos"
+      ],
+      "specialists": [
+        {
+          "name": "inventario",
+          "purpose": "mapear arquitectura y evidencia existente",
+          "when": "repositorio grande o fuentes dispersas",
+          "outputs": [
+            "mapa con rutas",
+            "lagunas"
+          ]
+        },
+        {
+          "name": "auditor-gates",
+          "purpose": "comprobar evidencia e independencia",
+          "when": "antes de avanzar etapa",
+          "outputs": [
+            "veredicto y hallazgos"
+          ]
+        }
+      ],
+      "capabilities": {
+        "repository": {
+          "status": "available",
+          "scope": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+          "evidence": "instalación local; acceso al directorio",
+          "owner": "host"
+        },
+        "documents": {
+          "status": "unverified"
+        },
+        "git": {
+          "status": "unverified"
+        }
+      }
+    },
+    {
+      "id": "D01",
+      "name": "Descubrimiento y requisitos",
+      "slug": "discovery",
+      "reviewer": "D02",
+      "autonomy": "A1",
+      "mode": "within_authorized_scope",
+      "skill": "viltrum-discovery",
+      "protocol": ".viltrum/os/departments/D01-discovery/sops/delivery.md",
+      "inputs": [
+        "fuentes del cliente con procedencia",
+        "proceso actual",
+        "objetivo y restricciones"
+      ],
+      "outputs": [
+        "PRD",
+        "mapa de actores/procesos",
+        "requisitos con criterios de aceptación",
+        "NFR medibles",
+        "Q/CI y trazabilidad"
+      ],
+      "specialists": [
+        {
+          "name": "extractor-reunion",
+          "purpose": "clasificar afirmaciones y preguntas",
+          "when": "transcripción larga o varias reuniones",
+          "outputs": [
+            "tabla con fragmentos y timestamps"
+          ]
+        },
+        {
+          "name": "revisor-dominio",
+          "purpose": "detectar requisitos sectoriales faltantes",
+          "when": "sector con obligaciones/restricciones relevantes",
+          "outputs": [
+            "preguntas y fuentes oficiales, sin dictamen legal"
+          ]
+        }
+      ],
+      "capabilities": {
+        "repository": {
+          "status": "available",
+          "scope": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+          "evidence": "instalación local; acceso al directorio",
+          "owner": "host"
+        },
+        "documents": {
+          "status": "unverified"
+        },
+        "web": {
+          "status": "unverified"
+        }
+      }
+    },
+    {
+      "id": "D22",
+      "name": "Gestión del conocimiento y contexto",
+      "slug": "knowledge-ops",
+      "reviewer": "D00",
+      "autonomy": "A2",
+      "mode": "within_authorized_scope",
+      "skill": "viltrum-knowledge",
+      "protocol": ".viltrum/os/departments/D22-knowledge-ops/sops/delivery.md",
+      "inputs": [
+        "fuentes/artefactos nuevos",
+        "decisiones atribuibles",
+        "estado y handoffs",
+        "inventario de código"
+      ],
+      "outputs": [
+        "índice de fuentes y hashes",
+        "paquete de contexto por perfil",
+        "registro de contradicciones",
+        "trazabilidad/recencia",
+        "lecciones para revisión"
+      ],
+      "specialists": [
+        {
+          "name": "triage-fuentes",
+          "purpose": "clasificar y detectar duplicados",
+          "when": "volumen documental alto",
+          "outputs": [
+            "índice/duplicados",
+            "contradicciones y desconocidos"
+          ]
+        },
+        {
+          "name": "auditor-trazabilidad",
+          "purpose": "localizar enlaces rotos/evidencia desactualizada",
+          "when": "cierre de fase o cambio arquitectura",
+          "outputs": [
+            "mapa de impactos",
+            "fuentes obsoletas"
+          ]
+        }
+      ],
+      "capabilities": {
+        "repository": {
+          "status": "available",
+          "scope": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+          "evidence": "instalación local; acceso al directorio",
+          "owner": "host"
+        },
+        "documents": {
+          "status": "unverified"
+        },
+        "git": {
+          "status": "unverified"
+        }
+      }
+    }
+  ],
+  "coordinator": "D00",
+  "currentTask": "TASK-D01",
+  "planHash": "f03d35f28c737ae958a22f84d1bb84d28df1dee77ed5170b17323a5a00120427",
+  "inputHashes": [
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\capabilities.json",
+      "sha256": "890957cfd43ad4e4fd189b0a57a327b48264be89ca70dfc8540b2850bbc01167"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\commercial.md",
+      "sha256": "41771d911ad483135ea345521a9918f747aaee549d53b14b28d23b5ac587cd9b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D00-orchestrator.md",
+      "sha256": "67cecc9042a7a7a29c6152b34f877a281ad4a4a1b53800c1641cfbb24971c080"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D01-discovery.md",
+      "sha256": "a269b011c5a32d7fd71b26f60f0ee03b22db458080c8f4c08dceb7240a18705f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D02-scope.md",
+      "sha256": "fd83f0586fe15d23d95afe8d758f37cc5c1cc3044c2cd367a46b287c0068c073"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D03-architecture.md",
+      "sha256": "b152c86dadcd9413190b6e6aeaba683a288a3436085a308bfc4eadc3665a7f84"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D04-ux-research.md",
+      "sha256": "d1723c0586947ac413bb72aaf514d8f5e1782b2d0ac4d87b08eab21549554293"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D05-ui-design-system.md",
+      "sha256": "39a2c6d9d9bbd32746b48acb03d5272670fa48f001f95578fdd6e75572f1d777"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D06-ux-states.md",
+      "sha256": "51b7c11fd015781b9e5987cfbc2ee48e398bd373da64303f4374bca466e39734"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D07-accessibility.md",
+      "sha256": "066f3986e797fe6b85604212a381e803eb6c44031272938b03b2fc4a5f980b62"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D08-content-seo.md",
+      "sha256": "1fd6eaf5c08111a304821b36ae02b94267ac929f070d9e87f5fa58f2d1a8ee42"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D09-frontend.md",
+      "sha256": "ad58a6e35fa992b7643327321733982b25e61ef69c9093828f174e1444cb6d7a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D10-backend.md",
+      "sha256": "74dafa638a3a2c846e8243b3678b1c1e0c2574181632e338cbca542de69625b9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D11-data.md",
+      "sha256": "65c9c99152f0847aa841c88b18307da5f5f060e1e985855c1633b9a89652f15e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D12-security.md",
+      "sha256": "31aa4f1ab884f2ae80f81835e316fa3afcb61e09f84aeed54310016298837e1f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D13-git-governance.md",
+      "sha256": "f2c3c18ce586a5f63c2f82d8bdd38f0071e57f14c718ab2f080cef0d324d4514"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D14-qa.md",
+      "sha256": "c35b576f1685b49b4a43e6c2f60572e63a185487bdb0d2c01ad570060f1d9d5c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D15-performance.md",
+      "sha256": "193e6e17a6375613084da0137f61be7759022c626bf21737847441861dad8dfa"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D16-devops.md",
+      "sha256": "612474c08162c0dfef09575c918c65117f7c1160f305517966fa17fcc17130a3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D17-observability.md",
+      "sha256": "8274e9e4edc476cd3bbafef41ed0f437763860efa1dea509bda468d050b2d307"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D18-ai-agents.md",
+      "sha256": "b4a54c4eb85786b48952e8e45b4838f4a230ba6f543e59ece9936f233ff06604"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D19-integrations.md",
+      "sha256": "77093e7b9f6b49193c72b114722ef948533d677620b564382cf02c8d082230ca"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D20-documentation.md",
+      "sha256": "d454ade8ac06823810f8417fe7f343476684037dc30e8268d4ecb257ba429374"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D21-research.md",
+      "sha256": "f93ba025939d53d15634ecae0e5627dcbe5de2588da299ed35c4822a8a7cee51"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\departments\\D22-knowledge-ops.md",
+      "sha256": "abfa2625144076ee0f012bec8a8c3d7787f6ebedc24cf4ffcb801ef94481a078"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\briefs\\8ff8898e487d42e6b22484a4e86de142.json",
+      "sha256": "3ec1b4544d262912f00181c7930f8395b377463a1fe1266fe1c1b860dabea9ce"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1050.json",
+      "sha256": "7e85bc15633ef669cedf2f303c0cc3a9c4494765be8ee710165a9176bb143a80"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1074.json",
+      "sha256": "8321ba3d89c575851c7c676f5cf2395672226be369109c9245a6bf9c41f0ad5a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1081.json",
+      "sha256": "b399dde00adf6cb83eb1340338780ee92327525c90b40af1aab45d1ba60798c7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1088.json",
+      "sha256": "b1be73f5dce6ccf04191db0f13c1bbb89380dc75ae0e8a56ed1f18971606246c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1089.json",
+      "sha256": "bd4d3407e841ca64e3140993dc07e734ec93c5ea831b3e1c4f36a9750caf247d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1094.json",
+      "sha256": "41d10325e27245369bacfc453440210636dd2c40f6819c769f86a932506cbb45"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1096.json",
+      "sha256": "44becab9d405b49ddcfc853fa207a3ba504c0c5a953dec74692c0a5f5ac1db3d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\11641.json",
+      "sha256": "45f5a99687437a6f09dce0071be73ee0f3a8235d14890fe8015225107c98152b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\14941.json",
+      "sha256": "6e83062695d4945915e17798f961f63310ec5fc3019aa77df09bb1a618690e5d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\15024.json",
+      "sha256": "97274bbc0a2957f40c63c0f99ff8b85bafbd5d81fc30aa3c7780ccd95e116378"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\15715.json",
+      "sha256": "d4a2531447cafea6aef19c07aa77f8c092de20e4909a1f8bde13eda877bfab95"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1603.json",
+      "sha256": "cfd172bdb2ff032133e9d0acb2a575e5e007b5cb92c6ae45febb01da5a38569b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1603\\demo.txt",
+      "sha256": "fc7bb4b6296cd6757c73059122c1a9ffa3e0f84949c904bfc6e4451a107b1f5c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1603\\source.txt",
+      "sha256": "ee9f4bdfd5c5a1ec1d830b9ad1eeeedc2db1f62f0f94a916c9f6d1786f0f35cd"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\161.json",
+      "sha256": "660dea44cd285d221d4f5334cdff19480e32259248326abdfff7a6f0f67a3d6d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1627.json",
+      "sha256": "8b5177ee1d66df128fc21c54acfdbe36abed78d6d76cda2cd750db21dcb4db05"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1633.json",
+      "sha256": "bce5bbadcf6ceba004d17fd85b799243d2810d45a90fc17e71068f800b72a3ee"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1633\\demo.txt",
+      "sha256": "0588ddab97ac1b297648376293ff41e72126622b14c7c1f9f7506f6ec52de89d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\1633\\source.txt",
+      "sha256": "c7d44de91bb15ef53b5694263e84610dadb78624dcd902806c348e2e792a1b1a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\19212.json",
+      "sha256": "f84ad5021211124b551c475b69a1cbef6b9f544e461b7aa63ddf2689f2188ad0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\20078.json",
+      "sha256": "40f42257c642c97fbab3837000081738cd1c1640c9fc5afb8e8d5490affc42d6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2055.json",
+      "sha256": "f60a1372aaff889ae02b47332bd5d78c3b62b4a5f73525f614e72f63f7752c24"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2055\\demo.txt",
+      "sha256": "013d61aa08afcd6b75f26cbb821e75e64824e1996ed0da0881231b31e906be7d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2055\\source.txt",
+      "sha256": "e0c4d8b0d2b2e3a8887e3b6fe582d6129c950681e73a2049e6de53887b3817b4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2075.json",
+      "sha256": "24221b8a1728e6fe99f01f7e568f2dd754966bc7d6d690a4f410f83c68fb948e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\211.json",
+      "sha256": "f21020fafbc0a8f72a9d2210b24e26c2baa32f98c6017ed2e4627ac4329d8684"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\21987.json",
+      "sha256": "3593bdef064e4045597b846de44c0eee13b078cfea7df2e402c5c3c0fdf53259"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\22177.json",
+      "sha256": "39c982a83231c1b8af6cad143502f090bc3722571bc1ee37c93a724b9c1ab952"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\22177\\demo.txt",
+      "sha256": "495b37294059d58e483d182ec69c19bacf083bf5e4fe0e5adee3866f9d376d86"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\22177\\source.txt",
+      "sha256": "7461a0eb106f57bc04734d95c43d394fbd775f5ad8fdaa8693a0a9a3b954bab2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\226.json",
+      "sha256": "32c7be10f4540a32a8e631df243f4579674231b58ee683962915f4b79df40201"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2316.json",
+      "sha256": "48d02a0014470ec5e91af91eaced0d7b810bfd46e82a604b6be655683ea03148"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\23522.json",
+      "sha256": "33e3ee6e5cd308ac6f00b8051d7b243550bbb829282154bd891a5aa40e4050ed"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\23604.json",
+      "sha256": "ea53ebc8b0cb51e220ac1a0175cd13bad2d74a3a3d0e13678fd04978083ef49e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\23619.json",
+      "sha256": "d0349b6c9411a2c5c1277b642139fc0fbc14d647596819b015266b1b20d1683f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\24835.json",
+      "sha256": "6d91cb5ce04ccaf5d3020fe1351ff6ad504c58241d576bdab6d1009b8f5541fe"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\25002.json",
+      "sha256": "2754908e48504f359c0603925953288a92e2bca9af8fd2d6533e76ee56a255c2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\25010.json",
+      "sha256": "ebf44c65f8c161835ed56193f3f1b5a5f7d6781f687e72bb5c8f87dcea77f440"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2503.json",
+      "sha256": "8b2446be9016ba5b51a0da8aaaa5ccb06b13fe7fc9d5bb901e73adc1ae7fa9fc"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2514.json",
+      "sha256": "88f5de3c1cfc67eb44e860a6faec16eb694c27e90510b79b9129b451b1d81468"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2514\\demo.txt",
+      "sha256": "761fc38f1c1f4c64da57d36005fd8a081c4c395b96cadc32d2b28423f6bbc26c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\2514\\source.txt",
+      "sha256": "8245ba9dd88153440cfdf6a4acc2b6314567d8eee797066249a7b500f1adb04d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\25395.json",
+      "sha256": "7e8c031faffdaca5fd10422e54847143199ce72b90f12c844e4d0be99ce8450b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\26906.json",
+      "sha256": "e2ab8f06c2546ecc8173a339543e31c0805d15036743ca0623b3b7c07fea6f3b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\26909.json",
+      "sha256": "e73d0054f7dc53c7eb28c601b47ad3cce6d5db315cd47459c2aa2113eaf5a0d7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\26969.json",
+      "sha256": "0e3ee0419e322a8b5819122e6f03702848da8a5e0996bc37f7be1c782208f118"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\27026.json",
+      "sha256": "ef7e295fa6731d2b5ae3658556847945b2f880b2c53bde510150bcdce6b7a80d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\27378.json",
+      "sha256": "927a02ff9ac8e48c057419a542e8ff23b039d9011f5cfe17dce13125a866d554"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\27378\\demo.txt",
+      "sha256": "17bdbbaed2828dd05aeea28977764241dd74ea76daa835502211c4267a803df8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\27378\\source.txt",
+      "sha256": "db56c6a12d48b33336209f32e86bae080f1d2b337b28a2affbbbc2113d1d17c3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\27503.json",
+      "sha256": "715c481a2ca43ad21b410f537b8f5ae669b76158f2532330e4e74b6677e4c2aa"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\27503\\demo.txt",
+      "sha256": "a8c441026b7d0b652a9cc4b3e45287e469cef6b23c337fbaef035254cb9db0d8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\27503\\source.txt",
+      "sha256": "30855e131993a7cbe8cb43bba1166985b9a75c25dd9bbdb6fbb2e58cd43133e8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\28295.json",
+      "sha256": "07c2b438a9e75d5aee28981da17441ef6e91a19bcfc197ab58b59f1b5c2622d1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\28298.json",
+      "sha256": "cddbcca432ad7535006119a8b33e140c213eb9c01fddd4902ebc0779b6cced8a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\28327.json",
+      "sha256": "9eee9e60bbfc80e73118aae8a7440b4963b51d124fadbd3f8091b3c4c8c2a9bb"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\28340.json",
+      "sha256": "f3dc29a409896e9ddc9d55e51ba915a68bac147717e422bc15a03df3db24af29"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\28340\\demo.txt",
+      "sha256": "8f4dedbadd12810e1fb4fdc4f1a77a6edb46f8b0f5ed549cc61091ead8b52ad2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\28340\\source.txt",
+      "sha256": "ffbbee2b09fb9387e05e89fa7d36ee41e9dcd02194d620de1d4853d1ca2459b4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\28770.json",
+      "sha256": "b19160287b341f0ea29bfeab71772262c84b3a1e8e7807e6da0d3a63505b19f7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\29221.json",
+      "sha256": "1b3de1002fdd6d5e892e004ee9245d6c3494b72dd64dd0258355e7a460d86098"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\29221\\demo.txt",
+      "sha256": "f877fc2784b73ee3ba455e669b01da8b7b875564f53a77ea9f354ebe7186732c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\29221\\source.txt",
+      "sha256": "24783a0c49e6e4407ccd6f13191f83a8f8e545ca885ae4596c10d70d1abb2de5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\29284.json",
+      "sha256": "cf3765279be1c5e2cf5326881a9e31c76b671a19ee12f63ad4b15be7bb6419b6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\3029.json",
+      "sha256": "ab81c57f8b4b9a735ab4a7aa68b0303481dfc3559b94c7187c0c4dcf656c0d20"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\3029\\demo.txt",
+      "sha256": "418b32141740db9c3db48b282f20c6b341357d38034ed2913b0e5d5ca362ba0a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\3029\\source.txt",
+      "sha256": "1e677a616e220e9ce624192159e673e44e765301dbdd6666b2f684f9ca737de6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\31802.json",
+      "sha256": "1bfbd0407cddd7d63182da38b4ae43632f31f3ef07ddbacb0404d0203e0848d7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\31861.json",
+      "sha256": "f91a8bb270e7a956da0b041f9956f3409ecec23e7265fcdd0f893301f32a0cc0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\3239.json",
+      "sha256": "143d1c5f57053d6fb3a01af89693d84e38e7ad1911715e0934aaca3d4cfb5c57"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\33493.json",
+      "sha256": "2c6075616709c0fc0fe568f7d786d4f230af6ffd126a02ec37a97e8c7fffb44d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\33507.json",
+      "sha256": "da3de7c881ae0a53f9c1a610594c9fb31a29955b0fd4813846021a76565c0118"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\337.json",
+      "sha256": "961b881872c9a2462f61e0149623c1df0d6f2df7cc2a43d5c11f38dc021ff785"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\338.json",
+      "sha256": "88bc2edf17831a3a6a759e557186033efea1907e5e41cb49502645525ded2397"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\34511.json",
+      "sha256": "c3af956398741d6d597e6e888d44105e00eeafb3f9e4b323507a90256f92eec6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\35042.json",
+      "sha256": "5980c2244b90ac971957ea56516cbd0d98292ac24bce7094cc274c5979f7d1b0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\3587.json",
+      "sha256": "0a0e332f4b3ba732d0e158ce6594fa1fc848702b738ef29bfa1731da5f71a344"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\3587\\demo.txt",
+      "sha256": "ca9e0b2d382909fc1c9c94c955ecb859747a02a695256bae81256bc27cb724af"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\3587\\source.txt",
+      "sha256": "16a1cb30168be2af8c4fc0cfe35e99895da663e23d74c2a485abfea1419ee7d9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\4086.json",
+      "sha256": "6842228da5bf8661216f1789cb14e76f8bff0b5850845d39387657b2bb079c58"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\4086\\demo.txt",
+      "sha256": "ce6d026ee787c6ac46c9845e71552e7c6d25982e283cddfe549508a238f101d9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\4086\\source.txt",
+      "sha256": "40de40d76b5125a6d5082a38eabaebb9e9cbd71eb9d5f7cd657178ca4285778a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\425.json",
+      "sha256": "857fc59cbba759dbdd6b94fe2829de76f4f9d96a0d41303104d533c8a9923ee2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\429.json",
+      "sha256": "c5f3219ea9241f46a285c92aada1562e5e54345e0c52c83ddcc40dd9e999cab3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\4901.json",
+      "sha256": "287bc50b7920a88ef6ac2f737c260461c1f54c4aa211343cc20f48bf31f0ad5d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\557.json",
+      "sha256": "28730565c255cbeecac8e29888ec76284c55566690baacee434a5a26ef7a459d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\62.json",
+      "sha256": "0f02b77c24d592693676fa26ef86f6fa9bd5c588dd7d0a93ce90ea1ba4397a1b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\725.json",
+      "sha256": "df25fac0aaf04a2088296fc7a16855365f69835e495543c72e8156a9ae40881b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\748.json",
+      "sha256": "91c92c6269182a751f7697242994672075f5948202716d0db9ba1f045d2c9aa2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\758.json",
+      "sha256": "ebf21b24333ba37fa3c156450e0bc52c53b05b080f20e8f87bf177134d1ed7f1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\758\\demo.txt",
+      "sha256": "5439ea2a47d3f9fbe10e51c84bdc630c7fbab5c01208257b3776f969372a19a8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\758\\source.txt",
+      "sha256": "9e1748e7216dad74fed43443d4871c56871e3036907bc655a9468e4e37c68047"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\764.json",
+      "sha256": "e8fbb1ff000a4cc48118f0dc80cc8b04e344aec1ca8cb9fbe474d63c12a7e8c5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\775.json",
+      "sha256": "7cfb246cedd1e2392dc6f7e549eaa358a32ea302b06bbea316fef797e9627864"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\795.json",
+      "sha256": "f468229eeac6caa03c192804ef4849c47e1770543ad7703e398fb81d8d663d07"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\803.json",
+      "sha256": "36d4015307ff26b3a5a5fa776bd03b6e118c0f4dd098755f8108af091edd58cd"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\819.json",
+      "sha256": "0ff54c42345b3cf2882f16f04c383954afd9ccb4f4a402bc8d2911514256a152"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\8371.json",
+      "sha256": "d81d160ef6c2f2bf2ada99cc191bc43b2668bb1abf8a406a937614399d7426b2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\847.json",
+      "sha256": "f6bf41369bee90c98cda2c0c20f00e79b84220f12c58fa849f31e142ca003ac8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\8597.json",
+      "sha256": "cfc530c798de9950355125917307385573f687074d0b321a4e736b2eb297af04"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\863.json",
+      "sha256": "8c04a9870b53d114a83958cc52c355a7323ef53b4eb5168f88d5f2f7770931ca"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\875.json",
+      "sha256": "75c2138577d20f8095e6db06b43f64aa2b8fa4613939e40eb47a2fe67ec5fe31"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\877.json",
+      "sha256": "58593bf8e6510f62dc1fcb4ee5a9c93879e151d53959fe8f734fced565c78639"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\908.json",
+      "sha256": "f84b43be378af6841aa4bc5cb7d4a2216c0aa802e9a8fc486d91b9623719f8f9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\943.json",
+      "sha256": "e8b72cb00a7ee7cac74d1b88def6aeb3570bd3609cbf381f3771aa98067d83f8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\953.json",
+      "sha256": "6988bd803be4bc7d0817267b7b54ca8572b045827f94131d454a6835fad8a93f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\design\\components\\9758.json",
+      "sha256": "d1de9945528524d63ebfc73244fb98ea9bbaa97889a4d4d3b5edf3c30254accb"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\findings.json",
+      "sha256": "38c37febf00b05707bc1023667c8450a90e6e710cb8202e24c5602199bf749d7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\findings.md",
+      "sha256": "0a83776b5da5b10869d616da5c2dcc40b61e8491568043280b155c1f17672055"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\department-factory.md",
+      "sha256": "9b1c970ac45812c402aeb3fe7f30c0b2eda43ba9a47b3db9b39d47efca2ae6b3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\doctrine\\buy-vs-build.md",
+      "sha256": "6694fe75d2ba193f3de5a94c83a2e6442951e677df50c4c28b4298f76e51c86b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\doctrine\\context-budget.md",
+      "sha256": "3a7c9b721740d8b884a7abade9fde87952f5057a3245cdafa2faf318311ba67b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\doctrine\\human-approvals.md",
+      "sha256": "f02b222e765a8cfd663b8f27e0bccdc58a1c4f9a0b23801e9d00defc6d16753c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\doctrine\\mandate-layer.md",
+      "sha256": "a8a0c8c1c7db98637acf38cace8abb04cab65d729434f65c8b4ec97073ac4414"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\doctrine\\modular-software-lifecycle.md",
+      "sha256": "43f7ee5f6828ff5ae46f88cce55cfe0585d59156dd357a7c1cec9e7418b7af42"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\doctrine\\ux-states.md",
+      "sha256": "632d6bc7601a978df2ae10922f5f1a0598d03c5da910087fe2cb2da85a86b5f1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\evidence-contract.md",
+      "sha256": "99c0ca75f0ebbf38cae6bd1b4d309b2afb5ca8dc761c729e0e29f89b1a1993f9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\lifecycle.md",
+      "sha256": "ab3e433d61752eaee008e2feb6eec2b94c5d9b4165b39851a99120e2d6c8a0f1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\orchestration.md",
+      "sha256": "af0b2c06310dadd35aaa53fcb1d42acbf7690b6f3bcc3ffbb521cbdea1efb335"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\project-workspace.md",
+      "sha256": "bd78aef08010d9e335558cf432e5fe7acf9b94a68d94646e8bd315e4dc2a0209"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\core\\routing.md",
+      "sha256": "7cc3091b2021cabc22b56bb0bbfbaec6bec74bdab156270091e5f8beb51f5e0a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D00-orchestrator\\AGENTS.md",
+      "sha256": "53a5c40765b6774d2104a60575d202c8d54e91a915450ce7c0c6e3a42f71b620"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D00-orchestrator\\CHANGELOG.md",
+      "sha256": "fa2db77923fb45ba716d00a8421e09459526c65e9ac220c8424323f3ca332d46"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D00-orchestrator\\MEMORY.md",
+      "sha256": "a596aed08313638d179724830b4afb851def35fdcb0edd709656da718c349a3a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D00-orchestrator\\SOUL.md",
+      "sha256": "7a7c4e47ee01c056f0f452f5552890eff772008dc59d9c0de31bb8b7fb690e42"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D00-orchestrator\\delivery.json",
+      "sha256": "df867f9360aa32081b1eefc71302506f4442b06036df0085d7208d009f229415"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D00-orchestrator\\evals\\delivery-cases.md",
+      "sha256": "92bbfbe16a37f45defa34beea1deb1830cb3fd14c74f116f0c5ba1b434547bda"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D00-orchestrator\\manifest.yaml",
+      "sha256": "3071c0f7819f2473c167b083c7c4cfa297a26276b9c6d70567c95a271bb7fc72"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D00-orchestrator\\sops\\delivery.md",
+      "sha256": "7a44ee5974646203b6a02b8d6f5056ac0d475ef90a83b694c66639d877a2a147"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\AGENTS.md",
+      "sha256": "3c81e8e2876c41835ce4e51569046a6c417cb6a44183a79765c0c38637cf40a2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\CHANGELOG.md",
+      "sha256": "5ddcdeeddf0a65640979b32ab639a496efa846775a744595101155a06eee3324"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\MEMORY.md",
+      "sha256": "bc1542ef9f03aeb7f488a802596421e99bec59fea797f0260b1526d6fb06324b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\SOUL.md",
+      "sha256": "59d2f4ed775fc72f8823e5557f140939822713be0ba2b5dda1f3e60a01a973b5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\checklists\\client-meeting-intake.md",
+      "sha256": "9b3aa56158ad2262cc4ca6830387d3fd47c7e3420e1f10547ad4a84f69c24165"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\checklists\\discovery-readiness.md",
+      "sha256": "2191b831184818c4a9748e85ecbdf88848d1509112b1373dceae01246feefb2f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\checklists\\requirements-quality.md",
+      "sha256": "4a660fa55f3babb0ea20ebab848825a34f2abe9122a0ea826739c275496e2e9e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\delivery.json",
+      "sha256": "2605e9010eb76a650a938c584e30ef1eae785042e186f83b10930bb2876fe19d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\evals\\cases.md",
+      "sha256": "553ddde48684bbc2454bc57a02f9c1b87da76e5f082898a516f1736df091b96a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\manifest.yaml",
+      "sha256": "5f7b59450eb6893cee00b3e579dfc1e64ef33ee4677bde4238ca8837fcd2ddc8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\reference\\expected-capabilities.md",
+      "sha256": "33d6f118130664efc3ca990e4200d9a2b1fae8305853de74ff7b1d025b8c95fe"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\reference\\question-bank.md",
+      "sha256": "14a772fae06fe9f2b730430ae377eca8042b920675a049f206defe1b934e8652"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\sops\\delivery.md",
+      "sha256": "7db8e77fa9da2f468cc9766b4091b3b0af916efa79b2e473c8c5971a4ba5f318"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\templates\\nfr.md",
+      "sha256": "fe93c687526487ca6455d3e3b55c19685ef4fb2a13bc08dee893191e067005de"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\templates\\prd.md",
+      "sha256": "607428c26ebe3724ad6ccbfdb4d94395d5dbfacf20e1c0ef0665a1afee6a0a69"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\templates\\traceability-matrix.md",
+      "sha256": "bcfd51bc1340cb9e05f5c147001f1f6ed35fb0e143b362e2356c1ab42f7aa310"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D01-discovery\\templates\\user-story.md",
+      "sha256": "ffc8a2b429bbc83ca4c29a3c7cbbef616839229a85dea0a73f1007125bf049c0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\AGENTS.md",
+      "sha256": "af0ef034ba3ffca278da139f24aa7b84781e4fa29e74a92030b769e637786d29"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\CHANGELOG.md",
+      "sha256": "783728e27868e371c86184b24cb360a029d5c7338e891a86c8a7386c53f9d96d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\MEMORY.md",
+      "sha256": "2e863ba548d2f8f7b5712915778b4501017ca52c5b8a50b74d7c697bbf6111b4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\SOUL.md",
+      "sha256": "54b600878f758552af52eea49cf8efa67233a7d17bd9d70111fe19b005bfb3c4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\checklists\\change-control.md",
+      "sha256": "b74d48efdc9d758d46360a77bb0f5c0a3ba18c1f25d4bfd9113b3d86beb6b945"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\checklists\\scope-definition.md",
+      "sha256": "b9339f79298ee0fbbee551c9df8c293d51eb6393b423a0efcaa0dc3a5eb65275"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\delivery.json",
+      "sha256": "f8c28da1439e51834915561a47ab7496237a0f8d469ebc557d9b562ce9c62d87"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\evals\\cases.md",
+      "sha256": "38dfcd0c04b14781f448d73b91d6c2bae7af9fb8f5e41f369e33b78ae72b93f9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\manifest.yaml",
+      "sha256": "d953b82954440806b6bc5716180e3d62f6c511745371ea24131c130270d322ef"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\sops\\delivery.md",
+      "sha256": "914d5905caede3dea130f8f6c3fe9e77ed852848cf6f06f6ee35d1e207908aca"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D02-scope\\sops\\legal-and-commercial-contracts.md",
+      "sha256": "0a280ea8e498637fe47098cbc7a02854279d731569d0facf40503f610e4545f9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\AGENTS.md",
+      "sha256": "8433af6b41ef060606edcb358ceb8891adee22b3e7ac036623b2d9a4d86e696f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\CHANGELOG.md",
+      "sha256": "aad14672b52ed20eba370170b6f0eb785d7ab1d1d0dbe3a7e5825e8b67e399e0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\MEMORY.md",
+      "sha256": "51a8af94ba39ba21bdee7ae51df0d1f49b48c2ee01f2dd8ebda199af5db20194"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\SOUL.md",
+      "sha256": "b6e965497c055bcabf5f63156917dcbf40b95adb50fc6ab34fae09889f22644d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\checklists\\architecture-review.md",
+      "sha256": "60403d56d43e8ca8e2eaf324b8b7f8493d3aff765504fa6d354b97d7de458642"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\checklists\\topology-and-patterns.md",
+      "sha256": "376d392024244df8ff315402e797f74f2f6ac6f6454c5b255af4228b597277b7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\delivery.json",
+      "sha256": "3afe4bd8636544f3930464e9997d2d23d7269df99b32dfd9ea28b0523e555bb2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\evals\\cases.md",
+      "sha256": "33980c40c82995a6f664d908df1c9d4b04a8e0c683090687752051e69a1aed22"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\manifest.yaml",
+      "sha256": "e56b31d701d8f873ee4bb4f92666150f1383e67eb801a3462f28868dd6ca56d3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D03-architecture\\sops\\delivery.md",
+      "sha256": "4b5b09e9f62bf12bb12892d0cb340a4c2b8d8627d7b5c58ed72c6a949195ff0f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\AGENTS.md",
+      "sha256": "396e95ec0620c15b406d363e38499e61c860984c6ecc49e5d2882528d1b4418e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\CHANGELOG.md",
+      "sha256": "1bac87504f7eff4bac26d691bdfd2da102e5f72e789857821a2aa08cf130d463"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\MEMORY.md",
+      "sha256": "9f9a96191fbefa11bd18b14961777ac9aab556ba098123a4e05319eeb2f56567"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\SOUL.md",
+      "sha256": "659e90ae28cc856e73ac9c893acc724ee5eae7d16d04433e3e1cbb57dc4cc206"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\checklists\\screen-inventory-review.md",
+      "sha256": "b1ae470158fdbab2504ab13c334083e2d5f1e5320b0893db495a6afbab1bca38"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\checklists\\user-flow-review.md",
+      "sha256": "99be60ed10b223ceafdfa508401d5031c7387551705ea683821ec3205b6c0f21"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\delivery.json",
+      "sha256": "5c1efb133a47164759a3e7923e8792959bcec1d5abfc59f4213a055aebc93e8b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\evals\\cases.md",
+      "sha256": "7a11e63d2fab3712eddc32a0bd9a8a330e64deabfee98b83688c22cce0c24b9b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\manifest.yaml",
+      "sha256": "be7fd0de09dbc6a8b50366dbe73225fe910ce2b624b5d06b8c459051ff7d0c79"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D04-ux-research\\sops\\delivery.md",
+      "sha256": "0609872dc5a4e304c9ba561773e535280e38872ed7ddde03a55a57699b1ae73d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\AGENTS.md",
+      "sha256": "e2da7fa60da0528cbabc5538f6ede85cdb8bc93499d934a0a031a5a45301b71b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\CHANGELOG.md",
+      "sha256": "3e0e25037458847892083af65992f5f8268764d44cb60aa632e891d3bcbe1137"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\MEMORY.md",
+      "sha256": "9353ce0e38d90cff067bac63ab7048685fc96108332f6d3364c340b4e4d16a1e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\SOUL.md",
+      "sha256": "ce634c38119b6b0dc1d88b7cfc4aeca9646706babd2faed966c0f25de0fee532"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\checklists\\form-design.md",
+      "sha256": "dff7c67f549a0b85bc3d1509322af2e8490d6445c7b64fd193ed06c92813a535"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\checklists\\mobile-component-system.md",
+      "sha256": "486155820791e4243258009637023fb40a68e7f81b6f388be7c3201263761880"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\checklists\\ui-review.md",
+      "sha256": "eec7e374b019f17d88f4cbd0c4cc21dfd9f29a213c34a655da4846f5349479a7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\delivery.json",
+      "sha256": "f022b4321f23f06451e6d38de3950729d92d2c2708f4f61c781f5299461a3536"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\evals\\cases.md",
+      "sha256": "73d98ab9a03914db6d08dc068311dafd3a5b74fcca84f8a90465bf7782d6b0cb"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\manifest.yaml",
+      "sha256": "33a8a198a98784b9279375573275535112ea416431dd04b73ee6fd35c38b1fe6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D05-ui-design-system\\sops\\delivery.md",
+      "sha256": "a93ce809ffcd150f0043ba933ea536eee2257f73711ff91c1df114f84981b42e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\AGENTS.md",
+      "sha256": "7d6ea518f4b618d80253e429ad59a326289b5d6e1110562a69f5eb3f07fa0f67"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\CHANGELOG.md",
+      "sha256": "61796dee6aef77281cff78363fea230d0915de5c620712d31e3237f1e8f396e9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\MEMORY.md",
+      "sha256": "6b97c0feff7761b82fb39399440a7c3f9ac57c1a8ee2ed4e45b9107efa3e8f5d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\SOUL.md",
+      "sha256": "e3b0013454e2ee0ef9c76af3bcf1c8849e52aa063aa96c59b4c9f6499dc38f0c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\checklists\\error-catalog.md",
+      "sha256": "f93bee97377a8331864908fe4fe4d38c0e2c04bd8fbe1575ab1423af9723bce5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\checklists\\states-matrix.md",
+      "sha256": "7d51be7dbb32be0cef2325027075443bbb10fd5078f5779896efd7c36091f71c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\delivery.json",
+      "sha256": "c4d5466e47d78c2e1712962b7e96ce5125e01f4ea058b01df3388e08421e0b3b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\evals\\cases.md",
+      "sha256": "c0928f45d984a649883da1fbb91946d3f484c62c9206b653774db385c715ca7c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\manifest.yaml",
+      "sha256": "57dc29edf1b08cd478f1b6cd3fc44c5e80b28acad6d25d17701f7067c4a11557"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D06-ux-states\\sops\\delivery.md",
+      "sha256": "15c6f3439b5dc04850cc12b3c4b6fec49fe3e08e555fe365648a345835d221e4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\AGENTS.md",
+      "sha256": "f4e91dc57dc285ffe8018d385a06d7b9adc814138f61dc70ec0a0a203343d3d3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\CHANGELOG.md",
+      "sha256": "2960e42eec457c232b0971bf6524e0ff4e0df682f248c0b4b245ef947a8d4023"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\MEMORY.md",
+      "sha256": "f895dbababb18a03d599e6e81f9588a179dba181e7fcde31cf26da5dc2300b0c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\SOUL.md",
+      "sha256": "fc3d9530e494e1f139baed929017868e651c8682962edb9ee366d91a3ea500a4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\checklists\\keyboard-screenreader.md",
+      "sha256": "821f0d28d37baa98431840270c4b957788637206cee7213df0b261ff3bb32ac9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\checklists\\wcag-audit.md",
+      "sha256": "359c765051bbaaef438d324a847f362d2649792e60fc0bef4d9ace0e18efe314"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\delivery.json",
+      "sha256": "95a0dd696c766a2e28192ba8f8e4cfb6a193b632c21be58939f260865a704c54"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\evals\\cases.md",
+      "sha256": "659e5f87589910e7ed8743ea0b8fea5a13ff7f0e457540e4bddef4a4b989e37b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\manifest.yaml",
+      "sha256": "6abca22e142a3acaf625b9016f28cdc8cc2fe0ae3423be484207b693415e123a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D07-accessibility\\sops\\delivery.md",
+      "sha256": "2081021e17a2efd742a2eba133f9710c69a61b2bbafa4950033396242697f33a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\AGENTS.md",
+      "sha256": "b45551f7872366298832dd1a93f2f8b0727222e9ec3c408727181ef229e8d12f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\CHANGELOG.md",
+      "sha256": "f209720916d4bbf1c098c2172a2fe04ea478d7a3b9d3e497a4f5f5b8038622cc"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\MEMORY.md",
+      "sha256": "e48a1f498445a2f3ed754081d5418b8148b569b1d723090bd6b72e5dea4f1149"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\SOUL.md",
+      "sha256": "46211c7d72db110bab5f996630f7349220ea261d8a0597c9658b0186a91b12c5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\checklists\\content-conversion.md",
+      "sha256": "a2694d097a1c7e2e2a015bdefec6e67ef0e43f9f91e394e03b0b4c4d0c6fc25a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\checklists\\seo-technical.md",
+      "sha256": "1788cee983d31f9265e456405de7993db95959b27e6bc610407d3821731c52c6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\delivery.json",
+      "sha256": "a09674c78d1e046e9ba137e59ae895916cfb689c41adbea21daad2da13f3b344"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\evals\\cases.md",
+      "sha256": "eda786f22a0389d0d11797e2e852208d2107448f423c128379e67ec9e12cfa9a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\manifest.yaml",
+      "sha256": "b19bc9bb986cb72a18bc3fb05b6b12725062fd78fbd0669e7a564ee4875a9f7c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D08-content-seo\\sops\\delivery.md",
+      "sha256": "86d821aaeb658ed5cec1ed2e1a339c358f214aa2fd2a26c1c79cae0e887e1a62"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\AGENTS.md",
+      "sha256": "7555869d2e31caba37f797375d7f4d7d7bee9ba2478d05eb368dd34c13624ce3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\CHANGELOG.md",
+      "sha256": "b62839ee89778f6189fa24503cc76dc89e2ee510d2589285bdeb4ed7e7aeb2dc"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\MEMORY.md",
+      "sha256": "e018cf04ecad2303bbd1cc7083a9fffec43f4b8b687d185e43431a603479f619"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\SOUL.md",
+      "sha256": "5ddc8b346ea7650e16298bd6be174b4f5f7f226095918b69b172989e7bed1af7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\checklists\\component-architecture.md",
+      "sha256": "5c08f4635b2a293d7ea4105fa8685a2887a5262f4b6d1a6e8c2b131548506f24"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\checklists\\forms-i18n-states.md",
+      "sha256": "bbfcab732e0423096f001212ed99de8218fc6ba8b185ebb664580b3f91dfb79d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\checklists\\mobile-native-experience.md",
+      "sha256": "00fbf44680333450b3a1e339cf824831c4a85b5be1f58cc5d103525bc283ca2e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\delivery.json",
+      "sha256": "eaa37e6b468b14df77cd85287522413aeac0d57434a4b927bc2bb48cc9e24c15"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\evals\\cases.md",
+      "sha256": "6cb3b025c6996aa0cc934c9724d15d6135ae4bd8f0988acea2948103de4a332b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\evals\\results\\EVAL-c6655d799a0c.json",
+      "sha256": "668682025d7d01e2f7c90673de1d39da2d1de33f4c183aae64c24f442b7ad363"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\manifest.yaml",
+      "sha256": "8385b2758f5e618a5e6ee014f279ec66b559feca7af97f093c03e452c48bc437"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D09-frontend\\sops\\delivery.md",
+      "sha256": "c1b8cc0f0f01faabbd30c145abeaf6b28284470da9cdb83a00c58276cce28a93"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\AGENTS.md",
+      "sha256": "e79fe9e398a51024bcf9e912f548a753295c662cb85505ced127bf465282f63a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\CHANGELOG.md",
+      "sha256": "a316546d1b0aaf5410dd67275b1985bf4b394416f7fe295398b3b880fdbc5817"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\MEMORY.md",
+      "sha256": "74e9dd8d49b3ebc36187f7062209d55ed3f309355486e11f6e25728d8a442a0a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\SOUL.md",
+      "sha256": "a68a1eb5434f39d0070dbff9a448f66853ddc19a4a7d3b52bdc7f06d0b2b1faf"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\checklists\\authentication.md",
+      "sha256": "64daed7b499d6df8b21a341f39909c997b0bcb9f4eb85285a4064c63762884b1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\checklists\\authorization.md",
+      "sha256": "1ddd9a6f8e1722173da082f3c30aa965deb6608edbdbc2fe728d020c186ac054"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\delivery.json",
+      "sha256": "c66e97ec7786c97314ac5f122a3e62228e1786689a4749ecfc7c754f342bb7a2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\evals\\cases.md",
+      "sha256": "7d9b0210b682d406b7d9876e984626178247cb95aab887386ffcc36ccf42c132"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\manifest.yaml",
+      "sha256": "5b1ee0bdaf83476e735c1265f423beeaf6cd9a4a7d1c01f6ff774c1d9bd7f418"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D10-backend\\sops\\delivery.md",
+      "sha256": "891e671e6afe1616e6c17b6b9a6cff593997b2a0955c48af70f4ab3ab043d2c4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\AGENTS.md",
+      "sha256": "fe34cfe8e929bf1e3c044ca06b23f975a9d44cf397792fc10d0af9b3633e4c17"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\CHANGELOG.md",
+      "sha256": "5ca3135be0d2f95a10367f9a857774f8643e281f5b2ad0c3c150bead0d9deba1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\MEMORY.md",
+      "sha256": "6050a1fc403e68670dbf42849e945ed0873785b46abb12f88d4115925a174bd4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\SOUL.md",
+      "sha256": "fa475020d65f95ffe96b8d41b5daa1c93196e73ad98da39ee0e4463eec862c7f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\checklists\\data-model-review.md",
+      "sha256": "046709f65fc98e4b6cc718f8a2351d6926ee643bd255da129bdaa92691e76d60"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\delivery.json",
+      "sha256": "ba91de209b1d4888135ba3e2ddb7865615af578b3e79b3cd8fd7f4a42c3e9407"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\evals\\cases.md",
+      "sha256": "fad06f60032660c6dc41f4d02d1f87275e7eb3b9c2c1bf5d1ab568faf1b98c19"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\manifest.yaml",
+      "sha256": "469cf1c2cc474bb4cba7d55d449ff90640c50c109d693ffb20ad940b3c3dd759"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D11-data\\sops\\delivery.md",
+      "sha256": "a4f034916db6b8924145fc40b31ec38fc0bf9d16cf5eef5cf033a4a7a738ad29"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\AGENTS.md",
+      "sha256": "04be1341abd537e70b7271acac4f46bf1d40855960a3afb6f15af0aa0e54215a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\CHANGELOG.md",
+      "sha256": "ad942f05bc790a08a1274fe4efcd932d2ef4a6ab8a28aa7bfd834d5995896d4b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\MEMORY.md",
+      "sha256": "0d5f2e8805ed6a262650d4dc4df09a38f16bd0c8dbbc55a7da394b9eddc43f4e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\SOUL.md",
+      "sha256": "2391cf2a94e5cec594d480652bd4d9e95f0ccd465a673070a9e95a854656eb57"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\checklists\\hardening.md",
+      "sha256": "29f50e29e2f8c5c4dacd6c8aab3e5d276e215641247ad0fa637899a976602068"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\checklists\\security-baseline.md",
+      "sha256": "c27613edf4587492e8a7f48eb2776fa7548db051ebf657aa81f7a6f5d42400a0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\checklists\\threat-model.md",
+      "sha256": "8b6b7e17163f4528894e28be1b1016053ac97e937bef50931cd63925aa44048d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\delivery.json",
+      "sha256": "d401885b7b44f6a2de73527eb63da720a809bfce72d69054b5f2902637c8a7a9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\evals\\cases.md",
+      "sha256": "6beba1406cc8322d2d49bfead44a514c7fb966811c50969379e7099bb9574b4f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\evals\\delivery-cases.md",
+      "sha256": "a6961e036948a439b2d014cdef7e5ab0c7780116788ec37550f943624c6d7c97"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\manifest.yaml",
+      "sha256": "f5a0b74bb9f01e5917b4ab8e1392fe4d3da7f81cb406f285850a2208aaffaeda"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D12-security\\sops\\delivery.md",
+      "sha256": "eb8d154f1ef7d1cfdf29c3dea0190770ebd8c7b37172e517beeda4d19f282e88"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\AGENTS.md",
+      "sha256": "2ac15433952ea05614fb7011b5a7d701857550ba496d9b26e8d5d95ff33d4147"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\CHANGELOG.md",
+      "sha256": "ffa5eff9f3d2cf10b92cd697d505d03d996b548db7645fea6c55bf8edb1dec61"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\MEMORY.md",
+      "sha256": "01d91f184b931d71a71bb16e5427067ad209b89e4bb596ccee17f431d741a47b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\SOUL.md",
+      "sha256": "97edf2ccd7b80b59b02b7d1f888ad02a99c140db97125b00bf475bba5fe7d8bb"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\checklists\\pre-merge.md",
+      "sha256": "bf054efaa49e80375dd4ae8bfab8492af827d42b07ef244b3aab6d75e72b4868"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\checklists\\release-versioning.md",
+      "sha256": "72549c9934f91dd5e0ffdc6d8982d026ab55552d4b9d385890e9aae97df390e2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\delivery.json",
+      "sha256": "a3322e50a7d7cb4c41d75cb21e7f13204777b481fed84d619d2c28c775ccf39c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\evals\\cases.md",
+      "sha256": "ce1de9b845904756e365eeae6c35b1332641b2434d1fd2acf1c96d011c1dc269"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\evals\\delivery-cases.md",
+      "sha256": "fe70a93c26d07ff181cfb6177fe64c96da871ee1e97cdcc214188f74b683c910"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\manifest.yaml",
+      "sha256": "bd29dd110c0d476d71d84fd232368dbd247d36e3ca0374d3e5b32f839f143550"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D13-git-governance\\sops\\delivery.md",
+      "sha256": "bc58d4d1d5714e90779330f4ef06fd7102b528f7e630063bd7b47f8a76948b4d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\AGENTS.md",
+      "sha256": "bcbc2e8ffcb3fe155967630e28ad82f7ee739ded3b77620d2a419c9a04da1583"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\CHANGELOG.md",
+      "sha256": "693b2a8270e68c86a13c5e68bb26a69c85bca05b220a51edd53c46202418dc53"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\MEMORY.md",
+      "sha256": "d2008de35ddd34ac13139c2721d697caed7a91b64368fee1ff096a3486e0bdd0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\SOUL.md",
+      "sha256": "eb2d0df36f23fbd70d37eb69454c5139d158cee50fb8df65d307145d84bd637c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\checklists\\e2e-forms.md",
+      "sha256": "1eb87492240511bf6e97559818fd0096da284f621dc6bd36ad1401ab7e70f87d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\checklists\\e2e-states.md",
+      "sha256": "c89f4b2c5a794647850395616216fb42a50ea7dca858669a64b86a475aaad0c1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\checklists\\mobile-native-qa.md",
+      "sha256": "b80aabb8f76e8128f2f73cf906219e9b690f5ec000b4151ae8da5295a3c3877e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\checklists\\screen-module-matrix-qa.md",
+      "sha256": "b7f0e271d8edafee9269491b06cb2c18f0df006dea2535491d5823cccaae3997"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\delivery.json",
+      "sha256": "1ca8a824f8c24cae91e4fe6e7601405180327145d5d75d78017a67b26d59eb50"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\evals\\cases.md",
+      "sha256": "e51e081aae9066311861a34c726301985b8dcfed15790c1b5fc27d8f8bb07b43"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\evals\\delivery-cases.md",
+      "sha256": "067c20d0991a8d04caf3bfd09ebe5507aa887fd0a80d413d261ade3c7577420b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\manifest.yaml",
+      "sha256": "46dd28d3b498791dc6571640bb1cbc0199cc306af239704134a57b2c73d3fa37"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D14-qa\\sops\\delivery.md",
+      "sha256": "b0c1ccf9e372153b59513b9f48a62dad45aa2a8a554dd1af45514361a7f2c8dd"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\AGENTS.md",
+      "sha256": "2d68068ee127046ac6dc0e7ad3d0427c632fab984be94ff9220349ff549b77e2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\CHANGELOG.md",
+      "sha256": "c4f679052d84f825df7ab2379d5af663550ba20a8875e9cac94b82b41f38478a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\MEMORY.md",
+      "sha256": "47114aa2885548591b8b2ac03949bf3cc8ccd27705a7431b8b0928c766bf1c65"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\SOUL.md",
+      "sha256": "02308eea5dbf46cdc6c781efa518bfd3e72daeeb23a84fd84dc0dae065f2e33a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\checklists\\load-testing.md",
+      "sha256": "f9954c962bff0701b6734d9c19de35f42438453f88fedf4e62c206fa290beedc"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\checklists\\performance-budget.md",
+      "sha256": "571388bc8f7560a70d3604d4bcf5a463db0bd6913001f750c36c733b6693ef60"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\delivery.json",
+      "sha256": "b55c7f30577f5ee665fc4d9cf7a34ad0bc6c37d34fdc3664417ca6246a27699b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\evals\\cases.md",
+      "sha256": "51f54544044716fda7ad713ab3abc3691bf87848484c2e9442f811804da57a92"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\evals\\delivery-cases.md",
+      "sha256": "49093664223815ed5d5f8e4d3d10725cfe8138413141dd7bd81da06f94cd909d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\manifest.yaml",
+      "sha256": "a950284a6915c33839a8b53d6e5864271f0ba1232167222aceba801eb2912266"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D15-performance\\sops\\delivery.md",
+      "sha256": "4514787dcf6ce514d43e8d6327392dcba4bd71da9d2e55f089abb373349957e8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\AGENTS.md",
+      "sha256": "9b66eb24f93cac8ec930889926f8df6951e5ce79dfe391a9dead4913c39c0918"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\CHANGELOG.md",
+      "sha256": "fb8b60b12fbb4c444cb6c1c168a817de728eb73f8c7c61b6004324a811b1f414"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\MEMORY.md",
+      "sha256": "9e85f70e82a5ea9247f57b69dd0e984da39631e50eb953d3abc2f38b507685a2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\SOUL.md",
+      "sha256": "75ce58e8cd109305a040d37ac3da8611ae91dcd4be9fcbf549a1d4c825041bc7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\checklists\\backup-restore-drill.md",
+      "sha256": "9c3c2f359fc1505b20fb865833304f08e7d1c989c1a33a04e5487112ffca3e92"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\checklists\\release-readiness.md",
+      "sha256": "33c22bd854ced71299bd6a687f3beab87457ec5ecb4804a347866791300bfdd6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\delivery.json",
+      "sha256": "fdf9f61c766da5b982f9e164f6893632d22f1de6c5d41f7bd08dac647f2a8010"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\evals\\cases.md",
+      "sha256": "da6237e5cbd895a37350e5d0ae31f5bd36f58e06397e13451acb379960cf703d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\evals\\delivery-cases.md",
+      "sha256": "89798b0ea4bd682b97995944858247afd929d8ebd27c999c89f0637f317d330c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\manifest.yaml",
+      "sha256": "9dae84751c90bf1e21b6af8f9ec5d84d6df7154fde596436ffd6eba028faaf5d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\sops\\delivery.md",
+      "sha256": "3e4324a45f92443fecbcc93e299b29d049b095fa14f6f1dafc8779a2488f38ca"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\templates\\runbook-release.md",
+      "sha256": "22b974777a3092d9d212005ccd50b994ab3123af2812df9e309d1087dab48caa"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D16-devops\\templates\\runbook-rollback.md",
+      "sha256": "f79966206f04853c7e5ef32b16265350703c56203ecba39b8288c118353f8c74"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\AGENTS.md",
+      "sha256": "28a6996a5408a59061cacec243b08c6ae8bb3d7d9c0d4633ab1a4cd18a5236cb"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\CHANGELOG.md",
+      "sha256": "0f8b2e0c568ef413e8e130bc8d8a7d6a64f8113533cdc7a8a760fba2c6b6c441"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\MEMORY.md",
+      "sha256": "c1871ebfe494d75408a9f2e4f439e4a86c5f53cba9210237a1cd1dd3834168be"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\SOUL.md",
+      "sha256": "baa2431b218e4cdbbca8f912ffe53e0ac5c45eaf13a714436d6c4a8d3eaab007"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\checklists\\incident-response.md",
+      "sha256": "e1417407bf50a9d1fcb087a50bb5c8957c9dc82355b40c39835863627dcbb72c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\checklists\\observability-readiness.md",
+      "sha256": "b94045024f744edf5dedd0239708f23418938399c6107eb1871508f381c73fde"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\delivery.json",
+      "sha256": "1370c260941d44473f8de7a9d944ffda16a4b9fee057189553e46a83715ad3a6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\evals\\cases.md",
+      "sha256": "d35ec21e8e3a7f3e8a1931cd1a9d4e69f5160438adb08d80230a78731d2b941d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\evals\\delivery-cases.md",
+      "sha256": "3fe2c1a8a8783d47f4aa9da8bb95dcb163006e59daf39585e6c39a4db13564b6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\manifest.yaml",
+      "sha256": "5d4b7b9e858ff9e40ce5d6dc670f2936c8db104c4744f15f915253e693711869"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\sops\\delivery.md",
+      "sha256": "240765c8df72754424aeb2c539376ec109e2fe7c007c7862848e3ffa7ece1307"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\templates\\postmortem.md",
+      "sha256": "b238bdfee8baeb94cfa81ecf73eb0feb7adabfffc6351dfc6411110baa8b810f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D17-observability\\templates\\slo-definition.md",
+      "sha256": "1beae41fb63ef0bf795ab06a2dae690768a776a56a902c34d94055fcdb282776"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\AGENTS.md",
+      "sha256": "4a41b59943ccd9990636bc6b20b175c1b6cb1651851cff2a401b58621f265273"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\CHANGELOG.md",
+      "sha256": "867c83ae0e029b34f67c6617ea046037939f5181cbfecd0f0ca1a356f09f63e1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\MEMORY.md",
+      "sha256": "01c84067ff05356d3c84b7ff652ff5ca097eb2d2307765a14373205681641fa6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\SOUL.md",
+      "sha256": "8809edcbcd12fcda139dc2e841b0755acdcecba32c479ff049b21981f8ea1df2"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\checklists\\grounding-and-evaluation.md",
+      "sha256": "c081a2025b1df3052a525b991401ff13af7211e901e490feab4506b40374e245"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\checklists\\prompt-safety-and-guardrails.md",
+      "sha256": "c27491398137021e80f1239a1c78e273cb6469d983c9bc627009f98af3c30d32"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\delivery.json",
+      "sha256": "1089d9193f97447e2c56193c1983a8198d59b2768f54bb96bdb6d7c5f3521a16"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\evals\\cases.md",
+      "sha256": "5102bcc49cbbca818f3e5343dabb1b138ddd88447db5d4d2df584f5b3754782e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\manifest.yaml",
+      "sha256": "ae71235de310c1006fe3c0d78c5eaaa0a9d4597ac8a80c195add812abbd0a61c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D18-ai-agents\\sops\\delivery.md",
+      "sha256": "ae074a2e81b23bf36e88f402159442e3cbdd9f6d74477f2edadc42908787d5cd"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\AGENTS.md",
+      "sha256": "bcbc5709817fd5d2dfbdd505e27003caadf5a2fe91262572347018676e0608b8"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\CHANGELOG.md",
+      "sha256": "1c8015b62c3f0f13bf873a228972bc82e9eaa157742060df616d46134cb19d2e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\MEMORY.md",
+      "sha256": "0feeece4b8e571cb81c0d1c17dc5b1b8d2856de9dd90ace3a845da956322e36e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\SOUL.md",
+      "sha256": "12efb50b669e282a8b3ce4e987c5f67974e59880a4419071a1209398e4689876"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\checklists\\resilience-and-idempotency.md",
+      "sha256": "f888301d5f0ce0b63c00ed91741ebff841dab575c8de6f0fae250ec5ff4ed401"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\checklists\\webhook-integration.md",
+      "sha256": "1cf6d7cab636b23338a56a1e5219fee9da560d9261e9215a314096ca53820f83"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\delivery.json",
+      "sha256": "0d72e6d748310079eab76d9bbce31141ce5bb4ad46ecd6294e28cb765ddcc2e9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\evals\\cases.md",
+      "sha256": "0c09de3f99e8ed5d79a972926f0100c9b415cb70fab2bd1a541b1e05eeb2f200"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\manifest.yaml",
+      "sha256": "655dddf9d4ab21a7b5fd375de1ab48e36859fef4aec8a649fd355701be9dca16"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D19-integrations\\sops\\delivery.md",
+      "sha256": "1bf2b24d0fecc6dac21539191f08a2cc4d00f877ae00357dace51c7bc1dc82d5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\AGENTS.md",
+      "sha256": "c84faca73b36b4fa23eaf4b14b336a81b2a74eea10a615181f553241831d5570"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\CHANGELOG.md",
+      "sha256": "2451896168ff3671991efcbb66ea480210fab3af8b43bcaa3f2714db7ef5a93c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\MEMORY.md",
+      "sha256": "061a1e1bf19c7cf2a2892c289bc7208b13425a3aaf18436fce29cf72a9fa2fc5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\SOUL.md",
+      "sha256": "e1f32d31de2b736910f9fb5aa94dbabfdddb12582f239868f049cbf62ad5aac3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\checklists\\documentation-readiness.md",
+      "sha256": "9cf0a753996ea671080632befafaa5c15f820832b63094e249ffda470b659a90"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\checklists\\handoff-readiness.md",
+      "sha256": "0292bd62da1243a32487fb45a63e55d95e00e4e5c66e6c9b62abbff73139afe4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\delivery.json",
+      "sha256": "ffc1e83c6ff930ff46d6857edc25930f4ca95420b42f934f4142108831c435bb"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\evals\\cases.md",
+      "sha256": "1cf46f814e956092c25bdf27e914c5e731a2d346e40efb1a96db07ccb61c1712"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\evals\\delivery-cases.md",
+      "sha256": "26f0b9828fe80615ebbf8aa32f0d15c7fce60afd905fdb1a5c3a80a93c2235a0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\manifest.yaml",
+      "sha256": "cc5c81f2a86261812ffd8cec59ea495e9b76d583908877ee38232cda7e28b0c1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\sops\\delivery.md",
+      "sha256": "026e41f53be4d7475d5540b68f5dc6ad729f0f58209f4723dffff8704ae010d1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\templates\\admin-manual.md",
+      "sha256": "8354ffa7b586499b7c93c04baa516402f530a9eccc1488b936032da269218e0d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D20-documentation\\templates\\readme-standard.md",
+      "sha256": "f2500b375d12d8c6ad72f60737b1a329c98d8bb85861a1d8c1b485a8829190a3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\AGENTS.md",
+      "sha256": "0b955d481f9ed76b65bbc32365e5ef87d49fc95a1f1fc67e2fff498439634fb5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\CHANGELOG.md",
+      "sha256": "a109c7f2696842f2802429600df3595f81900274e78d005355d6da7cf24a6df0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\MEMORY.md",
+      "sha256": "973db5ed562d0aefebb9f05a4203cc29919535858e7e19fd7f9f39bf1ea823f5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\SOUL.md",
+      "sha256": "57bcc1a3e5f78addef0ecab1a80bb15f1b6ad96167114460885683a5b760b077"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\checklists\\research-readiness.md",
+      "sha256": "f2aa9a8dcb2c707316437f7189a1a6f3ba3fc172d0221be291ef55987da4bf4f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\delivery.json",
+      "sha256": "6c7b51e26994ea4c9b0d00f63b803059126619e268d826c1bca16ee08132d901"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\evals\\cases.md",
+      "sha256": "153fcea88d2c57147f809c56d15b6d3e03ccb731b32b93ac97dec128d56a1082"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\manifest.yaml",
+      "sha256": "6f2505267c1d25f92c800970956fa67113187640ed4d68f2b1218f4480e297f6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D21-research\\sops\\delivery.md",
+      "sha256": "2727d9e5379475cf9dbd78d1c33e781af2f27266cedc2321d75f3946c4837fa7"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\AGENTS.md",
+      "sha256": "b2be00d6c143926b109b5ebd39f81acfa33839ec69291d27ea1e38bd7936f7c3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\CHANGELOG.md",
+      "sha256": "d8807b09dc51922ad372a0eabac7e5a99c63136176a385557d735b8f55a1f00e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\MEMORY.md",
+      "sha256": "6f7804043aa3addc3e7c353068d67b27f335476a9c92e1aa5072499d4f355a4d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\SOUL.md",
+      "sha256": "4eb233aca8898aa698ed82e6f7f5485dbf2067ad59482f4ed5d17c06f2eaebbc"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\checklists\\context-package-review.md",
+      "sha256": "477e520db14138b9a1edfed1950b7083aaf24349709995c0dbf9fa040fc0145b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\checklists\\knowledge-hygiene.md",
+      "sha256": "3d0b7ff71f2ff1e337b52d5a396f4255af2d21004a04c04c5880d1221a990657"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\delivery.json",
+      "sha256": "cfd4c6d973f50ef3cec95cda19ebff8dc7968d6dd7e19d6f42c0860f42b78865"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\evals\\cases.md",
+      "sha256": "6350d0908586d107104a92ff4a8776e4075ab483f2547367da4c2eaded020473"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\manifest.yaml",
+      "sha256": "57df5ba9f6c90242c39bd47c3b128a0bca4abd3b033435a49c33e2e3c1f4d78e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\departments\\D22-knowledge-ops\\sops\\delivery.md",
+      "sha256": "d2e2aba99dfd29c909203b2d09e7037cbceb15ad7ed855373a808d41ec40171a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\README.md",
+      "sha256": "d3e2764f7740b679319bb5370250bfbf89d8366bd7aa1065b431b0b6e87f0ab3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\provenance.json",
+      "sha256": "fa91324731cc162d1e01e4097aeadb9a19618687698108157705c501cdb3f043"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil-ecosystem\\AI-CONTEXT.md",
+      "sha256": "61f8768b44240709555032b79f3bafb50cd5d81686cc64748c05471118a6d020"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil-ecosystem\\ECOSYSTEM.md",
+      "sha256": "f8fa3afb8cc25f8096a4b0d0cc68655bec2f841ffebc31f948a3ee69e3c58bcd"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil-ecosystem\\INTEGRATION-MAP.md",
+      "sha256": "95a117b89cc24f0ea994943ead780e948fc4c3442241766946e1d724cd1c8d94"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil-ecosystem\\PXIL-DOCUMENT.md",
+      "sha256": "8d6ddb242ab2da68f9231d5e17b0272e788c2e1cfeb5750d4c5282e3c3a062a4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\design\\design-tokens-template.json",
+      "sha256": "36a24e48bedc392aa15135d7f07f36375e72fc02667fcf0fb83898deac474c09"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\design\\owasp-baseline.md",
+      "sha256": "bd3ba88bb04fbcedad69605307b7301d19b8580a050f3e4fc85856beb78d5a21"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\design\\wcag-baseline.md",
+      "sha256": "2171bcf7852872c7c2b114b9659caf40c0e52aa9ba86fd9b5a7f1b2db5f2be73"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\confidence-ledger.schema.json",
+      "sha256": "f0ac03d761aac55357c9253b96648e611d61fda4048e0cc1c4702e1bb7e8b33e"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\domain-pack.schema.json",
+      "sha256": "2b8acf9e7c4a497e0c3900e361187d958f2fae42fe5f5b52a18959283c00a88c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\ent.schema.json",
+      "sha256": "b56b0e720a0cba3dd9c76edb6f89df4c498a5ac4210d7ae313350fdfe3546a46"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\evidence-store.schema.json",
+      "sha256": "cb0e121fe9a1bbf926987ba9a9c2cbf36b7c3e4210b1f671be9cc93e5a925e03"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\evt.schema.json",
+      "sha256": "ef0ba11d1d17c13ba2e8955c20ad974b84628293b0e7521785af663bf4b9c87a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\flow.schema.json",
+      "sha256": "2523f118308f858d0f73d8d573cf2e33a7c257a4acdc779e0a1ab98357466345"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\mod.schema.json",
+      "sha256": "e8fd94d8202df68b9f08815a1fae6139ed2eccd1796bd0f2dc18deb7978c6a61"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\perm.schema.json",
+      "sha256": "830a6ca40c46d44955782ed6aa5ac831b5554ceb9b1998cce1d20bbab97b2009"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\private-library.schema.json",
+      "sha256": "38563e7bec54f5b8d9cc7f3a9fb01acbe278641461c1ad93ab36c5bbbec119c6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\req.schema.json",
+      "sha256": "6667247623caf55bbb6ef9bf7ad54cedba3694a4e946094469b1b10db3f2e036"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\scr.schema.json",
+      "sha256": "c7e19190f845ba331a7eac1f4aca8a60bac02cc17bdcb20ff732c238b850b531"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\sta.schema.json",
+      "sha256": "72639d15a347cfbf479b6da72910367797bf0c81ea8afbf3ed2adca342bce33d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\integrations\\pxil\\reference\\pxil\\schemas\\tst.schema.json",
+      "sha256": "19a141f25ef1cbd6eb9936eca0f2989a790a67117f0ac46fac84706356c62fd5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\alerts.json",
+      "sha256": "0e1e84fad75c54f2bd9147ee6351db2b4fc2723b18eb4d8bd37a52277e6b08cb"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\departments.yaml",
+      "sha256": "e23e836556ab4bb63d663411b794c49ef1943e647b8acbac53c09105893f5523"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\design-resources.json",
+      "sha256": "25e0709a18f6ca625ec2eaa311d10c8b06907963347a8fe759a74d33d4e56122"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\evals.json",
+      "sha256": "0855b776dc8730a56693d17354de4e1e6a01d4213ba06ddfda89782b18d65aac"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\models.json",
+      "sha256": "11bbd3680ddb504586944a0f045531e0bac553b40892a427b23ee083c91a02ce"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\orchestration.json",
+      "sha256": "b669e0573902a93256a92f05004da447cded0b059539c010c23b49e588355e45"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\providers.json",
+      "sha256": "944b6d40234355b63f33b4d01caa4114be536a4b0abdffb9b41b27cb9e8c19ca"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\routing-signals.json",
+      "sha256": "0b7fa7bbb7d1746114137c609f9a2763098e7273b4855c7a861a74dcf5361b3b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\runtime.json",
+      "sha256": "6f9762b22c36e55b328ca5ff20f3dfdef042317462b7a62246b9113130a42811"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\registry\\toolchain.json",
+      "sha256": "c1bdcedf57214252cd53ab4414949fe5b384cc4b2682cee9da9e9b1005392222"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\mobile-native-experience\\SKILL.md",
+      "sha256": "c80759c4935f712588de27c95e206a08af1d9f8a6a257a32c4f50098c01ec697"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\orquestar\\SKILL.md",
+      "sha256": "872cb191842c834521e7e9ba2ed6347bf2f398c0c2515c95d32d91945f57206d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\pxil-21st-scout\\SKILL.md",
+      "sha256": "899230a2dcb942a2ed1a83bc2d97c61bcac9767139d70ec5e07952397e15868f"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\pxil-a11y-qa\\SKILL.md",
+      "sha256": "91edd538b336eef585820f916ef57132070e1f85569ac408c53395b7b163933a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\pxil-compose\\SKILL.md",
+      "sha256": "3e9bb4790d64f7f80ac7c355ad181d34448d7f14dea8857d7a0721eb4d02d199"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\pxil-experience-contract\\SKILL.md",
+      "sha256": "97327a6cde071ac7594f20197e937d5cd4f0a2d11193461be7ea6bf6eb4aa3a4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\pxil-library-curation\\SKILL.md",
+      "sha256": "87c0dc1e5e7d3e188da8c007acd1365d02f0e9b8307d2dd01f568a2646ba0369"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\pxil-permission-matrix\\SKILL.md",
+      "sha256": "0853c721853164ec747428b102a56b50762a24d0e6ed247e7c61fbdcf27f3089"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\pxil-visual-qa\\SKILL.md",
+      "sha256": "a4a15151021a59fdf7c8da2401972312e8c3faf9ce4df1178b74053fdde45ff4"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-accessibility\\SKILL.md",
+      "sha256": "9bc14d40f2c0d66c518664705026ede827a967d6d0f82bd8dad03a149307e90c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-ai-agents\\SKILL.md",
+      "sha256": "0a88620f9fea64d50dece62a009bd44081c5fb4baeaf39e3df944952c759b623"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-architecture\\SKILL.md",
+      "sha256": "44a119e5ffa81ba05c5c5b5890f5b9ab6920fc84f7f9abd1bbe7c3ddc2d83cfb"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-backend\\SKILL.md",
+      "sha256": "26b4ca5d2efd49b91e96af71f12ed5b73747cdee3ca2c14036876918c8383c30"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-content-seo\\SKILL.md",
+      "sha256": "5db7d0b269f9906f5f011f96592b5858a9be899f40d23fb2cc30db30d7f8a543"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-data\\SKILL.md",
+      "sha256": "878901f66d6f346cb7267f2c58cf5f58533182b4597a4d5e2c7428336e21d1ed"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-devops\\SKILL.md",
+      "sha256": "c9c4682adbcbef942286278bf9bb2e91262e5da146bae1fd9a159b989f94fa92"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-discovery\\SKILL.md",
+      "sha256": "e0bb28478b756778c4b138f15b1b49a9ddc7ab0453f3af9f8520784593a2b655"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-documentation\\SKILL.md",
+      "sha256": "20e93a1f81e46edc202dbbb505e7d7a1ca801b5df5435197a965f672fb34051d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-frontend\\SKILL.md",
+      "sha256": "603f5eebac0ed0ece1caf97f9aa31dd4756295a39d0a424ae413f33e5be44fe0"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-git-governance\\SKILL.md",
+      "sha256": "aa7a43f43a3f6c27519894a0871f61fdef09b8e18d8517c756596542f3644595"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-integrations\\SKILL.md",
+      "sha256": "eb97464f273221174cef3c0b46c67185358b418ef9a9016a3eebfca1cf94c01a"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-knowledge\\SKILL.md",
+      "sha256": "135eda13963aa99944253dc540534f4d52bf64af66ecc7c4402207f6c57c6df3"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-observability\\SKILL.md",
+      "sha256": "9eae4b7a1a20f05ee903ffee8c4cf845a3dbf65ebc69848975f62e974af036c1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-performance\\SKILL.md",
+      "sha256": "fb282b6a3180a15f5553a14eb99b00bad34383f54121ad579dc02b1cfe1737e9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-pxil-design\\SKILL.md",
+      "sha256": "ba845bbbbc68f9a7a846e877febb0f6d68c5f9eea22418a5eb7aebd83657918d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-qa\\SKILL.md",
+      "sha256": "08f2ebb9d69b6900d66dfe4308ab87ce85b0c6519adcdf39ad272892d36fa86d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-research\\SKILL.md",
+      "sha256": "c6fe62408f3648ac5cc6869a4fa930d01ecd8821f20ad5e29842c92754727f91"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-runtime-review\\SKILL.md",
+      "sha256": "76bcd55035a1396305b6a0b214f2b50b3e1eeb039ac56de44cee669dbb54d6c9"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-runtime\\SKILL.md",
+      "sha256": "61003b11275937df28fc19608cb8afca85fa8981b30bf4190c22e4b181212862"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-scope\\SKILL.md",
+      "sha256": "1dba07bd4a9398287de5c34fe214923b9f78dd7549e212365c5b6ebc78cc3a88"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-security\\SKILL.md",
+      "sha256": "952ba9354c2c374b7df2caf294eb3d1c7af30ab06ffe73b51e4492a429116e7b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-ui-design-system\\SKILL.md",
+      "sha256": "1a780215f5883f8603944d7a9849a95b2db797fd7d6e82b3cab9ebe49b753dcd"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-ux-research\\SKILL.md",
+      "sha256": "f725a31d927a7b7afe9f4b08a76439ce2583af9f86a7e97a0803a2147c2f597c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\skills\\viltrum-ux-states\\SKILL.md",
+      "sha256": "f5a565c68f9b9d9c9dc80de09f4dcb850081b00bc0fd323ef4bd964e4aed1f6b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\templates\\pxil-component-evaluation.md",
+      "sha256": "77f7e76af2fa1a104a9fdd085fe8b0f4cebea09f455c47caacf22fcf4431fed6"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\os\\templates\\pxil-experience-contract.md",
+      "sha256": "f5ad83143550ca466178d3a00ceca5cfb79b98d3e9b3f9cf4e5e86c2d92e4bbd"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F0-intake.md",
+      "sha256": "e7ba52b5ab05f3191492241d0ce27db3fceca6be4f8e915e089ca84c896a8eb1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F1-requisitos.md",
+      "sha256": "2398fbb045c0bf448dde46884919ab52ad8b3ab6beb270445f33207d217aea85"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F2-arquitectura.md",
+      "sha256": "1d66163d4ed7513e417e0437f12360d638bc6c07ed9e93056115ff276a94d8ad"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F3-diseno.md",
+      "sha256": "6ff0b93798a188e88f424b7af9f3ca3025858d738c90efedff00cf9e5dc42bfe"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F4-construccion.md",
+      "sha256": "974fe6f88d9ad250c558a779eda259980ba1d7259df239e576ea636becc95599"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F5-verificacion.md",
+      "sha256": "4328f310a0f0c607670b7c62d997fa5111ad3c63b2e626947e7a67cecb20e7ad"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F6-pre-release.md",
+      "sha256": "ba1d8a68cd7d160d833427894edae7f4d348f2ea30fd1e82b755819d782d6aef"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F7-produccion.md",
+      "sha256": "f41866d55403875eda4d52fdabb99ad4ebfee88dba57c957fffd4de84aac3207"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\phases\\F8-mejora.md",
+      "sha256": "7fac7aed4d901e08cb170ec489d5dd3debdf44b4c81dfbcd1815702c3730397c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\project-facts.json",
+      "sha256": "48642deec1dc00c8ab7e2ff050409d4077c5d31d056baba2fe2104dbddc21d55"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\project.md",
+      "sha256": "3b20a8911ad6d82c0d1ad0d377767b3e8254e2a0db6ac90436c07061c3cac889"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\questions.md",
+      "sha256": "4e2e34a721286ee1f6474a27705336759f01ccb56f23cf01f00fd216ac48e4e5"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\requirements.md",
+      "sha256": null
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\sources.json",
+      "sha256": "fc5662796ba59bd380f68bb1df58f6fd11dabbc6a976feaa4f85534c1d2b86c1"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\status.md",
+      "sha256": "13c9df42a0e9fdeb41e2a3424d79b7474996ecd586178551dc42c51a76046b27"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\.viltrum\\verify.json",
+      "sha256": null
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\AGENTS.md",
+      "sha256": "4da0fe854e2c2c57a245ec176765fb4213606e2de31ebc550dc87260a1a11c3b"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\CLAUDE.md",
+      "sha256": "6b7fbf9cb890ceea8eb91921188611654726e6e6ce91b1eeb8e7b982cc772b73"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\README.md",
+      "sha256": "1ee3460033318fe52914e981f281f30e868a8f511e9542e435208adecfb4ab5c"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\docs\\architecture\\04-OPEN-SOURCE-LEAP-LEGO-BY-LEGO.md",
+      "sha256": "bf165689fa4f684d31a8c05aad5d719d509684d23b0c96563cb1fac5df6c351d"
+    },
+    {
+      "path": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM\\package.json",
+      "sha256": "3d5a481a4bf2830be3208bed8903c2791c0f2a2f1d4d46cccb036cc5ce60501c"
+    }
+  ],
+  "contextFiles": [
+    "README.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "package.json",
+    ".viltrum/phases/F0-intake.md",
+    ".viltrum/phases/F1-requisitos.md",
+    ".viltrum/phases/F2-arquitectura.md",
+    ".viltrum/phases/F3-diseno.md",
+    ".viltrum/phases/F4-construccion.md",
+    ".viltrum/phases/F5-verificacion.md",
+    ".viltrum/phases/F6-pre-release.md",
+    ".viltrum/phases/F7-produccion.md",
+    ".viltrum/phases/F8-mejora.md",
+    "docs/architecture/04-OPEN-SOURCE-LEAP-LEGO-BY-LEGO.md",
+    ".viltrum/departments/D00-orchestrator.md",
+    ".viltrum/departments/D01-discovery.md",
+    ".viltrum/departments/D02-scope.md",
+    ".viltrum/departments/D03-architecture.md",
+    ".viltrum/departments/D04-ux-research.md",
+    ".viltrum/departments/D05-ui-design-system.md",
+    ".viltrum/departments/D06-ux-states.md",
+    ".viltrum/departments/D07-accessibility.md",
+    ".viltrum/departments/D08-content-seo.md",
+    ".viltrum/departments/D09-frontend.md",
+    ".viltrum/departments/D10-backend.md",
+    ".viltrum/departments/D11-data.md",
+    ".viltrum/departments/D12-security.md",
+    ".viltrum/departments/D13-git-governance.md",
+    ".viltrum/departments/D14-qa.md",
+    ".viltrum/departments/D15-performance.md",
+    ".viltrum/departments/D16-devops.md",
+    ".viltrum/departments/D17-observability.md",
+    ".viltrum/departments/D18-ai-agents.md",
+    ".viltrum/departments/D19-integrations.md",
+    ".viltrum/departments/D20-documentation.md",
+    ".viltrum/departments/D21-research.md",
+    ".viltrum/departments/D22-knowledge-ops.md",
+    ".viltrum/os/templates/pxil-experience-contract.md",
+    ".viltrum/os/templates/pxil-component-evaluation.md",
+    ".viltrum/os/registry/design-resources.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/confidence-ledger.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/domain-pack.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/ent.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/evidence-store.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/evt.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/flow.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/mod.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/perm.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/private-library.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/req.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/scr.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/sta.schema.json",
+    ".viltrum/os/integrations/pxil/reference/pxil/schemas/tst.schema.json"
+  ],
+  "designContextFiles": []
+}

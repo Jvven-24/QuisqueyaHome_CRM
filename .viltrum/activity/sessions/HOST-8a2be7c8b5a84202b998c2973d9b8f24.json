@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-8a2be7c8b5a84202b998c2973d9b8f24",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D02",
+  "actor": "codex-scope-specs",
+  "goal": "Preparar alcance C1 y fichas I01/I02 locales",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:38:36.580388+00:00",
+  "updatedAt": "2026-10-05T01:41:24.100995+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:38:36.580471+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:41:24.100970+00:00",
+      "status": "finished",
+      "message": "C1 delimitado y preguntas bloqueantes registradas; D01 debe revisar alcance"
+    }
+  ]
+}

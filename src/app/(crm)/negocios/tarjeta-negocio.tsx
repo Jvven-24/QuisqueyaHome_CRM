@@ -64,26 +64,30 @@ export function TarjetaNegocio({
           type="button"
           onClick={onVerFicha}
           aria-label={`Abrir ficha del negocio de ${negocio.contactName}`}
-          className="min-h-12 min-w-12 inline-flex items-center text-left text-sm font-bold text-navy-950 hover:text-gold-700 cursor-pointer rounded focus-visible:outline-2 focus-visible:outline-gold-700"
+          className="min-h-12 min-w-12 inline-flex items-center text-left text-sm font-bold text-navy-950 hover:text-gold-700 cursor-pointer rounded focus-visible:outline-2 focus-visible:outline-gold-700 transition-colors"
         >
           <span className="line-clamp-2">{negocio.contactName}</span>
         </button>
-        <span className="shrink-0 rounded border border-line bg-surface-alt px-1.5 py-0.5 text-[13px] font-semibold text-ink-muted">
+        <span className="shrink-0 rounded-full border border-line bg-surface-alt px-2.5 py-0.5 text-[13px] font-semibold text-ink-muted">
           {negocio.sourceName ?? "Directo"}
         </span>
       </div>
 
-      <div className="flex items-center gap-1.5 text-[13px] font-medium text-ink-muted">
+      <div className="flex items-center gap-1.5 rounded-lg border border-line bg-surface-alt/70 px-2.5 py-1.5 text-[13px] font-medium text-navy-950">
         <Building2 className="size-4 shrink-0 text-gold-700" aria-hidden="true" />
-        <span className="truncate">
+        <span className="truncate font-semibold text-navy-950">
           {negocio.proyectoPrincipal?.projectName ?? "Interés general"}
-          {negocio.proyectoPrincipal?.unitCode ? ` · Unidad ${negocio.proyectoPrincipal.unitCode}` : ""}
         </span>
+        {negocio.proyectoPrincipal?.unitCode && (
+          <span className="shrink-0 rounded bg-gold-100 border border-gold-300 px-1.5 py-0.5 text-[13px] font-bold text-gold-900 tabular-nums">
+            Unidad {negocio.proyectoPrincipal.unitCode}
+          </span>
+        )}
       </div>
 
       <div className="flex items-baseline justify-between gap-2">
         {negocio.amountCents !== undefined ? (
-          <span className="font-heading text-sm font-extrabold text-navy-900">
+          <span className="font-heading text-base font-extrabold tabular-nums text-navy-950">
             {formatearMonto(negocio.amountCents, negocio.currency)}
             {negocio.operationType === "rent" && <span className="ml-1 text-[13px] font-semibold text-ink-muted">alquiler</span>}
           </span>
@@ -91,29 +95,32 @@ export function TarjetaNegocio({
         <span
           className={
             tipo === "dias"
-              ? "inline-flex items-center gap-1 text-[13px] font-medium text-ink"
-              : "inline-flex items-center gap-1 rounded border border-dashed border-input-line bg-surface-alt px-1.5 py-0.5 text-[13px] italic text-ink-muted"
+              ? "inline-flex items-center gap-1 rounded-md border border-line bg-surface px-2 py-0.5 text-[13px] font-semibold tabular-nums text-ink"
+              : "inline-flex items-center gap-1 rounded-md border border-dashed border-input-line bg-surface-alt px-2 py-0.5 text-[13px] italic text-ink-muted"
           }
           title={tipo === "dias" ? `En esta etapa: ${antiguedad}` : antiguedad}
         >
-          <Clock className="size-3.5" aria-hidden="true" />
+          <Clock className="size-3.5 text-ink-muted" aria-hidden="true" />
           <span>{antiguedad}</span>
         </span>
       </div>
 
-      <div className="flex items-center gap-1.5 rounded-md border border-line bg-surface-alt px-2.5 py-1.5 text-[13px] text-ink">
+      <div className="flex items-center gap-2 rounded-lg border border-line bg-surface-alt/80 px-2.5 py-1.5 text-[13px] text-ink">
         <Calendar className="size-4 shrink-0 text-gold-700" aria-hidden="true" />
         <span className="truncate font-medium">
           {negocio.nextActivityTitle ? `${negocio.nextActivityTitle}${proximaFecha ? ` · ${proximaFecha}` : ""}` : "Sin próxima acción"}
         </span>
       </div>
 
-      <footer className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-2">
-        <div className="flex min-w-0 items-center gap-1.5">
+      <footer className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-2.5 mt-1">
+        <div className="flex min-w-0 items-center gap-2">
           <Avatar name={negocio.brokerName ?? "Sin asignar"} small />
-          <span className="max-w-[110px] truncate text-[13px] font-semibold text-ink">
-            {negocio.brokerName?.split(" ")[0] ?? "Sin asignar"}
-          </span>
+          <div className="flex flex-col min-w-0">
+            <span className="max-w-[110px] truncate text-[13px] font-bold text-navy-950 leading-tight">
+              {negocio.brokerName?.split(" ")[0] ?? "Sin asignar"}
+            </span>
+            <span className="text-[13px] text-ink-muted leading-none">Broker</span>
+          </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {enlaceWa && (
@@ -121,10 +128,10 @@ export function TarjetaNegocio({
               href={enlaceWa}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-12 min-w-12 items-center justify-center gap-1 rounded-lg border border-success/40 bg-success-bg px-2.5 text-[13px] font-bold text-success"
+              className="inline-flex min-h-12 min-w-12 items-center justify-center gap-1.5 rounded-xl border border-emerald-300 bg-emerald-50 px-3 text-[13px] font-bold text-emerald-800 hover:bg-emerald-100 transition-colors"
               aria-label={`Contactar a ${negocio.contactName} por WhatsApp`}
             >
-              <MessageCircle className="size-4 shrink-0" aria-hidden="true" />
+              <MessageCircle className="size-4 shrink-0 text-emerald-600" aria-hidden="true" />
               <span className="hidden sm:inline">WhatsApp</span>
             </a>
           )}
@@ -135,7 +142,7 @@ export function TarjetaNegocio({
                   type="button"
                   disabled={ocupado || sinConexion}
                   aria-label={`Mover el negocio de ${negocio.contactName} a otra etapa`}
-                  className="inline-flex min-h-12 min-w-12 items-center justify-center gap-1.5 rounded-lg border border-input-line bg-surface px-3 text-[13px] font-semibold text-navy-900 hover:bg-navy-100 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex min-h-12 min-w-12 items-center justify-center gap-1.5 rounded-xl border border-input-line bg-surface px-3 text-[13px] font-bold text-navy-950 hover:bg-navy-100 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
                 >
                   <ArrowRightLeft className="size-4 shrink-0 text-gold-700" aria-hidden="true" />
                   <span>Mover a…</span>
@@ -150,7 +157,7 @@ export function TarjetaNegocio({
                       key={etapa.id}
                       disabled={actual}
                       onSelect={() => onMover(etapa.id)}
-                      className="min-h-12 cursor-pointer justify-between px-3 text-[13px]"
+                      className="min-h-12 cursor-pointer justify-between px-3 text-[13px] font-medium"
                     >
                       <span>{etapa.name}</span>
                       {actual && <Badge tone="neutral">Actual</Badge>}

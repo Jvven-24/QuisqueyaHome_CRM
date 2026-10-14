@@ -1,5 +1,8 @@
 # D06 — Registro de cambios
 
+## Integración aprobada — 2026-10-07 (revisión D00 HND-012)
+- Guía fuente canónica aprobada; D06 aplica su referencia cuando el scroll introduzca navegación o comportamiento con estado. El scroll pasivo no define estados de negocio.
+
 Formato basado en Keep a Changelog. Versiones según SemVer 2.0.0: mayor cambia el
 contrato de entrada o salida, menor añade checklist o procedimiento, parche corrige.
 

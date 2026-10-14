@@ -1,0 +1,35 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:48:06.329544+00:00",
+  "author": "lyanchouss",
+  "codeSha256": "9e1748e7216dad74fed43443d4871c56871e3036907bc655a9468e4e37c68047",
+  "demoSha256": "5439ea2a47d3f9fbe10e51c84bdc630c7fbab5c01208257b3776f969372a19a8",
+  "description": "Enhanced shadcn/ui radio group",
+  "framework": "",
+  "id": "758",
+  "metadata": {
+    "author": "lyanchouss",
+    "authorImage": "https://daliagents.com/og-mark.png",
+    "description": "Northstar is a production-ready Next.js template for AI agencies, agent studios, and development teams that need to present software delivery clearly. It includes four locales (EN, RU, KA, HY), a responsive shader hero, animated product demos, solution pages, case studies, a Markdown blog, service pages, PostHog and Vercel Analytics integration points, metadata, locale alternates, sitemap, and JSON-LD. The buyer-ready source uses fictional Northstar branding, placeholder people, clients, media, contact details, domains, and integration identifiers so the identity can be replaced safely. No CMS or database is required; copy is stored in typed TypeScript locale bundles and Markdown.",
+    "id": 758,
+    "name": "Northstar - AI Agency & Agent Studio Site",
+    "previewUrl": "https://cdn.21st.dev/user_2xFgBhIEcC8WVjxizPEzB14AOkb/templates/dali-ai-agency-agent-studio-site/preview-northstar-lines-1788209660954.png",
+    "price": 39,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/dali-ai-agency-agent-studio-site"
+  },
+  "name": "Radio Group",
+  "previewUrl": "https://cdn.21st.dev/user_2xFgBhIEcC8WVjxizPEzB14AOkb/templates/dali-ai-agency-agent-studio-site/preview-northstar-lines-1788209660954.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:48:06.329657+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "a9057cd56220f85619bc8a4b7c5cdc279888c878a8af00755e9b429a747180ed",
+    "importedAt": "2026-10-04T22:47:31.936088+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "10301f6225d9265c01a686de8cdd24644b354d16041fcfedfc524907d54adf3f"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/dali-ai-agency-agent-studio-site"
+}

@@ -4,7 +4,7 @@ Fase principal F2. Complementa `AGENTS.md`; revisor independiente: **humano**, s
 
 ## Entrada y reconocimiento del proyecto
 
-Leer mandato, `project.md`, estado, requisitos y alcance vigentes, riesgo, decisiones, investigación D21 y handoffs disponibles. Registrar commit o versión de los documentos. En proyecto existente inspeccionar estructura, stack real y lockfiles, entrypoints, módulos, rutas, modelo de datos, CI, tests relevantes, dependencias externas y despliegue. GitNexus sirve si existe un índice vigente; comprobar su commit y contrastar los símbolos con el código. Sin índice, usar búsquedas y referencias locales y declarar el límite. Context7 ayuda con documentación de la versión instalada, sin sustituir contratos ni decisiones.
+Leer mandato, `project.md`, estado, requisitos y alcance vigentes, riesgo, decisiones, investigación D21 y handoffs disponibles. Registrar commit o versión de los documentos. En proyecto existente inspeccionar estructura, stack real y lockfiles, entrypoints, módulos, rutas, modelo de datos, CI, tests relevantes, dependencias externas y despliegue. `viltrum repo-inventory` y `repo-impact` mapean símbolos y afectados del commit actual; contrastar con el código. Sin índice, usar búsquedas y referencias locales y declarar el límite. Context7 ayuda con documentación de la versión instalada, sin sustituir contratos ni decisiones.
 
 Construir una matriz `REQ → caso de uso → módulo → contrato → dato → control → evidencia esperada`. Una cifra ausente de volumen, disponibilidad, p95/p99, retención, RPO/RTO o presupuesto permanece pregunta para D01/D02; no convertir un ejemplo en requisito. Se puede levantar un mapa provisional para aclarar preguntas; G2 permanece abierto si faltan entradas bloqueantes.
 
@@ -34,4 +34,4 @@ G2 necesita revisión humana de decisiones irreversibles, expediente D21, contra
 
 Capacidades: repositorio/git, web de fuentes oficiales y renderer de diagramas si existe. Consultar únicamente las necesarias para el mandato. Un subagente de mapa de dependencias recibe commit, módulos y pregunta acotada; devuelve rutas/símbolos/ciclos e incertidumbres. Un segundo análisis de contrato requiere entrada y salida fijadas; no decide alcance ni firma arquitectura. Declarar herramienta ausente y alternativa disponible; un enlace en `delivery.json` no instala ni concede permisos.
 
-Fuentes verificadas 2026-09-29: [OpenAPI 3.1.1](https://spec.openapis.org/oas/v3.1.1.html), [AsyncAPI oficial](https://github.com/asyncapi/spec), [GitNexus](https://github.com/abhigyanpatwari/GitNexus), [Context7](https://github.com/upstash/context7), [OpenTelemetry](https://opentelemetry.io/docs/).
+Fuentes verificadas 2026-09-29: [OpenAPI 3.1.1](https://spec.openapis.org/oas/v3.1.1.html), [AsyncAPI oficial](https://github.com/asyncapi/spec), [ripgrep](https://github.com/BurntSushi/ripgrep), [Context7](https://github.com/upstash/context7), [OpenTelemetry](https://opentelemetry.io/docs/).

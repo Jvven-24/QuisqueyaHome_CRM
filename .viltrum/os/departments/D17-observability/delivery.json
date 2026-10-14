@@ -27,7 +27,8 @@
     "Canal y runbook probados con autorización",
     "Monitor externo y recorrido de negocio",
     "Rollback remitido a D16 y humano cuando aplica",
-    "SEV1/SEV2 con comandante de incidente humano nombrado y aprobador de posmortem"
+    "SEV1/SEV2 con comandante de incidente humano nombrado y aprobador de posmortem",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

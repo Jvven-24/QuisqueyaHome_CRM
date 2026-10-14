@@ -88,10 +88,10 @@ Aplico `core/project-workspace.md` completo:
 
 ### 6. Indexar código
 
-Antes de que cualquier perfil necesite explorar un repositorio, lo indexo con `gitnexus`
-(`gitnexus-cli`) para que las preguntas de arquitectura o impacto se resuelvan por consulta
-al grafo, no releyendo el árbol completo. Reindexeo cuando el repositorio cambia de forma
-significativa, no en cada commit menor.
+Antes de que un perfil explore un repositorio, le entrego `viltrum repo-inventory` y un
+`viltrum repo-pack` del tema (skill `viltrum-repo-map`) para que las preguntas de arquitectura
+o impacto se resuelvan por consulta, no releyendo el árbol completo. No hay índice que
+mantener: cada consulta lee el commit actual.
 
 ### 7. Producir el reporte de cobertura de conocimiento
 
@@ -115,9 +115,9 @@ Entrego a D00 el reporte de cobertura y cualquier hallazgo de higiene sin resolv
 | Situación | Skill |
 |---|---|
 | Organizar fuentes, decisiones y handoff | `viltrum-knowledge` |
-| Indexar o reanalizar un repositorio | `gitnexus-cli` |
-| Explorar arquitectura para armar un paquete de contexto técnico | `gitnexus-exploring` |
-| Resolver dudas sobre cómo usar el grafo de conocimiento del código | `gitnexus-guide` |
+| Indexar o reanalizar un repositorio | `viltrum-repo-map` (inventario) |
+| Explorar arquitectura para armar un paquete de contexto técnico | `viltrum-repo-map` (explorar) |
+| Resolver dudas sobre cómo usar el grafo de conocimiento del código | `viltrum-repo-map` (guía) |
 
 **Regla de uso:** la indexación reduce tokens de exploración; no reemplaza la extracción
 de decisiones de negocio, que es lectura y criterio humano-agente, no grafo de código.
@@ -147,7 +147,7 @@ de decisiones de negocio, que es lectura y criterio humano-agente, no grafo de c
 | Cargar el historial completo de la conversación a un perfil nuevo | Paquete de cinco piezas, nunca el arrastre completo |
 | `0-Inbox` como depósito permanente | Triage con SLA; lo que no se clasifica en el ciclo se escala |
 | Versión nueva que pisa la anterior sin rastro | Versionado obligatorio con fecha y autor |
-| Repositorio sin indexar mientras un perfil explora manualmente | Indexar con `gitnexus` antes de la exploración, no después |
+| Perfil releyendo el árbol completo del repositorio | Entregar `repo-inventory` y `repo-pack` antes de la exploración, no después |
 | Duplicar un catálogo o un estado en dos documentos | Fuente única; el segundo lugar enlaza, no repite |
 | Archivar un secreto porque "estaba en la transcripción" | Se escala a D12 de inmediato, nunca se guarda tal cual |
 

@@ -121,10 +121,10 @@ Verificados desde el primer commit del repositorio, revisados en cada cambio de 
 
 | Situación | Skill / herramienta |
 |---|---|
-| Operaciones de git y GitHub desde CLI | `gitnexus-cli` |
-| Revisar un PR y su riesgo antes de integrar | `gitnexus-pr-review` |
-| Analizar qué se rompe con un cambio | `gitnexus-impact-analysis` |
-| Trazar un bug hasta su origen en el historial | `gitnexus-debugging` |
+| Operaciones de git y GitHub desde CLI | `viltrum-git-governance` (git/gh) |
+| Revisar un PR y su riesgo antes de integrar | `viltrum-repo-map` (revisión de PR) |
+| Analizar qué se rompe con un cambio | `viltrum-repo-map` (impacto) |
+| Trazar un bug hasta su origen en el historial | `viltrum-repo-map` (depurar) |
 | Revisión de calidad del diff | `code-review` |
 | Detectar secretos antes de integrar | Gitleaks (CLI, ejecutado por D12 o en CI) |
 

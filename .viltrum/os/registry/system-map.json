@@ -1,0 +1,448 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-06",
+  "authority": "Única fuente de vocabularios, obligaciones por tipo de nodo, política de licencias y reglas de huecos del mapa maestro (core/system-map.md). viltrum_sdk/system_map.py los lee; nada de esto se incrusta en el código (P2).",
+  "node_types": {
+    "goal": {
+      "label": "Meta",
+      "prefix": "GOAL",
+      "required_departments": [
+        "D00",
+        "D01",
+        "D02",
+        "D22"
+      ],
+      "needs": [
+        "acceptance"
+      ]
+    },
+    "requirement": {
+      "label": "Requisito",
+      "prefix": "REQ",
+      "required_departments": [
+        "D01",
+        "D02",
+        "D03",
+        "D14"
+      ],
+      "needs": [
+        "acceptance",
+        "verifies"
+      ]
+    },
+    "module": {
+      "label": "Módulo",
+      "prefix": "MOD",
+      "required_departments": [
+        "D02",
+        "D03",
+        "D09",
+        "D10",
+        "D11",
+        "D13",
+        "D14",
+        "D15",
+        "D16"
+      ]
+    },
+    "function": {
+      "label": "Función",
+      "prefix": "FN",
+      "required_departments": [
+        "D01",
+        "D02",
+        "D03",
+        "D10",
+        "D11",
+        "D12",
+        "D14"
+      ],
+      "needs": [
+        "acceptance",
+        "contract_or_na",
+        "behaviors"
+      ]
+    },
+    "screen": {
+      "label": "Pantalla",
+      "prefix": "SCR",
+      "required_departments": [
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D09",
+        "D14"
+      ],
+      "needs": [
+        "six_states",
+        "behaviors"
+      ]
+    },
+    "component": {
+      "label": "Componente",
+      "prefix": "CMP",
+      "required_departments": [
+        "D05",
+        "D06",
+        "D07",
+        "D09",
+        "D14"
+      ]
+    },
+    "behavior": {
+      "label": "Comportamiento",
+      "prefix": "BHV",
+      "required_departments": [
+        "D06",
+        "D09",
+        "D10",
+        "D14"
+      ],
+      "needs": [
+        "acceptance"
+      ]
+    },
+    "entity": {
+      "label": "Entidad de datos",
+      "prefix": "ENT",
+      "required_departments": [
+        "D10",
+        "D11",
+        "D12"
+      ]
+    },
+    "contract": {
+      "label": "Contrato API/evento",
+      "prefix": "CTR",
+      "required_departments": [
+        "D03",
+        "D10",
+        "D14"
+      ]
+    },
+    "integration": {
+      "label": "Integración",
+      "prefix": "INT",
+      "required_departments": [
+        "D03",
+        "D12",
+        "D13",
+        "D14",
+        "D17",
+        "D19",
+        "D21"
+      ],
+      "needs": [
+        "reuse_decision"
+      ]
+    },
+    "role": {
+      "label": "Rol y permisos",
+      "prefix": "ROL",
+      "required_departments": [
+        "D01",
+        "D10",
+        "D11",
+        "D12"
+      ]
+    },
+    "notification": {
+      "label": "Notificación",
+      "prefix": "NTF",
+      "required_departments": [
+        "D01",
+        "D05",
+        "D10",
+        "D19"
+      ]
+    },
+    "test": {
+      "label": "Prueba de aceptación",
+      "prefix": "TST",
+      "required_departments": [
+        "D14"
+      ],
+      "needs": [
+        "acceptance"
+      ]
+    },
+    "operation": {
+      "label": "Operación",
+      "prefix": "OPS",
+      "required_departments": [
+        "D16",
+        "D17",
+        "D20",
+        "D22"
+      ]
+    },
+    "legal": {
+      "label": "Legal y cumplimiento",
+      "prefix": "LEG",
+      "required_departments": [
+        "D01",
+        "D12",
+        "D20"
+      ]
+    }
+  },
+  "cell_status": [
+    "pendiente",
+    "propuesto",
+    "validado",
+    "hecho",
+    "n/a",
+    "bloqueado"
+  ],
+  "closed_statuses": [
+    "validado",
+    "hecho",
+    "n/a"
+  ],
+  "reviewed_statuses": [
+    "validado",
+    "hecho",
+    "n/a"
+  ],
+  "link_types": [
+    "verifies",
+    "uses",
+    "depends_on",
+    "implements",
+    "contains"
+  ],
+  "priorities": [
+    "must",
+    "should",
+    "could"
+  ],
+  "six_states": [
+    "carga",
+    "vacio",
+    "error",
+    "sin_conexion",
+    "exito",
+    "permiso"
+  ],
+  "state_owner_department": "D06",
+  "reuse_decisions": [
+    "adopt",
+    "adapt",
+    "build",
+    "none"
+  ],
+  "reuse_decisions_requiring_license": [
+    "adopt",
+    "adapt"
+  ],
+  "license_policy": {
+    "allow": [
+      "MIT",
+      "Apache-2.0",
+      "BSD-2-Clause",
+      "BSD-3-Clause",
+      "ISC",
+      "Unlicense",
+      "CC0-1.0",
+      "0BSD",
+      "PostgreSQL",
+      "OFL-1.1",
+      "Zlib"
+    ],
+    "review_by_human": [
+      "LGPL-2.1",
+      "LGPL-3.0",
+      "EPL-2.0",
+      "MPL-2.0",
+      "CC-BY-4.0"
+    ],
+    "block_prefixes": [
+      "AGPL",
+      "GPL",
+      "SSPL",
+      "BUSL",
+      "PolyForm",
+      "Commons-Clause",
+      "Elastic",
+      "Proprietary",
+      "UNLICENSED",
+      "NOASSERTION"
+    ],
+    "note": "Una licencia no verificada, desconocida o de bloqueo impide adopt/adapt. Las de revisión humana (copyleft débil o de atribución) exigen decisión de Wilber. Expresiones SPDX: OR = basta una opción permitida; AND = todas deben serlo."
+  },
+  "gap_rules": {
+    "G01": {
+      "severity": "P2",
+      "text": "Falta la celda de un departamento obligatorio (por tipo de nodo o por bandera)"
+    },
+    "G02": {
+      "severity": "P2",
+      "text": "Celda n/a sin razón o sin evidencia"
+    },
+    "G03": {
+      "severity": "P1",
+      "text": "Requisito sin prueba de aceptación enlazada (verifies)"
+    },
+    "G04": {
+      "severity": "P2",
+      "text": "Pantalla sin los seis estados cubiertos por D06"
+    },
+    "G05": {
+      "severity": "P2",
+      "text": "Función sin contrato/entidad/integración enlazados ni n/a justificado en D10"
+    },
+    "G06": {
+      "severity": "P1",
+      "text": "Decisión de reutilización adopt/adapt sin candidato de licencia permitida y verificada"
+    },
+    "G07": {
+      "severity": "P1",
+      "text": "Candidato con licencia bloqueada o a revisión humana propuesto para adopt/adapt"
+    },
+    "G08": {
+      "severity": "P3",
+      "text": "Nodo huérfano: sin padre ni contenido y no es una meta"
+    },
+    "G09": {
+      "severity": "P1",
+      "text": "Ciclo en depends_on"
+    },
+    "G10": {
+      "severity": "P1",
+      "text": "Celda validado/hecho/n/a sin revisor independiente (distinto del productor) o sin referencia de revisión (P4)"
+    },
+    "G11": {
+      "severity": "P2",
+      "text": "Referencia a un nodo que no existe"
+    },
+    "G12": {
+      "severity": "P2",
+      "text": "Nodo sin criterio de aceptación verificable"
+    },
+    "G13": {
+      "severity": "P2",
+      "text": "Formato o vocabulario inválido: estado, tipo, riesgo, prioridad, id duplicado o ausente, departamento mal escrito"
+    },
+    "G14": {
+      "severity": "P3",
+      "text": "Cambio humano (overrides) sobre un campo o nodo inexistente"
+    },
+    "G15": {
+      "severity": "P3",
+      "text": "Nodo sin explicación en lenguaje simple (plain) para la lectura de una persona no técnica"
+    },
+    "G16": {
+      "severity": "P2",
+      "text": "Comunicación incoherente: un departamento declara entregar a otro (o necesitar de otro) que no tiene celda para ese nodo"
+    },
+    "G17": {
+      "severity": "P2",
+      "text": "Celda obligatoria todavía en pendiente: el departamento aún no aportó"
+    },
+    "G18": {
+      "severity": "P2",
+      "text": "Celda bloqueada: requiere una decisión o un desbloqueo"
+    },
+    "G19": {
+      "severity": "P2",
+      "text": "Celda hecho sin evidencia verificable"
+    },
+    "G20": {
+      "severity": "P2",
+      "text": "Función o pantalla sin comportamientos hijos (estados, validaciones, errores) ni justificación"
+    },
+    "G21": {
+      "severity": "P3",
+      "text": "Comunicación no recíproca: A declara entregar a B pero B no declara necesitar de A (o al revés)"
+    },
+    "G22": {
+      "severity": "P2",
+      "text": "Decisión build sin justificar la búsqueda previa de algo existente (P0)"
+    },
+    "G23": {
+      "severity": "P2",
+      "text": "Celda cerrada antes de un cambio humano en su nodo (o en uno enlazado): hay que revalidarla"
+    },
+    "G24": {
+      "severity": "P1",
+      "text": "Posible secreto dentro del mapa"
+    },
+    "G25": {
+      "severity": "P3",
+      "text": "Nodo cuyo código fuente ya no existe (stale_source): confirmar si se retira o se reubica"
+    }
+  },
+  "ready_for_review": {
+    "blocking_severities": [
+      "P1",
+      "P2"
+    ],
+    "note": "El mapa nunca se aprueba solo: READY_FOR_REVIEW exige cero huecos P1/P2 y la revisión de Wilber (mismo criterio que G1: no se aprueba por porcentaje)."
+  },
+  "risk_levels": [
+    "R0",
+    "R1",
+    "R2",
+    "R3",
+    "R4"
+  ],
+  "human_review_risk_from": "R2",
+  "flag_departments": {
+    "public": [
+      "D08"
+    ],
+    "personal_data": [
+      "D12",
+      "D20"
+    ],
+    "ai": [
+      "D18"
+    ],
+    "knowledge": [
+      "D22"
+    ],
+    "performance_critical": [
+      "D15"
+    ]
+  },
+  "executed_statuses": [
+    "hecho",
+    "n/a"
+  ],
+  "department_writable_statuses": [
+    "pendiente",
+    "propuesto",
+    "n/a",
+    "bloqueado"
+  ],
+  "review_required_statuses": [
+    "validado",
+    "hecho",
+    "n/a"
+  ],
+  "secret_patterns": [
+    "(?<![A-Za-z0-9_-])AKIA[0-9A-Z]{16}(?![A-Za-z0-9])",
+    "(?<![A-Za-z0-9_-])gsk_[A-Za-z0-9]{20,}(?![A-Za-z0-9])",
+    "(?<![A-Za-z0-9_-])sk[_-](?:live|test)[_-][A-Za-z0-9]{16,}(?![A-Za-z0-9])",
+    "(?<![A-Za-z0-9_-])sk-(?:ant|proj)-[A-Za-z0-9_-]{20,}",
+    "(?<![A-Za-z0-9_-])(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{30,}",
+    "(?<![A-Za-z0-9_-])github_pat_[A-Za-z0-9_]{40,}",
+    "(?<![A-Za-z0-9_-])xox[abposr]-[A-Za-z0-9-]{10,}",
+    "(?<![A-Za-z0-9_-])whsec_[A-Za-z0-9]{20,}",
+    "(?<![A-Za-z0-9_-])AIza[A-Za-z0-9_-]{30,}",
+    "(?<![A-Za-z0-9_-])AQ\\.[A-Za-z0-9_-]{30,}",
+    "(?<![A-Za-z0-9_-])eyJ[A-Za-z0-9_-]{10,}\\.eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}",
+    "-----BEGIN [A-Z ]*PRIVATE KEY-----",
+    "(?i)(?<![A-Za-z0-9_])[A-Za-z0-9_-]{0,40}(?:password|passwd|secret|api[_-]?key|token)[A-Za-z0-9_-]{0,40}['\"]?\\s*[:=]\\s*['\"][^'\"\\s{}()<>]{8,}['\"]",
+    "(?i)^\\s*(?:export\\s+|-\\s+)?[A-Za-z0-9_-]{0,40}(?:password|passwd|secret|api[_-]?key|token)[A-Za-z0-9_-]{0,40}\\s*[:=]\\s*(?=[^\\s'\"#]*\\d)(?=[^\\s'\"#]*[A-Za-z])[^\\s'\"#(){}<>\\[\\],;]{8,}\\s*(?:#.*)?$",
+    "(?i)[?&](?:token|access_token|api[_-]?key|key|secret|password)=[A-Za-z0-9._~-]{16,}",
+    "(?i)\\b(?:postgres(?:ql)?|mysql|mariadb|redis|rediss|mongodb(?:\\+srv)?|amqps?|https?)://[^\\s:/@'\\\"<>]+:(?!(?:password|pass|passwd|contrase(?:ñ|n)a|clave|secret|changeme|example|ejemplo|tu[-_]?(?:password|contrase(?:ñ|n)a|clave)|your[-_]?password|x{3,}|\\*+|<[^>@]*>|\\[[^\\]@]*\\]|\\$\\{[^}@]*\\})@)[^\\s@'\\\"<>]{3,}@(?!localhost|127\\.0\\.0\\.1|db\\.abcdefghijkl)",
+    "(?<![A-Za-z0-9_-])\\d{8,10}:[A-Za-z0-9_-]{35}(?![A-Za-z0-9_-])",
+    "(?<![A-Za-z0-9_-])sk-or-v1-[A-Za-z0-9]{32,}",
+    "(?<![A-Za-z0-9_-])sbp_[a-f0-9]{40}",
+    "(?<![A-Za-z0-9_-])sb_secret_[A-Za-z0-9_-]{20,}",
+    "(?<![A-Za-z0-9_-])ASIA[0-9A-Z]{16}(?![A-Za-z0-9])",
+    "(?<![A-Za-z0-9_-])ya29\\.[A-Za-z0-9_-]{20,}"
+  ]
+}

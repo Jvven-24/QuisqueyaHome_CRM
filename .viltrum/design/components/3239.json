@@ -1,0 +1,29 @@
+{
+  "author": "shailendrakumar19999",
+  "description": "Kanban board with the number of tasks in each stage. Here's a professional and user-friendly description for that board layout:\n\n",
+  "framework": "",
+  "id": "3239",
+  "metadata": {
+    "author": "shailendrakumar19999",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18yeXRnS1N4am5QWHIzanhTblJMdXVTWlZicXQifQ",
+    "description": "Kanban board with the number of tasks in each stage. Here's a professional and user-friendly description for that board layout:\n\n",
+    "id": 3239,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/shailendrakumar19999/kanban?[REDACTED]",
+    "name": "Kanban",
+    "previewUrl": "https://cdn.21st.dev/user_2ytgKTOYdmIWPc7GkqzOLR96ZKe/kanban/default/preview.1786985421665.webp",
+    "type": "component",
+    "url": "https://21st.dev/@shailendrakumar19999/components/kanban",
+    "videoUrl": "https://cdn.21st.dev/user_2ytgKTOYdmIWPc7GkqzOLR96ZKe/kanban/default/video.1786985416651.mp4"
+  },
+  "name": "Kanban",
+  "previewUrl": "https://cdn.21st.dev/user_2ytgKTOYdmIWPc7GkqzOLR96ZKe/kanban/default/preview.1786985421665.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:22.926464+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "b71d99cd3e43f6b47301d6ea72606361e2fe986edb85ba77d4c4980460e2ecec"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@shailendrakumar19999/components/kanban"
+}

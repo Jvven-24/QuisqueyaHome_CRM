@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "projectRoot": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D11",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "permissionMode": "yolo",
+  "role": "producer",
+  "mode": "code",
+  "yolo": true,
+  "goal": "CONTINUA T-E1-1b2 (tercera pasada). Lee .viltrum/vre-os/tareas/T-E1-1b2-cierre-venta-unica.md, en especial 'Desbloqueo 2 Regla S-303-H' que resuelve las 15 ventas historicas sin unidad, y tu informe .viltrum/vre-os/evidencia/E1/negocios/D11-D10-b2-cierre.md. Ajusta la migracion (el preflight ya no aborta; backfill solo de ganados con unidad concreta; aviso con la cuenta), añade la consulta de ventas historicas sin unidad con su prueba, haz que el ensayo poblado y npm run test:db terminen con exit 0 reales, y reescribe el informe. Sin git, sin commit, sin npm run dev ni build. Termina con ESTADO: ENTREGADO o ESTADO: BLOQUEADO.",
+  "packetHash": "442ea7afc7b72f8b40f8d43fc33a60b255d8b3b497629151a1981035d72f3082",
+  "sources": [
+    {
+      "path": ".viltrum\\project.md",
+      "sha256": "3b20a8911ad6d82c0d1ad0d377767b3e8254e2a0db6ac90436c07061c3cac889"
+    },
+    {
+      "path": ".viltrum\\status.md",
+      "sha256": "13c9df42a0e9fdeb41e2a3424d79b7474996ecd586178551dc42c51a76046b27"
+    },
+    {
+      "path": ".viltrum\\os\\CLAUDE.md",
+      "sha256": "237594693cf0cbf680a60e9352ee900b8d38970951a25ab3aa6e00b7c9bcb027"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D11-data\\SOUL.md",
+      "sha256": "fa475020d65f95ffe96b8d41b5daa1c93196e73ad98da39ee0e4463eec862c7f"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D11-data\\AGENTS.md",
+      "sha256": "fe34cfe8e929bf1e3c044ca06b23f975a9d44cf397792fc10d0af9b3633e4c17"
+    },
+    {
+      "path": ".viltrum\\os\\departments\\D11-data\\sops\\delivery.md",
+      "sha256": "a4f034916db6b8924145fc40b31ec38fc0bf9d16cf5eef5cf033a4a7a738ad29"
+    },
+    {
+      "path": ".viltrum\\os\\skills\\viltrum-data\\SKILL.md",
+      "sha256": "67ce486d27098f56a2455ee3158fa9344d0a8f6ae037f3a44e806755df74581b"
+    }
+  ],
+  "reviewer": "D12",
+  "supervisedOnly": false,
+  "bridgeId": "5c06ee68-6056-4f2e-8c46-4f9ba8e77fc2",
+  "actor": "hapi:db4d522a-8c97-473a-914f-456ee60cca73",
+  "machineId": "6881833d-f840-4f9d-bb13-da22e3d59ace",
+  "sessionId": "db4d522a-8c97-473a-914f-456ee60cca73",
+  "localId": "viltrum-5c06ee68-6056-4f2e-8c46-4f9ba8e77fc2",
+  "launchDirectory": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "state": "message_accepted",
+  "createdAt": "2026-10-13T20:16:50.184859+00:00",
+  "url": "http://127.0.0.1:3006/sessions/db4d522a-8c97-473a-914f-456ee60cca73"
+}

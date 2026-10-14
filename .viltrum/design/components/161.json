@@ -1,0 +1,29 @@
+{
+  "author": "originui",
+  "description": "Upgaraded shadcn/ui Input",
+  "framework": "",
+  "id": "161",
+  "metadata": {
+    "author": "originui",
+    "authorImage": "https://avatars.githubusercontent.com/u/185059885?s=200&v=4",
+    "description": "Upgaraded shadcn/ui Input",
+    "id": 161,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/originui/input?[REDACTED]",
+    "name": "Input",
+    "previewUrl": "https://cdn.21st.dev/user_originui/input/default/preview.1737999371671.png",
+    "type": "component",
+    "url": "https://21st.dev/@originui/components/input",
+    "videoUrl": "https://cdn.21st.dev/user_originui/input/default/video.1737999375549.mp4"
+  },
+  "name": "Input",
+  "previewUrl": "https://cdn.21st.dev/user_originui/input/default/preview.1737999371671.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:38.832400+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4c715ae6007b11706bed0fed8684ebdffa33ca741e964311f5d774e17d1ed517"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@originui/components/input"
+}

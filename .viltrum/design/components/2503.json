@@ -1,0 +1,29 @@
+{
+  "author": "isaiahbjork",
+  "description": "This is an interactive day-based data chart that visualizes values (like revenue or activity) using minimalistic vertical lines and animated gradient highlights. It’s perfect for dashboards or financial summaries where users need quick, clean visual feedback with a focus on a specific day.",
+  "framework": "",
+  "id": "2503",
+  "metadata": {
+    "author": "isaiahbjork",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ydGtiQlBjalhzMzl1eGNmR2h3c3VTWE1VU1YifQ",
+    "description": "This is an interactive day-based data chart that visualizes values (like revenue or activity) using minimalistic vertical lines and animated gradient highlights. It’s perfect for dashboards or financial summaries where users need quick, clean visual feedback with a focus on a specific day.",
+    "id": 2503,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/isaiahbjork/weekly-kpi-chart?[REDACTED]",
+    "name": "Weekly KPI Chart",
+    "previewUrl": "https://cdn.21st.dev/isaiahbjork/weekly-kpi-chart/default/preview.1785302842690-e6074757-0636-409b-9adc-0d1e603c7fd9.png",
+    "type": "component",
+    "url": "https://21st.dev/@isaiahbjork/components/weekly-kpi-chart",
+    "videoUrl": "https://cdn.21st.dev/isaiahbjork/weekly-kpi-chart/default/video.1785302842690-e6074757-0636-409b-9adc-0d1e603c7fd9.mp4"
+  },
+  "name": "Weekly KPI Chart",
+  "previewUrl": "https://cdn.21st.dev/isaiahbjork/weekly-kpi-chart/default/preview.1785302842690-e6074757-0636-409b-9adc-0d1e603c7fd9.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:41.905560+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "a6ac8fa98475b655b86304642a87e26478c04d91656142fa9f9f030a64701890"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@isaiahbjork/components/weekly-kpi-chart"
+}

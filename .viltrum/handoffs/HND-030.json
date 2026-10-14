@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D22",
+  "gate": "G0",
+  "actor": "codex-gpt-6.1-sol-d22",
+  "createdAt": "2026-10-04T22:55:03.640503+00:00",
+  "state": "review_pending",
+  "reviewer": "D00",
+  "summary": {
+    "path": ".viltrum/vre-os/spec/inventario/cms-reutilizable.md",
+    "sha256": "e0b85e031e4cd239f55bb5e71d49e1dce7ee042cf157da21274291a98d6e2847",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T220533Z-D22-codex/evidence.json",
+      "sha256": "a942841d3bfa448f5c85d9a7b2033825613d1453331d0161658e8fa3e19b1a9d",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-030"
+}

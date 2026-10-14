@@ -52,3 +52,13 @@
   - Disparo exitoso de `PullToRefresh`.
   - Alerta o error de validación en formularios.
 - [ ] La emulación háptica cuenta con fallback seguro y silencioso si el dispositivo o navegador no soporta la Vibration API.
+
+---
+
+## F. Entrada, navegación y compatibilidad adaptable
+
+- [ ] Los campos de texto usan tamaño de fuente de al menos `16px` en móvil para evitar zoom automático al enfocarlos en navegadores que lo aplican.
+- [ ] En una SPA, cada vista navegable tiene URL representativa; atrás/adelante del navegador y enlaces directos restauran el destino esperado.
+- [ ] Si el producto requiere instalación o capacidades de aplicación, se verifica el comportamiento PWA definido para ese alcance (manifest, service worker y fallback); si no aplica, se registra como no aplicable.
+- [ ] Se comprueba el layout en cada punto de corte de D05 (`320/390/430/768/1024/1440`) sin overflow ni contenido estirado sin límite, más un ancho intermedio y uno ultra-wide como comprobación exploratoria que **no** cuentan como punto de corte (añadir `360px` y ultra-wide a la fuente única está pendiente de decisión humana).
+- [ ] Las animaciones respetan `prefers-reduced-motion`, con alternativa que reduce o elimina movimiento no esencial.

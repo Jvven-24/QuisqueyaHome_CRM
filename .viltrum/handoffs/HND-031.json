@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D05",
+  "gate": "G3",
+  "actor": "antigravity-gemini-3.1-pro-high-d05",
+  "createdAt": "2026-10-04T22:59:57.151457+00:00",
+  "state": "review_pending",
+  "reviewer": "D07",
+  "summary": {
+    "path": ".viltrum/vre-os/design/DS-1-negocios-leads.md",
+    "sha256": "6c10ae6f77f625f94f1d2467cc517b3922989982482ec3e1a00cd53ad6fc6de5",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T225559Z-D05-antigravity/evidence.json",
+      "sha256": "07ec94ce15acc93a834f2d46ba1ed71bd15e9b47ccb7e2e8c21bc61e5c4be71e",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-031"
+}

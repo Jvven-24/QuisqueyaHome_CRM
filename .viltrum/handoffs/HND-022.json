@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D05",
+  "gate": "G3",
+  "actor": "antigravity-gemini-3.1-pro-low-d05",
+  "createdAt": "2026-10-04T21:29:51.493385+00:00",
+  "state": "review_pending",
+  "reviewer": "D07",
+  "summary": {
+    "path": ".viltrum/vre-os/D05-ux-modulos-A.md",
+    "sha256": "c3330eb9aa15a30b812b3af51bac2c453e423ec707bffe318e0b10fa3ac8850b",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T205550Z-D05-antigravity/evidence.json",
+      "sha256": "805c817614c9fbb7e0317f518a45aadd917111dcdfc4903a940ccf0f5371c8e1",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-022"
+}

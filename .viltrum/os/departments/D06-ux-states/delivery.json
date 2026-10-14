@@ -23,7 +23,8 @@
     "borradores respetan politica D12",
     "conflictos y resultados desconocidos tratados",
     "especificado implementado y verificado diferenciados",
-    "revision independiente D14 registrada"
+    "revision independiente D14 registrada",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

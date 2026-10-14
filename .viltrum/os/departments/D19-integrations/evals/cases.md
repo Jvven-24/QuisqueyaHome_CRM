@@ -9,15 +9,17 @@ petición tarda en responder (el servidor está bajo carga) y el proveedor, al n
 200 a tiempo, reintenta el mismo evento con el mismo `event.id` unos segundos después.
 
 **Qué debe detectar/producir D19:**
-- El adaptador guarda el `event.id` con restricción UNIQUE antes de ejecutar el efecto de
-  negocio (crear el registro de pago).
-- El segundo envío del mismo evento se detecta por la violación de unicidad y responde
-  200 sin crear un segundo registro de pago.
-- Existe una prueba automatizada que envía el mismo payload dos veces y verifica que solo
-  existe un registro de pago al final.
+- El adaptador persiste el evento en un inbox con UNIQUE `(proveedor, cuenta, event.id)` y
+  estado `received` antes de ejecutar el efecto de negocio (crear el registro de pago).
+- El registro de pago y el paso a `processed` ocurren en la misma transacción.
+- El segundo envío consulta el estado: si es `processed`, responde 200 sin crear otro
+  registro; si quedó `received` (caída a mitad), el efecto se completa una sola vez.
+- Pruebas automatizadas: mismo payload dos veces (también en concurrencia) y caída
+  simulada entre la recepción y el commit del efecto.
 
 **Criterio de aprobado:** dos entregas del mismo evento producen un único efecto de
-negocio, verificado con prueba, no con inspección manual.
+negocio, y una caída tras la recepción no pierde el pago. Una respuesta que trate "ID
+duplicado" como "ya procesado" sin mirar el estado **falla** el caso.
 
 ---
 

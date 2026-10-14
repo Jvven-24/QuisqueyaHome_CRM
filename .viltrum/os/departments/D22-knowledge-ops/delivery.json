@@ -21,7 +21,8 @@
     "Decisión distinta de petición o simulación",
     "Secretos y datos innecesarios excluidos",
     "Enlaces/hashes vigentes",
-    "D00 revisa paquete antes de promoción"
+    "D00 revisa paquete antes de promoción",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

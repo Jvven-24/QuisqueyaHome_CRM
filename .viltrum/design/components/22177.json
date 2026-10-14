@@ -1,0 +1,18 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:47:50.901615+00:00",
+  "author": "user_felipemenezes098",
+  "codeSha256": "7461a0eb106f57bc04734d95c43d394fbd775f5ad8fdaa8693a0a9a3b954bab2",
+  "demoSha256": "495b37294059d58e483d182ec69c19bacf083bf5e4fe0e5adee3866f9d376d86",
+  "description": "A data table built with TanStack Table that combines sorting, column filtering, pagination, row selection, a column-visibility toggle, and per-row action menus.",
+  "id": "22177",
+  "metadata": {},
+  "name": "Complex Data Table",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:47:50.901872+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "b61f2bc12ea69fc60dd6cc8467d70832e2321931efa75a0a018a486e55e6a286"
+  },
+  "source": "21st",
+  "status": "code_acquired"
+}

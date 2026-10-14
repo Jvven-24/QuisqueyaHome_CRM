@@ -77,3 +77,41 @@ pérdida de datos asociados) accesible desde configuración.
 **Criterio de aprobado:** el documento distingue esta acción como "irreversible de alto
 impacto" según la tabla de confirmaciones destructivas, especifica el mecanismo reforzado
 concreto (no genérico) y dice explícitamente si hay ventana de recuperación o no.
+
+---
+
+## Caso 5 — Quisqueya: campos obligatorios sin marca de obligatorio
+
+**Escenario:** Formulario de alta de cliente con Nombre, Teléfono y Dirección obligatorios y
+Notas opcional. En el diseño entregado ningún campo lleva marca; el usuario solo descubre
+cuáles eran obligatorios al fallar el envío.
+
+**Qué debe detectar/producir:**
+- Marca visible consistente en cada obligatorio (asterisco + leyenda, o "Obligatorio") y
+  `required` / `aria-required` programático (R1)
+- Textos de marca y leyenda por clave de catálogo, no escritos en el componente
+- Hallazgo R8 (P2) si falta la marca; no se acepta "se deduce por contexto"
+
+**Criterio de aprobado:** la especificación marca los tres obligatorios de forma visible y
+programática, cita R1 de `core/doctrine/ux-states.md` sin copiarlo y registra el hallazgo
+P2 si la entrada original no cumplía. **Reprueba** si solo marca los opcionales o si la
+marca es únicamente de color.
+
+---
+
+## Caso 6 — Quisqueya: Guardar deshabilitado sin decir por qué
+
+**Escenario:** El mismo formulario mantiene el botón Guardar deshabilitado mientras haya
+campos obligatorios vacíos. No hay texto cercano; el usuario no sabe qué falta.
+
+**Qué debe detectar/producir:**
+- Preferido: Guardar activo; al enviar, resumen de errores arriba con enlaces a cada campo,
+  foco al primer inválido y datos conservados (R2)
+- Si se mantiene deshabilitado, razón visible junto al botón, enlazada con
+  `aria-describedby`, que nombra qué falta ("Falta: Teléfono, Dirección")
+- Estados del botón completos (R6) y confirmación específica al guardar (R7)
+- Hallazgo R8 (P2) contra el diseño original
+
+**Criterio de aprobado:** la matriz del botón resuelve "deshabilitado (con razón)" nombrando
+los campos faltantes, o elimina el deshabilitado por validación. **Reprueba** si la razón es
+solo un tooltip, un cambio de color, o si el botón queda deshabilitado sin texto.

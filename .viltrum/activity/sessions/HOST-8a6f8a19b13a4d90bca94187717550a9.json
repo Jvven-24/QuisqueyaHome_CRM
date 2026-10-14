@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-8a6f8a19b13a4d90bca94187717550a9",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D12",
+  "actor": "codex-security-review",
+  "goal": "Revisión independiente de parche TOOL-001 D10 en worktree",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T02:11:32.801878+00:00",
+  "updatedAt": "2026-10-05T02:12:08.293137+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T02:11:32.801939+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T02:12:08.293118+00:00",
+      "status": "finished",
+      "message": "PASS D12 al parche TOOL-001: excepción exacta, nombres inválidos bloqueados, 8/8 pruebas y spec:check verde; sin aprobar I00/I01."
+    }
+  ]
+}

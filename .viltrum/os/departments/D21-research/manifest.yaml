@@ -29,8 +29,8 @@ skills:
   buscar_componentes_ui: 21st-cli-use
   buscar_skills:         find-skills
   verificar_en_navegador: browser-automation
-  indexar_codigo:        gitnexus-cli
-  explorar_codigo:       gitnexus-exploring
+  indexar_codigo:        viltrum-repo-map
+  explorar_codigo:       viltrum-repo-map
 
 subagents:
   can_create: true

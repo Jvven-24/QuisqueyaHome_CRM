@@ -1,0 +1,136 @@
+key,modulo,accion,origen,prioridad,estado_actual,evidencia_local
+lead.create,M01 Leads,Crear lead,C1:M01|Spec:M01,contractual,parcial,src/application/leads/casos-de-uso.ts
+lead.assign,M01 Leads,Asignar lead a broker,C1:M01|Spec:M01,contractual,parcial,src/application/leads/casos-de-uso.ts
+lead.discard,M01 Leads,Descartar lead con motivo,C1:M01|Spec:M01,contractual,parcial,src/application/leads/casos-de-uso.ts
+lead.convert,M01 Leads,Convertir lead a negocio,C1:M01|Spec:M01,contractual,parcial,src/application/leads/conversion.ts
+lead.capture_external,M01 Leads,Capturar lead externo con identidad,C1:M01|Spec:M01|Blueprint:LEGO1,contractual,parcial,src/application/leads/casos-de-uso.ts
+lead.investment_score,M01 Leads,Calcular scoring de inversión,C1:M01,contractual,desconocido,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M01
+lead.origin_detail,M01 Leads,Registrar origen detallado y diáspora,Blueprint:LEGO1|D21-cobertura:Leads,aspiracional,parcial,src/infrastructure/db/schema.ts
+lead.timeline,M01 Leads,Mostrar actividad unificada del lead,Blueprint:LEGO1|Spec:M01,aspiracional,parcial,src/app/(crm)/leads/inspector.tsx
+lead.kyc_gate,M01 Leads,Exigir KYC antes de reserva,Blueprint:LEGO2,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M17
+voice.whatsapp_ingest,G11 IA,Recibir nota de voz WhatsApp,C1:M02,contractual,ausente,src/app/api/ai/audio-transcribe/route.ts
+voice.telegram_ingest,G11 IA,Recibir nota de voz Telegram,C1:M02,contractual,ausente,src/app/api/ai/audio-transcribe/route.ts
+voice.transcribe,G11 IA,Transcribir audio a texto,C1:M02|Spec:G11,contractual,ausente,src/app/api/ai/audio-transcribe/route.ts
+voice.extract,G11 IA,Extraer datos de inversión del texto,C1:M02,contractual,parcial,src/domain/audio-lead-extractor.ts
+voice.human_review,G11 IA,Exigir revisión humana antes de aplicar datos,C1:M02|Spec:G11,contractual,parcial,src/application/ai/casos-de-uso.ts
+deal.kanban,M03 Negocios,Mostrar negocios en Kanban,C1:M03|Spec:M03,contractual,parcial,src/app/(crm)/negocios/vista.tsx
+deal.stage_change,M03 Negocios,Cambiar etapa de negocio,C1:M03|Spec:M03,contractual,parcial,src/application/pipeline/casos-de-uso.ts
+deal.stage_validate,M03 Negocios,Validar transición de etapa,C1:M03|Blueprint:LEGO2,contractual,parcial,src/application/pipeline/casos-de-uso.ts
+deal.stage_history,M03 Negocios,Registrar historial de etapas,C1:M03|Spec:M03,contractual,parcial,src/infrastructure/db/schema.ts
+deal.close_won,M03 Negocios,Cerrar negocio ganado,C1:M03|Spec:M03,contractual,parcial,src/application/pipeline/cierre.ts
+deal.close_lost,M03 Negocios,Cerrar negocio perdido con motivo,C1:M03|Spec:M03,contractual,parcial,src/application/pipeline/casos-de-uso.ts
+deal.multi_pipeline,M03 Negocios,Separar embudos de venta y renta,D21-cobertura:Pipeline,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M03
+deal.payment_preview,M03 Negocios,Mostrar plan de pago en tarjeta,Blueprint:LEGO2,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M16
+tax.confotur_quote,M16 Cotizaciones,Calcular beneficio Confotur para cotización,C1:M04|Spec:M16,contractual,parcial,src/application/confotur/casos-de-uso.ts
+tax.transfer_exemption,M16 Cotizaciones,Calcular exención de transferencia Confotur,C1:M04,contractual,parcial,src/domain/confotur.ts
+tax.ipi_exemption,M16 Cotizaciones,Calcular exención de IPI Confotur,C1:M04,contractual,parcial,src/domain/confotur.ts
+tax.eligibility,M16 Cotizaciones,Comprobar elegibilidad y vigencia del proyecto,C1:M04|Blueprint:LEGO3,contractual,desconocido,src/domain/confotur.ts
+property.create,M04 Propiedades,Crear proyecto inmobiliario,C1:M05|Spec:M04,contractual,parcial,src/application/proyectos/casos-de-uso.ts
+property.edit,M04 Propiedades,Editar proyecto inmobiliario,C1:M05|Spec:M04,contractual,parcial,src/application/proyectos/casos-de-uso.ts
+unit.create,M04 Propiedades,Crear unidad asociada a proyecto,C1:M05|Spec:M04,contractual,parcial,src/application/proyectos/casos-de-uso.ts
+unit.edit,M04 Propiedades,Editar unidad asociada a proyecto,C1:M05|Spec:M04,contractual,parcial,src/application/proyectos/casos-de-uso.ts
+unit.availability,M04 Propiedades,Consultar disponibilidad de unidad,C1:M05|Spec:M04,contractual,parcial,src/app/(crm)/propiedades/[slug]/page.tsx
+unit.masterplan,M04 Propiedades,Visualizar master plan interactivo,Blueprint:LEGO3,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M04
+unit.virtual_tour,M04 Propiedades,Mostrar recorrido virtual 360,Blueprint:LEGO3|D21-cobertura:Avances,aspiracional,ausente,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md#3
+unit.roi,M04 Propiedades,Proyectar retorno de inversión por unidad,Blueprint:LEGO3,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M04
+progress.phase_create,M05 Avances,Crear fase de construcción,Spec:M05|D21-cobertura:Avances,aspiracional,parcial,src/application/proyectos/casos-de-uso.ts
+progress.phase_update,M05 Avances,Actualizar avance de fase,Spec:M05|Blueprint:LEGO4,aspiracional,parcial,src/application/proyectos/casos-de-uso.ts
+progress.photo_upload,M05 Avances,Subir fotografía de avance,Spec:M05|Blueprint:LEGO4,aspiracional,parcial,src/application/proyectos/casos-de-uso.ts
+progress.publish,M05 Avances,Publicar avance a compradores,Blueprint:LEGO4,aspiracional,parcial,src/app/(crm)/avances/vista.tsx
+progress.bulletin,M05 Avances,Generar boletín fotográfico para comprador,Blueprint:LEGO4,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M05
+contact.create,M02 Contactos,Crear contacto inversionista,C1:M06|Spec:M02,contractual,parcial,src/application/contactos/casos-de-uso.ts
+contact.edit,M02 Contactos,Editar contacto inversionista,C1:M06|Spec:M02,contractual,parcial,src/application/contactos/casos-de-uso.ts
+contact.soft_delete,M02 Contactos,Enviar contacto a papelera,C1:M06|Spec:M02,contractual,parcial,src/application/contactos/casos-de-uso.ts
+contact.search,M02 Contactos,Buscar contacto con alcance,Spec:M02,aspiracional,parcial,src/application/contactos/consultas.ts
+contact.investor_profile,M02 Contactos,Guardar perfil financiero tipado de inversionista,Blueprint:LEGO1,aspiracional,desconocido,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M02
+contact.family_group,M02 Contactos,Agrupar contactos por familia o empresa,D21-cobertura:Contactos,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M02
+agenda.create,M06 Agenda,Crear cita,C1:M07|Spec:M06,contractual,parcial,src/application/actividades/casos-de-uso.ts
+agenda.edit,M06 Agenda,Editar cita,C1:M07|Spec:M06,contractual,parcial,src/application/actividades/casos-de-uso.ts
+agenda.export_ics,M06 Agenda,Exportar cita iCalendar RFC5545,C1:M07|Spec:M06,contractual,parcial,src/application/actividades/consultas.ts
+agenda.external_sync,M06 Agenda,Sincronizar calendario externo,D21-cobertura:Agenda|Spec:I04,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M06
+agenda.public_booking,M06 Agenda,Ofrecer enlace de reserva pública por broker,Blueprint:LEGO5,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M06
+task.create,M07 Tareas,Crear tarea,Spec:M07,aspiracional,parcial,src/application/actividades/casos-de-uso.ts
+task.complete,M07 Tareas,Completar o reabrir tarea,Spec:M07,aspiracional,parcial,src/app/(crm)/tareas/vista.tsx
+task.delegate,M07 Tareas,Delegar tarea entre brokers,D21-cobertura:Tareas,aspiracional,desconocido,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M07
+task.subtask,M07 Tareas,Crear subtarea,D21-cobertura:Tareas,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M07
+commission.split,M10 Comisiones,Definir reparto agencia broker,C1:M08|Spec:M10,contractual,parcial,src/application/comisiones/casos-de-uso.ts
+commission.approve,M10 Comisiones,Aprobar comisión,C1:M08|Spec:M10,contractual,parcial,src/app/(crm)/comisiones/vista.tsx
+commission.pay,M10 Comisiones,Marcar comisión pagada,C1:M08|Spec:M10,contractual,parcial,src/app/(crm)/comisiones/vista.tsx
+commission.export,M10 Comisiones,Exportar comisiones CSV,C1:M08|Spec:M10,contractual,parcial,src/application/comisiones/casos-de-uso.ts
+commission.multi_split,M10 Comisiones,Dividir comisión entre varios brokers,Blueprint:LEGO7,aspiracional,desconocido,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M10
+commission.withholding,M10 Comisiones,Calcular retenciones dominicanas,Blueprint:LEGO7,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M10
+commission.606,M10 Comisiones,Generar formato contable 606,Blueprint:LEGO7,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M10
+goal.set,M09 Metas,Fijar meta mensual,C1:M09|Spec:M09,contractual,parcial,src/application/metas/casos-de-uso.ts
+goal.track,M09 Metas,Consultar cumplimiento de meta,C1:M09|Spec:M09,contractual,parcial,src/app/(crm)/metas/page.tsx
+goal.hierarchy,M09 Metas,Definir metas agencia equipo broker,D21-cobertura:Metas,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M09
+goal.forecast,M09 Metas,Calcular proyección ponderada de cierres,C1:M09,contractual,desconocido,src/app/(crm)/metas/page.tsx
+academy.catalog,M13 Academy,Listar formación y checklists,C1:M10|Spec:M13,contractual,parcial,src/application/academy/casos-de-uso.ts
+academy.progress,M13 Academy,Registrar progreso de broker,C1:M10|Spec:M13,contractual,parcial,src/application/academy/casos-de-uso.ts
+academy.quiz,M13 Academy,Evaluar broker mediante quiz,C1:M10,contractual,ausente,.viltrum/crm-ux/D21-academy-opensource.md#3
+academy.pass_rule,M13 Academy,Verificar aprobación en servidor,C1:M10,contractual,ausente,.viltrum/crm-ux/D21-academy-opensource.md#3
+academy.certificate,M13 Academy,Emitir certificado trazable,C1:M10,contractual,ausente,.viltrum/crm-ux/D21-academy-opensource.md#3
+academy.moodle_sync,M13 Academy,Sincronizar matrícula y expediente con Moodle,Spec:I02,aspiracional,ausente,.viltrum/crm-ux/D21-academy-opensource.md#1
+message.template,M11 Comunicaciones,Crear plantilla de mensaje,C1:M11|Spec:M11,contractual,parcial,src/application/comunicaciones/casos-de-uso.ts
+message.whatsapp_link,M11 Comunicaciones,Abrir WhatsApp directo wa.me,C1:M11,contractual,parcial,src/app/(crm)/comunicaciones/vista.tsx
+message.telegram_send,M11 Comunicaciones,Enviar mensaje mediante Telegram Bot API,C1:M11,contractual,ausente,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md#7
+message.whatsapp_send,M11 Comunicaciones,Enviar WhatsApp por proveedor oficial,C1:M11|Spec:I03,contractual,desconocido,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md#1
+message.inbox,M11 Comunicaciones,Mostrar bandeja multicanal compartida,Blueprint:LEGO8,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M11
+message.delivery_status,M11 Comunicaciones,Consultar estado real de entrega,Spec:M11,aspiracional,desconocido,src/application/comunicaciones/casos-de-uso.ts
+report.funnel,M12 Reportes,Consultar embudo comercial,C1:M12|Spec:M12,contractual,parcial,src/application/reportes/consultas.ts
+report.channel,M12 Reportes,Consultar ventas por canal,C1:M12|Spec:M12,contractual,parcial,src/app/(crm)/reportes/vista.tsx
+report.forecast,M12 Reportes,Consultar pronóstico comercial,C1:M12|Spec:M12,contractual,parcial,src/app/(crm)/reportes/vista.tsx
+report.export_csv,M12 Reportes,Exportar reporte CSV RFC4180,C1:M12|Spec:M12,contractual,parcial,src/app/(crm)/reportes/vista.tsx
+report.velocity,M12 Reportes,Medir velocidad lead a reserva,Blueprint:LEGO11,aspiracional,desconocido,src/app/(crm)/reportes/vista.tsx
+report.roi,M12 Reportes,Calcular ROI por proyecto,D21-cobertura:Reportes,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M12
+audit.record,G05 Auditoría,Registrar cambios en audit_log,C1:M13|Spec:G05,contractual,parcial,src/infrastructure/audit.ts
+audit.read,G05 Auditoría,Consultar historial por entidad,C1:M13|Spec:G05,contractual,parcial,src/app/(crm)/_ui/historial.tsx
+audit.immutable,G05 Auditoría,Impedir alteración de auditoría,C1:M13,contractual,desconocido,src/infrastructure/db/schema.ts
+audit.export,G05 Auditoría,Exportar trazabilidad auditada,D21-cobertura:Auditoría,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G05
+dashboard.role,M21 Inicio,Mostrar dashboard por rol,C1:M14|Spec:M21,contractual,parcial,src/application/dashboard/consultas.ts
+dashboard.kpi,M21 Inicio,Mostrar KPIs comerciales reales,C1:M14|Spec:M21,contractual,parcial,src/app/(crm)/inicio/page.tsx
+dashboard.next_actions,M21 Inicio,Mostrar próximas actividades,C1:M14|Spec:M21,contractual,parcial,src/app/(crm)/inicio/vista.tsx
+trash.list,M14 Configuración,Listar papelera segura,C1:M15|Spec:M14,contractual,parcial,src/app/(crm)/configuracion/_papelera.tsx
+trash.restore,M14 Configuración,Restaurar registro borrado,C1:M15|Spec:M14,contractual,parcial,src/application/papelera/casos-de-uso.ts
+trash.purge_policy,M14 Configuración,Aplicar política de purga o retención,C1:M15,contractual,desconocido,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M14
+broker.profile,M08 Brokers,Mostrar perfil y rendimiento de broker,Spec:M08,aspiracional,parcial,src/app/(crm)/brokers/[id]/page.tsx
+broker.invite,M08 Brokers,Invitar broker,Spec:M08,aspiracional,parcial,src/application/usuarios/casos-de-uso.ts
+broker.assign_property,M08 Brokers,Asignar propiedades a broker,Spec:M08,aspiracional,parcial,src/application/brokers/casos-de-uso.ts
+broker.cobroking,M08 Brokers,Registrar acuerdo de co-broking,Spec:M08|Blueprint:LEGO6,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M08
+rent.contract,M15 Rentas,Crear contrato de renta,Spec:M15|D21-cobertura:Rentas,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M15
+rent.collection,M15 Rentas,Registrar cobro de renta,Spec:M15|D21-cobertura:Rentas,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M15
+rent.renewal,M15 Rentas,Programar renovación de renta,D21-cobertura:Rentas,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M15
+quote.persist,M16 Cotizaciones,Guardar cotización versionada,Spec:M16|D21-cobertura:Cotizaciones,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M16
+quote.pdf,M16 Cotizaciones,Generar PDF de cotización,Spec:M16|D21-cobertura:Cotizaciones,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M16
+payment.plan,M16 Cotizaciones,Calcular plan de pago 10-40-50,Spec:M16|Blueprint:LEGO2,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M16
+reserve.create,M17 Reservas,Reservar unidad sin doble asignación,Spec:M17|D21-cobertura:Reservas,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M17
+reserve.expire,M17 Reservas,Expirar reserva temporal,D21-cobertura:Reservas,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M17
+clientroom.view,M18 Client Room,Consultar expediente de cliente,Spec:M18|D21-cobertura:Client Room,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M18
+clientroom.documents,M18 Client Room,Consultar documentos compartidos,Spec:M18|D21-cobertura:Client Room,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M18
+dealroom.participants,M19 Deal Room,Invitar participantes a negociación,Spec:M19|D21-cobertura:Deal Room,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M19
+dealroom.activity,M19 Deal Room,Registrar negociación multipartes,Spec:M19|D21-cobertura:Deal Room,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M19
+brokerportal.inventory,M20 Portal broker,Consultar inventario externo con permisos,Spec:M20|D21-cobertura:Portal Broker,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M20
+brokerportal.lead,M20 Portal broker,Subir lead propio desde portal,Spec:M20|D21-cobertura:Portal Broker,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M20
+shell.navigation,G01 Shell,Navegar módulos autorizados,Spec:G01,aspiracional,parcial,src/app/(crm)/layout.tsx
+shell.mobile,G01 Shell,Usar navegación móvil,Spec:G01,aspiracional,parcial,src/app/(crm)/_ui/mobile-dock.tsx
+search.command,G02 Búsqueda,Ejecutar paleta de comandos,Spec:G02,aspiracional,parcial,src/app/(crm)/_ui/command-palette.tsx
+search.entities,G02 Búsqueda,Buscar entidades globalmente,Spec:G02|D21-cobertura:Búsqueda,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G02
+notification.persist,G03 Notificaciones,Guardar aviso para usuario,Spec:G03,aspiracional,desconocido,src/infrastructure/db/schema.ts
+notification.deliver,G03 Notificaciones,Entregar aviso real in-app,Spec:G03|D21-cobertura:Notificaciones,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G03
+auth.login,G04 Auth,Autenticar usuario,Spec:G04,aspiracional,parcial,src/app/login/login-form.tsx
+auth.scope,G04 Auth,Filtrar datos según rol y alcance,Spec:G04|Blueprint:LEGO12,aspiracional,parcial,src/domain/rbac.ts
+auth.recover,G04 Auth,Restablecer contraseña completamente,Spec:G04,aspiracional,parcial,src/app/recuperar/page.tsx
+i18n.switch,G06 i18n,Cambiar idioma español inglés,Spec:G06|D21-cobertura:i18n,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G06
+offline.cache,G07 PWA,Consultar datos sin conexión,Spec:G07|D21-cobertura:PWA,aspiracional,desconocido,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G07
+offline.sync,G07 PWA,Sincronizar mutaciones al reconectar,Spec:G07|D21-cobertura:PWA,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G07
+import.csv,G08 Importación,Importar registros con mapeo CSV,Spec:G08|D21-cobertura:Import/Export,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G08
+export.csv,G08 Exportación,Exportar datos comerciales CSV,Spec:G08,aspiracional,parcial,src/application/comisiones/casos-de-uso.ts
+phone.normalize,G09 Deduplicación,Normalizar teléfono internacional E164,Spec:G09|D21-cobertura:Deduplicación,aspiracional,parcial,src/domain/telefono.ts
+phone.merge,G09 Deduplicación,Fusionar duplicados de contactos,Spec:G09|D21-cobertura:Deduplicación,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G09
+integration.outbox,G10 Integraciones,Encolar evento de salida transaccional,Spec:G10,aspiracional,parcial,src/infrastructure/integraciones/outbox/worker.ts
+integration.replay,G10 Integraciones,Reintentar o reconciliar evento fallido,Spec:G10,aspiracional,parcial,src/infrastructure/integraciones/outbox/runtime.ts
+integration.health,G10 Integraciones,Mostrar salud de proveedores,Spec:G10|D21-cobertura:Configuración,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#G10
+automation.flow,G10 Integraciones,Ejecutar workflow entre sistemas,D21-cobertura:Automatizaciones|Spec:I01,aspiracional,ausente,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md#3
+portal.capture,M01 Leads,Capturar lead desde Portal Quisqueya,Spec:I06|D21-cobertura:Captura Leads,aspiracional,desconocido,src/application/leads/casos-de-uso.ts
+document.pdf,M16 Cotizaciones,Generar dossier PDF,Spec:I08|D21-cobertura:Documentos,aspiracional,ausente,.viltrum/vre-os/spec/inventario/crm-mapa-modulos.md#M16
+document.read_track,M18 Client Room,Registrar lectura de dossier,Blueprint:LEGO9|D21-cobertura:Documentos,aspiracional,ausente,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md#3
+document.signature,M18 Client Room,Firmar separación digitalmente,Blueprint:LEGO9,aspiracional,ausente,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md#7

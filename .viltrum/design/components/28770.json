@@ -1,0 +1,29 @@
+{
+  "author": "shadcnstore",
+  "description": "A dashboard page layout with a collapsible sidebar navigation, stat cards, an area chart, active-project progress bars, and a recent-activity feed.",
+  "framework": "",
+  "id": "28770",
+  "metadata": {
+    "author": "shadcnstore",
+    "authorImage": "https://www.google.com/s2/favicons?domain=shadcnstore.com&sz=128",
+    "description": "A dashboard page layout with a collapsible sidebar navigation, stat cards, an area chart, active-project progress bars, and a recent-activity feed.",
+    "id": 28770,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/shadcnstore/app-1?[REDACTED]",
+    "name": "App Dashboard Layout",
+    "previewUrl": "https://cdn.21st.dev/shadcnstore/app-1/default/preview.1790007039417-1f4477d8-e891-458c-9a9c-2e6f3409d3d2.png",
+    "type": "component",
+    "url": "https://21st.dev/@shadcnstore/components/app-1",
+    "videoUrl": "https://cdn.21st.dev/shadcnstore/app-1/default/video.1790007039417-1f4477d8-e891-458c-9a9c-2e6f3409d3d2.mp4"
+  },
+  "name": "App Dashboard Layout",
+  "previewUrl": "https://cdn.21st.dev/shadcnstore/app-1/default/preview.1790007039417-1f4477d8-e891-458c-9a9c-2e6f3409d3d2.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:38.740627+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "360e93bfb9f1a992b9a45beee2ed6a207e7e7ba2567a60d52f3f26fecc6c0e2c"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@shadcnstore/components/app-1"
+}

@@ -13,7 +13,7 @@
  * columna a `visibleRows` en ninguna de las tres consultas de aquí.
  */
 
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNotNull, isNull } from "drizzle-orm";
 import { can } from "@/domain/rbac";
 import { formatoPeriodo, nombreMes, parsearPeriodo } from "@/domain/metas";
 import { requireActor } from "@/infrastructure/auth/actor";
@@ -49,8 +49,11 @@ export default async function MetasPage({
   const condicionAnual = esVistaCompleta
     ? and(isNull(goals.brokerId), eq(goals.year, periodo.year))
     : and(eq(goals.brokerId, actor.userId), eq(goals.year, periodo.year));
+  const condicionTendencias = esVistaCompleta
+    ? and(isNotNull(goals.brokerId), eq(goals.year, periodo.year))
+    : and(eq(goals.brokerId, actor.userId), eq(goals.year, periodo.year));
 
-  const [heroFilas, filasBrokers, filasAnuales] = await Promise.all([
+  const [heroFilas, filasBrokers, filasAnuales, filasTendencias] = await Promise.all([
     db
       .select({ targetDeals: goals.targetDeals, achievedDeals: goals.achievedDeals })
       .from(goals)
@@ -77,6 +80,10 @@ export default async function MetasPage({
       .select({ month: goals.month, targetDeals: goals.targetDeals, achievedDeals: goals.achievedDeals })
       .from(goals)
       .where(condicionAnual),
+    db
+      .select({ brokerId: goals.brokerId, month: goals.month, achievedDeals: goals.achievedDeals })
+      .from(goals)
+      .where(condicionTendencias),
   ]);
 
   const heroMeta = heroFilas[0] ?? null;
@@ -88,12 +95,25 @@ export default async function MetasPage({
     return { month: mes, targetDeals: fila?.targetDeals ?? 0, achievedDeals: fila?.achievedDeals ?? 0 };
   });
 
+  const tendenciasPorBroker = new Map<number, number[]>();
+  for (const fila of filasTendencias) {
+    if (fila.brokerId == null) continue;
+    if (!tendenciasPorBroker.has(fila.brokerId)) {
+      tendenciasPorBroker.set(fila.brokerId, Array(12).fill(0));
+    }
+    const arr = tendenciasPorBroker.get(fila.brokerId)!;
+    if (fila.month >= 1 && fila.month <= 12) {
+      arr[fila.month - 1] = fila.achievedDeals;
+    }
+  }
+
   const brokers = filasBrokers.map((fila) => ({
     userId: fila.userId,
     fullName: fila.fullName,
     level: fila.level,
     targetDeals: fila.targetDeals ?? fila.profileTarget,
     achievedDeals: fila.achievedDeals ?? 0,
+    tendencia: tendenciasPorBroker.get(fila.userId) ?? Array(12).fill(0),
   }));
 
   const opcionesPeriodo = Array.from({ length: 12 }, (_, indice) => {

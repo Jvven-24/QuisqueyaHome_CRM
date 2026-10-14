@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D10",
+  "gate": "G5",
+  "actor": "codex-gpt-6.1-sol-d10",
+  "createdAt": "2026-10-04T21:02:53.714739+00:00",
+  "state": "review_pending",
+  "reviewer": "D12",
+  "summary": {
+    "path": ".viltrum/vre-os/D10-rentas.md",
+    "sha256": "2558e614309010518927461e9c2061a6dec597169dbc7cc35639312853df81da",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T205251Z-D10-codex/evidence.json",
+      "sha256": "88a494edc65060ab1dcc155d517e9731479cbbbd8869a4f8c5fd7488446121b7",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-021"
+}

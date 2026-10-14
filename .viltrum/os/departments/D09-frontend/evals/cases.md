@@ -124,6 +124,27 @@ localStorage.setItem("userProfile", JSON.stringify(profile)); // incluye cédula
 sesión usa el mecanismo de cookie segura o el que D03 definió como decisión irreversible
 del proyecto.
 
+## Caso 5 — Guardar deshabilitado sin decir por qué (Quisqueya)
+
+**Escenario:** formulario de propiedad con campos obligatorios sin marca. El botón Guardar
+queda deshabilitado con `disabled={!isValid}` (booleano), sin texto que diga qué falta. El
+servidor además responde 422 con `errors[]` y la UI solo muestra un toast genérico.
+
+**Qué debe detectar/producir D09:**
+- El dominio devuelve `reasons[]` (`field`, `code`, `messageKey`), no un booleano
+- La UI muestra "Falta: ..." junto al botón (`aria-describedby`), o deja enviar y muestra
+  resumen de errores con foco al primer campo inválido
+- Mapea `errors[]` del servidor a cada campo; los sin campo van al resumen general
+- Bloquea doble envío en vuelo y conserva lo escrito ante el error
+- Textos por clave de catálogo i18n
+
+**Criterio de aprobado:** ningún botón deshabilitado sin razón visible y programática; los
+errores del servidor aparecen en su campo. Falla (P2, R8): `disabled` sin motivo o error
+genérico efímero. Contrato: `core/doctrine/ux-states.md` § "Contrato de retroalimentación
+de acciones y formularios".
+
+---
+
 ## Evaluación de entrega — Cambio de tenant con request pendiente
 
 Usuario sale de tenant A y entra en B mientras una petición de A tarda. También existe SSR con caché global por URL.

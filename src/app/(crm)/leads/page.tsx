@@ -98,7 +98,7 @@ export default async function LeadsPage({
     convertedDealId: leads.convertedDealId,
   };
 
-  const [filas, totales, canales, brokers] = await Promise.all([
+  const [filas, totales, canales, brokers, conteosEstado] = await Promise.all([
     db
       .select(columnas)
       .from(leads)
@@ -124,7 +124,29 @@ export default async function LeadsPage({
     // Candidatos válidos para el botón Asignar del inspector (issue #22):
     // misma lista que arma la sugerencia, con el nombre para el selector.
     candidatosBroker(db),
+    // Distribución por estado sobre el universo visible para KPIs
+    db
+      .select({ status: leads.status, total: count() })
+      .from(leads)
+      .innerJoin(contacts, eq(contacts.id, leads.contactId))
+      .where(visibleRows(actor, scope, leads.brokerId, leads.deletedAt))
+      .groupBy(leads.status),
   ]);
+
+  const metricasLeads = {
+    total: 0,
+    new: 0,
+    assigned: 0,
+    contacted: 0,
+    converted: 0,
+    discarded: 0,
+  };
+  for (const item of conteosEstado) {
+    if (item.status && item.status in metricasLeads) {
+      metricasLeads[item.status as keyof typeof metricasLeads] = Number(item.total);
+    }
+    metricasLeads.total += Number(item.total);
+  }
 
   // La ficha lateral respeta el mismo alcance que el listado, igual que en
   // Contactos: un id fuera del `visibleRows` del actor no se filtra por la URL.
@@ -149,12 +171,14 @@ export default async function LeadsPage({
       canales={canales}
       brokers={brokers}
       total={totales[0]?.total ?? 0}
+      metricas={metricasLeads}
       tamanioPagina={TAMANIO_PAGINA}
       pagina={pagina}
       filtros={{ q, sourceId, status }}
       leadSeleccionado={leadSeleccionado ?? null}
       historial={leadSeleccionado ? <Historial entidad="lead" entidadId={leadSeleccionado.id} /> : null}
       roleSlug={actor.roleSlug}
+      actorId={actor.userId}
     />
   );
 }

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D21",
+  "gate": "G2",
+  "actor": "antigravity-gemini-3.1-pro-low-d21",
+  "createdAt": "2026-10-04T17:04:23.150296+00:00",
+  "state": "review_pending",
+  "reviewer": "D03",
+  "summary": {
+    "path": ".viltrum/vre-os/D21-cobertura-modulos.md",
+    "sha256": "fbc3e1416e540742af385c76317c51106b0e3ef9b0259bdadba7b1e208a1f22c",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T170128Z-D21-antigravity/evidence.json",
+      "sha256": "05cff4a30b1aabb95ca75a8b3befeab9beeeaf9233bac921de793849577b2dd7",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-016"
+}

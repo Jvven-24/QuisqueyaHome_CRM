@@ -24,7 +24,8 @@
     "cache/session aislados al cambiar tenant",
     "errores, conflicto, peticion obsoleta y submit duplicado",
     "evidencia de teclado/responsive/rendimiento",
-    "revision independiente D14"
+    "revision independiente D14",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",
@@ -47,8 +48,8 @@
       "url": "https://github.com/upstash/context7"
     },
     {
-      "title": "GitNexus — official repository",
-      "url": "https://github.com/abhigyanpatwari/GitNexus"
+      "title": "ripgrep — official repository (MIT/Unlicense)",
+      "url": "https://github.com/BurntSushi/ripgrep"
     }
   ],
   "subagents": [

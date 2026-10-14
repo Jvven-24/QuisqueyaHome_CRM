@@ -1,0 +1,17 @@
+department: D10
+cells:
+- node: FN-001
+  status: propuesto
+  deliverable: Caso de uso y validación en servidor
+  needs_from:
+  - D01
+  delivers_to:
+  - D14
+- node: ENT-001
+  status: pendiente
+- node: CTR-001
+  status: validado
+  reviewer: D03
+  review_ref: handoff:HND-demo-02
+  reviewed_on: '2026-10-06'
+  deliverable: Contrato con errors[] por campo

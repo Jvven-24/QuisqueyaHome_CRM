@@ -1,0 +1,28 @@
+{
+  "author": "ruixen.ui",
+  "description": "A Next.js 15 marketing template for data and analytics products with a live dashboard mock, client carousel, bento feature system, feature tabs, pricing, contact, and first-class light and dark themes.",
+  "framework": "",
+  "id": "725",
+  "metadata": {
+    "author": "ruixen.ui",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2y5Wd5l713ZIFYjX19aZXSyXd6b/avatar.svg+xml",
+    "description": "A Next.js 15 marketing template for data and analytics products with a live dashboard mock, client carousel, bento feature system, feature tabs, pricing, contact, and first-class light and dark themes.",
+    "id": 725,
+    "name": "Folio - Data Intelligence Landing Template",
+    "previewUrl": "https://cdn.21st.dev/user_2y5Wd5l713ZIFYjX19aZXSyXd6b/templates/folio-open-source-data-intelligence-landing-template/preview-1782463876385.png",
+    "price": 49,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/folio-open-source-data-intelligence-landing-template"
+  },
+  "name": "Folio - Data Intelligence Landing Template",
+  "previewUrl": "https://cdn.21st.dev/user_2y5Wd5l713ZIFYjX19aZXSyXd6b/templates/folio-open-source-data-intelligence-landing-template/preview-1782463876385.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:53.683410+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "7cc0749a637c4ed889242313e7681b387d695cfbdfb0a1711daba769f7f040be"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/folio-open-source-data-intelligence-landing-template"
+}

@@ -17,6 +17,14 @@
 - [ ] Validación de servidor rechaza lo mismo **saltándose el cliente** — probado con petición directa a la API sin pasar por la interfaz
 - [ ] Restricción de base de datos rechaza lo que llegara a pasar el servidor — probado con inserción directa cuando el entorno lo permite
 - [ ] Regla de negocio (fecha fin > fecha inicio, límite de monto, etc.) validada en servidor, no solo en cliente
+- [ ] Cada capa tiene su **propia** prueba negativa con el mismo dato inválido (cliente, API directa sin cliente, restricción de BD); que falle en la interfaz no acredita las otras dos
+
+## B2. Retroalimentación (ver "Contrato de retroalimentación de acciones y formularios", `core/doctrine/ux-states.md`)
+
+- [ ] Botón primario deshabilitado sin motivo visible junto a él (o sin nombrar qué falta) — **P2**
+- [ ] Campo obligatorio sin marca visible ni `required`/`aria-required` — **P2**
+- [ ] Error de servidor (422 con `errors[]`) mostrado solo como mensaje genérico o efímero (toast) — **P2**
+- [ ] El error de servidor aparece junto a su campo (y resumen con enlaces), con el dato conservado — probado forzando 422 por API/mock
 
 ## C. Conservación de datos
 

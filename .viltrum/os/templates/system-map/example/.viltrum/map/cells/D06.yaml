@@ -1,0 +1,14 @@
+department: D06
+cells:
+- node: SCR-001
+  status: propuesto
+  deliverable: Matriz de estados del formulario
+  states:
+  - carga
+  - vacio
+  - error
+  - exito
+  states_na:
+    permiso: pantalla pública sin roles
+  delivers_to:
+  - D09

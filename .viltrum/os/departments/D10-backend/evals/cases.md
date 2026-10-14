@@ -110,3 +110,11 @@ GET individual verifica pertenencia; exportación, lista y worker aceptan tenant
 Esperado: matriz de acción/recurso/campo/tenant aplicada a todos los caminos y deny por defecto; contexto autenticado, query limitada, job ligado a principal/tenant y scopes. RLS como defensa adicional con D11.
 
 Aprobado: intentos cross-tenant en esos caminos se ejercen y rechazan; revisar solo endpoint feliz no cierra hallazgo.
+
+## Evaluación de entrega — Guardar rechazado sin decir qué campo (caso Quisqueya)
+
+Reproducción ilustrativa (la ruta y el cuerpo del 400 son un ejemplo, no un log de Quisqueya): `POST /v1/properties` con nombre vacío y teléfono con formato inválido. El handler devuelve 400 con `{"error":"Datos inválidos"}` (o un 422 con un único string); el cliente, que además deshabilitaba Guardar sin explicar, solo puede mostrar un aviso efímero. El cliente validaba el teléfono, pero una llamada directa con curl pasa sin validar.
+
+Esperado: validación servidor independiente del cliente; 422 `application/problem+json` con `errors[]` de dos elementos `{field, code, messageKey, params}` (p. ej. `name`/`required`, `phone`/`format`), `messageKey` existentes en el catálogo de mensajes y sin texto incrustado, todos los errores en una sola respuesta; OpenAPI documenta los `code`; prueba de contrato que verifica la forma y una prueba por API directa. Referencia R4/R5 de "Contrato de retroalimentación de acciones y formularios".
+
+Aprobado: la prueba de contrato corre y se demuestra que falla (mutando la respuesta) si falta `field`/`code`/`messageKey`, si `code`/`messageKey` no están en el catálogo cerrado, si `field` no es ruta pública, si `params` trae el valor enviado, si hay SQL/tabla/stack por expresión, o si dos entradas indistinguibles (email existente vs nuevo) dan respuestas distintas. Un `field` que sea columna interna o un unique traducido a "el email existe" reprueba. JSON no parseable sigue siendo 400. Reprobado: 400/422 genérico, solo el primer error, texto localizado en el handler, o confiar en que el cliente validó.

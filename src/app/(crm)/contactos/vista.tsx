@@ -7,7 +7,18 @@ import { Avatar, PageHeader } from "../_ui/prototipo-ui";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { ContactoInspector } from "./inspector";
 import { DataTable, type Columna } from "@/components/ui/data-table";
-import { MessageSquare, Phone, X } from "lucide-react";
+import {
+  Globe,
+  Mail,
+  MessageSquare,
+  Phone,
+  Plus,
+  Search,
+  UserCheck,
+  Users,
+  Video,
+  X,
+} from "lucide-react";
 
 export type ContactoFila = {
   id: number;
@@ -25,19 +36,38 @@ export type ContactoFila = {
 
 export type Canal = { id: number; name: string };
 
+export function CanalChip({ nombre }: { nombre: string | null }) {
+  const n = nombre ? nombre.trim() : "Directo";
+  const lower = n.toLowerCase();
+
+  let Icon = Globe;
+  let badgeClass = "bg-slate-100 text-slate-800 border-slate-200/90";
+
+  if (lower.includes("youtube") || lower.includes("video")) {
+    Icon = Video;
+    badgeClass = "bg-red-50 text-red-800 border-red-200";
+  } else if (lower.includes("whatsapp")) {
+    Icon = MessageSquare;
+    badgeClass = "bg-emerald-50 text-emerald-800 border-emerald-300";
+  } else if (lower.includes("web") || lower.includes("portal") || lower.includes("google")) {
+    Icon = Globe;
+    badgeClass = "bg-sky-50 text-sky-800 border-sky-200";
+  } else if (lower.includes("referid") || lower.includes("broker")) {
+    Icon = Users;
+    badgeClass = "bg-amber-50 text-amber-900 border-amber-300/80";
+  }
+
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold border shadow-2xs ${badgeClass}`}>
+      <Icon className="size-3.5 shrink-0" />
+      <span className="truncate max-w-[130px]">{n}</span>
+    </span>
+  );
+}
+
 /**
- * M1 · Contactos (F1). Sustituye los `initialLeads` de muestra por los
- * contactos reales que resuelve `page.tsx` con `visibleRows` — el look
- * (`.filter-bar`, `.table-wrap`, `.split-view`, `.table-person`) es el mismo
- * que portó T5 del prototipo, solo cambia de dónde vienen los datos.
- *
- * Búsqueda, canal y página viven en la URL (`searchParams`), no en estado de
- * cliente: cada cambio navega, `page.tsx` vuelve a consultar con
- * `visibleRows` y esta vista solo pinta lo que llega. La ficha lateral hace
- * lo mismo con `?contacto=<id>` — así el historial de auditoría (T6), que es
- * un componente de servidor, se resuelve en `page.tsx` y llega aquí ya
- * montado en la prop `historial`, en vez de reimplementarlo con un fetch de
- * cliente.
+ * M1 · Contactos (Private Desk).
+ * Directorio de contactos premium con búsqueda en servidor y ficha 360 lateral.
  */
 export function ContactosVista({
   contactos,
@@ -84,14 +114,16 @@ export function ContactosVista({
     () => [
       {
         clave: "contacto",
-        titulo: "Contacto",
+        titulo: "Contacto / Inversionista",
         movil: "titulo",
         celda: (c) => (
           <div className="flex items-center gap-3">
-            <Avatar name={c.fullName} small />
+            <Avatar name={c.fullName} />
             <div className="grid min-w-0 leading-tight">
-              <strong className="text-[13.5px] font-bold text-foreground truncate">{c.fullName}</strong>
-              <span className="text-[11.5px] text-muted-foreground truncate">{c.phoneDisplay ?? c.phone ?? c.email ?? "—"}</span>
+              <strong className="text-[14px] font-bold text-foreground truncate">{c.fullName}</strong>
+              <span className="text-[13px] text-muted-foreground truncate">
+                {c.phoneDisplay ?? c.phone ?? c.email ?? "Sin teléfono ni correo"}
+              </span>
             </div>
           </div>
         ),
@@ -100,20 +132,23 @@ export function ContactosVista({
       },
       {
         clave: "canal",
-        titulo: "Canal",
-        celda: (c) => (
-          <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2 py-0.5 text-[11.5px] font-medium text-muted-foreground border border-border/40">
-            {c.sourceName ?? "Directo"}
-          </span>
-        ),
+        titulo: "Canal de captación",
+        celda: (c) => <CanalChip nombre={c.sourceName} />,
         valor: (c) => c.sourceName ?? "",
       },
       {
         clave: "broker",
-        titulo: "Broker Asignado",
+        titulo: "Asesor Patrimonial",
         celda: (c) => (
-          <span className="text-[12.5px] font-medium text-foreground">
-            {c.brokerName ?? "Sin asignar"}
+          <span className="text-[13.5px] font-medium text-foreground flex items-center gap-1.5">
+            {c.brokerName ? (
+              <>
+                <UserCheck className="size-4 text-navy-800 shrink-0" />
+                <span>{c.brokerName}</span>
+              </>
+            ) : (
+              <span className="text-muted-foreground italic font-normal text-[13px]">Sin asignar</span>
+            )}
           </span>
         ),
         valor: (c) => c.brokerName ?? "",
@@ -124,8 +159,14 @@ export function ContactosVista({
         titulo: "Última Interacción",
         movil: "subtitulo",
         celda: (c) => (
-          <span className="text-[12px] text-muted-foreground">
-            {c.lastInteractionAt ? new Date(c.lastInteractionAt).toLocaleDateString("es-DO") : "Sin registrar"}
+          <span className="text-[13px] text-muted-foreground font-medium">
+            {c.lastInteractionAt
+              ? new Date(c.lastInteractionAt).toLocaleDateString("es-DO", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : "Sin interacciones"}
           </span>
         ),
         valor: (c) => (c.lastInteractionAt ? new Date(c.lastInteractionAt).getTime() : 0),
@@ -133,33 +174,49 @@ export function ContactosVista({
       },
       {
         clave: "acciones",
-        titulo: "Contacto",
+        titulo: "Contacto directo",
         alinear: "derecha",
         celda: (c) => {
           const phone = c.phone;
           const clean = phone ? phone.replace(/\D/g, "") : null;
+          const whatsappUrl = clean
+            ? `https://wa.me/${clean}?text=${encodeURIComponent(
+                `Hola ${c.fullName}, le escribo de Quisqueya Home Private Desk respecto a su portafolio inmobiliario y proyectos de interés en República Dominicana.`
+              )}`
+            : null;
+
           return (
-            <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
-              {clean && (
+            <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+              {whatsappUrl && (
                 <a
-                  href={`https://wa.me/${clean}?text=${encodeURIComponent(
-                    `Hola ${c.fullName}, le escribo de Quisqueya Home respecto a su portafolio inmobiliario.`
-                  )}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  title={`WhatsApp con ${c.fullName}`}
-                  className="inline-flex size-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-300 transition-colors shadow-2xs"
+                  aria-label={`WhatsApp con ${c.fullName}`}
+                  title={`WhatsApp directo con ${c.fullName}`}
+                  className="inline-flex size-12 min-h-12 min-w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800 border border-emerald-300 transition-colors shadow-2xs focus-visible:outline-2 focus-visible:outline-gold-700"
                 >
-                  <MessageSquare size={13} />
+                  <MessageSquare className="size-5" />
                 </a>
               )}
               {clean && (
                 <a
                   href={`tel:${clean}`}
+                  aria-label={`Llamar a ${c.fullName}`}
                   title={`Llamar a ${c.fullName}`}
-                  className="inline-flex size-7 items-center justify-center rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border transition-colors shadow-2xs"
+                  className="inline-flex size-12 min-h-12 min-w-12 items-center justify-center rounded-xl bg-surface text-navy-950 hover:bg-surface-alt border border-line transition-colors shadow-2xs focus-visible:outline-2 focus-visible:outline-gold-700"
                 >
-                  <Phone size={13} />
+                  <Phone className="size-5" />
+                </a>
+              )}
+              {c.email && (
+                <a
+                  href={`mailto:${c.email}?subject=${encodeURIComponent("Quisqueya Home Private Desk — Asesoría Patrimonial")}`}
+                  aria-label={`Enviar correo a ${c.fullName}`}
+                  title={`Enviar correo a ${c.fullName}`}
+                  className="inline-flex size-12 min-h-12 min-w-12 items-center justify-center rounded-xl bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-300 transition-colors shadow-2xs focus-visible:outline-2 focus-visible:outline-gold-700"
+                >
+                  <Mail className="size-5" />
                 </a>
               )}
             </div>
@@ -173,39 +230,72 @@ export function ContactosVista({
   return (
     <>
       <PageHeader
-        eyebrow="Relación"
-        title="Contactos"
-        subtitle="Historial consolidado de clientes y proyectos de interés."
+        eyebrow="Private Desk · Directorio"
+        title="Directorio de Contactos"
+        subtitle="Relación patrimonial consolidada, inversionistas, clientes calificados e historial 360."
         action={
-          <button className="button primary" type="button" onClick={() => setCreando(true)}>
-            Nuevo contacto
+          <button
+            type="button"
+            onClick={() => setCreando(true)}
+            className="min-h-12 px-5 inline-flex items-center gap-2.5 rounded-xl bg-navy-950 hover:bg-navy-900 text-white text-[13.5px] font-bold shadow-sm transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
+          >
+            <Plus className="size-4 text-gold-500" />
+            <span>Nuevo contacto</span>
           </button>
         }
       />
-      <div className="filter-bar">
-        <input
-          type="search"
-          placeholder="Buscar por nombre, teléfono o correo…"
-          defaultValue={filtros.q}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              irCon({ q: event.currentTarget.value.trim() || undefined, page: undefined, contacto: undefined });
-            }
-          }}
-        />
-        <select
-          value={filtros.sourceId ?? ""}
-          onChange={(event) => irCon({ source_id: event.target.value || undefined, page: undefined })}
-        >
-          <option value="">Todos los canales</option>
-          {canales.map((canal) => (
-            <option key={canal.id} value={canal.id}>
-              {canal.name}
-            </option>
-          ))}
-        </select>
-        <span>{total} contactos</span>
+
+      {/* Franja de búsqueda y filtros ejecutivos */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-surface border border-line rounded-xl mb-4 shadow-xs">
+        <div className="flex items-center gap-2 flex-1 min-w-[280px] max-w-md">
+          <div className="relative flex items-center w-full">
+            <Search className="absolute left-3.5 size-4 text-muted pointer-events-none" />
+            <input
+              type="search"
+              placeholder="Buscar por nombre, teléfono o correo…"
+              defaultValue={filtros.q}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  irCon({ q: event.currentTarget.value.trim() || undefined, page: undefined, contacto: undefined });
+                }
+              }}
+              className="w-full min-h-12 pl-10 pr-3.5 text-[13.5px] bg-surface border border-input-line rounded-lg text-ink placeholder:text-muted focus:outline-none focus:border-gold-700 focus:ring-2 focus:ring-gold-700/20 transition-all"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <select
+            aria-label="Filtrar por canal"
+            value={filtros.sourceId ?? ""}
+            onChange={(event) => irCon({ source_id: event.target.value || undefined, page: undefined })}
+            className="min-h-12 px-3.5 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer"
+          >
+            <option value="">Todos los canales</option>
+            {canales.map((canal) => (
+              <option key={canal.id} value={canal.id}>
+                {canal.name}
+              </option>
+            ))}
+          </select>
+
+          {hayFiltro && (
+            <button
+              type="button"
+              onClick={() => irCon({ q: undefined, source_id: undefined, page: undefined })}
+              className="min-h-12 px-4 inline-flex items-center gap-2 text-[13.5px] font-semibold text-ink-muted hover:text-ink bg-surface border border-input-line rounded-lg transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
+            >
+              <X className="size-4" />
+              <span>Limpiar filtros</span>
+            </button>
+          )}
+
+          <span className="inline-flex items-center px-3.5 py-2 rounded-full bg-gold-100 text-gold-900 text-[13px] font-bold tabular-nums border border-gold-300/60 ml-1">
+            {total} contactos registrados
+          </span>
+        </div>
       </div>
+
       <div className={contactoSeleccionado ? "split-view inspector-open" : "split-view"}>
         <div className="table-wrap">
           <DataTable
@@ -215,7 +305,7 @@ export function ContactosVista({
             activa={contactoSeleccionado ? String(contactoSeleccionado.id) : null}
             onAbrir={(c) => irCon({ contacto: String(c.id) })}
             porPagina={tamanioPagina}
-            etiqueta="Listado de contactos"
+            etiqueta="Directorio de contactos patrimoniales"
             vacio={{
               titulo: hayFiltro ? "Sin contactos para este filtro" : "Sin contactos todavía",
               cuerpo: hayFiltro
@@ -224,20 +314,20 @@ export function ContactosVista({
             }}
           />
           {totalPaginas > 1 && (
-            <div className="form-actions" style={{ justifyContent: "space-between", padding: "12px 4px 0" }}>
+            <div className="form-actions" style={{ justifyContent: "space-between", padding: "16px 8px 0" }}>
               <button
-                className="button"
+                className="button min-h-12 px-4 text-[13.5px]"
                 type="button"
                 disabled={pagina <= 1}
                 onClick={() => irCon({ page: String(pagina - 1) })}
               >
                 Anterior
               </button>
-              <span className="text-xs font-semibold text-muted-foreground tabular-nums">
+              <span className="text-[13px] font-semibold text-muted-foreground tabular-nums">
                 Página {pagina} de {totalPaginas}
               </span>
               <button
-                className="button"
+                className="button min-h-12 px-4 text-[13.5px]"
                 type="button"
                 disabled={pagina >= totalPaginas}
                 onClick={() => irCon({ page: String(pagina + 1) })}
@@ -266,9 +356,7 @@ export function ContactosVista({
 }
 
 /**
- * Alta de contacto, con el 409 de duplicados de la decisión #19: si el
- * servidor devuelve candidatos, se muestran y se ofrece "Crear de todas
- * formas" (`crear_igual: true`) en vez de reintentar a ciegas.
+ * Alta de contacto, con el 409 de duplicados de la decisión #19.
  */
 function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: () => void }) {
   const router = useRouter();
@@ -329,15 +417,27 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
   }
 
   return (
-    <div className="modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <section className="modal" role="dialog" aria-modal="true" aria-labelledby="nuevo-contacto-title" ref={modalRef}>
-        <div className="drawer-head">
-          <h2 id="nuevo-contacto-title">Nuevo contacto</h2>
-          <button className="icon-button" onClick={onClose} aria-label="Cerrar">
-            <X size={18} />
+    <div
+      className="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 backdrop-blur-xs p-4 animate-in fade-in"
+      role="presentation"
+      onMouseDown={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <section
+        className="modal bg-surface border border-line rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in zoom-in-95 duration-200 outline-none"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="nuevo-contacto-title"
+        ref={modalRef}
+      >
+        <div className="drawer-head flex items-center justify-between px-6 py-4 border-b border-line bg-surface-alt">
+          <h2 id="nuevo-contacto-title" className="font-heading font-bold text-lg text-navy-950 m-0">
+            Nuevo contacto patrimonial
+          </h2>
+          <button className="icon-button min-h-12 min-w-12 size-12" onClick={onClose} aria-label="Cerrar">
+            <X size={20} />
           </button>
         </div>
-        <form className="form-grid" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
+        <form className="form-grid p-6" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
           {errorRed && (
             <div className="span-2">
               <AlertaErrorFormulario
@@ -347,24 +447,41 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
               />
             </div>
           )}
-          <label className="span-2">
+          <label className="span-2 text-[13.5px] font-semibold text-ink">
             Nombre completo
-            <input name="fullName" required autoFocus />
-            {errores.fullName && <small style={{ color: "#b42318" }}>{errores.fullName}</small>}
+            <input
+              name="fullName"
+              required
+              autoFocus
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700"
+            />
+            {errores.fullName && <small className="text-[13px] text-danger">{errores.fullName}</small>}
           </label>
-          <label>
+          <label className="text-[13.5px] font-semibold text-ink">
             Teléfono
-            <input name="phone" placeholder="809-555-0184" />
-            {errores.phone && <small style={{ color: "#b42318" }}>{errores.phone}</small>}
+            <input
+              name="phone"
+              placeholder="809-555-0184"
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700"
+            />
+            {errores.phone && <small className="text-[13px] text-danger">{errores.phone}</small>}
           </label>
-          <label>
+          <label className="text-[13.5px] font-semibold text-ink">
             Correo
-            <input name="email" type="email" />
-            {errores.email && <small style={{ color: "#b42318" }}>{errores.email}</small>}
+            <input
+              name="email"
+              type="email"
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700"
+            />
+            {errores.email && <small className="text-[13px] text-danger">{errores.email}</small>}
           </label>
-          <label className="span-2">
+          <label className="span-2 text-[13.5px] font-semibold text-ink">
             Canal
-            <select name="sourceId" defaultValue="">
+            <select
+              name="sourceId"
+              defaultValue=""
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700 cursor-pointer"
+            >
               <option value="">Sin especificar</option>
               {canales.map((canal) => (
                 <option key={canal.id} value={canal.id}>
@@ -373,33 +490,51 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
               ))}
             </select>
           </label>
-          <label className="span-2">
+          <label className="span-2 text-[13.5px] font-semibold text-ink">
             Notas
-            <textarea name="notes" />
+            <textarea
+              name="notes"
+              className="min-h-24 w-full rounded-xl border border-input-line bg-surface p-3 text-[13.5px] text-ink focus-visible:outline-2 focus-visible:outline-gold-700"
+              placeholder="Detalles sobre perfil del cliente o proyectos de interés..."
+            />
           </label>
-          {errores._ && <small style={{ color: "#b42318" }}>{errores._}</small>}
+          {errores._ && <small className="text-[13px] text-danger">{errores._}</small>}
 
           {candidatos && (
-            <div className="span-2 permission-note" role="alert">
+            <div className="span-2 permission-note text-[13px]" role="alert">
               <strong>Ya existe un contacto parecido</strong>
-              <ul>
+              <ul className="my-2">
                 {candidatos.map((candidato) => (
-                  <li key={candidato.id}>
+                  <li key={candidato.id} className="text-[13px]">
                     {candidato.fullName} — {candidato.phoneDisplay ?? "sin teléfono"} — {candidato.email ?? "sin correo"}
                   </li>
                 ))}
               </ul>
-              <button className="button primary" type="button" disabled={enviando} onClick={() => void enviar(true)}>
+              <button
+                className="button primary min-h-12 px-5 text-[13.5px]"
+                type="button"
+                disabled={enviando}
+                onClick={() => void enviar(true)}
+              >
                 Crear de todas formas
               </button>
             </div>
           )}
 
-          <div className="form-actions">
-            <button className="button" type="button" onClick={onClose} disabled={enviando}>
+          <div className="form-actions span-2 pt-2">
+            <button
+              className="button min-h-12 px-5 text-[13.5px]"
+              type="button"
+              onClick={onClose}
+              disabled={enviando}
+            >
               Cancelar
             </button>
-            <button className="button primary" type="submit" disabled={enviando}>
+            <button
+              className="button primary min-h-12 px-6 text-[13.5px]"
+              type="submit"
+              disabled={enviando}
+            >
               {enviando ? "Creando…" : "Crear contacto"}
             </button>
           </div>

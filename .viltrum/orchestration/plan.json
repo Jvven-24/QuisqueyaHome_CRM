@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "createdAt": "2026-10-03T16:17:55.451259+00:00",
+  "createdAt": "2026-10-14T13:12:26.205617+00:00",
   "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
   "identity": {
     "id": "quisqueyahome-crm",
@@ -13,7 +13,7 @@
     "departamento_activo": "D00",
     "actualizado": "2026-10-03"
   },
-  "goal": "Refactorizacion integral de diseno y arquitectura de QuisqueyaHome CRM bajo estandar Viltrum Studio y sincronizacion Obsidian",
+  "goal": "Implementar frente E1.2 Leads e integrar Timeline enriquecido en Ficha 360 Negocios con perfiles Viltrum",
   "intent": "INTEGRACION",
   "classification": "provisional; confirmar por el asistente con evidencia",
   "phase": "F0",
@@ -212,7 +212,7 @@
       "checksDigest": "bea2332098067db6f73c86c5305c68b8fa4f04f0b8df365ceed5f085965ed995",
       "evidence": [],
       "dependencies": [],
-      "policyDigest": "ee48ae1e432d4517bc082cf22c3a20d82b352e3ea88bde9c599624aa627fb2ee",
+      "policyDigest": "feb1fc9bfc80615e350f8571d780e0c613310f46070b249f0e10a5ea82509688",
       "producerActors": []
     },
     {
@@ -241,7 +241,7 @@
       "checksDigest": "9dbb148ffe4300bc761362d6734e4f0d8cadc2f1beb78ec5fde05b16a7a5ac41",
       "evidence": [],
       "dependencies": [],
-      "policyDigest": "d831d63160ed839f714cadf69f5c50344c0f9bd716a3db6e6272f4b94a4c80e4",
+      "policyDigest": "343b155b2ee7bba40aa1ecd3c8ba590d41dc47e6dbfd28ecab43512a7e3fc72d",
       "producerActors": []
     },
     {
@@ -262,7 +262,6 @@
         "Checklist sin completar",
         "Falta revisión independiente vigente de D03",
         "Falta revisión independiente vigente de D11",
-        "Falta revisión independiente vigente de D21",
         "Falta aprobación de fase vigente por human",
         "Sin aprobación de fase registrada",
         "Una puerta anterior perdió aprobación o está pendiente"
@@ -271,9 +270,18 @@
       "expectedReviewer": "human",
       "checksDigest": "9beac1e8b6df74410018b99bf8b54647bdabd95e01436244139b7ab0d482dd76",
       "evidence": [],
-      "dependencies": [],
-      "policyDigest": "1fe651e6c08197af8a98eda869fd5485e4c70cc29f7386d09e92ce8232edc388",
-      "producerActors": []
+      "dependencies": [
+        {
+          "path": ".viltrum/handoffs/HND-038.json",
+          "sha256": "37126bb81b8f24740b9b34bb1c56932093d1633553923c54a0f1f96bda4a01fb",
+          "kind": "unclassified",
+          "sourceCurrent": true
+        }
+      ],
+      "policyDigest": "9b421a8aacdabf619e7043a02c05e8ae255debf6036a9380ed88773352e6377b",
+      "producerActors": [
+        "codex-d21-research"
+      ]
     },
     {
       "id": "F3",
@@ -291,6 +299,7 @@
       "review": "D14",
       "approved": false,
       "problems": [
+        "Checklist canónica incompleta o duplicada",
         "Checklist sin completar",
         "Falta revisión independiente vigente de D04",
         "Falta revisión independiente vigente de D05",
@@ -305,7 +314,7 @@
       "checksDigest": "edc250dd588c263fd470f40885a6cbe12f0c4e7abd646f8b3a30a9cc70632f69",
       "evidence": [],
       "dependencies": [],
-      "policyDigest": "cbfacf029b67ab34d68e3e570759f331f1dba89e20b4be1a4b5f4f6069ea224f",
+      "policyDigest": "23241c8060ce62a88cf56601f7971a03a902e8055be85bcf9350fa40ebb7ff3c",
       "producerActors": []
     },
     {
@@ -325,8 +334,6 @@
       "problems": [
         "C1 sin aceptación comercial vigente",
         "Checklist sin completar",
-        "Falta revisión independiente vigente de D09",
-        "Falta revisión independiente vigente de D10",
         "Falta revisión independiente vigente de D11",
         "Falta aprobación de fase vigente por human",
         "Sin aprobación de fase registrada",
@@ -336,9 +343,25 @@
       "expectedReviewer": "human",
       "checksDigest": "93c61b869d9517666c89f2a2b9b89c2171ed6f7d2387114aaf3e61c54f7be5cc",
       "evidence": [],
-      "dependencies": [],
-      "policyDigest": "141762c71307a0ad1e8640e2598250df0cb8e316592700796ea2129c852c75cc",
-      "producerActors": []
+      "dependencies": [
+        {
+          "path": ".viltrum/handoffs/HND-042.json",
+          "sha256": "f29e0b8ad9c19a6b3247a37dd81d18921100422f919e6828f393fddf57d44bd7",
+          "kind": "unclassified",
+          "sourceCurrent": true
+        },
+        {
+          "path": ".viltrum/handoffs/HND-043.json",
+          "sha256": "a854f57a26734471349151d4ea14ffa4eb6fbd40331a1067be9332dca97e36a8",
+          "kind": "unclassified",
+          "sourceCurrent": true
+        }
+      ],
+      "policyDigest": "987c345289936a607861b0dd24b3b19671118ca32d3c8ca7241750943b0153c0",
+      "producerActors": [
+        "codex-d09-academy-ui",
+        "codex-d10-academy-backend"
+      ]
     },
     {
       "id": "F5",
@@ -371,7 +394,7 @@
       "checksDigest": "1eb7bda7df95fba40fd8566ddb391611ec18afa4248e3d3823c18b12d9b98fb5",
       "evidence": [],
       "dependencies": [],
-      "policyDigest": "102f00558eed778e90996a886d5ef6163071b9326f182c4064fc0ebcc85a426c",
+      "policyDigest": "7a3356213c061d698e0413be87cbc8164b939fe135cc7230572544c7344ec7ef",
       "producerActors": []
     },
     {
@@ -402,7 +425,7 @@
       "checksDigest": "15b951c7e55740282f8accbafe0bf8df0316cd980f1ea5124e960cce4f8fc7b7",
       "evidence": [],
       "dependencies": [],
-      "policyDigest": "fd082add17ad215fd54a6007aa66a2bc0ba3940429443e3c303bb5749272f8fd",
+      "policyDigest": "f6f1fe4c8103ab1e23254944ac03426e55e35c70e8282f39a0c25f47ee2e2c5d",
       "producerActors": []
     },
     {
@@ -430,7 +453,7 @@
       "checksDigest": "39da74540de1c55d4e56e30836b1a4b248c0c9306255404627967f0c54c7c4cc",
       "evidence": [],
       "dependencies": [],
-      "policyDigest": "cb3baa3029f02a152a595f2f1d12c8ed3fcc83b15442e1216d63904a1117e121",
+      "policyDigest": "fc384906d50dc4ab92e0da9c1ae20f45f6797b04d13ab6832a936e36f7757f99",
       "producerActors": []
     },
     {
@@ -459,7 +482,7 @@
       "checksDigest": "638ea10929f715fec279cafad0395c0468a176606f75f04a1fa3f13ab1afa118",
       "evidence": [],
       "dependencies": [],
-      "policyDigest": "efcb25028f1bb9a05f48234d013d1ef38d6709b482dd484f68802c0bc11ba585",
+      "policyDigest": "26f9f378e906be3d30c706016683e133382065cc328d967a76141ceb18b86f0d",
       "producerActors": []
     }
   ],
@@ -482,6 +505,7 @@
       ".viltrum/phases/F8-mejora.md"
     ],
     "architectureFiles": [
+      "docs/architecture/04-OPEN-SOURCE-LEAP-LEGO-BY-LEGO.md",
       ".viltrum/departments/D00-orchestrator.md",
       ".viltrum/departments/D01-discovery.md",
       ".viltrum/departments/D02-scope.md",

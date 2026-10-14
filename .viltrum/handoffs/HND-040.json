@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "department": "D03",
+  "gate": "G3",
+  "actor": "codex-d03-academy-contract",
+  "createdAt": "2026-10-05T02:43:45.932729+00:00",
+  "state": "review_approved",
+  "reviewer": "human",
+  "summary": {
+    "path": "specs/002-m13-certificacion-local/CORE-0.md",
+    "sha256": "0398fd58181ed091b235bcddebcf488b342b83ee298c6948df3ede0742299931",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": "specs/002-m13-certificacion-local/spec.md",
+      "sha256": "570d44f6299dc7fb5d34b16188c284b10174f2a69d459f3c227a00d9314522dd",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-040",
+  "review": {
+    "reviewer": "human",
+    "actor": "Wilber-De-La-Rosa",
+    "result": "approved",
+    "report": {
+      "path": ".viltrum/reviews/HUMAN-revision-HND-040-CORE-0-2026-10-04.md",
+      "sha256": "dceeb9edb7607ece163cd5fa38a5a0bc5febb0857e913c6da843343947d0cc39",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    },
+    "createdAt": "2026-10-05T02:58:38.336043+00:00"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-ab86210b59004b2491b0de752d79a3af",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D14",
+  "actor": "codex-qa-spec-review",
+  "goal": "Revisión independiente de testabilidad I01 Twenty e I02 Moodle para C1",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T01:44:02.707797+00:00",
+  "updatedAt": "2026-10-05T01:44:58.606838+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T01:44:02.707862+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T01:44:58.606811+00:00",
+      "status": "finished",
+      "message": "Revisión D14 I01/I02 entregada: ambas FAIL para READY, criterios API/DB/UI/6 estados/móvil y bloqueos documentados"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "author": "ravikatiyar162",
+  "description": "OrderStatusCard\nA visually polished and animated card component to display a process timeline, such as an order completion status. It is built to be highly reusable, responsive, and theme-adaptive, leveraging shadcn/ui conventions and framer-motion for smooth animations.",
+  "framework": "",
+  "id": "8597",
+  "metadata": {
+    "author": "ravikatiyar162",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2zMtrqo9RMaaIn4f8F2z3oeY497/avatar.png",
+    "description": "OrderStatusCard\nA visually polished and animated card component to display a process timeline, such as an order completion status. It is built to be highly reusable, responsive, and theme-adaptive, leveraging shadcn/ui conventions and framer-motion for smooth animations.",
+    "id": 8597,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/ravikatiyar162/order-status-card?[REDACTED]",
+    "name": "Order Status Card",
+    "previewUrl": "https://cdn.21st.dev/user_2zMtrqo9RMaaIn4f8F2z3oeY497/order-status-card/default/preview.1786474275688.webp",
+    "type": "component",
+    "url": "https://21st.dev/@ravikatiyar162/components/order-status-card",
+    "videoUrl": "https://cdn.21st.dev/user_2zMtrqo9RMaaIn4f8F2z3oeY497/order-status-card/default/video.1786474279563.mp4"
+  },
+  "name": "Order Status Card",
+  "previewUrl": "https://cdn.21st.dev/user_2zMtrqo9RMaaIn4f8F2z3oeY497/order-status-card/default/preview.1786474275688.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:10.830785+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "4e0c54be2018c8c69120c747718eaf4a105dca71fd45c5d532f5f54f6d464fd9"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@ravikatiyar162/components/order-status-card"
+}

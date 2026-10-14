@@ -1,0 +1,29 @@
+{
+  "author": "ln-dev7",
+  "description": "A two-column responsive image gallery section where each tile displays a title and subtitle caption beneath a gradient thumbnail, used for showcasing product screens or portfolio work.",
+  "framework": "",
+  "id": "26909",
+  "metadata": {
+    "author": "ln-dev7",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ycm1QZE9TdDV6aWZkeGswZVlUOG9QdUxDSjEifQ",
+    "description": "A two-column responsive image gallery section where each tile displays a title and subtitle caption beneath a gradient thumbnail, used for showcasing product screens or portfolio work.",
+    "id": 26909,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/ln-dev7/gallery-02?[REDACTED]",
+    "name": "Gallery Grid with Captions",
+    "previewUrl": "https://cdn.21st.dev/ln-dev7/gallery-02/default/preview.1788991653220-35c1c731-dfe2-4e25-ba61-ddaf09c17cb3.png",
+    "type": "component",
+    "url": "https://21st.dev/@ln-dev7/components/gallery-02",
+    "videoUrl": "https://cdn.21st.dev/ln-dev7/gallery-02/default/video.1788991653220-35c1c731-dfe2-4e25-ba61-ddaf09c17cb3.mp4"
+  },
+  "name": "Gallery Grid with Captions",
+  "previewUrl": "https://cdn.21st.dev/ln-dev7/gallery-02/default/preview.1788991653220-35c1c731-dfe2-4e25-ba61-ddaf09c17cb3.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:55.505375+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "5d5868e75f195899206a74f59dcc3ae6b1ea472d4a1ac542b28623538a04f127"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@ln-dev7/components/gallery-02"
+}

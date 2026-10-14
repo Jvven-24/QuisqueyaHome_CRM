@@ -14,6 +14,15 @@ riesgo: R<n>
 ## Intención
 <Una frase: el resultado que se busca, no la acción.>
 
+## Ejemplos tratados como clase
+- <ejemplo que dio la persona> → <clase completa a la que se aplica>
+
+## Alcance implícito (lo que conlleva)
+- <cosa no dicha que la petición implica: datos, permisos, estados, errores, idioma, accesibilidad, pruebas, operación, legal, reversión…> · entra | se difiere | se pregunta
+
+## Prompt mejorado
+<El encargo completo, escrito como lo habría escrito un ingeniero con experiencia. Esto es lo que se ejecuta.>
+
 ## Hechos verificados
 - <hecho> · evidencia: `ruta/archivo.ext:línea`
 - <hecho> · evidencia: <comando o búsqueda que lo muestra>

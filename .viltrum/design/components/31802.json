@@ -1,0 +1,29 @@
+{
+  "author": "moumensoliman",
+  "description": "A single-input command palette where multi-step commands (like \"Assign to [person] with priority [level]\") collapse into inline argument chips, with fuzzy search ranking and an animated height morph between views.",
+  "framework": "",
+  "id": "31802",
+  "metadata": {
+    "author": "moumensoliman",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zOEcwdmxDdElEYW1OaFJqUmhPWVhXQkU2NHIifQ",
+    "description": "A single-input command palette where multi-step commands (like \"Assign to [person] with priority [level]\") collapse into inline argument chips, with fuzzy search ranking and an animated height morph between views.",
+    "id": 31802,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/moumensoliman/command-palette?[REDACTED]",
+    "name": "Command Palette with Argument Chips",
+    "previewUrl": "https://cdn.21st.dev/moumensoliman/command-palette/default/preview.1790350756334-e165cf3c-3f8a-4bbd-9c5a-3d88dbcd9971.png",
+    "type": "component",
+    "url": "https://21st.dev/@moumensoliman/components/command-palette",
+    "videoUrl": "https://cdn.21st.dev/moumensoliman/command-palette/default/video.1790350756334-e165cf3c-3f8a-4bbd-9c5a-3d88dbcd9971.mp4"
+  },
+  "name": "Command Palette with Argument Chips",
+  "previewUrl": "https://cdn.21st.dev/moumensoliman/command-palette/default/preview.1790350756334-e165cf3c-3f8a-4bbd-9c5a-3d88dbcd9971.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:01.849334+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "734815b6383485fcc826adf6bfe6c746c44c0446f930001438eebc40ea1563c2"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@moumensoliman/components/command-palette"
+}

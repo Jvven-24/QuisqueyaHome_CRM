@@ -122,6 +122,11 @@ Entrego a D09 (implementación de metadatos, schema.org y scripts de analítica 
 consentimiento) y a D02 (revisor, valida que el contenido y los embudos respondan a la
 estrategia real).
 
+En portfolios editoriales, valida que los capítulos, claims, texto alternativo y CTA sigan
+siendo verdaderos y comprensibles con el motion desactivado; referencia revisada por D00
+(HND-012):
+[`core/design-experience-os.md` §9](../../core/design-experience-os.md#portfolio-editorial-motion).
+
 ---
 
 ## Herramientas y skills

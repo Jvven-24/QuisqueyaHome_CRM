@@ -55,6 +55,8 @@
 - [ ] **Éxito** — confirmación específica, estado final visible y persistente
 - [ ] **Permiso insuficiente** — deshabilitado o ausente con razón visible, verificado
       contra el permiso real que devuelve el servidor, nunca una suposición del cliente
+- [ ] **Obligatorio y acción deshabilitada** — cumple R1–R2 de `core/doctrine/ux-states.md`
+      § "Contrato de retroalimentación de acciones y formularios"
 
 ## E. Accesibilidad técnica
 

@@ -1,5 +1,8 @@
 # D08 — Registro de cambios
 
+## Integración aprobada — 2026-10-07 (revisión D00 HND-012)
+- Guía fuente canónica aprobada; D08 verifica claims, capítulos, texto alternativo y CTA de portfolios editoriales sin depender del movimiento.
+
 Formato basado en Keep a Changelog. Versiones según SemVer 2.0.0: mayor cambia el
 contrato de entrada o salida, menor añade checklist o procedimiento, parche corrige.
 

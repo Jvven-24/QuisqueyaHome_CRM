@@ -28,7 +28,7 @@ skills:
   diagramas_de_arquitectura_e_incidentes: artifact-diagramming
   dashboards_de_slo_y_error: dataviz
   revision_de_seguridad_de_telemetria: security-review
-  rastrear_origen_de_errores_en_codigo: gitnexus-exploring
+  rastrear_origen_de_errores_en_codigo: viltrum-repo-map
 
 subagents:
   can_create: true

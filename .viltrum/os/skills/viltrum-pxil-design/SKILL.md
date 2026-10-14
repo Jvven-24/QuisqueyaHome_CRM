@@ -17,10 +17,14 @@ Esto es metodología disponible, no entrenamiento de pesos ni acceso acreditado 
 3. D04 define tareas/recorridos y pantallas. D06 define estados y transiciones; D08 el feedback.
    Para cada pantalla cubrir inicial, carga, vacío, parcial, error, offline, éxito y sin permiso;
    añadir conflicto/cancelación cuando apliquen. Registrar explícitamente los no aplicables.
-4. D05 revisa biblioteca propia primero. Después usa CLI/MCP oficial de 21st:
-   `npx @21st-dev/cli search "necesidad concreta" --context auto` y `get ID --json`.
-   Registrar autor, URL, dependencias, licencia/procedencia y adaptación al stack.
-   No scraping, publicación automática, entrenamiento con el catálogo ni compras implícitas.
+4. D05 inspecciona primero PXIL y las bibliotecas/componentes existentes del proyecto,
+   abriendo y reutilizando el código desde su ruta local cuando cubra la necesidad. No
+   requiere registry CLI ni instalar herramientas para esa inspección. Solo si PXIL/local
+   no cubre la necesidad y el proyecto autoriza explícitamente la búsqueda externa, usar
+   CLI/MCP oficial de 21st: `npx @21st-dev/cli search "necesidad concreta" --context auto`
+   y `get ID --json`. Registrar autor, URL, dependencias, licencia/procedencia y adaptación
+   al stack. No scraping, publicación automática, entrenamiento con el catálogo ni compras
+   implícitas.
 5. Preparar tokens semánticos y Screen Recipe: jerarquía, datos, componentes, puntos de corte,
    estados, acción/permisos/feedback/auditoría/recuperación y aceptación por pantalla.
 6. D07 revisa semántica, contraste, foco, teclado, zoom y movimiento reducido.
@@ -39,6 +43,44 @@ Esto es metodología disponible, no entrenamiento de pesos ni acceso acreditado 
 - El `traceability-linter.js` original solo imprime éxito: NO usarlo como evidencia.
 - Gates PXIL se nombran `PXIL-G0` … `PXIL-G8`; nunca equivalen automáticamente a gates Viltrum.
 
+## Open Design: puente de contexto, no import de runtime
+
+Open Design entrega contexto de diseño a PXIL —prompts, tokens, fixtures e índice de
+fuentes—; no instala ni importa componentes en el runtime del producto. El flujo por
+defecto inspecciona primero el componente PXIL/local desde su ruta de código fuente y lo
+reutiliza directamente si satisface el contrato. El perfil que implementa debe abrir e
+inspeccionar ese código y verificarlo en el stack destino.
+
+Antes de instalar una CLI para descubrir componentes, inspeccionar primero las fuentes
+locales disponibles: biblioteca Viltrum/PXIL, componentes del proyecto y ejemplos que se
+puedan abrir y revisar. Instalar una herramienta solo si una necesidad concreta sigue
+sin resolverse y el flujo del proyecto lo autoriza. La disponibilidad de una galería o un
+paquete de contexto no prueba que su código sea compatible ni ejecutable en la aplicación.
+
+Un paquete reutilizable debe incluir un fixture real que renderice el componente desde su
+fuente, además de un índice que permita localizar y auditar esa fuente. Un índice
+metadata-only describe candidatos pero no contiene ni demuestra un fixture ejecutable, el
+código fuente o la integración con el runtime. Cada entrada del
+índice registra como mínimo ruta y revisión del código fuente, framework, dependencias,
+licencia y procedencia, compatibilidad con el stack destino y evidencia QA. QA identifica
+viewport(s), estados cubiertos, resultado de build/test y revisión relevante de teclado,
+contraste y movimiento reducido. El fixture debe enlazar a la entrada del índice; una
+imagen de referencia o una maqueta sintética no sustituye ese fixture.
+
+La adopción, incluida la reutilización entre proyectos, requiere licencia/procedencia
+verificadas y compatibilidad confirmada entre framework, dependencias y stack destino para
+el uso previsto. Si cualquiera de ellas sigue sin resolver, el ingrediente queda
+`reference-only`: puede orientar composición y evaluación, pero no copiarse, adaptarse,
+instalarse ni incorporarse al producto hasta resolverlo. No completar metadatos por
+suposición.
+
+Informar por separado el estado del servicio y el de la experiencia: `listening` solo
+significa que el daemon abrió su socket; `api_verified` exige una respuesta válida del
+endpoint esperado; `app_verified` exige comprobar la aplicación o flujo objetivo. Guardar
+URL, endpoint/flujo, resultado y hora de la verificación. Un proceso activo, una respuesta
+de health o una galería preparada no acreditan por sí solos que la API y la app estén
+verificadas.
+
 ## Salida y revisión
 
 Entregar contrato, inventario de componentes, matriz de estados, trazabilidad y evidencia por ancho.
@@ -50,8 +92,10 @@ Conservar pendientes, fuentes sintéticas y limitaciones; no producir aprobacion
 Cuando se comparan candidatos o se rediseña una interfaz, D00 asigna responsabilidades
 separadas. Utilizar subagentes del host realmente disponibles; no inventar agentes activos.
 
-1. **D21 / scout:** buscar en biblioteca propia y 21st por CLI/MCP; reducir a 2–3 candidatos
-   compatibles con la Screen Recipe. Entregar IDs, URL, dependencias y motivo de selección.
+1. **D21 / scout:** inspeccionar primero componentes PXIL/locales por ruta de fuente y
+   reducir a 2–3 candidatos compatibles con la Screen Recipe. Usar 21st por CLI/MCP solo
+   como fallback cuando lo local no cubra la necesidad y exista autorización explícita del
+   proyecto. Entregar IDs, fuente, URL cuando aplique, dependencias y motivo de selección.
 2. **D05 / captura visual:** abrir previews oficiales en pestañas propias y tomar capturas
    del shell/componente y de sus estados visibles. Guardar viewport, fecha, fuente y SHA256.
    Si se modifica un viewport compartido, coordinar y restaurarlo. No scraping masivo.
@@ -83,11 +127,12 @@ viltrum design PROJECT capture --id ID --file preview.png --actor ACTOR --kind p
 viltrum design PROJECT prepare --brief-id ID
 ```
 
-La búsqueda y adquisición consultan la biblioteca por interfaces GET de solo lectura y la
-CLI oficial de 21st; `acquire` guarda el resultado como texto en `.viltrum/design/`, que no
-se ejecuta. Si se recibe un archivo JSON de resultados en vez de una consulta en vivo, usar
-`import-search --file resultados.json`. Ejecutar búsqueda, adquisición y captura únicamente
-para los candidatos pertinentes a cada pantalla; no rastrear el catálogo en masa.
+La búsqueda local consulta interfaces GET de solo lectura; `acquire` guarda el resultado
+como texto en `.viltrum/design/`, que no se ejecuta. La consulta externa a 21st por CLI/MCP
+es únicamente un fallback si PXIL/local no cubre la necesidad y el proyecto la autoriza
+explícitamente. Si se recibe un archivo JSON de resultados en vez de una consulta en vivo,
+usar `import-search --file resultados.json`. Ejecutar búsqueda, adquisición y captura
+únicamente para candidatos pertinentes; no rastrear el catálogo en masa.
 
 Responsabilidades: D21 reduce candidatos y registra procedencia; D05 captura previews
 oficiales y prepara la comparación; D06 contrasta datos, estados y eventos con la receta;
@@ -97,8 +142,9 @@ para el alcance expresamente revisado. `prepare` produce un plan lexical de hand
 las pantallas, no una decisión de calidad, gate, mandato ni C1. La consola presenta el
 estado/evidencia existente y no acredita por sí sola que un perfil ejecutó el flujo.
 
-El selector local determinista es la ruta gratuita por defecto. Un ranking remoto tipo Jev
-puede proponerse después como opción, solo sobre candidatos ya filtrados y mediante una
-integración verificada; no se presupone endpoint, soporte de imágenes ni credencial/API.
+El selector local determinista y la inspección directa del código PXIL/proyecto son la ruta
+por defecto. Un ranking remoto tipo Jev puede proponerse después como opción, solo sobre
+candidatos ya filtrados y mediante una integración verificada; no se presupone endpoint,
+soporte de imágenes ni credencial/API.
 Toda pantalla mantiene selección humana y evidencia visual comparable. No enviar capturas
 ni contenido privado a servicios externos sin autorización específica.

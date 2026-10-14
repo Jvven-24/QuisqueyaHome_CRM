@@ -1,0 +1,36 @@
+{
+  "acquired": true,
+  "acquiredAt": "2026-10-04T22:48:02.842601+00:00",
+  "author": "eldoraui",
+  "codeSha256": "30855e131993a7cbe8cb43bba1166985b9a75c25dd9bbdb6fbb2e58cd43133e8",
+  "demoSha256": "a8c441026b7d0b652a9cc4b3e45287e469cef6b23c337fbaef035254cb9db0d8",
+  "description": "An animated map graphic with bouncing avatar location markers that appear on hover, useful for team/location or \"who's online\" style sections.",
+  "framework": "",
+  "id": "27503",
+  "metadata": {
+    "author": "eldoraui",
+    "authorImage": "https://www.google.com/s2/favicons?domain=eldoraui.site&sz=128",
+    "description": "An animated map graphic with bouncing avatar location markers that appear on hover, useful for team/location or \"who's online\" style sections.",
+    "id": 27503,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/eldoraui/map?[REDACTED]",
+    "name": "Animated Map",
+    "previewUrl": "https://cdn.21st.dev/eldoraui/map/default/preview.1789773008804-0c80b367-522d-4e9c-bacf-b8511e929b58.png",
+    "type": "component",
+    "url": "https://21st.dev/@eldoraui/components/map",
+    "videoUrl": "https://cdn.21st.dev/eldoraui/map/default/video.1789773008804-0c80b367-522d-4e9c-bacf-b8511e929b58.mp4"
+  },
+  "name": "Animated Map",
+  "previewUrl": "https://cdn.21st.dev/eldoraui/map/default/preview.1789773008804-0c80b367-522d-4e9c-bacf-b8511e929b58.png",
+  "provenance": {
+    "acquiredAt": "2026-10-04T22:48:02.842790+00:00",
+    "getSourceFile": "response.json",
+    "getSourceSha256": "ae8065ef13c30b8ed4c7e32aa5c9c0e48aba92cd8710aa72936d955d4d39feb9",
+    "importedAt": "2026-10-04T22:47:31.885316+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "10301f6225d9265c01a686de8cdd24644b354d16041fcfedfc524907d54adf3f"
+  },
+  "source": "21st",
+  "status": "code_acquired",
+  "tags": [],
+  "url": "https://21st.dev/@eldoraui/components/map"
+}

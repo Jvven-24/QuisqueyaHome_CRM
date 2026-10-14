@@ -1,0 +1,29 @@
+{
+  "author": "bundui",
+  "description": "A scrollable content area placed inside a slide-out sheet, ideal for showing long text such as a privacy policy without overflowing the panel.",
+  "framework": "",
+  "id": "19212",
+  "metadata": {
+    "author": "bundui",
+    "authorImage": "https://shadcnuikit.com/logo.png",
+    "description": "A scrollable content area placed inside a slide-out sheet, ideal for showing long text such as a privacy policy without overflowing the panel.",
+    "id": 19212,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/bundui/scroll-area2?[REDACTED]",
+    "name": "Scroll Area with Sheet",
+    "previewUrl": "https://cdn.21st.dev/bundui/scroll-area2/default/preview.1783712813477.png",
+    "type": "component",
+    "url": "https://21st.dev/@bundui/components/scroll-area2",
+    "videoUrl": "https://cdn.21st.dev/bundui/scroll-area2/default/video.1783712813477.mp4"
+  },
+  "name": "Scroll Area with Sheet",
+  "previewUrl": "https://cdn.21st.dev/bundui/scroll-area2/default/preview.1783712813477.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:52.070912+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "0397cdb3c97d0e03935cc11c066cbd7726aa97cfe74142365b7048b1785d69f7"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@bundui/components/scroll-area2"
+}

@@ -1,0 +1,28 @@
+{
+  "author": "larsen66",
+  "description": "A creative portfolio boilerplate featuring projects, blog, and gallery with SEO optimization.",
+  "framework": "",
+  "id": "337",
+  "metadata": {
+    "author": "larsen66",
+    "authorImage": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/users/user_2wdgsmfD3BNOOm4oOqUDUS9IXZI/avatar.jpeg",
+    "description": "A creative portfolio boilerplate featuring projects, blog, and gallery with SEO optimization.",
+    "id": 337,
+    "name": "Magic Portfolio for Next.js",
+    "previewUrl": "https://vucvdpamtrjkzmubwlts.supabase.co/storage/v1/object/public/templates/user_2nElBLvklOKlAURm6W1PTu6yYFh/magic-portfolio-for-next-js/preview.jpg",
+    "price": 0,
+    "type": "template",
+    "url": "https://21st.dev/community/templates/magic-portfolio-for-next-js"
+  },
+  "name": "Magic Portfolio for Next.js",
+  "previewUrl": null,
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:55.516980+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "5d5868e75f195899206a74f59dcc3ae6b1ea472d4a1ac542b28623538a04f127"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/community/templates/magic-portfolio-for-next-js"
+}

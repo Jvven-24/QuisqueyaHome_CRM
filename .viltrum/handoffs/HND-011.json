@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D09",
+  "gate": "G4",
+  "actor": "codex-gpt-6.1-sol-d09",
+  "createdAt": "2026-10-03T22:49:05.828715+00:00",
+  "state": "review_pending",
+  "reviewer": "D14",
+  "summary": {
+    "path": ".viltrum/crm-ux/D09-afinado-fase1.md",
+    "sha256": "2836180fe990fe754ad2cff0afb67ddf429b7f2847997b2d378233ba8bc432cc",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261003T223136Z-D09-codex/evidence.json",
+      "sha256": "987f1e97292a349f89b901d3e388dc74546f1fbfe84a6755311259aee44cde93",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-011"
+}

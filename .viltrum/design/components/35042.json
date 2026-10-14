@@ -1,0 +1,29 @@
+{
+  "author": "kuratlielia",
+  "description": "A row of selectable filter chips for narrowing a list by facets like topics, statuses, or tags, with an animated check and a \"+N more\" overflow for long sets.",
+  "framework": "",
+  "id": "35042",
+  "metadata": {
+    "author": "kuratlielia",
+    "authorImage": "https://avatars.githubusercontent.com/u/82137127?v=4",
+    "description": "A row of selectable filter chips for narrowing a list by facets like topics, statuses, or tags, with an animated check and a \"+N more\" overflow for long sets.",
+    "id": 35042,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/kuratlielia/chip-group?[REDACTED]",
+    "name": "Chip Group",
+    "previewUrl": "https://cdn.21st.dev/user_registry_kuratlielia_1790903117010/chip-group/default/preview.1790978073493.webp",
+    "type": "component",
+    "url": "https://21st.dev/@kuratlielia/components/chip-group",
+    "videoUrl": "https://cdn.21st.dev/user_registry_kuratlielia_1790903117010/chip-group/default/video.1790978068976.mp4"
+  },
+  "name": "Chip Group",
+  "previewUrl": "https://cdn.21st.dev/user_registry_kuratlielia_1790903117010/chip-group/default/preview.1790978073493.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:48.909096+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "e189222e8f62d9d6805c696a79c855140dc0156440b7cccff4fb599175bdec1b"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@kuratlielia/components/chip-group"
+}

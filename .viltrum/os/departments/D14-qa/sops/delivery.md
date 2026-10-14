@@ -26,6 +26,20 @@ Usa datos sintéticos y cuentas separadas por rol/tenant. Aísla cada prueba, pr
 6. Integra las suites aplicables en CI y registra build, browser, SO, datos, pasos y resultado. Un E2E sobre toast provisional no confirma negocio; consulta estado final autorizado.
 7. Usa charters acotados para riesgos poco modelados. Reintentos limitados son evidencia de flakiness, no cura; muestra primer fallo y éxito posterior. Una cuarentena necesita dueño, razón, fecha y cobertura alternativa.
 
+## Evidencia visual y compatibilidad
+
+Cada captura o grabación de un caso visual registra: ID de caso/requisito, ruta y estado, resultado esperado/real, fecha, viewport, navegador y versión, SO, artefacto y ubicación, y redacciones aplicadas. Adjunta el SHA del commit, ID/enlace del build y ejecución que la produjo; vincula la evidencia a la revisión independiente de D00 (ID/enlace y estado). No marques como revisada una evidencia sin esa referencia; datos de entorno no comprobados quedan `(no verificado)`. No incluyas tokens ni datos personales.
+
+Prioriza la matriz de compatibilidad usando navegadores, dispositivos y breakpoints acordados por D01/D05 para el producto; no presupongas soporte sin ese acuerdo. Registra por combinación: prioridad, navegador/versión, SO/dispositivo, viewport, flujo/estados cubiertos, build/commit, resultado, evidencia y revisión D00.
+
+| Prioridad | Cobertura mínima |
+|---|---|
+| P0 | Recorridos críticos y límites de permiso/datos en cada combinación objetivo de mayor uso; estados de error y éxito incluidos. |
+| P1 | Resto de combinaciones objetivo y regresión visual de pantallas críticas. |
+| P2 | Combinaciones secundarias acordadas y pantallas de menor riesgo; registrar exclusiones y motivo. |
+
+La combinación concreta y su orden se acuerdan con D01/D05 según usuarios y riesgo; si faltan, quedan pendientes `(no verificado)`. Una captura aislada no acredita compatibilidad de otras combinaciones.
+
 ## Defectos y G5
 
 Cada bug tiene esperado vinculado a requisito, reproducción precisa, frecuencia, entorno/build, dato sintético y evidencia; la severidad usa core/evidence-contract. Corrección del producto va a su dueño, regresión nueva al nivel del fallo. Reproduce antes/después y conserva evidencia; D14 no acepta por sí mismo el riesgo residual ni firma G5. D12 recibe seguridad y D15 rendimiento.
@@ -36,7 +50,7 @@ Entrega a D00 la cobertura crítica, reportes, estados verificados, hallazgos y 
 
 ## Herramientas, repositorios y límites
 
-Consulta primero herramientas instaladas/accesos del proyecto. Una fuente oficial o skill registrada no concede conexión, credenciales, licencia ni instalación. GitNexus/Context7, si están disponibles, ayudan a localizar símbolos y documentación: corroborar contra commit y versión usada; no prueban comportamiento runtime. Mantén comandos de ejecución dentro del alcance del manifest/mandato y deja lo inaccesible como pendiente con dueño.
+Consulta primero herramientas instaladas/accesos del proyecto. Una fuente oficial o skill registrada no concede conexión, credenciales, licencia ni instalación. `viltrum repo-*` (mapa de repositorio) y Context7, si está disponible, ayudan a localizar símbolos y documentación: corroborar contra commit y versión usada; no prueban comportamiento runtime. Mantén comandos de ejecución dentro del alcance del manifest/mandato y deja lo inaccesible como pendiente con dueño.
 
 Los subagentes en delivery.json son tareas opcionales: activa solo si hay trabajo independiente, presupuesto y autorización de delegación. Reciben contrato, artefactos mínimos y herramientas necesarias; no heredan secretos ni privilegios de producción. Su salida no sustituye al revisor canónico. Reporta estado real (no ejecutado, bloqueado, verificado o pendiente de revisión) y no declarar certificación/100% de cobertura por haber escrito instrucciones.
 

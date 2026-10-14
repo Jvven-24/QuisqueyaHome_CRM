@@ -1,0 +1,9 @@
+import { Table20 } from "@/components/ui/table-20";
+
+export default function Default() {
+  return (
+    <div className="flex min-h-[420px] w-full items-center justify-center p-6">
+      <Table20 />
+    </div>
+  );
+}

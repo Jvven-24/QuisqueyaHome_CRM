@@ -17,7 +17,7 @@
 - [ ] El historial completo de la conversación anterior no está incluido
 - [ ] Documentos de otros departamentos no relacionados con esta fase, excluidos
 - [ ] Transcripciones sin procesar, excluidas — solo las decisiones extraídas
-- [ ] El árbol completo del repositorio no se cargó; se referencia el índice de `gitnexus`
+- [ ] El árbol completo del repositorio no se cargó; se referencia `repo-inventory`/`repo-pack`
 
 ## C. Resumen ejecutivo
 

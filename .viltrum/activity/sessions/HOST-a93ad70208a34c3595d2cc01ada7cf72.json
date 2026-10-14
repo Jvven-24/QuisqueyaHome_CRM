@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-a93ad70208a34c3595d2cc01ada7cf72",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D12",
+  "actor": "codex-security-review",
+  "goal": "Revisión independiente de seguridad de ficha M13 Academy C1",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T02:06:16.562002+00:00",
+  "updatedAt": "2026-10-05T02:07:22.860528+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T02:06:16.562513+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T02:07:22.860502+00:00",
+      "status": "finished",
+      "message": "Revisión M13 Academy registrada: FAIL READY, seis bloqueos concretos de segregación Admin, evidencia, consulta, revocación Moodle, RLS/legacy y PII."
+    }
+  ]
+}

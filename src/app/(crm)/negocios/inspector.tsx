@@ -109,28 +109,50 @@ export function DealInspector({
     >
       <div className="drawer-head">
         <div>
-          <p className="eyebrow">Ficha de negocio</p>
-          <h2>{negocio.contactName}</h2>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="eyebrow m-0">Ficha de negocio 360</span>
+            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[13px] font-bold ${
+              negocio.stageKind === "won" ? "bg-emerald-50 text-emerald-800 border border-emerald-300" :
+              negocio.stageKind === "lost" ? "bg-red-50 text-red-800 border border-red-300" :
+              "bg-gold-50 text-gold-900 border border-gold-300"
+            }`}>
+              {negocio.stageKind === "won" ? "Venta cerrada" : negocio.stageKind === "lost" ? "No concretado" : "Activo"}
+            </span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-navy-950 font-heading m-0 tracking-tight">{negocio.contactName}</h2>
         </div>
-        <div className="header-actions-inline">
+        <div className="header-actions-inline flex items-center gap-1.5">
           {editable && <button className={BOTON_TEXTO} type="button" onClick={() => setEditando(true)}>Editar</button>}
-          <button className={`${BOTON_TEXTO} text-xl text-ink-muted`} type="button" onClick={onClose} aria-label="Cerrar ficha">×</button>
+          <button className={`${BOTON_TEXTO} text-2xl text-ink-muted`} type="button" onClick={onClose} aria-label="Cerrar ficha">×</button>
         </div>
       </div>
 
-      <div className="contact-hero">
-        <Avatar name={negocio.contactName} />
-        <div>
-          <strong>{negocio.contactPhoneDisplay ?? negocio.contactPhone ?? "Sin teléfono"}</strong>
-          <small>{negocio.sourceName ?? "Sin canal"}</small>
+      <div className="contact-hero flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-surface-alt p-3.5">
+        <div className="flex items-center gap-3">
+          <Avatar name={negocio.contactName} />
+          <div>
+            <strong className="block text-sm font-bold text-navy-950">{negocio.contactPhoneDisplay ?? negocio.contactPhone ?? "Sin teléfono"}</strong>
+            <span className="inline-block mt-0.5 rounded bg-surface border border-line px-2 py-0.5 text-[13px] font-medium text-ink-muted">{negocio.sourceName ?? "Sin canal"}</span>
+          </div>
         </div>
+        {negocio.contactPhone && (
+          <a
+            className="inline-flex min-h-12 min-w-12 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-4 text-sm font-bold text-white shadow-sm transition-colors"
+            href={`https://wa.me/${negocio.contactPhone.replace(/\D/g, "")}`}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Abrir WhatsApp con el contacto"
+          >
+            WhatsApp
+          </a>
+        )}
       </div>
 
       <Tabs value={pestana} onValueChange={setPestana} className="mt-3">
         <TabsList className="group-data-[orientation=horizontal]/tabs:h-12! w-full">
-          <TabsTrigger value="resumen" className="min-h-12 text-sm">Resumen</TabsTrigger>
-          <TabsTrigger value="propiedades" className="min-h-12 text-sm">Propiedades ({propiedades.length})</TabsTrigger>
-          {tieneHistorial && <TabsTrigger value="seguimiento" className="min-h-12 text-sm">Seguimiento</TabsTrigger>}
+          <TabsTrigger value="resumen" className="min-h-12 text-sm font-bold">Resumen</TabsTrigger>
+          <TabsTrigger value="propiedades" className="min-h-12 text-sm font-bold">Propiedades ({propiedades.length})</TabsTrigger>
+          {tieneHistorial && <TabsTrigger value="seguimiento" className="min-h-12 text-sm font-bold">Seguimiento</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="resumen" className="grid gap-4 pt-3">
@@ -139,11 +161,11 @@ export function DealInspector({
             <div><dt>Responsable</dt><dd>{negocio.brokerName ?? "Sin asignar"}</dd></div>
             <div><dt>Operación</dt><dd>{negocio.operationType === "rent" ? "Alquiler" : "Venta"}</dd></div>
             {negocio.amountCents !== undefined && (
-              <div><dt>Monto comercial</dt><dd>{negocio.amountCents !== null ? formatearMonto(negocio.amountCents, negocio.currency) : "Por definir"}</dd></div>
+              <div><dt>Monto comercial</dt><dd className="tabular-nums font-bold text-navy-950">{negocio.amountCents !== null ? formatearMonto(negocio.amountCents, negocio.currency) : "Por definir"}</dd></div>
             )}
-            <div><dt>Probabilidad</dt><dd>{negocio.probability !== null ? `${negocio.probability}%` : "—"}</dd></div>
+            <div><dt>Probabilidad</dt><dd className="tabular-nums">{negocio.probability !== null ? `${negocio.probability}%` : "—"}</dd></div>
             {negocio.commissionBasisPoints !== undefined && (
-              <div><dt>Comisión</dt><dd>{negocio.commissionBasisPoints !== null ? `${(negocio.commissionBasisPoints / 100).toFixed(2)}%` : "—"}</dd></div>
+              <div><dt>Comisión</dt><dd className="tabular-nums font-bold text-gold-900">{negocio.commissionBasisPoints !== null ? `${(negocio.commissionBasisPoints / 100).toFixed(2)}%` : "—"}</dd></div>
             )}
             <div><dt>Fecha estimada de cierre</dt><dd>{negocio.expectedCloseDate ?? "—"}</dd></div>
             <div><dt>Próxima acción</dt><dd>{negocio.nextActivityTitle ?? "Sin registrar"}</dd></div>
@@ -151,9 +173,15 @@ export function DealInspector({
           </dl>
 
           {motivoPerdida && (
-            <p className="m-0 text-sm"><strong>Motivo de pérdida:</strong> {motivoPerdida.name}{negocio.lossComment ? ` — ${negocio.lossComment}` : ""}</p>
+            <div className="rounded-xl border border-red-200 bg-red-50/70 p-3">
+              <p className="m-0 text-sm text-red-950"><strong>Motivo de pérdida:</strong> {motivoPerdida.name}{negocio.lossComment ? ` — ${negocio.lossComment}` : ""}</p>
+            </div>
           )}
-          {negocio.notes && <p className="m-0 text-sm"><strong>Notas:</strong> {negocio.notes}</p>}
+          {negocio.notes && (
+            <div className="rounded-xl border border-line bg-surface-alt p-3">
+              <p className="m-0 text-sm text-ink"><strong>Notas:</strong> {negocio.notes}</p>
+            </div>
+          )}
 
           {abierto && !puedeEditar && (
             <AvisoPermiso titulo="Cambios con aprobación" motivo="Tu rol prepara cambios para que un administrador los apruebe. El envío de propuestas todavía no está disponible en esta pantalla." />
@@ -172,7 +200,7 @@ export function DealInspector({
               </label>
               {errorEtapa && <p id="inspector-etapa-error" role="alert" className="m-0 text-[13px] font-medium text-danger">{errorEtapa}</p>}
               <button type="button" onClick={confirmarEtapa} disabled={ocupado} aria-busy={ocupado}
-                className="min-h-12 cursor-pointer rounded-lg bg-gold-600 px-4 text-sm font-bold text-navy-950 disabled:cursor-wait disabled:opacity-70">
+                className="min-h-12 cursor-pointer rounded-lg bg-gold-600 px-4 text-sm font-bold text-navy-950 disabled:cursor-wait disabled:opacity-70 hover:bg-gold-500 transition-colors">
                 {ocupado ? "Aplicando…" : "Cambiar etapa"}
               </button>
               <p className="m-0 text-[13px] text-ink-muted">Pasar a una etapa de venta pide la unidad; pasar a una de pérdida pide motivo y comentario.</p>
@@ -214,7 +242,15 @@ export function DealInspector({
           )}
         </TabsContent>
 
-        {tieneHistorial && <TabsContent value="seguimiento" className="pt-3">{historial}</TabsContent>}
+        {tieneHistorial && (
+          <TabsContent value="seguimiento" className="pt-3">
+            <div className="mb-4 rounded-xl border border-line bg-surface-alt p-3.5">
+              <h3 className="m-0 text-sm font-bold text-navy-950 font-heading">Línea de tiempo de auditoría</h3>
+              <p className="m-0 mt-0.5 text-[13px] text-ink-muted">Trazabilidad completa de modificaciones y transiciones de etapa.</p>
+            </div>
+            {historial}
+          </TabsContent>
+        )}
       </Tabs>
 
       {editando && <FormularioNegocio negocio={negocio} onClose={() => setEditando(false)} onExito={onExito} />}

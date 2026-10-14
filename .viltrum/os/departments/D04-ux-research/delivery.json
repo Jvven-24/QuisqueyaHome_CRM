@@ -20,7 +20,8 @@
     "roles y navegacion sin ambigüedad",
     "recorridos incluyen alternativas errores e interrupciones",
     "simulacion distinguida de investigacion real",
-    "revision independiente D05 registrada"
+    "revision independiente D05 registrada",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

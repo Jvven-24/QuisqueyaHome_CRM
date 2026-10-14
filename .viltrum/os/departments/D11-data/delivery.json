@@ -26,7 +26,8 @@
     "backfill reanuda sin perder datos",
     "RPO/RTO verificados o declarados pendientes",
     "datos personales redactados",
-    "revision independiente D12"
+    "revision independiente D12",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

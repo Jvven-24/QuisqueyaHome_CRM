@@ -11,7 +11,22 @@ import { LeadInspector } from "./inspector";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Insignia } from "@/components/ui/bits";
 import { leadStatusTone } from "@/components/ui/tone";
-import { Building2, MessageSquare, Phone, Plus, Search, Sparkles, X } from "lucide-react";
+import {
+  Building2,
+  Flame,
+  Globe,
+  MessageSquare,
+  Phone,
+  Plus,
+  Search,
+  Snowflake,
+  Sparkles,
+  Sun,
+  TrendingUp,
+  Users,
+  Video,
+  X,
+} from "lucide-react";
 
 export type LeadFila = {
   id: number;
@@ -46,6 +61,15 @@ export type Canal = { id: number; name: string };
 /** Candidato para el botón Asignar del inspector (issue #22). */
 export type BrokerOpcion = { userId: number; fullName: string };
 
+export type MetricasLeads = {
+  total: number;
+  new: number;
+  assigned: number;
+  contacted: number;
+  converted: number;
+  discarded: number;
+};
+
 export const ETIQUETAS_ESTADO: Record<LeadFila["status"], string> = {
   new: "Nuevo",
   assigned: "Asignado",
@@ -54,13 +78,98 @@ export const ETIQUETAS_ESTADO: Record<LeadFila["status"], string> = {
   discarded: "Descartado",
 };
 
-const TONO_ESTADO: Record<LeadFila["status"], "gold" | "blue" | "green" | "red" | "neutral"> = {
-  new: "gold",
-  assigned: "blue",
-  contacted: "blue",
-  converted: "green",
-  discarded: "red",
-};
+export type NivelTemperatura = "caliente" | "tibio" | "frio";
+
+export function calcularTemperatura(lead: LeadFila): {
+  nivel: NivelTemperatura;
+  etiqueta: string;
+  icono: "flame" | "sun" | "snowflake";
+  clase: string;
+} {
+  if (lead.status === "discarded") {
+    return {
+      nivel: "frio",
+      etiqueta: "Frío",
+      icono: "snowflake",
+      clase: "bg-slate-100 text-slate-700 border-slate-300/80",
+    };
+  }
+
+  const monto = lead.budgetMaxCents ?? lead.budgetMinCents ?? 0;
+  const fechaRecibido = new Date(lead.receivedAt).getTime();
+  const dias = (Date.now() - fechaRecibido) / (1000 * 60 * 60 * 24);
+
+  // Caliente si presupuesto >= $250k USD, estado nuevo o ingresado en las últimas 72h
+  if (monto >= 250_000_00 || lead.status === "new" || dias <= 3) {
+    return {
+      nivel: "caliente",
+      etiqueta: "Caliente",
+      icono: "flame",
+      clase: "bg-rose-50 text-rose-800 border-rose-300/80",
+    };
+  }
+
+  // Tibio si está asignado, contactado o con presupuesto definido
+  if (lead.status === "assigned" || lead.status === "contacted" || monto > 0 || dias <= 14) {
+    return {
+      nivel: "tibio",
+      etiqueta: "Tibio",
+      icono: "sun",
+      clase: "bg-amber-50 text-amber-900 border-amber-300/80",
+    };
+  }
+
+  return {
+    nivel: "frio",
+    etiqueta: "Frío",
+    icono: "snowflake",
+    clase: "bg-sky-50 text-sky-800 border-sky-300/80",
+  };
+}
+
+export function TemperaturaBadge({ lead }: { lead: LeadFila }) {
+  const temp = calcularTemperatura(lead);
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[13px] font-bold border shadow-2xs ${temp.clase}`}
+      title={`Temperatura comercial: ${temp.etiqueta}`}
+    >
+      {temp.icono === "flame" && <Flame className="size-3.5 text-rose-600 shrink-0" />}
+      {temp.icono === "sun" && <Sun className="size-3.5 text-amber-600 shrink-0" />}
+      {temp.icono === "snowflake" && <Snowflake className="size-3.5 text-sky-600 shrink-0" />}
+      <span>{temp.etiqueta}</span>
+    </span>
+  );
+}
+
+export function CanalChip({ nombre }: { nombre: string | null }) {
+  const n = nombre ? nombre.trim() : "Directo";
+  const lower = n.toLowerCase();
+
+  let Icon = Globe;
+  let badgeClass = "bg-slate-100 text-slate-800 border-slate-200/90";
+
+  if (lower.includes("youtube") || lower.includes("video")) {
+    Icon = Video;
+    badgeClass = "bg-red-50 text-red-800 border-red-200";
+  } else if (lower.includes("whatsapp")) {
+    Icon = MessageSquare;
+    badgeClass = "bg-emerald-50 text-emerald-800 border-emerald-300";
+  } else if (lower.includes("web") || lower.includes("portal") || lower.includes("google")) {
+    Icon = Globe;
+    badgeClass = "bg-sky-50 text-sky-800 border-sky-200";
+  } else if (lower.includes("referid") || lower.includes("broker")) {
+    Icon = Users;
+    badgeClass = "bg-amber-50 text-amber-900 border-amber-300/80";
+  }
+
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold border shadow-2xs ${badgeClass}`}>
+      <Icon className="size-3.5 shrink-0" />
+      <span className="truncate max-w-[130px]">{n}</span>
+    </span>
+  );
+}
 
 function formatoPresupuesto(lead: LeadFila): string {
   if (!lead.budgetMinCents && !lead.budgetMaxCents) return "Por definir";
@@ -77,33 +186,35 @@ function formatoPresupuesto(lead: LeadFila): string {
 }
 
 /**
- * M2 · Leads (F1). Sustituye los `initialLeads` de muestra por los leads
- * reales que resuelve `page.tsx` con `visibleRows` — mismo look que M1
- * (`.filter-bar`, `.table-wrap`, `.split-view`), búsqueda/origen/estado/página
- * en la URL, no en estado de cliente.
+ * M2 · Leads (Private Desk).
+ * Eleva la experiencia hacia un estándar de banca patrimonial y hospitalidad caribeña.
  */
 export function LeadsVista({
   leads,
   canales,
   brokers,
   total,
+  metricas,
   tamanioPagina,
   pagina,
   filtros,
   leadSeleccionado,
   historial,
   roleSlug,
+  actorId,
 }: {
   leads: LeadFila[];
   canales: Canal[];
   brokers: BrokerOpcion[];
   total: number;
+  metricas?: MetricasLeads;
   tamanioPagina: number;
   pagina: number;
   filtros: { q: string; sourceId?: number; status?: LeadFila["status"] };
   leadSeleccionado: LeadFila | null;
   historial: ReactNode;
   roleSlug: string;
+  actorId?: number;
 }) {
   const isBroker = roleSlug === "broker";
   const router = useRouter();
@@ -120,6 +231,15 @@ export function LeadsVista({
     router.push(`${pathname}?${params.toString()}`);
   }
 
+  const kpis: MetricasLeads = metricas ?? {
+    total,
+    new: leads.filter((l) => l.status === "new").length,
+    assigned: leads.filter((l) => l.status === "assigned").length,
+    contacted: leads.filter((l) => l.status === "contacted").length,
+    converted: leads.filter((l) => l.status === "converted").length,
+    discarded: leads.filter((l) => l.status === "discarded").length,
+  };
+
   const totalPaginas = Math.max(1, Math.ceil(total / tamanioPagina));
   const hayFiltro = Boolean(filtros.q || filtros.sourceId || filtros.status);
 
@@ -131,11 +251,11 @@ export function LeadsVista({
         movil: "titulo",
         celda: (lead) => (
           <div className="flex items-center gap-3">
-            <Avatar name={lead.contactName} small />
+            <Avatar name={lead.contactName} />
             <div className="grid min-w-0 leading-tight">
-              <strong className="text-[13.5px] font-bold text-foreground truncate">{lead.contactName}</strong>
-              <span className="text-[11.5px] text-muted-foreground truncate">
-                {lead.contactPhoneDisplay ?? lead.contactPhone ?? "—"}
+              <strong className="text-[14px] font-bold text-foreground truncate">{lead.contactName}</strong>
+              <span className="text-[13px] text-muted-foreground truncate">
+                {lead.contactPhoneDisplay ?? lead.contactPhone ?? "Sin teléfono"}
               </span>
             </div>
           </div>
@@ -144,13 +264,19 @@ export function LeadsVista({
         ordenable: true,
       },
       {
+        clave: "temperatura",
+        titulo: "Temperatura",
+        celda: (lead) => <TemperaturaBadge lead={lead} />,
+        valor: (lead) => calcularTemperatura(lead).etiqueta,
+      },
+      {
         clave: "proyecto",
         titulo: "Proyecto / Interés",
         movil: "subtitulo",
         celda: (lead) => (
-          <div className="flex items-center gap-1.5 min-w-0">
-            <Building2 size={13} className="text-gold-500 shrink-0" />
-            <span className="truncate font-medium text-foreground text-[12.5px]">
+          <div className="flex items-center gap-2 min-w-0">
+            <Building2 className="size-4 text-gold-600 shrink-0" />
+            <span className="truncate font-semibold text-foreground text-[13.5px]">
               {lead.projectName ?? lead.projectInterestText ?? lead.zoneInterest ?? "Por definir"}
             </span>
           </div>
@@ -162,11 +288,7 @@ export function LeadsVista({
         clave: "origen",
         titulo: "Canal",
         secundaria: true,
-        celda: (lead) => (
-          <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2 py-0.5 text-[11.5px] font-medium text-muted-foreground border border-border/40">
-            {lead.sourceName ?? "Directo"}
-          </span>
-        ),
+        celda: (lead) => <CanalChip nombre={lead.sourceName} />,
         valor: (lead) => lead.sourceName ?? "",
       },
       {
@@ -174,13 +296,13 @@ export function LeadsVista({
         titulo: "Responsable",
         celda: (lead) =>
           lead.brokerName ? (
-            <span className="text-[12.5px] font-medium text-foreground">{lead.brokerName}</span>
+            <span className="text-[13.5px] font-medium text-foreground">{lead.brokerName}</span>
           ) : lead.suggestedBrokerName ? (
-            <span className="inline-flex items-center gap-1 text-[11.5px] text-gold-600 bg-gold-500/10 px-2 py-0.5 rounded-full border border-gold-500/30">
-              <Sparkles size={11} /> {lead.suggestedBrokerName}
+            <span className="inline-flex items-center gap-1.5 text-[13px] text-gold-700 bg-gold-500/10 px-2.5 py-1 rounded-full border border-gold-500/30 font-semibold">
+              <Sparkles className="size-3.5 text-gold-600" /> {lead.suggestedBrokerName}
             </span>
           ) : (
-            <span className="text-[12px] text-muted-foreground italic">Sin asignar</span>
+            <span className="text-[13px] text-muted-foreground italic">Sin asignar</span>
           ),
         valor: (lead) => lead.brokerName ?? lead.suggestedBrokerName ?? "",
       },
@@ -202,7 +324,7 @@ export function LeadsVista({
         titulo: "Presupuesto",
         alinear: "derecha",
         celda: (lead) => (
-          <span className="font-semibold text-foreground tabular-nums text-[12.5px]">
+          <span className="font-bold text-foreground tabular-nums text-[13.5px]">
             {formatoPresupuesto(lead)}
           </span>
         ),
@@ -211,35 +333,41 @@ export function LeadsVista({
       },
       {
         clave: "acciones",
-        titulo: "Contacto",
+        titulo: "Contacto directo",
         alinear: "derecha",
         celda: (lead) => {
           const phone = lead.contactPhone;
           const clean = phone ? phone.replace(/\D/g, "") : null;
+          const whatsappUrl = clean
+            ? `https://wa.me/${clean}?text=${encodeURIComponent(
+                `Hola ${lead.contactName}, le contacto de Quisqueya Home Private Desk respecto a su consulta sobre ${
+                  lead.projectName ?? "inversiones inmobiliarias en República Dominicana"
+                }. ¿En qué momento le resultaría conveniente conversar?`
+              )}`
+            : null;
+
           return (
-            <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
-              {clean && (
+            <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+              {whatsappUrl && (
                 <a
-                  href={`https://wa.me/${clean}?text=${encodeURIComponent(
-                    `Hola ${lead.contactName}, le contacto de Quisqueya Home respecto a su interés en ${
-                      lead.projectName ?? "nuestros proyectos inmobiliarios en República Dominicana"
-                    }.`
-                  )}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
+                  aria-label={`WhatsApp directo con ${lead.contactName}`}
                   title={`WhatsApp directo con ${lead.contactName}`}
-                  className="inline-flex size-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-300 transition-colors shadow-2xs"
+                  className="inline-flex size-12 min-h-12 min-w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800 border border-emerald-300 transition-colors shadow-2xs focus-visible:outline-2 focus-visible:outline-gold-700"
                 >
-                  <MessageSquare size={13} />
+                  <MessageSquare className="size-5" />
                 </a>
               )}
               {clean && (
                 <a
                   href={`tel:${clean}`}
+                  aria-label={`Llamar a ${lead.contactName}`}
                   title={`Llamar a ${lead.contactName}`}
-                  className="inline-flex size-7 items-center justify-center rounded-lg bg-muted text-foreground hover:bg-muted/80 border border-border transition-colors shadow-2xs"
+                  className="inline-flex size-12 min-h-12 min-w-12 items-center justify-center rounded-xl bg-surface text-navy-950 hover:bg-surface-alt border border-line transition-colors shadow-2xs focus-visible:outline-2 focus-visible:outline-gold-700"
                 >
-                  <Phone size={13} />
+                  <Phone className="size-5" />
                 </a>
               )}
             </div>
@@ -253,29 +381,109 @@ export function LeadsVista({
   return (
     <>
       <PageHeader
-        eyebrow="Captación"
-        title={isBroker ? "Mis leads" : "Bandeja de leads"}
-        subtitle="Origen, asignación y próxima acción de cada prospecto."
+        eyebrow="Private Desk · Captación"
+        title={isBroker ? "Mis leads calificados" : "Bandeja de leads patrimoniales"}
+        subtitle="Monitoreo de prospectos, canal de origen, temperatura comercial y asignación."
         action={
           <button
             type="button"
             onClick={() => setCreando(true)}
-            className="h-9 px-3.5 inline-flex items-center gap-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+            className="min-h-12 px-5 inline-flex items-center gap-2.5 rounded-xl bg-navy-950 hover:bg-navy-900 text-white text-[13.5px] font-bold shadow-sm transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
           >
-            <Plus className="size-3.5 text-gold-400" />
+            <Plus className="size-4 text-gold-500" />
             <span>Registrar lead</span>
           </button>
         }
       />
-      <div className="mb-3">
+
+      {/* Franja de métricas / KPIs del universo de leads */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <button
+          type="button"
+          onClick={() => irCon({ status: undefined, page: undefined, lead: undefined })}
+          className={`min-h-12 p-4 rounded-xl border text-left transition-all cursor-pointer bg-surface shadow-xs hover:border-gold-600/50 focus-visible:outline-2 focus-visible:outline-gold-700 ${
+            !filtros.status
+              ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30"
+              : "border-line"
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider">Total Leads</span>
+            <Users className="size-4 text-gold-600" />
+          </div>
+          <strong className="block font-heading font-extrabold text-2xl md:text-3xl text-navy-950 tabular-nums">
+            {kpis.total}
+          </strong>
+          <span className="text-[13px] text-ink-muted">Universo calificado</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => irCon({ status: "new", page: undefined, lead: undefined })}
+          className={`min-h-12 p-4 rounded-xl border text-left transition-all cursor-pointer bg-surface shadow-xs hover:border-gold-600/50 focus-visible:outline-2 focus-visible:outline-gold-700 ${
+            filtros.status === "new"
+              ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30"
+              : "border-line"
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider">Nuevos</span>
+            <Sparkles className="size-4 text-rose-500" />
+          </div>
+          <strong className="block font-heading font-extrabold text-2xl md:text-3xl text-navy-950 tabular-nums">
+            {kpis.new}
+          </strong>
+          <span className="text-[13px] text-ink-muted">Pendientes de atención</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => irCon({ status: "contacted", page: undefined, lead: undefined })}
+          className={`min-h-12 p-4 rounded-xl border text-left transition-all cursor-pointer bg-surface shadow-xs hover:border-gold-600/50 focus-visible:outline-2 focus-visible:outline-gold-700 ${
+            filtros.status === "contacted"
+              ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30"
+              : "border-line"
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider">Contactados</span>
+            <MessageSquare className="size-4 text-emerald-600" />
+          </div>
+          <strong className="block font-heading font-extrabold text-2xl md:text-3xl text-navy-950 tabular-nums">
+            {kpis.contacted}
+          </strong>
+          <span className="text-[13px] text-ink-muted">En conversación activa</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => irCon({ status: "converted", page: undefined, lead: undefined })}
+          className={`min-h-12 p-4 rounded-xl border text-left transition-all cursor-pointer bg-surface shadow-xs hover:border-gold-600/50 focus-visible:outline-2 focus-visible:outline-gold-700 ${
+            filtros.status === "converted"
+              ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30"
+              : "border-line"
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider">Convertidos</span>
+            <TrendingUp className="size-4 text-gold-600" />
+          </div>
+          <strong className="block font-heading font-extrabold text-2xl md:text-3xl text-navy-950 tabular-nums">
+            {kpis.converted}
+          </strong>
+          <span className="text-[13px] text-ink-muted">Madurados a negocios</span>
+        </button>
+      </div>
+
+      <div className="mb-4">
         <ModuleTabs
           tabs={[
-            { id: "all", label: "Todos", count: total },
-            { id: "new", label: "Nuevos", count: leads.filter((l) => l.status === "new").length },
-            { id: "assigned", label: "Asignados", count: leads.filter((l) => l.status === "assigned").length },
-            { id: "contacted", label: "Contactados", count: leads.filter((l) => l.status === "contacted").length },
-            { id: "converted", label: "Convertidos", count: leads.filter((l) => l.status === "converted").length },
-            { id: "discarded", label: "Descartados", count: leads.filter((l) => l.status === "discarded").length },
+            { id: "all", label: "Todos", count: kpis.total },
+            { id: "new", label: "Nuevos", count: kpis.new },
+            { id: "assigned", label: "Asignados", count: kpis.assigned },
+            { id: "contacted", label: "Contactados", count: kpis.contacted },
+            { id: "converted", label: "Convertidos", count: kpis.converted },
+            { id: "discarded", label: "Descartados", count: kpis.discarded },
           ]}
           activeTab={filtros.status ?? "all"}
           onTabChange={(tabId) =>
@@ -287,10 +495,11 @@ export function LeadsVista({
           }
         />
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-3 p-2 bg-slate-100/70 border border-slate-200/80 rounded-xl mb-4">
-        <div className="flex items-center gap-2 flex-1 min-w-[260px] max-w-md">
+
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-surface border border-line rounded-xl mb-4 shadow-xs">
+        <div className="flex items-center gap-2 flex-1 min-w-[280px] max-w-md">
           <div className="relative flex items-center w-full">
-            <Search className="absolute left-2.5 size-3.5 text-slate-400 pointer-events-none" />
+            <Search className="absolute left-3.5 size-4 text-muted pointer-events-none" />
             <input
               type="search"
               placeholder="Buscar por nombre, teléfono o correo…"
@@ -300,19 +509,19 @@ export function LeadsVista({
                   irCon({ q: event.currentTarget.value.trim() || undefined, page: undefined, lead: undefined });
                 }
               }}
-              className="w-full h-8 pl-8 pr-3 text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder:text-slate-400 shadow-2xs focus:outline-none focus:border-gold-500"
+              className="w-full min-h-12 pl-10 pr-3.5 text-[13.5px] bg-surface border border-input-line rounded-lg text-ink placeholder:text-muted focus:outline-none focus:border-gold-700 focus:ring-2 focus:ring-gold-700/20 transition-all"
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2.5 flex-wrap">
           <select
             aria-label="Filtrar por origen"
             value={filtros.sourceId ?? ""}
             onChange={(event) => irCon({ source_id: event.target.value || undefined, page: undefined })}
-            className="h-8 px-2.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-2xs focus:outline-none focus:border-gold-500 cursor-pointer"
+            className="min-h-12 px-3.5 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer"
           >
-            <option value="">Todos los orígenes</option>
+            <option value="">Todos los canales</option>
             {canales.map((canal) => (
               <option key={canal.id} value={canal.id}>
                 {canal.name}
@@ -324,7 +533,7 @@ export function LeadsVista({
             aria-label="Filtrar por estado"
             value={filtros.status ?? ""}
             onChange={(event) => irCon({ status: event.target.value || undefined, page: undefined })}
-            className="h-8 px-2.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg shadow-2xs focus:outline-none focus:border-gold-500 cursor-pointer"
+            className="min-h-12 px-3.5 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer"
           >
             <option value="">Todos los estados</option>
             {LEAD_STATUSES.map((estado) => (
@@ -338,18 +547,19 @@ export function LeadsVista({
             <button
               type="button"
               onClick={() => irCon({ q: undefined, source_id: undefined, status: undefined, page: undefined })}
-              className="h-8 px-2.5 inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-800 bg-white border border-slate-200 rounded-lg shadow-2xs transition-colors cursor-pointer"
+              className="min-h-12 px-4 inline-flex items-center gap-2 text-[13.5px] font-semibold text-ink-muted hover:text-ink bg-surface border border-input-line rounded-lg transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
             >
-              <X className="size-3" />
-              <span>Limpiar</span>
+              <X className="size-4" />
+              <span>Limpiar filtros</span>
             </button>
           )}
 
-          <span className="text-xs text-slate-500 font-medium pl-1 font-mono">
-            {total} leads
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gold-100 text-gold-900 text-[13px] font-bold tabular-nums border border-gold-300/60 ml-1">
+            {total} prospectos
           </span>
         </div>
       </div>
+
       <div className={leadSeleccionado ? "split-view inspector-open" : "split-view"}>
         <div className="table-wrap">
           <DataTable
@@ -359,7 +569,7 @@ export function LeadsVista({
             activa={leadSeleccionado ? String(leadSeleccionado.id) : null}
             onAbrir={(lead) => irCon({ lead: String(lead.id) })}
             porPagina={tamanioPagina}
-            etiqueta="Listado de leads"
+            etiqueta="Listado de leads patrimoniales"
             vacio={{
               titulo: hayFiltro ? "Sin resultados para esta búsqueda" : "Sin leads todavía",
               cuerpo: hayFiltro
@@ -368,20 +578,20 @@ export function LeadsVista({
             }}
           />
           {totalPaginas > 1 && (
-            <div className="form-actions" style={{ justifyContent: "space-between", padding: "12px 4px 0" }}>
+            <div className="form-actions" style={{ justifyContent: "space-between", padding: "16px 8px 0" }}>
               <button
-                className="button"
+                className="button min-h-12 px-4 text-[13.5px]"
                 type="button"
                 disabled={pagina <= 1}
                 onClick={() => irCon({ page: String(pagina - 1) })}
               >
                 Anterior
               </button>
-              <span className="text-xs font-semibold text-muted-foreground tabular-nums">
+              <span className="text-[13px] font-semibold text-muted-foreground tabular-nums">
                 Página {pagina} de {totalPaginas}
               </span>
               <button
-                className="button"
+                className="button min-h-12 px-4 text-[13.5px]"
                 type="button"
                 disabled={pagina >= totalPaginas}
                 onClick={() => irCon({ page: String(pagina + 1) })}
@@ -396,6 +606,8 @@ export function LeadsVista({
             lead={leadSeleccionado}
             brokers={brokers}
             historial={historial}
+            actorId={actorId}
+            roleSlug={roleSlug}
             onClose={() => irCon({ lead: undefined })}
           />
         )}
@@ -406,8 +618,7 @@ export function LeadsVista({
 }
 
 /**
- * Alta manual. Igual que M1: 409 con candidatos de duplicado (decisión #19),
- * más "Crear de todas formas" (`crear_igual: true`).
+ * Alta manual con control de duplicados (decisión #19).
  */
 function FormularioLead({ canales, onClose }: { canales: Canal[]; onClose: () => void }) {
   const router = useRouter();
@@ -483,10 +694,10 @@ function FormularioLead({ canales, onClose }: { canales: Canal[]; onClose: () =>
       >
         <div className="drawer-head flex items-center justify-between px-6 py-4 border-b border-line bg-surface-alt">
           <h2 id="nuevo-lead-title" className="font-heading font-bold text-lg text-navy-950 m-0">
-            Registrar lead manual
+            Registrar lead patrimonial
           </h2>
-          <button className="icon-button" onClick={onClose} aria-label="Cerrar">
-            <X size={18} />
+          <button className="icon-button min-h-12 min-w-12 size-12" onClick={onClose} aria-label="Cerrar">
+            <X size={20} />
           </button>
         </div>
         <form className="form-grid p-6" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
@@ -498,32 +709,57 @@ function FormularioLead({ canales, onClose }: { canales: Canal[]; onClose: () =>
               reintentando={enviando}
             />
           )}
-          <label className="span-2">
+          <label className="span-2 text-[13.5px] font-semibold text-ink">
             Nombre completo
-            <input name="fullName" required autoFocus />
-            {errores.fullName && <small style={{ color: "#b42318" }}>{errores.fullName}</small>}
+            <input
+              name="fullName"
+              required
+              autoFocus
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700"
+            />
+            {errores.fullName && <small className="text-[13px] text-danger">{errores.fullName}</small>}
           </label>
-          <label>
+          <label className="text-[13.5px] font-semibold text-ink">
             Teléfono
-            <input name="phone" placeholder="809-555-0184" />
-            {errores.phone && <small style={{ color: "#b42318" }}>{errores.phone}</small>}
+            <input
+              name="phone"
+              placeholder="809-555-0184"
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700"
+            />
+            {errores.phone && <small className="text-[13px] text-danger">{errores.phone}</small>}
           </label>
-          <label>
+          <label className="text-[13.5px] font-semibold text-ink">
             Correo
-            <input name="email" type="email" />
-            {errores.email && <small style={{ color: "#b42318" }}>{errores.email}</small>}
+            <input
+              name="email"
+              type="email"
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700"
+            />
+            {errores.email && <small className="text-[13px] text-danger">{errores.email}</small>}
           </label>
-          <label>
-            Proyecto de interés (texto libre)
-            <input name="projectInterestText" placeholder="Praderas de Punta Cana" />
+          <label className="text-[13.5px] font-semibold text-ink">
+            Proyecto de interés
+            <input
+              name="projectInterestText"
+              placeholder="Praderas de Punta Cana"
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700"
+            />
           </label>
-          <label>
+          <label className="text-[13.5px] font-semibold text-ink">
             Zona de interés
-            <input name="zoneInterest" placeholder="Punta Cana" />
+            <input
+              name="zoneInterest"
+              placeholder="Cap Cana"
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700"
+            />
           </label>
-          <label>
+          <label className="text-[13.5px] font-semibold text-ink">
             Canal
-            <select name="sourceId" defaultValue="">
+            <select
+              name="sourceId"
+              defaultValue=""
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700 cursor-pointer"
+            >
               <option value="">Sin especificar</option>
               {canales.map((canal) => (
                 <option key={canal.id} value={canal.id}>
@@ -532,28 +768,32 @@ function FormularioLead({ canales, onClose }: { canales: Canal[]; onClose: () =>
               ))}
             </select>
           </label>
-          <label>
+          <label className="text-[13.5px] font-semibold text-ink">
             Operación
-            <select name="operationType" defaultValue="">
+            <select
+              name="operationType"
+              defaultValue=""
+              className="min-h-12 text-[13.5px] px-3.5 border border-input-line rounded-lg focus-visible:outline-2 focus-visible:outline-gold-700 cursor-pointer"
+            >
               <option value="">Sin especificar</option>
               <option value="sale">Venta</option>
               <option value="rent">Alquiler</option>
             </select>
           </label>
-          {errores._ && <small style={{ color: "#b42318" }}>{errores._}</small>}
+          {errores._ && <small className="text-[13px] text-danger">{errores._}</small>}
 
           {candidatos && (
-            <div className="span-2 permission-note" role="alert">
+            <div className="span-2 permission-note text-[13px]" role="alert">
               <strong>Ya existe un contacto parecido</strong>
-              <ul>
+              <ul className="my-2">
                 {candidatos.map((candidato) => (
-                  <li key={candidato.id}>
+                  <li key={candidato.id} className="text-[13px]">
                     {candidato.fullName} — {candidato.phoneDisplay ?? "sin teléfono"} — {candidato.email ?? "sin correo"}
                   </li>
                 ))}
               </ul>
               <button
-                className="button primary"
+                className="button primary min-h-12 px-5 text-[13.5px]"
                 type="button"
                 disabled={enviando}
                 aria-busy={enviando}
@@ -564,11 +804,21 @@ function FormularioLead({ canales, onClose }: { canales: Canal[]; onClose: () =>
             </div>
           )}
 
-          <div className="form-actions span-2">
-            <button className="button" type="button" onClick={onClose} disabled={enviando}>
+          <div className="form-actions span-2 pt-2">
+            <button
+              className="button min-h-12 px-5 text-[13.5px]"
+              type="button"
+              onClick={onClose}
+              disabled={enviando}
+            >
               Cancelar
             </button>
-            <button className="button primary" type="submit" disabled={enviando} aria-busy={enviando}>
+            <button
+              className="button primary min-h-12 px-6 text-[13.5px]"
+              type="submit"
+              disabled={enviando}
+              aria-busy={enviando}
+            >
               {enviando ? "Registrando…" : "Registrar lead"}
             </button>
           </div>

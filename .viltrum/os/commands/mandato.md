@@ -24,7 +24,7 @@ Antes de proponer:
 - Busca lo que ya existe relacionado (componentes, tablas, endpoints, catálogos, pruebas)
 - Identifica las convenciones del proyecto
 - Revisa `.viltrum/status.md`, `.viltrum/questions.md` y `.viltrum/decisions.md` si existen
-- Si el cambio toca código compartido, haz análisis de impacto (GitNexus si está indexado)
+- Si el cambio toca código compartido, haz análisis de impacto (`viltrum repo-impact`)
 
 Si la exploración es amplia, delégala a un subagente con modelo pequeño y pide solo la
 conclusión con rutas y líneas.

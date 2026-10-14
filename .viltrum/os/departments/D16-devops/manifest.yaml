@@ -25,7 +25,7 @@ tools:
     - ejecutar una migracion no probada por D11 sobre copia de produccion
 
 skills:
-  explorar_infraestructura_existente: gitnexus-exploring
+  explorar_infraestructura_existente: viltrum-repo-map
   revision_de_seguridad_de_pipeline: security-review
   diagramas_de_pipeline_y_ambientes: artifact-diagramming
 

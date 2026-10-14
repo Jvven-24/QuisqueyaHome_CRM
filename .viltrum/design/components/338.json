@@ -1,0 +1,29 @@
+{
+  "author": "serafimcloud",
+  "description": "Alert in shadcn/ui format",
+  "framework": "",
+  "id": "338",
+  "metadata": {
+    "author": "serafimcloud",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ2l0aHViL2ltZ18ybkVsQk9lMnU2VHVQTmZWaDNZWTZ0UG05OXQifQ",
+    "description": "Alert in shadcn/ui format",
+    "id": 338,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/serafimcloud/alert?[REDACTED]",
+    "name": "Alert",
+    "previewUrl": "https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/alert/alert-notification/preview.png?v=1",
+    "type": "component",
+    "url": "https://21st.dev/@serafimcloud/components/alert",
+    "videoUrl": ""
+  },
+  "name": "Alert",
+  "previewUrl": "https://cdn.21st.dev/user_2nElBLvklOKlAURm6W1PTu6yYFh/alert/alert-notification/preview.png?v=1",
+  "provenance": {
+    "importedAt": "2026-10-04T22:51:07.832385+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6dff87db7e2176ba4e8387824f9cb00c26c1808f13ef79e2dcb343f3d9a1115a"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@serafimcloud/components/alert"
+}

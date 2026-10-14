@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "department": "D21",
+  "gate": "G2",
+  "actor": "antigravity-gemini-3.1-pro-high-d21",
+  "createdAt": "2026-10-05T00:00:02.628342+00:00",
+  "state": "review_pending",
+  "reviewer": "D03",
+  "summary": {
+    "path": ".viltrum/vre-os/spec/integraciones/CAPACIDADES.md",
+    "sha256": "8c4ff7b9fb32a1d615b3177eeabc138d59c53d23c7be2b59de2e33b0267a5376",
+    "kind": "unclassified",
+    "sourceCurrent": true
+  },
+  "evidence": [
+    {
+      "path": ".viltrum/dispatch/20261004T235510Z-D21-antigravity/evidence.json",
+      "sha256": "424910960c000c67a0112f5d23b6b9a4d89a22b24e3b82ac4fd6d24df42397c7",
+      "kind": "unclassified",
+      "sourceCurrent": true
+    }
+  ],
+  "id": "HND-035"
+}

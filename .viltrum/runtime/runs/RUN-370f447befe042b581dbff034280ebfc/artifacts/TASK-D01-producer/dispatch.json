@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "actor": "codex:producer:e4684e7aa4c34ceca3dad39af755ae1d",
+  "taskId": "TASK-D01",
+  "role": "producer",
+  "inputHash": "1c4a4d8992e473ed43f75d908b25d5a0267dd265585c218438a299d965f97315",
+  "createdAt": "2026-10-05T00:21:45.720216+00:00",
+  "sandboxRequested": "read-only",
+  "sandboxVerified": false,
+  "mode": "analysis",
+  "externalIntegrations": "disabled",
+  "ephemeral": true,
+  "requestedTimeoutSeconds": 180,
+  "resultHash": "efe689ee187802a87722a0d2ea32f166f204c625717db9e18ca8c73293f95feb"
+}

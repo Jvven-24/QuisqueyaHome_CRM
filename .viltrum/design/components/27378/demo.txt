@@ -1,0 +1,9 @@
+import { CommandMenu04 } from "@/components/ui/command-menu-04";
+
+export default function CommandMenu04Demo() {
+  return (
+    <div className="flex min-h-[500px] w-full items-center justify-center p-8">
+      <CommandMenu04 />
+    </div>
+  );
+}

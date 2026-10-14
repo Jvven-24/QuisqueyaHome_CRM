@@ -90,3 +90,12 @@ export function evaluationLoginAllowed(host: string | null): boolean {
   // No se aceptan URLs, subdominios, listas de proxy ni variantes de loopback.
   return host !== null && /^(?:localhost|127\.0\.0\.1)(?::[0-9]{1,5})?$/i.test(host);
 }
+
+/** Configuración de Moodle LMS local (Academy, M13). Solo servidor. */
+export function moodleConfig() {
+  return {
+    url: process.env.MOODLE_URL || "http://127.0.0.1:9330",
+    token: process.env.MOODLE_TOKEN || null,
+  };
+}
+

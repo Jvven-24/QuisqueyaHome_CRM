@@ -1,0 +1,29 @@
+{
+  "author": "originui",
+  "description": "Enchanced shadcn/ui tabs",
+  "framework": "",
+  "id": "425",
+  "metadata": {
+    "author": "originui",
+    "authorImage": "https://avatars.githubusercontent.com/u/185059885?s=200&v=4",
+    "description": "Enchanced shadcn/ui tabs",
+    "id": 425,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/originui/tabs?[REDACTED]",
+    "name": "Tabs",
+    "previewUrl": "https://cdn.21st.dev/user_originui/tabs/file-tabs/preview.1786742657366.png",
+    "type": "component",
+    "url": "https://21st.dev/@originui/components/tabs",
+    "videoUrl": "https://cdn.21st.dev/user_originui/tabs/file-tabs/video.1786742667743.mp4"
+  },
+  "name": "Tabs",
+  "previewUrl": "https://cdn.21st.dev/user_originui/tabs/file-tabs/preview.1786742657366.png",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:46.888178+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "6834ca5bee29259d3c4ac915eea6fe2a0d79c0935b59bd2505c5dbe26710f145"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@originui/components/tabs"
+}

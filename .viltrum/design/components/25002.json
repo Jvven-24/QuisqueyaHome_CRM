@@ -1,0 +1,29 @@
+{
+  "author": "shadcnspace",
+  "description": "A slide-out sheet (drawer) panel that can open from any edge — top, right, bottom, or left — with a header, form fields, and footer actions.",
+  "framework": "",
+  "id": "25002",
+  "metadata": {
+    "author": "shadcnspace",
+    "authorImage": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zOHFBT3VLQWpSb3c5SjlUdGttSGhYZnBiZ28ifQ",
+    "description": "A slide-out sheet (drawer) panel that can open from any edge — top, right, bottom, or left — with a header, form fields, and footer actions.",
+    "id": 25002,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/shadcnspace/sheet-01?[REDACTED]",
+    "name": "Sheet (Different Directions)",
+    "previewUrl": "https://cdn.21st.dev/user_38qAOtph5HovpSn2yjNYXjbTOm2/sheet-01/default/preview.1787762812125.webp",
+    "type": "component",
+    "url": "https://21st.dev/@shadcnspace/components/sheet-01",
+    "videoUrl": "https://cdn.21st.dev/user_38qAOtph5HovpSn2yjNYXjbTOm2/sheet-01/default/video.1787762805187.mp4"
+  },
+  "name": "Sheet (Different Directions)",
+  "previewUrl": "https://cdn.21st.dev/user_38qAOtph5HovpSn2yjNYXjbTOm2/sheet-01/default/preview.1787762812125.webp",
+  "provenance": {
+    "importedAt": "2026-10-04T17:19:52.053277+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "0397cdb3c97d0e03935cc11c066cbd7726aa97cfe74142365b7048b1785d69f7"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@shadcnspace/components/sheet-01"
+}

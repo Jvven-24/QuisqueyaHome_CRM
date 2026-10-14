@@ -150,6 +150,10 @@ Antes de entregar:
 Entrego a D05 (construcción visual y revisor según registry) y a D07 (consultor que
 verifica que la estructura no cree barreras de acceso desde el origen).
 
+Si un portfolio editorial requiere ordenar capítulos o recorridos, aporta la secuencia y
+los puntos de entrada/salida —sin decidir la composición visual— conforme a la guía revisada
+por D00 (HND-012) en [`core/design-experience-os.md` §9](../../core/design-experience-os.md#portfolio-editorial-motion).
+
 ---
 
 ## Herramientas y skills

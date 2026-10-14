@@ -29,7 +29,8 @@
     "Alertas/readiness antes del tráfico",
     "Aprobación humana actual para ambiente/digest",
     "C1 vigente y vinculada a la versión que se despliega",
-    "go/no-go con aprobador humano nombrado y fecha; nunca inferido"
+    "go/no-go con aprobador humano nombrado y fecha; nunca inferido",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
   ],
   "capabilities": [
     "repository",

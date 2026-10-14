@@ -25,10 +25,10 @@ tools:
     - ejecutar reversion en produccion sin coordinar con D16
 
 skills:
-  cli_git_github: gitnexus-cli
-  revision_de_pr: gitnexus-pr-review
-  analisis_de_impacto: gitnexus-impact-analysis
-  depuracion_historial: gitnexus-debugging
+  cli_git_github: viltrum-git-governance
+  revision_de_pr: viltrum-repo-map
+  analisis_de_impacto: viltrum-repo-map
+  depuracion_historial: viltrum-repo-map
   revision_de_diff: code-review
 
 subagents:

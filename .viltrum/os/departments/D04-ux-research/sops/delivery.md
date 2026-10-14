@@ -23,6 +23,12 @@ Si faltan roles o reglas necesarias para un recorrido, registrar pregunta con du
 6. **Wireframes verificables.** Componer jerarquía y acciones sobre datos representativos, incluidos nombres largos, volúmenes altos y traducciones. Evaluar orientación, móvil, teclado y ayudas antes de detalle visual. Una regla comercial ausente bloquea ese paso, no se completa con una elección de UI.
 7. **Validación de tareas.** Preparar escenarios neutrales, sin indicar qué botón pulsar. Con usuarios disponibles registrar finalización, errores, ayuda recibida y observaciones; con agentes registrar revisión heurística o simulación. Guardar versión del prototipo y cambios derivados. Dar seguimiento a necesidades no resueltas.
 
+## Evidencia UX y trazabilidad
+
+- Para decisiones de producto, explicitar el JTBD y, cuando aplique, la alternativa o competencia que el usuario utiliza hoy; si no se investigó, marcarlo como pendiente, no como hecho.
+- Por cada actividad de investigación o evaluación, registrar método, fechas, participantes o alcance, artefacto/versión y límites (sesgo, muestra, acceso o condiciones). Distinguir investigación con usuarios, revisión heurística y simulación.
+- En `ux-research.md` (o el artefacto de evaluación correspondiente), cada hallazgo debe enlazar evidencia localizable → REQ → decisión afectada; registra también la decisión pendiente y su responsable. Referencia el REQ por su ID en el mapa maestro o, si no está allí, por el ID del documento de requisitos. No conviertas una observación en regla de negocio sin validación de D01/D02.
+
 ## Salidas y handoff
 
 Guardar en `.viltrum/design/` o el directorio de diseño existente: `ux-research.md` (plan y hallazgos), `screen-inventory.md`, `screen-role-matrix.md`, `sitemap.md`, `user-flows.md` y `wireframes.md` con enlaces al prototipo. El informe `.viltrum/departments/D04-ux-research.md` indexa artefactos, REQ, fuentes, versión, preguntas, limitaciones y estado `propuesto`, `bloqueado` o `listo_para_revision`.

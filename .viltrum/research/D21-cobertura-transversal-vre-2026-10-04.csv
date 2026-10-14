@@ -1,0 +1,51 @@
+key,producto,soporte_documentado,modo,integracion_requerida,fuente_oficial,confianza
+voice.whatsapp_ingest,Viltrum runtime propio,desconocido,RUN,Inspeccionar contrato y prueba de recepción de audio en runtime local; fuente oficial externa no acredita implementación propia,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md,baja
+voice.telegram_ingest,Telegram Bot API,parcial,RUN,Webhook bot y descarga de voz más autorización de contacto,https://core.telegram.org/bots/api,media
+voice.transcribe,whisper.cpp,si,APP,Convertir audio al formato admitido y ejecutar modelo local,https://github.com/ggml-org/whisper.cpp,baja
+voice.extract,CRM propio,desconocido,APP,Extraer datos con esquema y validar ambigüedad,https://github.com/ggml-org/whisper.cpp,baja
+voice.human_review,CRM propio,no,APP,Construir flujo de aprobación antes de escritura,https://github.com/ggml-org/whisper.cpp,alta
+progress.phase_create,CRM propio,no,APP,Crear fase en modelo de proyectos local,https://maplibre.org/maplibre-gl-js/docs/,alta
+progress.phase_update,CRM propio,no,APP,Actualizar fase con permisos e historial,https://maplibre.org/maplibre-gl-js/docs/,alta
+progress.photo_upload,CRM propio,no,APP,Almacenamiento y metadatos de avance propios,https://pannellum.org/documentation/reference/,alta
+progress.publish,CRM propio,no,APP,Autorizar y publicar avance en portal,https://pannellum.org/documentation/reference/,alta
+progress.bulletin,react-pdf,parcial,APP,Diseñar boletín desde fotos y estado del CRM,https://react-pdf.org/docs/v4/components/document,alta
+academy.catalog,Moodle,parcial,RUN,core_course_get_courses documentado pero checklists y versión/endpoint local no probados,https://docs.moodle.org/dev/Web_services_Roadmap,media
+academy.progress,Moodle,parcial,RUN,core_completion_get_course_completion_status documentado pero versión permisos y mapeo broker no probados,https://docs.moodle.org/dev/Web_services_Roadmap,media
+academy.quiz,Moodle,parcial,RUN,Actividad quiz acreditada en UI; API de intento nota y versión local no verificadas,https://docs.moodle.org/500/en/images_en/archive/2/2a/20250630145556%21Moodle_features_students.pdf,media
+academy.pass_rule,Moodle,parcial,RUN,Definir umbral contractual en CRM y leer resultado de evaluación,https://docs.moodle.org/dev/Web_services_Roadmap,media
+academy.certificate,Moodle con plugin Custom certificate,parcial,RUN,El PDF requiere plugin y API de emisión/verificación no comprobada en versión fijada,https://moodle.org/plugins/mod_customcert,media
+academy.moodle_sync,Moodle,parcial,RUN,Usar enrol_manual y core_completion; correlación bidireccional propia,https://docs.moodle.org/dev/Web_services_Roadmap,alta
+message.template,Viltrum runtime propio,desconocido,RUN,Verificar plantillas Meta aprobadas y mapeo CRM en runtime local; Chatwoot no acredita esta implementación,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md,baja
+message.whatsapp_link,Navegador,si,APP,Generar URL wa.me con número validado y permiso UI,https://faq.whatsapp.com/5913398998672934,media
+message.telegram_send,Telegram Bot API,si,RUN,Configurar bot y sendMessage con chat_id consentido,https://core.telegram.org/bots/api,alta
+message.whatsapp_send,Viltrum runtime propio,desconocido,RUN,Verificar API propia y proveedor Meta oficial antes de conectar; fuente externa no acredita runtime local,.viltrum/vre-os/MAPA-SISTEMAS-OSS.md,baja
+message.inbox,Chatwoot Community,parcial,RUN,Guía oficial acredita inbox en UI Chatwoot; API exacta para reproducirlo en UI CRM y edición fijada no probadas,https://www.chatwoot.com/hc/user-guide/articles/1677492191-adding-inboxes,media
+message.delivery_status,Chatwoot Community,desconocido,RUN,Verificar webhook y estados reales del canal en versión fijada; guía de inbox no acredita estado por API,https://www.chatwoot.com/hc/user-guide/articles/1677492191-adding-inboxes,baja
+trash.list,CRM propio,no,APP,Construir listado seguro por tenant y entidad,https://www.postgresql.org/docs/current/ddl-rowsecurity.html,alta
+trash.restore,CRM propio,no,APP,Restaurar con reglas de conflicto y auditoría,https://www.postgresql.org/docs/current/ddl-rowsecurity.html,alta
+trash.purge_policy,CRM propio,no,APP,Definir política de retención y autorización explícita,https://www.postgresql.org/docs/current/ddl-rowsecurity.html,alta
+clientroom.view,CRM propio,no,APP,Construir expediente y control de acceso para comprador,https://docs.papermark.com/docs/api,alta
+clientroom.documents,Papermark,si,RUN,Enlazar documentos y links con usuario local; probar self-host,https://docs.papermark.com/docs/api,media
+dealroom.participants,CRM propio,desconocido,APP,"Construir sala y permisos de participantes; Papermark Data Rooms es Enterprise y no se cuenta como OSS libre",https://github.com/papermark/papermark/blob/main/ee/README.md,alta
+dealroom.activity,CRM propio,desconocido,APP,"Persistir actividad de negociación con ACL y auditoría; analítica de links no acredita actividad de sala; Papermark Data Rooms es Enterprise",https://github.com/papermark/papermark/blob/main/ee/README.md,alta
+brokerportal.inventory,CRM propio,no,APP,Exponer inventario autorizado por broker y tenant,https://maplibre.org/maplibre-gl-js/docs/,alta
+brokerportal.lead,CRM propio,no,APP,Crear lead con identidad broker y deduplicación local,https://docs.frappe.io/framework/user/en/guides/integration/rest_api,alta
+shell.navigation,CRM propio,no,APP,Mostrar módulos permitidos por rol y alcance,https://www.w3.org/WAI/ARIA/apg/patterns/menubar/,alta
+shell.mobile,CRM propio,no,APP,Construir navegación responsive del CRM,https://www.w3.org/WAI/ARIA/apg/patterns/menubar/,alta
+search.command,CRM propio,no,APP,Construir paleta y acciones con permisos,https://www.w3.org/WAI/ARIA/apg/patterns/combobox/,alta
+search.entities,PostgreSQL,parcial,APP,Indexar FTS y pg_trgm con alcance tenant,https://www.postgresql.org/docs/current/textsearch.html,alta
+notification.persist,CRM propio,no,APP,Guardar avisos transaccionalmente en BD local,https://www.postgresql.org/docs/current/ddl-rowsecurity.html,alta
+notification.deliver,CRM propio,no,APP,Construir entrega in-app y estado leído/no leído,https://www.w3.org/WAI/ARIA/apg/patterns/alert/,alta
+i18n.switch,CRM propio,no,APP,Extraer textos y traducir contenido/esquemas,https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl,alta
+offline.cache,Service Worker,parcial,APP,Definir qué datos sensibles pueden cachearse y expiración,https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API,media
+offline.sync,Service Worker,parcial,APP,Construir cola conflictos idempotencia y reintentos,https://developer.mozilla.org/en-US/docs/Web/API/Background_Synchronization_API,media
+import.csv,CRM propio,no,APP,Construir mapeo validación masiva e idempotencia,https://www.postgresql.org/docs/current/sql-copy.html,alta
+export.csv,CRM propio,no,APP,Autorizar columnas y preservar RFC4180,https://www.postgresql.org/docs/current/sql-copy.html,alta
+integration.outbox,CRM propio,no,APP,Transacción de negocio más evento y worker,https://www.postgresql.org/docs/current/tutorial-transactions.html,alta
+integration.replay,CRM propio,no,APP,Reintentos clasificación DLQ y reconciliación,https://www.postgresql.org/docs/current/tutorial-transactions.html,alta
+integration.health,CRM propio,no,APP,Definir health por adaptador y mostrar última sincronización,https://www.activepieces.com/docs/install/overview,alta
+automation.flow,Activepieces Community,si,RUN,Crear pieza y enlazar eventos de dominio; editor embebido Enterprise,https://www.activepieces.com/solutions/open-source-developers,alta
+portal.capture,CRM propio,no,APP,Integrar formulario Portal con lead y origen verificable,https://docs.frappe.io/framework/user/en/guides/integration/rest_api,alta
+document.pdf,react-pdf,si,APP,Diseñar dossier y renderizar con datos autorizados,https://react-pdf.org/docs/v4/components/document,alta
+document.read_track,Papermark,si,RUN,Enlazar visitas de link a cliente CRM; webhooks no disponibles,https://docs.papermark.com/docs/api,media
+document.signature,Sin candidato verificado,desconocido,RUN,Papermark API publicada no acredita firma; investigar producto y validez legal antes de adoptar,https://docs.papermark.com/docs/api,baja

@@ -1,0 +1,29 @@
+{
+  "author": "cubby-ui",
+  "description": "A composable timeline that displays a sequence of dated events connected by a line, usable for activity feeds, changelogs, or as a controlled step progress indicator.",
+  "framework": "",
+  "id": "28295",
+  "metadata": {
+    "author": "cubby-ui",
+    "authorImage": "https://www.google.com/s2/favicons?domain=cubby-ui.dev&sz=128",
+    "description": "A composable timeline that displays a sequence of dated events connected by a line, usable for activity feeds, changelogs, or as a controlled step progress indicator.",
+    "id": 28295,
+    "installCommand": "npx shadcn@latest add \"https://21st.dev/r/cubby-ui/timeline?[REDACTED]",
+    "name": "Timeline",
+    "previewUrl": "https://cdn.21st.dev/cubby-ui/timeline/default/preview.1789960266184-d8fcdc0d-1c82-48a8-bfde-3572fb88be97.png",
+    "type": "component",
+    "url": "https://21st.dev/@cubby-ui/components/timeline",
+    "videoUrl": null
+  },
+  "name": "Timeline",
+  "previewUrl": "https://cdn.21st.dev/cubby-ui/timeline/default/preview.1789960266184-d8fcdc0d-1c82-48a8-bfde-3572fb88be97.png",
+  "provenance": {
+    "importedAt": "2026-10-04T22:47:31.157107+00:00",
+    "sourceFile": "response.json",
+    "sourceSha256": "225809cbbf79b547206776c7a1984689c7afbcd8edb9fe8fb6d401b377bd5d40"
+  },
+  "source": "21st",
+  "status": "metadata_imported",
+  "tags": [],
+  "url": "https://21st.dev/@cubby-ui/components/timeline"
+}

@@ -23,7 +23,11 @@ export default function Error({
       <strong>No se pudo cargar Leads</strong>
       <p>Ocurrió un error inesperado. Intenta de nuevo.</p>
       <p>
-        <button className="button primary" type="button" onClick={() => reset()}>
+        <button
+          className="button primary min-h-12 px-6 text-[13.5px] font-bold focus-visible:outline-2 focus-visible:outline-gold-700"
+          type="button"
+          onClick={() => reset()}
+        >
           Reintentar
         </button>
       </p>

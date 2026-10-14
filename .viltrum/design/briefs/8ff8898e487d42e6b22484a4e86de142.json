@@ -1,0 +1,340 @@
+{
+  "briefKey": "BRIEF-VRE-E1",
+  "createdAt": "2026-10-04T22:43:11.015312+00:00",
+  "id": "8ff8898e487d42e6b22484a4e86de142",
+  "name": "CRM Quisqueya Home · E1 rediseño profundo",
+  "provenance": {
+    "sourceFile": "pantallas-e1.json",
+    "sourceSha256": "bba308bfde3039073f311ea24c460511462ee796840fdc76c6fe312f14ce2821"
+  },
+  "screens": [
+    {
+      "components": [
+        "kanban board",
+        "deal card",
+        "stage header with totals",
+        "filter bar with saved views",
+        "quick action menu",
+        "side drawer detail",
+        "forecast summary strip"
+      ],
+      "id": "SCR-NEG-TABLERO",
+      "name": "Negocios · tablero",
+      "purpose": "Ver y mover todos los negocios por etapa, saber qué requiere acción hoy y el valor en juego por etapa.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "data table with grouping",
+        "saved views tabs",
+        "bulk actions bar",
+        "funnel chart",
+        "aging chart",
+        "forecast line chart"
+      ],
+      "id": "SCR-NEG-LISTA",
+      "name": "Negocios · lista y análisis",
+      "purpose": "Trabajar muchos negocios a la vez: ordenar, agrupar, filtrar, acciones en lote y ver embudo, antigüedad y pronóstico.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "detail header with stage stepper",
+        "activity timeline",
+        "linked properties list",
+        "documents panel",
+        "next action card",
+        "close or lose dialog"
+      ],
+      "id": "SCR-NEG-FICHA",
+      "name": "Negocio · ficha 360",
+      "purpose": "Entender un negocio completo: cliente, propiedades de interés, línea de tiempo, documentos, próxima acción, cierre o pérdida con motivo.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "data table with SLA badges",
+        "source and campaign filters",
+        "assignment control",
+        "quick actions whatsapp call",
+        "side inspector",
+        "duplicate warning"
+      ],
+      "id": "SCR-LEAD-BANDEJA",
+      "name": "Leads · bandeja",
+      "purpose": "Atender cada lead a tiempo: prioridad por tiempo de respuesta, origen y calidad, con asignación y acciones rápidas.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "contact header",
+        "investor profile card",
+        "unified timeline",
+        "duplicates panel",
+        "convert to deal action",
+        "note composer"
+      ],
+      "id": "SCR-LEAD-FICHA",
+      "name": "Lead · ficha 360",
+      "purpose": "Conocer al prospecto: perfil de inversor, presupuesto, historial completo, duplicados y convertir a negocio.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "quick add form",
+        "assignment rules panel",
+        "webhook source status",
+        "import wizard",
+        "duplicate resolver"
+      ],
+      "id": "SCR-LEAD-ENTRADA",
+      "name": "Leads · captura y asignación",
+      "purpose": "Registrar o recibir leads y repartirlos con reglas claras, sin duplicar.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "project card grid",
+        "faceted filters with ranges",
+        "map view",
+        "availability summary bar",
+        "compare tray"
+      ],
+      "id": "SCR-PROP-CATALOGO",
+      "name": "Propiedades · catálogo de proyectos",
+      "purpose": "Descubrir y comparar proyectos con disponibilidad real, zona, entrega y beneficio Confotur.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission"
+      ]
+    },
+    {
+      "components": [
+        "project hero summary",
+        "tabs",
+        "units table",
+        "construction timeline",
+        "documents list",
+        "linked deals"
+      ],
+      "id": "SCR-PROP-PROYECTO",
+      "name": "Proyecto · detalle",
+      "purpose": "Todo un proyecto en un lugar: resumen, unidades, avances de obra, documentos y negocios asociados.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "availability matrix tower floor",
+        "state legend",
+        "unit side sheet",
+        "price visibility by role",
+        "hold and reserve actions"
+      ],
+      "id": "SCR-PROP-MATRIZ",
+      "name": "Unidades · matriz de disponibilidad",
+      "purpose": "Ver de un vistazo qué unidades están disponibles, reservadas o vendidas por torre y piso, y actuar sobre una.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "leaderboard",
+        "performance bar chart",
+        "goal progress",
+        "team filter",
+        "trend sparkline"
+      ],
+      "id": "SCR-BRK-RANKING",
+      "name": "Brokers · ranking y desempeño",
+      "purpose": "Saber quién rinde y por qué: volumen, cierres, conversión, tiempo de respuesta, meta y tendencia.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission"
+      ]
+    },
+    {
+      "components": [
+        "profile header",
+        "tabs",
+        "deal list",
+        "goal chart",
+        "commission summary",
+        "training progress"
+      ],
+      "id": "SCR-BRK-PERFIL",
+      "name": "Broker · perfil",
+      "purpose": "Perfil completo del broker: negocios, metas, comisiones, formación y actividad.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission"
+      ]
+    },
+    {
+      "components": [
+        "port health cards",
+        "last contact and version",
+        "connection test action",
+        "degraded mode banner"
+      ],
+      "id": "SCR-INT-SALUD",
+      "name": "Integraciones · salud de conexiones",
+      "purpose": "Ver si cada sistema conectado funciona y qué pasa si cae.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "outbox table with status filter",
+        "error detail drawer",
+        "retry action",
+        "discard with reason dialog",
+        "audit trail"
+      ],
+      "id": "SCR-INT-COLA",
+      "name": "Integraciones · cola de salida",
+      "purpose": "Operar los envíos a sistemas externos: pendientes, enviados, fallidos; reintentar o descartar con motivo.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission",
+        "conflict"
+      ]
+    },
+    {
+      "components": [
+        "sidebar navigation",
+        "command palette",
+        "global search results",
+        "notification center",
+        "mobile bottom dock",
+        "user and role switcher"
+      ],
+      "id": "SCR-GLB-SHELL",
+      "name": "Shell · navegación, búsqueda global y notificaciones",
+      "purpose": "Moverse por el CRM con rapidez, buscar cualquier cosa y recibir avisos reales.",
+      "states": [
+        "initial",
+        "loading",
+        "empty",
+        "partial",
+        "error",
+        "offline",
+        "success",
+        "no_permission"
+      ]
+    }
+  ],
+  "stack": "React 19 · Next.js 15 · Tailwind CSS v4 · shadcn/ui · Recharts · vaul",
+  "version": "3f836ca9-a853-4028-ae3c-e0d496e598bc"
+}

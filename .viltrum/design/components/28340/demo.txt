@@ -1,0 +1,5 @@
+import Timeline3 from "@/components/ui/timeline-3";
+
+export default function TimelineDemo() {
+  return <Timeline3 />;
+}

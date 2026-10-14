@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "HOST-d6baff1f89114692945911d9a0343f0f",
+  "project": "C:\\Users\\wilbe\\Documents\\QuisqueyaHome_CRM",
+  "department": "D11",
+  "actor": "codex-data-review",
+  "goal": "Revisión independiente D11 de I00 e I01-A para READY",
+  "status": "finished",
+  "source": "host_reported",
+  "startedAt": "2026-10-05T02:03:54.890476+00:00",
+  "updatedAt": "2026-10-05T02:04:55.320976+00:00",
+  "events": [
+    {
+      "at": "2026-10-05T02:03:54.890559+00:00",
+      "status": "running",
+      "message": "Trabajo iniciado por el host"
+    },
+    {
+      "at": "2026-10-05T02:04:55.320955+00:00",
+      "status": "finished",
+      "message": "Revisión D11 I00/I01-A: FAIL READY, PASS conceptual; informe .viltrum/reviews/D11-revision-I00-I01-A-READY-2026-10-04.md"
+    }
+  ]
+}
