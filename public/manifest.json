@@ -1,0 +1,30 @@
+{
+  "name": "Quisqueya Home Private Desk CRM",
+  "short_name": "QH CRM",
+  "description": "Consola operativa y CRM inmobiliario para Quisqueya Home",
+  "start_url": "/inicio",
+  "display": "standalone",
+  "background_color": "#10172d",
+  "theme_color": "#10172d",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/brand/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/app-icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

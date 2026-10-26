@@ -1,0 +1,93 @@
+{
+ "makeplane/plane": {
+  "spdx_api": "AGPL-3.0",
+  "licencia_head": " GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007 Copyright (C) 2007 Free Software Foundation, In",
+  "ultimo_push": "2026-10-04",
+  "estrellas": 60368,
+  "archivado": false
+ },
+ "payloadcms/payload": {
+  "spdx_api": "MIT",
+  "licencia_head": "MIT License Copyright (c) 2018-2026 Payload CMS, LLC <info@payloadcms.com> Permission is hereby granted, free ",
+  "ultimo_push": "2026-10-04",
+  "estrellas": 45091,
+  "archivado": false
+ },
+ "Leaflet/Leaflet": {
+  "spdx_api": "BSD-2-Clause",
+  "licencia_head": "BSD 2-Clause License Copyright (c) 2010-2026, Volodymyr Agafonkin Copyright (c) 2010-2011, CloudMade",
+  "ultimo_push": "2026-10-02",
+  "estrellas": 45704,
+  "archivado": false
+ },
+ "immich-app/immich": {
+  "spdx_api": "AGPL-3.0",
+  "licencia_head": " GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007 Copyright (C) 2007 Free Software Foundation, In",
+  "ultimo_push": "2026-10-04",
+  "estrellas": 115592,
+  "archivado": false
+ },
+ "killbill/killbill": {
+  "spdx_api": "Apache-2.0",
+  "licencia_head": " Apache License Version 2.0, January 2004 http://www.apache.org/licenses/",
+  "ultimo_push": "2026-10-03",
+  "estrellas": 5780,
+  "archivado": false
+ },
+ "tremorlabs/tremor": {
+  "spdx_api": "Apache-2.0",
+  "licencia_head": " Apache License Version 2.0, January 2004 http://www.apache.org/licenses/",
+  "ultimo_push": "2025-10-10",
+  "estrellas": 3646,
+  "archivado": false
+ },
+ "apache/superset": {
+  "spdx_api": "Apache-2.0",
+  "licencia_head": " Apache License Version 2.0, January 2004 http://www.apache.org/licenses/",
+  "ultimo_push": "2026-10-04",
+  "estrellas": 75037,
+  "archivado": false
+ },
+ "outline/outline": {
+  "spdx_api": "NOASSERTION",
+  "licencia_head": "Business Source License 1.1 Parameters Licensor: General Outline, Inc.",
+  "ultimo_push": "2026-10-04",
+  "estrellas": 40802,
+  "archivado": false
+ },
+ "supertokens/supertokens-core": {
+  "spdx_api": "NOASSERTION",
+  "licencia_head": "Portions of this software are licensed as follows: * All content that resides under the \"ee/\" directory of thi",
+  "ultimo_push": "2026-10-02",
+  "estrellas": 15332,
+  "archivado": false
+ },
+ "appwrite/appwrite": {
+  "spdx_api": "BSD-3-Clause",
+  "licencia_head": "Copyright (c) 2019 Appwrite (https://appwrite.io) and individual contributors. All rights reserved. Redistribu",
+  "ultimo_push": "2026-10-04",
+  "estrellas": 57567,
+  "archivado": false
+ },
+ "OpenBB-finance/OpenBB": {
+  "spdx_api": "NOASSERTION",
+  "licencia_head": "Copyright (c) 2021-2026 OpenBB Inc. All files in this repository are licensed under the Apache License, Versio",
+  "ultimo_push": "2026-10-02",
+  "estrellas": 73850,
+  "archivado": false
+ },
+ "ggml-org/whisper.cpp": {
+  "spdx_api": "MIT",
+  "licencia_head": "MIT License Copyright (c) 2023-2026 The ggml authors Permission is hereby granted, free of charge, to any pers",
+  "ultimo_push": "2026-10-02",
+  "estrellas": 54132,
+  "archivado": false
+ },
+ "NUKnightLab/TimelineJS3": {
+  "spdx_api": "MPL-2.0",
+  "licencia_head": "Mozilla Public License, version 2.0 1. Definitions 1.1. \"Contributor\"",
+  "ultimo_push": "2026-09-22",
+  "estrellas": 3224,
+  "archivado": false
+ }
+}

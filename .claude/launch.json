@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "crm-revision",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "-p", "9301"],
+      "port": 9301,
+      "env": { "CRM_EVAL_LOGIN": "1" }
+    }
+  ]
+}

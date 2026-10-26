@@ -1,0 +1,5 @@
+export type PortalModo="editor"|"publicacion"|"catalogo"|"comprador"|"promotor";
+export const contenidoPortalEjemplo={titulo:"Portal de demostración",descripcion:"Catálogo ilustrativo para revisar estructura, contenido y acceso antes de conectar el portal real.",accion:"Consultar disponibilidad"};
+export const catalogoPortalEjemplo=[{id:"PUB-EJ-01",nombre:"Proyecto de demostración A",zona:"Zona de ejemplo",estado:"No publicado",precio:"Precio por confirmar",material:"Material sujeto a licencia y revisión"},{id:"PUB-EJ-02",nombre:"Proyecto de demostración B",zona:"Zona de ejemplo",estado:"Borrador",precio:"Precio por confirmar",material:"Sin afirmaciones fiscales acreditadas"}];
+export const pasosCompradorEjemplo=["Identidad y expediente autorizados pendientes","Condiciones comerciales sujetas al compromiso real","Plan de pagos no conectado","Documentos y avances visibles sólo mediante acceso autorizado"];
+export const pasosPromotorEjemplo=["Asignación del promotor y alcance por proyecto pendientes","Inventario y ventas no conectados a esta vista","Avance constructivo sujeto a evidencia y revisión","Estado de cuenta y liquidación no calculados"];

@@ -1,0 +1,5 @@
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+const enlaces = [["/reservas/holds","Holds"],["/reservas","Reservas"],["/reservas/cartera","Cartera y planes"],["/reservas/conciliacion","Conciliación"],["/reservas/excepciones","Excepciones"],["/reservas/facturacion","Facturación"],["/comisiones","Libro"],["/comisiones/reglas","Reglas"],["/comisiones/liquidaciones","Liquidaciones"],["/metas","Metas"]] as const;
+export function NavegacionFinanzas(){const path=usePathname();return <nav aria-label="Finanzas y Cobros" className="mb-4 flex min-w-0 flex-wrap gap-1 border-b border-line pb-2">{enlaces.map(([href,label])=>{const active=path===href || (href!=="/reservas"&&href!=="/comisiones"&&path.startsWith(href+"/"));return <Link key={href} href={href} aria-current={active?"page":undefined} className={"inline-flex min-h-11 items-center rounded-md px-3 text-[13px] font-semibold focus-visible:outline-2 focus-visible:outline-gold-700 "+(active?"bg-gold-600 text-navy-950":"text-navy-900 hover:bg-navy-100")}>{label}</Link>;})}</nav>}

@@ -1,0 +1,4928 @@
+{
+  "observedAt": "2026-10-18T12:52:56.026Z",
+  "destination": {
+    "name": "quisqueyahome_crm",
+    "host": "127.0.0.1/32",
+    "port": 5432
+  },
+  "manifest": {
+    "academy_certificates": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "public_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "review_request_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "course_code",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "course_name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "verification_code",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "cryptographic_hash",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "evidence_snapshot",
+        "type": "jsonb",
+        "nullable": false
+      },
+      {
+        "name": "approved_by",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "revoked_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "revoked_reason",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "revoked_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "issued_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      }
+    ],
+    "academy_checklist_items": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "academy_item_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "label",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "academy_checklist_progress": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "user_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "checklist_item_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "is_completed",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "completed_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "academy_items": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "item_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "duration_minutes",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "video_url",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "published_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "academy_progress": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "user_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "academy_item_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "progress_percent",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "is_completed",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "completed_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "academy_review_requests": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "public_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "course_code",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "course_name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "moodle_course_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "progress_percent",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "grade_percent",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "evidence_hash",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "evidence_payload",
+        "type": "jsonb",
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "decision_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "decision_reason",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "decided_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      }
+    ],
+    "activities": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "activity_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "contact_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deal_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "project_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "assignee_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "starts_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "ends_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "is_all_day",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "location",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "meeting_url",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "priority",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "completed_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "lead_id",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "activity_sync": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "activity_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "provider",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "external_event_id",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "external_calendar_id",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "sync_status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "last_synced_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "last_error",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "agencies": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "public_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "audit_log": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "user_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "action",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "entity_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "entity_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "previous_value",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "new_value",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "ip_address",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "user_agent",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "broker_profiles": [
+      {
+        "name": "user_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "specialty",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "handles_rentals",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "level",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "annual_sales_cents",
+        "type": "bigint",
+        "nullable": false
+      },
+      {
+        "name": "monthly_target_deals",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "agency_id",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "campaign_spend": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "public_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "campaign_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "month",
+        "type": "date",
+        "nullable": false
+      },
+      {
+        "name": "amount_cents",
+        "type": "bigint",
+        "nullable": false
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "commissions": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "deal_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "sale_amount_cents",
+        "type": "bigint",
+        "nullable": false
+      },
+      {
+        "name": "commission_basis_points",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "total_commission_cents",
+        "type": "bigint",
+        "nullable": false
+      },
+      {
+        "name": "broker_share_basis_points",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "agency_share_basis_points",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "broker_amount_cents",
+        "type": "bigint",
+        "nullable": false
+      },
+      {
+        "name": "agency_amount_cents",
+        "type": "bigint",
+        "nullable": false
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "closed_date",
+        "type": "date",
+        "nullable": true
+      },
+      {
+        "name": "approved_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "approved_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "paid_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "construction_phases": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "project_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "period",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "progress_percent",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "status_date",
+        "type": "date",
+        "nullable": true
+      },
+      {
+        "name": "video_url",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "public_note",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "responsible_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "is_published",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "published_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "contacts": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "full_name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "phone",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "phone_display",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "email",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "country",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "city",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "source_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "notes",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "last_interaction_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "consent_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "consent_source",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      }
+    ],
+    "deal_properties": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "deal_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "project_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "unit_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "is_primary",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "deleted_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deletion_reason",
+        "type": "text",
+        "nullable": true
+      }
+    ],
+    "deal_stage_history": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "deal_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "from_stage_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "to_stage_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "changed_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "changed_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "deals": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "contact_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "lead_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "stage_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "source_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "operation_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "amount_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "probability",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "commission_basis_points",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "expected_close_date",
+        "type": "date",
+        "nullable": true
+      },
+      {
+        "name": "next_activity_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "stage_changed_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "closed_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "loss_reason_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "loss_comment",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "notes",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      }
+    ],
+    "external_refs": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "entity_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "local_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "system",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "external_id",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "version",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "synced_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "files": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "entity_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "entity_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "file_type",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "url",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "mime_type",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "size_bytes",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "visibility",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "uploaded_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      }
+    ],
+    "goals": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "year",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "month",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "target_deals",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "target_amount_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "achieved_deals",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "achieved_amount_cents",
+        "type": "bigint",
+        "nullable": false
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "integration_accounts": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "provider",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "user_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "external_account_id",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "encrypted_credentials",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "scopes",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "last_synced_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "last_error",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "lead_sources": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "leads": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "contact_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "source_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "project_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "project_interest_text",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "zone_interest",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "operation_type",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "budget_min_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "budget_max_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "bedrooms",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "suggested_broker_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "source_video_url",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "campaign",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "utm_source",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "utm_medium",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "utm_campaign",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "original_message",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "external_id",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "received_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "first_contacted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "converted_deal_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "discard_reason",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "zone_interest_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "campaign_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "delivery_horizon_months",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "payment_method_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "confotur_interest",
+        "type": "boolean",
+        "nullable": true
+      }
+    ],
+    "loss_reasons": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "marketing_campaigns": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "public_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "source_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "starts_on",
+        "type": "date",
+        "nullable": false
+      },
+      {
+        "name": "ends_on",
+        "type": "date",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      }
+    ],
+    "message_templates": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "category",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "channel",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "body",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "variables",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "notifications": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "user_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "notification_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "title",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "body",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "entity_type",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "entity_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "is_read",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "read_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "outbox": [
+      {
+        "name": "event_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "event_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "version",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "aggregate_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "correlation_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "payload",
+        "type": "jsonb",
+        "nullable": false
+      },
+      {
+        "name": "idempotency_key",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "attempts",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "available_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "sent_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "dead_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "last_failure",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "attempt_history",
+        "type": "jsonb",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "outbox_dead": [
+      {
+        "name": "event_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "reason",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "failed_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "payment_methods": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "public_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "permissions": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "role_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "resource",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "action",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "scope",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "pipeline_stages": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "kind",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "default_probability",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "projects": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "zone",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "project_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "operation_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "developer",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "start_date",
+        "type": "date",
+        "nullable": true
+      },
+      {
+        "name": "estimated_delivery_date",
+        "type": "date",
+        "nullable": true
+      },
+      {
+        "name": "progress_percent",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "internal_price_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "public_range_min_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "public_range_max_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "video_url",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "is_published",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "zone_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "confotur_eligible",
+        "type": "boolean",
+        "nullable": true
+      }
+    ],
+    "roles": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "is_protected",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "sessions": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "user_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "token_hash",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "ip_address",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "user_agent",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "expires_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "revoked_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "unit_inventory_states": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "public_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "legacy_status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ],
+    "unit_sales": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "unit_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "deal_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "project_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "unit_code_normalized",
+        "type": "text",
+        "nullable": false
+      }
+    ],
+    "units": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "project_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "code",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "unit_type",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "bedrooms",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "bathrooms",
+        "type": "real",
+        "nullable": true
+      },
+      {
+        "name": "built_area_m2",
+        "type": "real",
+        "nullable": true
+      },
+      {
+        "name": "yard_area_m2",
+        "type": "real",
+        "nullable": true
+      },
+      {
+        "name": "floor_level",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "operation_type",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "price_period",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "currency",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "real_price_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "public_range_min_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "public_range_max_cents",
+        "type": "bigint",
+        "nullable": true
+      },
+      {
+        "name": "status",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "broker_id",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "internal_notes",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "created_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "updated_by",
+        "type": "integer",
+        "nullable": true
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "tower",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "inventory_state_id",
+        "type": "integer",
+        "nullable": true
+      }
+    ],
+    "users": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "role_id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "auth_user_id",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "full_name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "email",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "password_hash",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "initials",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "job_title",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "phone",
+        "type": "text",
+        "nullable": true
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "last_login_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      }
+    ],
+    "webhook_inbox": [
+      {
+        "name": "id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "system",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "account_id",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "event_id",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "correlation_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "version",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "received_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "processed_at",
+        "type": "timestamp with time zone",
+        "nullable": true
+      },
+      {
+        "name": "payload",
+        "type": "jsonb",
+        "nullable": false
+      }
+    ],
+    "zones": [
+      {
+        "name": "id",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "public_id",
+        "type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "nullable": false
+      },
+      {
+        "name": "position",
+        "type": "integer",
+        "nullable": false
+      },
+      {
+        "name": "is_active",
+        "type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "nullable": false
+      }
+    ]
+  },
+  "uniques": [
+    {
+      "table": "academy_certificates",
+      "name": "academy_certificates_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_certificates_pkey ON public.academy_certificates USING btree (id)"
+    },
+    {
+      "table": "academy_certificates",
+      "name": "academy_certificates_public_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_certificates_public_id_unq ON public.academy_certificates USING btree (public_id)"
+    },
+    {
+      "table": "academy_certificates",
+      "name": "academy_certificates_review_request_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_certificates_review_request_unq ON public.academy_certificates USING btree (review_request_id)"
+    },
+    {
+      "table": "academy_certificates",
+      "name": "academy_certificates_verification_code_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_certificates_verification_code_unq ON public.academy_certificates USING btree (verification_code)"
+    },
+    {
+      "table": "academy_checklist_items",
+      "name": "academy_checklist_items_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_checklist_items_pkey ON public.academy_checklist_items USING btree (id)"
+    },
+    {
+      "table": "academy_checklist_items",
+      "name": "academy_checklist_items_position_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_checklist_items_position_unq ON public.academy_checklist_items USING btree (academy_item_id, \"position\")"
+    },
+    {
+      "table": "academy_checklist_progress",
+      "name": "academy_checklist_progress_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_checklist_progress_pkey ON public.academy_checklist_progress USING btree (id)"
+    },
+    {
+      "table": "academy_checklist_progress",
+      "name": "academy_checklist_progress_user_item_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_checklist_progress_user_item_unq ON public.academy_checklist_progress USING btree (user_id, checklist_item_id)"
+    },
+    {
+      "table": "academy_items",
+      "name": "academy_items_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_items_pkey ON public.academy_items USING btree (id)"
+    },
+    {
+      "table": "academy_progress",
+      "name": "academy_progress_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_progress_pkey ON public.academy_progress USING btree (id)"
+    },
+    {
+      "table": "academy_progress",
+      "name": "academy_progress_user_item_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_progress_user_item_unq ON public.academy_progress USING btree (user_id, academy_item_id)"
+    },
+    {
+      "table": "academy_review_requests",
+      "name": "academy_review_requests_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_review_requests_pkey ON public.academy_review_requests USING btree (id)"
+    },
+    {
+      "table": "academy_review_requests",
+      "name": "academy_review_requests_public_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX academy_review_requests_public_id_unq ON public.academy_review_requests USING btree (public_id)"
+    },
+    {
+      "table": "activities",
+      "name": "activities_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX activities_pkey ON public.activities USING btree (id)"
+    },
+    {
+      "table": "activity_sync",
+      "name": "activity_sync_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX activity_sync_pkey ON public.activity_sync USING btree (id)"
+    },
+    {
+      "table": "activity_sync",
+      "name": "activity_sync_provider_event_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX activity_sync_provider_event_unq ON public.activity_sync USING btree (provider, external_event_id)"
+    },
+    {
+      "table": "agencies",
+      "name": "agencies_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX agencies_pkey ON public.agencies USING btree (id)"
+    },
+    {
+      "table": "agencies",
+      "name": "agencies_public_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX agencies_public_id_unq ON public.agencies USING btree (public_id)"
+    },
+    {
+      "table": "agencies",
+      "name": "agencies_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX agencies_slug_unq ON public.agencies USING btree (slug)"
+    },
+    {
+      "table": "audit_log",
+      "name": "audit_log_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX audit_log_pkey ON public.audit_log USING btree (id)"
+    },
+    {
+      "table": "broker_profiles",
+      "name": "broker_profiles_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX broker_profiles_pkey ON public.broker_profiles USING btree (user_id)"
+    },
+    {
+      "table": "campaign_spend",
+      "name": "campaign_spend_campaign_month_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX campaign_spend_campaign_month_unq ON public.campaign_spend USING btree (campaign_id, month)"
+    },
+    {
+      "table": "campaign_spend",
+      "name": "campaign_spend_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX campaign_spend_pkey ON public.campaign_spend USING btree (id)"
+    },
+    {
+      "table": "campaign_spend",
+      "name": "campaign_spend_public_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX campaign_spend_public_id_unq ON public.campaign_spend USING btree (public_id)"
+    },
+    {
+      "table": "commissions",
+      "name": "commissions_deal_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX commissions_deal_unq ON public.commissions USING btree (deal_id)"
+    },
+    {
+      "table": "commissions",
+      "name": "commissions_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX commissions_pkey ON public.commissions USING btree (id)"
+    },
+    {
+      "table": "construction_phases",
+      "name": "construction_phases_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX construction_phases_pkey ON public.construction_phases USING btree (id)"
+    },
+    {
+      "table": "construction_phases",
+      "name": "construction_phases_project_position_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX construction_phases_project_position_unq ON public.construction_phases USING btree (project_id, \"position\")"
+    },
+    {
+      "table": "contacts",
+      "name": "contacts_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX contacts_pkey ON public.contacts USING btree (id)"
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_deal_project_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX deal_properties_deal_project_unq ON public.deal_properties USING btree (deal_id, project_id) WHERE ((unit_id IS NULL) AND (deleted_at IS NULL))"
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_deal_unit_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX deal_properties_deal_unit_unq ON public.deal_properties USING btree (deal_id, unit_id) WHERE (deleted_at IS NULL)"
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX deal_properties_pkey ON public.deal_properties USING btree (id)"
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_primary_live_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX deal_properties_primary_live_unq ON public.deal_properties USING btree (deal_id) WHERE (is_primary AND (deleted_at IS NULL))"
+    },
+    {
+      "table": "deal_stage_history",
+      "name": "deal_stage_history_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX deal_stage_history_pkey ON public.deal_stage_history USING btree (id)"
+    },
+    {
+      "table": "deals",
+      "name": "deals_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX deals_pkey ON public.deals USING btree (id)"
+    },
+    {
+      "table": "external_refs",
+      "name": "external_refs_local_system_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX external_refs_local_system_unq ON public.external_refs USING btree (entity_type, local_id, system)"
+    },
+    {
+      "table": "external_refs",
+      "name": "external_refs_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX external_refs_pkey ON public.external_refs USING btree (id)"
+    },
+    {
+      "table": "external_refs",
+      "name": "external_refs_system_external_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX external_refs_system_external_unq ON public.external_refs USING btree (system, external_id)"
+    },
+    {
+      "table": "files",
+      "name": "files_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX files_pkey ON public.files USING btree (id)"
+    },
+    {
+      "table": "goals",
+      "name": "goals_broker_period_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX goals_broker_period_unq ON public.goals USING btree (broker_id, year, month)"
+    },
+    {
+      "table": "goals",
+      "name": "goals_company_period_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX goals_company_period_unq ON public.goals USING btree (year, month) WHERE (broker_id IS NULL)"
+    },
+    {
+      "table": "goals",
+      "name": "goals_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX goals_pkey ON public.goals USING btree (id)"
+    },
+    {
+      "table": "integration_accounts",
+      "name": "integration_accounts_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX integration_accounts_pkey ON public.integration_accounts USING btree (id)"
+    },
+    {
+      "table": "integration_accounts",
+      "name": "integration_accounts_provider_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX integration_accounts_provider_unq ON public.integration_accounts USING btree (provider) WHERE (user_id IS NULL)"
+    },
+    {
+      "table": "integration_accounts",
+      "name": "integration_accounts_provider_user_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX integration_accounts_provider_user_unq ON public.integration_accounts USING btree (provider, user_id)"
+    },
+    {
+      "table": "lead_sources",
+      "name": "lead_sources_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX lead_sources_pkey ON public.lead_sources USING btree (id)"
+    },
+    {
+      "table": "lead_sources",
+      "name": "lead_sources_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX lead_sources_slug_unq ON public.lead_sources USING btree (slug)"
+    },
+    {
+      "table": "leads",
+      "name": "leads_external_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX leads_external_id_unq ON public.leads USING btree (external_id) WHERE (deleted_at IS NULL)"
+    },
+    {
+      "table": "leads",
+      "name": "leads_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX leads_pkey ON public.leads USING btree (id)"
+    },
+    {
+      "table": "loss_reasons",
+      "name": "loss_reasons_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX loss_reasons_pkey ON public.loss_reasons USING btree (id)"
+    },
+    {
+      "table": "loss_reasons",
+      "name": "loss_reasons_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX loss_reasons_slug_unq ON public.loss_reasons USING btree (slug)"
+    },
+    {
+      "table": "marketing_campaigns",
+      "name": "marketing_campaigns_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX marketing_campaigns_pkey ON public.marketing_campaigns USING btree (id)"
+    },
+    {
+      "table": "marketing_campaigns",
+      "name": "marketing_campaigns_public_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX marketing_campaigns_public_id_unq ON public.marketing_campaigns USING btree (public_id)"
+    },
+    {
+      "table": "marketing_campaigns",
+      "name": "marketing_campaigns_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX marketing_campaigns_slug_unq ON public.marketing_campaigns USING btree (slug)"
+    },
+    {
+      "table": "message_templates",
+      "name": "message_templates_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX message_templates_pkey ON public.message_templates USING btree (id)"
+    },
+    {
+      "table": "notifications",
+      "name": "notifications_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX notifications_pkey ON public.notifications USING btree (id)"
+    },
+    {
+      "table": "outbox",
+      "name": "outbox_idempotency_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX outbox_idempotency_unq ON public.outbox USING btree (idempotency_key)"
+    },
+    {
+      "table": "outbox",
+      "name": "outbox_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX outbox_pkey ON public.outbox USING btree (event_id)"
+    },
+    {
+      "table": "outbox_dead",
+      "name": "outbox_dead_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX outbox_dead_pkey ON public.outbox_dead USING btree (event_id)"
+    },
+    {
+      "table": "payment_methods",
+      "name": "payment_methods_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX payment_methods_pkey ON public.payment_methods USING btree (id)"
+    },
+    {
+      "table": "payment_methods",
+      "name": "payment_methods_public_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX payment_methods_public_id_unq ON public.payment_methods USING btree (public_id)"
+    },
+    {
+      "table": "payment_methods",
+      "name": "payment_methods_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX payment_methods_slug_unq ON public.payment_methods USING btree (slug)"
+    },
+    {
+      "table": "permissions",
+      "name": "permissions_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX permissions_pkey ON public.permissions USING btree (id)"
+    },
+    {
+      "table": "permissions",
+      "name": "permissions_role_resource_action_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX permissions_role_resource_action_unq ON public.permissions USING btree (role_id, resource, action)"
+    },
+    {
+      "table": "pipeline_stages",
+      "name": "pipeline_stages_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX pipeline_stages_pkey ON public.pipeline_stages USING btree (id)"
+    },
+    {
+      "table": "pipeline_stages",
+      "name": "pipeline_stages_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX pipeline_stages_slug_unq ON public.pipeline_stages USING btree (slug)"
+    },
+    {
+      "table": "projects",
+      "name": "projects_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX projects_pkey ON public.projects USING btree (id)"
+    },
+    {
+      "table": "projects",
+      "name": "projects_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX projects_slug_unq ON public.projects USING btree (slug) WHERE (deleted_at IS NULL)"
+    },
+    {
+      "table": "roles",
+      "name": "roles_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX roles_pkey ON public.roles USING btree (id)"
+    },
+    {
+      "table": "roles",
+      "name": "roles_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX roles_slug_unq ON public.roles USING btree (slug)"
+    },
+    {
+      "table": "sessions",
+      "name": "sessions_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX sessions_pkey ON public.sessions USING btree (id)"
+    },
+    {
+      "table": "sessions",
+      "name": "sessions_token_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX sessions_token_unq ON public.sessions USING btree (token_hash)"
+    },
+    {
+      "table": "unit_inventory_states",
+      "name": "unit_inventory_states_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX unit_inventory_states_pkey ON public.unit_inventory_states USING btree (id)"
+    },
+    {
+      "table": "unit_inventory_states",
+      "name": "unit_inventory_states_public_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX unit_inventory_states_public_id_unq ON public.unit_inventory_states USING btree (public_id)"
+    },
+    {
+      "table": "unit_inventory_states",
+      "name": "unit_inventory_states_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX unit_inventory_states_slug_unq ON public.unit_inventory_states USING btree (slug)"
+    },
+    {
+      "table": "unit_sales",
+      "name": "unit_sales_deal_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX unit_sales_deal_unq ON public.unit_sales USING btree (deal_id)"
+    },
+    {
+      "table": "unit_sales",
+      "name": "unit_sales_identity_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX unit_sales_identity_unq ON public.unit_sales USING btree (project_id, unit_code_normalized)"
+    },
+    {
+      "table": "unit_sales",
+      "name": "unit_sales_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX unit_sales_pkey ON public.unit_sales USING btree (id)"
+    },
+    {
+      "table": "unit_sales",
+      "name": "unit_sales_unit_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX unit_sales_unit_unq ON public.unit_sales USING btree (unit_id)"
+    },
+    {
+      "table": "units",
+      "name": "units_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX units_pkey ON public.units USING btree (id)"
+    },
+    {
+      "table": "units",
+      "name": "units_project_code_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX units_project_code_unq ON public.units USING btree (project_id, code) WHERE (deleted_at IS NULL)"
+    },
+    {
+      "table": "users",
+      "name": "users_auth_user_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX users_auth_user_unq ON public.users USING btree (auth_user_id) WHERE (auth_user_id IS NOT NULL)"
+    },
+    {
+      "table": "users",
+      "name": "users_email_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX users_email_unq ON public.users USING btree (email) WHERE (deleted_at IS NULL)"
+    },
+    {
+      "table": "users",
+      "name": "users_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX users_pkey ON public.users USING btree (id)"
+    },
+    {
+      "table": "webhook_inbox",
+      "name": "webhook_inbox_account_event_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX webhook_inbox_account_event_unq ON public.webhook_inbox USING btree (system, account_id, event_id)"
+    },
+    {
+      "table": "webhook_inbox",
+      "name": "webhook_inbox_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX webhook_inbox_pkey ON public.webhook_inbox USING btree (id)"
+    },
+    {
+      "table": "zones",
+      "name": "zones_pkey",
+      "primary": true,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX zones_pkey ON public.zones USING btree (id)"
+    },
+    {
+      "table": "zones",
+      "name": "zones_public_id_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX zones_public_id_unq ON public.zones USING btree (public_id)"
+    },
+    {
+      "table": "zones",
+      "name": "zones_slug_unq",
+      "primary": false,
+      "valid": true,
+      "definition": "CREATE UNIQUE INDEX zones_slug_unq ON public.zones USING btree (slug)"
+    }
+  ],
+  "foreignKeys": [
+    {
+      "table": "academy_certificates",
+      "name": "academy_certificates_approved_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "approved_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_certificates",
+      "name": "academy_certificates_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_certificates",
+      "name": "academy_certificates_review_request_id_academy_review_requests_",
+      "targetSchema": "public",
+      "target": "academy_review_requests",
+      "sourceColumns": [
+        "review_request_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_certificates",
+      "name": "academy_certificates_revoked_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "revoked_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_checklist_items",
+      "name": "academy_checklist_items_academy_item_id_academy_items_id_fk",
+      "targetSchema": "public",
+      "target": "academy_items",
+      "sourceColumns": [
+        "academy_item_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_checklist_progress",
+      "name": "academy_checklist_progress_checklist_item_id_academy_checklist_",
+      "targetSchema": "public",
+      "target": "academy_checklist_items",
+      "sourceColumns": [
+        "checklist_item_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_checklist_progress",
+      "name": "academy_checklist_progress_user_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "user_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_items",
+      "name": "academy_items_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_items",
+      "name": "academy_items_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_progress",
+      "name": "academy_progress_academy_item_id_academy_items_id_fk",
+      "targetSchema": "public",
+      "target": "academy_items",
+      "sourceColumns": [
+        "academy_item_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_progress",
+      "name": "academy_progress_user_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "user_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_review_requests",
+      "name": "academy_review_requests_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "academy_review_requests",
+      "name": "academy_review_requests_decision_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "decision_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "activities",
+      "name": "activities_assignee_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "assignee_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "activities",
+      "name": "activities_contact_id_contacts_id_fk",
+      "targetSchema": "public",
+      "target": "contacts",
+      "sourceColumns": [
+        "contact_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "activities",
+      "name": "activities_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "activities",
+      "name": "activities_deal_id_deals_id_fk",
+      "targetSchema": "public",
+      "target": "deals",
+      "sourceColumns": [
+        "deal_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "activities",
+      "name": "activities_lead_id_leads_id_fk",
+      "targetSchema": "public",
+      "target": "leads",
+      "sourceColumns": [
+        "lead_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "activities",
+      "name": "activities_project_id_projects_id_fk",
+      "targetSchema": "public",
+      "target": "projects",
+      "sourceColumns": [
+        "project_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "activities",
+      "name": "activities_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "activity_sync",
+      "name": "activity_sync_activity_id_activities_id_fk",
+      "targetSchema": "public",
+      "target": "activities",
+      "sourceColumns": [
+        "activity_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "audit_log",
+      "name": "audit_log_user_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "user_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "broker_profiles",
+      "name": "broker_profiles_agency_id_agencies_id_fk",
+      "targetSchema": "public",
+      "target": "agencies",
+      "sourceColumns": [
+        "agency_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "broker_profiles",
+      "name": "broker_profiles_user_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "user_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "campaign_spend",
+      "name": "campaign_spend_campaign_id_marketing_campaigns_id_fk",
+      "targetSchema": "public",
+      "target": "marketing_campaigns",
+      "sourceColumns": [
+        "campaign_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "campaign_spend",
+      "name": "campaign_spend_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "campaign_spend",
+      "name": "campaign_spend_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "commissions",
+      "name": "commissions_approved_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "approved_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "commissions",
+      "name": "commissions_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "commissions",
+      "name": "commissions_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "commissions",
+      "name": "commissions_deal_id_deals_id_fk",
+      "targetSchema": "public",
+      "target": "deals",
+      "sourceColumns": [
+        "deal_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "commissions",
+      "name": "commissions_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "construction_phases",
+      "name": "construction_phases_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "construction_phases",
+      "name": "construction_phases_project_id_projects_id_fk",
+      "targetSchema": "public",
+      "target": "projects",
+      "sourceColumns": [
+        "project_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "construction_phases",
+      "name": "construction_phases_responsible_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "responsible_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "construction_phases",
+      "name": "construction_phases_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "contacts",
+      "name": "contacts_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "contacts",
+      "name": "contacts_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "contacts",
+      "name": "contacts_source_id_lead_sources_id_fk",
+      "targetSchema": "public",
+      "target": "lead_sources",
+      "sourceColumns": [
+        "source_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "contacts",
+      "name": "contacts_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_deal_id_deals_id_fk",
+      "targetSchema": "public",
+      "target": "deals",
+      "sourceColumns": [
+        "deal_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_deleted_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "deleted_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_project_id_projects_id_fk",
+      "targetSchema": "public",
+      "target": "projects",
+      "sourceColumns": [
+        "project_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_properties",
+      "name": "deal_properties_unit_id_units_id_fk",
+      "targetSchema": "public",
+      "target": "units",
+      "sourceColumns": [
+        "unit_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_stage_history",
+      "name": "deal_stage_history_changed_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "changed_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_stage_history",
+      "name": "deal_stage_history_deal_id_deals_id_fk",
+      "targetSchema": "public",
+      "target": "deals",
+      "sourceColumns": [
+        "deal_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_stage_history",
+      "name": "deal_stage_history_from_stage_id_pipeline_stages_id_fk",
+      "targetSchema": "public",
+      "target": "pipeline_stages",
+      "sourceColumns": [
+        "from_stage_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deal_stage_history",
+      "name": "deal_stage_history_to_stage_id_pipeline_stages_id_fk",
+      "targetSchema": "public",
+      "target": "pipeline_stages",
+      "sourceColumns": [
+        "to_stage_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deals",
+      "name": "deals_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deals",
+      "name": "deals_contact_id_contacts_id_fk",
+      "targetSchema": "public",
+      "target": "contacts",
+      "sourceColumns": [
+        "contact_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deals",
+      "name": "deals_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deals",
+      "name": "deals_lead_id_leads_id_fk",
+      "targetSchema": "public",
+      "target": "leads",
+      "sourceColumns": [
+        "lead_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deals",
+      "name": "deals_loss_reason_id_loss_reasons_id_fk",
+      "targetSchema": "public",
+      "target": "loss_reasons",
+      "sourceColumns": [
+        "loss_reason_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deals",
+      "name": "deals_source_id_lead_sources_id_fk",
+      "targetSchema": "public",
+      "target": "lead_sources",
+      "sourceColumns": [
+        "source_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deals",
+      "name": "deals_stage_id_pipeline_stages_id_fk",
+      "targetSchema": "public",
+      "target": "pipeline_stages",
+      "sourceColumns": [
+        "stage_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "deals",
+      "name": "deals_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "files",
+      "name": "files_uploaded_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "uploaded_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "goals",
+      "name": "goals_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "goals",
+      "name": "goals_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "goals",
+      "name": "goals_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "integration_accounts",
+      "name": "integration_accounts_user_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "user_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_campaign_id_marketing_campaigns_id_fk",
+      "targetSchema": "public",
+      "target": "marketing_campaigns",
+      "sourceColumns": [
+        "campaign_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_contact_id_contacts_id_fk",
+      "targetSchema": "public",
+      "target": "contacts",
+      "sourceColumns": [
+        "contact_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_payment_method_id_payment_methods_id_fk",
+      "targetSchema": "public",
+      "target": "payment_methods",
+      "sourceColumns": [
+        "payment_method_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_project_id_projects_id_fk",
+      "targetSchema": "public",
+      "target": "projects",
+      "sourceColumns": [
+        "project_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_source_id_lead_sources_id_fk",
+      "targetSchema": "public",
+      "target": "lead_sources",
+      "sourceColumns": [
+        "source_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_suggested_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "suggested_broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "leads",
+      "name": "leads_zone_interest_id_zones_id_fk",
+      "targetSchema": "public",
+      "target": "zones",
+      "sourceColumns": [
+        "zone_interest_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "marketing_campaigns",
+      "name": "marketing_campaigns_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "marketing_campaigns",
+      "name": "marketing_campaigns_source_id_lead_sources_id_fk",
+      "targetSchema": "public",
+      "target": "lead_sources",
+      "sourceColumns": [
+        "source_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "marketing_campaigns",
+      "name": "marketing_campaigns_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "message_templates",
+      "name": "message_templates_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "message_templates",
+      "name": "message_templates_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "notifications",
+      "name": "notifications_user_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "user_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "outbox_dead",
+      "name": "outbox_dead_event_id_outbox_event_id_fk",
+      "targetSchema": "public",
+      "target": "outbox",
+      "sourceColumns": [
+        "event_id"
+      ],
+      "targetColumns": [
+        "event_id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "permissions",
+      "name": "permissions_role_id_roles_id_fk",
+      "targetSchema": "public",
+      "target": "roles",
+      "sourceColumns": [
+        "role_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "projects",
+      "name": "projects_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "projects",
+      "name": "projects_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "projects",
+      "name": "projects_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "projects",
+      "name": "projects_zone_id_zones_id_fk",
+      "targetSchema": "public",
+      "target": "zones",
+      "sourceColumns": [
+        "zone_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "sessions",
+      "name": "sessions_user_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "user_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "unit_sales",
+      "name": "unit_sales_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "r",
+      "validated": true
+    },
+    {
+      "table": "unit_sales",
+      "name": "unit_sales_deal_id_deals_id_fk",
+      "targetSchema": "public",
+      "target": "deals",
+      "sourceColumns": [
+        "deal_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "r",
+      "validated": true
+    },
+    {
+      "table": "unit_sales",
+      "name": "unit_sales_project_id_projects_id_fk",
+      "targetSchema": "public",
+      "target": "projects",
+      "sourceColumns": [
+        "project_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "r",
+      "validated": true
+    },
+    {
+      "table": "unit_sales",
+      "name": "unit_sales_unit_id_units_id_fk",
+      "targetSchema": "public",
+      "target": "units",
+      "sourceColumns": [
+        "unit_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "r",
+      "validated": true
+    },
+    {
+      "table": "units",
+      "name": "units_broker_id_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "broker_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "units",
+      "name": "units_created_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "created_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "units",
+      "name": "units_inventory_state_id_unit_inventory_states_id_fk",
+      "targetSchema": "public",
+      "target": "unit_inventory_states",
+      "sourceColumns": [
+        "inventory_state_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "r",
+      "onUpdate": "c",
+      "validated": true
+    },
+    {
+      "table": "units",
+      "name": "units_project_id_projects_id_fk",
+      "targetSchema": "public",
+      "target": "projects",
+      "sourceColumns": [
+        "project_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "c",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "units",
+      "name": "units_updated_by_users_id_fk",
+      "targetSchema": "public",
+      "target": "users",
+      "sourceColumns": [
+        "updated_by"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    },
+    {
+      "table": "users",
+      "name": "users_role_id_roles_id_fk",
+      "targetSchema": "public",
+      "target": "roles",
+      "sourceColumns": [
+        "role_id"
+      ],
+      "targetColumns": [
+        "id"
+      ],
+      "onDelete": "a",
+      "onUpdate": "a",
+      "validated": true
+    }
+  ],
+  "rows": {
+    "academy_certificates": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "academy_checklist_items": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "academy_checklist_progress": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "academy_items": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "academy_progress": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "academy_review_requests": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "activities": {
+      "count": "1803",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "activity_sync": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "agencies": {
+      "count": "3",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "audit_log": {
+      "count": "49",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "broker_profiles": {
+      "count": "15",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "campaign_spend": {
+      "count": "152",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "commissions": {
+      "count": "17",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "construction_phases": {
+      "count": "8",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "contacts": {
+      "count": "460",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "deal_properties": {
+      "count": "184",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "deal_stage_history": {
+      "count": "596",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "deals": {
+      "count": "184",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "external_refs": {
+      "count": "5",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "files": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "goals": {
+      "count": "247",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "integration_accounts": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "lead_sources": {
+      "count": "9",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "leads": {
+      "count": "650",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "loss_reasons": {
+      "count": "17",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "marketing_campaigns": {
+      "count": "8",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "message_templates": {
+      "count": "4",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "notifications": {
+      "count": "3",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "outbox": {
+      "count": "4",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "outbox_dead": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "payment_methods": {
+      "count": "3",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "permissions": {
+      "count": "183",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "pipeline_stages": {
+      "count": "7",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "projects": {
+      "count": "25",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "roles": {
+      "count": "3",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "sessions": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "unit_inventory_states": {
+      "count": "5",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "unit_sales": {
+      "count": "15",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "units": {
+      "count": "404",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "users": {
+      "count": "19",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "webhook_inbox": {
+      "count": "0",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    },
+    "zones": {
+      "count": "13",
+      "originalHashEqual": true,
+      "fullHashEqual": true
+    }
+  }
+}

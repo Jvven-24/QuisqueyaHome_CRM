@@ -63,5 +63,294 @@ Ver detalle de capas en arquitectura.md.
 **Autenticación:** confirmado — **Supabase Auth**, precisamente por venir integrado con la base de datos elegida.
 **Pendiente de decidir:** mecanismo de deploy hacia el VPS de Hostinger. El usuario lo está trabajando en otra sesión, como parte del cronograma general del proyecto — no forma parte de esta ronda de documentación.
 
+## 13. Fechas en Postgres: tipos nativos, no texto ISO-8601
+**Decisión (1 de septiembre de 2026, al portar el esquema en T1):** en el repositorio de producción los instantes se guardan en `timestamptz` y las fechas sin hora en `date`, no como texto ISO-8601.
+**Por qué:** la convención de texto (`MAPEO_FRONTEND_CRM.md` §20.1) existía por un defecto de SQLite — su `CURRENT_TIMESTAMP` escribe `"2026-08-30 12:00:00"` mientras la aplicación escribe `"2026-08-30T12:00:00.000Z"`, y en texto el espacio ordena antes que la `T`, así que mezclarlos rompía `ORDER BY` y los rangos por fecha en silencio. Postgres no tiene ese defecto y sí tiene tipos de fecha reales. Guardar fechas como texto en Postgres tira a la basura los rangos, los índices por fecha y la aritmética de intervalos, que es justo lo que necesitan la próxima acción obligatoria, las alertas de SLA, la agenda y los rangos de Reportes.
+**Lo que NO cambia:** todo se sigue guardando en UTC y la conversión a `America/Santo_Domingo` sigue ocurriendo en la capa de aplicación.
+**Nota:** §20.1 advierte de no "corregir" las convenciones a mitad del desarrollo. El port a Postgres es exactamente la ventana en la que el propio documento admite que la sintaxis no es portable; hacerlo después habría exigido migrar datos.
+
+## 14. Dinero en `bigint`, no en `integer`
+**Decisión (1 de septiembre de 2026, T1):** todas las columnas `*_cents` son `bigint`.
+**Por qué:** en centavos, un `integer` de Postgres desborda a partir de US$21.4 millones. Es alcanzable en `broker_profiles.annual_sales_cents` y en los acumulados de `goals`. El desbordamiento no avisa antes de ocurrir.
+
+## 15. La tabla `sessions` queda sin uso
+**Decisión (1 de septiembre de 2026, T2):** `sessions` se conserva en el esquema portado pero no se usa. Supabase Auth ya gestiona sesiones y refresh tokens, y "cerrar sesión remota" se resuelve con su API.
+**Por qué:** mantener dos registros de sesión en paralelo garantiza que se desincronicen. La tabla se conserva solo porque el esquema está congelado (§18.1) y borrarla merece su propio PR.
+
+## 16. Sin repositorios ni puertos hasta que exista un caso de uso
+**Decisión (1 de septiembre de 2026, T4):** F0 entrega el cliente de base de datos, la validación, los errores y el helper de transacción, pero **no** un puerto ni un repositorio por tabla. Nacen en F1, con el caso de uso que los consuma.
+**Por qué:** la arquitectura hexagonal (decisión #11) invita a escribir la interfaz antes que el consumidor. Un puerto con una sola implementación y ningún consumidor es código muerto con nombre elegante, y además fija una forma antes de saber qué forma hace falta.
+**Descartado:** generar los 28 repositorios junto al esquema.
+
+## 17. El despliegue al VPS se hace al final, en una sola operación
+**Decisión (1 de septiembre de 2026):** no se despliega nada al VPS de Hostinger hasta que el programa esté terminado y funcionando. Cuando lo esté, se hace el despliegue y la migración completos en una sola operación.
+**Por qué:** decisión del responsable del proyecto. Evita mantener entornos desplegados durante los tres meses de construcción, y concentra el trabajo de infraestructura en un momento en que ya se sabe exactamente qué hay que desplegar.
+**Consecuencia sobre el cronograma:** **T8 sale de F0.** F0 se da por cerrada con T1, T2, T3, T4 y T7 —todas verificadas contra la base real—, y el issue de T8 se mueve a la fase de entrega. Sin esto, F0 quedaría abierta durante meses por un trabajo que se decidió no hacer todavía, y arrastraría la lectura de todo el cronograma.
+**Consecuencia sobre los criterios de terminado:** el #10 de `MAPEO_FRONTEND_CRM.md` §16 —*existe respaldo y una restauración probada*— **no se puede cumplir hasta ese momento**, porque no hay entorno de producción sobre el que probar la restauración. Queda pendiente explícitamente, no olvidado.
+**Riesgo asumido, para que esté escrito:** los problemas de entorno no aparecen hasta el primer despliegue, y aparecen todos juntos. Ya hay un ejemplo concreto de esta misma sesión: la conexión directa de Supabase resultó ser solo IPv6, y si el VPS no lleva IPv6 eso no se descubre hasta ese día. La lista de comprobaciones que hay que hacer entonces está en `docs/DESPLIEGUE.md` §5, y conviene repasarla antes de reservar el tiempo para esa operación, no durante.
+**Lo que sí queda hecho por adelantado:** contrato de variables de entorno (`.env.example`), procedimiento de respaldo y restauración, y las condiciones que el mecanismo de despliegue debe respetar. El desarrollo entretanto corre contra el proyecto de Supabase en la nube y `npm run dev` en local.
+
+## 18. Los estilos se portan del prototipo, no se rediseñan
+**Decisión (6 de septiembre de 2026, T5):** `src/app/globals.css` se porta desde `referencia-prototipo/app/globals.css` — 478 líneas de CSS plano, sin la línea `@import "tailwindcss"` — y encima se añaden los cuatro estados que el prototipo nunca tuvo: cargando, sin resultados, error y deshabilitado por permiso.
+**Por qué:** es la interfaz que el cliente ya vio y aprobó, y es CSS plano que funciona tal cual: variables de color, `.button`, `.table-wrap`, `.split-view`, `.inspector`, `.kanban`, `.empty`. Rediseñar añadiría una semana y una discusión de diseño a la ruta crítica de F1 para llegar al mismo sitio.
+**Descartado:** instalar Tailwind y reescribir el port como utilidades — misma interfaz, dependencia nueva y todo el trabajo hecho dos veces.
+**Consecuencia:** los estados de carga y error se resuelven con `loading.tsx` y `error.tsx`, convención nativa de Next 15. No hay estado global de carga ni librería de UI.
+
+## 19. Los duplicados se avisan, no se bloquean
+**Decisión (6 de septiembre de 2026, M1):** al crear un contacto se consulta por teléfono en E.164 y por email; si hay candidatos, se responde 409 con la lista, y quien crea puede insistir con un `crear_igual: true` explícito. **No se toca el esquema.**
+**Por qué:** el criterio de terminado #5 dice «se detectan antes de crear», no «se impiden». En una inmobiliaria una pareja comparte teléfono, y el mismo número entra por WhatsApp y por el portal el mismo día: un índice único duro convertiría un caso real en un error irrecuperable para el usuario. Además exigiría una migración sobre un esquema congelado.
+**Consecuencia:** fusionar duplicados queda fuera de F1 — es una pantalla propia y §8.4 la lista sin diseño confirmado.
+**Nota:** la normalización a E.164 se escribe a mano (República Dominicana es `+1` con 809/829/849). `libphonenumber-js` son ~500 KB para cubrir 200 países que este CRM no usa.
+
+## 20. El endpoint público de leads lleva token compartido
+**Decisión (6 de septiembre de 2026, M2):** la captura externa de leads se autentica con un token compartido en cabecera, declarado en `src/infrastructure/env.ts`, más validación estricta de la entrada y `external_id` obligatorio.
+**Por qué:** es la única entrada del sistema sin sesión, y por tanto el único sitio donde el RBAC no aplica — no hay actor del que resolver permisos. Un endpoint de inserción abierto a internet no se deja para después.
+**Consecuencia:** la idempotencia la garantiza el índice `leads_external_id_unq`, que ya existe: `ON CONFLICT DO NOTHING` y devolver el lead existente. Sin tabla de idempotencia, sin cola, sin cabecera `Idempotency-Key`.
+
+## 21. El broker se sugiere, no se asigna solo
+**Decisión (6 de septiembre de 2026, M2):** la regla de especialidad escribe `leads.suggested_broker_id`, no `broker_id`. Alguien confirma la asignación.
+**Por qué:** es lo que pide §10.3 #1 («sugerir o asignar»), y el esquema ya separa las dos columnas justo para esto. Repartir trabajo en automático sin que nadie mire, en un equipo de tres personas, produce leads en el buzón equivocado y nadie se entera hasta que el cliente llama.
+**Descartado:** un motor de reglas configurable para una condición sobre dos columnas (`specialty`, `handles_rentals`).
+
+## 22. Se porta la interfaz completa del prototipo en T5, no solo la de F1
+**Decisión (6 de septiembre de 2026, T5):** los 15 módulos del prototipo (`referencia-prototipo/app/page.tsx`, hoy un único componente cliente) se portan todos ahora, cada uno a su carpeta de ruta creada por T7, y no solo los tres de F1 (Contactos, Leads, Pipeline). Los módulos que aún no tienen backend real muestran los datos de muestra del prototipo, marcados con `ponytail:` como mock explícito.
+**Por qué:** el frontend ya está construido y aprobado por el cliente — F0 y F1 no lo diseñan, lo conectan. Mantener 12 módulos con un texto de "pendiente de construir" mientras el prototipo ya tiene su interfaz completa es dejar trabajo terminado sin usar, y el CRM se percibe como más avanzado (y es más fácil de revisar con el cliente) si se ve completo desde ya, aunque detrás siga siendo mock hasta que le llegue su turno de construcción.
+**Consecuencia:** cada `page.tsx` de módulo sigue siendo componente de servidor con `requireActor` + `requireScopeInPage` — el guardia de permiso no se pierde por portar la vista. El JSX y la interactividad local del prototipo pasan a un componente cliente hijo (`vista.tsx`), sin tocar el guardia.
+**No cambia el orden de construcción de F1** (`docs/F1_ANALISIS_Y_PLAN.md` §5): M1→M2→M3 siguen siendo los únicos que reciben datos reales en esta fase. Los demás quedan visualmente completos y funcionalmente mock hasta su propia fase (F2–F5).
+
+## 23. Agenda y tareas son dos vistas de `activities`, no dos módulos
+**Decisión (12 de septiembre de 2026, M4):** un solo grupo de route handlers (`/api/actividades`) y dos páginas que consultan distinto. `/agenda` lee por semana, `/tareas` lee la cola del día.
+**Por qué:** el esquema ya unificó cita y tarea en `activities` —con `contact_id`, `deal_id` y `assignee_id`, que es justo lo que el prototipo no tenía (§8.2)— y las dos rutas ya apuntan al mismo recurso de permisos (`modulos.ts:28-29`). Dos CRUD sobre la misma tabla se desincronizan.
+**Descartado:** reproducir la separación `Appointment`/`Task` del prototipo, catalogada como defecto del modelo.
+
+## 24. Fechas reales con `Intl`, sin librería de fechas
+**Decisión (12 de septiembre de 2026, M4):** `starts_at`/`ends_at` son `timestamptz`; la conversión a `America/Santo_Domingo` ocurre **solo al pintar**, con `Intl.DateTimeFormat`. La rejilla semanal se calcula con aritmética de `Date` sobre el lunes de la semana pedida por `searchParams`.
+**Por qué:** `Intl` está en Node y en el navegador. `date-fns-tz` o `luxon` son 20–70 KB para seis líneas.
+**Consecuencia:** desaparece el índice de día `1..5` y el offset `-04:00` escrito a mano del prototipo (R11).
+
+## 25. El `.ics` se genera en servidor; `activity_sync` no se toca en F2
+**Decisión (12 de septiembre de 2026, M4):** un route handler responde `text/calendar` con `UID = activity-{id}@quisqueyahome.com`, filtrado por permiso. Sin dependencia de iCalendar.
+**Por qué:** un `VEVENT` son ~15 líneas de texto, y la clave primaria **es** el identificador estable que pide R11 — el `{day}-{time}@…` del prototipo duplicaba eventos al resincronizar. Generarlo en servidor mantiene el filtro de permisos donde ya vive.
+**Consecuencia:** `activity_sync` queda intacta hasta que exista sincronización de dos vías con Google Calendar, que §14 clasifica como fase posterior. Escribir en ella ahora es mantener una tabla que nadie lee.
+
+## 26. El precio real se decide en el `SELECT`, no en el JSX
+**Decisión (12 de septiembre de 2026, M5):** `units.real_price_cents` y `projects.internal_price_cents` solo se incluyen en la consulta si el actor tiene permiso sobre `unit_real_price`.
+**Por qué:** el prototipo los ocultaba con `role === "admin"` en el render — el dato viajaba al navegador y cualquiera lo veía en el HTML (R7, §10.4). El dato que no se selecciona no se filtra, no se serializa y no se escapa.
+**Consecuencia:** es la primera restricción a nivel de campo del sistema, y M6, M7, M9 y M12 la repetirán.
+
+## 27. La matriz de permisos pinta el modelo real, no las 8 casillas del prototipo
+**Decisión (12 de septiembre de 2026, M13):** una fila por recurso, una columna por acción y, en cada celda, el alcance (`ninguno`/`propio`/`equipo`/`todos`). La columna del administrador queda bloqueada (R10).
+**Por qué:** la matriz aprobada tiene 8 filas × 3 columnas y describe un modelo que ya no existe — el propio mapeo señala que «cubre 8 alcances frente a 15 módulos». Traducir esas casillas a filas de `permissions` exige inventar reglas que nadie aprobó (¿«Leads ✓» concede `delete`?, ¿con qué alcance?) y concede permisos en silencio.
+**Consecuencia:** misma disposición visual y mismo CSS, datos honestos. El cambio surte efecto en la petición siguiente: `getActor` resuelve permisos por petición y su `cache` de React vive solo dentro de un render.
+
+## 28. El alta de usuario es invitación, con la fila de `users` primero
+**Decisión (12 de septiembre de 2026, M13):** `INSERT` en `users` con `auth_user_id` nulo, auditado y en transacción; después `auth.admin.inviteUserByEmail` con `SUPABASE_SERVICE_ROLE_KEY`, declarada en `env.ts` y solo servidor.
+**Por qué:** el esquema ya lo previó — el comentario de `auth_user_id` dice «nulo mientras el usuario existe en el CRM pero aún no ha sido invitado». Si la invitación falla, queda un usuario del CRM que no puede entrar, reparable con «reenviar invitación»; al revés quedaría una cuenta de Auth huérfana sin rol.
+**Consecuencia:** se acaban las altas manuales por SQL (`docs/contexto/errores-conocidos.md`, sección Operación). Hace falta la clave de servicio del proyecto de Supabase.
+
+## 29. Las etapas se renombran y se reordenan; su `slug` y su `kind` no
+**Decisión (12 de septiembre de 2026, M13):** la pantalla de etapas edita nombre, posición, probabilidad por defecto y activación. `slug` y `kind` son de solo lectura.
+**Por qué:** la decisión #1 pide que el nombre sea editable, y para eso las reglas cuelgan de `kind`. Cambiar `kind` reescribiría en silencio el significado de los negocios ya cerrados —y de ahí cuelgan el nivel del broker y la comisión—; el `slug` es la identidad que usa el código.
+
+## 30. Prohibido crear ramas nuevas para fixes puntuales
+**Decisión (14 de septiembre de 2026):** ya no se crean ramas `fix/<issue>` (ni
+`chore/<algo>` ni ninguna rama nueva) para arreglos de auditoría, regresiones o
+fixtures de prueba. Todo se trabaja sobre la rama personal ya existente
+(`dev/<tu-nombre>`) y se sube ahí, en commits separados si hace falta
+distinguirlos. Revierte la práctica descrita antes en `flujo-de-trabajo.md`
+("usa una rama `fix/<issue-o-descripcion>` contra `develop`").
+**Por qué:** al corregir los defectos de la auditoría de F1 (12/09/2026) se
+crearon 3 ramas (`fix/22-asignar-broker`, `fix/23-defectos-una-linea`,
+`fix/24-fecha-santo-domingo-ventas-anuales`), y eso causó que **2 workflows de
+GitHub Actions no recibieran el PR correctamente** — quedaron configurados
+esperando el evento contra las ramas de trabajo habituales, no contra ramas
+nuevas creadas al vuelo para cada fix.
+**Descartado:** seguir aceptando ramas `fix/*` porque "la guardia de ramas las
+acepta" — el hecho de que la guardia no las rechace no significa que el resto
+del pipeline (Actions) las maneje bien.
+**Excepción:** si hace falta de verdad una rama nueva y separada (ej. un cambio
+de esquema que exige su propio PR), **la pide el usuario explícitamente**; no
+es una decisión que tome el agente por su cuenta.
+
+## 31. Flujo de trabajo por fase, de punta a punta: orientación, issues, ponytail, commit por issue y PR bloqueado si algo falla
+**Decisión (14 de septiembre de 2026):** se formaliza el ciclo completo de
+trabajo por fase en `flujo-de-trabajo.md`:
+1. Al abrir sesión, orientación rápida (decisiones, errores conocidos, mapeo,
+   `git log`) — no una auditoría completa.
+2. Al recibir una fase, investigar todo lo que ya existe sobre ella, revisar el
+   repo real contra esos documentos, **crear los issues en GitHub** y **escribir
+   el plan de implementación** (`docs/F<n>_ANALISIS_Y_PLAN.md`) antes de tocar
+   código.
+3. Al construir, **ponytail es obligatorio**: la skill `ponytail` para escribir,
+   `ponytail-review` para revisar cada diff, y **`ponytail-audit` no se puede
+   omitir**.
+4. **Un commit por issue**, nunca varios issues agrupados en un commit.
+5. Al cerrar la fase (todos los issues comiteados): prueba unitaria
+   (`typecheck`/`lint`/`test`/`build`) **y** prueba manual desde interfaz. Un
+   error encontrado en cualquiera de las dos se anota y **se prioriza sobre
+   seguir avanzando**.
+6. **No se abre PR si algo falla.** Se puede seguir comiteando, pero el mensaje
+   del commit debe decir explícitamente qué está fallando.
+**Por qué:** hasta ahora estos pasos se seguían de facto (los planes
+`F0_ANALISIS_Y_PLAN.md`/`F1_ANALISIS_Y_PLAN.md` y los issues por defecto de la
+auditoría de F1 ya existían), pero no estaban escritos como regla — lo que deja
+margen para que una sesión nueva salte directo a codear sin plan, mezcle varios
+arreglos en un commit, o abra un PR con algo roto. Escribirlo evita que el
+criterio varíe de sesión a sesión.
+**Relacionado:** decisión #30 (no crear ramas nuevas), que ya tocaba el mismo
+documento por el mismo motivo — evitar que GitHub Actions reciba el PR mal.
+
+## 32. El alcance `own` de las fases de obra se hereda del proyecto
+**Decisión (17 de septiembre de 2026, M6):** `construction_phases` no gana una columna de responsable. El alcance se aplica al proyecto —`visibleRows(actor, scope, projects.brokerId, projects.deletedAt)`— y las fases se leen solo de un proyecto que ya pasó ese filtro.
+**Por qué:** el broker tiene `construction_phases:view own`, pero la tabla no tiene `broker_id` y el esquema está congelado (§18.1). El proyecto ya sabe de quién es; duplicar esa referencia en las fases obliga a mantener dos verdades sincronizadas.
+**Consecuencia:** mismo patrón que `api/pipeline/[id]/propiedades`. Un proyecto reasignado lleva sus fases consigo, sin migrar datos.
+
+## 33. Las fotos de obra van a Supabase Storage, en un bucket privado y con URLs firmadas
+**Decisión (18 de septiembre de 2026, M6):** bucket `avances-obra`, **privado**, creado de forma idempotente en `db/seed.sql`. La subida va por route handler con `adminClient()` después de `requireScope` (mismo criterio que la invitación, decisión #28), deja una fila en `files` con la **ruta** del objeto —no una URL pública— y la pantalla genera URLs firmadas en el servidor al pintar.
+**Por qué:** las imágenes no caben en Postgres sin inflarlo, y `@supabase/supabase-js` ya está instalado: Storage no agrega una sola dependencia. Privado por defecto significa que nada se filtra antes de publicar, y el portal público (Sistema 1) está fuera de alcance.
+**Validación:** solo JPEG, PNG, WEBP y GIF. **SVG rechazado a propósito**: puede llevar script y el archivo se sirve desde una URL que un navegador abre como documento. La extensión del objeto sale del tipo validado, nunca del nombre que manda el cliente, y el tamaño se rechaza por `content-length` antes de leer el cuerpo.
+**Descartado:** guardar la ruta de un Drive de la inmobiliaria como sustituto (se evaluó el 17/09/2026 y se descartó al confirmar que Storage ya venía con el proyecto). Si algún día se cambia de proveedor, lo único que cambia es el route handler de subida.
+**Requiere:** `SUPABASE_SERVICE_ROLE_KEY` en `.env` — configurada el 18/09/2026.
+
+## 34. «Publicar en el portal» es una marca, no una integración
+**Decisión (17 de septiembre de 2026, M6):** publicar escribe `is_published` y `published_at` en la fase, auditado. Nada más.
+**Por qué:** el portal público es otro producto (§15). F3 entrega el contrato de qué verá el comprador —nota, porcentaje, fotos, video— y deja la marca lista para que alguien la consuma.
+
+## 35. La meta del mes: `goals.target_*` la fija M8; `achieved_*` solo el cierre
+**Decisión (17 de septiembre de 2026, M8):** `PUT /api/metas` escribe únicamente `target_deals` y `target_amount_cents`; el cierre transaccional escribe únicamente `achieved_*`. Ambos usan los mismos dos índices únicos de `goals`, en sentidos opuestos. Cuando el cierre **crea** la fila del mes, su meta sale de `broker_profiles.monthly_target_deals`, no de 0.
+**Por qué:** antes, el primer cierre del mes creaba la fila con meta 0 y el periodo aparecía «sin meta» aunque el perfil dijera 4. Y si la pantalla de metas pudiera tocar `achieved_*`, el criterio de terminado #4 —la meta se actualiza exactamente una vez por cierre— dejaría de ser verificable.
+**Consecuencia:** hay una prueba que compila el `ON CONFLICT` del endpoint y falla si alguien añade `achieved_*` a su `set`.
+
+## 36. Aprobar, pagar y anular una comisión son transiciones, no ediciones
+**Decisión (17 de septiembre de 2026, M9):** `pending → approved → paid`, y `pending | approved → void`. Lo decide una función pura en `domain/comision-estado.ts`, igual que `transicion-etapa.ts`; el route handler sella `approved_by`/`approved_at`/`paid_at` y bloquea la fila con `for update`. El reparto broker/agencia solo se edita en `pending`, y se recalcula con `calcularComision`.
+**Por qué:** una comisión es dinero que se le paga a una persona. Un `PATCH` libre de `status` permitiría devolver a pendiente algo ya pagado sin dejar rastro de por qué.
+
+## 37. Exportar es texto generado en el servidor
+**Decisión (17 de septiembre de 2026, M9):** `GET /api/comisiones/export` responde `text/csv` con los mismos `searchParams`, el mismo `visibleRows` y el permiso `commissions:export`. Sin librería de hojas de cálculo. Lleva BOM UTF-8 para que Excel muestre los acentos, y un campo que empieza por `=`, `+`, `-` o `@` se neutraliza con una comilla.
+**Por qué:** mismo criterio que el `.ics` (decisión #25): el filtro de permisos vive donde vive la consulta. La página y el CSV comparten el constructor de condiciones, así que no pueden divergir.
+
+## 38. M7 casi no escribe: reutiliza M13 y M5
+**Decisión (17 de septiembre de 2026, M7):** «Invitar broker» reutiliza el formulario y el endpoint de M13; editar el perfil sigue en M13; «Ver perfil» es una página de lectura. La única escritura propia de M7 es asignar proyectos (`projects.broker_id`), con `projects:edit` de alcance `all` y auditada por proyecto.
+**Por qué:** M7 muestra lo que otros módulos ya producen. Duplicar la invitación habría creado un segundo camino para crear usuarios, con su propia manera de equivocarse.
+**Detalle que muerde:** el universo de la asignación es «proyectos activos y no borrados», el mismo que ve el modal. Si el endpoint mirara más proyectos que la pantalla, un proyecto inactivo asignado al broker se quedaría sin responsable cada vez que alguien guardara la asignación, sin que nadie lo pidiera.
+
+## 39. Ninguna credencial vive en el repositorio
+**Decisión (21 de septiembre de 2026):** las credenciales —y muy especialmente la de administrador— viven solo en la máquina de quien desarrolla, dentro de `.env`, que git ignora. El repositorio no lleva contraseñas, claves ni tokens en texto plano.
+**Por qué:** era una norma que ya se daba por acordada de palabra desde hacía semanas, pero **nunca se había escrito aquí**, y se descubrió el 21/09/2026 al buscarla. Lo que no está escrito se incumple sin que nadie lo note.
+**Estado hoy: incumplida en un punto, a propósito y con fecha de caducidad.** `scripts/crear-usuario-prueba.mjs` trae tres contraseñas en texto plano (líneas 29, 37 y 45), las de `admin.prueba@`, `asistente.prueba@` y `broker.prueba@`. Se mantiene mientras dure el desarrollo porque es la fixture con la que se prueban los flujos de RBAC de punta a punta, con un usuario por rol.
+**Qué hay que hacer antes de entregar:** sacar esas contraseñas a variables de entorno o borrar el script, **y además** eliminar las tres cuentas de `auth.users` y de `users`. Existen de verdad en el proyecto de Supabase hospedado, así que borrar el archivo no cierra la fuga por sí solo. Las contraseñas están también en el historial de git.
+**Lo que sí está limpio, verificado el 21/09/2026:** `.env` nunca se ha versionado —tampoco en el historial— y no hay claves JWT ni el `LEADS_WEBHOOK_TOKEN` en ningún archivo versionado. Ese script es el único punto.
+
+## 40. Las reglas de seguridad comprobables las comprueba CI, no la memoria
+**Decisión (29 de septiembre de 2026):** RLS obligatorio en toda tabla de `public` y permiso en servidor en toda ruta de la API se verifican en `src/infrastructure/seguridad.test.ts`, que corre con `npm test` en CI. El resto va en el checklist de `flujo-de-trabajo.md` §6, y `AGENTS.md`/`CLAUDE.md` lo ponen delante de cualquier agente (Claude o Codex) que abra el repositorio.
+**Por qué:** Supabase avisó varias veces de que las 29 tablas estaban expuestas por PostgREST sin RLS antes de que alguien lo viera. La norma de "la seguridad la da RLS" estaba escrita en un comentario de `env.ts`, pero ninguna migración la aplicaba. La migración `0001_enable_rls_public_tables.sql` lo corrigió, y la auditoría del mismo día cerró cuatro hallazgos más (cabeceras HTTP, `requireFullScope` en usuarios, último admin, redirección del login).
+**Consecuencia:** una tabla o ruta nueva que se salte la regla rompe el build. Una ruta pública a propósito se declara en `RUTAS_PUBLICAS` con lo que la protege.
+
+## 41. Reestructuración con metodología SOLID: los casos de uso van en `application/`, y la #16 se cumplió
+**Decisión (30 de septiembre de 2026):** se abre el milestone «Reestructuración con metodología SOLID» (rama de integración `dev/reestructuracion-solid`; plan en `docs/R_ANALISIS_Y_PLAN.md`). Mismo comportamiento, otra estructura. Seis decisiones, tomadas el 29–30 de septiembre:
+1. **Alcance completo:** fases R0–R6, incluido el frontend.
+2. **SOLID pragmático:** puerto y caso de uso donde hay reglas de negocio; los catálogos simples y la papelera usan un repositorio genérico, sin un caso de uso por tabla.
+3. **Red de seguridad:** un guion de regresión en el navegador (`docs/R_REGRESION.md`, fase R2) más pruebas de los casos de uso con dobles en memoria. Sin Playwright.
+4. **Funciones nuevas congeladas** mientras dure el milestone. Solo arreglos urgentes, que se traen a la rama de integración.
+5. **Paleta clara de `docs/DESIGN.md`:** la actual del CRM, azul marino, con tres ajustes de contraste WCAG.
+6. **Quince componentes, solo Radix:** los de la tabla de `docs/DESIGN.md` («Bibliotecas de componentes»), con tokens semánticos y sin efectos. Aceternity y Magic UI quedan fuera del CRM.
+**Por qué:** medido contra el repositorio en `8c7d147`, `application/` estaba vacía, 34 de las 37 rutas de la API importaban la base o el esquema, había 198 consultas Drizzle dentro de `src/app/` y las 125 pruebas eran casi todas de dominio. La decisión #11 prometía reglas de negocio aisladas de la infraestructura y esa promesa solo se cumplía en `domain/`. Con los casos de uso en `application/`, la lógica se prueba sin base de datos y las rutas y páginas quedan en lo suyo: traducir HTTP o parámetros, autorizar, llamar y responder.
+**Relación con la #16: la supera, pero la #16 no fue un error.** La #16 decía «sin repositorios ni puertos hasta que exista un caso de uso que los consuma», y en F0 eso era lo correcto: un puerto sin consumidor es código muerto y fija una forma antes de saber cuál hace falta. Esa condición **ahora se cumple**: los consumidores existen. Contactos (R1.3) es el primer módulo con sus casos de uso y ya consume la unidad de trabajo y la auditoría de `compartido/`; los puertos de almacenamiento y de admin de Auth se crearon con los transversales (R1.2) y esperan a sus consumidores, proyectos y usuarios (R3.4 y R3.5). Cada puerto de un módulo nace con el caso de uso que lo usa. La #16 se cumplió; no se rompió, y su texto no se toca. Lo que sigue en pie de ella: no se generan repositorios por tabla.
+**Descartado:** Playwright (decisión 3); Aceternity y Magic UI en el CRM (decisión 6); un repositorio por tabla, ya descartado en la #16; un contenedor central de dependencias y una librería de inyección, porque un archivo central que todos editen hace chocar a dos agentes que migran módulos distintos en paralelo: cada módulo arma sus adaptadores en su propio `infrastructure/contenedor/<modulo>.ts`.
+**Consecuencia:** el patrón queda documentado en `src/application/README.md` y en `arquitectura.md`. `arquitectura.test.ts` hace cumplir la dirección de las capas en CI y se endurece solo: un módulo cuenta como migrado cuando existe `src/application/<modulo>/`, y desde entonces sus rutas y páginas no pueden importar `@/infrastructure/db/*`. Las carpetas vacías `application/ports/` y `application/use-cases/` (de la #16) se retiran: la estructura real es por módulo y un puerto se busca en `<modulo>/puertos.ts`. Mientras dure el milestone conviven módulos migrados y sin migrar, y es esperado. La decisión #18 (estilos portados del prototipo, sin Tailwind) deja de regir el frontend cuando llegue R5: Tailwind v4 y shadcn/ui entran y `globals.css` se retira. El esquema no cambia y el despliegue sigue aplazado (#17).
+
 ## Estado de implementación de estas decisiones
-El esquema (`db/schema.ts`, 29 tablas) y la migración (`drizzle/0000_adorable_forge.sql`) **existen en disco pero no están comiteados** (`git status` los marca como modificado/untracked). Ninguna decisión #1–#8 está desplegada: D1 sigue `null` en `.openai/hosting.json`. Las decisiones #11 y #12 (hexagonal, Supabase/Hostinger) son aún más tempranas: ni siquiera existe todavía el repositorio de producción donde aplicarlas.
+**Actualizado el 12 de septiembre de 2026, al arrancar F2.**
+
+Las decisiones #1–#8 (modelado) están implementadas en `src/infrastructure/db/schema.ts` — 29 tablas sobre Postgres — con su migración generada en `drizzle/`, y los catálogos que les dan sentido sembrados en `db/seed.sql`. La #2 (permisos por recurso + acción + alcance) está además implementada en código y probada: `src/domain/rbac.ts`.
+
+La #11 (hexagonal) y la #12 (Supabase/Hostinger) están implementadas: capas separadas, autenticación sobre Supabase Auth, RBAC en servidor, rutas por módulo, y la migración aplicada contra el proyecto real de Supabase. **F0 está cerrada** — ver `docs/F0_ESTADO.md` para qué se verificó y cómo. Lo único que sigue pendiente de acceso es el despliegue al VPS, aplazado a propósito por la #17.
+
+Las decisiones #18–#22 se tomaron al arrancar F1 y están implementadas en sus cinco pasos (`docs/F1_ANALISIS_Y_PLAN.md` §7): estilos portados, duplicados avisados, endpoint público con token, broker sugerido e interfaz completa portada. **F1 está cerrada** — `npm run typecheck` limpio y 57 pruebas en verde.
+
+Las decisiones #23–#29 se tomaron al arrancar F2 y están implementadas: **F2 está cerrada** (PR #29, ver `docs/F2_ESTADO.md`).
+
+Las decisiones #32–#38 se toman en F3 y están implementadas en sus cuatro issues (#30 M8, #31 M9, #32 M6, #33 M7) — ver `docs/F3_ESTADO.md` para qué se verificó y cómo.
+
+La #39 se toma el 21 de septiembre de 2026 y está **pendiente a propósito**: se cumple en todo el repositorio menos en `scripts/crear-usuario-prueba.mjs`, que se limpia antes de la entrega.
+
+Lo que sigue siendo cierto del prototipo (`referencia-prototipo/`): su `db/schema.ts` es SQLite, D1 nunca se enlazó, y nada de lo anterior está desplegado ahí. El prototipo es material de consulta, no la base del sistema.
+
+La #41 se toma el 30 de septiembre de 2026, al arrancar el milestone de reestructuración, y su implementación va por fases R0–R6 (`docs/R_ANALISIS_Y_PLAN.md`). R1 —fundamentos, piloto y documentación— se cierra con `60dcc19` (R1.1, prueba de arquitectura por capas), `3b4c1a0` (R1.2, puertos compartidos y dobles en memoria) y `3f1d81b` (R1.3, Contactos como módulo piloto); R1.4, la documentación del patrón, es el commit que añade esta entrada. Hoy solo `contactos` está migrado; el resto de los módulos, y el frontend (R5), siguen pendientes.
+
+## 42. Los hallazgos se anotan y se priorizan; la migración se termina antes de abrir fase nueva
+**Decisión (30 de septiembre de 2026):** lo que se encuentra mientras se migra se anota en `docs/R_HALLAZGOS.md` con su tamaño real, y se arregla según cuánto pesa, no según cuándo apareció:
+1. **Bloqueante** — se arregla antes de seguir. Rompe datos, seguridad o el comportamiento que el usuario ve.
+2. **Sesión propia** — no bloquea la migración, pero es demasiado grande o delicado para colarlo en el commit de otro issue.
+3. **Al cerrar la migración** — menor y de arreglo conocido. Se agrupan al final, en una pasada.
+Y dos reglas de orden: **la reestructuración se termina completa antes de abrir cualquier fase o milestone nuevo**, y al cerrarla se **reconfiguran los milestones pendientes** (F4 en adelante, y lo que quede de la hoja de ruta) contra la estructura que deja el milestone, dejándolo escrito en `docs/contexto/` antes de empezar a trabajarlos.
+**Por qué:** arreglar cada cosa en el momento en que se ve alarga la migración e hincha los diffs, y mezclar un arreglo con una migración hace que una revisión no pueda distinguir "esto lo moví" de "esto lo cambié" — que es justo lo que la regla de conservar el comportamiento existe para evitar. Pero lo contrario, anotarlo y no volver, convierte el registro en un cementerio. De ahí las tres casillas y un documento donde se tachan. La segunda parte viene de una lección de este repositorio: los milestones pendientes se planificaron contra la estructura anterior —rutas con SQL dentro, sin casos de uso, sin Tailwind— así que estimarlos o empezarlos sin rehacerlos daría plazos y diseños que ya no aplican. `arquitectura.md` llegó a afirmar durante tres fases cosas que habían dejado de ser ciertas (hallazgo H11); el mismo descuido en un plan cuesta más que en un documento de contexto.
+**Consecuencia:** ningún issue de la reestructuración arregla de paso algo que no le toque: lo anota. Una función nueva sigue congelada (decisión 4) aunque se vea fácil al pasar por el código. R6.1 no se cierra con hallazgos bloqueantes abiertos, y añade la reconfiguración de los milestones pendientes a su lista de entregables.
+
+## 43. Programa VRE-OS: se levanta el congelamiento, Twenty va detrás como motor y el frente es el nuestro
+**Decisión (4 de octubre de 2026, Wilber De La Rosa):** se abre el programa "Viltrum Real Estate OS" (`.viltrum/vre-os/M-20261004-VRE.md`). Se levanta el congelamiento de funciones nuevas y de esquema de la decisión 4 y del hito SOLID. Se conserva el CRM actual (Next.js + PostgreSQL + capas `domain/application/infrastructure`) como frente y núcleo de dominio. Twenty se incorpora **detrás**, como motor CRM sin interfaz propia visible, accedido solo desde `infrastructure/` mediante un puerto (`CrmPort` + `TwentyAdapter`); de Twenty se reproducen en nuestro frente, con el estilo de `docs/DESIGN.md` pulido, solo las capacidades que el CRM necesite. Entra el módulo de **rentas** (portado de OpenProperty, MIT). La **firma digital queda fuera** del programa.
+**Por qué:** el usuario quiere el motor y las capacidades de un CRM maduro sin perder la experiencia propia ni la arquitectura que ya está probada (448 pruebas, RLS, permisos por alcance). Poner Twenty detrás de un puerto permite adoptarlo por fases y sustituirlo sin tocar vistas ni casos de uso (P1).
+**Consecuencia:** el navegador nunca habla con Twenty; ninguna vista importa nada de Twenty. La propiedad de contactos, leads y negocios no pasa a Twenty hasta que existan prueba de concepto, mapeo de objetos, ensayo de migración y aprobación humana; mientras tanto la fuente de verdad sigue siendo PostgreSQL local. Twenty requiere Docker (o un servidor) y hoy Docker Desktop no arranca en el equipo de desarrollo: su despliegue es una decisión de infraestructura pendiente.
+
+## 44. Nuevo reparto: Codex y Antigravity producen por perfil, Claude orquesta, revisa y hace commit
+**Decisión (4 de octubre de 2026, Wilber De La Rosa):** dentro del programa VRE-OS (decisión #43) Codex y Antigravity escriben código cuando reciben una tarea despachada por perfil Viltrum, en worktree aislado y con lista de archivos permitidos; entregan un parche. Claude orquesta, revisa con comandos (`typecheck`, `lint`, `test`, `build`, capturas) y es el único que hace commit. El revisor de cada entrega es un proveedor distinto del productor.
+**Por qué:** el usuario pidió minimizar el consumo de Claude y delegar la producción en los proveedores activos. El reparto del 02/10 hacía que Codex rechazara tareas de código ("solo pruebas de interfaz"), como ocurrió con T-W1-D09a.
+**Consecuencia:** `AGENTS.md` se actualiza; el reparto del 02/10 queda como histórico. Las reglas de seguridad, RLS, permisos y verificación de este archivo siguen igual para cualquier productor.
+
+## 45. Arquitectura de integraciones aprobada; "Pipeline" se llama "Negocios" (D-04 del Expediente Sprint 1)
+**Decisión (4 de octubre de 2026, Wilber De La Rosa):** (1) se aprueba `ARQ-VRE-002` (puertos por capacidad, adaptadores aislados, selección por `env.ts`, una fuente de verdad por entidad, outbox para salir y webhook verificado para entrar), con Twenty detrás de `CrmPort` según la decisión #43. (2) Se aplica la decisión firmada D-04 del Expediente del Sprint 1: el módulo "Pipeline" se llama **"Negocios"** en toda la interfaz y la fase "clasificación" se llama "presentación". La palabra "pipeline" no puede aparecer en texto visible al cliente; los identificadores técnicos internos (tablas, rutas de API) pueden conservarse hasta que una ficha decida su cambio.
+**Por qué:** el término técnico no era comprensible para el usuario final; "Negocios" es como lo nombra AlterEstate, la herramienta que el cliente ya conoce (Expediente Sprint 1, D-04 y glosario).
+**Consecuencia:** toda ficha y tarea nueva usa "Negocios"; el programa E1 incluye un paso previo de renombrado (E1.0). Las decisiones D-01 a D-11 del Expediente son requisitos del cliente y mandan sobre cualquier ficha; en particular D-11 (diseño aprobado, construcción fiel a la demo, sin recargar la interfaz) acota el alcance del rediseño.
+
+## 46. Rediseño profundo autorizado: la demo es un concepto, no un límite (sustituye a D-11 en lo que choque)
+**Decisión (4 de octubre de 2026, Wilber De La Rosa):** se autoriza un rediseño profundo del CRM. La demo aprobada en el Sprint 1 conserva la **idea** de cada módulo, pero cada pantalla se amplía a su máxima capacidad: lo que el módulo debe hacer manda sobre cómo lo hacía la demo. Las funciones que cubra software open source se integran detrás de puertos (ARQ-VRE-002) y se ven en nuestra interfaz. El diseño sigue la doctrina visual Viltrum (`docs/DESIGN.md`, PXIL, seis estados, móvil nativo) y se elige con la librería local Viltrum Design mediante el flujo `viltrum design` (brief → búsqueda → adquisición → preparación).
+**Por qué:** el usuario considera la demo un boceto; el valor del producto está en el alcance funcional y en la calidad del diseño, no en parecerse a ella.
+**Consecuencia:** D-11 del Expediente («fiel a la demo, sin recargar») deja de acotar el rediseño; **las demás decisiones firmadas (D-01 a D-10: vocabulario Negocios, nada se elimina, roles, precio restringido, contacto con varios negocios) siguen vigentes**. Se mantiene el principio del cliente de que el CRM sea rápido y simple de usar: ampliar capacidad no es recargar la pantalla (jerarquía, pestañas y acciones contextuales).
+
+## 47. Decisiones de negocio de Negocios y Leads (respuestas de Wilber, 5 de octubre de 2026)
+**Decisión (Wilber De La Rosa, en el chat de orquestación):** (1) **Aprobación del asistente (D-06; Q-301 y Q-1001):** cualquier administrador aprueba o rechaza con motivo, un solo nivel; el asistente no se aprueba a sí mismo; la propuesta caduca a los 7 días. (2) **Monto y precio (D-07; Q-302):** el broker ve y edita el **monto comercial** de sus propios negocios; el **precio de lista real** de la unidad y la comisión de terceros solo los ve el administrador. (3) **Cierre (Q-303):** al cerrar un negocio es **obligatoria una unidad concreta** (el broker la elige o la crea); el sistema impide venderla dos veces; el inventario fino se completa al vender. (4) **Leads (Q-1002):** solo el administrador reasigna; el broker **puede tomar** leads no asignados de una cola; toda asignación queda auditada.
+**Por qué:** eran las cuatro decisiones P0 que bloqueaban las fichas M03 (Negocios) y M01 (Leads); se tomaron con la recomendación del orquestador.
+**Consecuencia:** las fichas incorporan estas reglas como requisitos firmados. Las demás preguntas (Q-304 a Q-315, Q-1003 a Q-1011) se resuelven con valores por defecto seguros y reversibles marcados como SUPUESTO, con responsable y fecha, y sin bloquear el tramo construible.
+
+## 48. Subagentes Claude producen código mientras HAPI no está disponible; Moodle se instala nativo en local
+**Decisión (14 de octubre de 2026, Wilber De La Rosa, en el chat):** (1) Mientras Codex y Antigravity no estén disponibles (HAPI caído), **producen subagentes de Claude** (Haiku para inventarios y tareas mecánicas, Sonnet para código e investigación); Claude (Opus) orquesta, revisa y solo aplica con `typecheck`, `lint`, `test`, `test:db` y `build` en verde, y hace commit en `develop` sin push. (2) **Moodle se instala nativo en este equipo** (PHP oficial de Windows + Moodle oficial, puertos 9300–9399), no en Docker. (3) El trabajo sin commit del tablero de Negocios (c1a de Antigravity) lo retoma y cierra Claude.
+**Por qué:** el usuario pidió terminar el CRM de forma funcional y eficiente en costo; los productores de otro proveedor no estaban disponibles y Docker no arranca con la RAM libre del equipo.
+**Consecuencia:** sustituye a la #44 solo en quién produce mientras dure la indisponibilidad. La revisión de **otro proveedor** (Codex/Antigravity) queda **pendiente** para cada entrega hecha así y se anota en su evidencia; sin ella ninguna ficha pasa a VERIFIED. El resto de reglas (fichas, seguridad, candados de verificación) sigue vigente.
+
+## 49. Multiempresa en una sola instalación (Q40-01): `tenant_id` y aislamiento por empresa
+**Decisión (18 de octubre de 2026, Wilber De La Rosa, en el chat de orquestación):** el CRM es **una sola instalación
+multiempresa**. Cada inmobiliaria es un inquilino (`tenant`) con sus datos aislados: toda tabla de negocio lleva `tenant_id`,
+las claves únicas y los índices parciales se acotan por inquilino, RLS y los filtros de servidor (`visibleRows`/`reaches`)
+exigen el inquilino del actor, y un usuario puede pertenecer a varias empresas con cambio de empresa (UI-001 de la
+Especificación Maestra v1). Resuelve Q40-01 de la ficha M40 y la condición H-R2-02 de su revisión independiente.
+**Por qué:** la Especificación Maestra v1 define el producto Viltrum Real Estate OS para varias inmobiliarias (aislamiento de
+empresas como invariante P0); decidirlo antes de crear las tablas de la cadena transaccional evita una migración disruptiva.
+**Consecuencia:** **sustituye a la #5** («Sin multi-organización»). Antes de la DDL de M40 (`b1c`) se especifica en una ficha
+global la introducción de `tenant_id` en el esquema existente (migración y relleno de los datos actuales como el primer
+inquilino, Quisqueya Home), la membresía usuario–empresa, el contexto de inquilino en el actor y las pruebas de aislamiento
+entre empresas. La #12 (Supabase/Hostinger) no cambia.
+
+## 50. Reglas de multiempresa aprobadas (Q12-01 a Q12-04 de la ficha G12)
+**Decisión (18 de octubre de 2026, Wilber De La Rosa, en el chat de orquestación):** se aprueban las recomendaciones de
+`.viltrum/vre-os/spec/globales/G12-multiempresa.md` §11:
+(1) **Q12-01** topología física compartida: tablas compartidas con `tenant_id`, FKs compuestas, filtros de servidor y RLS;
+se conservan los IDs internos y se usa UUID público para lo expuesto; rol por membresía de empresa; `audit_log` por
+empresa y solo-anexado; corte por expansión → relleno → activación (ADR-G12-01 a 05).
+(2) **Q12-02** «organización» y «empresa» (`tenants`) son la misma entidad; no hay tablas duplicadas.
+(3) **Q12-03** solo Viltrum (administración de plataforma) crea, activa, suspende y da de baja empresas; no hay alta
+autónoma ni borrado de empresa por parte del cliente.
+(4) **Q12-04** el rol Administrador de cada empresa es su propietario; siempre debe quedar al menos uno activo y para
+retirar al último hay que nombrar antes a otro.
+**Por qué:** eran la condición H-R2-G12-03 de la revisión independiente para habilitar migraciones irreversibles.
+**Consecuencia:** G12 pasa a READY condicionada; se construye por rebanadas pequeñas (H-R2-G12-02) y la rebanada `g3d`
+debe demostrar en ejecución el aislamiento del pool de conexiones (H-R2-G12-01) antes de seguir.
+
+## 51. Prioridad: el CRM completo para una empresa primero; multiempresa después
+**Decisión (18 de octubre de 2026, Wilber De La Rosa, en el chat):** el foco es que toda la aplicación funcione completa,
+rápida y probada para **una sola empresa** (Quisqueya Home). La multiempresa (#49, #50, ficha G12) queda **aprobada pero en
+pausa**: no se ejecutan sus rebanadas hasta que el CRM de una empresa esté completo. La cadena transaccional M40 se construye
+para una empresa, con el diseño de G12 (expansión → relleno → activación) como camino para añadir `tenant_id` después.
+Además: los datos de prueba se activan y vacían con un interruptor en Configuración, para probar los flujos desde cero.
+**Por qué:** terminar y estabilizar el producto antes de ampliar su modelo de despliegue.
+**Consecuencia:** G12 permanece READY condicionada sin despacho; la condición Q40-01 de M40 se considera resuelta por esta
+decisión para la DDL de una empresa (`b1c` y siguientes).

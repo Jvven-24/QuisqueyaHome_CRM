@@ -1,0 +1,231 @@
+/**
+ * Catálogos cerrados y vocabulario del dominio.
+ *
+ * Viven en `domain/` y no junto al esquema porque son reglas de negocio: qué
+ * acciones existen, sobre qué recursos y con qué alcance. El esquema los importa
+ * para tipar sus columnas — la dependencia va de infraestructura a dominio, no
+ * al revés.
+ *
+ * Todas son listas cerradas a propósito: con varias personas construyendo
+ * módulos en paralelo, un `"Leads"` frente a un `"leads"` haría que un permiso
+ * deje de aplicarse sin que nadie lo note.
+ */
+
+
+/** Naturaleza de una etapa. Las reglas de negocio dependen de esto, no del nombre. */
+export const STAGE_KINDS = ["open", "won", "lost"] as const;
+
+/** Acciones sobre un recurso, según la pantalla de permisos diseñada en Figma. */
+export const PERMISSION_ACTIONS = [
+  "view",
+  "create",
+  "edit",
+  "delete",
+  "import",
+  "export",
+] as const;
+
+/** Alcance de datos. `own` es lo que el prototipo fingía comparando nombres. */
+export const PERMISSION_SCOPES = ["none", "own", "team", "all"] as const;
+
+/** M40 §6.2. Declarar una capacidad no concede acceso a ningún rol. */
+export const FINANCIAL_PERMISSION_RESOURCES = [
+  "holds", "reservations", "payment_plans", "payments",
+  "payment_verifications", "reconciliations", "financial_approvals", "refunds",
+  "commission_rules", "commission_entries", "payouts", "financial_jobs",
+] as const;
+
+/**
+ * Recursos sobre los que se conceden permisos. Lista cerrada a propósito: con
+ * varias personas construyendo módulos en paralelo, un `"Leads"` frente a un
+ * `"leads"` haría que un permiso deje de aplicarse sin que nadie lo note.
+ */
+export const PERMISSION_RESOURCES = [
+  "dashboard",
+  "leads",
+  "contacts",
+  "deals",
+  "activities",
+  "projects",
+  "units",
+  "unit_real_price",
+  "construction_phases",
+  "brokers",
+  "academy",
+  "goals",
+  "commissions",
+  "communications",
+  "reports",
+  "global_metrics",
+  "settings",
+  "users",
+  "roles",
+  "audit_log",
+  "integrations",
+  ...FINANCIAL_PERMISSION_RESOURCES,
+] as const;
+
+/** Entidades referenciables desde tablas polimórficas (archivos, avisos, auditoría). */
+export const ENTITY_TYPES = [
+  "contact",
+  "lead",
+  "deal",
+  "activity",
+  "project",
+  "unit",
+  "construction_phase",
+  "user",
+  "role",
+  "permission",
+  "commission",
+  "goal",
+  "academy_item",
+  "message_template",
+  "integration_account",
+  "file",
+  // M13 (F2): catálogos editables que F0/F1 sembraron pero nadie editaba
+  // todavía. `entity_type` es `text` liso en el esquema —sin `CHECK` de
+  // Postgres, ver `drizzle/0000_thankful_senator_kelly.sql`—, así que sumar
+  // valores aquí no es un cambio de esquema ni pide migración.
+  "pipeline_stage",
+  "loss_reason",
+  "lead_source",
+  // Deuda de F1 (F2, issue #21): unidades de interés de un negocio.
+  "deal_property",
+  // M40: los hijos también pueden tener evidencia e historial propio.
+  "transaction_command", "hold", "hold_unit", "reservation",
+  "reservation_party", "reservation_unit", "inventory_commitment",
+  "payment_plan_template", "payment_plan", "payment_plan_version",
+  "payment_installment", "fx_rate", "payment", "payment_event",
+  "payment_allocation", "allocation_carryforward", "payment_reversal",
+  "bank_import", "bank_transaction", "reconciliation_case", "refund",
+  "commission_rule", "commission_rule_version", "commission_agreement",
+  "commission_split", "commission_entry", "commission_event",
+  "commission_adjustment", "beneficiary_account", "payout_batch", "payout_line",
+  "legacy_commission_link", "financial_approval_request",
+] as const;
+
+/**
+ * Acciones que se registran en `audit_log` (T6). Lista corta y explícita a
+ * propósito — `MAPEO_FRONTEND_CRM.md` §4 pide «acción sensible», no «cualquier
+ * escritura»: crear/editar/eliminar/restaurar de un registro, más las cuatro
+ * transiciones de negocio que el mapeo señala aparte porque cambian estado de
+ * forma irreversible o casi (convertir un lead, cambiar de etapa, cerrar,
+ * marcar como perdido). Texto libre aquí repetiría el error que el resto de
+ * catálogos evita: un `"Editar"` frente a un `"editar"` deja de agruparse en
+ * el historial sin que nadie lo note.
+ */
+export const AUDIT_ACTIONS = [
+  "crear",
+  "editar",
+  "eliminar",
+  "restaurar",
+  "convertir",
+  "cambiar_etapa",
+  "cerrar",
+  "marcar_perdido",
+  /**
+   * M2 · Leads: descartar un lead no es borrarlo (`eliminar` es borrado
+   * lógico del registro, `deleted_at`) ni convertirlo — es una transición de
+   * estado de negocio propia, igual que `marcar_perdido` lo es para negocios.
+   */
+  "descartar",
+  /** M2 · Leads: confirmar el responsable (`broker_id`), issue #22. */
+  "asignar",
+  /**
+   * M11 · Comunicaciones: envío de un mensaje por un canal externo. Se
+   * registra con `entity_type = "user"` y `entity_id = quien envió`; el
+   * destinatario va enmascarado en `new_value` (hallazgo D21/D12, 2026-10-14).
+   */
+  "enviar",
+  // M40 §4.1/4.2: transiciones sensibles; no son acciones de permisos RBAC.
+  "extender", "cancelar", "expirar", "confirmar", "cambiar_unidad",
+  "solicitar_cancelacion", "acordar", "reestructurar", "completar", "reabrir",
+  "presentar", "rechazar", "aplicar", "reversar", "registrar_contracargo",
+  "importar", "conciliar", "solicitar", "aprobar", "instruir", "versionar",
+  "proyectar", "devengar", "hacer_exigible", "ajustar", "pagar",
+  "cambiar_disponibilidad", "exportar",
+] as const;
+
+/** Estado del lead antes de convertirse en negocio. */
+export const LEAD_STATUSES = [
+  "new",
+  "assigned",
+  "contacted",
+  "converted",
+  "discarded",
+] as const;
+
+export const OPERATION_TYPES = ["sale", "rent"] as const;
+
+/** Un precio de venta es único; uno de alquiler es mensual. */
+export const PRICE_PERIODS = ["one_time", "monthly"] as const;
+
+export const PROJECT_TYPES = [
+  "blueprint",
+  "presale",
+  "under_construction",
+  "delivered",
+  "rental",
+] as const;
+
+export const UNIT_STATUSES = [
+  "available",
+  "reserved",
+  "sold",
+  "unavailable",
+] as const;
+
+export const PHASE_STATUSES = [
+  "pending",
+  "in_progress",
+  "completed",
+  "delayed",
+] as const;
+
+export const BROKER_LEVELS = [
+  "junior",
+  "senior",
+  "senior_plus",
+  "top_producer",
+  "top_leader",
+] as const;
+
+export const COMMISSION_STATUSES = [
+  "pending",
+  "approved",
+  "paid",
+  "void",
+] as const;
+
+export const ACTIVITY_TYPES = [
+  "task",
+  "call",
+  "meeting",
+  "note",
+  "whatsapp",
+  "email",
+] as const;
+
+export const ACTIVITY_STATUSES = ["pending", "completed", "cancelled"] as const;
+
+export const ACTIVITY_PRIORITIES = ["low", "normal", "high"] as const;
+
+export const ACADEMY_ITEM_TYPES = ["session", "checklist", "material"] as const;
+
+export const FILE_VISIBILITIES = ["internal", "public"] as const;
+
+export const SYNC_STATUSES = ["pending", "synced", "failed"] as const;
+
+export type PermissionResource = (typeof PERMISSION_RESOURCES)[number];
+export type PermissionAction = (typeof PERMISSION_ACTIONS)[number];
+export type PermissionScope = (typeof PERMISSION_SCOPES)[number];
+export type EntityType = (typeof ENTITY_TYPES)[number];
+export type StageKind = (typeof STAGE_KINDS)[number];
+export type AuditAction = (typeof AUDIT_ACTIONS)[number];
+/** M9 · Comisiones (`domain/comision-estado.ts`): `commissions.status`. */
+export type CommissionStatus = (typeof COMMISSION_STATUSES)[number];
+/** M6 · Avances de obra (`domain/avance-obra.ts`): `construction_phases.status`. */
+export type PhaseStatus = (typeof PHASE_STATUSES)[number];
+/** M3b (`domain/cierre-negocio.ts`): nivel de broker según `broker_profiles.level`. */
+export type BrokerLevel = (typeof BROKER_LEVELS)[number];

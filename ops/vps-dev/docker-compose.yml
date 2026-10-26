@@ -1,0 +1,115 @@
+# Stack de desarrollo aislado del CRM en la VPS (proyecto Compose «qh-dev»).
+# Aislamiento: red propia, volúmenes propios, puertos solo en 127.0.0.1 (se usan por túnel SSH) y límites de CPU/RAM
+# para no quitar recursos a lo que ya corre en la VPS (bot, runtime, Portales, Supabase de producción, staging).
+# Secretos: /opt/qh-dev/.env (chmod 600), generado en la VPS por deploy.sh; nunca en el repositorio.
+name: qh-dev
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${QH_DB_PASSWORD}
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    networks: [qh-dev]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 10
+    deploy:
+      resources:
+        limits: { cpus: "0.75", memory: 512m }
+
+  auth:
+    image: supabase/gotrue:v2.189.0
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: "9999"
+      API_EXTERNAL_URL: http://localhost:54331
+      GOTRUE_SITE_URL: http://localhost:3201
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://postgres:${QH_DB_PASSWORD}@db:5432/auth?search_path=auth
+      GOTRUE_DB_NAMESPACE: auth
+      GOTRUE_JWT_SECRET: ${QH_JWT_SECRET}
+      GOTRUE_JWT_EXP: "3600"
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_DISABLE_SIGNUP: "true"
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+    networks: [qh-dev]
+    deploy:
+      resources:
+        limits: { cpus: "0.25", memory: 128m }
+
+  moodle:
+    image: erseco/alpine-moodle:v4.5.15
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      SITE_URL: http://localhost:9330
+      DB_TYPE: pgsql
+      DB_HOST: db
+      DB_NAME: moodle
+      DB_USER: postgres
+      DB_PASS: ${QH_DB_PASSWORD}
+      MOODLE_LANGUAGE: es
+      # Sin espacios: el entrypoint de la imagen no cita este valor (rompía el instalador). Se renombra luego por CLI.
+      MOODLE_SITENAME: QuisqueyaAcademy
+      MOODLE_USERNAME: ${QH_MOODLE_ADMIN}
+      MOODLE_PASSWORD: ${QH_MOODLE_PASSWORD}
+      MOODLE_EMAIL: admin@quisqueyahome.do
+      AUTO_UPDATE_MOODLE: "false"
+    volumes:
+      - moodledata:/var/www/moodledata
+      - moodlehtml:/var/www/html
+    networks: [qh-dev]
+    deploy:
+      resources:
+        limits: { cpus: "0.75", memory: 768m }
+
+  # El proxy publica los tres puertos y la app comparte su red: así `localhost:54331` (auth) y `localhost:9330` (Moodle)
+  # valen igual dentro de la app y en el navegador a través del túnel.
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    ports:
+      - "127.0.0.1:3201:3000"
+      - "127.0.0.1:54331:54331"
+      - "127.0.0.1:9330:9330"
+    networks: [qh-dev]
+    deploy:
+      resources:
+        limits: { cpus: "0.25", memory: 64m }
+
+  app:
+    image: node:22-alpine
+    restart: unless-stopped
+    network_mode: "service:proxy"
+    working_dir: /app
+    command: ["npx", "next", "start", "-p", "3000"]
+    env_file: [./app.env]
+    environment:
+      NODE_ENV: production
+    volumes:
+      - ./app:/app
+    depends_on: [proxy, auth, db]
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 768m }
+
+networks:
+  qh-dev:
+    name: qh-dev
+
+volumes:
+  db:
+  moodledata:
+  moodlehtml:

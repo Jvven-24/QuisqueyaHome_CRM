@@ -1,0 +1,363 @@
+[
+  {
+    "id": "meta_lead_ads",
+    "nombre": "Meta Lead Ads",
+    "categoria": "Meta",
+    "variables": [
+      "META_APP_ID",
+      "META_APP_SECRET",
+      "META_PAGE_ACCESS_TOKEN",
+      "META_WEBHOOK_VERIFY_TOKEN"
+    ],
+    "docs": "https://developers.facebook.com/docs/marketing-api/guides/lead-ads/retrieving/",
+    "pasos": [
+      "Registrar la app y la página de negocio.",
+      "Solicitar los permisos de leads aplicables y revisar su aprobación.",
+      "Registrar el callback HTTPS, verificar el reto y validar firma con app secret.",
+      "Probar con la herramienta oficial de leads y comprobar recepción auditada."
+    ],
+    "falta": "Adaptador y webhook público autorizado; variables no prueban recepción."
+  },
+  {
+    "id": "whatsapp_business",
+    "nombre": "WhatsApp Business Cloud API",
+    "categoria": "Meta",
+    "variables": [
+      "WHATSAPP_API_TOKEN",
+      "WHATSAPP_PHONE_NUMBER_ID"
+    ],
+    "docs": "https://developers.facebook.com/docs/whatsapp/cloud-api/overview",
+    "pasos": [
+      "Vincular cuenta Business y número autorizado.",
+      "Preparar token de sistema con alcance mínimo.",
+      "Aprobar plantillas y registrar consentimientos antes de enviar.",
+      "Validar webhooks y estados de entrega en una prueba autorizada."
+    ],
+    "falta": "Prueba de salud del proveedor y entrega supervisada."
+  },
+  {
+    "id": "instagram",
+    "nombre": "Instagram Business",
+    "categoria": "Meta",
+    "variables": [
+      "META_APP_ID",
+      "META_APP_SECRET",
+      "INSTAGRAM_BUSINESS_ACCOUNT_ID",
+      "META_PAGE_ACCESS_TOKEN"
+    ],
+    "docs": "https://developers.facebook.com/docs/instagram-platform/",
+    "pasos": [
+      "Identificar cuenta profesional y permisos aplicables.",
+      "Completar OAuth y revisión de app cuando corresponda.",
+      "Definir eventos admitidos y verificar callback.",
+      "Comprobar lectura con una cuenta de prueba autorizada."
+    ],
+    "falta": "OAuth, adaptador de mensajes y webhooks."
+  },
+  {
+    "id": "messenger",
+    "nombre": "Messenger",
+    "categoria": "Meta",
+    "variables": [
+      "META_PAGE_ACCESS_TOKEN",
+      "META_APP_SECRET",
+      "META_WEBHOOK_VERIFY_TOKEN"
+    ],
+    "docs": "https://developers.facebook.com/docs/messenger-platform/",
+    "pasos": [
+      "Vincular página y app.",
+      "Revisar permisos y política de mensajería.",
+      "Verificar firma y suscripciones del webhook.",
+      "Probar lectura/recepción con supervisión."
+    ],
+    "falta": "Bandeja y adaptador autorizado de mensajes."
+  },
+  {
+    "id": "meta_pixel",
+    "nombre": "Meta Pixel",
+    "categoria": "Meta",
+    "variables": [
+      "META_PIXEL_ID"
+    ],
+    "docs": "https://developers.facebook.com/docs/meta-pixel/",
+    "pasos": [
+      "Registrar origen web en la cuenta empresarial.",
+      "Identificar pixel y eventos permitidos.",
+      "Aplicar consentimiento antes de medición.",
+      "Validar eventos en las herramientas oficiales antes de publicar."
+    ],
+    "falta": "Publicación en el portal y gestión del consentimiento."
+  },
+  {
+    "id": "meta_capi",
+    "nombre": "Conversions API",
+    "categoria": "Meta",
+    "variables": [
+      "META_PIXEL_ID",
+      "META_CAPI_ACCESS_TOKEN"
+    ],
+    "docs": "https://developers.facebook.com/docs/marketing-api/conversions-api/",
+    "pasos": [
+      "Definir origen y eventos autorizados.",
+      "Preparar token y minimización de datos.",
+      "Diseñar event_id compartido para deduplicación.",
+      "Validar eventos de prueba sin activar campañas."
+    ],
+    "falta": "Adaptador servidor y deduplicación auditable."
+  },
+  {
+    "id": "meta_catalog",
+    "nombre": "Catálogo de Meta",
+    "categoria": "Meta",
+    "variables": [
+      "META_CATALOG_ID",
+      "META_PAGE_ACCESS_TOKEN"
+    ],
+    "docs": "https://developers.facebook.com/docs/marketing-api/catalog/",
+    "pasos": [
+      "Definir catálogo y acceso empresarial.",
+      "Mapear sólo inventario publicable.",
+      "Revisar políticas y campos del catálogo.",
+      "Validar feed antes de sincronizar."
+    ],
+    "falta": "Feed autorizado y sincronización persistente."
+  },
+  {
+    "id": "ga4",
+    "nombre": "Google Analytics 4",
+    "categoria": "Google",
+    "variables": [
+      "GOOGLE_ANALYTICS_MEASUREMENT_ID"
+    ],
+    "docs": "https://developers.google.com/analytics/devguides/collection/ga4/web",
+    "pasos": [
+      "Crear propiedad GA4 y flujo web.",
+      "Identificar la etiqueta de Google del flujo.",
+      "Definir consentimiento y eventos permitidos.",
+      "Comprobar DebugView antes de publicar."
+    ],
+    "falta": "Etiqueta del portal, consentimiento y verificación de eventos."
+  },
+  {
+    "id": "gtm",
+    "nombre": "Google Tag Manager",
+    "categoria": "Google",
+    "variables": [
+      "GOOGLE_TAG_MANAGER_ID"
+    ],
+    "docs": "https://developers.google.com/tag-platform/tag-manager",
+    "pasos": [
+      "Crear contenedor web y permisos del equipo.",
+      "Instalar snippet mediante despliegue del portal.",
+      "Configurar consentimiento y etiquetas por entorno.",
+      "Revisar en Preview antes de publicar una versión."
+    ],
+    "falta": "Despliegue y versión aprobada del contenedor."
+  },
+  {
+    "id": "search_console",
+    "nombre": "Search Console",
+    "categoria": "Google",
+    "variables": [
+      "GOOGLE_SEARCH_CONSOLE_SITE_URL",
+      "GOOGLE_SITE_VERIFICATION"
+    ],
+    "docs": "https://developers.google.com/webmaster-tools",
+    "pasos": [
+      "Registrar la propiedad correcta del dominio.",
+      "Verificar propiedad con el método aprobado.",
+      "Publicar y enviar sitemap del portal.",
+      "Consultar cobertura con permisos mínimos."
+    ],
+    "falta": "Verificación de propiedad y adaptador de lectura."
+  },
+  {
+    "id": "google_ads",
+    "nombre": "Google Ads · conversiones offline",
+    "categoria": "Google",
+    "variables": [
+      "GOOGLE_ADS_CUSTOMER_ID",
+      "GOOGLE_ADS_DEVELOPER_TOKEN",
+      "GOOGLE_OAUTH_CLIENT_ID",
+      "GOOGLE_OAUTH_CLIENT_SECRET"
+    ],
+    "docs": "https://developers.google.com/data-manager/api/devguides/events/google-ads/offline",
+    "pasos": [
+      "Verificar acceso de la cuenta y origen de conversiones.",
+      "Revisar Data Manager API para nuevas integraciones.",
+      "Definir consentimiento, identificadores y deduplicación.",
+      "Validar diagnósticos en entorno de prueba antes de importar."
+    ],
+    "falta": "OAuth, proveedor de conversiones y revisión de datos."
+  },
+  {
+    "id": "google_calendar_2way",
+    "nombre": "Google Calendar · dos vías",
+    "categoria": "Google",
+    "variables": [
+      "GOOGLE_OAUTH_CLIENT_ID",
+      "GOOGLE_OAUTH_CLIENT_SECRET",
+      "GOOGLE_OAUTH_REDIRECT_URI"
+    ],
+    "docs": "https://developers.google.com/workspace/calendar/api/guides/push",
+    "pasos": [
+      "Habilitar Calendar API y registrar redirect URI exacta.",
+      "Solicitar los scopes mínimos al usuario.",
+      "Implementar almacenamiento cifrado y renovación de credenciales.",
+      "Verificar callback HTTPS y reconciliar cambios perdidos."
+    ],
+    "falta": "OAuth persistente, watchers y conciliación bidireccional. Exportar ICS no prueba sincronización."
+  },
+  {
+    "id": "gmail",
+    "nombre": "Workspace / Gmail",
+    "categoria": "Google",
+    "variables": [
+      "GOOGLE_OAUTH_CLIENT_ID",
+      "GOOGLE_OAUTH_CLIENT_SECRET",
+      "GOOGLE_OAUTH_REDIRECT_URI"
+    ],
+    "docs": "https://developers.google.com/workspace/gmail/api/auth/web-server",
+    "pasos": [
+      "Habilitar Gmail API y revisar scopes sensibles.",
+      "Configurar consentimiento y redirect URI.",
+      "Guardar tokens cifrados con revocación controlada.",
+      "Si se requieren eventos, implementar Cloud Pub/Sub y reconciliación."
+    ],
+    "falta": "OAuth, revisión de alcance y adaptador de correo."
+  },
+  {
+    "id": "portal_seo",
+    "nombre": "SEO y metadatos del portal",
+    "categoria": "Portal / SEO",
+    "variables": [
+      "PORTAL_PUBLIC_URL",
+      "GOOGLE_SITE_VERIFICATION"
+    ],
+    "docs": "https://developers.google.com/search/docs/fundamentals/seo-starter-guide",
+    "pasos": [
+      "Revisar dominio canónico y contenido público autorizado.",
+      "Preparar títulos, descripciones, Open Graph y URLs canónicas.",
+      "Revisar robots.txt y sitemap.xml sin publicar contenido privado.",
+      "Validar datos estructurados y verificación antes del despliegue."
+    ],
+    "falta": "Persistencia CMS y publicación/verificación en el portal."
+  },
+  {
+    "id": "smtp",
+    "nombre": "Correo SMTP",
+    "categoria": "Correo",
+    "variables": [
+      "SMTP_HOST",
+      "SMTP_PORT",
+      "SMTP_USER",
+      "SMTP_PASSWORD",
+      "SMTP_FROM"
+    ],
+    "docs": "https://www.rfc-editor.org/rfc/rfc8314",
+    "pasos": [
+      "Elegir proveedor y verificar dominio remitente.",
+      "Configurar host, puerto y TLS según proveedor.",
+      "Guardar contraseña en el entorno servidor.",
+      "Autorizar un correo de prueba antes de habilitar entrega."
+    ],
+    "falta": "Adaptador SMTP y prueba autorizada; no se envía correo desde este panel."
+  },
+  {
+    "id": "resend",
+    "nombre": "Resend",
+    "categoria": "Correo",
+    "variables": [
+      "RESEND_API_KEY",
+      "RESEND_FROM"
+    ],
+    "docs": "https://resend.com/docs/introduction",
+    "pasos": [
+      "Verificar un dominio propio en Resend.",
+      "Crear clave de alcance mínimo en el servidor.",
+      "Revisar remitente y registros DNS exigidos.",
+      "Autorizar una prueba y revisar entrega antes de activar."
+    ],
+    "falta": "Adaptador y verificación de dominio/entrega."
+  },
+  {
+    "id": "telegram",
+    "nombre": "Telegram",
+    "categoria": "Mensajería",
+    "variables": [
+      "TELEGRAM_BOT_TOKEN"
+    ],
+    "docs": "https://core.telegram.org/bots/api",
+    "pasos": [
+      "Crear bot con BotFather y custodiar token.",
+      "Autorizar chats de destino sin datos innecesarios.",
+      "Definir polling o webhook con su protección.",
+      "Comprobar identidad y recepción con prueba autorizada."
+    ],
+    "falta": "Prueba de identidad y entrega; token presente no demuestra conexión."
+  },
+  {
+    "id": "twenty",
+    "nombre": "Twenty CRM",
+    "categoria": "Plataforma",
+    "variables": [
+      "TWENTY_API_URL",
+      "TWENTY_API_KEY"
+    ],
+    "docs": "https://docs.twenty.com/developers/extend/api",
+    "pasos": [
+      "Confirmar instancia y responsabilidad de cada entidad.",
+      "Crear clave con acceso mínimo.",
+      "Mapear identificadores y eventos del outbox.",
+      "Verificar lectura y reconciliación antes de activar espejo."
+    ],
+    "falta": "Adaptador persistente, lectura de salud y reconciliación."
+  },
+  {
+    "id": "moodle",
+    "nombre": "Moodle Academy",
+    "categoria": "Plataforma",
+    "variables": [
+      "MOODLE_URL",
+      "MOODLE_TOKEN"
+    ],
+    "docs": "https://moodledev.io/docs/4.5/apis/subsystems/external",
+    "pasos": [
+      "Consultar el servicio autorizado de Academy.",
+      "Limitar funciones y usuario de servicio.",
+      "Configurar URL y token sólo en servidor.",
+      "Validar salud con el flujo de Academy, sin activar cursos desde este panel."
+    ],
+    "falta": "Consultar salud real en Academy; configuración no demuestra sincronización."
+  },
+  {
+    "id": "webhooks",
+    "nombre": "Webhooks salientes",
+    "categoria": "Plataforma",
+    "variables": [
+      "CRM_WEBHOOK_DESTINATIONS"
+    ],
+    "docs": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST",
+    "pasos": [
+      "Definir destinos HTTPS exactos autorizados.",
+      "Establecer firma, tiempos máximos e idempotencia.",
+      "Registrar consumidor y política de reintento.",
+      "Validar recepción en entorno de prueba antes de despachar."
+    ],
+    "falta": "Contrato de consumidor por destino; no se prueba enviando eventos reales."
+  },
+  {
+    "id": "api_keys",
+    "nombre": "Claves de API propias",
+    "categoria": "Plataforma",
+    "variables": [],
+    "docs": "https://owasp.org/API-Security/",
+    "pasos": [
+      "Definir recurso y alcance mínimo de cada clave.",
+      "Almacenar sólo hash con caducidad y auditoría.",
+      "Mostrar secreto una sola vez al emitir.",
+      "Permitir revocación y rotación controladas."
+    ],
+    "falta": "Tabla y backend de claves propias; alta y revocación sólo vista previa."
+  }
+]

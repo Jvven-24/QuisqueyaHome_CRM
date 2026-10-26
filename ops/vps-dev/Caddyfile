@@ -1,0 +1,18 @@
+{
+	admin off
+	auto_https off
+}
+
+# Supabase Auth compatible: /auth/v1/* → GoTrue
+:54331 {
+	handle_path /auth/v1* {
+		reverse_proxy auth:9999
+	}
+}
+
+# Moodle con el Host que conoce su wwwroot (http://localhost:9330)
+:9330 {
+	reverse_proxy moodle:8080 {
+		header_up Host localhost:9330
+	}
+}

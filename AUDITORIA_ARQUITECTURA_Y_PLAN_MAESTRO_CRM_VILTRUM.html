@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Auditoría y Plan Maestro CRM Quisqueya Home</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    line-height: 1.6;
+    font-size: 13.5px;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    border-bottom: 2.5px solid #c7990e;
+    padding-bottom: 8px;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    page-break-after: avoid;
+  }
+  h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1e293b;
+    border-left: 4px solid #c7990e;
+    padding-left: 10px;
+    margin-top: 22px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #334155;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+  p, li {
+    color: #334155;
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
+  strong {
+    color: #0f172a;
+  }
+  ul, ol {
+    padding-left: 20px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 20px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 12px;
+    page-break-inside: avoid;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid #e2e8f0;
+  }
+  th {
+    background-color: #0f172a;
+    color: #f8fafc;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+  pre {
+    background-color: #090d16;
+    color: #e2e8f0;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-family: "JetBrains Mono", Consolas, Menlo, Monaco, monospace;
+    font-size: 11px;
+    line-height: 1.45;
+    overflow-x: auto;
+    page-break-inside: avoid;
+    border: 1px solid #1e293b;
+    margin: 12px 0;
+  }
+  code {
+    font-family: "JetBrains Mono", Consolas, Menlo, Monaco, monospace;
+    font-size: 11.5px;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 2px 5px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+  }
+  pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    border: none;
+  }
+  blockquote {
+    border-left: 4px solid #0284c7;
+    background-color: #f0f9ff;
+    color: #0369a1;
+    padding: 10px 14px;
+    margin: 14px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  blockquote p {
+    margin: 0;
+    color: #0c4a6e;
+    font-weight: 500;
+  }
+  .header-badge {
+    display: inline-block;
+    background: #c7990e;
+    color: #0f172a;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="header-badge">Viltrum Agentic OS · Real Estate Architecture</div>
+  <h1 id="auditoria-tecnica-arquitectura-de-coexistencia-aislada-y-plan-maestro">AUDITORÍA TÉCNICA, ARQUITECTURA DE COEXISTENCIA AISLADA Y PLAN MAESTRO</h1>
+<h2 id="quisqueya-home-real-estate-crm-nivel-superior-viltrum-agentic-os">Quisqueya Home Real Estate CRM — Nivel Superior Viltrum Agentic OS</h2>
+<p><strong>Documento:</strong> PLAN-MAESTRO-CRM-VILTRUM-2026-V1<br />
+<strong>Fecha de Emisión:</strong> 3 de octubre de 2026<br />
+<strong>Ecosistema:</strong> Viltrum Agentic OS (Nivel Enterprise / Plan Máximo Inmobiliario)<br />
+<strong>Autoría Técnica:</strong> Colegiado de Departamentos Viltrum:
+- <strong>D00:</strong> Dirección &amp; Orquestación
+- <strong>D02:</strong> Definición de Alcance &amp; PRD
+- <strong>D04 / D05 / D09:</strong> UX Research, Diseño de Sistemas UI (PXIL) e Ingeniería Frontend
+- <strong>D10 / D11:</strong> Arquitectura de Backend, Microservicios y Diseño de Datos Relacionales
+- <strong>D12:</strong> Ciberseguridad, RBAC y Cumplimiento Normativo (Ley 172-13 RD)
+- <strong>D14:</strong> Control de Calidad, QA Automatizado y Candados de Arquitectura
+- <strong>D16:</strong> DevOps, Aislamiento de Redes y Despliegue en Hostinger VPS
+- <strong>D18 / D19:</strong> Agentes de Inteligencia Artificial, MCP Server y Protocolos de Integración
+- <strong>D21 / D22:</strong> Inteligencia Competitiva (Benchmarking Alter Estate) y Operaciones de Conocimiento</p>
+<hr />
+<h2 id="1-resumen-ejecutivo-y-veredicto-tecnico">1. Resumen Ejecutivo y Veredicto Técnico</h2>
+<h3 id="11-dictamen-objetivo-esta-bien-o-esta-mal-el-proyecto">1.1 Dictamen Objetivo: ¿Está bien o está mal el proyecto?</h3>
+<p>El proyecto <strong>no está mal en sus cimientos relacionales y matemáticos</strong>, pero <strong>está a medio camino y muy verde en su capa de interacción, madurez de módulos y conexión con el negocio real</strong>.</p>
+<ul>
+<li><strong>Calificación Global:</strong> <strong>Nivel 2.5 de 5 (Núcleo Relacional Sólido, Capa Superior Incompleta)</strong>.</li>
+<li><strong>Veredicto:</strong> Posee un esquema de base de datos relacional impecable y una lógica de dominio blindada con pruebas unitarias, pero el frontend en <code>develop</code> es rígido y anticuado, carece por completo de la integración de Inteligencia Artificial prometida, mantiene 7 de sus 15 módulos con datos simulados en memoria (<code>_ui/datos-muestra.ts</code>) y ha vivido en total desconexión con el portal web público (<code>QuisqueyaHome PortalWeb</code>).</li>
+</ul>
+<h3 id="12-balance-tecnico-detallado">1.2 Balance Técnico Detallado</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Área de Evaluación</th>
+<th style="text-align: left;">Estado Actual en <code>develop</code></th>
+<th style="text-align: left;">Estado en <code>dev/reestructuracion-solid</code></th>
+<th style="text-align: left;">Diagnóstico Viltrum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Modelado de Datos</strong></td>
+<td style="text-align: left;">29 tablas en Drizzle ORM, <code>bigint</code> para dinero en centavos, zonas horarias UTC vs Santo Domingo.</td>
+<td style="text-align: left;">Esquema consolidado con RLS y repositorios desacoplados.</td>
+<td style="text-align: left;"><strong>Aprobado Alto (9.5/10)</strong>. Es una base de datos profesional.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Lógica Comercial &amp; Pruebas</strong></td>
+<td style="text-align: left;">122 pruebas unitarias en verde. Reglas de pipeline, comisiones 50/50, normalización E.164.</td>
+<td style="text-align: left;"><strong>334 pruebas automatizadas en verde</strong>. Puertos, casos de uso puros y dobles en memoria.</td>
+<td style="text-align: left;"><strong>Sobresaliente (10/10)</strong>. La regla de negocio no falla.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Diseño Visual &amp; UI/UX</strong></td>
+<td style="text-align: left;">CSS plano monolítico de 500 líneas (<code>globals.css</code>), azules y dorados saturados, tablas que desbordan en móvil.</td>
+<td style="text-align: left;"><strong>Tailwind CSS v4</strong>, tokens de Viltrum Design (<code>DESIGN.md</code>), componentes de 21st.dev y Radix.</td>
+<td style="text-align: left;"><strong>Crítico en <code>develop</code> (4/10) / Avanzado en rama solid (8.5/10)</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Completitud de Módulos</strong></td>
+<td style="text-align: left;">Módulos M10 (Academy), M11 (Comunicaciones), M12 (Reportes), M14 (Inicio) con datos falsos.</td>
+<td style="text-align: left;">Misma brecha funcional pendiente de implementación en backend.</td>
+<td style="text-align: left;"><strong>Insuficiente (5/10)</strong>. Hay pantallas que son solo maquetas.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Capa de Inteligencia Artificial</strong></td>
+<td style="text-align: left;">Inexistente. Cero código de Whisper, cero prompts, cero herramientas de agentes.</td>
+<td style="text-align: left;">Inexistente. Solo documentado a nivel de arquitectura.</td>
+<td style="text-align: left;"><strong>No Iniciado (0/10)</strong>. Prioridad estratégica.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Conexión con Portal Web</strong></td>
+<td style="text-align: left;">Desconectado. El portal no envía datos al CRM.</td>
+<td style="text-align: left;">Desconectado. Endpoint <code>/api/leads/externo</code> listo pero huérfano.</td>
+<td style="text-align: left;"><strong>Pendiente de Integración (3/10)</strong>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-auditoria-forense-por-departamentos-viltrum">2. Auditoría Forense por Departamentos Viltrum</h2>
+<h3 id="d00-direccion-orquestacion">D00 · Dirección &amp; Orquestación</h3>
+<ul>
+<li><strong>Diagnóstico:</strong> El proyecto avanzó con rigor durante las fases F0 a F3 (Metas, Comisiones, Avances de obra, Brokers), pero sufrió un estancamiento antes de abordar F4 (Academy, BI, Comunicaciones).</li>
+<li><strong>Gobernanza de Git:</strong> Se descubrió que la rama remota <code>origin/dev/reestructuracion-solid</code> contiene <strong>29 commits de ingeniería superior</strong> que nunca fueron integrados a <code>develop</code>. Ignorar esa rama significaría tirar a la basura semanas de arquitectura limpia y 334 pruebas unitarias.</li>
+</ul>
+<h3 id="d02-definicion-de-alcance-prd-auditoria-de-los-15-modulos">D02 · Definición de Alcance &amp; PRD (Auditoría de los 15 Módulos)</h3>
+<ol>
+<li><strong>00 · Inicio (Dashboard):</strong> Visualmente dividido por rol, pero todas las métricas de conversión, volumen y cierres son números fijos en el JSX.</li>
+<li><strong>01 · Leads:</strong> Funcional en base de datos. Posee deduplicación y asignación automática por broker.</li>
+<li><strong>02 · Contactos:</strong> Ficha centralizada funcional vinculada a leads.</li>
+<li><strong>03 · Pipeline (Kanban):</strong> Cumple con las 6 etapas abiertas más Ganada/Perdida, exigiendo motivo obligatorio al perder y unidad/monto al ganar.</li>
+<li><strong>04 · Agenda &amp; Citas:</strong> Genera archivos <code>.ics</code> estándar y sincroniza horas en huso horario dominicano.</li>
+<li><strong>05 · Propiedades Internas:</strong> Catálogo operativo de unidades y precios reales confidenciales.</li>
+<li><strong>06 · Brokers:</strong> Ficha de desempeño con métricas calculadas desde cierres reales.</li>
+<li><strong>07 · Academy:</strong> <strong>Falso/Mock</strong>. Muestra cursos y cuestionarios pero no guarda el progreso en la base de datos.</li>
+<li><strong>08 · Metas:</strong> Conectado a la tabla <code>goals</code>. La meta la define el admin y los cierres actualizan el porcentaje.</li>
+<li><strong>09 · Comisiones:</strong> Transiciones de estado estrictas (<code>pending</code> -&gt; <code>approved</code> -&gt; <code>paid</code> o <code>void</code>). Exportación a CSV con prevención de inyecciones de fórmulas maliciosas en Excel.</li>
+<li><strong>10 · Tareas &amp; Actividades:</strong> Registro de llamadas, notas y citas vinculadas a la próxima acción.</li>
+<li><strong>11 · Comunicaciones:</strong> <strong>Falso/Mock</strong>. Solo contiene botones para lanzar <code>wa.me</code>, no registra historial de chat.</li>
+<li><strong>12 · Reportes &amp; BI:</strong> <strong>Falso/Mock</strong>. Gráficos estáticos sin agregaciones SQL dinámicas.</li>
+<li><strong>13 · Avances de Obra:</strong> Excelente implementación. 8 fases estándar, carga de fotos a Supabase Storage con URLs firmadas y botón de publicación hacia el portal.</li>
+<li><strong>14 · Configuración &amp; Roles:</strong> Matriz de permisos RBAC granular editable desde la interfaz.</li>
+</ol>
+<h3 id="d05-d09-diseno-de-interfaces-frontend-viltrum-pxil">D05 &amp; D09 · Diseño de Interfaces &amp; Frontend (Viltrum PXIL)</h3>
+<ul>
+<li><strong>Deficiencias Visuales:</strong> Uso de tipografías genéricas, falta de espaciado proporcional en pantallas de alta densidad, ausencia de estados de esqueleto (<em>loading skeletons</em>) y componentes modales que se cortan en pantallas pequeñas.</li>
+<li><strong>Mandato Viltrum:</strong> Implementar la paleta Slate/Zinc neutral con acentos esmeralda/ámbar, tipografías <strong>Outfit</strong> (titulares), <strong>Manrope</strong> (cuerpo) y <strong>JetBrains Mono</strong> (números financieros tabulares). <strong>Regla estricta: Cero emojis; 100% iconos vectoriales Lucide.</strong></li>
+</ul>
+<h3 id="d10-d11-backend-y-arquitectura-de-datos">D10 &amp; D11 · Backend y Arquitectura de Datos</h3>
+<ul>
+<li><strong>Arquitectura Hexagonal:</strong> En la rama <code>dev/reestructuracion-solid</code>, los endpoints de Next.js delegan en <code>src/application/&lt;modulo&gt;/casos-de-uso.ts</code>. Drizzle ORM queda confinado a <code>src/infrastructure/db/repos/</code>.</li>
+<li><strong>Integridad Transaccional:</strong> Uso de <code>tx.for("update")</code> en cierres de negocios y comisiones para impedir condiciones de carrera concurrentes entre dos brokers reclamando una misma unidad.</li>
+</ul>
+<h3 id="d12-seguridad-privacidad-y-ley-172-13-rd">D12 · Seguridad, Privacidad y Ley 172-13 RD</h3>
+<ul>
+<li><strong>Aislamiento Multi-Tenant:</strong> Aislamiento estricto de carteras mediante Row-Level Security (RLS). Un broker con alcance <code>own</code> recibe un error HTTP 403 / 404 al intentar consultar el ID de un lead ajeno.</li>
+<li><strong>Protección de Datos Personales:</strong> Separación de los datos personales de compradores respecto a la base de datos de usuarios administrativos internos.</li>
+</ul>
+<hr />
+<h2 id="3-matriz-estrategica-como-superar-a-alter-estate">3. Matriz Estratégica: Cómo Superar a Alter Estate</h2>
+<p>Alter Estate es la plataforma inmobiliaria dominante en la República Dominicana. Sin embargo, su infraestructura legacy arrastra vicios que Quisqueya Home CRM resolverá de raíz:</p>
+<pre><code>┌────────────────────────────────────────────────────────────────────────┐
+│                   QUISQUEYA HOME CRM (VILTRUM OS)                      │
+│                                                                        │
+│   ┌──────────────────┐  ┌──────────────────┐  ┌────────────────────┐   │
+│   │  WHATSAPP AUDIO  │  │  MOTOR CONFOTUR  │  │   AGENTES IA &amp;     │   │
+│   │  INGESTION (HITL)│  │   LEY 158-01 RD  │  │   HERRAMIENTAS MCP │   │
+│   └────────┬─────────┘  └────────┬─────────┘  └─────────┬──────────┘   │
+│            ▼                     ▼                      ▼              │
+│   ┌────────────────────────────────────────────────────────────────┐   │
+│   │         CORE COMERCIAL: LEADS → ACTIVIDADES → CIERRES          │   │
+│   │   (Clean Architecture, Drizzle ORM, Supabase PostgreSQL)       │   │
+│   └────────────────────────────────┬───────────────────────────────┘   │
+│                                    ▼                                   │
+│   ┌────────────────────────────────────────────────────────────────┐   │
+│   │            EXPERIENCIA MÓVIL Y RADIX (VILTRUM PXIL)            │   │
+│   │   Acciones a 1 pulgar, cero emojis, feedback háptico, 44px+    │   │
+│   └────────────────────────────────────────────────────────────────┘   │
+└────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Capacidad de Negocio</th>
+<th style="text-align: left;">Alter Estate (Líder Actual en RD)</th>
+<th style="text-align: left;">Quisqueya Home CRM (Viltrum OS)</th>
+<th style="text-align: left;">Impacto Competitivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Ingesta de Notas de Voz WhatsApp</strong></td>
+<td style="text-align: left;">Inexistente. El agente debe transcribir manualmente cada conversación en una computadora.</td>
+<td style="text-align: left;"><strong>Whisper AI + Human-in-the-Loop:</strong> Transcripción de audios de WhatsApp con tarjeta de aprobación en 1 toque.</td>
+<td style="text-align: left;">Ahorra 80% de la carga administrativa del broker.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Experiencia Móvil en Obra</strong></td>
+<td style="text-align: left;">Formularios pesados, fuentes diminutas, inutilizable con una mano bajo el sol.</td>
+<td style="text-align: left;"><strong>Mobile-First Real Estate UX:</strong> Botones táctiles de 44px+, acciones directas a WhatsApp, swipe cards.</td>
+<td style="text-align: left;">Adopción total del equipo de ventas en la calle.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Régimen Fiscal Dominicano</strong></td>
+<td style="text-align: left;">Cálculos genéricos de amortización sin leyes locales.</td>
+<td style="text-align: left;"><strong>Motor Confotur (Ley 158-01):</strong> Exención automática del 3% de transferencia y 1% de IPI anual por 15 años.</td>
+<td style="text-align: left;">Cierre de ventas con inversionistas extranjeros en minutos.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tratamiento de Leads Duplicados</strong></td>
+<td style="text-align: left;">Colisiones de leads; fragmentación de datos y disputas internas entre brokers.</td>
+<td style="text-align: left;"><strong>Identidad Unificada 1:N:</strong> Un contacto, múltiples proyectos de interés con trazabilidad clara de atribución.</td>
+<td style="text-align: left;">Fin de las disputas internas de comisiones.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Avances de Obra Públicos</strong></td>
+<td style="text-align: left;">Módulo cerrado sin sincronización transparente con el comprador.</td>
+<td style="text-align: left;"><strong>Sincronización Bidireccional:</strong> Hitos de obra y fotos de dron publicables al portal web público en 1 clic.</td>
+<td style="text-align: left;">Confianza total para inversionistas de la diáspora.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Integración con Agentes de IA</strong></td>
+<td style="text-align: left;">Sistema cerrado sin APIs abiertas para agentes autónomos.</td>
+<td style="text-align: left;"><strong>Servidor MCP Nativo:</strong> Exposición de herramientas estructuradas para LLMs y copilotos.</td>
+<td style="text-align: left;">Preparado para el futuro de la automatización inmobiliaria.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Costos de Licenciamiento</strong></td>
+<td style="text-align: left;">Cobro mensual por asiento de broker; costo prohibitivo al escalar.</td>
+<td style="text-align: left;"><strong>Infraestructura Propia en VPS:</strong> Usuarios y almacenamiento ilimitados bajo control de Quisqueya Home.</td>
+<td style="text-align: left;">Retorno de inversión inmediato y soberanía de datos.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-arquitectura-de-coexistencia-aislada-portal-web-crm-inmobiliario">4. Arquitectura de Coexistencia Aislada: Portal Web ↔ CRM Inmobiliario</h2>
+<p>Siguiendo el principio <strong>P1 de Viltrum (Bajo Acoplamiento y Contratos Estables)</strong>, se descarta compartir tablas directas en una misma base de datos. Se implementa una <strong>Arquitectura Shared-Nothing (Bases de Datos Aisladas con Comunicación por API)</strong>.</p>
+<pre><code>┌────────────────────────────────────────────────────────┐       ┌────────────────────────────────────────────────────────┐
+│               PORTAL WEB (PUBLIC FACING)               │       │               QUISQUEYA HOME CRM (INTERNAL)            │
+│  - Runtime: Node.js / Express + Vite SPA (Port 8787)   │       │  - Runtime: Next.js 15 Standalone (Port 3000)          │
+│  - Tráfico: Millones de visitas, SEO, Inversionistas   │       │  - Tráfico: Brokers, Asistentes, Admins, Finanzas     │
+│  - Base de Datos: `quisqueya_portal`                   │       │  - Base de Datos: `quisqueya_crm`                      │
+│    (client_accounts, inquiries, projects, zones, pois) │       │    (leads, contacts, deals, commissions, goals, users) │
+└──────────────────────────┬─────────────────────────────┘       └───────────────────────────▲────────────────────────────┘
+                           │                                                                 │
+                           │   EVENTO 1: Captura de Lead / Cita (Inbound)                   │
+                           ├─────────────────────────────────────────────────────────────────┤
+                           │   POST /api/leads/externo (HTTPS con HMAC + Idempotency-Key)    │
+                           │                                                                 │
+                           │   EVENTO 2: Publicación de Avance de Obra (Outbound)            │
+                           │◄────────────────────────────────────────────────────────────────┤
+                           │   POST /api/internal/sync-construction-updates (Cache Invalidate│
+                           │                                                                 │
+</code></pre>
+<h3 id="41-principios-de-aislamiento">4.1 Principios de Aislamiento</h3>
+<ol>
+<li><strong>Aislamiento de Fallos (<em>Blast Radius</em>):</strong> Una caída, sobrecarga o migración en el CRM jamás afecta la disponibilidad del portal web público ni sus tiempos de respuesta para Googlebot.</li>
+<li><strong>Soberanía y Seguridad de Datos:</strong> Los precios de compra de constructora, los contratos privados, las metas financieras y las comisiones bancarias de los brokers viven en una base de datos físicamente inaccesible para los usuarios del portal web.</li>
+<li><strong>Escalabilidad Independiente:</strong> El portal web escala horizontalmente para absorber picos de tráfico de publicidad digital; el CRM escala verticalmente para optimizar transacciones financieras y auditoría.</li>
+</ol>
+<h3 id="42-modelo-de-identidad-y-gestion-de-usuarios">4.2 Modelo de Identidad y Gestión de Usuarios</h3>
+<pre><code>                    ┌───────────────────────────────────────────────┐
+                    │            SEGREGACIÓN DE IDENTIDAD           │
+                    └───────────────────────┬───────────────────────┘
+                                            │
+               ┌────────────────────────────┴────────────────────────────┐
+               ▼                                                         ▼
+┌──────────────────────────────┐                         ┌──────────────────────────────┐
+│  CLIENTES (PORTAL WEB)       │                         │  EQUIPO INTERNO (CRM)        │
+├──────────────────────────────┤                         ├──────────────────────────────┤
+│ - Tabla: `client_accounts`   │                         │ - Tabla: `users`             │
+│ - Perfil: Comprador/Inversor │                         │ - Perfiles: `broker_profiles`│
+│ - Ley 172-13 (Derechos ARCO) │                         │ - Roles: Admin, Asist, Broker│
+│ - Contraseñas no tocan CRM   │                         │ - Sesiones Supabase Auth     │
+└──────────────────────────────┘                         └──────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>Clientes Compradores (Portal Web):</strong></li>
+<li>Residen en la tabla <code>client_accounts</code> de la base de datos del portal.</li>
+<li>Sus contraseñas e identidades de sesión jamás se replican en el CRM.</li>
+<li>En el CRM solo existen como registros comerciales: un <code>contact</code> (nombre, teléfono, correo) y un <code>lead</code> (proyecto de interés, presupuesto).</li>
+<li><strong>Equipo Comercial (CRM):</strong></li>
+<li>Residen en <code>users</code> y <code>broker_profiles</code> en la base de datos del CRM.</li>
+<li>Cuentan con credenciales de alta seguridad y matriz RBAC estricta.</li>
+<li>En el portal público, los brokers son representados únicamente como figuras editoriales públicas (<code>advisors</code>), mostrando foto de perfil y número público de WhatsApp, sin exponer sus cuentas internas.</li>
+</ul>
+<hr />
+<h2 id="5-trazabilidad-de-punta-a-punta-entre-sistemas">5. Trazabilidad de Punta a Punta entre Sistemas</h2>
+<h3 id="51-flujo-inbound-captura-de-lead-desde-el-portal-hacia-el-crm">5.1 Flujo Inbound: Captura de Lead desde el Portal hacia el CRM</h3>
+<ol>
+<li><strong>Interacción del Usuario:</strong> Un visitante en <code>quisqueyahome.com</code> solicita una cita o asesoría sobre el proyecto "Altos de Cana".</li>
+<li><strong>Persistencia Local en Portal:</strong> El portal registra la solicitud en <code>client_inquiries</code> con estado <code>status = 'requested'</code> y <code>crm_sync_status = 'pending'</code>.</li>
+<li><strong>Despacho del Webhook:</strong> Un proceso worker lee las consultas pendientes y emite una petición segura:</li>
+<li><strong>URL:</strong> <code>https://crm.quisqueyahome.com/api/leads/externo</code></li>
+<li><strong>Cabeceras:</strong> <code>x-webhook-token: &lt;SHARED_SECRET&gt;</code>, <code>Content-Type: application/json</code></li>
+<li><strong>Payload:</strong>
+     <code>json
+     {
+       "externalId": "inquiry_9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+       "fullName": "Carlos Mendoza",
+       "phone": "+1 (809) 555-0199",
+       "email": "carlos.mendoza@gmail.com",
+       "projectInterestText": "Altos de Cana",
+       "zoneInterest": "Punta Cana",
+       "operationType": "sale",
+       "budgetMinCents": 15000000,
+       "budgetMaxCents": 22000000,
+       "currency": "USD",
+       "utmSource": "meta_ads",
+       "originalMessage": "Deseo información de disponibilidad para 2 habitaciones."
+     }</code></li>
+<li><strong>Procesamiento en CRM:</strong></li>
+<li><strong>Autenticación en Tiempo Constante:</strong> Se valida el token sin fugas de tiempo.</li>
+<li><strong>Normalización Telefónica:</strong> Convierte el número a formato E.164 canónico (<code>+18095550199</code>).</li>
+<li><strong>Deduplicación de Contacto:</strong> Si el teléfono o correo ya existen en <code>contacts</code>, se asocia a ese contacto; si no, se crea uno nuevo.</li>
+<li><strong>Enrutamiento Inteligente:</strong> <code>sugerirBroker()</code> evalúa la especialidad del broker (ej. Punta Cana / Ventas) y lo asigna automáticamente.</li>
+<li><strong>Inserción Idempotente:</strong> Se inserta en <code>leads</code>. Si la petición se reintenta por intermitencia de red, el índice único parcial <code>leads_external_id_unq</code> descarta duplicados con <code>onConflictDoNothing</code>.</li>
+<li><strong>Cierre de Trazabilidad:</strong> El CRM responde HTTP 200 con <code>{ ok: true, leadId: 842, assignedBrokerId: 4 }</code>. El portal actualiza su registro local a <code>crm_sync_status = 'synced'</code> y <code>crm_external_id = 'crm_lead_842'</code>.</li>
+</ol>
+<h3 id="52-flujo-outbound-publicacion-de-avances-de-obra-hacia-el-portal">5.2 Flujo Outbound: Publicación de Avances de Obra hacia el Portal</h3>
+<ol>
+<li><strong>Carga en CRM:</strong> El ingeniero o broker accede a <code>/avances</code> en el CRM, selecciona la fase correspondiente (ej. "Fase 4: Estructura de Hormigón") y sube fotos capturadas en obra.</li>
+<li><strong>Almacenamiento Seguro:</strong> Las fotos se almacenan en Supabase Storage con compresión WebP y URLs firmadas.</li>
+<li><strong>Publicación:</strong> El usuario hace clic en «Publicar en el portal». El CRM marca <code>is_published = true</code> y <code>published_at = now()</code>.</li>
+<li><strong>Notificación al Portal:</strong> El CRM emite un webhook a <code>https://quisqueyahome.com/api/internal/sync-construction-updates</code>.</li>
+<li><strong>Actualización Pública:</strong> El portal web invalida su caché de catálogo y actualiza la línea de tiempo de obra en la página pública del proyecto. Los inversionistas ven las evidencias fotográficas de inmediato.</li>
+</ol>
+<hr />
+<h2 id="6-arquitectura-de-inteligencia-artificial-ai-native">6. Arquitectura de Inteligencia Artificial (AI-Native)</h2>
+<h3 id="61-ingesta-de-notas-de-voz-de-whatsapp-human-in-the-loop">6.1 Ingesta de Notas de Voz de WhatsApp (Human-in-the-Loop)</h3>
+<p>La mayor pérdida de datos comerciales ocurre cuando los brokers conducen o están en obra y reciben mensajes de audio de WhatsApp que olvidan anotar en el CRM.</p>
+<pre><code>┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
+│ Broker en Obra  │       │ Whisper Audio   │       │ Motor LLM       │       │ Tarjeta HITL    │
+│ envía nota de   │──────►│ Transcripción   │──────►│ Extracción      │──────►│ Aprobación con  │
+│ voz a WhatsApp  │       │ de alta fidelid.│       │ Estructurada    │       │ 1 toque en CRM  │
+└─────────────────┘       └─────────────────┘       └─────────────────┘       └─────────────────┘
+</code></pre>
+<ol>
+<li><strong>Captura:</strong> El broker reenvía una nota de voz al bot corporativo de WhatsApp de Quisqueya Home.</li>
+<li><strong>Transcripción:</strong> La API procesa el audio con Whisper AI.</li>
+<li><strong>Extracción Estructurada:</strong> Un LLM extrae variables clave:</li>
+<li>Nombre / Teléfono del cliente.</li>
+<li>Proyecto de interés y tipología (ej. 2 habitaciones).</li>
+<li>Rango de presupuesto expresado.</li>
+<li>Tarea de seguimiento requerida y fecha límite.</li>
+<li><strong>Validación Humana (HITL):</strong> En lugar de mutar la base de datos a ciegas, el CRM presenta al broker una tarjeta flotante en su móvil:<blockquote>
+<p><em>"Detectamos: Lead Juan Pérez, Presupuesto US$180,000, Interés en Cana Rock. Próxima acción: Llamar el jueves. ¿Deseas guardar en el pipeline?"</em></p>
+</blockquote>
+</li>
+<li><strong>Confirmación:</strong> Con <strong>un solo toque</strong>, el broker valida la información y se crea el lead y la actividad en la base de datos.</li>
+</ol>
+<h3 id="62-servidor-mcp-model-context-protocol-para-agentes-viltrum">6.2 Servidor MCP (Model Context Protocol) para Agentes Viltrum</h3>
+<p>El CRM expondrá endpoints estructurados bajo el estándar MCP para que agentes de IA autorizados actúen como asistentes comerciales:
+- <code>search_inventory(zone, max_price, bedrooms, confotur_only)</code>: Devuelve disponibilidad en tiempo real.
+- <code>calculate_payment_plan(unit_id, reserve_usd, down_percent, delivery_date)</code>: Genera el esquema de cuotas.
+- <code>get_lead_dossier(lead_id)</code>: Recupera el historial omnicanal para que el agente prepare una reunión.
+- <code>calculate_confotur_savings(purchase_price_usd)</code>: Calcula el ahorro impositivo exacto (3% traspaso + 1% IPI anual).</p>
+<hr />
+<h2 id="7-plan-de-despliegue-en-servidor-hostinger-vps">7. Plan de Despliegue en Servidor (Hostinger VPS)</h2>
+<h3 id="71-topologia-de-red-y-reverse-proxy-nginx">7.1 Topología de Red y Reverse Proxy (Nginx)</h3>
+<pre><code>                              INTERNET (Tráfico HTTPS)
+                                         │
+                                         ▼
+                     ┌───────────────────────────────────────┐
+                     │     NGINX REVERSE PROXY &amp; SSL         │
+                     │     (Certbot Let's Encrypt, UFW)      │
+                     └───────┬───────────────────────┬───────┘
+                             │                       │
+      Host: quisqueyahome.com│                       │Host: crm.quisqueyahome.com
+                             ▼                       ▼
+               ┌──────────────────────────┐    ┌──────────────────────────┐
+               │    PORTAL WEB RUNTIME    │    │    CRM NEXT.JS SERVER    │
+               │   Node.js (Puerto 8787)  │    │   Node.js (Puerto 3000)  │
+               │   PM2 / Systemd Service  │    │   PM2 / Systemd Service  │
+               └─────────────┬────────────┘    └─────────────┬────────────┘
+                             │                               │
+                             ▼                               ▼
+               ┌──────────────────────────┐    ┌──────────────────────────┐
+               │   POSTGRESQL PORTAL DB   │    │    POSTGRESQL CRM DB     │
+               │    (Puerto 5432 Local)   │    │    (Puerto 5432 Local)   │
+               └──────────────────────────┘    └──────────────────────────┘
+</code></pre>
+<ul>
+<li><strong><code>quisqueyahome.com</code></strong>: Enruta el tráfico hacia el runtime del portal web (puerto <code>8787</code>).</li>
+<li><strong><code>crm.quisqueyahome.com</code></strong>: Enruta el tráfico hacia el servidor Next.js 15 en modo standalone (puerto <code>3000</code>).</li>
+<li><strong>Seguridad de Servidor:</strong></li>
+<li>Firewall UFW configurado para aceptar únicamente tráfico en los puertos <strong>80</strong> y <strong>443</strong>.</li>
+<li>El puerto PostgreSQL <strong>5432</strong> permanece cerrado al exterior, accesible exclusivamente vía localhost (<code>127.0.0.1</code>) o mediante túneles SSH autenticados con llave criptográfica Ed25519.</li>
+</ul>
+<h3 id="72-configuracion-de-procesos-con-pm2-ecosystemconfigcjs">7.2 Configuración de Procesos con PM2 (<code>ecosystem.config.cjs</code>)</h3>
+<pre><code class="language-javascript">module.exports = {
+  apps: [
+    {
+      name: 'quisqueya-portal',
+      cwd: '/var/www/quisqueya-portal',
+      script: 'server/server.mjs',
+      instances: 2,
+      exec_mode: 'cluster',
+      env: { NODE_ENV: 'production', PORT: 8787 }
+    },
+    {
+      name: 'quisqueya-crm',
+      cwd: '/var/www/quisqueya-crm',
+      script: 'node_modules/next/dist/bin/next',
+      args: 'start -p 3000',
+      instances: 1,
+      exec_mode: 'fork',
+      env: { NODE_ENV: 'production', PORT: 3000 }
+    }
+  ]
+};
+</code></pre>
+<hr />
+<h2 id="8-plan-de-ejecucion-y-roadmap-de-implementacion">8. Plan de Ejecución y Roadmap de Implementación</h2>
+<pre><code class="language-mermaid">gantt
+    title Roadmap de Transformación CRM Quisqueya Home
+    dateFormat  YYYY-MM-DD
+    section Fase 1: Arquitectura
+    Merge de dev/reestructuracion-solid a develop :active, a1, 2026-10-04, 2d
+    Verificación de 334 pruebas en CI/CD          :a2, after a1, 1d
+    section Fase 2: Integración
+    Conexión Webhook Portal Web ↔ CRM             :b1, after a2, 2d
+    Sincronización de Avances de Obra             :b2, after b1, 2d
+    section Fase 3: Módulos Pendientes
+    Persistencia real de Academy (M10)            :c1, after b2, 3d
+    Motor de BI y Métricas en Vivo (M12 &amp; M14)    :c2, after c1, 3d
+    section Fase 4: Inteligencia Artificial
+    Ingesta de WhatsApp Audio con Whisper HITL    :d1, after c2, 4d
+    Calculadora Fiscal Confotur Ley 158-01        :d2, after d1, 2d
+    Servidor MCP de Herramientas para Agentes     :d3, after d2, 3d
+</code></pre>
+<h3 id="hitos-inmediatos">Hitos Inmediatos:</h3>
+<ol>
+<li><strong>Paso 1 (Fundamento):</strong> Ejecutar el merge ordenado de <code>origin/dev/reestructuracion-solid</code> hacia <code>develop</code>, garantizando que el repositorio cuente con las 334 pruebas automatizadas, Tailwind v4 y los tokens semánticos de Viltrum Design.</li>
+<li><strong>Paso 2 (Integración):</strong> Desplegar el webhook en <code>QuisqueyaHome PortalWeb/server/client-api.mjs</code> hacia <code>POST /api/leads/externo</code>, verificando la deduplicación de leads y la asignación automática de broker en Staging.</li>
+<li><strong>Paso 3 (Avances de Obra):</strong> Conectar la publicación de fases fotográficas del CRM con la visualización pública en el portal web.</li>
+<li><strong>Paso 4 (IA &amp; Confotur):</strong> Implementar el microservicio de ingesta de notas de voz de WhatsApp con aprobación en un clic y la calculadora de exención fiscal de la Ley 158-01.</li>
+</ol>
+</body>
+</html>

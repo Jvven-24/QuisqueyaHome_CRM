@@ -1,0 +1,60 @@
+/**
+ * Clientes de Supabase Auth (T2).
+ *
+ * Se usa `@supabase/ssr` porque el App Router necesita la sesión **en el
+ * servidor**: un componente de servidor tiene que saber quién pregunta antes de
+ * consultar nada. La sesión viaja en cookies, no en `localStorage`.
+ */
+
+import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient, createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+import { supabaseAnonKey, supabaseServiceRoleKey, supabaseUrl } from "../env";
+
+/** Cliente de navegador. Solo para componentes cliente. */
+export function browserClient() {
+  return createBrowserClient(supabaseUrl(), supabaseAnonKey());
+}
+
+/**
+ * Cliente de servidor, ligado a las cookies de la petición.
+ *
+ * `setAll` puede fallar cuando se llama desde un componente de servidor —
+ * Next.js no permite escribir cookies durante el render. Se ignora a propósito:
+ * el middleware ya refresca la sesión en cada petición, que es donde sí se puede
+ * escribir.
+ */
+export async function serverClient() {
+  const store = await cookies();
+  return createServerClient(supabaseUrl(), supabaseAnonKey(), {
+    cookies: {
+      getAll: () => store.getAll(),
+      setAll: (cookiesToSet) => {
+        try {
+          for (const { name, value, options } of cookiesToSet) {
+            store.set(name, value, options);
+          }
+        } catch {
+          // Render de componente de servidor: lo resuelve el middleware.
+        }
+      },
+    },
+  });
+}
+
+/**
+ * Cliente administrativo (M13, decisión #28). Con la clave de servicio, no la
+ * anónima: es lo único que puede invitar usuarios por correo
+ * (`auth.admin.inviteUserByEmail`). Sin cookies ni sesión propia —cada
+ * llamada ya trae el permiso "de servidor completo" en la clave misma—, así
+ * que no comparte código con `serverClient`/`browserClient`.
+ *
+ * Solo se usa desde route handlers que ya comprobaron `requireScope(actor,
+ * "users", ...)"` primero: este cliente no sabe quién es el actor ni aplica
+ * RBAC por su cuenta.
+ */
+export function adminClient() {
+  return createClient(supabaseUrl(), supabaseServiceRoleKey(), {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}

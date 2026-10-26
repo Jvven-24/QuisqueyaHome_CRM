@@ -1,0 +1,201 @@
+{
+  "method": "Vistas del parche en Chromium aislado. Navegación y API simuladas; sin Next, sin base de datos. CSS de módulo real y tokens de DESIGN.md; tipografía del banco, sin shell compartido.",
+  "responsive": [
+    {
+      "view": "importacion",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "importacion",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "importacion",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "importacion",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "view": "asignacion",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "asignacion",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "asignacion",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "asignacion",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "view": "duplicados",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "duplicados",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "duplicados",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "duplicados",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "view": "empresas",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "empresas",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "empresas",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "empresas",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "view": "demandas",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "demandas",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "demandas",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "demandas",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "view": "privacidad",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "privacidad",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "privacidad",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "privacidad",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "view": "relaciones",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "relaciones",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "relaciones",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "relaciones",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "view": "calificacion",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "calificacion",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "calificacion",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "calificacion",
+      "width": 1440,
+      "scroll": 1440
+    },
+    {
+      "view": "sla",
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "view": "sla",
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "view": "sla",
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "view": "sla",
+      "width": 1440,
+      "scroll": 1440
+    }
+  ],
+  "flows": [
+    "CSV: mapeo, correo inválido, duplicado y reporte descargable",
+    "Excel XLSX: descompresión, shared strings, selección de hoja y resumen",
+    "Excel: rechaza fórmulas sin evaluarlas",
+    "Duplicados: motivo y confirmación obligatorios; preparación sin fusión real",
+    "Empresas: validación del obligatorio en español",
+    "Diálogos: Escape cierra solo el superior, Tab queda dentro y vuelve el foco",
+    "Matching: score explicable, unidades excluidas y ajuste local",
+    "Contacto 360: pestañas por teclado y estado vacío",
+    "Distribución: plan round-robin y confirmación por lead con API simulada",
+    "Calificación: valida importes y guarda con API simulada",
+    "Privacidad: descarga JSON y solicitud sin falsa persistencia",
+    "Seis estados: carga, vacío, error, sin conexión, permiso y datos",
+    "SLA: política configurable y filtrado sin atribuir incumplimientos reales"
+  ],
+  "errors": []
+}

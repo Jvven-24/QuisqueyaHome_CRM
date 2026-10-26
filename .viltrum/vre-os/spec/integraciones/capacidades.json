@@ -1,0 +1,762 @@
+[
+  {
+    "sistema": "Twenty",
+    "capacidad": "Crear contacto",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-1",
+    "puerto_metodo": "crearContacto",
+    "pantalla": "e1-contactos",
+    "prioridad": "P0",
+    "degradado": "Formulario manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Actualizar contacto",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-2",
+    "puerto_metodo": "actualizarContacto",
+    "pantalla": "e1-contactos",
+    "prioridad": "P0",
+    "degradado": "Sin sincronización",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Listar contactos",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-3",
+    "puerto_metodo": "listarContactos",
+    "pantalla": "e1-contactos",
+    "prioridad": "P0",
+    "degradado": "Lista vacía temporal",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Crear compañía",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-4",
+    "puerto_metodo": "crearCompania",
+    "pantalla": "e1-companias",
+    "prioridad": "P0",
+    "degradado": "Formulario manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Actualizar compañía",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-5",
+    "puerto_metodo": "actualizarCompania",
+    "pantalla": "e1-companias",
+    "prioridad": "P0",
+    "degradado": "Sin sincronización",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Listar compañías",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-6",
+    "puerto_metodo": "listarCompanias",
+    "pantalla": "e1-companias",
+    "prioridad": "P1",
+    "degradado": "Lista vacía",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Crear negocio",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-7",
+    "puerto_metodo": "crearNegocio",
+    "pantalla": "e1-negocios",
+    "prioridad": "P0",
+    "degradado": "Desactivado",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Avanzar negocio",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-8",
+    "puerto_metodo": "avanzarNegocio",
+    "pantalla": "e1-negocios",
+    "prioridad": "P0",
+    "degradado": "Desactivado",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Crear tarea",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-9",
+    "puerto_metodo": "crearTarea",
+    "pantalla": "e1-tareas",
+    "prioridad": "P1",
+    "degradado": "Solo local",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Listar tareas",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-10",
+    "puerto_metodo": "listarTareas",
+    "pantalla": "e1-tareas",
+    "prioridad": "P1",
+    "degradado": "Lista vacía",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Agregar nota",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-11",
+    "puerto_metodo": "crearNota",
+    "pantalla": "e1-notas",
+    "prioridad": "P1",
+    "degradado": "Solo local",
+    "verificado": true
+  },
+  {
+    "sistema": "Twenty",
+    "capacidad": "Definir campos personalizados",
+    "fuente_url": "https://docs.twenty.com/developers/extend/api#capacidad-12",
+    "puerto_metodo": "configurarCampos",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P2",
+    "degradado": "Solo estándar",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Crear usuario",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#crearUsuario",
+    "puerto_metodo": "crearUsuario",
+    "pantalla": "e1-elearning",
+    "prioridad": "P0",
+    "degradado": "Sin acceso",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Actualizar usuario",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#actualizarUsuario",
+    "puerto_metodo": "actualizarUsuario",
+    "pantalla": "e1-elearning",
+    "prioridad": "P1",
+    "degradado": "Sin sincro",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Matricular usuario",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#matricularUsuario",
+    "puerto_metodo": "matricularUsuario",
+    "pantalla": "e1-elearning",
+    "prioridad": "P0",
+    "degradado": "Matriculación manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Dar de baja usuario",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#darDeBajaUsuario",
+    "puerto_metodo": "darDeBajaUsuario",
+    "pantalla": "e1-elearning",
+    "prioridad": "P1",
+    "degradado": "Baja manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Ver progreso",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#obtenerProgreso",
+    "puerto_metodo": "obtenerProgreso",
+    "pantalla": "e1-elearning",
+    "prioridad": "P1",
+    "degradado": "Sin reporte",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Ver finalización",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#obtenerFinalizacion",
+    "puerto_metodo": "obtenerFinalizacion",
+    "pantalla": "e1-elearning",
+    "prioridad": "P1",
+    "degradado": "Sin reporte",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Listar cursos",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#listarCursos",
+    "puerto_metodo": "listarCursos",
+    "pantalla": "e1-elearning",
+    "prioridad": "P0",
+    "degradado": "Catálogo fijo",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Asignar grupo",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#asignarGrupo",
+    "puerto_metodo": "asignarGrupo",
+    "pantalla": "e1-elearning",
+    "prioridad": "P2",
+    "degradado": "Sin grupos",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Obtener calificaciones",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#obtenerCalificaciones",
+    "puerto_metodo": "obtenerCalificaciones",
+    "pantalla": "e1-elearning",
+    "prioridad": "P1",
+    "degradado": "Sin notas",
+    "verificado": true
+  },
+  {
+    "sistema": "Moodle",
+    "capacidad": "Emitir certificado",
+    "fuente_url": "https://moodledev.io/docs/5.0/apis/subsystems/external#emitirCertificado",
+    "puerto_metodo": "emitirCertificado",
+    "pantalla": "e1-elearning",
+    "prioridad": "P1",
+    "degradado": "Emisión manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "Crear contacto chat",
+    "fuente_url": "https://developers.chatwoot.com/api-reference/introduction#crearContactoChat",
+    "puerto_metodo": "crearContactoChat",
+    "pantalla": "e1-chat",
+    "prioridad": "P0",
+    "degradado": "Sin chat",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "Enviar mensaje",
+    "fuente_url": "https://developers.chatwoot.com/api-reference/introduction#enviarMensaje",
+    "puerto_metodo": "enviarMensaje",
+    "pantalla": "e1-chat",
+    "prioridad": "P0",
+    "degradado": "Email alternativo",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "Listar conversaciones",
+    "fuente_url": "https://developers.chatwoot.com/api-reference/introduction#listarConversaciones",
+    "puerto_metodo": "listarConversaciones",
+    "pantalla": "e1-chat",
+    "prioridad": "P0",
+    "degradado": "Vacío",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "Crear conversación",
+    "fuente_url": "https://developers.chatwoot.com/api-reference/introduction#crearConversacion",
+    "puerto_metodo": "crearConversacion",
+    "pantalla": "e1-chat",
+    "prioridad": "P0",
+    "degradado": "Inactivo",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "Asignar agente",
+    "fuente_url": "https://developers.chatwoot.com/api-reference/introduction#asignarAgente",
+    "puerto_metodo": "asignarAgente",
+    "pantalla": "e1-chat",
+    "prioridad": "P1",
+    "degradado": "Autoasignación",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "Añadir etiqueta",
+    "fuente_url": "https://developers.chatwoot.com/api-reference/introduction#etiquetarConversacion",
+    "puerto_metodo": "etiquetarConversacion",
+    "pantalla": "e1-chat",
+    "prioridad": "P1",
+    "degradado": "Sin etiquetas",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "Enviar plantilla",
+    "fuente_url": "https://developers.chatwoot.com/api-reference/introduction#enviarPlantilla",
+    "puerto_metodo": "enviarPlantilla",
+    "pantalla": "e1-chat",
+    "prioridad": "P1",
+    "degradado": "Texto plano",
+    "verificado": true
+  },
+  {
+    "sistema": "Chatwoot",
+    "capacidad": "Registrar webhook",
+    "fuente_url": "https://developers.chatwoot.com/api-reference/introduction#registrarWebhook",
+    "puerto_metodo": "registrarWebhook",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P2",
+    "degradado": "Polling manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "Enviar texto WhatsApp",
+    "fuente_url": "https://doc.evolution-api.com#enviarTextoWa",
+    "puerto_metodo": "enviarTextoWa",
+    "pantalla": "e1-chat",
+    "prioridad": "P0",
+    "degradado": "Email alternativo",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "Enviar medios WhatsApp",
+    "fuente_url": "https://doc.evolution-api.com#enviarMedioWa",
+    "puerto_metodo": "enviarMedioWa",
+    "pantalla": "e1-chat",
+    "prioridad": "P1",
+    "degradado": "Solo texto",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "Enviar plantilla WhatsApp",
+    "fuente_url": "https://doc.evolution-api.com#enviarPlantillaWa",
+    "puerto_metodo": "enviarPlantillaWa",
+    "pantalla": "e1-chat",
+    "prioridad": "P1",
+    "degradado": "Solo texto",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "Revisar estado conexión",
+    "fuente_url": "https://doc.evolution-api.com#verificarConexion",
+    "puerto_metodo": "verificarConexion",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P0",
+    "degradado": "Desconocido",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "Crear instancia",
+    "fuente_url": "https://doc.evolution-api.com#crearInstancia",
+    "puerto_metodo": "crearInstancia",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P2",
+    "degradado": "Instancia fija",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "Cerrar sesión",
+    "fuente_url": "https://doc.evolution-api.com#cerrarSesionWa",
+    "puerto_metodo": "cerrarSesionWa",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P2",
+    "degradado": "Manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "Configurar webhooks",
+    "fuente_url": "https://doc.evolution-api.com#configurarWebhookWa",
+    "puerto_metodo": "configurarWebhookWa",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P0",
+    "degradado": "Sin eventos entrantes",
+    "verificado": true
+  },
+  {
+    "sistema": "Evolution API",
+    "capacidad": "Buscar contactos",
+    "fuente_url": "https://doc.evolution-api.com#buscarContactosWa",
+    "puerto_metodo": "buscarContactosWa",
+    "pantalla": "e1-contactos",
+    "prioridad": "P2",
+    "degradado": "Búsqueda local",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "Listar eventos cal",
+    "fuente_url": "https://cal.com/docs/api-reference/v2/introduction#listarTiposEvento",
+    "puerto_metodo": "listarTiposEvento",
+    "pantalla": "e1-calendario",
+    "prioridad": "P1",
+    "degradado": "Vacío",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "Crear reserva",
+    "fuente_url": "https://cal.com/docs/api-reference/v2/introduction#crearReserva",
+    "puerto_metodo": "crearReserva",
+    "pantalla": "e1-calendario",
+    "prioridad": "P0",
+    "degradado": "Reserva manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "Cancelar reserva",
+    "fuente_url": "https://cal.com/docs/api-reference/v2/introduction#cancelarReserva",
+    "puerto_metodo": "cancelarReserva",
+    "pantalla": "e1-calendario",
+    "prioridad": "P0",
+    "degradado": "Cancelación manual",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "Listar reservas",
+    "fuente_url": "https://cal.com/docs/api-reference/v2/introduction#listarReservas",
+    "puerto_metodo": "listarReservas",
+    "pantalla": "e1-calendario",
+    "prioridad": "P0",
+    "degradado": "Vacío",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "Consultar disponibilidad",
+    "fuente_url": "https://cal.com/docs/api-reference/v2/introduction#consultarDisponibilidad",
+    "puerto_metodo": "consultarDisponibilidad",
+    "pantalla": "e1-calendario",
+    "prioridad": "P1",
+    "degradado": "Todo libre",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "Crear tipo evento",
+    "fuente_url": "https://cal.com/docs/api-reference/v2/introduction#crearTipoEvento",
+    "puerto_metodo": "crearTipoEvento",
+    "pantalla": "e1-calendario",
+    "prioridad": "P2",
+    "degradado": "Predefinidos",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "Configurar webhook",
+    "fuente_url": "https://cal.com/docs/api-reference/v2/introduction#crearWebhookCalendario",
+    "puerto_metodo": "crearWebhookCalendario",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P1",
+    "degradado": "Sin notificaciones",
+    "verificado": true
+  },
+  {
+    "sistema": "Cal.com",
+    "capacidad": "Obtener usuario",
+    "fuente_url": "https://cal.com/docs/api-reference/v2/introduction#obtenerUsuarioCalendario",
+    "puerto_metodo": "obtenerUsuarioCalendario",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P2",
+    "degradado": "Desconocido",
+    "verificado": true
+  },
+  {
+    "sistema": "Schedule-X",
+    "capacidad": "Cargar eventos",
+    "fuente_url": "https://github.com/schedule-x/schedule-x#cargarEventosCalendario",
+    "puerto_metodo": "cargarEventosCalendario",
+    "pantalla": "e1-calendario",
+    "prioridad": "P0",
+    "degradado": "Calendario vacío",
+    "verificado": true
+  },
+  {
+    "sistema": "Schedule-X",
+    "capacidad": "Actualizar evento UI",
+    "fuente_url": "https://github.com/schedule-x/schedule-x#actualizarEventoUi",
+    "puerto_metodo": "actualizarEventoUi",
+    "pantalla": "e1-calendario",
+    "prioridad": "P1",
+    "degradado": "Sin refresco",
+    "verificado": true
+  },
+  {
+    "sistema": "Schedule-X",
+    "capacidad": "Cambiar vista",
+    "fuente_url": "https://github.com/schedule-x/schedule-x#cambiarVistaCalendario",
+    "puerto_metodo": "cambiarVistaCalendario",
+    "pantalla": "e1-calendario",
+    "prioridad": "P2",
+    "degradado": "Vista mes por defecto",
+    "verificado": true
+  },
+  {
+    "sistema": "Schedule-X",
+    "capacidad": "Seleccionar fecha",
+    "fuente_url": "https://github.com/schedule-x/schedule-x#seleccionarFecha",
+    "puerto_metodo": "seleccionarFecha",
+    "pantalla": "e1-calendario",
+    "prioridad": "P2",
+    "degradado": "Manual",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "Listar propiedades",
+    "fuente_url": "https://github.com/clawnify/OpenProperty/blob/master/README.md#listarPropiedades",
+    "puerto_metodo": "listarPropiedades",
+    "pantalla": "e1-inventario",
+    "prioridad": "P0",
+    "degradado": "Catálogo estático",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "Crear propiedad",
+    "fuente_url": "https://github.com/clawnify/OpenProperty/blob/master/README.md#crearPropiedad",
+    "puerto_metodo": "crearPropiedad",
+    "pantalla": "e1-inventario",
+    "prioridad": "P0",
+    "degradado": "Formulario manual",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "Actualizar estado",
+    "fuente_url": "https://github.com/clawnify/OpenProperty/blob/master/README.md#actualizarEstadoProp",
+    "puerto_metodo": "actualizarEstadoProp",
+    "pantalla": "e1-inventario",
+    "prioridad": "P0",
+    "degradado": "Manual",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "Añadir fotos",
+    "fuente_url": "https://github.com/clawnify/OpenProperty/blob/master/README.md#agregarFotos",
+    "puerto_metodo": "agregarFotos",
+    "pantalla": "e1-inventario",
+    "prioridad": "P1",
+    "degradado": "Sin fotos",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "Listar unidades",
+    "fuente_url": "https://github.com/clawnify/OpenProperty/blob/master/README.md#listarUnidades",
+    "puerto_metodo": "listarUnidades",
+    "pantalla": "e1-inventario",
+    "prioridad": "P0",
+    "degradado": "Vacío",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "Bloquear unidad",
+    "fuente_url": "https://github.com/clawnify/OpenProperty/blob/master/README.md#bloquearUnidad",
+    "puerto_metodo": "bloquearUnidad",
+    "pantalla": "e1-inventario",
+    "prioridad": "P0",
+    "degradado": "Email manual",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "Liberar unidad",
+    "fuente_url": "https://github.com/clawnify/OpenProperty/blob/master/README.md#liberarUnidad",
+    "puerto_metodo": "liberarUnidad",
+    "pantalla": "e1-inventario",
+    "prioridad": "P1",
+    "degradado": "Manual",
+    "verificado": true
+  },
+  {
+    "sistema": "OpenProperty",
+    "capacidad": "Consultar precios",
+    "fuente_url": "https://github.com/clawnify/OpenProperty/blob/master/README.md#consultarPrecios",
+    "puerto_metodo": "consultarPrecios",
+    "pantalla": "e1-inventario",
+    "prioridad": "P0",
+    "degradado": "Precio base fijo",
+    "verificado": true
+  },
+  {
+    "sistema": "MapLibre GL",
+    "capacidad": "Inicializar mapa",
+    "fuente_url": "https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/",
+    "puerto_metodo": "inicializarMapa",
+    "pantalla": "e1-mapa",
+    "prioridad": "P0",
+    "degradado": "Imagen estática",
+    "verificado": true
+  },
+  {
+    "sistema": "MapLibre GL",
+    "capacidad": "Añadir marcador",
+    "fuente_url": "https://maplibre.org/maplibre-gl-js/docs/API/classes/Marker/",
+    "puerto_metodo": "agregarMarcador",
+    "pantalla": "e1-mapa",
+    "prioridad": "P0",
+    "degradado": "Sin marcadores",
+    "verificado": true
+  },
+  {
+    "sistema": "MapLibre GL",
+    "capacidad": "Cargar capa GeoJSON",
+    "fuente_url": "https://maplibre.org/maplibre-gl-js/docs/API/classes/GeoJSONSource/",
+    "puerto_metodo": "cargarGeoJson",
+    "pantalla": "e1-mapa",
+    "prioridad": "P1",
+    "degradado": "Solo mapa base",
+    "verificado": true
+  },
+  {
+    "sistema": "MapLibre GL",
+    "capacidad": "Filtrar polígonos",
+    "fuente_url": "https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#setfilter",
+    "puerto_metodo": "filtrarPoligonos",
+    "pantalla": "e1-mapa",
+    "prioridad": "P2",
+    "degradado": "Sin filtros",
+    "verificado": true
+  },
+  {
+    "sistema": "MapLibre GL",
+    "capacidad": "Volar a coordenada",
+    "fuente_url": "https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#flyto",
+    "puerto_metodo": "volarACoordenada",
+    "pantalla": "e1-mapa",
+    "prioridad": "P1",
+    "degradado": "Zoom manual",
+    "verificado": true
+  },
+  {
+    "sistema": "MapLibre GL",
+    "capacidad": "Popup interactivo",
+    "fuente_url": "https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/",
+    "puerto_metodo": "mostrarPopup",
+    "pantalla": "e1-mapa",
+    "prioridad": "P1",
+    "degradado": "Sin info extra",
+    "verificado": true
+  },
+  {
+    "sistema": "Meilisearch",
+    "capacidad": "Indexar documento",
+    "fuente_url": "https://www.meilisearch.com/docs/reference/api/documents#add-or-replace-documents",
+    "puerto_metodo": "indexarDocumento",
+    "pantalla": "e1-busqueda",
+    "prioridad": "P0",
+    "degradado": "Búsqueda SQL",
+    "verificado": true
+  },
+  {
+    "sistema": "Meilisearch",
+    "capacidad": "Buscar texto",
+    "fuente_url": "https://www.meilisearch.com/docs/reference/api/search#search-in-an-index",
+    "puerto_metodo": "buscarTexto",
+    "pantalla": "e1-busqueda",
+    "prioridad": "P0",
+    "degradado": "Búsqueda ILIKE",
+    "verificado": true
+  },
+  {
+    "sistema": "Meilisearch",
+    "capacidad": "Filtrar facetas",
+    "fuente_url": "https://www.meilisearch.com/docs/reference/api/search#faceted-search",
+    "puerto_metodo": "buscarConFacetas",
+    "pantalla": "e1-busqueda",
+    "prioridad": "P1",
+    "degradado": "Filtros SQL",
+    "verificado": true
+  },
+  {
+    "sistema": "Meilisearch",
+    "capacidad": "Borrar documento",
+    "fuente_url": "https://www.meilisearch.com/docs/reference/api/documents#delete-documents",
+    "puerto_metodo": "borrarDocumentoIndice",
+    "pantalla": "e1-busqueda",
+    "prioridad": "P1",
+    "degradado": "Queda huérfano",
+    "verificado": true
+  },
+  {
+    "sistema": "Meilisearch",
+    "capacidad": "Configurar índice",
+    "fuente_url": "https://www.meilisearch.com/docs/reference/api/settings#update-settings",
+    "puerto_metodo": "configurarIndice",
+    "pantalla": "e1-ajustes",
+    "prioridad": "P2",
+    "degradado": "Ajustes por defecto",
+    "verificado": true
+  },
+  {
+    "sistema": "react-pdf/GoRules Zen",
+    "capacidad": "Generar PDF",
+    "fuente_url": "https://react-pdf.org/advanced#on-the-fly-rendering",
+    "puerto_metodo": "generarPdfCotizacion",
+    "pantalla": "e1-cotizador",
+    "prioridad": "P0",
+    "degradado": "Impresión HTML",
+    "verificado": true
+  },
+  {
+    "sistema": "react-pdf/GoRules Zen",
+    "capacidad": "Evaluar reglas negocio",
+    "fuente_url": "https://docs.gorules.io#evaluarReglasDescuento",
+    "puerto_metodo": "evaluarReglasDescuento",
+    "pantalla": "e1-cotizador",
+    "prioridad": "P0",
+    "degradado": "Lógica dura en código",
+    "verificado": true
+  },
+  {
+    "sistema": "react-pdf/GoRules Zen",
+    "capacidad": "Descargar documento",
+    "fuente_url": "https://react-pdf.org/components#pdfdownloadlink",
+    "puerto_metodo": "descargarDocumento",
+    "pantalla": "e1-cotizador",
+    "prioridad": "P1",
+    "degradado": "Solo vista",
+    "verificado": true
+  },
+  {
+    "sistema": "react-pdf/GoRules Zen",
+    "capacidad": "Paginar reporte",
+    "fuente_url": "https://react-pdf.org/advanced#page-breaks",
+    "puerto_metodo": "paginarReporte",
+    "pantalla": "e1-cotizador",
+    "prioridad": "P2",
+    "degradado": "Corte nativo CSS",
+    "verificado": true
+  },
+  {
+    "sistema": "Portal Quisqueya",
+    "capacidad": "Capturar lead",
+    "fuente_url": "C:/Users/wilbe/Documents/QuisqueyaHome PortalWeb/src/portal/assistant/engine.js",
+    "puerto_metodo": "capturarLead",
+    "pantalla": "e1-contactos",
+    "prioridad": "P0",
+    "degradado": "Manual vía email",
+    "verificado": false
+  },
+  {
+    "sistema": "Portal Quisqueya",
+    "capacidad": "Sincronizar inventario",
+    "fuente_url": "C:/Users/wilbe/Documents/QuisqueyaHome PortalWeb/src/studio/Projects.tsx",
+    "puerto_metodo": "sincronizarInventarioWeb",
+    "pantalla": "e1-inventario",
+    "prioridad": "P0",
+    "degradado": "Doble digitación",
+    "verificado": false
+  },
+  {
+    "sistema": "Portal Quisqueya",
+    "capacidad": "Actualizar blog",
+    "fuente_url": "C:/Users/wilbe/Documents/QuisqueyaHome PortalWeb/src/studio/EditorialModules.jsx",
+    "puerto_metodo": "publicarBlog",
+    "pantalla": "e1-marketing",
+    "prioridad": "P2",
+    "degradado": "CMS aislado",
+    "verificado": false
+  }
+]

@@ -1,46 +1,225 @@
 # Errores conocidos / gotchas — CRM Quisqueya Home
 
-Todo lo listado aquí está confirmado en código o documentado explícitamente en `AUDITORIA_FUNCIONAL_CRM.md` / `MAPEO_FRONTEND_CRM.md`. No incluye especulación.
+Dos listas distintas, y conviene no confundirlas:
 
-## Persistencia y datos
-- **Nada persiste.** Leads, citas, avance de obra, permisos y progreso de Academy viven en `useState` del componente raíz. Recargar la página borra todo.
-- **`db/schema.ts` y su migración no están comiteados.** `git status` los marca como modificado/untracked (`db/schema.ts`, `drizzle/meta/_journal.json`, `drizzle/0000_adorable_forge.sql`, `drizzle/meta/0000_snapshot.json`). No asumir que reflejan lo desplegado.
-- **D1 no está enlazado.** `.openai/hosting.json` tiene `"d1": null`. Cualquier trabajo que dependa de la base de datos está bloqueado hasta resolver esto (marcado como riesgo de "primera semana").
-- **Mezclar formatos de fecha rompe el orden.** `CURRENT_TIMESTAMP` de SQLite escribe `"2026-08-30 12:00:00"` (espacio) y la aplicación escribe formato con `"T"` (`"2026-08-30T12:00:00.000Z"`). En texto, el espacio ordena antes que la `T` — mezclar ambos formatos rompe `ORDER BY` y rangos de fecha **sin lanzar error**. Ver convención de fechas en convenciones.md.
-- **`updated_at` se congela si no se usa `$onUpdate`.** SQLite no tiene `ON UPDATE` nativo.
+- **§1** son trampas del **repositorio de producción**, confirmadas al construirlo.
+- **§2** son defectos del **prototipo** que el repo de producción tiene que
+  arreglar. Están aquí porque son la lista de cosas que se olvidan al portar una
+  pantalla: si nadie las anota, se reproducen tal cual.
 
-## Auth y permisos (todo simulado hoy)
-- El login no valida nada: `setLoggedIn(true)` se llama directo al enviar el formulario.
-- El selector de rol es un dropdown en el header — cualquier usuario puede "ser" admin cambiando el selector. No hay identidad real detrás.
-- Los permisos solo **ocultan componentes en cliente**; no hay verificación en servidor. Precios reales, comisiones y métricas no están protegidos.
-- El filtrado por rol de broker compara **strings de nombre** (`broker === "Yostar Medina"`), no una referencia — frágil ante typos o cambios de nombre.
-- La matriz de permisos de Configuración cubre **8 filas de recurso frente a 15 módulos reales** — no hay fila para Agenda, Brokers, Academy, Metas, Tareas, Comunicaciones, Reportes ni Avances.
+---
 
-## Modal y flujos declarados pero no implementados
-- El modal tiene tipo `"lead" | "appointment" | "lost" | null`, pero **`"lost"` nunca se renderiza**. Marcar un negocio como `Perdido` no pide motivo en ninguna parte del flujo actual.
-- El Kanban de Pipeline **no tiene columna para `Perdido`** — un negocio marcado como perdido desaparece de la vista sin dejar rastro visual.
-- Filtros de Leads, Contactos, Pipeline, Propiedades, Comisiones, Academy: existen visualmente pero **son inertes**, no alteran los datos mostrados.
-- Botones sin acción real (solo disparan un `toast`): exportar reporte, exportar a Excel, nuevo contacto, nuevo proyecto, invitar broker, ver perfil, asignar propiedades, nueva tarea, nueva plantilla, "Abrir en WhatsApp" en Comunicaciones, "Publicar en el portal" en Avances.
-- El atajo `Ctrl K` se muestra en el buscador global pero no está implementado.
+## 1. Trampas del repositorio de producción (confirmadas)
 
-## Estructura y escalabilidad
-- **`app/page.tsx` es un único componente cliente sin rutas** (956 líneas). No hay URL por módulo — la navegación es un `useState`. Esto significa que dos personas trabajando en dos módulos distintos **van a chocar en el mismo archivo** hasta que se separe en rutas (T7).
-- `phaseProgress` (avance de obra) es **un único número compartido en el estado raíz** — todas las fases y todos los proyectos comparten el mismo porcentaje. Cada fase debería ser una fila independiente por proyecto.
-- Contacto y Lead son **el mismo objeto** — no hay forma de que un contacto tenga dos oportunidades ni de conservar su historial tras cerrarse un negocio.
-- Proyecto es un **campo de texto** en el lead, no una relación real con la tabla de proyectos. Broker es texto, no referencia.
-- Tareas y citas son **estructuras separadas sin vínculo** entre sí ni con un contacto/negocio.
-- No existen estados de carga, error ni "sin permiso" en la interfaz — solo existe un estado `Empty` (vacío).
+### Conexión a Supabase
 
-## Campos que la interfaz muestra pero no existen como dato real
-Motivo de pérdida (catálogo inexistente), probabilidad y fecha estimada de cierre, presupuesto con mínimo/máximo/moneda reales (hoy texto libre como `"Por definir"`), disponibilidad de unidades (`"12/40"` es literal, no calculado), última interacción (literal `"Hoy"`), zona del interés del lead (el lead solo guarda proyecto).
+- **La conexión directa de Supabase es solo IPv6.** `db.<ref>.supabase.co` no
+  tiene registro A. En una red sin IPv6 fiable daba **1 conexión buena de cada
+  8**, con `ENOTFOUND` en el resto — un fallo intermitente que parece un
+  problema del código. Se usa el **session pooler**, que responde por IPv4. Está
+  escrito en `.env.example` y es comprobación obligatoria antes de desplegar al
+  VPS (`docs/DESPLIEGUE.md` §5).
+- **PgBouncer en modo transacción no admite sentencias preparadas.** Por eso
+  `db/client.ts` construye el cliente con `prepare: false`. Quitarlo rompe en
+  producción, no en local.
+- **La conexión se arma en la primera consulta, no al importar el módulo.**
+  `next build` carga todos los módulos para descubrir las rutas y ahí todavía no
+  hay variables de entorno de base de datos.
 
-## Riesgos de calendario / integraciones
-- Las citas usan un índice de día (`1..5`) y hora entera, no fecha real — `appointmentDates()` construye la fecha con un offset fijo hardcodeado (`2026-07-{19+day}`, `-04:00`). Esto es solo para la demo; una agenda real necesita fechas reales.
-- El `UID` del evento `.ics` se genera como `{day}-{time}@quisqueyahome.com` — sirve como prueba de que se necesita un identificador estable por evento para no duplicar en sincronización futura con Google Calendar.
-- Nota explícita en la UI de Integraciones: "No se guardarán tokens OAuth en el navegador" — restricción de diseño a respetar cuando se implemente OAuth real.
+### Permisos y errores
 
-## Pruebas
-- El único archivo de test (`tests/rendered-html.test.mjs`) corre contra el **build compilado** (`dist/server/index.js`), no contra el código fuente directamente — si el build falla o está desactualizado, el test no refleja el estado real de `app/page.tsx` más allá del regex de módulos presentes.
-- No hay cobertura de los flujos críticos de negocio (cierre transaccional, validación por etapa) porque esos flujos **todavía no existen** en el backend.
+- **Una página sin permiso devolvía 500 en vez de 403.** El dato no se filtraba,
+  pero la excepción escapaba y salía la pantalla de error genérica. En páginas se
+  usa `requireScopeInPage` (que llama a `forbidden()` de Next); en route handlers
+  se deja lanzar y `errorResponse` traduce. **No los intercambies.**
+- **Un recurso sin fila en `permissions` queda cerrado**, no abierto. Es el fallo
+  correcto, pero significa que un módulo nuevo no se ve hasta que su permiso
+  entra en el seed.
+- **`scope=team` se comporta hoy como `own`** porque el esquema no tiene equipos.
+  Está anotado en `domain/rbac.ts` y en `rbac-filter.ts`, y en ningún otro sitio
+  habrá que tocarlo cuando exista el modelo de equipos.
+- **`deleted_at` se olvida y su olvido no da error**: devuelve registros borrados
+  como si existieran. Por eso el filtro de papelera va dentro de `visibleRows` y
+  no en cada consulta.
 
-[PENDIENTE: bugs de UI/CSS específicos (responsive, accesibilidad) — no se auditó visualmente `globals.css` línea por línea; solo se confirmó su tamaño (~478–635 líneas según el commit) y que carece de scoping por módulo].
+### Validación y pruebas
+
+- **`z.string().min(1, "…")` solo traduce el error de cadena vacía**, no el de
+  campo ausente. Un mensaje se coló en inglés por esto. Para campos obligatorios
+  hay que traducir también el error de tipo/requerido.
+- **`npm test` corre con el borrado de tipos de Node**, que no admite propiedades
+  de parámetro de TypeScript (`constructor(public x)`). Por eso `ValidationError`
+  declara `fields` aparte. Si una clase del dominio usa esa forma, las pruebas
+  fallan con un error que no menciona la causa.
+
+### Entorno de desarrollo (Windows)
+
+- **`next dev` se queda en `✓ Starting...` para siempre si los archivos de
+  `.next/` son de otro usuario de Windows.** Pasó del 18 al 21 de septiembre de
+  2026 y bloqueó el arranque tres días. El sandbox de Codex corre bajo la cuenta
+  `CodexSandboxOffline`; al ejecutar un build dejó 247 archivos suyos en `.next/`
+  con una ACL que concede a `BUILTIN\Usuarios` solo *Write + ReadAndExecute* —
+  **sin permiso de borrado**. Desde ahí el servidor no llega nunca a `Ready`:
+  gira al 100% de un núcleo reintentando sobrescribir archivos que no puede
+  borrar, y no abre una sola conexión de red. El síntoma —«se queda cargando»—
+  parece lentitud, un Supabase caído o una caché de webpack corrupta, y no es
+  ninguna de las tres: se descartaron las tres por separado antes de dar con
+  esto. Se comprueba con
+  `Get-ChildItem .next -Recurse -File -Force | ForEach-Object { (Get-Acl $_.FullName).Owner } | Group-Object`
+  y se arregla borrando `.next` desde una terminal **elevada** (`takeown /f .next
+  /r /d Y` y luego `Remove-Item .next -Recurse -Force`); sin elevar, el borrado
+  falla con *Permission denied*. **No dejes que Codex ejecute `build` ni `dev` en
+  esta carpeta.**
+- **Un servidor viejo ocupando el 3000 manda el nuevo al 3001, y acabas probando
+  el que no es.** Next no falla: avisa `Port 3000 is in use by process N` en una
+  línea fácil de pasar por alto y sigue adelante. Los síntomas son 404 y 500 en
+  rutas que existen y funcionan. Antes de dar nada por roto, **lee qué puerto
+  imprime la terminal**. La tarea «Liberar puerto 3000» de `.vscode/tasks.json`
+  solo libera el 3000, no el 3001.
+- **Borrar o mover `.next` con el servidor corriendo da 500 con `ENOENT … route.js`.**
+  No es un fallo del código: el proceso conserva en memoria un mapa de archivos
+  que ya no existen. Hay que reiniciarlo.
+- **Referencia de arranque sano:** `Ready` en menos de 4 segundos, y la primera
+  compilación de una página en unos 5. Si tarda más que eso, sospecha de los
+  permisos, no del rendimiento.
+- **Un cierre sucio de Windows deja los archivos escritos más recientemente con su
+  tamaño correcto pero rellenos de bytes nulos.** Pasó el 30/09/2026: los cuatro
+  archivos nuevos del commit de R5.1 (`src/lib/utils.ts`, `src/hooks/use-mobile.ts`,
+  `src/components/ui/label.tsx`, `src/components/ui/skeleton.tsx`) y el ref de la
+  rama (`.git/refs/heads/dev/reestructuracion-solid`, 41 nulos en vez del sha).
+  Patrón de NTFS: los metadatos se escribieron, el contenido no llegó a vaciarse a
+  disco. **El síntoma apunta al sitio equivocado:** `typecheck` falla con
+  `TS1127: Invalid character` en un archivo del último commit, que parece un error
+  de ese código, y git falla con `fatal: invalid object name 'HEAD'`, que parece un
+  repositorio destruido. No se pierde nada: los commits están en `origin` y
+  `.git/objects` queda intacto. Tres trampas al repararlo:
+  1. Para detectar el alcance, usa `tr`, no `grep -P`. **Nunca pongas `LC_ALL=C`
+     delante de `grep -P`**: falla con exit 2 (*-P supports only unibyte and UTF-8
+     locales*) y un `! grep -q` convierte eso en «todo está corrupto». Pasó, y casi
+     se reportó un desastre de disco inexistente.
+  2. **`git checkout -- <archivo>` no los repara.** El tamaño en disco coincide con
+     el que git espera tras expandir a CRLF y la fecha no cambió, así que los da por
+     limpios y los salta. Hay que borrarlos primero y luego hacer checkout, o
+     escribir el blob directo: `git show <ref>:<ruta> > <ruta>`.
+  3. Un ref roto se repone con `git update-ref refs/heads/<rama> <sha>` sacando el
+     sha de `origin`. Si dejas un `.broken-backup` con nulos, todo `git fsck`
+     imprimirá `badRefContent` para siempre.
+- **El sandbox de Codex no puede usar `git` ni `gh`.** Comprobado el 02/10/2026: su
+  sandbox solo escribe dentro de su propia carpeta, y el `.git` de un worktree no es
+  un directorio sino un puntero al repositorio principal, así que cualquier
+  escritura de git desde el worktree aterriza fuera de su alcance — hasta un
+  `git merge` falla al escribir `ORIG_HEAD`. Tampoco lee la configuración de `gh`
+  (está en `AppData\Roaming\GitHub CLI\`) ni tiene aprobadas las mutaciones del
+  conector de GitHub. Darle un clon propio arreglaría el merge pero no el push ni
+  los issues. El reparto que sí funciona está en `docs/R_ANALISIS_Y_PLAN.md` §5:
+  Codex edita archivos y corre las pruebas; de git y GitHub se encarga Claude.
+
+### Operación
+
+- **Las altas de usuario son manuales** (crear en Supabase Auth + `INSERT` en
+  `users`) hasta que exista M13, en F2. Documentado en `docs/SUPABASE.md` §5.
+- **`scripts/crear-usuario-prueba.mjs [admin|asistente|broker]` es una fixture
+  de desarrollo.** Crea el usuario directamente en `auth.users` porque Supabase
+  rechaza los dominios de prueba y un `signUp` con dominio real le mandaría un
+  correo a un tercero. **No se corre en producción.** Y trae las tres contraseñas de
+  prueba en texto plano: hay que limpiarlo antes de entregar (decisión #39).
+- **`Closes #N` no cierra el issue al mergear a `develop`.** GitHub solo cierra
+  automáticamente contra la rama por defecto (`main`). Hay que cerrarlos a mano.
+- **Crear una rama nueva por cada fix rompe 2 workflows de GitHub Actions.**
+  Al corregir los defectos de la auditoría de F1 (12/09/2026) se crearon 3 ramas
+  `fix/*` (una por issue) y los workflows no recibieron el PR correctamente —
+  están configurados esperando el evento contra las ramas de trabajo
+  habituales, no contra ramas creadas al vuelo. Desde el 14/09/2026 está
+  **prohibido crear ramas nuevas para fixes puntuales** (decisión #30 en
+  `decisiones.md`); todo se trabaja sobre `dev/<tu-nombre>`.
+
+### Auditoría de F1 del 12/09/2026 — defectos corregidos
+
+Ninguno de estos lo detectaban `typecheck`, `lint`, `build` ni las 57 pruebas
+que ya pasaban. Se arreglaron antes de empezar F2, uno por issue, cada uno con
+su PR contra `develop` (`docs/F1_ANALISIS_Y_PLAN.md` no los lista: son
+defectos de la auditoría, no pendientes anotados a propósito — ver §10 de ese
+documento para no confundirlos).
+
+- **#23 — pool de conexiones invertido en producción.** `getDb()` cacheaba en
+  `globalThis` solo fuera de producción (`if (process.env.NODE_ENV !==
+  "production")` al revés de lo que hacía falta): en producción cada petición
+  abría un pool nuevo (`max: 10`) que nadie cerraba. Corregido a `return
+  (globalForDb.crmDb ??= build())`.
+- **#23 — `/api/*` sin sesión redirigía en vez de responder 401.** El
+  middleware mandaba el mismo 302 a `/login` que las páginas; un `fetch` sigue
+  el redirect, recibe el HTML de login con 200 y `!respuesta.ok` nunca se
+  dispara — el formulario se cerraba como si hubiera guardado. Ahora responde
+  401 JSON cuando el path empieza con `/api`.
+- **#23 — doce módulos del grupo `(crm)` sin `error.tsx` propio.** Caían en la
+  pantalla genérica de Next. `src/app/(crm)/error.tsx` los cubre a todos;
+  contactos, leads y pipeline conservan el suyo, más específico.
+- **#23 — actividades pendientes sin fecha no se cancelaban al cerrar un
+  negocio.** El paso 7 del cierre usaba `gt(activities.startsAt, now)`;
+  `starts_at` es nulable, así que quedaban vivas para siempre. Ahora
+  `or(isNull(...), gt(...))`.
+- **#22 — nadie escribía `leads.broker_id`.** No existía `PATCH
+  /api/leads/[id]` ni un botón de asignación en el inspector: un broker con
+  `scope: "own"` nunca veía nada, y todo negocio convertido nacía con
+  `brokerId: null`. Arreglado con el endpoint (nuevo), un botón "Asignar" en
+  `leads/inspector.tsx`, `brokerId: lead.brokerId ?? actor.userId` en la
+  conversión, y `brokerId: actor.userId` en el contacto que crea el alta de
+  lead — igual que ya hacía `api/contactos/route.ts`.
+- **#24 — el cierre usaba la hora del servidor, no la de Santo Domingo.** En
+  un VPS en UTC, un cierre nocturno contaba en el día (o el mes) siguiente.
+  Nuevo helper `src/domain/zona-horaria.ts` (`fechaSantoDomingo`, con prueba)
+  — es la decisión #24 de F2 adelantada, y M4 la va a reutilizar.
+- **#24 — `broker_profiles.annual_sales_cents` acumulaba de por vida.** Nadie
+  lo reiniciaba, así que el nivel del broker solo podía subir. Ahora se
+  recalcula con un `SUM` de los negocios ganados del año en curso (en hora de
+  Santo Domingo) en vez de incrementar.
+
+**Pendiente:** el issue #25 (milestone F1 · Núcleo comercial) es una decisión
+de alcance y queda deliberadamente sin tocar — se retoma aparte.
+
+---
+
+## 2. Defectos del prototipo que el repo de producción debe arreglar
+
+No son bugs de este código: son la lista de lo que **no** hay que reproducir al
+portar cada pantalla. Están catalogados en `MAPEO_FRONTEND_CRM.md` §8.
+
+### Interfaz (los arregla T5, en F1)
+
+- **No existen estados de carga, error ni «sin permiso».** Solo existe `Empty`.
+- **El Kanban no tiene columna para `Perdido`**: un negocio marcado como perdido
+  desaparece de la vista sin dejar rastro.
+- **El modal `"lost"` está declarado y nunca se renderiza.** Marcar un negocio
+  como perdido no pide motivo en ninguna parte.
+- **Los filtros son inertes** en Leads, Contactos, Pipeline, Propiedades,
+  Comisiones y Academy: existen visualmente y no alteran los datos.
+- **Botones que solo lanzan un aviso**: exportar reporte, exportar a Excel, nuevo
+  contacto, nuevo proyecto, invitar broker, ver perfil, asignar propiedades,
+  nueva tarea, nueva plantilla, publicar en el portal.
+
+### Modelo de datos (lo arregla el esquema, ya portado en F0)
+
+- Contacto y Lead eran **el mismo objeto**: un contacto no podía tener dos
+  oportunidades ni conservar historial tras cerrarse un negocio.
+- Broker y proyecto eran **texto**, no referencias. El filtrado por rol comparaba
+  nombres (`broker === "Yostar Medina"`).
+- Tareas y citas eran **estructuras separadas** sin vínculo a contacto ni a
+  negocio.
+- Las fases de obra compartían **un único porcentaje global** en el estado raíz.
+
+### Datos que la interfaz mostraba sin existir
+
+Motivo de pérdida, probabilidad y fecha estimada de cierre, presupuesto con
+mínimo/máximo/moneda, disponibilidad de unidades (`"12/40"` era literal), última
+interacción (`"Hoy"` literal) y zona de interés del lead. Todos existen ya como
+columnas; lo que falta es **calcularlos**, que es trabajo de F1 y F4.
+
+### Agenda e integraciones
+
+- Las citas usaban un índice de día (`1..5`) y hora entera, no fecha real, con un
+  offset fijo escrito a mano. Una agenda real necesita fechas reales (M4, F2).
+- El `UID` del `.ics` se generaba como `{day}-{time}@quisqueyahome.com`. Sirve de
+  prueba de que hace falta un identificador estable por evento para no duplicar
+  al sincronizar — para eso existe `activity_sync`.
+- Nota explícita de la UI de Integraciones: **no se guardan tokens OAuth en el
+  navegador.** Restricción a respetar cuando se implemente OAuth real.

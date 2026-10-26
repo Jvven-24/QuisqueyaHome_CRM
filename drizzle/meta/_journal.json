@@ -1,0 +1,97 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1788293030135,
+      "tag": "0000_thankful_senator_kelly",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790708400972,
+      "tag": "0001_enable_rls_public_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791132922493,
+      "tag": "0002_messy_gwen_stacy",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791136378819,
+      "tag": "0003_curly_charles_xavier",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791920582355,
+      "tag": "0004_cierre_venta_unica",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791920582356,
+      "tag": "0005_identidad_venta_durable",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792307000000,
+      "tag": "0006_academy_certificaciones",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792329922738,
+      "tag": "0007_m40_compromisos_reservas",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792332212418,
+      "tag": "0008_m40_planes_pagos_aplicaciones",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792335060308,
+      "tag": "0009_m40_comisiones_liquidaciones",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792339526989,
+      "tag": "0010_m40_backfill_legado",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792341812555,
+      "tag": "0011_m40_outbox_tipos",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792360262062,
+      "tag": "0012_m40_unidad_version",
+      "breakpoints": true
+    }
+  ]
+}

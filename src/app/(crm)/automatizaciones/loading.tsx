@@ -1,0 +1,1 @@
+export default function Loading() { return <section aria-busy="true" className="grid gap-3 p-4"><h1>Automatizaciones</h1><p role="status">Cargando permisos y estado de la cola…</p><div className="h-40 animate-pulse rounded-xl bg-surface-alt" /></section>; }

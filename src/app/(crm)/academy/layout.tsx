@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function AcademyLayout({children}:{children:React.ReactNode}){return <div className="min-w-0 max-w-full pb-28 md:pb-0"><nav aria-label="Secciones Academy" className="mb-4 flex flex-wrap gap-2"><Link className="button secondary min-h-11" href="/academy">Biblioteca y constancias</Link><Link className="button secondary min-h-11" href="/academy/administracion">Autoría, matrículas y revisión</Link></nav>{children}</div>;}
