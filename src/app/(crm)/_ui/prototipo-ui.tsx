@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { X } from "lucide-react";
+import { PageHeader as SharedPageHeader } from "@/components/modulo";
 
 /**
  * Componentes visuales compartidos de alta gama (Estándar Viltrum Design & Quisqueya Studio).
@@ -19,28 +20,7 @@ export function PageHeader({
   subtitle?: string;
   action?: ReactNode;
 }) {
-  return (
-    <header className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-border pb-3 mb-4 min-h-[40px]">
-      <div className="min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          {eyebrow && (
-            <span className="eyebrow inline-flex items-center font-bold tracking-[0.1em] text-[10px] text-gold-700 uppercase bg-gold-100/80 px-2 py-0.5 rounded border border-gold-600/20">
-              {eyebrow}
-            </span>
-          )}
-          <h1 className="font-heading font-bold text-lg md:text-xl text-navy-950 tracking-tight leading-none m-0">
-            {title}
-          </h1>
-        </div>
-        {subtitle && (
-          <p className="text-xs text-muted-foreground leading-normal max-w-2xl mt-1 m-0">
-            {subtitle}
-          </p>
-        )}
-      </div>
-      {action && <div className="shrink-0 flex items-center gap-2">{action}</div>}
-    </header>
-  );
+  return <SharedPageHeader title={title} description={subtitle} actions={action} eyebrow={eyebrow} />;
 }
 
 export function Avatar({ name, small = false }: { name: string; small?: boolean }) {

@@ -15,6 +15,7 @@ import { LEAD_STATUSES, OPERATION_TYPES } from "@/domain/catalogs";
 import { Avatar, PageHeader } from "../_ui/prototipo-ui";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { ModuleTabs } from "../_ui/module-tabs";
+import { ModuleTabs as RouteModuleTabs } from "@/components/modulo";
 import { LeadInspector } from "./inspector";
 import { NotaDeVozLeadModal } from "./nota-de-voz-modal";
 import { DataTable, type Columna } from "@/components/ui/data-table";
@@ -365,12 +366,7 @@ export function LeadsVista({
         }
       />
 
-      <nav aria-label="Gestión de leads" className="flex flex-wrap gap-2 mb-4">
-        <Link className="button min-h-12" href={cola ? "/leads" : "/leads?cola=1"}>{cola ? "Todos los leads" : "Cola de primer contacto"}</Link>
-        <Link className="button min-h-12" href="/leads/asignacion">Asignación y distribución</Link>
-        <Link className="button min-h-12" href="/leads/importaciones">Importación y migración</Link>
-        <Link className="button min-h-12" href="/leads/duplicados">Duplicados y fusión</Link>
-      </nav>
+      <RouteModuleTabs label="Gestión de leads" items={[{href:cola?"/leads":"/leads?cola=1",label:cola?"Todos los leads":"Cola de primer contacto"},{href:"/leads/asignacion",label:"Asignación y distribución",match:"prefix"},{href:"/leads/importaciones",label:"Importación y migración",match:"prefix"},{href:"/leads/duplicados",label:"Duplicados y fusión",match:"prefix"}]} className="mb-4" />
       {cola && <SlaPolicyPreview />}
       {/* Franja de métricas / KPIs del universo de leads */}
       <div className="grid grid-cols-1 min-[390px]:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">

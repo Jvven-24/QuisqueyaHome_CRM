@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { readFileSync, existsSync } from "node:fs";
-import { REGISTRO_MODULOS, type ModuloRegistro } from "./registry.ts";
+import { existsSync } from "node:fs";
+import { REGISTRO_MODULOS } from "./registry.ts";
 import { PERMISSION_RESOURCES } from "../domain/catalogs.ts";
 
 const SRC = new URL("../", import.meta.url);
@@ -29,7 +29,7 @@ test("registry: todos los recursos RBAC son válidos y cerrados", () => {
   const validos = new Set(PERMISSION_RESOURCES);
   for (const m of REGISTRO_MODULOS) {
     assert.ok(
-      validos.has(m.recurso as any),
+      (validos as Set<string>).has(m.recurso),
       `Recurso inválido en ${m.id}/${m.nombre}: ${m.recurso}`
     );
   }
@@ -47,4 +47,11 @@ test("registry: subrutas empiezan con / y bases son únicas", () => {
 
 test("registry: contiene exactamente 22 módulos", () => {
   assert.equal(REGISTRO_MODULOS.length, 22);
+});
+
+test("registry: ids únicos y la navegación conserva los ids históricos (M4 en Agenda y Tareas)", () => {
+  const ids = REGISTRO_MODULOS.map((m) => m.id);
+  assert.equal(new Set(ids).size, ids.length);
+  const legado = REGISTRO_MODULOS.filter((m) => m.idLegado).map((m) => [m.rutaBase, m.idLegado]);
+  assert.deepEqual(legado, [["/agenda", "M4"], ["/tareas", "M4"]]);
 });

@@ -34,6 +34,9 @@ const PUBLIC_PATHS = [
   "/api/auth",
   "/api/leads/externo",
   "/api/integraciones/webhooks",
+  // Login con Google: el callback decide por el state; conectar calendario sigue exigiendo sesión.
+  "/api/integraciones/google/login",
+  "/api/integraciones/google/callback",
   "/api/health",
   "/manifest.json",
   "/favicon.ico",

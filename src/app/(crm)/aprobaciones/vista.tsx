@@ -4,6 +4,8 @@ import Link from "next/link";
 import { CheckSquare, Search } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useOnline } from "../_ui/analytics-state";
+import { mostrarDemo } from "@/lib/flags";
+import { PageHeader } from "@/components/modulo";
 import { APPROVAL_EXAMPLES, APPROVAL_KINDS, APPROVAL_STATES, type Approval, type ApprovalState } from "./_ejemplo";
 
 export function ApprovalsPreview() {
@@ -16,9 +18,9 @@ export function ApprovalsPreview() {
   const current = !online ? "offline" : state;
   const rows = APPROVAL_EXAMPLES.filter(row => (filter === "all" || row.kind === filter) && (row.title + row.detail).toLowerCase().includes(query.toLowerCase()));
   return <div className="private-approvals space-y-5">
-    <header className="flex flex-wrap items-start justify-between gap-3"><div><h1 className="font-heading text-2xl font-bold text-navy-950 m-0">Centro de aprobaciones</h1><p className="text-ink-muted mt-1">Cada decisión, con su contexto y responsable.</p></div><Link href="/inicio" className="button">Volver al inicio</Link></header>
+    <PageHeader title="Centro de aprobaciones" description="Cada decisión, con su contexto y responsable." actions={<Link href="/inicio" className="button min-h-11">Volver al inicio</Link>} />
     <div role="note" className="private-preview"><CheckSquare className="size-5 shrink-0" /><p className="m-0"><strong>Vista previa · datos de ejemplo</strong><br />Falta: bandeja unificada persistida, políticas de aprobación, decisiones y auditoría. Ninguna acción de esta vista modifica negocios ni autoriza pagos.</p></div>
-    <div className="private-panel p-4"><div className="flex flex-wrap items-end gap-3"><label className="flex-1 min-w-0"><span className="block text-sm font-semibold mb-1">Buscar solicitud</span><span className="flex items-center gap-2"><Search className="size-4 shrink-0" /><input className="min-w-0 w-full" value={query} onChange={event => setQuery(event.target.value)} placeholder="Descuento, hold, liquidación…" /></span></label><label><span className="block text-sm font-semibold mb-1">Estado de demostración</span><select value={state} onChange={event => setState(event.target.value as ApprovalState)}>{APPROVAL_STATES.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}</select></label></div>
+    <div className="private-panel p-4"><div className="flex flex-wrap items-end gap-3"><label className="flex-1 min-w-0"><span className="block text-sm font-semibold mb-1">Buscar solicitud</span><span className="flex items-center gap-2"><Search className="size-4 shrink-0" /><input className="min-w-0 w-full" value={query} onChange={event => setQuery(event.target.value)} placeholder="Descuento, hold, liquidación…" /></span></label>{mostrarDemo() && <label><span className="block text-sm font-semibold mb-1">Estado de demostración</span><select value={state} onChange={event => setState(event.target.value as ApprovalState)}>{APPROVAL_STATES.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}</select></label>}</div>
       <nav aria-label="Tipos de aprobación" className="flex flex-wrap gap-2 mt-4"><button type="button" className="private-filter" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>Todas</button>{APPROVAL_KINDS.map(kind => <button type="button" className="private-filter" aria-pressed={filter === kind.id} key={kind.id} onClick={() => setFilter(kind.id)}>{kind.label}</button>)}</nav>
     </div>
     {current === "loading" ? <div className="private-panel p-8" role="status" aria-busy="true"><p>Cargando solicitudes de ejemplo…</p><button className="button" onClick={() => setState("data")}>Terminar demostración de carga</button></div>

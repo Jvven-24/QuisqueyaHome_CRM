@@ -94,3 +94,6 @@ export const limiteLoginIp = crearLimitador(10, 60_000);
 export const limiteLoginCorreo = crearLimitador(8, 15 * 60_000);
 export const limiteLeadsExterno = crearLimitador(60, 60_000);
 export const limiteAudio = crearLimitador(10, 60_000);
+export const limiteRecuperarIp = crearLimitador(5, 15 * 60_000);
+export const limiteRecuperarCorreo = crearLimitador(3, 60 * 60_000);
+export const limiteGoogleLoginIp = crearLimitador(20, 15 * 60_000);

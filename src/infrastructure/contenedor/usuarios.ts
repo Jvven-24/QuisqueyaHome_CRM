@@ -3,7 +3,7 @@
 import { crearUsuario, editarUsuario, borrarUsuario, reenviarInvitacion } from "../../application/usuarios/casos-de-uso";
 import type { AdminAuth } from "../../application/compartido/admin-auth";
 import { ConflictError } from "../../domain/errors";
-import { adminClient } from "../auth/supabase";
+import { enviarInvitacion } from "../auth/enlaces";
 import { getDb } from "../db/client";
 import { repositorioUsuarios, reposUsuarios } from "../db/repos/usuarios";
 import { unidadDeTrabajoDrizzle } from "../db/repos/compartido";
@@ -11,9 +11,11 @@ import { unidadDeTrabajoDrizzle } from "../db/repos/compartido";
 export function usuariosParaEscritura() {
   const adminAuth: AdminAuth = {
     async invitarPorCorreo(email) {
-      const { data, error } = await adminClient().auth.admin.inviteUserByEmail(email);
-      if (error) throw new ConflictError(error.message);
-      return data.user?.id ?? null;
+      try {
+        return await enviarInvitacion(email);
+      } catch (e) {
+        throw new ConflictError(e instanceof Error ? e.message : "No se pudo enviar la invitación.");
+      }
     },
   };
   return { usuarios: repositorioUsuarios(getDb()), unidad: unidadDeTrabajoDrizzle(reposUsuarios), adminAuth };

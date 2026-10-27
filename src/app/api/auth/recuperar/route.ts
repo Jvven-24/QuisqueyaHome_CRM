@@ -1,8 +1,12 @@
-/** Recuperación de contraseña (T2). Supabase envía el correo con el enlace. */
+/** Recuperación de contraseña: solo cuentas creadas por el admin y activas reciben el correo. */
 
+import { and, eq, isNull, sql } from "drizzle-orm";
 import { z } from "zod";
-import { serverClient } from "@/infrastructure/auth/supabase";
+import { enviarRecuperacion } from "@/infrastructure/auth/enlaces";
+import { getDb } from "@/infrastructure/db/client";
+import { users } from "@/infrastructure/db/schema";
 import { errorResponse, parseInput } from "@/infrastructure/http";
+import { demasiadasPeticiones, ipCliente, leerJsonLimitado, limiteRecuperarCorreo, limiteRecuperarIp } from "@/infrastructure/limites";
 
 const RecoverInput = z.object({
   email: z.email({ error: "Escribe un correo válido." }),
@@ -10,19 +14,20 @@ const RecoverInput = z.object({
 
 export async function POST(request: Request) {
   try {
-    const { email } = parseInput(
-      RecoverInput,
-      await request.json().catch(() => ({})),
-    );
-
-    const supabase = await serverClient();
-    const origin = new URL(request.url).origin;
-    await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${origin}/recuperar/nueva-clave`,
-    });
-
-    // Siempre `ok`, exista o no el correo: responder distinto convertiría esto
-    // en un verificador de quién tiene cuenta.
+    const espera = limiteRecuperarIp.consumir(ipCliente(request));
+    if (espera) return demasiadasPeticiones(espera);
+    const cuerpo = await leerJsonLimitado(request, 4 * 1024);
+    if (cuerpo instanceof Response) return cuerpo;
+    const correo = parseInput(RecoverInput, cuerpo).email.trim().toLowerCase();
+    // Siempre `ok`, exista o no: responder distinto delataría quién tiene cuenta.
+    if (limiteRecuperarCorreo.consumir(correo)) return Response.json({ ok: true });
+    const [u] = await getDb().select({ id: users.id }).from(users)
+      .where(and(sql`lower(${users.email}) = ${correo}`, eq(users.isActive, true), isNull(users.deletedAt))).limit(1);
+    if (u) {
+      try { await enviarRecuperacion(correo); } catch (e) {
+        console.error("recuperar: fallo al enviar", e instanceof Error ? e.message : "desconocido");
+      }
+    }
     return Response.json({ ok: true });
   } catch (error) {
     return errorResponse(error);

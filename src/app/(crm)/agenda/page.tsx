@@ -9,7 +9,7 @@
  * vinculadas (Proyectos, Negocios, Contactos).
  */
 
-import { and, asc, desc, eq, gte, isNull, lt } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lt } from "drizzle-orm";
 import { can, scopeFor } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
@@ -77,7 +77,12 @@ export default async function AgendaPage({
       db
         .select({ id: users.id, fullName: users.fullName })
         .from(users)
-        .where(and(eq(users.isActive, true), isNull(users.deletedAt)))
+        .where(
+          and(
+            eq(users.isActive, true),
+            visibleRows(actor, scopeFor(actor, "activities", "create"), users.id, users.deletedAt),
+          ),
+        )
         .orderBy(users.fullName),
       can(actor, "projects", "view")
         ? db

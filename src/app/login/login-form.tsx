@@ -7,6 +7,15 @@ import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 
 import { AccessPreview } from "./access-preview";
 
+const MENSAJES_GOOGLE: Record<string, string> = {
+  "no-autorizado": "Esa cuenta de Google no tiene acceso. Pide al administrador que cree tu usuario con ese correo.",
+  "no-verificado": "Google no confirmó tu correo. Usa otra cuenta o entra con tu contraseña.",
+  cancelado: "Cancelaste el inicio de sesión con Google.",
+  "estado-invalido": "La sesión con Google expiró. Vuelve a intentarlo.",
+  "sin-codigo": "Google no devolvió la autorización. Vuelve a intentarlo.",
+  fallo: "No se pudo iniciar sesión con Google. Intenta de nuevo o usa tu contraseña.",
+};
+
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,6 +29,7 @@ export function LoginForm() {
   // Hasta hidratar, el submit nativo enviaría la contraseña en la URL (GET). Se bloquea hasta entonces.
   const [hidratado, setHidratado] = useState(false);
   useEffect(() => setHidratado(true), []);
+  const googleError = MENSAJES_GOOGLE[searchParams.get("google") ?? ""] ?? (searchParams.get("error") === "google-no-configurado" ? MENSAJES_GOOGLE.fallo : null);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -138,13 +148,13 @@ export function LoginForm() {
         </div>
 
         {/* Error Alert */}
-        {error && (
+        {(error ?? googleError) && (
           <div
             role="alert"
             className="flex items-start gap-2.5 p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs animate-in fade-in"
           >
             <AlertCircle className="size-4 text-red-600 shrink-0 mt-0.5" />
-            <span>{error}</span>
+            <span>{error ?? googleError}</span>
           </div>
         )}
 
@@ -164,6 +174,20 @@ export function LoginForm() {
           )}
         </button>
       </form>
+
+      <div className="flex items-center gap-3 my-5" aria-hidden="true">
+        <span className="h-px flex-1 bg-slate-200" />
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">o</span>
+        <span className="h-px flex-1 bg-slate-200" />
+      </div>
+      <a
+        href="/api/integraciones/google/login"
+        className="w-full h-11 inline-flex items-center justify-center gap-2.5 px-4 text-xs sm:text-sm font-semibold text-slate-800 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg shadow-2xs transition-all focus:outline-none focus:ring-1 focus:ring-gold-600"
+      >
+        <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.6 3.8-5.5 3.8-3.3 0-6-2.7-6-6.1s2.7-6.1 6-6.1c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.2 14.6 2.2 12 2.2 6.6 2.2 2.2 6.6 2.2 12s4.4 9.8 9.8 9.8c5.7 0 9.4-4 9.4-9.6 0-.6-.1-1.1-.2-1.6H12z"/></svg>
+        <span>Iniciar sesión con Google</span>
+      </a>
+      <p className="mt-2 text-[11px] text-slate-400 text-center">Solo para cuentas creadas por el administrador.</p>
 
       <AccessPreview />
 
