@@ -1,6 +1,6 @@
 # Estado: Login / Google / Correo
 
-_Regenerado 2026-10-27 10:48 (hora RD, UTC-4). Sin secretos: las credenciales viven solo en el VPS._
+_Regenerado 2026-10-27 11:18 (hora RD, UTC-4). Sin secretos: las credenciales viven solo en el VPS._
 
 ## Resumen (al 27-oct-2026 09:45 RD)
 - **Login ID + clave**: activo; recuperación de contraseña por correo propio con canje en servidor y límites por IP/correo; nueva clave exige usuario activo y ≥8 caracteres.
@@ -20,10 +20,8 @@ _Regenerado 2026-10-27 10:48 (hora RD, UTC-4). Sin secretos: las credenciales vi
 
 | Commit | Fecha (RD) | Mensaje |
 |---|---|---|
-| `bb6ae45` | 2026-10-27 09:41 | ops(vps): respaldo diario, chequeo de salud y documentación del relay de correo |
-| `e224fe2` | 2026-10-27 09:41 | fix(auth): nueva clave exige usuario activo y mínimo 8 caracteres (revisión grok-build) |
-| `57633b5` | 2026-10-27 09:36 | feat(auth): iniciar sesión con Google solo para usuarios creados por el admin (mismo callback, state 0) |
-| `ab7ce2a` | 2026-10-27 09:36 | fix(auth): recuperación de contraseña por correo propio, canje en servidor y límites por IP/correo |
+| `15e26ab` | 2026-10-27 11:04 | fix(agenda): tras POST con fallo de Google cerrar el modal (sin pasar a PATCH que exige activities.edit) |
+| `b26e55d` | 2026-10-27 10:36 | fix(agenda): listas de consulta (ver) y asignación (crear) por permiso, ver como, sin usuarios rechazados con 403, anti-duplicado si falla Google (claude Opus) |
 
 ## Guía OAuth
 - [plan/GUIA-GOOGLE-OAUTH.md](../plan/GUIA-GOOGLE-OAUTH.md)
