@@ -11,6 +11,7 @@
  */
 
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { sugerirBroker } from "../../domain/asignacion-lead.ts";
 import { ConflictError, NotFoundError, ValidationError } from "../../domain/errors.ts";
@@ -381,4 +382,37 @@ test("webhook: un fallo a mitad (al auditar el lead) no deja contacto, lead ni a
   assert.deepEqual(leads.contactos, []);
   assert.deepEqual(leads.leads, []);
   assert.deepEqual(leads.auditoriaSinActor, []);
+});
+
+// --- la garantía que ningún doble puede probar (hallazgo H33) -----------------
+
+/**
+ * El informe de R3.2 ya lo dijo con estas palabras: «si alguien rompe el `where`
+ * o el `onConflictDoNothing` del adaptador, ninguna prueba cae; solo lo cubre el
+ * grep de la verificación». Un grep que se corre a mano una vez no es una red,
+ * así que aquí queda.
+ *
+ * Se lee el código en vez de importarlo (`repos/leads.ts` abre la conexión al
+ * cargarse) y se quitan los comentarios antes de afirmar: este archivo y el
+ * adaptador mencionan `onConflictDoNothing` en sus docblocks, y un comentario no
+ * es una garantía. Misma técnica que `seguridad.test.ts` y `arquitectura.test.ts`.
+ */
+test("la idempotencia del webhook sigue siendo un upsert atómico, con el predicado del índice parcial", () => {
+  const codigo = readFileSync(new URL("../../infrastructure/db/repos/leads.ts", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/^\s*\/\/.*$/gm, "");
+
+  // `leads_external_id_unq` es un índice único PARCIAL (`WHERE deleted_at IS
+  // NULL`). Postgres exige que el conflicto declarado calce con el predicado del
+  // índice, o responde "no unique or exclusion constraint" y NO aplica el DO
+  // NOTHING: la captura externa pasaría a duplicar leads en cada reintento del
+  // portal, que es justo lo que la decisión #20 existe para evitar.
+  assert.match(
+    codigo,
+    /\.onConflictDoNothing\(\{\s*target:\s*leads\.externalId,\s*where:\s*isNull\(leads\.deletedAt\)\s*\}\)/,
+  );
+
+  // Y que no haya reaparecido el patrón que el puerto prohíbe: buscar primero y
+  // crear después reabre la ventana entre las dos entregas simultáneas.
+  assert.doesNotMatch(codigo, /buscarPorExternalId/);
 });

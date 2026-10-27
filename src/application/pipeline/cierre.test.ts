@@ -11,6 +11,7 @@
  */
 
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { ConflictError, NotFoundError } from "../../domain/errors.ts";
 import type { Actor } from "../../domain/rbac.ts";
@@ -419,4 +420,55 @@ test("un fallo a mitad del cierre no deja nada escrito", async () => {
   assert.deepEqual(auditoria.registros, []);
   assert.equal(unidad.revertidas, 1);
   assert.equal(unidad.confirmadas, 0);
+});
+
+// --- las garantías que ningún doble puede probar (hallazgo H33) ---------------
+
+/**
+ * Lee el código del adaptador en vez de importarlo: `repos/pipeline.ts` abre la
+ * conexión al cargarse y usa imports sin extensión que `node --test` no resuelve.
+ * Los comentarios se quitan antes de afirmar, porque este mismo archivo los
+ * menciona y un docblock no es una garantía.
+ *
+ * Por qué hace falta: en memoria no hay concurrencia, así que **ninguna** prueba
+ * de caso de uso ve un `FOR UPDATE` que falta ni un `targetWhere` borrado. Lo
+ * descubrimos al migrar comisiones (R3.6): quitar su bloqueo no hizo caer
+ * ninguna de las 300 pruebas de entonces. Es la misma técnica que usan
+ * `seguridad.test.ts` para exigir `requireScope` en cada ruta y
+ * `arquitectura.test.ts` para la dirección de las capas: cuando una propiedad no
+ * se puede observar por comportamiento, se vigila el texto que la produce.
+ *
+ * Es un sustituto, y conviene decirlo: lo honesto serían dos transacciones
+ * concurrentes contra Postgres real, y el milestone decidió no tener esa
+ * infraestructura (decisión 3). Entre vigilar el texto y no vigilar nada, se
+ * vigila el texto.
+ */
+function codigoDelAdaptador(nombre: string): string {
+  return readFileSync(new URL(`../../infrastructure/db/repos/${nombre}`, import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/^\s*\/\/.*$/gm, "");
+}
+
+test("el adaptador real bloquea la fila del negocio: bloquearNegocio usa .for(\"update\")", () => {
+  const codigo = codigoDelAdaptador("pipeline.ts");
+  const bloqueos = codigo.match(/\.for\(/g) ?? [];
+  assert.equal(bloqueos.length, 1, "bloquearNegocio es el único bloqueo del adaptador de pipeline");
+  assert.match(codigo, /\.for\("update"\)/);
+});
+
+test("el upsert de la meta de compañía conserva el targetWhere de su índice parcial", () => {
+  const codigo = codigoDelAdaptador("pipeline.ts");
+  // `goals` tiene DOS índices únicos y el de la compañía es parcial
+  // (`WHERE broker_id IS NULL`). Sin el `targetWhere`, Drizzle no sabe contra
+  // cuál resolver el conflicto y Postgres responde "no unique or exclusion
+  // constraint" en vez de aplicar el upsert: el cierre fallaría con un 500.
+  assert.match(codigo, /targetWhere:\s*sql`\$\{goals\.brokerId\}\s*is null`/);
+  const upserts = codigo.match(/\.onConflictDoUpdate\(/g) ?? [];
+  assert.equal(upserts.length, 2, "las dos ramas del upsert de metas: broker y compañía");
+});
+
+test("el recálculo anual conserva la zona horaria de Santo Domingo", () => {
+  // Arreglo del issue #24: con la hora del servidor (UTC en el VPS), un cierre
+  // nocturno contaría en el año siguiente y el nivel del broker saldría mal.
+  assert.match(codigoDelAdaptador("pipeline.ts"), /at time zone 'America\/Santo_Domingo'/);
 });
