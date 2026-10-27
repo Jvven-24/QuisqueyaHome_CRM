@@ -10,10 +10,10 @@ test("reproductor incrusta sólo video directo https y ofrece el resto como enla
 });
 test("vista de Academy usa el reproductor en móvil y botones táctiles de 44 px",()=>{
  const view=readFileSync(new URL("../vista.tsx",import.meta.url),"utf8");
- assert.match(view,/import \{ReproductorLeccion\} from "\.\/_ui\/reproductor"/);
+ assert.match(view,/import \{ReproductorLeccion\} from "\.\/_ui\/reproductor-leccion"/);
  assert.match(view,/item\.videoUrl && \(/);
  assert.match(view,/aria-pressed=\{paso\.isCompleted\}/);
- const reproductor=readFileSync(new URL("./reproductor.tsx",import.meta.url),"utf8");
+ const reproductor=readFileSync(new URL("./reproductor-leccion.tsx",import.meta.url),"utf8");
  assert.match(reproductor,/playsInline/);assert.match(reproductor,/bg-gold-50/);assert.match(reproductor,/bg-navy-950/);
  assert.doesNotMatch(reproductor,/min-h-\[(36|38|40)px\]/);
 });
