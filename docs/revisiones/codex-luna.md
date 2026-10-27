@@ -1,6 +1,6 @@
 # Revisión — rama `codex-luna`
 
-- Estado: corriendo: g20-automatizaciones (actualizado 2026-10-27T10:16-04:00)
+- Estado: corriendo: gate-104014-luna (actualizado 2026-10-27T10:48-04:00)
 - Hallazgos: 44 — por tipo: funcionalidad 23, mejora 11, móvil 7, diseño 3
 - Log completo (no versionado): `/workspace/crm-plan/tablero/revisiones/codex-luna.log`
 
