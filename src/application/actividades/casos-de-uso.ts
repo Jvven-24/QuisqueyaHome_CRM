@@ -72,7 +72,13 @@ export async function editarActividad(deps: { unidad: UnidadDeTrabajo<ReposActiv
       const negocio = await actividades.buscarNegocioVisible(actor, alcance, entrada.dealId);
       if (!negocio) throw new NotFoundError();
     }
-    await validarReferencias(actividades, actor, alcance, entrada);
+    // Validar el rango con los valores efectivos: un PATCH que solo trae `endsAt`
+    // (o solo `startsAt`) se compara contra lo ya guardado en la fila.
+    await validarReferencias(actividades, actor, alcance, {
+      ...entrada,
+      startsAt: "startsAt" in entrada ? entrada.startsAt : anterior.startsAt,
+      endsAt: "endsAt" in entrada ? entrada.endsAt : anterior.endsAt,
+    });
     validarResultadoTarea(entrada.activityType ?? anterior.activityType, entrada.status, entrada.description);
     const cambios: CambiosActividad = { updatedBy: actor.userId };
     if (entrada.activityType !== undefined) cambios.activityType = entrada.activityType;

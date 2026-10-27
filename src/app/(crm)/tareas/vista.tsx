@@ -38,7 +38,7 @@ import {
   X,
 } from "lucide-react";
 import { erroresActividad } from "@/application/actividades/validacion";
-import { fechaLocal, fechaSantoDomingo, horaSantoDomingo, sumarDias } from "@/domain/zona-horaria";
+import { fechaSantoDomingo, horaSantoDomingo, sumarDias } from "@/domain/zona-horaria";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
@@ -634,7 +634,7 @@ export function TareasVista({
   const [errorAccion, setErrorAccion] = useState<string | null>(null);
   const enviandoInline = useRef(false);
 
-  const hoy = useMemo(() => fechaLocal(new Date()), []);
+  const hoy = useMemo(() => fechaSantoDomingo(new Date()), []);
 
   const tareasConUrgencia = useMemo(
     () =>

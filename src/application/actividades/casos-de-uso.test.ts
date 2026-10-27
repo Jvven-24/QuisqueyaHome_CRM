@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { NotFoundError } from "../../domain/errors.ts";
+import { NotFoundError, ValidationError } from "../../domain/errors.ts";
 import type { Actor } from "../../domain/rbac.ts";
 import { auditoriaEnMemoria } from "../testing/auditoria-en-memoria.ts";
 import { unidadDeTrabajoEnMemoria } from "../testing/unidad-de-trabajo-en-memoria.ts";
@@ -148,4 +148,14 @@ test("borrar: marca la fila y audita; fuera de alcance devuelve NotFoundError", 
   assert.ok(actividades.filas[0]!.deletedAt instanceof Date);
   assert.equal(auditoria.registros[0]!.accion, "eliminar");
   await assert.rejects(borrarActividad(deps, broker, "own", 1), NotFoundError);
+});
+
+test("editar: cambiar solo endsAt no puede quedar antes del inicio guardado", async () => {
+  const original = actividad({ id: 1, activityType: "call", startsAt: new Date("2026-10-28T19:00:00Z"), endsAt: new Date("2026-10-28T19:30:00Z") });
+  const { deps, auditoria } = montar([original]);
+  await assert.rejects(editarActividad(deps, broker, "own", 1, { endsAt: new Date("2026-10-28T18:00:00Z") }), ValidationError);
+  await assert.rejects(editarActividad(deps, broker, "own", 1, { startsAt: new Date("2026-10-28T20:00:00Z") }), ValidationError);
+  assert.deepEqual(auditoria.registros, []);
+  const ok = await editarActividad(deps, broker, "own", 1, { endsAt: new Date("2026-10-28T20:00:00Z") });
+  assert.equal(ok.endsAt?.toISOString(), "2026-10-28T20:00:00.000Z");
 });
