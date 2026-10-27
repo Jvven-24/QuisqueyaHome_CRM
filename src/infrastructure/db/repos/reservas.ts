@@ -452,6 +452,8 @@ export function repositorioReservas(tx: Tx): ReservasPort {
         resultPublicId: nuevaReserva.publicId,
         resultCode: "ReservaCreada",
         completedAt: effectiveAt,
+        // transaction_commands_result_check exige retención >= 5 años al completar.
+        retainUntil: sql`${effectiveAt.toISOString()}::timestamptz + interval '5 years 1 day'`,
       }).where(eq(transactionCommands.id, comando.id));
 
       return mapearReserva(nuevaReserva, partiesInsertadas, unidadesInsertadas);
@@ -625,6 +627,8 @@ export function repositorioReservas(tx: Tx): ReservasPort {
         resultPublicId: reservaConfirmada.publicId,
         resultCode: "ReservaConfirmada",
         completedAt: effectiveAt,
+        // transaction_commands_result_check exige retención >= 5 años al completar.
+        retainUntil: sql`${effectiveAt.toISOString()}::timestamptz + interval '5 years 1 day'`,
       }).where(eq(transactionCommands.id, comando.id));
 
       const parties = await tx
@@ -889,6 +893,8 @@ export function repositorioReservas(tx: Tx): ReservasPort {
         resultPublicId: reservaModificada.publicId,
         resultCode: "ReservaUnidadCambiada",
         completedAt: effectiveAt,
+        // transaction_commands_result_check exige retención >= 5 años al completar.
+        retainUntil: sql`${effectiveAt.toISOString()}::timestamptz + interval '5 years 1 day'`,
       }).where(eq(transactionCommands.id, comando.id));
 
       const parties = await tx
@@ -1108,6 +1114,8 @@ export function repositorioReservas(tx: Tx): ReservasPort {
         resultPublicId: reservaActualizada.publicId,
         resultCode: eventType,
         completedAt: effectiveAt,
+        // transaction_commands_result_check exige retención >= 5 años al completar.
+        retainUntil: sql`${effectiveAt.toISOString()}::timestamptz + interval '5 years 1 day'`,
       }).where(eq(transactionCommands.id, comando.id));
 
       const parties = await tx
