@@ -13,6 +13,7 @@ import { Modal } from "../_ui/prototipo-ui";
 import { ModuleTabs, PageHeader, Section as Panel } from "@/components/modulo";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Insignia } from "@/components/ui/bits";
+import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import { type Tone } from "@/components/ui/tone";
 import {
   AlertTriangle,
@@ -433,7 +434,7 @@ export function ComisionesVista({
         </div>
       )}
 
-      <div className="mb-4 grid gap-3 md:grid-cols-2">{kpis.porMoneda?.map(m=><Panel key={m.currency} title={`Comisiones · ${m.currency}`}><dl className="grid grid-cols-2 gap-2 tabular-nums"><dt>Total registrado</dt><dd>{formatearMonto(m.totalCents,m.currency)}</dd><dt>Pendientes y aprobadas</dt><dd>{formatearMonto(m.pendientesCents,m.currency)}</dd><dt>Marcadas como pagadas</dt><dd>{formatearMonto(m.pagadasCents,m.currency)}</dd></dl></Panel>)}</div>
+      <div className="mb-4 grid gap-3 md:grid-cols-2">{kpis.porMoneda?.map(m=><Panel key={m.currency} title={`Comisiones · ${m.currency}`}><div className="grid grid-cols-2 gap-2"><ResumenCompacto etiqueta="Total registrado" valor={formatearMonto(m.totalCents,m.currency)} /><ResumenCompacto etiqueta="Pendientes y aprobadas" valor={formatearMonto(m.pendientesCents,m.currency)} /><ResumenCompacto etiqueta="Marcadas como pagadas" valor={formatearMonto(m.pagadasCents,m.currency)} /></div></Panel>)}</div>
 
       {/* Bandeja Interactiva: Pestañas de Estado Semántico */}
       <ModuleTabs

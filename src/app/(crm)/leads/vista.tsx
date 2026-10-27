@@ -22,6 +22,7 @@ import { DataTable, type Columna } from "@/components/ui/data-table";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Insignia } from "@/components/ui/bits";
 import { leadStatusTone } from "@/components/ui/tone";
+import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import {
   Building2,
   Globe,
@@ -369,82 +370,11 @@ export function LeadsVista({
       <RouteModuleTabs label="Gestión de leads" items={[{href:cola?"/leads":"/leads?cola=1",label:cola?"Todos los leads":"Cola de primer contacto"},{href:"/leads/asignacion",label:"Asignación y distribución",match:"prefix"},{href:"/leads/importaciones",label:"Importación y migración",match:"prefix"},{href:"/leads/duplicados",label:"Duplicados y fusión",match:"prefix"}]} className="mb-4" />
       {cola && <SlaPolicyPreview />}
       {/* Franja de métricas / KPIs del universo de leads */}
-      <div className="grid grid-cols-1 min-[390px]:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
-        <button
-          type="button"
-          onClick={() => irCon({ status: undefined, page: undefined, lead: undefined })}
-          className={`min-h-12 p-4 rounded-xl border text-left transition-all cursor-pointer bg-surface shadow-xs hover:border-gold-600/50 focus-visible:outline-2 focus-visible:outline-gold-700 ${
-            !filtros.status
-              ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30"
-              : "border-line"
-          }`}
-        >
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider">Total Leads</span>
-            <Users className="size-4 text-gold-600" />
-          </div>
-          <strong className="block font-heading font-extrabold text-2xl md:text-3xl text-navy-950 tabular-nums">
-            {kpis.total}
-          </strong>
-          <span className="text-[13px] text-ink-muted">Universo calificado</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => irCon({ status: "new", page: undefined, lead: undefined })}
-          className={`min-h-12 p-4 rounded-xl border text-left transition-all cursor-pointer bg-surface shadow-xs hover:border-gold-600/50 focus-visible:outline-2 focus-visible:outline-gold-700 ${
-            filtros.status === "new"
-              ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30"
-              : "border-line"
-          }`}
-        >
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider">Nuevos</span>
-            <Sparkles className="size-4 text-rose-500" />
-          </div>
-          <strong className="block font-heading font-extrabold text-2xl md:text-3xl text-navy-950 tabular-nums">
-            {kpis.new}
-          </strong>
-          <span className="text-[13px] text-ink-muted">Pendientes de atención</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => irCon({ status: "contacted", page: undefined, lead: undefined })}
-          className={`min-h-12 p-4 rounded-xl border text-left transition-all cursor-pointer bg-surface shadow-xs hover:border-gold-600/50 focus-visible:outline-2 focus-visible:outline-gold-700 ${
-            filtros.status === "contacted"
-              ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30"
-              : "border-line"
-          }`}
-        >
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider">Contactados</span>
-            <MessageSquare className="size-4 text-emerald-600" />
-          </div>
-          <strong className="block font-heading font-extrabold text-2xl md:text-3xl text-navy-950 tabular-nums">
-            {kpis.contacted}
-          </strong>
-          <span className="text-[13px] text-ink-muted">En conversación activa</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => irCon({ status: "converted", page: undefined, lead: undefined })}
-          className={`min-h-12 p-4 rounded-xl border text-left transition-all cursor-pointer bg-surface shadow-xs hover:border-gold-600/50 focus-visible:outline-2 focus-visible:outline-gold-700 ${
-            filtros.status === "converted"
-              ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30"
-              : "border-line"
-          }`}
-        >
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-[13px] font-semibold text-ink-muted uppercase tracking-wider">Convertidos</span>
-            <TrendingUp className="size-4 text-gold-600" />
-          </div>
-          <strong className="block font-heading font-extrabold text-2xl md:text-3xl text-navy-950 tabular-nums">
-            {kpis.converted}
-          </strong>
-          <span className="text-[13px] text-ink-muted">Madurados a negocios</span>
-        </button>
+      <div className="grid grid-cols-2 gap-3 mb-6 xl:grid-cols-4">
+        <ResumenCompacto etiqueta="Total Leads" valor={kpis.total} detalle="Universo calificado" icono={<Users className="size-4 text-gold-600" />} onClick={() => irCon({ status: undefined, page: undefined, lead: undefined })} pressed={!filtros.status} className={!filtros.status ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30" : ""} />
+        <ResumenCompacto etiqueta="Nuevos" valor={kpis.new} detalle="Pendientes de atención" icono={<Sparkles className="size-4 text-rose-700" />} onClick={() => irCon({ status: "new", page: undefined, lead: undefined })} pressed={filtros.status === "new"} className={filtros.status === "new" ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30" : ""} />
+        <ResumenCompacto etiqueta="Contactados" valor={kpis.contacted} detalle="En conversación activa" icono={<MessageSquare className="size-4 text-emerald-700" />} onClick={() => irCon({ status: "contacted", page: undefined, lead: undefined })} pressed={filtros.status === "contacted"} className={filtros.status === "contacted" ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30" : ""} />
+        <ResumenCompacto etiqueta="Convertidos" valor={kpis.converted} detalle="Madurados a negocios" icono={<TrendingUp className="size-4 text-gold-700" />} onClick={() => irCon({ status: "converted", page: undefined, lead: undefined })} pressed={filtros.status === "converted"} className={filtros.status === "converted" ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30" : ""} />
       </div>
 
       <div className="mb-4">
