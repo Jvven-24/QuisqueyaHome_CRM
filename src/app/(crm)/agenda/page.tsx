@@ -19,6 +19,7 @@ import { visibleRows } from "@/infrastructure/rbac-filter";
 import { fechaSantoDomingo, lunesDeLaSemana, medianocheSantoDomingo, sumarDias } from "@/domain/zona-horaria";
 import { AgendaVista, type CitaFila } from "./vista";
 import { GoogleCuentasPanel } from "../_ui/google-cuentas";
+import { listasAgenda } from "./_lib/personas-agenda";
 
 export const metadata = { title: "Agenda & Visitas por Broker · CRM Quisqueya Home" };
 
@@ -44,7 +45,7 @@ export default async function AgendaPage({
   const scopeContactos = scopeFor(actor, "contacts", "view");
 
   const db = getDb();
-  const [filasCitas, personas, proyectosVisibles, negociosVisibles, contactosVisibles] =
+  const [filasCitas, usuariosActivos, proyectosVisibles, negociosVisibles, contactosVisibles] =
     await Promise.all([
       db
         .select({
@@ -74,15 +75,11 @@ export default async function AgendaPage({
           ),
         )
         .orderBy(activities.startsAt),
+      // Usuarios activos; `listasAgenda` reparte consulta (ver) y asignación (crear).
       db
         .select({ id: users.id, fullName: users.fullName })
         .from(users)
-        .where(
-          and(
-            eq(users.isActive, true),
-            visibleRows(actor, scopeFor(actor, "activities", "create"), users.id, users.deletedAt),
-          ),
-        )
+        .where(and(eq(users.isActive, true), visibleRows(actor, "all", users.id, users.deletedAt)))
         .orderBy(users.fullName),
       can(actor, "projects", "view")
         ? db
@@ -122,6 +119,8 @@ export default async function AgendaPage({
         : Promise.resolve([]),
     ]);
 
+  const { personas, asignables, puedeCrear } = listasAgenda(actor, usuariosActivos);
+
   const mapaProyectos = new Map(proyectosVisibles.map((p) => [p.id, p]));
   const mapaNegocios = new Map(negociosVisibles.map((d) => [d.id, d]));
   const mapaContactos = new Map(contactosVisibles.map((c) => [c.id, c]));
@@ -147,6 +146,8 @@ export default async function AgendaPage({
     <AgendaVista
       citas={citas}
       personas={personas}
+      asignables={asignables}
+      puedeCrear={puedeCrear}
       lunes={lunes}
       proyectos={proyectosVisibles}
       negocios={negociosVisibles.map((d) => ({
