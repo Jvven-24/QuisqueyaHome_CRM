@@ -136,7 +136,7 @@ export default function NuevaClavePage() {
                       name="nuevaPassword"
                       type={mostrar1 ? "text" : "password"}
                       required
-                      minLength={6}
+                      minLength={8}
                       autoComplete="new-password"
                       value={nuevaPassword}
                       onChange={(e) => setNuevaPassword(e.target.value)}
@@ -169,7 +169,7 @@ export default function NuevaClavePage() {
                       name="confirmarPassword"
                       type={mostrar2 ? "text" : "password"}
                       required
-                      minLength={6}
+                      minLength={8}
                       autoComplete="new-password"
                       value={confirmarPassword}
                       onChange={(e) => setConfirmarPassword(e.target.value)}
