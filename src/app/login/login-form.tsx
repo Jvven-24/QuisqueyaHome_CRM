@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 
@@ -17,6 +17,9 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [mostrarPassword, setMostrarPassword] = useState(false);
+  // Hasta hidratar, el submit nativo enviaría la contraseña en la URL (GET). Se bloquea hasta entonces.
+  const [hidratado, setHidratado] = useState(false);
+  useEffect(() => setHidratado(true), []);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -66,7 +69,7 @@ export function LoginForm() {
         </p>
       </div>
 
-      <form className="space-y-4" onSubmit={onSubmit} aria-busy={enviando}>
+      <form method="post" action="/login" className="space-y-4" onSubmit={onSubmit} aria-busy={enviando}>
         {/* Email Field */}
         <div>
           <label
@@ -148,7 +151,7 @@ export function LoginForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={enviando}
+          disabled={enviando || !hidratado}
           className="w-full h-11 inline-flex items-center justify-center gap-2 px-4 text-xs sm:text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 rounded-lg shadow-sm transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed mt-2"
         >
           {enviando ? (
