@@ -9,6 +9,7 @@ import { reaches, type Actor, type PermissionScope } from "../../domain/rbac.ts"
 import type { UnidadDeTrabajo } from "../compartido/unidad-de-trabajo.ts";
 import type { Meta, ReposMetas } from "./puertos.ts";
 import { FijarMetaInput } from "./validacion.ts";
+import { ReiniciarMetaInput, type EntradaReiniciarMeta } from "./alcances-validacion.ts";
 
 export type DepsMetas = { unidad: UnidadDeTrabajo<ReposMetas> };
 
@@ -66,5 +67,30 @@ export async function fijarMetaMensual(
     });
 
     return meta;
+  });
+}
+
+/**
+ * Reinicia (borra el objetivo de) una meta mensual. Solo alcance `all`
+ * (Administrador). Lo logrado no se toca: lo escribe únicamente el cierre.
+ */
+export async function reiniciarMetaMensual(
+  deps: DepsMetas,
+  actor: Actor,
+  alcance: PermissionScope,
+  entrada: EntradaReiniciarMeta,
+): Promise<Meta> {
+  if (alcance !== "all") throw new ForbiddenError("Solo la administración puede reiniciar metas.");
+  const validada = ReiniciarMetaInput.safeParse(entrada);
+  if (!validada.success) {
+    const fields: Record<string, string> = {};
+    for (const issue of validada.error.issues) fields[String(issue.path[0])] = issue.message;
+    throw new ValidationError("Revisa los campos de la meta.", fields);
+  }
+  return deps.unidad.ejecutar(async ({ metas, auditoria }) => {
+    const r = await metas.reiniciarMetaMensual({ ...validada.data, actorId: actor.userId });
+    if (!r) throw new NotFoundError("No hay meta registrada para ese periodo.");
+    await auditoria.registrar(actor, { accion: "editar", entidad: "goal", entidadId: r.meta.id, antes: r.anterior, despues: r.meta });
+    return r.meta;
   });
 }

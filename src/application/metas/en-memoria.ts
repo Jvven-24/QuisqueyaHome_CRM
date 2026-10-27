@@ -73,6 +73,14 @@ export function metasEnMemoria(semilla: { metas?: readonly Meta[]; perfiles?: re
       return { anterior: undefined, meta };
     },
 
+    async reiniciarMetaMensual({ brokerId, year, month, actorId }) {
+      const anterior = metas.find((m) => m.brokerId === brokerId && m.year === year && m.month === month);
+      if (!anterior) return undefined;
+      const meta: Meta = { ...anterior, targetDeals: 0, targetAmountCents: null, updatedBy: actorId, updatedAt: FECHA_FIJA };
+      metas = metas.map((m) => (m.id === anterior.id ? meta : m));
+      return { anterior, meta };
+    },
+
     instantanea() {
       const copia = metas;
       return () => {

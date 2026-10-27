@@ -146,6 +146,9 @@ export async function cerrarNegocioGanado(
     actorId: actor.userId,
   });
 
+  // --- Paso 4b: atribución congelada (regla versionada de M8) -------------
+  await pipeline.congelarAtribucion({ dealId, brokerId: dealCerrado.brokerId, actorId: actor.userId });
+
   // --- Paso 5: broker_profiles.annual_sales_cents + nivel ------------------
   if (dealCerrado.brokerId != null) {
     const perfil = await pipeline.buscarPerfilDeBroker(dealCerrado.brokerId);

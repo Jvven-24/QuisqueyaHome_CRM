@@ -80,6 +80,22 @@ export function repositorioMetas(tx: Tx): RepositorioMetas {
 
       return { anterior, meta: fila! };
     },
+
+    async reiniciarMetaMensual({ brokerId, year, month, actorId }) {
+      const condicion =
+        brokerId != null
+          ? and(eq(goals.brokerId, brokerId), eq(goals.year, year), eq(goals.month, month))
+          : and(isNull(goals.brokerId), eq(goals.year, year), eq(goals.month, month));
+      const [anterior] = await tx.select().from(goals).where(condicion).limit(1).for("update");
+      if (!anterior) return undefined;
+      // Solo `target_*` y `updated_by` (ver el docblock del archivo).
+      const [meta] = await tx
+        .update(goals)
+        .set({ targetDeals: 0, targetAmountCents: null, updatedBy: actorId })
+        .where(eq(goals.id, anterior.id))
+        .returning();
+      return { anterior, meta: meta! };
+    },
   };
 }
 

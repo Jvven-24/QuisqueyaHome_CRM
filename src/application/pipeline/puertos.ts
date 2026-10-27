@@ -198,6 +198,12 @@ export interface RepositorioPipeline {
     amountCents: number;
     actorId: number;
   }): Promise<void>;
+  /**
+   * Paso 4b (M8). Congela en el negocio la regla de atribución activa: versión,
+   * proyecto (propiedad principal) y equipo del broker en este momento. Así un
+   * cambio posterior de equipo o de regla no reescribe metas ya cerradas.
+   */
+  congelarAtribucion(params: { dealId: number; brokerId: number | null; actorId: number }): Promise<void>;
   /** Paso 5. Un usuario sin perfil de broker devuelve `undefined`. */
   buscarPerfilDeBroker(brokerId: number): Promise<{ userId: number } | undefined>;
   /** Paso 5. `SUM` en SQL de los negocios ganados del broker cuyo `closed_at` cae en `anio` en hora de Santo Domingo. */

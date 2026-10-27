@@ -55,6 +55,7 @@ import {
   jsonb,
   numeric,
   pgTable,
+  primaryKey,
   real,
   serial,
   text,
@@ -706,6 +707,10 @@ export const deals = pgTable(
     closedAt: instant("closed_at"),
     lossReasonId: integer("loss_reason_id").references(() => lossReasons.id),
     lossComment: text("loss_comment"),
+    /** M8: versión de la regla de atribución congelada al cerrar como ganado. */
+    attributionRuleVersion: integer("attribution_rule_version"),
+    attributedProjectId: integer("attributed_project_id").references(() => projects.id),
+    attributedTeamId: integer("attributed_team_id").references((): AnyPgColumn => teams.id),
     notes: text("notes"),
     ...timestamps,
     ...authorship,
@@ -909,6 +914,98 @@ export const goals = pgTable(
       .where(sql`${table.brokerId} is null`),
   ],
 );
+
+/* -------------------------------------------------------------------------- */
+/* M8 · Metas por proyecto/equipo y regla versionada de atribución             */
+/* -------------------------------------------------------------------------- */
+
+/** Equipo comercial mínimo: nombre, líder opcional y miembros (un broker, un equipo). */
+export const teams = pgTable(
+  "teams",
+  {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
+    leaderId: integer("leader_id").references(() => users.id),
+    isActive: boolean("is_active").notNull().default(true),
+    ...timestamps,
+    ...authorship,
+  },
+  (table) => [
+    uniqueIndex("teams_slug_unq").on(table.slug),
+    check("teams_name_not_blank", sql`length(btrim(${table.name})) > 0`),
+  ],
+).enableRLS();
+
+export const teamMembers = pgTable(
+  "team_members",
+  {
+    teamId: integer("team_id")
+      .notNull()
+      .references(() => teams.id, { onDelete: "cascade" }),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id),
+    createdAt: instant("created_at").notNull().defaultNow(),
+    createdBy: integer("created_by").references(() => users.id),
+  },
+  (table) => [
+    primaryKey({ name: "team_members_pk", columns: [table.teamId, table.userId] }),
+    /** Un broker pertenece a un solo equipo: la atribución por equipo es inequívoca. */
+    uniqueIndex("team_members_user_unq").on(table.userId),
+  ],
+).enableRLS();
+
+/**
+ * Metas de proyecto o de equipo. Solo guardan el objetivo: lo logrado se deriva
+ * de los negocios ganados del periodo con su atribución congelada al cierre.
+ */
+export const scopedGoals = pgTable(
+  "scoped_goals",
+  {
+    id: serial("id").primaryKey(),
+    scopeType: text("scope_type", { enum: ["project", "team"] }).notNull(),
+    scopeId: integer("scope_id").notNull(),
+    year: integer("year").notNull(),
+    month: integer("month").notNull(),
+    targetDeals: integer("target_deals").notNull().default(0),
+    targetAmountCents: bigint("target_amount_cents", { mode: "number" }),
+    currency: text("currency").notNull().default("USD"),
+    ...timestamps,
+    ...authorship,
+  },
+  (table) => [
+    uniqueIndex("scoped_goals_period_unq").on(table.scopeType, table.scopeId, table.year, table.month),
+    check("scoped_goals_scope_type_chk", sql`${table.scopeType} in ('project','team')`),
+    check("scoped_goals_month_chk", sql`${table.month} between 1 and 12`),
+    check(
+      "scoped_goals_target_chk",
+      sql`${table.targetDeals} >= 0 and (${table.targetAmountCents} is null or ${table.targetAmountCents} >= 0)`,
+    ),
+    check("scoped_goals_currency_chk", sql`${table.currency} in ('USD','DOP')`),
+  ],
+).enableRLS();
+
+/** Regla de atribución versionada. Una sola activa; la activa se congela en cada cierre. */
+export const attributionRules = pgTable(
+  "attribution_rules",
+  {
+    id: serial("id").primaryKey(),
+    version: integer("version").notNull(),
+    scope: text("scope").notNull(),
+    rule: text("rule").notNull(),
+    config: jsonb("config").notNull(),
+    isActive: boolean("is_active").notNull().default(false),
+    approvedBy: integer("approved_by").references(() => users.id),
+    approvedAt: instant("approved_at"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+    createdBy: integer("created_by").references(() => users.id),
+  },
+  (table) => [
+    uniqueIndex("attribution_rules_version_unq").on(table.version),
+    uniqueIndex("attribution_rules_active_unq").on(table.isActive).where(sql`${table.isActive}`),
+  ],
+).enableRLS();
 
 /**
  * Comisión interna del negocio ganado. Sin reparto con agencias externas: el

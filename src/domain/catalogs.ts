@@ -103,6 +103,8 @@ export const ENTITY_TYPES = [
   "commission_split", "commission_entry", "commission_event",
   "commission_adjustment", "beneficiary_account", "payout_batch", "payout_line",
   "legacy_commission_link", "financial_approval_request",
+  // M8: metas por proyecto/equipo, equipos y regla de atribución.
+  "scoped_goal", "team", "attribution_rule",
 ] as const;
 
 /**

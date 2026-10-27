@@ -163,3 +163,16 @@ test("H-01: una meta inválida no abre transacción ni escribe auditoría", asyn
     assert.equal(auditoria.registros.length, 0);
   }
 });
+
+test("reiniciar meta: deja el objetivo en cero, conserva lo logrado, audita y exige alcance all", async () => {
+  const { reiniciarMetaMensual } = await import("./casos-de-uso.ts");
+  const { repo, auditoria, deps } = montar([meta({ id: 1, targetDeals: 6, targetAmountCents: 9_00, achievedDeals: 2, achievedAmountCents: 7_00 })]);
+  const fila = await reiniciarMetaMensual(deps, admin, "all", { brokerId: 5, year: 2026, month: 9 });
+  assert.equal(fila.targetDeals, 0);
+  assert.equal(fila.targetAmountCents, null);
+  assert.equal(fila.achievedDeals, 2);
+  assert.equal(repo.metas[0]!.achievedAmountCents, 7_00);
+  assert.equal(auditoria.registros.at(-1)!.accion, "editar");
+  await assert.rejects(reiniciarMetaMensual(deps, broker, "own", { brokerId: 5, year: 2026, month: 9 }), ForbiddenError);
+  await assert.rejects(reiniciarMetaMensual(deps, admin, "all", { brokerId: 5, year: 2026, month: 3 }), NotFoundError);
+});

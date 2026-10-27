@@ -18,6 +18,7 @@ import { getDb } from "@/infrastructure/db/client";
 import { brokerProfiles, goals, users } from "@/infrastructure/db/schema";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { visibleRows } from "@/infrastructure/rbac-filter";
+import { equiposActivos, logroDelPeriodo, metasDeAlcance, proyectosParaMetas, reglasDeAtribucion } from "@/infrastructure/db/repos/metas-lectura";
 import { MetasVista } from "./vista";
 
 export const metadata = { title: "Metas · CRM Quisqueya Home" };
@@ -34,6 +35,8 @@ export default async function MetasPage({
   const actor = await requireActor();
   const scope = requireScopeInPage(actor, "goals", "view");
   const puedeEditar = can(actor, "goals", "edit");
+  // Reiniciar, metas de proyecto/equipo, equipos y regla: solo alcance `all` de goals:edit.
+  const puedeAdministrar = puedeEditar && scope === "all";
 
   const params = await searchParams;
   const periodo = parsearPeriodo(primero(params.periodo), new Date());
@@ -50,7 +53,7 @@ export default async function MetasPage({
     ? and(isNotNull(goals.brokerId), eq(goals.year, periodo.year))
     : and(eq(goals.brokerId, actor.userId), eq(goals.year, periodo.year));
 
-  const [heroFilas, filasBrokers, filasAnuales, filasTendencias, baselineRows] = await Promise.all([
+  const [heroFilas, filasBrokers, filasAnuales, filasTendencias, baselineRows, logro, alcances, equipos, proyectos, reglas] = await Promise.all([
     db
       .select({ targetDeals: goals.targetDeals, achievedDeals: goals.achievedDeals, targetAmountCents: goals.targetAmountCents, achievedAmountCents: goals.achievedAmountCents, currency: goals.currency })
       .from(goals)
@@ -82,6 +85,11 @@ export default async function MetasPage({
       .from(goals)
       .where(condicionTendencias),
     db.select({targetDeals: goals.targetDeals, achievedDeals: goals.achievedDeals, targetAmountCents: goals.targetAmountCents, achievedAmountCents: goals.achievedAmountCents, currency: goals.currency}).from(goals).where(and(esVistaCompleta ? isNull(goals.brokerId) : eq(goals.brokerId, actor.userId), eq(goals.year, periodo.year - 1), eq(goals.month, periodo.month))).limit(1),
+    logroDelPeriodo(db, periodo.year, periodo.month),
+    metasDeAlcance(db, periodo.year, periodo.month),
+    equiposActivos(db),
+    puedeAdministrar ? proyectosParaMetas(db) : Promise.resolve([]),
+    reglasDeAtribucion(db),
   ]);
 
   const heroMeta = heroFilas[0] ?? null;
@@ -107,8 +115,17 @@ export default async function MetasPage({
     targetDeals: fila.targetDeals ?? 0,
     achievedDeals: fila.achievedDeals ?? 0,
     targetAmountCents: fila.targetAmountCents ?? null, achievedAmountCents: fila.achievedAmountCents ?? 0, currency: fila.currency ?? null,
+    tieneMeta: fila.targetDeals != null,
+    logro: logro.porBroker.get(fila.userId) ?? [],
     tendencia: tendenciasPorBroker.get(fila.userId)?.toSorted((a, b) => a.month - b.month) ?? [],
   }));
+
+  // Alcance `own`: solo las metas de proyecto y las del equipo propio.
+  const misEquipos = new Set(equipos.filter((e) => e.miembros.some((m) => m.id === actor.userId)).map((e) => e.id));
+  const metasAlcance = alcances
+    .filter((m) => esVistaCompleta || m.scopeType === "project" || misEquipos.has(m.scopeId))
+    .map((m) => ({ ...m, logro: (m.scopeType === "project" ? logro.porProyecto : logro.porEquipo).get(m.scopeId) ?? [] }));
+  const heroLogro = esVistaCompleta ? logro.compania : logro.porBroker.get(actor.userId) ?? [];
 
   const opcionesPeriodo = Array.from({ length: 12 }, (_, indice) => {
     const mes = indice + 1;
@@ -122,6 +139,12 @@ export default async function MetasPage({
       opcionesPeriodo={opcionesPeriodo}
       esVistaCompleta={esVistaCompleta}
       puedeEditar={puedeEditar}
+      puedeAdministrar={puedeAdministrar}
+      heroLogro={heroLogro}
+      metasAlcance={metasAlcance}
+      equipos={esVistaCompleta ? equipos : []}
+      proyectos={proyectos}
+      reglas={reglas}
       heroMeta={heroMeta}
       baseline={baselineRows[0] ?? null}
       brokers={brokers}

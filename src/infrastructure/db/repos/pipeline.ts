@@ -43,7 +43,11 @@ import {
   unitSales,
   inventoryCommitments,
   lossReasons,
+  attributionRules,
+  teamMembers,
+  teams,
 } from "../schema";
+import { leerConfigAtribucion } from "../../../domain/metas-alcances";
 import { visibleRows } from "../../rbac-filter";
 import { auditoriaDrizzle, type Tx } from "./compartido";
 import { repositorioCompromisos } from "./compromisos";
@@ -273,6 +277,41 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
             updatedBy: actorId,
           },
         });
+    },
+
+    async congelarAtribucion({ dealId, brokerId, actorId }): Promise<void> {
+      const [regla] = await tx
+        .select({ version: attributionRules.version, config: attributionRules.config })
+        .from(attributionRules)
+        .where(eq(attributionRules.isActive, true))
+        .limit(1);
+      if (!regla) return; // Sin regla aprobada no se atribuye: el negocio queda sin versión.
+      const config = leerConfigAtribucion(regla.config);
+      const [propiedad] = await tx
+        .select({ projectId: dealProperties.projectId })
+        .from(dealProperties)
+        .where(eq(dealProperties.dealId, dealId))
+        .orderBy(sql`${dealProperties.isPrimary} desc`, dealProperties.id)
+        .limit(1);
+      let teamId: number | null = null;
+      if (brokerId != null && config.equipo === "equipo_del_broker_al_cierre") {
+        const [miembro] = await tx
+          .select({ teamId: teamMembers.teamId })
+          .from(teamMembers)
+          .innerJoin(teams, eq(teams.id, teamMembers.teamId))
+          .where(and(eq(teamMembers.userId, brokerId), eq(teams.isActive, true)))
+          .limit(1);
+        teamId = miembro?.teamId ?? null;
+      }
+      await tx
+        .update(deals)
+        .set({
+          attributionRuleVersion: regla.version,
+          attributedProjectId: propiedad?.projectId ?? null,
+          attributedTeamId: teamId,
+          updatedBy: actorId,
+        })
+        .where(eq(deals.id, dealId));
     },
 
     async buscarPerfilDeBroker(brokerId) {

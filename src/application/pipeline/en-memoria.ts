@@ -92,6 +92,8 @@ export type PipelineEnMemoria = RepositorioPipeline &
     readonly unidades: readonly UnidadEnMemoria[];
     readonly comisiones: readonly DatosNuevaComision[];
     readonly historial: readonly HistorialEnMemoria[];
+    /** M8: negocios cuya atribución se congeló al cierre. */
+    readonly atribuciones: readonly number[];
     /** Ids de los negocios que se bloquearon con `bloquearNegocio`, en orden. No se revierte: una llamada es una llamada aunque la transacción falle. */
     readonly bloqueos: readonly number[];
     readonly ventas: readonly { unitId: number; dealId: number; projectId: number; unitCodeNormalized: string; actorId: number }[];
@@ -121,6 +123,7 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
   let ventas: { unitId: number; dealId: number; projectId: number; unitCodeNormalized: string; actorId: number }[] = [];
   let comisiones: DatosNuevaComision[] = [];
   let historial: HistorialEnMemoria[] = [];
+  let atribuciones: number[] = [];
   const bloqueos: number[] = [];
   let siguienteIdPropiedad = Math.max(0, ...propiedades.map((p) => p.id)) + 1;
 
@@ -165,6 +168,9 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
     },
     get historial() {
       return historial;
+    },
+    get atribuciones() {
+      return atribuciones;
     },
     get bloqueos() {
       return bloqueos;
@@ -284,6 +290,10 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
      * broker (0 sin perfil, y 0 para la compañía), y el "conflicto" nunca toca
      * `targetDeals`. NO prueba la atomicidad: en memoria no hay concurrencia.
      */
+    async congelarAtribucion({ dealId }) {
+      atribuciones = [...atribuciones, dealId];
+    },
+
     async incrementarMetaAlcanzada({ brokerId, anio, mes, amountCents, actorId }) {
       const existente = metas.find((m) => m.brokerId === brokerId && m.year === anio && m.month === mes);
       if (existente) {
@@ -417,8 +427,9 @@ export function pipelineEnMemoria(semilla: SemillaPipeline = {}): PipelineEnMemo
       // restaurarla es devolver la referencia. `bloqueos` no se restaura a
       // propósito, y el contador de ids tampoco (una secuencia de Postgres no
       // retrocede tras un rollback).
-      const copia = { negocios, propiedades, actividades, perfiles, metas, unidades, comisiones, historial, ventas };
+      const copia = { negocios, propiedades, actividades, perfiles, metas, unidades, comisiones, historial, ventas, atribuciones };
       return () => {
+        atribuciones = copia.atribuciones;
         negocios = copia.negocios;
         propiedades = copia.propiedades;
         actividades = copia.actividades;

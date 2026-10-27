@@ -11,7 +11,8 @@
  */
 
 import { FijarMetaInput } from "@/application/metas/validacion";
-import { fijarMetaMensual, type EntradaFijarMeta } from "@/application/metas/casos-de-uso";
+import { fijarMetaMensual, reiniciarMetaMensual, type EntradaFijarMeta } from "@/application/metas/casos-de-uso";
+import { ReiniciarMetaInput } from "@/application/metas/alcances-validacion";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { metasParaEscritura } from "@/infrastructure/contenedor/metas";
@@ -34,6 +35,19 @@ export async function PUT(request: Request) {
 
     const meta = await fijarMetaMensual(metasParaEscritura(), actor, scope, entrada);
 
+    return Response.json({ ok: true, meta });
+  } catch (error) {
+    return errorResponse(error);
+  }
+}
+
+/** Reinicia el objetivo del periodo (solo Administrador). Lo logrado se conserva. */
+export async function DELETE(request: Request) {
+  try {
+    const datos = parseInput(ReiniciarMetaInput, await request.json().catch(() => ({})));
+    const actor = await requireActor();
+    const scope = requireScope(actor, "goals", "edit");
+    const meta = await reiniciarMetaMensual(metasParaEscritura(), actor, scope, { brokerId: datos.brokerId, year: datos.year, month: datos.month });
     return Response.json({ ok: true, meta });
   } catch (error) {
     return errorResponse(error);

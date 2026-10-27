@@ -53,6 +53,11 @@ export interface RepositorioMetas {
   existePerfilDeBroker(brokerId: number): Promise<boolean>;
   /** Upsert atómico de la meta del periodo. `anterior` es la fila previa, para la auditoría. */
   fijarMetaMensual(datos: DatosMetaMensual): Promise<{ anterior: Meta | undefined; meta: Meta }>;
+  /**
+   * Reinicia el objetivo del periodo (`target_deals = 0`, sin monto). La fila se
+   * conserva porque guarda lo logrado por los cierres; `undefined` si no había.
+   */
+  reiniciarMetaMensual(datos: { brokerId: number | null; year: number; month: number; actorId: number }): Promise<{ anterior: Meta; meta: Meta } | undefined>;
 }
 
 export type ReposMetas = { metas: RepositorioMetas; auditoria: Auditoria };

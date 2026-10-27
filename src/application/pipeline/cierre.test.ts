@@ -523,7 +523,7 @@ test("b2: cierre repetido no duplica venta, comision, metas ni outbox", async ()
   const { deps, pipeline, outbox } = montar();
   await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 });
   await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 6 });
-  assert.equal(pipeline.ventas.length, 1); assert.equal(pipeline.comisiones.length, 1); assert.equal(pipeline.historial.length, 1);
+  assert.equal(pipeline.ventas.length, 1); assert.equal(pipeline.comisiones.length, 1); assert.equal(pipeline.historial.length, 1); assert.equal(pipeline.atribuciones.length, 1);
   assert.ok(pipeline.metas.every(m => m.achievedDeals === 1));
   assert.deepEqual(outbox.eventos, [{ tipo: "NegocioCambioEtapa", aggregateId: 1, payload: { id: 1, stageId: 6 } }]);
 });
