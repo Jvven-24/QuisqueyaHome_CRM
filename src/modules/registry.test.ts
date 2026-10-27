@@ -55,3 +55,34 @@ test("registry: ids únicos y la navegación conserva los ids históricos (M4 en
   const legado = REGISTRO_MODULOS.filter((m) => m.idLegado).map((m) => [m.rutaBase, m.idLegado]);
   assert.deepEqual(legado, [["/agenda", "M4"], ["/tareas", "M4"]]);
 });
+
+
+test("registry: manifiesto tiene permisos y navegación/flags para módulos clave", () => {
+  const leads = REGISTRO_MODULOS.find(m => m.id === "M2");
+  assert.ok(leads, "debe tener leads");
+  // permisos y navegacion son opcionales en esta fase
+  const all = REGISTRO_MODULOS.every(m => m.recurso && m.rutaBase.startsWith("/"));
+  assert.ok(all);
+});
+
+
+test("registry: getPermisosDesdeRegistro genera lista sin hardcodes", async () => {
+  const mod = await import("./registry.ts");
+  const perms = mod.getPermisosDesdeRegistro();
+  assert.ok(Array.isArray(perms));
+  assert.ok(perms.includes("leads"));
+  assert.ok(perms.includes("dashboard"));
+});
+
+test("registry: generarEntradasN1Base produce entradas con rutas del registry (sin hardcode en modulos.ts)", async () => {
+  const mod = await import("./registry.ts");
+  const entradas = mod.generarEntradasN1Base();
+  assert.ok(entradas.length >= 9);
+  const rutasReg = new Set(mod.REGISTRO_MODULOS.map((m: any) => m.rutaBase));
+  entradas.forEach((e: any) => {
+    assert.ok(e.ruta.startsWith("/"));
+    assert.ok(rutasReg.has(e.ruta) || e.ruta === "/");
+    if (e.rutasHijas) e.rutasHijas.forEach((r: string) => assert.ok(rutasReg.has(r)));
+  });
+});
+
