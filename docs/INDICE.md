@@ -1,13 +1,15 @@
 # Quisqueya Home CRM — Índice maestro
 
-_Generado automáticamente por `/workspace/crm-plan/central/sync.sh` · 2026-10-27 09:47 (hora RD, UTC-4). No editar a mano._
+_Generado automáticamente por `/workspace/crm-plan/central/sync.sh` · 2026-10-27 09:48 (hora RD, UTC-4). No editar a mano._
 
-Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.com/drive/folders/16LGfWveOKvE2xxCazeecmoLbl1aDIYkD) · Índice como Google Doc: INDICE (Doc) (Drive: pendiente)
+Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.com/drive/folders/16LGfWveOKvE2xxCazeecmoLbl1aDIYkD) · Índice como Google Doc: [INDICE (Doc)](https://docs.google.com/document/d/12ACs5SVspYWg2Ir80kEfJ1v5SfAHKYXga-ikSFD3V5Y/edit)
 
 ## 1. Tablero
 - Tablero vivo (local): `/workspace/crm-plan/tablero/index.html` · copia estática: [Drive 01-Tablero](https://drive.google.com/drive/folders/1G0sThKml0_UrSvqqAE7YBn5AIw9XfHqT)
 - Avance global: **37/442 ítems (8%)** · estado.json actualizado 2026-10-27T09:38-04:00
 - Pendientes abiertos: **405**
+
+- Specs en Drive: [Doc 22 módulos](https://docs.google.com/document/d/13Gc3K6w-uXysv-S164mRpByiVNieLRmCTatiCVpwOuQ/edit) · Revisiones: [Doc revisiones](https://docs.google.com/document/d/1uR7SaZE-7kflhMIy9z92qlg3I04RlROEKyKwq-MhJCA/edit) · Estado: [Doc login/Google/correo](https://docs.google.com/document/d/1vSmWraP9B-RDM-KSB4HU-eSh1rs3X44TFMtQl1Y2iqE/edit)
 
 ## 2. Módulos (22)
 
