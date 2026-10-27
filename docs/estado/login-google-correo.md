@@ -1,6 +1,6 @@
 # Estado: Login / Google / Correo
 
-_Regenerado 2026-10-27 10:18 (hora RD, UTC-4). Sin secretos: las credenciales viven solo en el VPS._
+_Regenerado 2026-10-27 10:48 (hora RD, UTC-4). Sin secretos: las credenciales viven solo en el VPS._
 
 ## Resumen (al 27-oct-2026 09:45 RD)
 - **Login ID + clave**: activo; recuperación de contraseña por correo propio con canje en servidor y límites por IP/correo; nueva clave exige usuario activo y ≥8 caracteres.
@@ -24,13 +24,6 @@ _Regenerado 2026-10-27 10:18 (hora RD, UTC-4). Sin secretos: las credenciales vi
 | `e224fe2` | 2026-10-27 09:41 | fix(auth): nueva clave exige usuario activo y mínimo 8 caracteres (revisión grok-build) |
 | `57633b5` | 2026-10-27 09:36 | feat(auth): iniciar sesión con Google solo para usuarios creados por el admin (mismo callback, state 0) |
 | `ab7ce2a` | 2026-10-27 09:36 | fix(auth): recuperación de contraseña por correo propio, canje en servidor y límites por IP/correo |
-| `59e09b3` | 2026-10-27 09:36 | feat(correo): relay SMTP propio para invitaciones con enlace al CRM (nodemailer 10.2.1) |
-| `f60a922` | 2026-10-27 07:27 | fix(google): callback vuelve al dominio público, no al host interno del proxy |
-| `c78d481` | 2026-10-27 07:24 | feat(google): multi-cuenta por usuario con tokens cifrados, OAuth con state anti-CSRF, refresh, calendarios activables, predeterminado para visitas y revocación; agenda crea la visita en el calendario elegido |
-| `04b27a0` | 2026-10-27 06:41 | feat(integraciones): adaptadores por env (WhatsApp YCloud/Cloud API, Resend, Meta webhook+CAPI, Google OAuth), webhooks firmados, prueba en modo test y estado en Configuración |
-| `3ed6a70` | 2026-10-27 04:29 | fix(reservas): clave de outbox propia para HoldConvertido (la conversión hold → reserva daba 500 por outbox_idempotency_unq) |
-| `899fa1f` | 2026-10-27 04:08 | fix(crm): permisos de reservas/holds, anti-escalada de roles, idempotencia en comisiones/metas, pack de tareas atómico, Academy sin autocertificación, No asistió cierra la cita, brokerId sin NaN y límites en login/leads externo/audio |
-| `c8968ab` | 2026-10-27 01:40 | fix(login): POST nativo y submit bloqueado hasta hidratar para no exponer credenciales en la URL |
 
 ## Guía OAuth
 - [plan/GUIA-GOOGLE-OAUTH.md](../plan/GUIA-GOOGLE-OAUTH.md)
