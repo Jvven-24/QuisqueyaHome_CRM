@@ -310,12 +310,15 @@ export function generarEntradasN1Base() {
   const find = (id: string) => REGISTRO_MODULOS.find(m => m.id === id || m.idLegado === id);
   const mk = (g: any) => {
     const base = find(g.refs[0]!);
+    if (!base) throw new Error(`registry: módulo inexistente "${g.refs[0]}" en la entrada ${g.id}`);
+    const faltante = (g.hijasRefs || []).find((r: string) => !find(r));
+    if (faltante) throw new Error(`registry: módulo hijo inexistente "${faltante}" en la entrada ${g.id}`);
     const hijas = (g.hijasRefs || g.refs).map((r: string) => find(r)?.rutaBase).filter(Boolean) as string[];
     return {
       id: g.id,
-      ruta: base?.rutaBase || "/",
+      ruta: base.rutaBase,
       nombre: g.nombre || base?.nombre || g.id,
-      recurso: base?.recurso || ("dashboard" as PermissionResource),
+      recurso: base.recurso,
       icono: base?.icono || "Circle",
       descripcion: g.descripcion || base?.nombre || "",
       atajo: g.atajo || "",
