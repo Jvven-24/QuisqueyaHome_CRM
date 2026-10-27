@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {filtrarBiblioteca} from "./_ui/biblioteca";
+import {ReproductorLeccion} from "./_ui/reproductor";
 import {
   AlertTriangle,
   Award,
@@ -33,6 +34,18 @@ import type {
   TipoContenidoAcademy,
 } from "@/application/academy/puertos";
 import type { CursoLms, EstadoLms } from "@/application/aprendizaje/puertos";
+import type { FilaEquipoAcademy } from "@/application/academy/consultas";
+import {
+  progresoRutasFormacion,
+  type ProgresoRutaFormacion,
+} from "@/domain/academy-rutas";
+import {
+  constanciaAcreditaFormacion,
+  estadoVigenciaConstancia,
+  fechaVencimientoConstancia,
+  requiereRecertificacion,
+  type EstadoVigenciaConstancia,
+} from "@/domain/academy-vigencia";
 
 export type ItemAcademySerializado = {
   id: number;
@@ -124,9 +137,26 @@ interface AcademyVistaProps {
   usuarioId: number;
   usuarioNombre: string;
   usuarioEmail: string;
+  /** Progreso del equipo; `null` si quien ve la página no tiene alcance de equipo. */
+  progresoEquipo: FilaEquipoAcademy[] | null;
 }
 
-type TabActiva = "cursos" | "checklists" | "constancias";
+type TabActiva = "cursos" | "checklists" | "constancias" | "equipo";
+
+const formatoFechaUtc = (fecha: Date) =>
+  fecha.toLocaleDateString("es-DO", { timeZone: "UTC", year: "numeric", month: "2-digit", day: "2-digit" });
+
+function estadoDeConstancia(c: ConstanciaSerializada, ahora: Date): EstadoVigenciaConstancia {
+  return estadoVigenciaConstancia({ status: c.status, issuedAt: new Date(c.issuedAt) }, ahora);
+}
+
+const ETIQUETA_ESTADO: Record<EstadoVigenciaConstancia | "sin_constancia", string> = {
+  vigente: "Vigente",
+  por_vencer: "Por vencer: recertificar",
+  vencida: "Vencida",
+  revocada: "Revocada",
+  sin_constancia: "Pendiente",
+};
 
 export function AcademyVista({
   initialContenidos,
@@ -141,6 +171,7 @@ export function AcademyVista({
   usuarioId,
   usuarioNombre,
   usuarioEmail,
+  progresoEquipo,
 }: AcademyVistaProps) {
   const esAdmin = rol === "admin";
   const [busquedaCurso,setBusquedaCurso]=useState("");
@@ -185,6 +216,18 @@ export function AcademyVista({
   const constanciasVigentes = useMemo(
     () => constancias.filter((c) => c.status === "vigente").length,
     [constancias],
+  );
+
+  const rutasFormacion = useMemo(
+    () =>
+      progresoRutasFormacion(
+        cursosAsignados.map((c) => ({ codigo: c.codigo, nombre: c.nombre, categoria: c.categoria })),
+        constancias
+          .filter((c) => c.brokerId === usuarioId)
+          .map((c) => ({ courseCode: c.courseCode, status: c.status, issuedAt: new Date(c.issuedAt) })),
+        new Date(),
+      ),
+    [cursosAsignados, constancias, usuarioId],
   );
 
   const solicitudesPendientes = useMemo(
@@ -487,7 +530,7 @@ export function AcademyVista({
           <button
             type="button"
             onClick={() => setErrorUi(null)}
-            className="min-h-[36px] px-2.5 rounded-lg text-xs font-semibold text-red-700 hover:bg-red-100"
+            className="min-h-[44px] px-2.5 rounded-lg text-xs font-semibold text-red-700 hover:bg-red-100"
           >
             Cerrar
           </button>
@@ -510,7 +553,7 @@ export function AcademyVista({
           <button
             type="button"
             onClick={() => setExitoUi(null)}
-            className="min-h-[36px] px-2.5 rounded-lg text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+            className="min-h-[44px] px-2.5 rounded-lg text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
           >
             Entendido
           </button>
@@ -556,14 +599,14 @@ export function AcademyVista({
       <div
         role="tablist"
         aria-label="Secciones de Quisqueya Academy"
-        className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 rounded-xl bg-slate-100 p-1.5 overflow-x-auto"
+        className="flex flex-nowrap items-center gap-1.5 rounded-xl bg-slate-100 p-1.5 overflow-x-auto scroll-smooth snap-x snap-mandatory overscroll-x-contain"
       >
         <button
           type="button"
           role="tab"
           aria-selected={tabActiva === "cursos"}
           onClick={() => setTabActiva("cursos")}
-          className={`flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
+          className={`snap-start flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
             tabActiva === "cursos"
               ? "bg-white text-slate-900 shadow-sm"
               : "text-slate-600 hover:text-slate-900"
@@ -578,7 +621,7 @@ export function AcademyVista({
           role="tab"
           aria-selected={tabActiva === "constancias"}
           onClick={() => setTabActiva("constancias")}
-          className={`flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
+          className={`snap-start flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
             tabActiva === "constancias"
               ? "bg-white text-slate-900 shadow-sm"
               : "text-slate-600 hover:text-slate-900"
@@ -595,7 +638,7 @@ export function AcademyVista({
           role="tab"
           aria-selected={tabActiva === "checklists"}
           onClick={() => setTabActiva("checklists")}
-          className={`flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
+          className={`snap-start flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
             tabActiva === "checklists"
               ? "bg-white text-slate-900 shadow-sm"
               : "text-slate-600 hover:text-slate-900"
@@ -604,9 +647,46 @@ export function AcademyVista({
           <ClipboardCheck className="w-4 h-4 shrink-0" />
           <span>Checklists Operativos ({contenidos.length})</span>
         </button>
+
+        {progresoEquipo !== null && (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tabActiva === "equipo"}
+            onClick={() => setTabActiva("equipo")}
+            className={`snap-start flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
+              tabActiva === "equipo"
+                ? "bg-white text-slate-900 shadow-sm"
+                : "text-slate-600 hover:text-slate-900"
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4 shrink-0" />
+            <span>Mi equipo ({progresoEquipo.length})</span>
+          </button>
+        )}
       </div>
 
       {tabActiva === "cursos" && <section className="mb-4 rounded-xl border border-slate-200 bg-white p-4"><div className="flex flex-wrap gap-3"><label className="grid gap-1 text-sm">Buscar curso<input className="min-h-11 rounded border border-slate-300 p-2" type="search" value={busquedaCurso} onChange={event=>setBusquedaCurso(event.target.value)}/></label><label className="grid gap-1 text-sm">Categoría<select className="min-h-11 rounded border border-slate-300 p-2" value={categoriaCurso} onChange={event=>setCategoriaCurso(event.target.value)}><option value="">Todas las categorías</option>{Array.from(new Set(cursosAsignados.map(c=>c.categoria))).map(c=><option key={c}>{c}</option>)}</select></label><label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={soloMatriculados} onChange={event=>setSoloMatriculados(event.target.checked)}/>Sólo matriculados</label></div><p className="mt-2 text-sm text-slate-600">La evidencia procede del LMS; completar un curso no emite una constancia automáticamente. La decisión independiente permanece en el CRM.</p>{cursosAsignados.length>0&&cursosVisibles.length===0&&<p role="status">Sin cursos para estos filtros. Limpia la búsqueda o cambia categoría.</p>}</section>}
+      {tabActiva === "cursos" && (
+        <section
+          aria-labelledby="rutas-formacion"
+          className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 space-y-3"
+        >
+          <h2 id="rutas-formacion" className="text-base font-bold text-slate-900">
+            Rutas de formación por etapa
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600">
+            Cada ruta reúne los cursos de su etapa según su categoría en Moodle. Un curso cuenta
+            como completado solo con una constancia vigente.
+          </p>
+          <div className="grid gap-3 md:grid-cols-2">
+            {rutasFormacion.map((progreso) => (
+              <TarjetaRuta key={progreso.ruta.id} progreso={progreso} />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* PESTAÑA 1: Cursos asignados en Moodle */}
       {tabActiva === "cursos" && (
         <div className="space-y-4">
@@ -635,11 +715,18 @@ export function AcademyVista({
                     s.brokerId === usuarioId &&
                     (s.status === "pendiente" || s.status === "aprobado"),
                 );
-                const constanciaVigente = constancias.find(
+                const ahora = new Date();
+                const constanciaAcreditada = constancias.find(
                   (c) =>
                     c.courseCode === curso.codigo &&
                     c.brokerId === usuarioId &&
-                    c.status === "vigente",
+                    constanciaAcreditaFormacion(estadoDeConstancia(c, ahora)),
+                );
+                const constanciaParaRecertificar = constancias.find(
+                  (c) =>
+                    c.courseCode === curso.codigo &&
+                    c.brokerId === usuarioId &&
+                    requiereRecertificacion(estadoDeConstancia(c, ahora)),
                 );
 
                 return (
@@ -704,12 +791,15 @@ export function AcademyVista({
                           </a>
                         )}
 
-                        {constanciaVigente ? (
-                          <span className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-2 text-xs font-semibold text-emerald-800">
-                            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                            Certificado ({constanciaVigente.verificationCode})
+                        {constanciaAcreditada && (
+                          <span className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-navy-900 border border-gold-600 px-4 py-2 text-xs font-semibold text-gold-100">
+                            <ShieldCheck className="w-4 h-4 text-gold-600" />
+                            Certificado ({constanciaAcreditada.verificationCode}) · vence{" "}
+                            {formatoFechaUtc(fechaVencimientoConstancia(new Date(constanciaAcreditada.issuedAt)))}
                           </span>
-                        ) : (
+                        )}
+
+                        {(!constanciaAcreditada || constanciaParaRecertificar) && (
                           <button
                             type="button"
                             disabled={cargandoAccion === `solicitar-${curso.codigo}`}
@@ -724,7 +814,9 @@ export function AcademyVista({
                             <span>
                               {solicitudExistente?.status === "pendiente"
                                 ? "Actualizar solicitud con evidencia Moodle"
-                                : "Solicitar revisión de constancia"}
+                                : constanciaParaRecertificar
+                                  ? "Solicitar recertificación"
+                                  : "Solicitar revisión de constancia"}
                             </span>
                           </button>
                         )}
@@ -790,6 +882,55 @@ export function AcademyVista({
             </div>
           )}
         </div>
+      )}
+
+      {/* PESTAÑA de gerente: progreso formativo de su equipo (alcance team) */}
+      {tabActiva === "equipo" && progresoEquipo !== null && (
+        <section aria-labelledby="equipo-academy" className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 space-y-4">
+          <div className="space-y-1">
+            <h2 id="equipo-academy" className="text-base font-bold text-slate-900">
+              Progreso formativo de tu equipo
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600">
+              Solo ves a los brokers de tu equipo. El detalle por curso sigue en Moodle.
+            </p>
+          </div>
+
+          {progresoEquipo.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-slate-300 p-6 text-center">
+              <p className="text-sm font-semibold text-slate-900">Tu equipo no tiene brokers asignados</p>
+              <p className="mt-1 text-xs text-slate-600">Cuando te asignen brokers, aparecerá aquí su avance.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="text-xs uppercase text-slate-500">
+                  <tr>
+                    <th scope="col" className="py-2 pr-3 font-semibold">Broker</th>
+                    <th scope="col" className="py-2 pr-3 font-semibold">Constancias vigentes</th>
+                    <th scope="col" className="py-2 pr-3 font-semibold">Por vencer</th>
+                    <th scope="col" className="py-2 pr-3 font-semibold">Vencidas</th>
+                    <th scope="col" className="py-2 font-semibold">Solicitudes pendientes</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {progresoEquipo.map((fila) => (
+                    <tr key={fila.brokerId}>
+                      <td className="py-2.5 pr-3">
+                        <p className="font-semibold text-slate-900">{fila.nombre}</p>
+                        <p className="text-xs text-slate-500">{fila.email}</p>
+                      </td>
+                      <td className="py-2.5 pr-3 font-semibold text-emerald-700">{fila.constanciasAcreditadas}</td>
+                      <td className="py-2.5 pr-3 font-semibold text-amber-700">{fila.porVencer}</td>
+                      <td className="py-2.5 pr-3 font-semibold text-red-700">{fila.vencidas}</td>
+                      <td className="py-2.5 font-semibold text-slate-900">{fila.solicitudesPendientes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       )}
 
       {/* PESTAÑA 2: Revisiones y Constancias Persistidas (Regla Q-C1-03) */}
@@ -951,14 +1092,14 @@ export function AcademyVista({
                 {constancias.map((cert) => (
                   <div
                     key={cert.id}
-                    className="rounded-xl border border-slate-200 p-4 space-y-2.5"
+                    className="rounded-xl border border-navy-100 border-t-4 border-t-gold-600 bg-white p-4 space-y-2.5 shadow-sm"
                   >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-navy-900 px-3 py-2">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-xs font-mono font-bold text-amber-950">
+                        <span className="rounded bg-gold-100 border border-gold-600 px-2.5 py-0.5 text-xs font-mono font-bold text-navy-950">
                           {cert.verificationCode}
                         </span>
-                        <span className="text-sm font-bold text-slate-900">
+                        <span className="text-sm font-bold text-white">
                           {cert.courseName} ({cert.courseCode})
                         </span>
                       </div>
@@ -977,6 +1118,19 @@ export function AcademyVista({
                       Titular: <strong>{cert.brokerNombre}</strong> · Aprobada por:{" "}
                       <strong>{cert.approvedByNombre}</strong> · Fecha:{" "}
                       {new Date(cert.issuedAt).toLocaleDateString("es-DO")}
+                    </p>
+
+                    <p className="text-xs text-slate-600">
+                      Vigencia:{" "}
+                      {cert.status === "revocada" ? (
+                        <strong>No aplica (revocada)</strong>
+                      ) : (
+                        <strong>
+                          vence el{" "}
+                          {formatoFechaUtc(fechaVencimientoConstancia(new Date(cert.issuedAt)))} ·{" "}
+                          {ETIQUETA_ESTADO[estadoDeConstancia(cert, new Date())]}
+                        </strong>
+                      )}
                     </p>
 
                     <p className="text-[11px] font-mono text-slate-500 break-all">
@@ -1043,9 +1197,9 @@ export function AcademyVista({
               {contenidos.map((item) => (
                 <div
                   key={item.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-3"
+                  className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm space-y-3"
                 >
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div>
                       <span className="text-xs font-semibold text-amber-800">
                         {item.category}
@@ -1060,6 +1214,10 @@ export function AcademyVista({
                     </span>
                   </div>
 
+                  {item.videoUrl && (
+                    <ReproductorLeccion titulo={item.title} videoUrl={item.videoUrl} />
+                  )}
+
                   {item.checklistItems.length > 0 && (
                     <div className="space-y-2 pt-2 border-t border-slate-100">
                       {item.checklistItems.map((paso) => (
@@ -1067,16 +1225,19 @@ export function AcademyVista({
                           key={paso.id}
                           type="button"
                           disabled={cargandoAccion === `step-${paso.id}`}
+                          aria-pressed={paso.isCompleted}
                           onClick={() =>
                             alternarPasoChecklist(item.id, paso.id, paso.isCompleted)
                           }
-                          className="w-full min-h-[44px] flex items-center gap-3 rounded-xl border border-slate-200 px-3.5 py-2.5 text-left text-xs sm:text-sm hover:bg-slate-50 transition-colors"
+                          className="w-full min-h-[44px] flex items-center gap-3 rounded-xl border border-slate-200 px-3.5 py-3 text-left text-sm hover:bg-slate-50 active:bg-slate-100 transition-colors disabled:opacity-50"
                         >
                           <input
                             type="checkbox"
                             checked={paso.isCompleted}
                             readOnly
-                            className="h-4 w-4 rounded border-slate-300 text-amber-600"
+                            tabIndex={-1}
+                            aria-hidden="true"
+                            className="h-5 w-5 shrink-0 rounded border-slate-300 text-amber-600"
                           />
                           <span
                             className={
@@ -1098,5 +1259,48 @@ export function AcademyVista({
         </div>
       )}
     </div>
+  );
+}
+
+function TarjetaRuta({ progreso }: { progreso: ProgresoRutaFormacion }) {
+  const { ruta, total, completados, porcentaje, cursos } = progreso;
+  return (
+    <article className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2.5">
+      <div className="flex items-start justify-between gap-2">
+        <div className="space-y-0.5">
+          <h3 className="text-sm font-semibold text-slate-900">{ruta.nombre}</h3>
+          <p className="text-xs text-slate-600">{ruta.descripcion}</p>
+        </div>
+        <span className="shrink-0 text-xs font-semibold text-slate-700">
+          {completados}/{total}
+        </span>
+      </div>
+
+      <div
+        role="progressbar"
+        aria-label={`Avance de ${ruta.nombre}`}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={porcentaje}
+        className="h-2 overflow-hidden rounded-full bg-slate-200"
+      >
+        <div className="h-full bg-emerald-600" style={{ width: `${porcentaje}%` }} />
+      </div>
+
+      {total === 0 ? (
+        <p className="text-xs text-slate-500">Todavía no hay cursos en esta etapa.</p>
+      ) : (
+        <ul className="space-y-1">
+          {cursos.map((curso) => (
+            <li key={curso.codigo} className="flex items-center justify-between gap-2 text-xs">
+              <span className="text-slate-800">{curso.nombre}</span>
+              <span className="shrink-0 font-semibold text-slate-600">
+                {ETIQUETA_ESTADO[curso.estado]}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </article>
   );
 }
