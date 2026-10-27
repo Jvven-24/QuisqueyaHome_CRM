@@ -55,7 +55,8 @@ export async function ejecutarIdempotente(
     await almacen.liberar(actorId, operation, key);
     throw error;
   }
-  if (respuesta.ok) await almacen.completar(actorId, operation, key, respuesta.status);
+  // La escritura ya se confirmó: si falla el cierre del comando no se convierte en 500.
+  if (respuesta.ok) await almacen.completar(actorId, operation, key, respuesta.status).catch(() => {});
   else await almacen.liberar(actorId, operation, key);
   return respuesta;
 }

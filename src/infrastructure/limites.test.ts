@@ -13,8 +13,8 @@ test("limitador: corta al superar el máximo y se reabre tras la ventana", () =>
   assert.equal(l.consumir("a"), null);
 });
 
-test("ip: toma la primera de x-forwarded-for", () => {
-  assert.equal(ipCliente(new Request("http://x", { headers: { "x-forwarded-for": "1.2.3.4, 5.6.7.8" } })), "1.2.3.4");
+test("ip: toma el último salto (Caddy) de x-forwarded-for", () => {
+  assert.equal(ipCliente(new Request("http://x", { headers: { "x-forwarded-for": "1.2.3.4, 5.6.7.8" } })), "5.6.7.8");
 });
 
 test("tamaño: 413 por content-length y por bytes reales", async () => {
@@ -22,4 +22,11 @@ test("tamaño: 413 por content-length y por bytes reales", async () => {
   const r = await leerJsonLimitado(new Request("http://x", { method: "POST", body: JSON.stringify({ a: "x".repeat(2000) }) }), 1000);
   assert.ok(r instanceof Response && r.status === 413);
   assert.deepEqual(await leerJsonLimitado(new Request("http://x", { method: "POST", body: "{\"a\":1}" }), 1000), { a: 1 });
+});
+
+test("bloqueado no gasta intento", () => {
+  const l = crearLimitador(1, 1000, () => 0);
+  assert.equal(l.bloqueado("a"), null);
+  assert.equal(l.consumir("a"), null);
+  assert.equal(l.bloqueado("a"), 1);
 });

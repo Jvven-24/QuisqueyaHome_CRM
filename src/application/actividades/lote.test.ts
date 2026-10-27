@@ -25,9 +25,10 @@ test("pack: crea todas las tareas en una sola unidad", async () => {
 });
 
 test("pack: si una falla no queda ninguna creada", async () => {
-  const { deps, auditoria } = montar();
+  const { deps, auditoria, actividades } = montar();
   await assert.rejects(crearActividadesEnLote(deps, broker, "own", [tarea("Uno"), { ...tarea("Dos"), status: "completed" }]), ValidationError);
   assert.equal(auditoria.registros.length, 0);
+  assert.equal(actividades.filas.length, 0);
 });
 
 test("pack vacío: error de validación", async () => {

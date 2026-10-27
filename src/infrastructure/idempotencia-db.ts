@@ -1,6 +1,6 @@
 /** Adaptador Postgres de `idempotencia.ts` sobre `transaction_commands`. */
 
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, lt, sql } from "drizzle-orm";
 import { requireActor } from "./auth/actor";
 import { getDb } from "./db/client";
 import { transactionCommands } from "./db/schema";
@@ -14,10 +14,12 @@ function donde(actorId: number, operation: string, key: string) {
 export const almacenIdempotenciaDb: AlmacenIdempotencia = {
   async reservar(actorId, operation, key, requestHash) {
     const db = getDb();
+    // Una reserva `processing` de más de 2 min es de un proceso caído: se libera.
+    await db.delete(transactionCommands).where(and(donde(actorId, operation, key), eq(transactionCommands.status, "processing"), lt(transactionCommands.createdAt, sql`clock_timestamp() - interval '2 minutes'`)));
     const insertado = await db
       .insert(transactionCommands)
       .values({ actorId, operation, idempotencyKey: key, requestHash, status: "processing" })
-      .onConflictDoNothing()
+      .onConflictDoNothing({ target: [transactionCommands.actorId, transactionCommands.operation, transactionCommands.idempotencyKey] })
       .returning({ id: transactionCommands.id });
     if (insertado.length) return null;
     const [fila] = await db

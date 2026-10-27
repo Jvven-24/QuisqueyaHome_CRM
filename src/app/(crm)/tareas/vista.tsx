@@ -2914,6 +2914,8 @@ function ModalDesplegarPackBroker({
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const enviandoPackRef = useRef(false);
+  // Misma clave en los reintentos del mismo pack: el servidor no lo duplica.
+  const claveLoteRef = useRef<string | null>(null);
 
   const playbook = useMemo(
     () => PLAYBOOKS_INMOBILIARIOS.find((p) => p.id === playbookId) ?? PLAYBOOKS_INMOBILIARIOS[0]!,
@@ -2955,7 +2957,7 @@ function ModalDesplegarPackBroker({
       });
       const res = await fetch("/api/actividades/lote", {
         method: "POST",
-        headers: { "content-type": "application/json", "Idempotency-Key": crypto.randomUUID() },
+        headers: { "content-type": "application/json", "Idempotency-Key": (claveLoteRef.current ??= crypto.randomUUID()) },
         body: JSON.stringify({ actividades }),
       });
       const cuerpo = (await res.json().catch(() => ({}))) as { creadas?: number; error?: string };
@@ -2964,6 +2966,7 @@ function ModalDesplegarPackBroker({
         setError(cuerpo.error ?? "No se pudo desplegar la secuencia de tareas. No se creó ninguna; puedes reintentar.");
         return;
       }
+      claveLoteRef.current = null;
       if (creadas > 0) {
         const nombreBroker =
           personas.find((p) => String(p.id) === assigneeId)?.fullName ?? "el broker";

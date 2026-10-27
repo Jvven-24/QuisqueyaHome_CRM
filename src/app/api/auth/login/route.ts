@@ -32,7 +32,8 @@ export async function POST(request: Request) {
     const cuerpo = await leerJsonLimitado(request, 8 * 1024);
     if (cuerpo instanceof Response) return cuerpo;
     const { email, password } = parseInput(LoginInput, cuerpo);
-    const esperaCorreo = limiteLoginCorreo.consumir(email.trim().toLowerCase());
+    const correo = email.trim().toLowerCase();
+    const esperaCorreo = limiteLoginCorreo.bloqueado(correo);
     if (esperaCorreo) return demasiadasPeticiones(esperaCorreo);
 
     const supabase = await serverClient();
@@ -42,6 +43,8 @@ export async function POST(request: Request) {
     });
 
     if (error || !data.user) {
+      // Solo los fallos cuentan para el límite por correo.
+      limiteLoginCorreo.consumir(correo);
       // Mensaje único a propósito: distinguir "no existe" de "contraseña mala"
       // convierte el login en un verificador de correos registrados.
       throw new UnauthorizedError("Correo o contraseña incorrectos.");

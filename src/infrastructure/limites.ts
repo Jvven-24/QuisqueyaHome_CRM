@@ -12,9 +12,20 @@ export function crearLimitador(maximo: number, ventanaMs: number, ahora: () => n
   const ventanas = new Map<string, Ventana>();
   return {
     /** `null` si se permite; si no, segundos hasta poder reintentar. */
+    /** Como `consumir`, pero sin gastar intento (para contar solo fallos). */
+    bloqueado(clave: string): number | null {
+      const actual = ventanas.get(clave);
+      const t = ahora();
+      if (!actual || t - actual.inicio >= ventanaMs || actual.cuenta < maximo) return null;
+      return Math.max(1, Math.ceil((actual.inicio + ventanaMs - t) / 1000));
+    },
     consumir(clave: string): number | null {
       const t = ahora();
-      if (ventanas.size > 10_000) for (const [k, v] of ventanas) if (t - v.inicio >= ventanaMs) ventanas.delete(k);
+      if (ventanas.size > 10_000) {
+        for (const [k, v] of ventanas) if (t - v.inicio >= ventanaMs) ventanas.delete(k);
+        // Si siguen vivas demasiadas, se vacía: mejor perder memoria del límite que la del proceso.
+        if (ventanas.size > 10_000) ventanas.clear();
+      }
       const actual = ventanas.get(clave);
       if (!actual || t - actual.inicio >= ventanaMs) {
         ventanas.set(clave, { inicio: t, cuenta: 1 });
@@ -28,7 +39,9 @@ export function crearLimitador(maximo: number, ventanaMs: number, ahora: () => n
 }
 
 export function ipCliente(request: Request): string {
-  const reenviada = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  // El último salto lo añade Caddy (proxy de confianza); los anteriores los
+  // puede inventar el cliente.
+  const reenviada = request.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim();
   return reenviada || request.headers.get("x-real-ip") || "desconocida";
 }
 
@@ -52,9 +65,29 @@ export function cuerpoDemasiadoGrande(request: Request, maxBytes: number): Respo
 export async function leerJsonLimitado(request: Request, maxBytes: number): Promise<unknown | Response> {
   const grande = cuerpoDemasiadoGrande(request, maxBytes);
   if (grande) return grande;
-  const texto = await request.text().catch(() => "");
-  if (Buffer.byteLength(texto) > maxBytes) return cuerpoDemasiadoGrande(new Request("http://x", { headers: { "content-length": String(maxBytes + 1) } }), maxBytes)!;
-  try { return JSON.parse(texto); } catch { return {}; }
+  const muyGrande = () => Response.json({ error: `El contenido supera el máximo de ${Math.round(maxBytes / 1024)} KB.` }, { status: 413 });
+  if (!request.body) {
+    const texto = await request.text().catch(() => "");
+    if (texto.length > maxBytes) return muyGrande();
+    try { return JSON.parse(texto); } catch { return {}; }
+  }
+  // Lectura por trozos: corta en cuanto se pasa del tope, aunque no haya Content-Length.
+  const lector = request.body.getReader();
+  const trozos: Uint8Array[] = [];
+  let total = 0;
+  try {
+    for (;;) {
+      const { done, value } = await lector.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) { await lector.cancel().catch(() => {}); return muyGrande(); }
+      trozos.push(value);
+    }
+  } catch { return {}; }
+  const unido = new Uint8Array(total);
+  let pos = 0;
+  for (const t of trozos) { unido.set(t, pos); pos += t.byteLength; }
+  try { return JSON.parse(new TextDecoder().decode(unido)); } catch { return {}; }
 }
 
 export const limiteLoginIp = crearLimitador(10, 60_000);

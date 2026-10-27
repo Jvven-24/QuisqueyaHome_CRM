@@ -35,7 +35,7 @@ export async function editarPermisos(
     if (actor.roleSlug !== "admin") {
       if (rol.slug && rol.slug === actor.roleSlug) throw new ForbiddenError("No puedes editar los permisos de tu propio rol.");
       for (const permiso of permisos) {
-        if (RANGO[permiso.scope] > RANGO[scopeFor(actor, permiso.resource, permiso.action)]) {
+        if ((RANGO[permiso.scope] ?? 3) > (RANGO[scopeFor(actor, permiso.resource, permiso.action)] ?? 0)) {
           throw new ForbiddenError("No puedes conceder un permiso mayor que el tuyo.");
         }
       }

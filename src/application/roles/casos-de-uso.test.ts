@@ -45,6 +45,7 @@ test("un rol no admin no concede más alcance del que tiene", async () => {
   const auditoria = auditoriaEnMemoria();
   const unidad = unidadDeTrabajoEnMemoria({ roles, auditoria }, [roles, auditoria]);
   await assert.rejects(() => editarPermisos({ unidad }, editor, 4, [{ resource: "contacts", action: "view", scope: "all" }]), ForbiddenError);
+  await assert.rejects(() => editarPermisos({ unidad }, editor, 4, [{ resource: "users", action: "delete", scope: "own" }]), ForbiddenError);
   await editarPermisos({ unidad }, editor, 4, [{ resource: "contacts", action: "view", scope: "own" }]);
   assert.equal(roles.permisos.length, 1);
 });

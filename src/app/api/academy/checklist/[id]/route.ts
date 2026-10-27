@@ -32,7 +32,7 @@ export async function PUT(
     // Anti-autocertificación (auditoría 27/10/2026): solo quien edita Academy
     // (tutor o administrador) puede dar un contenido o paso por completado.
     if ((datos.isCompleted) && !can(actor, "academy", "edit")) {
-      return Response.json({ error: "Un tutor o administrador debe validar la finalización. Tu avance parcial sí se guarda." }, { status: 403 });
+      return Response.json({ error: "Un tutor o administrador debe validar la finalización. Pídele que marque este paso." }, { status: 403 });
     }
 
     const resultado = await academyRepositorio().ejecutar(async (repo) => {
