@@ -305,7 +305,9 @@ export function repositorioReservas(tx: Tx): ReservasPort {
           version: 1,
           aggregateId: holdExistente.id,
           correlationId: params.correlationId,
-          idempotencyKey: params.idempotencyKey,
+          // Clave propia: el evento de la reserva usa la del comando y
+          // `outbox_idempotency_unq` hacía fallar (500) toda conversión hold → reserva.
+          idempotencyKey: `${params.idempotencyKey}:HoldConvertido`,
           payload: {
             publicId: holdExistente.publicId,
             aggregateVersion: holdExistente.rowVersion,
