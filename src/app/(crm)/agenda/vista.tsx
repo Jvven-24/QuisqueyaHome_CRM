@@ -34,7 +34,7 @@ import {
 import { formatoFechaIcs, generarIcs } from "@/domain/ics";
 import { fechaSantoDomingo, horaSantoDomingo, sumarDias } from "@/domain/zona-horaria";
 import { intervalosSeSolapan } from "./_componentes/operaciones";
-import { destinoGuardadoCita, idActividadCreada } from "./_lib/guardado-cita";
+import { destinoGuardadoCita } from "./_lib/guardado-cita";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 
@@ -1220,8 +1220,7 @@ function ModalCita({
 
   // Si el POST creó la cita pero falló Google, el modal pasa a editar ese id:
   // un segundo «Guardar» no puede volver a crearla.
-  const [idCreado, setIdCreado] = useState<number | null>(null);
-  const destino = destinoGuardadoCita(cita?.id, idCreado);
+  const destino = destinoGuardadoCita(cita?.id, null);
   const esEdicion = destino.method === "PATCH";
   const bloqueadoCrear = !esEdicion && !puedeCrear;
 
@@ -1359,15 +1358,13 @@ function ModalCita({
       }
 
       if (typeof cuerpo.google?.error === "string") {
-        const creada = method === "POST" ? idActividadCreada(cuerpo) : null;
-        if (method === "POST" && creada === null) {
-          // Sin id no se puede editar lo creado: se cierra para no duplicar la cita.
-          toast.warning("Cita guardada; Google no respondió.");
+        if (method === "POST") {
+          // La cita ya existe: se cierra el modal para no duplicarla ni exigir permiso de edición (PATCH).
+          toast.warning("Cita creada en la agenda; Google no respondió. Reintenta la sincronización desde la cita.");
           router.refresh();
           onClose();
           return;
         }
-        if (creada !== null) setIdCreado(creada);
         setAvisoParcial("La cita se guardó en la agenda, pero Google no respondió. La cita sigue disponible en el CRM; revisa la integración antes de reintentar la sincronización.");
         toast.warning("Cita guardada; Google no respondió.");
         router.refresh();
