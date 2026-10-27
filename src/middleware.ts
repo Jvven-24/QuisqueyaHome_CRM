@@ -32,6 +32,7 @@ const PUBLIC_PATHS = [
   "/recuperar",
   "/api/auth",
   "/api/leads/externo",
+  "/api/health",
   "/manifest.json",
   "/favicon.ico",
 ];
