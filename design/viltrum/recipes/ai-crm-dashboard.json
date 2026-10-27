@@ -1,0 +1,54 @@
+{
+  "id": "ai-crm-dashboard",
+  "name": "AI CRM Dashboard",
+  "description": "Full-stack CRM con pipeline de ventas, lista de cuentas, notas y chat IA para interacción de registros.",
+  "visualFamily": "enterprise-dense",
+  "category": "CRM & Gestión Comercial",
+  "sourceAppId": "1096",
+  "slots": {
+    "navigation": {
+      "type": "navigation",
+      "componentId": "1323"
+    },
+    "hero": {
+      "type": "hero",
+      "componentId": "19"
+    },
+    "dashboard-kpi": {
+      "type": "dashboard-kpi",
+      "componentId": "25"
+    },
+    "feature-grid": {
+      "type": "feature-grid",
+      "componentId": "64"
+    },
+    "data-display": {
+      "type": "data-display",
+      "componentId": "10457"
+    },
+    "form-input": {
+      "type": "form-input",
+      "componentId": "3824"
+    },
+    "overlay": {
+      "type": "overlay",
+      "componentId": "731"
+    },
+    "footer": {
+      "type": "footer",
+      "componentId": "10478"
+    }
+  },
+  "layout": "standard-fluid",
+  "qualityGates": [
+    "G0",
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "G6",
+    "G7",
+    "G8"
+  ]
+}

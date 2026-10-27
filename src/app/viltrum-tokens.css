@@ -1,0 +1,25 @@
+/* Tokens Viltrum Design v2.1 — SOLO los que el CRM aún no define.
+   Aditivo: no pisa ningún token de src/app/tokens.css (ver design/viltrum/ y
+   /workspace/crm-plan/VILTRUM-DESIGN-PLAN.md). Fuente: design/viltrum/tokens.css */
+:root {
+  --ink-secondary: #334155;    /* Slate 700 para párrafos y descripciones */
+  --gold-border: rgba(199, 153, 14, 0.35);
+  --success-soft: #ECFDF5;
+  --warning-soft: #FFFBEB;
+  --danger-soft: #FEF2F2;
+  --info-soft: #F0F9FF;
+  --radius-xs: 4px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  --shadow-2xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.07);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.08);
+  --shadow-luxury: 0 20px 25px -5px rgba(12, 19, 34, 0.12), 0 8px 10px -6px rgba(12, 19, 34, 0.08);
+  --duration-fast: 150ms;
+  --duration-normal: 220ms;
+  --duration-slow: 350ms;
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --focus-ring: 0 0 0 3px rgba(199, 153, 14, 0.45);
+}

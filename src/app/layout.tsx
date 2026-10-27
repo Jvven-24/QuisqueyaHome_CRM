@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Atkinson_Hyperlegible_Next, Hanken_Grotesk } from "next/font/google";
 import "./tokens.css";
+import "./viltrum-tokens.css";
 
 /**
  * Fuentes del sistema de diseño (T5), portadas de

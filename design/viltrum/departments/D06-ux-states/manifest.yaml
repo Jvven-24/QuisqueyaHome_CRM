@@ -1,0 +1,64 @@
+id: D06
+slug: ux-states
+name: Estados, resiliencia y microinteracciones
+family: F2
+
+department_version: 1.2.0
+reviewed_at: 2026-09-24
+reviewed_by: pendiente
+eval_score: null
+
+autonomy: A1
+model: sonnet
+reviewer: D14
+
+tools:
+  read:   [inventario de pantallas de D04, composicion de D05, recorridos criticos, contratos de API, open-design-mcp]
+  write:  [matriz pantalla x estado, catalogo de mensajes de error, especificacion de componentes con estados]
+  execute: [navegador para reproducir errores, timeouts y desconexion, open-design-mcp]
+  forbidden:
+    - aprobar su propio trabajo
+    - decidir composicion visual final de la pantalla
+    - decidir estrategia de resolucion de conflictos de datos sin D01/D11
+
+skills:
+  verificacion_en_navegador: [browser-automation, playwright-cli]
+  exploracion_de_microinteraccion: [ui-design, ui-ux-pro-max, open-design]
+  animacion_de_transicion: [emilkowal-animations, framer-motion, gsap-framer-scroll-animation]
+  auditoria: [21st-ui-review, web-design-guidelines, code-review]
+  accesibilidad_de_estados: accessibility
+
+subagents:
+  can_create: true
+  purpose: reproducir estados de error, timeout y desconexion en un entorno controlado
+  model: sonnet
+
+outputs:
+  - matriz pantalla x estado completa
+  - catalogo de mensajes de error con estructura que-paso + que-hacer
+  - especificacion de skeletons por tipo de contenido
+  - especificacion de reintentos, timeouts y cola offline
+  - especificacion de conflictos de edicion concurrente
+  - especificacion de confirmaciones destructivas y deshacer
+  - estados de componentes verificados en ejecucion
+
+checklists:
+  - checklists/states-matrix.md
+  - checklists/error-catalog.md
+
+source_manifest:
+  - "core/doctrine/ux-states.md — los seis estados obligatorios y presupuesto de formularios (repositorio interno)"
+  - "Sistema de Perfiles IA — Perfil 06 (Drive, 2026-08-19)"
+  - "Nielsen Norman Group — Error Message Guidelines (nngroup.com/articles/error-message-guidelines, consultado 2026-09-24)"
+
+known_limits:
+  - No verifica accesibilidad profunda de los estados (contraste, anuncio a lector de pantalla); eso lo cierra D07
+  - No decide la estrategia de resolucion de conflictos de datos; depende de D01/D11 cuando no esta definida
+  - No mide si los tiempos de carga reales cumplen un presupuesto de rendimiento; eso es D15
+  - Sin skill instalada de monitoreo de errores en produccion (Sentry o equivalente); la verificacion de estados reales depende de lo que D17 reporte
+  - El catalogo de mensajes de error esta redactado en espanol neutro de agencia; el tono final de marca lo cierra D08 cuando existe guia de voz
+
+changelog: CHANGELOG.md
+
+delivery_protocol: sops/delivery.md
+local_skill: viltrum-ux-states

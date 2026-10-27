@@ -1,0 +1,43 @@
+{
+  "id": "enterprise-crm-hub",
+  "name": "Enterprise CRM Hub",
+  "description": "High-density CRM dashboard with timeline and KPIs.",
+  "visualFamily": "Enterprise Dense",
+  "slots": {
+    "sidebar": {
+      "type": "navigation",
+      "componentId": "collapsible-sidebar-v2",
+      "props": {
+        "density": "compact",
+        "items": ["Dashboard", "Contacts", "Deals", "Reports"]
+      }
+    },
+    "topbar": {
+      "type": "kpi",
+      "componentId": "kpi-strip-dense",
+      "props": {
+        "metrics": ["Total Revenue", "Active Deals", "Win Rate", "Avg Cycle"]
+      }
+    },
+    "content": {
+      "type": "grid",
+      "componentId": "data-table-grid-pro",
+      "props": {
+        "sortable": true,
+        "filterable": true,
+        "pagination": true,
+        "density": "compact"
+      }
+    },
+    "aside": {
+      "type": "timeline",
+      "componentId": "activity-timeline-feed",
+      "props": {
+        "showTimestamps": true,
+        "groupedByDate": true
+      }
+    }
+  },
+  "layout": "dashboard-standard",
+  "qualityGates": ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"]
+}

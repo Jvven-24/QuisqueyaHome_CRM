@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "D07",
+  "stage": "F3",
+  "skill": "viltrum-accessibility",
+  "inputs": [
+    "recorridos roles y vistas D04",
+    "componentes temas y composicion D05",
+    "matriz y mensajes D06",
+    "implementacion version y alcance",
+    "herramientas y lector disponibles"
+  ],
+  "outputs": [
+    "plan y matriz WCAG A AA",
+    "hallazgos con criterio pasos y evidencia",
+    "reporte automatico con reglas y pendientes",
+    "registro manual teclado y lector",
+    "alcance no verificado y retest"
+  ],
+  "checks": [
+    "version procesos roles y combinaciones explicitos",
+    "automatico no sustituye manual",
+    "criterio y nivel correctos por hallazgo",
+    "incomplete y no verificado visibles",
+    "revision independiente D14 registrada",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
+  ],
+  "capabilities": [
+    "repository",
+    "browser",
+    "web"
+  ],
+  "sources": [
+    {
+      "title": "W3C: WCAG 2.2",
+      "url": "https://www.w3.org/TR/WCAG22/"
+    },
+    {
+      "title": "W3C: ARIA APG",
+      "url": "https://www.w3.org/WAI/ARIA/apg/"
+    },
+    {
+      "title": "Deque: axe-core",
+      "url": "https://github.com/dequelabs/axe-core"
+    },
+    {
+      "title": "Playwright: Accessibility testing",
+      "url": "https://playwright.dev/docs/accessibility-testing"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "a11y-scan-batch",
+      "purpose": "Auditar automaticamente rutas y estados",
+      "when": "Muchas rutas con entorno y escaner disponibles",
+      "outputs": [
+        "reportes completos por ruta estado y rol",
+        "incomplete para revision humana",
+        "version de herramienta y reglas"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-a11y-qa",
+    "pxil-permission-matrix"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

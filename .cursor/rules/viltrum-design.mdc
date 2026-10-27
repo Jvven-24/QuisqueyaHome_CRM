@@ -1,0 +1,9 @@
+# Viltrum Design System — Cursor Rules
+You are an expert Frontend Architect and UI/UX Designer using the Viltrum Design System.
+
+## Core Rules:
+1. Standards: Follow the 'Private Desk' luxury aesthetic (deep navy #0C1322, noble gold #C7990E, ivory canvas #FAF9F6).
+2. Mobile First & Accessibility: All touch targets must be at least 44x44px. Support WCAG 2.2 AA contrast.
+3. No Simulated provenance: Reuse real components from the Viltrum catalog or official shadcn/21st.dev commands.
+4. Component states: Every interactive flow must handle 6 states: loading, empty, error, offline, success, and permissions.
+5. Tokens: Always use CSS variables (--canvas, --surface, --ink, --line, --navy-950, --gold-600) rather than hardcoded hex values.

@@ -1,0 +1,100 @@
+/* ==========================================================================
+   VILTRUM DESIGN SYSTEM — SEMANTIC DESIGN TOKENS
+   Standard: Private Desk, Luxury Hospitality & Executive Fintech
+   ========================================================================== */
+
+:root {
+  /* Lienzo y Superficies Principales */
+  --canvas: #FAF9F6;           /* Marfil cálido institucional */
+  --surface: #FFFFFF;          /* Fondo tarjetas y contenedores */
+  --surface-raised: #FFFFFF;   /* Modales, flyouts y dropdowns */
+  --surface-alt: #F8FAFC;      /* Franjas alternas y tablas */
+  --surface-hover: #F1F5F9;    /* Hover sobre filas y tarjetas */
+
+  /* Tipografía y Textos */
+  --ink: #0F172A;              /* Slate 900 de máximo contraste */
+  --ink-secondary: #334155;    /* Slate 700 para párrafos y descripciones */
+  --muted: #64748B;            /* Slate 500 para etiquetas y micro-copia */
+  --line: #E2E8F0;             /* Líneas divisorias y bordes estándar */
+  --line-strong: #94A3B8;      /* Bordes activos y divisores de foco */
+
+  /* Identidad y Acento Noble (Prestige Navy & Gold) */
+  --navy-950: #0C1322;         /* Navy profundo de tarjetas maestras y cabeceras */
+  --navy-900: #10172D;         /* Navy para barras de navegación y branding */
+  --navy-800: #1E293B;         /* Navy suave para chips secundarios */
+  --gold-600: #C7990E;         /* Oro noble para llamadas de acción y estados VIP */
+  --gold-700: #9B7300;         /* Oro de contraste WCAG AA para textos sobre blanco */
+  --gold-soft: #FEF9C3;        /* Fondo pastillas y badges dorados */
+  --gold-border: rgba(199, 153, 14, 0.35);
+
+  /* Semáforos Comerciales y Estados */
+  --success: #10B981;          /* Verde esmeralda (Confirmado, Pagado, Activo) */
+  --success-soft: #ECFDF5;
+  --warning: #F59E0B;          /* Ámbar tibio (Pendiente, En revisión) */
+  --warning-soft: #FFFBEB;
+  --danger: #EF4444;           /* Rojo caribeño (Cancelado, Error crítico) */
+  --danger-soft: #FEF2F2;
+  --info: #0284C7;             /* Azul cielo de navegación */
+  --info-soft: #F0F9FF;
+
+  /* Radios de Curvatura */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Sombras Multicapa Sutiles */
+  --shadow-2xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.07);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.08);
+  --shadow-luxury: 0 20px 25px -5px rgba(12, 19, 34, 0.12), 0 8px 10px -6px rgba(12, 19, 34, 0.08);
+
+  /* Transiciones y Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 220ms;
+  --duration-slow: 350ms;
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Accesibilidad: Anillo de Foco */
+  --focus-ring: 0 0 0 3px rgba(199, 153, 14, 0.45);
+}
+
+/* Modo Oscuro (Dark Prestige) */
+.dark, [data-theme="dark"] {
+  --canvas: #090D16;
+  --surface: #0F172A;
+  --surface-raised: #1E293B;
+  --surface-alt: #131D31;
+  --surface-hover: #1E293B;
+
+  --ink: #F8FAFC;
+  --ink-secondary: #CBD5E1;
+  --muted: #94A3B8;
+  --line: #1E293B;
+  --line-strong: #334155;
+
+  --navy-950: #050811;
+  --navy-900: #090D16;
+  --navy-800: #10172D;
+  --gold-600: #EAB308;
+  --gold-700: #FACC15;
+  --gold-soft: rgba(234, 179, 8, 0.15);
+  --gold-border: rgba(234, 179, 8, 0.35);
+
+  --success-soft: rgba(16, 185, 129, 0.15);
+  --warning-soft: rgba(245, 158, 11, 0.15);
+  --danger-soft: rgba(239, 68, 68, 0.15);
+  --info-soft: rgba(2, 132, 199, 0.15);
+
+  --shadow-2xs: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px -1px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
+  --shadow-luxury: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
+
+  --focus-ring: 0 0 0 3px rgba(234, 179, 8, 0.55);
+}

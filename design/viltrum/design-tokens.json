@@ -1,0 +1,79 @@
+{
+  "version": "2.1.0",
+  "system": "Viltrum Design System",
+  "theme": "Private Desk & Luxury Fintech",
+  "colors": {
+    "canvas": {
+      "light": "#FAF9F6",
+      "dark": "#090D16"
+    },
+    "surface": {
+      "light": "#FFFFFF",
+      "dark": "#0F172A"
+    },
+    "surface-raised": {
+      "light": "#FFFFFF",
+      "dark": "#1E293B"
+    },
+    "surface-alt": {
+      "light": "#F8FAFC",
+      "dark": "#131D31"
+    },
+    "ink": {
+      "light": "#0F172A",
+      "dark": "#F8FAFC"
+    },
+    "ink-secondary": {
+      "light": "#334155",
+      "dark": "#CBD5E1"
+    },
+    "muted": {
+      "light": "#64748B",
+      "dark": "#94A3B8"
+    },
+    "line": {
+      "light": "#E2E8F0",
+      "dark": "#1E293B"
+    },
+    "line-strong": {
+      "light": "#94A3B8",
+      "dark": "#334155"
+    },
+    "navy": {
+      "950": "#0C1322",
+      "900": "#10172D",
+      "800": "#1E293B"
+    },
+    "gold": {
+      "600": "#C7990E",
+      "700": "#9B7300",
+      "soft": "#FEF9C3"
+    },
+    "status": {
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "danger": "#EF4444",
+      "info": "#0284C7"
+    }
+  },
+  "radii": {
+    "xs": "4px",
+    "sm": "6px",
+    "md": "10px",
+    "lg": "14px",
+    "xl": "20px",
+    "full": "9999px"
+  },
+  "motion": {
+    "fast": "150ms",
+    "normal": "220ms",
+    "slow": "350ms",
+    "spring": "cubic-bezier(0.16, 1, 0.3, 1)",
+    "smooth": "cubic-bezier(0.4, 0, 0.2, 1)"
+  },
+  "accessibility": {
+    "minTouchTarget": "44px",
+    "contrastRatioText": "4.5:1",
+    "contrastRatioUi": "3.0:1"
+  }
+}

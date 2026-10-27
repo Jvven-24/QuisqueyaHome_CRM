@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "D06",
+  "stage": "F3",
+  "skill": "viltrum-ux-states",
+  "inputs": [
+    "vistas roles y recorridos D04",
+    "composicion y componentes D05",
+    "garantias de API D10/D19",
+    "reglas de conflictos D11",
+    "politica de borradores y sesion D12"
+  ],
+  "outputs": [
+    "matriz vista accion estado",
+    "catalogo de errores y recuperacion",
+    "transiciones y contratos requeridos",
+    "plan de verificacion por escenarios",
+    "evidencia ejecutada cuando existe implementacion"
+  ],
+  "checks": [
+    "seis estados o inaplicabilidad justificada",
+    "recuperacion usa garantias reales",
+    "borradores respetan politica D12",
+    "conflictos y resultados desconocidos tratados",
+    "especificado implementado y verificado diferenciados",
+    "revision independiente D14 registrada",
+    "lección que afecta a otro departamento registrada en registry/lessons.json y departamentos avisados (o declarar que no aplica)"
+  ],
+  "capabilities": [
+    "repository",
+    "browser",
+    "web"
+  ],
+  "sources": [
+    {
+      "title": "Playwright: Network",
+      "url": "https://playwright.dev/docs/network"
+    },
+    {
+      "title": "Playwright: Emulation",
+      "url": "https://playwright.dev/docs/emulation"
+    },
+    {
+      "title": "W3C: ARIA APG",
+      "url": "https://www.w3.org/WAI/ARIA/apg/"
+    }
+  ],
+  "subagents": [
+    {
+      "name": "state-scenario-runner",
+      "purpose": "Reproducir fallos con fixtures seguros",
+      "when": "Implementacion en sandbox y escenarios independientes",
+      "outputs": [
+        "esperado versus real",
+        "captura o log con version",
+        "recursos afectados y limpieza"
+      ]
+    }
+  ],
+  "supporting_skills": [
+    "viltrum-pxil-design",
+    "pxil-experience-contract",
+    "pxil-permission-matrix"
+  ],
+  "design_resources": "registry/design-resources.json"
+}

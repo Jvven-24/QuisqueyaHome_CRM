@@ -142,3 +142,15 @@ This project is indexed by GitNexus as **QuisqueyaHome_CRM** (10567 symbols, 196
 | Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
 
 <!-- gitnexus:end -->
+
+# Viltrum Design — base de diseño del CRM
+
+Viltrum Design v2.1 es la base de diseño oficial del CRM. Antes de crear o rediseñar cualquier pantalla:
+
+- **CLI:** `viltrum-design search <término>` (una palabra: `crm`, `kanban`, `table`), `viltrum-design get <ID>`, `viltrum-design export <ID> --to src/components/ui`, `viltrum-design tokens`. Paquete instalado en `~/.local/share/viltrum-design`.
+- **Tokens:** `src/app/tokens.css` sigue siendo la fuente canónica de valores. `src/app/viltrum-tokens.css` sólo **añade** tokens que faltaban (sombras, radios xs/xl/full, `*-soft`, `--ink-secondary`, duraciones, easing, `--focus-ring`); un test impide que pise tokens existentes. La referencia completa está en `design/viltrum/` (`tokens.css`, `tailwind.tokens.js`, `design-tokens.json`). El repo usa Tailwind v4 sin `tailwind.config`: el preset v3 se usa sólo como referencia; si se adopta, va vía `@theme` en CSS.
+- **No cambies valores de tokens existentes a los de Viltrum sin pasar D07:** varios colores Viltrum (`--success #10B981`, `--warning #F59E0B`, `--danger #EF4444`) no llegan a contraste AA como texto sobre blanco; los del CRM sí.
+- **Contratos de departamento:** `design/viltrum/departments/` — D05 (sistema de diseño), D06 (estados UX: loading/empty/error/sin permiso/éxito en cada vista), D07 (accesibilidad WCAG 2.1 AA). Toda PR de UI cumple sus checklists.
+- **Recetas de pantalla:** `design/viltrum/recipes/enterprise-crm-hub.json` (densidad compacta: sidebar colapsable, franja KPI, tabla pro, timeline lateral) y `ai-crm-dashboard.json`. Las usamos como guía de layout, no como copia literal.
+- **Reglas Cursor:** `.cursor/rules/viltrum-design.mdc`.
+- **Plan de rediseño por prioridad:** `/workspace/crm-plan/VILTRUM-DESIGN-PLAN.md`.
