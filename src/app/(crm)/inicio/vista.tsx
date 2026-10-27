@@ -103,10 +103,10 @@ export function InicioVista({
         <h2 className="font-heading text-lg font-bold text-navy-950">Cola de la jornada</h2>
         <p className="text-sm text-ink-muted">{isAssistant ? "Carga operativa y seguimiento del día" : isBroker ? "Acciones de tu cartera" : "Supervisión del equipo y pendientes"}. Cada cifra respeta el alcance de tu usuario.</p>
         <div className="flex flex-wrap gap-3 mt-3">
-          {permissions.leads && <Link className="button min-h-12" href="/leads?cola=1">Cola de primer contacto</Link>}
-          {permissions.activities && <Link className="button min-h-12" href="/tareas">Tareas pendientes · {metricas.tareasPendientesCount}</Link>}
-          {permissions.activities && <Link className="button min-h-12" href="/agenda">Citas de hoy · {metricas.citasHoyCount}</Link>}
-          {!isBroker && <Link className="button min-h-12" href="/aprobaciones">Revisar aprobaciones</Link>}
+          {permissions.leads && <Link className="button min-h-12" href="/leads?cola=1" prefetch={false}>Cola de primer contacto</Link>}
+          {permissions.activities && <Link className="button min-h-12" href="/tareas" prefetch={false}>Tareas pendientes · {metricas.tareasPendientesCount}</Link>}
+          {permissions.activities && <Link className="button min-h-12" href="/agenda" prefetch={false}>Citas de hoy · {metricas.citasHoyCount}</Link>}
+          {!isBroker && <Link className="button min-h-12" href="/aprobaciones" prefetch={false}>Revisar aprobaciones</Link>}
         </div>
         <p role="note" className="text-sm text-ink-muted mt-3">Alertas de SLA y contador de aprobaciones: pendientes de un servicio operativo; no se presentan como cero.</p>
       </section>
@@ -126,7 +126,7 @@ export function InicioVista({
           {label:"Negocios activos",value:metricas.negociosActivosCount,help:metricas.volumenPipelineDisplay,href:"/negocios",allowed:permissions.deals},
           {label:"Cierres del mes",value:metricas.cierresMesCount,help:"Negocios ganados este mes",href:"/negocios",allowed:permissions.deals},
           {label:"Cierres / captaciones",value:metricas.conversionPorcentaje,help:"Cierres ganados del mes / leads recibidos este mes; poblaciones distintas, no conversión de cohorte",href:"/reportes",allowed:permissions.leads&&permissions.deals},
-        ]).map(kpi=><article key={kpi.label} className="rounded-xl border border-line bg-surface p-4 min-w-0"><h2 className="text-[13px] text-ink-muted font-semibold">{kpi.label}</h2>{kpi.allowed?<><p className="font-heading text-2xl font-bold text-navy-950 tabular-nums break-words">{typeof kpi.value==="number"?formatNumber(kpi.value):kpi.value}</p><p className="text-[13px] text-ink-muted">{kpi.help}</p><Link href={kpi.href} className="inline-flex min-h-12 items-center text-sm font-semibold text-navy-900 underline">Consultar</Link></>:<p role="note" className="text-sm text-ink-muted">Tu rol no tiene permiso para consultar este indicador.</p>}</article>)}
+        ]).map(kpi=><article key={kpi.label} className="rounded-xl border border-line bg-surface p-4 min-w-0"><h2 className="text-[13px] text-ink-muted font-semibold">{kpi.label}</h2>{kpi.allowed?<><p className="font-heading text-2xl font-bold text-navy-950 tabular-nums break-words">{typeof kpi.value==="number"?formatNumber(kpi.value):kpi.value}</p><p className="text-[13px] text-ink-muted">{kpi.help}</p><Link href={kpi.href} prefetch={false} className="inline-flex min-h-12 items-center text-sm font-semibold text-navy-900 underline">Consultar</Link></>:<p role="note" className="text-sm text-ink-muted">Tu rol no tiene permiso para consultar este indicador.</p>}</article>)}
       </section>
 
       {/* ── BANDEJA DE ACCESOS RÁPIDOS OPERATIVOS ─────────────────────────────── */}
@@ -214,7 +214,7 @@ export function InicioVista({
               <div className="text-center py-8 px-4 text-ink-muted text-sm space-y-2">
                 <p>No hay leads pendientes en este momento.</p>
                 {permissions.createLead && (
-                  <Link href="/leads" className="inline-flex min-h-12 items-center gap-1.5 text-sm font-bold text-gold-700 hover:underline">
+                  <Link href="/leads" prefetch={false} className="inline-flex min-h-12 items-center gap-1.5 text-sm font-bold text-gold-700 hover:underline">
                     <span>Crear un nuevo lead</span>
                     <ArrowRight className="size-4" />
                   </Link>
@@ -244,7 +244,7 @@ export function InicioVista({
                         </div>
                         <div className="min-w-0">
                           <Link
-                            href={`/leads/${lead.id}`}
+                            href={`/leads/${lead.id}`} prefetch={false}
                             className="font-bold text-sm text-navy-950 hover:text-gold-700 transition-colors block break-words"
                           >
                             {lead.name}
@@ -369,7 +369,7 @@ export function InicioVista({
             {citas.length === 0 ? (
               <div className="text-center py-6 text-sm text-ink-muted">
                 <p>Sin citas registradas para hoy.</p>
-                <Link href="/agenda" className="inline-flex min-h-12 items-center text-gold-700 font-bold hover:underline mt-1">
+                <Link href="/agenda" prefetch={false} className="inline-flex min-h-12 items-center text-gold-700 font-bold hover:underline mt-1">
                   + Programar actividad
                 </Link>
               </div>
@@ -418,7 +418,7 @@ export function InicioVista({
                 </h2>
               </div>
               <Link
-                href={isBroker ? "/academy" : "/propiedades"}
+                href={isBroker ? "/academy" : "/propiedades"} prefetch={false}
                 className="inline-flex min-h-12 items-center gap-1.5 px-3 rounded-lg text-[13px] font-bold text-navy-900 hover:text-gold-700 transition-colors"
               >
                 <span>{isBroker ? "Cursos" : "Catálogo"}</span>
@@ -476,7 +476,7 @@ export function InicioVista({
                       </div>
                     </div>
                     <Link
-                      href={`/propiedades`}
+                      href={`/propiedades`} prefetch={false}
                       className="inline-flex min-h-12 min-w-12 rounded-xl bg-white border border-line items-center justify-center text-slate-600 hover:text-navy-950 hover:border-gold-600 transition-colors shadow-2xs"
                       title="Ver proyecto"
                     >

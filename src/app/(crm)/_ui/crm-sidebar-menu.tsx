@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search, X, ChevronDown } from "lucide-react";
@@ -39,8 +39,18 @@ export function CrmSidebarMenu({
 
   const activePath = pendingRoute ?? pathname;
 
+  useEffect(() => {
+    if (!pendingRoute) return;
+    const timer = window.setTimeout(() => setPendingRoute(null), 2500);
+    return () => window.clearTimeout(timer);
+  }, [pendingRoute]);
+
   const handleNavigate = (ruta: string) => {
-    setPendingRoute(ruta);
+    if (ruta !== pathname) {
+      setPendingRoute(ruta);
+    } else {
+      setPendingRoute(null);
+    }
     if (isMobile) {
       setOpenMobile(false);
     }
@@ -83,10 +93,10 @@ export function CrmSidebarMenu({
             <button
               type="button"
               onClick={() => setFilterQuery("")}
-              className="absolute right-2 p-0.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="absolute right-0 size-11 inline-flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
               aria-label="Limpiar búsqueda"
             >
-              <X className="size-3" />
+              <X className="size-3.5" />
             </button>
           ) : (
             <kbd className="absolute right-2 text-[10px] font-mono text-slate-400/50 pointer-events-none">

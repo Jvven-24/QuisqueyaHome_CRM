@@ -126,6 +126,9 @@ export default async function AgendaPage({
     const cont = c.contactId ? mapaContactos.get(c.contactId) : undefined;
     return {
       ...c,
+      projectId: proy ? c.projectId : null,
+      dealId: neg ? c.dealId : null,
+      contactId: cont ? c.contactId : null,
       projectName: proy ? proy.name : null,
       dealTitle: neg ? neg.title || `Negocio #${neg.id}` : null,
       contactName: cont ? cont.fullName : null,
