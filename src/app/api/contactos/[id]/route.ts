@@ -2,22 +2,18 @@
  * M1 · Contactos — edición y borrado lógico (`docs/F1_ANALISIS_Y_PLAN.md` paso 3).
  *
  * Mismo patrón que `../route.ts`: `parseInput` → `requireActor` +
- * `requireScope` → `transaction` con `auditar` dentro → `errorResponse`. El
- * alcance del actor filtra qué fila puede tocar (`visibleRows`), igual que en
- * la lectura de `page.tsx` — no se reescribe el filtro a mano.
+ * `requireScope` → caso de uso → `errorResponse`. El alcance del actor filtra
+ * qué fila puede tocar dentro del repositorio (`visibleRows`) — no se reescribe
+ * el filtro a mano.
  */
 
-import { and, eq } from "drizzle-orm";
 import { z } from "zod";
-import { ForbiddenError, NotFoundError } from "@/domain/errors";
+import { borrarContacto, editarContacto, type EntradaEditarContacto } from "@/application/contactos/casos-de-uso";
+import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
-import { normalizarTelefono } from "@/domain/telefono";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction, type Db } from "@/infrastructure/db/client";
-import { contacts } from "@/infrastructure/db/schema";
+import { contactosParaEscritura } from "@/infrastructure/contenedor/contactos";
 import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
-import { visibleRows } from "@/infrastructure/rbac-filter";
 
 /**
  * Edición parcial: todo opcional. `null` explícito borra el campo (por
@@ -38,22 +34,6 @@ const EditarContactoInput = z.object({
   brokerId: z.coerce.number().int().positive().optional(),
 });
 
-type Tx = Parameters<Parameters<Db["transaction"]>[0]>[0];
-
-async function contactoVisible(
-  tx: Tx,
-  id: number,
-  actor: Awaited<ReturnType<typeof requireActor>>,
-  scope: Parameters<typeof visibleRows>[1],
-) {
-  const [fila] = await tx
-    .select()
-    .from(contacts)
-    .where(and(eq(contacts.id, id), visibleRows(actor, scope, contacts.brokerId, contacts.deletedAt)))
-    .limit(1);
-  return fila;
-}
-
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idParam } = await params;
@@ -67,50 +47,21 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const actor = await requireActor();
     const scope = requireScope(actor, "contacts", "edit");
 
-    // Reasignar el responsable es una decisión de cartera, no de edición de
-    // ficha (decisión de la deuda de F1, issue #21): solo quien ve y edita
-    // toda la cartera (`scope: "all"`) puede mover un contacto de un broker a
-    // otro. Un broker con `own` podría, si no fuera por esto, "regalarse" el
-    // contacto de otro con la misma llamada que corrige un teléfono.
-    if (datos.brokerId !== undefined && scope !== "all") {
-      throw new ForbiddenError("Solo un administrador o asistente puede reasignar el responsable de un contacto.");
-    }
+    // La regla de reasignar (solo alcance `all`) vive en `editarContacto`.
+    //
+    // Se copian solo las claves PRESENTES en `datos`, nunca `...datos` ni
+    // `entrada.phone = datos.phone` a secas: para el caso de uso `null` borra el
+    // campo y ausente lo deja igual, y `{ phone: undefined }` contaría como
+    // presente. Zod ya omite las claves que no llegaron.
+    const entrada: EntradaEditarContacto = {};
+    if (datos.fullName !== undefined) entrada.fullName = datos.fullName;
+    if ("phone" in datos) entrada.phone = datos.phone;
+    if ("email" in datos) entrada.email = datos.email;
+    if ("sourceId" in datos) entrada.sourceId = datos.sourceId;
+    if ("notes" in datos) entrada.notes = datos.notes;
+    if (datos.brokerId !== undefined) entrada.brokerId = datos.brokerId;
 
-    const contacto = await transaction(async (tx) => {
-      // Se relee dentro de la transacción: el `NotFoundError` cubre a la vez
-      // "no existe" y "existe pero fuera de tu alcance" (`domain/errors.ts`),
-      // sin distinguir los dos casos al usuario.
-      const anterior = await contactoVisible(tx, id, actor, scope);
-      if (!anterior) throw new NotFoundError();
-
-      const cambios: Partial<typeof contacts.$inferInsert> = { updatedBy: actor.userId };
-      if (datos.fullName !== undefined) cambios.fullName = datos.fullName;
-      if ("phone" in datos) {
-        const { phone, phoneDisplay } = normalizarTelefono(datos.phone);
-        cambios.phone = phone;
-        cambios.phoneDisplay = phoneDisplay;
-      }
-      if ("email" in datos) cambios.email = datos.email;
-      if ("sourceId" in datos) cambios.sourceId = datos.sourceId;
-      if ("notes" in datos) cambios.notes = datos.notes;
-      if (datos.brokerId !== undefined) cambios.brokerId = datos.brokerId;
-
-      const [fila] = await tx
-        .update(contacts)
-        .set(cambios)
-        .where(eq(contacts.id, id))
-        .returning();
-
-      await auditar(tx, actor, {
-        accion: "editar",
-        entidad: "contact",
-        entidadId: id,
-        antes: anterior,
-        despues: fila,
-      });
-
-      return fila;
-    });
+    const contacto = await editarContacto(contactosParaEscritura(), actor, scope, id, entrada);
 
     return Response.json({ ok: true, contacto });
   } catch (error) {
@@ -127,26 +78,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     const actor = await requireActor();
     const scope = requireScope(actor, "contacts", "delete");
 
-    await transaction(async (tx) => {
-      const anterior = await contactoVisible(tx, id, actor, scope);
-      if (!anterior) throw new NotFoundError();
-
-      // Borrado lógico: nunca `DELETE` real (§9 del encargo). `visibleRows` ya
-      // excluye `deleted_at` no nulo de cualquier lectura futura.
-      const [fila] = await tx
-        .update(contacts)
-        .set({ deletedAt: new Date(), updatedBy: actor.userId })
-        .where(eq(contacts.id, id))
-        .returning();
-
-      await auditar(tx, actor, {
-        accion: "eliminar",
-        entidad: "contact",
-        entidadId: id,
-        antes: anterior,
-        despues: fila,
-      });
-    });
+    await borrarContacto(contactosParaEscritura(), actor, scope, id);
 
     return Response.json({ ok: true });
   } catch (error) {

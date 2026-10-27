@@ -10,16 +10,13 @@
  * (`etapa/route.ts`), con sus propias validaciones de `validarTransicion`.
  */
 
-import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { editarNegocio, type EntradaEditarNegocio } from "@/application/pipeline/casos-de-uso";
 import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
-import { deals } from "@/infrastructure/db/schema";
+import { pipelineParaEscritura } from "@/infrastructure/contenedor/pipeline";
 import { errorResponse, parseInput, vaciosANull } from "@/infrastructure/http";
-import { negocioAbiertoVisible } from "./_negocio-abierto";
 
 const EditarNegocioInput = z.object({
   amountCents: z.union([z.coerce.number().int().nonnegative(), z.null()]).optional(),
@@ -46,21 +43,15 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
 
-    const negocio = await transaction(async (tx) => {
-      const anterior = await negocioAbiertoVisible(tx, id, actor, scope);
+    // Se copian solo las claves PRESENTES en `datos`, nunca `...datos`: para el
+    // caso de uso `null` borra el campo y ausente lo deja igual.
+    const entrada: EntradaEditarNegocio = {};
+    if ("amountCents" in datos) entrada.amountCents = datos.amountCents;
+    if ("probability" in datos) entrada.probability = datos.probability;
+    if ("commissionBasisPoints" in datos) entrada.commissionBasisPoints = datos.commissionBasisPoints;
+    if ("expectedCloseDate" in datos) entrada.expectedCloseDate = datos.expectedCloseDate;
 
-      const cambios: Partial<typeof deals.$inferInsert> = { updatedBy: actor.userId };
-      if ("amountCents" in datos) cambios.amountCents = datos.amountCents;
-      if ("probability" in datos) cambios.probability = datos.probability;
-      if ("commissionBasisPoints" in datos) cambios.commissionBasisPoints = datos.commissionBasisPoints;
-      if ("expectedCloseDate" in datos) cambios.expectedCloseDate = datos.expectedCloseDate;
-
-      const [fila] = await tx.update(deals).set(cambios).where(eq(deals.id, id)).returning();
-
-      await auditar(tx, actor, { accion: "editar", entidad: "deal", entidadId: id, antes: anterior, despues: fila });
-
-      return fila;
-    });
+    const negocio = await editarNegocio(pipelineParaEscritura(), actor, scope, id, entrada);
 
     return Response.json({ ok: true, negocio });
   } catch (error) {

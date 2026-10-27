@@ -10,20 +10,17 @@
  * ajeno sin verlo primero.
  *
  * El diff (qué se asigna, qué se suelta) es `domain/asignacion-propiedades.ts`,
- * probado aparte; aquí solo se aplica dentro de una transacción y se audita
- * cada proyecto que de verdad cambió — nunca los que ya estaban como deben
- * quedar.
+ * probado aparte; el caso de uso (`asignarProyectosABroker`) lo aplica dentro
+ * de una transacción y audita cada proyecto que de verdad cambió — nunca los
+ * que ya estaban como deben quedar.
  */
 
-import { and, eq, inArray, isNull, or } from "drizzle-orm";
 import { z } from "zod";
-import { diffAsignacion } from "@/domain/asignacion-propiedades";
-import { ForbiddenError, NotFoundError } from "@/domain/errors";
+import { asignarProyectosABroker } from "@/application/brokers/casos-de-uso";
+import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
-import { auditar } from "@/infrastructure/audit";
-import { transaction } from "@/infrastructure/db/client";
-import { brokerProfiles, projects, users } from "@/infrastructure/db/schema";
+import { brokersParaEscritura } from "@/infrastructure/contenedor/brokers";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
 const AsignarProyectosInput = z.object({
@@ -39,83 +36,14 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const datos = parseInput(AsignarProyectosInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
     const scope = requireScope(actor, "projects", "edit");
-    if (scope !== "all") {
-      throw new ForbiddenError("Se requiere alcance completo sobre proyectos para asignar propiedades.");
-    }
 
-    const idsSolicitados = Array.from(new Set(datos.projectIds));
-
-    const proyectosActualizados = await transaction(async (tx) => {
-      const [broker] = await tx
-        .select({ userId: brokerProfiles.userId, isActive: users.isActive, deletedAt: users.deletedAt })
-        .from(brokerProfiles)
-        .innerJoin(users, eq(users.id, brokerProfiles.userId))
-        .where(eq(brokerProfiles.userId, brokerId))
-        .limit(1);
-      if (!broker || !broker.isActive || broker.deletedAt) throw new NotFoundError("El broker indicado no existe.");
-
-      // Una sola consulta cubre las dos cosas que hacían falta por separado:
-      // validar que los proyectos pedidos existen (`encontrados`) y tener la
-      // foto "antes" de auditoría de todo lo que puede cambiar — los
-      // proyectos pedidos y los que hoy ya son de este broker (`OR`, no dos
-      // `SELECT`).
-      //
-      // El universo es "activo, no borrado": exactamente lo que el modal de
-      // `/brokers` ofrece marcar (`isActive = true`, `deletedAt is null`). Un
-      // proyecto inactivo asignado hoy a este broker no aparece aquí, así que
-      // nunca cae en `aQuitar` — antes sí, y como el modal ni lo lista, cada
-      // guardado lo desasignaba solo (bug de la revisión de spec, issue #33).
-      const universoCondicion = and(eq(projects.isActive, true), isNull(projects.deletedAt));
-      const relevantes =
-        idsSolicitados.length > 0
-          ? await tx
-              .select()
-              .from(projects)
-              .where(and(or(inArray(projects.id, idsSolicitados), eq(projects.brokerId, brokerId)), universoCondicion))
-          : await tx.select().from(projects).where(and(eq(projects.brokerId, brokerId), universoCondicion));
-
-      const encontrados = new Set(relevantes.map((fila) => fila.id));
-      if (idsSolicitados.some((id) => !encontrados.has(id))) {
-        throw new NotFoundError("Alguno de los proyectos indicados no existe o no está activo.");
-      }
-      const antesPorId = new Map(relevantes.map((fila) => [fila.id, fila]));
-
-      const asignadosActualmente = relevantes.filter((fila) => fila.brokerId === brokerId).map((fila) => fila.id);
-      const { aAsignar, aQuitar } = diffAsignacion(asignadosActualmente, idsSolicitados);
-      if (aAsignar.length === 0 && aQuitar.length === 0) return [];
-
-      const filas = [];
-      if (aAsignar.length > 0) {
-        filas.push(
-          ...(await tx
-            .update(projects)
-            .set({ brokerId, updatedBy: actor.userId })
-            .where(inArray(projects.id, aAsignar))
-            .returning()),
-        );
-      }
-      if (aQuitar.length > 0) {
-        filas.push(
-          ...(await tx
-            .update(projects)
-            .set({ brokerId: null, updatedBy: actor.userId })
-            .where(inArray(projects.id, aQuitar))
-            .returning()),
-        );
-      }
-
-      for (const fila of filas) {
-        await auditar(tx, actor, {
-          accion: "asignar",
-          entidad: "project",
-          entidadId: fila.id,
-          antes: antesPorId.get(fila.id),
-          despues: fila,
-        });
-      }
-
-      return filas;
-    });
+    const proyectosActualizados = await asignarProyectosABroker(
+      brokersParaEscritura(),
+      actor,
+      scope,
+      brokerId,
+      datos.projectIds,
+    );
 
     return Response.json({ ok: true, proyectos: proyectosActualizados });
   } catch (error) {

@@ -7,25 +7,20 @@
  * que resolver permiso. Por eso esta ruta **no llama a `requireActor` ni a
  * `requireScope`** — el filtro es un token compartido en la cabecera
  * `x-webhook-token`, comparado con `leadsWebhookToken()` (`infrastructure/env.ts`).
- * No se generaliza este atajo a ninguna otra ruta.
+ * No se generaliza este atajo a ninguna otra ruta. `coincideToken` se queda en
+ * ESTE archivo: `seguridad.test.ts` lo exige para aceptar la ruta como pública.
  *
- * La idempotencia la garantiza `leads_external_id_unq` (índice único parcial
- * ya aplicado): `insert().onConflictDoNothing()` sobre ese índice, y si no
- * insertó nada porque ya existía, un `SELECT` por `externalId` devuelve el
- * lead existente. Sin tabla de idempotencia, sin cola, sin cabecera
- * `Idempotency-Key` — es justo lo que descarta la decisión #20.
+ * La idempotencia (decisión #20) la da `capturarLeadExterno`
+ * (`application/leads`) con un upsert atómico sobre `leads_external_id_unq`;
+ * esta ruta solo autentica el token, valida el cuerpo y responde.
  */
 
-import { and, eq, isNull, or } from "drizzle-orm";
 import { z } from "zod";
-import { sugerirBroker } from "@/domain/asignacion-lead";
+import { capturarLeadExterno } from "@/application/leads/casos-de-uso";
 import { OPERATION_TYPES } from "@/domain/catalogs";
-import { normalizarTelefono } from "@/domain/telefono";
-import { transaction } from "@/infrastructure/db/client";
-import { auditLog, contacts, leads } from "@/infrastructure/db/schema";
+import { leadsParaEscritura } from "@/infrastructure/contenedor/leads";
 import { leadsWebhookToken } from "@/infrastructure/env";
 import { errorResponse, parseInput } from "@/infrastructure/http";
-import { candidatosBroker } from "../_broker-candidatos";
 
 const LeadExternoInput = z.object({
   /** Obligatorio aquí (a diferencia del alta manual): es la clave de idempotencia. */
@@ -77,123 +72,27 @@ export async function POST(request: Request) {
     }
 
     const datos = parseInput(LeadExternoInput, await request.json().catch(() => ({})));
-    const { phone, phoneDisplay } = normalizarTelefono(datos.phone ?? null);
 
-    // La sugerencia de broker es dominio puro; se calcula antes de la
-    // transacción igual que en el alta manual.
-    const candidatos = await candidatosBroker();
-    const suggestedBrokerId = sugerirBroker(
-      {
-        projectInterestText: datos.projectInterestText ?? null,
-        zoneInterest: datos.zoneInterest ?? null,
-        operationType: datos.operationType ?? null,
-      },
-      candidatos,
-    );
-
-    const resultado = await transaction(async (tx) => {
-      // Reutiliza un contacto existente por teléfono o correo en vez de crear
-      // uno nuevo en cada entrega: a diferencia del alta manual (decisión
-      // #19, que avisa porque hay un humano que puede confirmar), aquí no hay
-      // nadie a quien preguntarle "¿de todas formas?" — un webhook no puede
-      // responder un 409. El criterio #5 sigue cumplido: no se pierde el
-      // duplicado, se enlaza al contacto que ya lo representa.
-      let idContacto: number | undefined;
-      if (phone || datos.email) {
-        const [existente] = await tx
-          .select({ id: contacts.id })
-          .from(contacts)
-          .where(
-            and(
-              isNull(contacts.deletedAt),
-              or(
-                phone ? eq(contacts.phone, phone) : undefined,
-                datos.email ? eq(contacts.email, datos.email) : undefined,
-              ),
-            ),
-          )
-          .limit(1);
-        idContacto = existente?.id;
-      }
-
-      if (!idContacto) {
-        const [contacto] = await tx
-          .insert(contacts)
-          .values({
-            fullName: datos.fullName.trim(),
-            phone,
-            phoneDisplay,
-            email: datos.email ?? null,
-            sourceId: datos.sourceId ?? null,
-            consentAt: new Date(),
-            consentSource: "portal_externo",
-          })
-          .returning();
-
-        // Sin `Actor`: se escribe directamente en `audit_log` con `userId: null`
-        // en vez de pasar por `auditar()`, que exige un actor humano — sigue
-        // yendo dentro de la misma transacción que el cambio (§18.1 / criterio #2).
-        await tx.insert(auditLog).values({
-          userId: null,
-          action: "crear",
-          entityType: "contact",
-          entityId: contacto!.id,
-          newValue: JSON.stringify(contacto),
-        });
-        idContacto = contacto!.id;
-      }
-
-      // Idempotencia (decisión #20): `onConflictDoNothing` sobre el único
-      // parcial de `externalId`, con `returning()` — no un `SELECT` previo
-      // que compita con un `INSERT` separado.
-      const [insertado] = await tx
-        .insert(leads)
-        .values({
-          contactId: idContacto,
-          sourceId: datos.sourceId ?? null,
-          projectId: datos.projectId ?? null,
-          projectInterestText: datos.projectInterestText ?? null,
-          zoneInterest: datos.zoneInterest ?? null,
-          operationType: datos.operationType ?? null,
-          currency: datos.currency ?? "USD",
-          budgetMinCents: datos.budgetMinCents ?? null,
-          budgetMaxCents: datos.budgetMaxCents ?? null,
-          suggestedBrokerId,
-          campaign: datos.campaign ?? null,
-          utmSource: datos.utmSource ?? null,
-          utmMedium: datos.utmMedium ?? null,
-          utmCampaign: datos.utmCampaign ?? null,
-          originalMessage: datos.originalMessage ?? null,
-          sourceVideoUrl: datos.sourceVideoUrl ?? null,
-          externalId: datos.externalId,
-        })
-        // `leads_external_id_unq` es un índice único **parcial**
-        // (`WHERE deleted_at IS NULL`, `db/schema.ts`): Postgres exige que el
-        // conflicto declarado calce exactamente con el predicado del índice,
-        // o responde "no unique or exclusion constraint" en vez de aplicar el
-        // `DO NOTHING`. Por eso `where` repite esa misma condición.
-        .onConflictDoNothing({ target: leads.externalId, where: isNull(leads.deletedAt) })
-        .returning();
-
-      if (insertado) {
-        await tx.insert(auditLog).values({
-          userId: null,
-          action: "crear",
-          entityType: "lead",
-          entityId: insertado.id,
-          newValue: JSON.stringify(insertado),
-        });
-        return { lead: insertado, creado: true };
-      }
-
-      // Ya existía: el índice único descartó el `insert`. Se devuelve el
-      // lead existente, sin auditoría nueva — no hubo cambio que registrar.
-      const [existente] = await tx
-        .select()
-        .from(leads)
-        .where(eq(leads.externalId, datos.externalId))
-        .limit(1);
-      return { lead: existente!, creado: false };
+    // Campo por campo, nunca `...datos`.
+    const resultado = await capturarLeadExterno(leadsParaEscritura(), {
+      externalId: datos.externalId,
+      fullName: datos.fullName,
+      phone: datos.phone,
+      email: datos.email,
+      sourceId: datos.sourceId,
+      projectId: datos.projectId,
+      projectInterestText: datos.projectInterestText,
+      zoneInterest: datos.zoneInterest,
+      operationType: datos.operationType,
+      budgetMinCents: datos.budgetMinCents,
+      budgetMaxCents: datos.budgetMaxCents,
+      currency: datos.currency,
+      campaign: datos.campaign,
+      utmSource: datos.utmSource,
+      utmMedium: datos.utmMedium,
+      utmCampaign: datos.utmCampaign,
+      originalMessage: datos.originalMessage,
+      sourceVideoUrl: datos.sourceVideoUrl,
     });
 
     return Response.json({ ok: true, ...resultado });

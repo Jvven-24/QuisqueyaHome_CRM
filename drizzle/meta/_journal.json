@@ -8,6 +8,13 @@
       "when": 1788293030135,
       "tag": "0000_thankful_senator_kelly",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790708400972,
+      "tag": "0001_enable_rls_public_tables",
+      "breakpoints": true
     }
   ]
 }
