@@ -4,6 +4,7 @@ import Link from "next/link";
 import { EstadoConexion } from "./estado-conexion";
 import type { DashboardMetrics } from "@/application/dashboard/puertos";
 import { formatNumber } from "@/lib/formato-analitica";
+import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import { mostrarDemo } from "@/lib/flags";
 import {
   ArrowRight,
@@ -111,7 +112,7 @@ export function InicioVista({
         </div>
         <p role="note" className="text-sm text-ink-muted mt-3">Alertas de SLA y contador de aprobaciones: pendientes de un servicio operativo; no se presentan como cero.</p>
       </section>
-      <section aria-label="Indicadores operativos por rol" className="grid grid-cols-1 min-[390px]:grid-cols-2 xl:grid-cols-4 gap-4">
+      <section aria-label="Indicadores operativos por rol" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {(isAssistant ? [
           {label:"Leads sin asignar",value:metricas.leadsSinAsignarCount,help:"Bandeja visible que requiere responsable",href:"/leads/asignacion",allowed:permissions.leads},
           {label:"Citas de hoy",value:metricas.citasHoyCount,help:"Agenda operativa de hoy",href:"/agenda",allowed:permissions.activities},
@@ -127,7 +128,7 @@ export function InicioVista({
           {label:"Negocios activos",value:metricas.negociosActivosCount,help:metricas.volumenPipelineDisplay,href:"/negocios",allowed:permissions.deals},
           {label:"Cierres del mes",value:metricas.cierresMesCount,help:"Negocios ganados este mes",href:"/negocios",allowed:permissions.deals},
           {label:"Cierres / captaciones",value:metricas.conversionPorcentaje,help:"Cierres ganados del mes / leads recibidos este mes; poblaciones distintas, no conversión de cohorte",href:"/reportes",allowed:permissions.leads&&permissions.deals},
-        ]).map(kpi=><article key={kpi.label} className="rounded-xl border border-line bg-surface p-4 min-w-0"><h2 className="text-[13px] text-ink-muted font-semibold">{kpi.label}</h2>{kpi.allowed?<><p className="font-heading text-2xl font-bold text-navy-950 tabular-nums break-words">{typeof kpi.value==="number"?formatNumber(kpi.value):kpi.value}</p><p className="text-[13px] text-ink-muted">{kpi.help}</p><Link href={kpi.href} prefetch={false} className="inline-flex min-h-12 items-center text-sm font-semibold text-navy-900 underline">Consultar</Link></>:<p role="note" className="text-sm text-ink-muted">Tu rol no tiene permiso para consultar este indicador.</p>}</article>)}
+        ]).map(kpi=><ResumenCompacto key={kpi.label} etiqueta={kpi.label} valor={kpi.allowed ? (typeof kpi.value === "number" ? formatNumber(kpi.value) : kpi.value) : undefined} detalle={kpi.allowed ? kpi.help : "Tu rol no tiene permiso para consultar este indicador."} pie={kpi.allowed ? <Link href={kpi.href} prefetch={false} className="inline-flex min-h-11 items-center text-[13px] font-semibold text-navy-900 underline">Consultar</Link> : undefined} />)}
       </section>
 
       {/* ── BANDEJA DE ACCESOS RÁPIDOS OPERATIVOS ─────────────────────────────── */}

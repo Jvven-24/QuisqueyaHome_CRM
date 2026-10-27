@@ -41,6 +41,7 @@ export function renderLeads(q = "", hayFilas = true): string {
     "../_ui/prototipo-ui": ui,
     "../_ui/module-tabs": cargar("src/app/(crm)/_ui/module-tabs.tsx"),
     "../_ui/alerta-error-formulario": {}, "./inspector": {}, "./nota-de-voz-modal": {},
+    "@/components/ui/resumen-compacto": cargar("src/components/ui/resumen-compacto.tsx"),
     "@/components/ui/data-table": table, "@/components/ui/phone-input": {},
     "@/components/ui/bits": { Insignia: ({ texto }: { texto: string }) => texto },
     "@/components/ui/tone": { leadStatusTone: () => "neutral" },

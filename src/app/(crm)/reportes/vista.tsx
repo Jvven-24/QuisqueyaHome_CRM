@@ -13,6 +13,7 @@ import {
 import { generarCsv } from "@/domain/csv";
 import type { ReportesBiData } from "@/application/reportes/puertos";
 import { ChartCard } from "@/components/ui/chart-card";
+import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { analyticsCopy, inventoryLabels, reportTabs } from "../_ui/analitica-copy";
 import { AnalyticsTabs } from "../_ui/analytics-tabs";
@@ -348,88 +349,11 @@ export function ReportesVista({
       </p>
 
       {/* Tarjetas KPI de Resumen Ejecutivo */}
-      <section
-        className="executive-kpis-grid"
-        aria-label="Indicadores clave"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "14px",
-          marginTop: "16px",
-          marginBottom: "16px",
-        }}
-      >
-        <div
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--line)",
-            borderRadius: "12px",
-            padding: "16px",
-            boxShadow: "var(--shadow-card)",
-          }}
-        >
-          <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            Total Leads Captados
-          </span>
-          <div style={{ fontSize: "28px", fontWeight: 800, color: "var(--navy-950)", marginTop: "6px" }}>
-            {formatNumber(metricas.totalLeads)}
-          </div>
-          <span style={{ fontSize: "13px", color: "var(--muted)" }}>Registros en el periodo</span>
-        </div>
-
-        <div
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--line)",
-            borderRadius: "12px",
-            padding: "16px",
-            boxShadow: "var(--shadow-card)",
-          }}
-        >
-          <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            Negocios Activos
-          </span>
-          <div style={{ fontSize: "28px", fontWeight: 800, color: "var(--gold-700)", marginTop: "6px" }}>
-            {formatNumber(metricas.totalDeals)}
-          </div>
-          <span style={{ fontSize: "13px", color: "var(--muted)" }}>En negociación comercial</span>
-        </div>
-
-        <div
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--line)",
-            borderRadius: "12px",
-            padding: "16px",
-            boxShadow: "var(--shadow-card)",
-          }}
-        >
-          <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            Cierres Ganados
-          </span>
-          <div style={{ fontSize: "28px", fontWeight: 800, color: "var(--success)", marginTop: "6px" }}>
-            {formatNumber(totalCierres)}
-          </div>
-          <span style={{ fontSize: "13px", color: "var(--muted)" }}>Ventas concretadas</span>
-        </div>
-
-        <div
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--line)",
-            borderRadius: "12px",
-            padding: "16px",
-            boxShadow: "var(--shadow-card)",
-          }}
-        >
-          <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            Proyección Ponderada
-          </span>
-          <div style={{ fontSize: "28px", fontWeight: 800, color: "var(--navy-900)", marginTop: "6px" }}>
-            {formatUsd(metricas.projection.totalWeightedCents)}
-          </div>
-          <span style={{ fontSize: "13px", color: "var(--muted)" }}>Volumen proyectado USD</span>
-        </div>
+      <section className="grid grid-cols-2 gap-3 my-4 xl:grid-cols-4" aria-label="Indicadores clave">
+        <ResumenCompacto etiqueta="Total Leads Captados" valor={formatNumber(metricas.totalLeads)} detalle="Registros en el periodo" />
+        <ResumenCompacto etiqueta="Negocios Activos" valor={formatNumber(metricas.totalDeals)} detalle="En negociación comercial" valorClassName="text-gold-800" />
+        <ResumenCompacto etiqueta="Cierres Ganados" valor={formatNumber(totalCierres)} detalle="Ventas concretadas" valorClassName="text-success" />
+        <ResumenCompacto etiqueta="Proyección Ponderada" valor={formatUsd(metricas.projection.totalWeightedCents)} detalle="Volumen proyectado USD" valorClassName="text-navy-900" />
       </section>
 
       <div role="status" aria-live="polite" style={{ fontSize: "13px", color: "var(--success)", fontWeight: 600 }}>
