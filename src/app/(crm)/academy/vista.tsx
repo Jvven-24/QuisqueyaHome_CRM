@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {filtrarBiblioteca} from "./_ui/biblioteca";
-import {ReproductorLeccion} from "./_ui/reproductor";
+import {ReproductorLeccion} from "./_ui/reproductor-leccion";
 import {
   AlertTriangle,
   Award,
