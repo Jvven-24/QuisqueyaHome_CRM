@@ -7,8 +7,10 @@ import { prepararReparto } from "@/application/comisiones/reparto";
 import { ValidationError } from "@/domain/errors";
 import type { CommissionStatus } from "@/domain/catalogs";
 import { COMMISSION_STATUS_LABELS } from "@/domain/comision-estado";
+import { enlacesEstadoComisiones } from "./_navegacion";
 import { montoExacto as formatearMonto } from "../reservas/_finanzas/calculos";
-import { PageHeader, Modal } from "../_ui/prototipo-ui";
+import { Modal } from "../_ui/prototipo-ui";
+import { ModuleTabs, PageHeader, Section as Panel } from "@/components/modulo";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Insignia } from "@/components/ui/bits";
 import { type Tone } from "@/components/ui/tone";
@@ -182,6 +184,8 @@ export function ComisionesVista({
   if (brokerIdSeleccionado != null) parametrosExport.set("broker", String(brokerIdSeleccionado));
   parametrosExport.set("periodo", periodoSeleccionado);
   parametrosExport.set("estado", estadoSeleccionado);
+
+  const estadosTab = enlacesEstadoComisiones(pathname, searchParams.toString(), conteosPorEstado);
 
   const columnasTabla: Columna<FilaComisionVista>[] = useMemo(
     () => [
@@ -386,8 +390,8 @@ export function ComisionesVista({
       <PageHeader
         eyebrow="Finanzas y Liquidación"
         title="Comisiones"
-        subtitle="Control interno de liquidaciones, aprobación de pagos y desglose de reparto entre broker y agencia."
-        action={
+        description="Control interno de liquidaciones, aprobación de pagos y desglose de reparto entre broker y agencia."
+        actions={
           puedeExportar ? (
             <a
               className="inline-flex items-center justify-center gap-2 min-h-[46px] px-5 rounded-xl border border-line bg-surface hover:bg-surface-alt text-navy-950 text-[13.5px] font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700 shadow-2xs cursor-pointer"
@@ -429,74 +433,17 @@ export function ComisionesVista({
         </div>
       )}
 
-      <section className="mb-4 grid gap-3 md:grid-cols-2">{kpis.porMoneda?.map(m=><div key={m.currency} className="rounded-lg border border-line bg-surface p-4"><h2 className="font-semibold">Comisiones · {m.currency}</h2><dl className="mt-3 grid grid-cols-2 gap-2 tabular-nums"><dt>Total registrado</dt><dd>{formatearMonto(m.totalCents,m.currency)}</dd><dt>Pendientes y aprobadas</dt><dd>{formatearMonto(m.pendientesCents,m.currency)}</dd><dt>Marcadas como pagadas</dt><dd>{formatearMonto(m.pagadasCents,m.currency)}</dd></dl></div>)}</section>
+      <div className="mb-4 grid gap-3 md:grid-cols-2">{kpis.porMoneda?.map(m=><Panel key={m.currency} title={`Comisiones · ${m.currency}`}><dl className="grid grid-cols-2 gap-2 tabular-nums"><dt>Total registrado</dt><dd>{formatearMonto(m.totalCents,m.currency)}</dd><dt>Pendientes y aprobadas</dt><dd>{formatearMonto(m.pendientesCents,m.currency)}</dd><dt>Marcadas como pagadas</dt><dd>{formatearMonto(m.pagadasCents,m.currency)}</dd></dl></Panel>)}</div>
 
       {/* Bandeja Interactiva: Pestañas de Estado Semántico */}
-      <div className="flex flex-wrap items-center gap-2 pb-2 mb-6 border-b border-line">
-        <button
-          type="button"
-          onClick={() => irCon({ estado: undefined })}
-          className={`px-4 min-h-[46px] rounded-xl text-[13.5px] font-semibold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 ${
-            estadoSeleccionado === "todos"
-              ? "bg-navy-950 text-white border-navy-950 shadow-xs"
-              : "bg-surface hover:bg-surface-alt text-ink-muted border-line"
-          }`}
-        >
-          Todas ({conteosPorEstado.todos})
-        </button>
-
-        <button
-          type="button"
-          onClick={() => irCon({ estado: "pending" })}
-          className={`px-4 min-h-[46px] rounded-xl text-[13.5px] font-semibold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 flex items-center gap-2 ${
-            estadoSeleccionado === "pending"
-              ? "bg-slate-800 text-white border-slate-800 shadow-xs"
-              : "bg-surface hover:bg-surface-alt text-ink-muted border-line"
-          }`}
-        >
-          <span className="size-2 rounded-full bg-slate-400" />
-          <span>Pendientes ({conteosPorEstado.pending})</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => irCon({ estado: "approved" })}
-          className={`px-4 min-h-[46px] rounded-xl text-[13.5px] font-semibold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 flex items-center gap-2 ${
-            estadoSeleccionado === "approved"
-              ? "bg-gold-600 text-navy-950 border-gold-600 shadow-xs"
-              : "bg-surface hover:bg-surface-alt text-ink-muted border-line"
-          }`}
-        >
-          <span className="size-2 rounded-full bg-amber-500" />
-          <span>Aprobadas ({conteosPorEstado.approved})</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => irCon({ estado: "paid" })}
-          className={`px-4 min-h-[46px] rounded-xl text-[13.5px] font-semibold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 flex items-center gap-2 ${
-            estadoSeleccionado === "paid"
-              ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-              : "bg-surface hover:bg-surface-alt text-ink-muted border-line"
-          }`}
-        >
-          <span className="size-2 rounded-full bg-emerald-400" />
-          <span>Pagadas ({conteosPorEstado.paid})</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => irCon({ estado: "void" })}
-          className={`px-4 min-h-[46px] rounded-xl text-[13.5px] font-semibold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 flex items-center gap-2 ${
-            estadoSeleccionado === "void"
-              ? "bg-rose-600 text-white border-rose-600 shadow-xs"
-              : "bg-surface hover:bg-surface-alt text-ink-muted border-line"
-          }`}
-        >
-          <span className="size-2 rounded-full bg-rose-400" />
-          <span>Anuladas ({conteosPorEstado.void})</span>
-        </button>
-      </div>
+      <ModuleTabs
+        label="Estados de comisión"
+        items={estadosTab}
+        queryParam="tab"
+        activeTab={estadoSeleccionado}
+        panelId="comisiones-panel"
+        className="mb-4"
+      />
 
       {/* Barra de Filtros y Búsqueda */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
@@ -546,7 +493,8 @@ export function ComisionesVista({
       </div>
 
       {/* Tabla Interactiva de Comisiones */}
-      <div className="bg-surface border border-line/80 rounded-2xl overflow-hidden shadow-xs">
+      <Panel className="overflow-hidden p-0">
+      <div id="comisiones-panel" role="tabpanel" aria-labelledby={`comisiones-panel-tab-${estadoSeleccionado}`} tabIndex={0} className="overflow-hidden focus-visible:outline-2 focus-visible:outline-gold-700">
         <DataTable
           filas={filasFiltradas}
           columnas={columnasTabla}
@@ -559,6 +507,7 @@ export function ComisionesVista({
           }}
         />
       </div>
+      </Panel>
 
       {/* Modal Inspector 360° Fiscal DGII y Sub-Splits */}
       {comisionInspector && (
