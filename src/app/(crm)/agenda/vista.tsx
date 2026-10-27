@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SelectorCalendarioGoogle } from "../_ui/google-cuentas";
 import { toast } from "sonner";
 
 import { crearSeguimientoVisita } from "@/application/actividades/seguimiento-visita";
@@ -1274,6 +1275,7 @@ function ModalCita({
         location: form.get("location") || undefined,
         meetingUrl: form.get("meetingUrl") || undefined,
         priority: form.get("priority") || "normal",
+        ...(esEdicion ? {} : { googleCalendarId: form.get("googleCalendarId") || undefined }),
       };
 
       const url = esEdicion ? `/api/actividades/${cita!.id}` : "/api/actividades";
@@ -1572,6 +1574,8 @@ function ModalCita({
             </select>
           </label>
         </div>
+
+        {!esEdicion && <SelectorCalendarioGoogle />}
 
         <label className="span-2">
           Ubicación física (opcional)

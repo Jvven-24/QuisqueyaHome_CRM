@@ -2073,3 +2073,28 @@ export const legacyCommissionLinks = pgTable("legacy_commission_links", {
   uniqueIndex("legacy_commission_links_entry_unq").on(t.entryId).where(sql`${t.entryId} is not null`),
   check("legacy_commission_links_values_check", sql`${t.beneficiaryRole} in ('broker','agency') and ((${t.migrationStatus} = 'pendiente' and ${t.entryId} is null) or (${t.migrationStatus} = 'validada' and ${t.entryId} is not null)) and length(btrim(${t.source})) > 0`),
 ]).enableRLS();
+
+/** Cuentas Google conectadas por usuario (varias por usuario). Tokens cifrados AES-256-GCM. */
+export const googleAccounts = pgTable("google_accounts", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  email: text("email").notNull(),
+  googleSub: text("google_sub").notNull(),
+  accessTokenEnc: text("access_token_enc").notNull(),
+  refreshTokenEnc: text("refresh_token_enc"),
+  expiresAt: instant("expires_at").notNull(),
+  scopes: text("scopes").notNull().default(""),
+  active: boolean("active").notNull().default(true),
+  createdAt: instant("created_at").notNull().defaultNow(),
+  revokedAt: instant("revoked_at"),
+}, (t) => [uniqueIndex("google_accounts_user_sub_unq").on(t.userId, t.googleSub)]).enableRLS();
+
+export const googleCalendars = pgTable("google_calendars", {
+  id: serial("id").primaryKey(),
+  accountId: integer("account_id").notNull().references(() => googleAccounts.id, { onDelete: "cascade" }),
+  calendarId: text("calendar_id").notNull(),
+  summary: text("summary").notNull(),
+  isPrimary: boolean("is_primary").notNull().default(false),
+  selected: boolean("selected").notNull().default(false),
+  defaultForVisits: boolean("default_for_visits").notNull().default(false),
+}, (t) => [uniqueIndex("google_calendars_account_cal_unq").on(t.accountId, t.calendarId)]).enableRLS();

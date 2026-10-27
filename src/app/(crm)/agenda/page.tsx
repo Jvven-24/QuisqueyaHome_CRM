@@ -18,6 +18,7 @@ import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { visibleRows } from "@/infrastructure/rbac-filter";
 import { fechaSantoDomingo, lunesDeLaSemana, medianocheSantoDomingo, sumarDias } from "@/domain/zona-horaria";
 import { AgendaVista, type CitaFila } from "./vista";
+import { GoogleCuentasPanel } from "../_ui/google-cuentas";
 
 export const metadata = { title: "Agenda & Visitas por Broker · CRM Quisqueya Home" };
 
@@ -136,6 +137,8 @@ export default async function AgendaPage({
   });
 
   return (
+    <>
+    <div className="mx-auto w-full max-w-7xl px-4 pt-4"><details className="group"><summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold">Mis calendarios de Google</summary><GoogleCuentasPanel titulo="Mis calendarios de Google" /></details></div>
     <AgendaVista
       citas={citas}
       personas={personas}
@@ -149,5 +152,6 @@ export default async function AgendaPage({
       contactos={contactosVisibles}
       muestraEquipo={scope === "all"}
     />
+    </>
   );
 }
