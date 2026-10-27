@@ -1482,6 +1482,19 @@ export const transactionCommands = pgTable("transaction_commands", {
   check("transaction_commands_result_check", sql`(${t.status} = 'processing' and ${t.completedAt} is null and ${t.httpStatus} is null and ${t.retainUntil} is null and ${t.resultPublicId} is null and ${t.resultCode} is null) or (${t.status} = 'completed' and ${t.completedAt} is not null and ${t.completedAt} >= ${t.createdAt} and ${t.httpStatus} between 100 and 599 and ${t.httpStatus} is not null and ${t.retainUntil} is not null and ${t.retainUntil} >= ${t.completedAt} + interval '5 years' and length(btrim(${t.resultCode})) > 0 and ${t.resultCode} is not null)`),
 ]).enableRLS();
 
+/** Idempotencia de escrituras HTTP de la UI (drizzle 0015). */
+export const httpIdempotency = pgTable("http_idempotency", {
+  id: serial("id").primaryKey(),
+  actorId: integer("actor_id").notNull().references(() => users.id),
+  operation: text("operation").notNull(),
+  idempotencyKey: uuid("idempotency_key").notNull(),
+  requestHash: text("request_hash").notNull(),
+  status: text("status", { enum: ["processing", "completed"] }).notNull().default("processing"),
+  httpStatus: integer("http_status"),
+  createdAt: instant("created_at").notNull().defaultNow(),
+  completedAt: instant("completed_at"),
+}, (t) => [uniqueIndex("http_idempotency_key_unq").on(t.actorId, t.operation, t.idempotencyKey)]).enableRLS();
+
 export const holds = pgTable("holds", {
   id: serial("id").primaryKey(),
   publicId: uuid("public_id").notNull().defaultRandom(),

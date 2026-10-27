@@ -2,7 +2,7 @@
  * Idempotencia HTTP genérica para escrituras de la UI (auditoría 27/10/2026:
  * comisiones y metas enviaban `Idempotency-Key` y el servidor lo ignoraba).
  *
- * Usa `transaction_commands` (clave única por actor + operación + clave). Un
+ * Usa `http_idempotency` (clave única por actor + operación + clave). Un
  * reintento con la misma clave y el mismo cuerpo devuelve `{ ok, replayed }` sin
  * repetir la escritura; con otro cuerpo, 409. Si la operación falla se libera
  * la clave para poder reintentar.
