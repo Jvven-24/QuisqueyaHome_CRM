@@ -1,5 +1,7 @@
 "use client";
 
+import { NotasBitacora } from "../_ui/notas-bitacora";
+
 import { CalificacionLead } from "./_componentes/calificacion";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useRef, useState } from "react";
@@ -331,6 +333,7 @@ export function LeadInspector({
         </TabsList>
 
         <TabsContent value="detalle" className="grid gap-4 pt-4">
+          <NotasBitacora entidad="lead" entidadId={lead.id} />
           <CalificacionLead lead={lead} />
           <dl className="detail-grid">
             <div className="py-2.5">

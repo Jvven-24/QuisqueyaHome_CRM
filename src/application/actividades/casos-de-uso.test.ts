@@ -159,3 +159,19 @@ test("editar: cambiar solo endsAt no puede quedar antes del inicio guardado", as
   const ok = await editarActividad(deps, broker, "own", 1, { endsAt: new Date("2026-10-28T20:00:00Z") });
   assert.equal(ok.endsAt?.toISOString(), "2026-10-28T20:00:00.000Z");
 });
+
+test("notas: el endpoint genérico no permite modificar notas de otro autor", async () => {
+  const { deps } = montar([actividad({ id: 1, activityType: "note", createdBy: 8 })]);
+  const actor: Actor = { ...broker, permissions: [...broker.permissions, { resource: "activities", action: "edit", scope: "own" }, { resource: "activities", action: "delete", scope: "own" }] };
+  await assert.rejects(editarActividad(deps, actor, "all", 1, { title: "Intento" }), /Solo el autor/);
+  await assert.rejects(borrarActividad(deps, actor, "all", 1), /Solo el autor/);
+});
+
+test("notas: la ruta genérica no reasigna vínculos ni elude el ámbito del lead", async () => {
+  const actor: Actor = { ...broker, permissions: [...broker.permissions, { resource: "activities", action: "edit", scope: "all" }, { resource: "activities", action: "delete", scope: "all" }] };
+  const notaLead = { ...actividad({ id: 1, activityType: "note" }), leadId: 99 };
+  const { deps } = montar([notaLead, actividad({ id: 2, activityType: "note" })]);
+  await assert.rejects(editarActividad(deps, actor, "all", 1, { title: "Intento" }), /bitácora de su lead/);
+  await assert.rejects(borrarActividad(deps, actor, "all", 1), /bitácora de su lead/);
+  await assert.rejects(editarActividad(deps, actor, "all", 2, { dealId: 99 }), /vínculos/);
+});

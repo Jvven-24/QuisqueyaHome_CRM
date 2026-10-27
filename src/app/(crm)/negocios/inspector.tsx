@@ -1,5 +1,7 @@
 "use client";
 
+import { NotasBitacora } from "../_ui/notas-bitacora";
+
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useRef, useState } from "react";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
@@ -197,6 +199,7 @@ export function DealInspector({
         </TabsList>
 
         <TabsContent value="resumen" className="grid gap-4 pt-3">
+          <NotasBitacora entidad="deal" entidadId={negocio.id} />
           <dl className="detail-grid">
             <div><dt>Etapa</dt><dd>{etapaActual?.name ?? "—"}</dd></div>
             <div><dt>Responsable</dt><dd>{negocio.brokerName ?? "Sin asignar"}</dd></div>

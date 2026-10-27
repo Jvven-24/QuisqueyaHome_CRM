@@ -1,5 +1,6 @@
 import { requireScope } from "../../domain/rbac.ts";
 import { ForbiddenError, NotFoundError, ValidationError } from "../../domain/errors.ts";
+import { puedeModificarNota } from "./notas.ts";
 import { tituloActividad } from "./validacion.ts";
 import type { Actor, PermissionScope } from "../../domain/rbac.ts";
 import type { UnidadDeTrabajo } from "../compartido/unidad-de-trabajo.ts";
@@ -83,6 +84,13 @@ export async function editarActividad(deps: { unidad: UnidadDeTrabajo<ReposActiv
   return deps.unidad.ejecutar(async ({ actividades, auditoria }) => {
     const anterior = await actividades.buscarVisible(actor, alcance, id);
     if (!anterior) throw new NotFoundError();
+    if (anterior.activityType === "note") {
+      if ("leadId" in anterior && anterior.leadId != null) throw new ValidationError("Modifica esta nota desde la bitácora de su lead.");
+      if (!puedeModificarNota(actor, anterior, "edit")) throw new ForbiddenError("Solo el autor o un usuario con permiso global puede modificar esta nota.");
+      if (anterior.dealId !== null && !await actividades.buscarNegocioVisible(actor, requireScope(actor, "deals", "view"), anterior.dealId)) throw new NotFoundError();
+      if (anterior.contactId !== null && !await actividades.referenciaVisible(actor, requireScope(actor, "contacts", "view"), "contacts", anterior.contactId)) throw new NotFoundError();
+    }
+    if (anterior.activityType === "note" && ["activityType", "contactId", "dealId", "assigneeId"].some(campo => campo in entrada)) throw new ValidationError("La autoría y los vínculos de una nota no se pueden cambiar.");
     if (entrada.dealId !== undefined && entrada.dealId !== null && entrada.dealId !== anterior.dealId) {
       const negocio = await actividades.buscarNegocioVisible(actor, alcance, entrada.dealId);
       if (!negocio) throw new NotFoundError();
@@ -125,6 +133,12 @@ export async function borrarActividad(deps: { unidad: UnidadDeTrabajo<ReposActiv
   await deps.unidad.ejecutar(async ({ actividades, auditoria }) => {
     const anterior = await actividades.buscarVisible(actor, alcance, id);
     if (!anterior) throw new NotFoundError();
+    if (anterior.activityType === "note") {
+      if ("leadId" in anterior && anterior.leadId != null) throw new ValidationError("Modifica esta nota desde la bitácora de su lead.");
+      if (!puedeModificarNota(actor, anterior, "delete")) throw new ForbiddenError("Solo el autor o un usuario con permiso global puede modificar esta nota.");
+      if (anterior.dealId !== null && !await actividades.buscarNegocioVisible(actor, requireScope(actor, "deals", "view"), anterior.dealId)) throw new NotFoundError();
+      if (anterior.contactId !== null && !await actividades.referenciaVisible(actor, requireScope(actor, "contacts", "view"), "contacts", anterior.contactId)) throw new NotFoundError();
+    }
     const actividad = await actividades.marcarBorrado(id, new Date(), actor.userId);
     await auditoria.registrar(actor, { accion: "eliminar", entidad: "activity", entidadId: id, antes: anterior, despues: actividad });
   });

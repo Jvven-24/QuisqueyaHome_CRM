@@ -1,5 +1,10 @@
 # R · Relevo
 
+## Entrega autorizada en rama fase2-tmp — 2026-10-27
+
+Fase 1 implementada: bitácora de notas persistente para lead y negocio, permisos y borrado lógico. Evidencia y límites en `docs/ENTREGA_NOTAS_PIPELINE.md`; ficha READY en `specs/entrega-notas-pipeline/spec.md`. Pruebas enfocadas de actividades/notas: 16/16 verdes con Node 22. No migraciones nuevas ni aplicadas. Sin push. El relevo histórico de abajo se conserva como contexto; esta tarea autoriza explícitamente producir y commitear en la rama actual.
+
+
 **Este archivo se reescribe en cada push y describe el commit donde vive.** Si
 lo estás leyendo, describe el estado exacto de este commit, no otro.
 
