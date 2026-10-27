@@ -1,12 +1,13 @@
 /**
- * Los 15 módulos del CRM agrupados por Espacios de Trabajo (Workspaces).
+ * Los 22 módulos del CRM — ahora generados desde el registro central src/modules/registry.ts
+ * para la modularización (sin cambiar orden, textos, recursos ni permisos visibles).
  *
  * Mantiene compatibilidad total con la lista canónica de `MAPEO_FRONTEND_CRM.md` §18
- * y `.github/CODEOWNERS`, incorporando metadatos para la nueva arquitectura
- * de navegación editorial: iconos Lucide, descripción, atajos y agrupación.
+ * y `.github/CODEOWNERS`.
  */
 
 import type { PermissionResource } from "@/domain/catalogs";
+import { REGISTRO_MODULOS } from "../../modules/registry.ts";
 
 export type WorkspaceId =
   | "comercial"
@@ -56,172 +57,47 @@ export const WORKSPACES: readonly Workspace[] = [
   },
 ];
 
-export const MODULOS: readonly Modulo[] = [
-  {"id":"M16","ruta":"/aprobaciones","nombre":"Aprobaciones","recurso":"dashboard","workspaceId":"comercial","icono":"CheckSquare","descripcion":"Descuentos, reservas y liquidaciones pendientes","atajo":"G Q"},
-  {"id":"M17","ruta":"/reservas","nombre":"Reservas y cobros","recurso":"deals","workspaceId":"brokerage","icono":"BadgeDollarSign","descripcion":"Reservas de unidades y seguimiento de cobros","atajo":"G V"},
-  {"id":"M18","ruta":"/documentos","nombre":"Documentos","recurso":"deals","workspaceId":"comercial","icono":"Briefcase","descripcion":"Expediente documental de cada negocio","atajo":"G D"},
-  {"id":"M19","ruta":"/posventa","nombre":"Posventa","recurso":"projects","workspaceId":"operaciones","icono":"Building2","descripcion":"Entrega y seguimiento de cada propiedad","atajo":"G Z"},
-  {"id":"M20","ruta":"/portal","nombre":"Portal","recurso":"settings","workspaceId":"herramientas","icono":"Settings","descripcion":"Configuración del portal y acceso de clientes","atajo":"G H"},
-  {"id":"M21","ruta":"/comunidad","nombre":"Comunidad","recurso":"brokers","workspaceId":"brokerage","icono":"Users","descripcion":"Comunidad y colaboración de la red","atajo":"G U"},
-  {"id":"M22","ruta":"/automatizaciones","nombre":"Automatizaciones","recurso":"settings","workspaceId":"herramientas","icono":"Settings","descripcion":"Flujos y reglas de automatización","atajo":"G F"},
-  // Espacio 1: Comercial & Clientes
-  {
-    id: "M14",
-    ruta: "/inicio",
-    nombre: "Inicio",
-    recurso: "dashboard",
-    workspaceId: "comercial",
-    icono: "LayoutDashboard",
-    descripcion: "Resumen ejecutivo y tablero operativo del día",
-    atajo: "G I",
-  },
-  {
-    id: "M2",
-    ruta: "/leads",
-    nombre: "Leads",
-    recurso: "leads",
-    workspaceId: "comercial",
-    icono: "UserPlus",
-    descripcion: "Captación, calificación y gestión de prospectos",
-    atajo: "G L",
-  },
-  {
-    id: "M3",
-    ruta: "/negocios",
-    nombre: "Negocios",
-    recurso: "deals",
-    workspaceId: "comercial",
-    icono: "Kanban",
-    descripcion: "Embudo comercial de oportunidades y cierres de venta",
-    atajo: "G P",
-  },
-  {
-    id: "M1",
-    ruta: "/contactos",
-    nombre: "Contactos",
-    recurso: "contacts",
-    workspaceId: "comercial",
-    icono: "Users",
-    descripcion: "Directorio unificado de clientes e inversionistas",
-    atajo: "G C",
-  },
+// Metadatos adicionales (workspace, descripciones, atajos) se mantienen EXACTOS para no cambiar UI visible.
+// El listado base + orden + nombre + recurso + icono + subrutas viene del registry.
+const META: Record<string, { workspaceId: WorkspaceId; descripcion: string; atajo?: string; badge?: string }> = {
+  "M16": { workspaceId: "comercial", descripcion: "Descuentos, reservas y liquidaciones pendientes", atajo: "G Q" },
+  "M17": { workspaceId: "brokerage", descripcion: "Reservas de unidades y seguimiento de cobros", atajo: "G V" },
+  "M18": { workspaceId: "comercial", descripcion: "Expediente documental de cada negocio", atajo: "G D" },
+  "M19": { workspaceId: "operaciones", descripcion: "Entrega y seguimiento de cada propiedad", atajo: "G Z" },
+  "M20": { workspaceId: "herramientas", descripcion: "Configuración del portal y acceso de clientes", atajo: "G H" },
+  "M21": { workspaceId: "brokerage", descripcion: "Comunidad y colaboración de la red", atajo: "G U" },
+  "M22": { workspaceId: "herramientas", descripcion: "Flujos y reglas de automatización", atajo: "G F" },
+  "M14": { workspaceId: "comercial", descripcion: "Resumen ejecutivo y tablero operativo del día", atajo: "G I" },
+  "M2": { workspaceId: "comercial", descripcion: "Captación, calificación y gestión de prospectos", atajo: "G L" },
+  "M3": { workspaceId: "comercial", descripcion: "Embudo comercial de oportunidades y cierres de venta", atajo: "G P" },
+  "M1": { workspaceId: "comercial", descripcion: "Directorio unificado de clientes e inversionistas", atajo: "G C" },
+  "M5": { workspaceId: "operaciones", descripcion: "Catálogo maestro de proyectos, tipologías y unidades", atajo: "G R" },
+  "M6": { workspaceId: "operaciones", descripcion: "Seguimiento fotográfico y cronograma constructivo", atajo: "G O" },
+  "M4-agenda": { workspaceId: "operaciones", descripcion: "Citas con clientes, visitas a proyectos y reuniones", atajo: "G A" },
+  "M4-tareas": { workspaceId: "operaciones", descripcion: "Actividades operativas y tareas pendientes de seguimiento", atajo: "G T" },
+  "M7": { workspaceId: "brokerage", descripcion: "Red de intermediarios inmobiliarios y agencias aliadas", atajo: "G B" },
+  "M8": { workspaceId: "brokerage", descripcion: "Objetivos mensuales, trimestrales y KPIs comerciales", atajo: "G M" },
+  "M9": { workspaceId: "brokerage", descripcion: "Liquidación y cálculo de comisiones por venta cerrada", atajo: "G $" },
+  "M11": { workspaceId: "herramientas", descripcion: "Mensajería, WhatsApp y plantillas de contacto", atajo: "G W" },
+  "M12": { workspaceId: "herramientas", descripcion: "Métricas consolidadas, ratios de conversión e inteligencia", atajo: "G X" },
+  "M10": { workspaceId: "herramientas", descripcion: "Centro de capacitación y recursos para brokers y asesores", atajo: "G Y" },
+  "M13": { workspaceId: "herramientas", descripcion: "Ajustes del sistema, parámetros de seguridad y preferencias", atajo: "G S" },
+};
 
-  // Espacio 2: Operaciones & Activos
-  {
-    id: "M5",
-    ruta: "/propiedades",
-    nombre: "Propiedades",
-    recurso: "projects",
-    workspaceId: "operaciones",
-    icono: "Building2",
-    descripcion: "Catálogo maestro de proyectos, tipologías y unidades",
-    atajo: "G R",
-  },
-  {
-    id: "M6",
-    ruta: "/avances",
-    nombre: "Avances de obra",
-    recurso: "construction_phases",
-    workspaceId: "operaciones",
-    icono: "HardHat",
-    descripcion: "Seguimiento fotográfico y cronograma constructivo",
-    atajo: "G O",
-  },
-  {
-    id: "M4",
-    ruta: "/agenda",
-    nombre: "Agenda",
-    recurso: "activities",
-    workspaceId: "operaciones",
-    icono: "Calendar",
-    descripcion: "Citas con clientes, visitas a proyectos y reuniones",
-    atajo: "G A",
-  },
-  {
-    id: "M4",
-    ruta: "/tareas",
-    nombre: "Tareas",
-    recurso: "activities",
-    workspaceId: "operaciones",
-    icono: "CheckSquare",
-    descripcion: "Actividades operativas y tareas pendientes de seguimiento",
-    atajo: "G T",
-  },
-
-  // Espacio 3: Red & Finanzas
-  {
-    id: "M7",
-    ruta: "/brokers",
-    nombre: "Brokers",
-    recurso: "brokers",
-    workspaceId: "brokerage",
-    icono: "Briefcase",
-    descripcion: "Red de intermediarios inmobiliarios y agencias aliadas",
-    atajo: "G B",
-  },
-  {
-    id: "M8",
-    ruta: "/metas",
-    nombre: "Metas",
-    recurso: "goals",
-    workspaceId: "brokerage",
-    icono: "Target",
-    descripcion: "Objetivos mensuales, trimestrales y KPIs comerciales",
-    atajo: "G M",
-  },
-  {
-    id: "M9",
-    ruta: "/comisiones",
-    nombre: "Comisiones",
-    recurso: "commissions",
-    workspaceId: "brokerage",
-    icono: "BadgeDollarSign",
-    descripcion: "Liquidación y cálculo de comisiones por venta cerrada",
-    atajo: "G $",
-  },
-
-  // Espacio 4: Inteligencia & Herramientas
-  {
-    id: "M11",
-    ruta: "/comunicaciones",
-    nombre: "Comunicaciones",
-    recurso: "communications",
-    workspaceId: "herramientas",
-    icono: "MessageSquare",
-    descripcion: "Mensajería, WhatsApp y plantillas de contacto",
-    atajo: "G W",
-  },
-  {
-    id: "M12",
-    ruta: "/reportes",
-    nombre: "Reportes",
-    recurso: "reports",
-    workspaceId: "herramientas",
-    icono: "BarChart3",
-    descripcion: "Métricas consolidadas, ratios de conversión e inteligencia",
-    atajo: "G X",
-  },
-  {
-    id: "M10",
-    ruta: "/academy",
-    nombre: "Academy",
-    recurso: "academy",
-    workspaceId: "herramientas",
-    icono: "GraduationCap",
-    descripcion: "Centro de capacitación y recursos para brokers y asesores",
-    atajo: "G Y",
-  },
-  {
-    id: "M13",
-    ruta: "/configuracion",
-    nombre: "Configuración",
-    recurso: "settings",
-    workspaceId: "herramientas",
-    icono: "Settings",
-    descripcion: "Ajustes del sistema, parámetros de seguridad y preferencias",
-    atajo: "G S",
-  },
-];
+export const MODULOS: readonly Modulo[] = REGISTRO_MODULOS.map((r) => {
+  const meta = META[r.id] ?? { workspaceId: "herramientas" as WorkspaceId, descripcion: r.nombre };
+  return {
+    id: r.idLegado ?? r.id,
+    ruta: r.rutaBase,
+    nombre: r.nombre,
+    recurso: r.recurso,
+    workspaceId: meta.workspaceId,
+    icono: r.icono ?? "Circle",
+    descripcion: meta.descripcion,
+    atajo: meta.atajo,
+    ...(meta.badge ? { badge: meta.badge } : {}),
+  };
+});
 
 export type EntradaN1 = {
   id: string;
