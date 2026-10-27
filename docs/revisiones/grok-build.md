@@ -1,6 +1,6 @@
 # Revisión — rama `grok-build`
 
-- Estado: terminada (62 hallazgos) (actualizado 2026-10-27T09:27-04:00)
+- Estado: corriendo: modular-continuar (actualizado 2026-10-27T10:16-04:00)
 - Hallazgos: 62 — por tipo: funcionalidad 22, mejora 18, diseño 11, móvil 11
 - Log completo (no versionado): `/workspace/crm-plan/tablero/revisiones/grok-build.log`
 
