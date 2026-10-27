@@ -1,0 +1,45 @@
+Syslog yes
+UMask 007
+Mode sv
+Canonicalization relaxed/simple
+Domain quisqueyahome.com
+Selector qh2026
+KeyFile /etc/opendkim/keys/quisqueyahome.com/qh2026.private
+InternalHosts 127.0.0.1,172.16.1.0/24
+Socket inet:8891@127.0.0.1
+PidFile /run/opendkim/opendkim.pid
+OversignHeaders From
+UserID opendkim
+---
+alias_database = hash:/etc/aliases
+alias_maps = hash:/etc/aliases
+append_dot_mydomain = no
+biff = no
+compatibility_level = 3.6
+disable_vrfy_command = yes
+inet_interfaces = 127.0.0.1, 172.16.1.1
+inet_protocols = ipv4
+mailbox_size_limit = 0
+message_size_limit = 10240000
+milter_default_action = accept
+milter_protocol = 6
+mydestination = localhost
+mydomain = quisqueyahome.com
+myhostname = mail.quisqueyahome.com
+mynetworks = 127.0.0.0/8 172.16.1.0/24
+myorigin = quisqueyahome.com
+non_smtpd_milters = inet:127.0.0.1:8891
+readme_directory = no
+recipient_delimiter = +
+relay_domains =
+relayhost =
+smtp_tls_CApath = /etc/ssl/certs
+smtp_tls_security_level = may
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtpd_banner = $myhostname ESMTP
+smtpd_milters = inet:127.0.0.1:8891
+smtpd_relay_restrictions = permit_mynetworks, reject
+smtpd_tls_cert_file = /etc/ssl/certs/ssl-cert-snakeoil.pem
+smtpd_tls_key_file = /etc/ssl/private/ssl-cert-snakeoil.key
+smtpd_tls_security_level = may
+transport_maps = hash:/etc/postfix/transport
