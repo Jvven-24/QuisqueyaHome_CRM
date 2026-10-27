@@ -1,9 +1,13 @@
 # R · Relevo
 
 <!-- fase3:start -->
-## Fase 3 RBAC · entrega autorizada (3/4)
+## Fase 3 RBAC · entrega local autorizada — 2026-10-27
 
-Datos/dominio en 88fd49d; administración/API en fa4c183. Este commit integra matriz por rol y broker, herencia, badge personalizado, restablecimiento al rol con motivo, asignación de equipos y supervisores, y barra ver-como de solo lectura con salida. Resta concesión de reasignación y evidencia final. Verificación observada del árbol completo con Node 22: typecheck/lint limpios; 1126 aprobadas, 2 omitidas. Sin migración aplicada, build/dev ni push. UI real/BD y revisión independiente pendientes; Gemini CLI sin autenticación.
+Rama `codex/wilber-crm-20261026`. Manager, overrides auditados con precedencia central, equipos/supervisores reales, matriz por rol y broker y ver-como de solo lectura implementados. Conceder leads:edit all permite reasignación sin cambiar de rol; manager no lo recibe por defecto. Commits: 88fd49d (datos/dominio), fa4c183 (administración/API), 70bf483 (interfaz) y este commit (reasignación/evidencia).
+
+**Verificación final observada:** Node 22.23.4; typecheck y lint limpios; npm test: **1126 aprobadas, 2 omitidas, 0 fallos**. Ficha `specs/fase3-rbac/spec.md` BUILT/L3; evidencia y revisión estática de seguridad en `docs/ENTREGA_FASE3_RBAC.md`. Migración **0017_rbac_supervision.sql** idempotente y journal actualizado, **sin aplicar**. Antes de desplegar debe aplicarse tras respaldo: auth ya consulta las tablas nuevas. Sin build/dev ni push. Pendientes: BD real, recorrido/capturas UI y revisión independiente (Gemini CLI sin autenticación; no hubo informe). No se cierran issues ni se declara VERIFIED.
+
+Esta entrega autoriza explícitamente producir, probar localmente y commitear en la rama actual; las restricciones incompatibles del relevo histórico de abajo no aplican a esta tarea.
 <!-- fase3:end -->
 
 ## Entrega autorizada en rama fase2-tmp — 2026-10-27

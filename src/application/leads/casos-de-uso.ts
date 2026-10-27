@@ -189,7 +189,7 @@ export async function crearLead(deps: DepsLeads, actor: Actor, entrada: EntradaC
  * segunda condición "es broker activo". Esa comprobación va ANTES de leer el
  * lead, como antes: un broker inválido responde 422 aunque el lead no exista.
  *
- * M41 / Decisión #47: reasignar cartera corresponde al administrador.
+ * Fase 3: la reasignación requiere alcance total concedido por el administrador.
  */
 export async function asignarResponsableDeLead(
   deps: DepsLeads,
@@ -211,8 +211,8 @@ export async function asignarResponsableDeLead(
     // El `SELECT` ya ocurrió por `id`: el alcance se comprueba en memoria con
     // `reaches`. Fuera de alcance responde igual que inexistente.
     if (!reaches(actor, alcance, lead.brokerId)) throw new NotFoundError();
-    if (actor.roleSlug !== "admin" || alcance !== "all") {
-      throw new ForbiddenError("Solo un administrador puede reasignar el responsable de un lead.");
+    if (alcance !== "all" || actor.readOnly) {
+      throw new ForbiddenError("Se requiere permiso total de edición de leads para reasignar el responsable.");
     }
     if (lead.status === "converted" || lead.status === "discarded") {
       throw new ConflictError("No se puede reasignar un lead convertido o descartado.");

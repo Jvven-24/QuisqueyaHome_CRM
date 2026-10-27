@@ -181,7 +181,7 @@ export default async function LeadsPage({
 
   if (params.lead !== undefined && !leadSeleccionado) notFound();
 
-  if (primero(params.vista) === "asignacion") return <AsignacionVista key={[pagina,q].join(":")} leads={filas} brokers={brokers} total={totales[0]?.total ?? 0} page={pagina} q={q} canAssign={actor.roleSlug === "admin" && scopeFor(actor,"leads","edit") === "all"} />;
+  if (primero(params.vista) === "asignacion") return <AsignacionVista key={[pagina,q].join(":")} leads={filas} brokers={brokers} total={totales[0]?.total ?? 0} page={pagina} q={q} canAssign={scopeFor(actor,"leads","edit") === "all"} />;
 
   return (
     <LeadsVista
@@ -199,6 +199,7 @@ export default async function LeadsPage({
       historial={leadSeleccionado ? <Historial entidad="lead" entidadId={leadSeleccionado.id} /> : null}
       ahora={Date.now()}
       cola={primero(params.cola) === "1"}
+      canAssign={scopeFor(actor, "leads", "edit") === "all"}
       roleSlug={actor.roleSlug}
       actorId={actor.userId}
     />

@@ -70,7 +70,7 @@ export function AsignacionVista({ leads, brokers, total, page, canAssign, q }: {
         }
     }
     return <Desk title="Asignación y distribución" subtitle="Revisa la carga y confirma cada cambio de responsable. Cada lead conserva su auditoría.">
-    <p className={s.panel}>La selección se limita a las {leads.length} filas de esta página de {total} resultados. Los leads convertidos o descartados no se reasignan. El servidor vuelve a comprobar permisos y concurrencia en cada operación.</p>{!canAssign && <p role="note" className={s.preview}>La reasignación está reservada al administrador. Puedes consultar la distribución; toma tus leads disponibles desde su ficha.</p>}<form action="/leads/asignacion" className={s.toolbar}>
+    <p className={s.panel}>La selección se limita a las {leads.length} filas de esta página de {total} resultados. Los leads convertidos o descartados no se reasignan. El servidor vuelve a comprobar permisos y concurrencia en cada operación.</p>{!canAssign && <p role="note" className={s.preview}>La reasignación requiere un permiso de edición de leads con alcance total concedido por el administrador. Puedes consultar la distribución; toma tus leads disponibles desde su ficha.</p>}<form action="/leads/asignacion" className={s.toolbar}>
     <label>Buscar lead<input name="q" defaultValue={q} placeholder="Nombre, teléfono o correo"/>
     </label>
     <button className={s.button}>Buscar</button>

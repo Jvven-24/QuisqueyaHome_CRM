@@ -41,7 +41,7 @@ function formatoMonto(lead: LeadFila): string {
  *
  * Cumple con Decisión #47:
  * - El broker puede tomar leads no asignados desde la cola de disponibles con bloqueo concurrente.
- * - Solo el administrador reasigna a otros brokers.
+ * - El administrador puede conceder reasignación con edición de leads de alcance total.
  * - Los diálogos son modales accesibles (CA-17: sin confirm/alert nativos).
  * - Controles táctiles >= 48px (min-h-12) y tipografía >= 13px.
  */
@@ -51,6 +51,7 @@ export function LeadInspector({
   historial,
   actorId,
   roleSlug,
+  canAssign = false,
   onClose,
 }: {
   lead: LeadFila;
@@ -58,6 +59,7 @@ export function LeadInspector({
   historial: React.ReactNode;
   actorId?: number;
   roleSlug?: string;
+  canAssign?: boolean;
   onClose: () => void;
   }) {
   const router = useRouter();
@@ -84,6 +86,7 @@ export function LeadInspector({
 
   const puedeActuar = lead.status !== "converted" && lead.status !== "discarded";
   const esAdmin = roleSlug === "admin";
+  const puedeReasignar = canAssign;
   const sinResponsable = !lead.brokerId;
   const tieneHistorial = historial !== null && historial !== undefined;
 
@@ -391,7 +394,7 @@ export function LeadInspector({
                 )}
 
                 {/* Asignación admin o toma de lead según Decisión #47 */}
-                {puedeActuar && esAdmin && brokers.length > 0 && (
+                {puedeActuar && puedeReasignar && brokers.length > 0 && (
                   <div className="mt-3 flex flex-wrap items-center gap-2">
                     <select
                       aria-label="Elegir broker a asignar"
@@ -418,7 +421,7 @@ export function LeadInspector({
                   </div>
                 )}
 
-                {puedeActuar && !esAdmin && sinResponsable && actorId && (
+                {puedeActuar && !esAdmin && !puedeReasignar && sinResponsable && actorId && (
                   <div className="mt-3">
                     <button
                       className="inline-flex min-h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-gold-600 px-5 text-[13.5px] font-bold text-navy-950 hover:bg-gold-500 disabled:cursor-wait disabled:opacity-70 shadow-sm transition-all focus-visible:outline-2 focus-visible:outline-gold-700"

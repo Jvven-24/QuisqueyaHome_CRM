@@ -603,3 +603,12 @@ test("M41 BOLA: contactoVisible filtra alcance y papelera en SQL", () => {
   const method = source.slice(source.indexOf("async contactoVisible("), source.indexOf("async candidatosBroker("));
   assert.ok(method.includes("visibleRows(actor, alcance, contacts.brokerId, contacts.deletedAt)"));
 });
+
+test("Fase 3: manager con edición all concedida puede reasignar; team no lo permite", async () => {
+  const manager: Actor = { userId: 4, roleSlug: "manager", permissions: [{ resource: "leads", action: "edit", scope: "all" }], teamUserIds: [5] };
+  const { deps, auditoria } = montar({ leads: [lead({ id: 1, brokerId: 5 })] });
+  await assert.rejects(asignarResponsableDeLead(deps, manager, "team", 1, { brokerId: 6 }), ForbiddenError);
+  const updated = await asignarResponsableDeLead(deps, manager, "all", 1, { brokerId: 6 });
+  assert.equal(updated.brokerId, 6);
+  assert.equal(auditoria.registros.length, 1);
+});

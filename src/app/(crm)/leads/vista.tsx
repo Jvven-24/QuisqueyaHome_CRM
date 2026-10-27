@@ -140,6 +140,7 @@ export function LeadsVista({
   historial,
   soloFicha = false,
   roleSlug,
+  canAssign = false,
   actorId,
   ahora = 0,
   cola = false,
@@ -157,6 +158,7 @@ export function LeadsVista({
   historial: ReactNode;
   soloFicha?: boolean;
   roleSlug: string;
+  canAssign?: boolean;
   actorId?: number;
   ahora?: number;
   cola?: boolean;
@@ -328,6 +330,7 @@ export function LeadsVista({
             historial={historial}
             actorId={actorId}
             roleSlug={roleSlug}
+            canAssign={canAssign}
             onClose={() => router.push("/leads")}
           />
     </div>
@@ -606,6 +609,7 @@ export function LeadsVista({
             historial={historial}
             actorId={actorId}
             roleSlug={roleSlug}
+            canAssign={canAssign}
             onClose={() => irCon({ lead: undefined })}
           />
         )}

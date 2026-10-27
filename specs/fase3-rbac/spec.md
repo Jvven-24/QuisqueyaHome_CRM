@@ -1,6 +1,6 @@
 # Fase 3 · Permisos individuales y supervisión
-estado: READY
-Nivel: L2. Autorización: solicitud explícita del usuario de 2026-10-27.
+estado: BUILT
+Nivel: L3. Autorización: solicitud explícita del usuario de 2026-10-27.
 Fuente completa: /workspace/crm-plan/PLAN-EQUIPO.md §4 y REQUISITOS-ENTREGA.md (RQ-01 a RQ-04).
 
 ## Alcance y aceptación
@@ -26,3 +26,6 @@ Reutilizar roles/permissions/users/teams/team_members/audit_log. Nuevas user_per
 
 ## Verificación independiente
 Pendiente de otro proveedor. No declarar VERIFIED ni cerrar issues remotos. No existe servidor autorizado para captura; validar 320/390/768/1440 al desplegar en entorno de prueba.
+
+## Evidencia de construcción
+`docs/ENTREGA_FASE3_RBAC.md`: typecheck/lint y 1126 pruebas aprobadas, 2 omitidas con Node 22. Migración no aplicada; BD, UI y revisión independiente pendientes. No VERIFIED.
