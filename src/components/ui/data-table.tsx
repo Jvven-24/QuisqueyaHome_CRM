@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode, type ElementType } from "react";
 import { ArrowUpDown, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Inbox } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -52,6 +52,7 @@ export function DataTable<F>({
 }: Props<F>) {
   const [orden, setOrden] = useState<{ clave: string; asc: boolean } | null>(ordenInicial ?? null);
   const [pagina, setPagina] = useState(0);
+  const CabeceraFicha: ElementType = onAbrir ? "button" : "div";
   const [marcadas, setMarcadas] = useState<Set<string>>(new Set());
 
   const ordenadas = useMemo(() => {
@@ -281,10 +282,13 @@ export function DataTable<F>({
                     />
                   )}
                   {medioMovil && <span className="shrink-0">{medioMovil(fila)}</span>}
-                  <button
-                    type="button"
-                    onClick={onAbrir ? () => onAbrir(fila) : undefined}
-                    className="min-w-0 flex-1 text-left cursor-pointer bg-transparent border-none p-0"
+                  {/* Sin onAbrir no hay acción: un div evita anidar un botón dentro de otro botón
+                      cuando la columna título trae su propio botón (React #418 en /metas y /reservas/facturacion). */}
+                  <CabeceraFicha
+                    {...(onAbrir
+                      ? { type: "button" as const, onClick: () => onAbrir(fila) }
+                      : {})}
+                    className={"min-w-0 flex-1 text-left bg-transparent border-none p-0" + (onAbrir ? " cursor-pointer" : "")}
                   >
                     <strong className="line-clamp-2 text-[14px] font-bold leading-snug text-foreground">
                       {titulo ? textoPlano(titulo, fila, id) : id}
@@ -294,7 +298,7 @@ export function DataTable<F>({
                         {textoPlano(subtitulo, fila, "")}
                       </small>
                     )}
-                  </button>
+                  </CabeceraFicha>
                 </div>
                 {(insignia || resto.length > 0) && (
                   <dl className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-border/60 pt-2 mt-1">
