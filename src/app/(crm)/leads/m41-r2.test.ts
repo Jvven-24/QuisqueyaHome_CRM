@@ -22,10 +22,14 @@ function cargar(path: string, mocks: Record<string, unknown> = {}): Record<strin
 
 /** Render de la vista real; solo se sustituyen navegación y dependencias fuera de la lista. */
 export function renderLeads(q = "", hayFilas = true): string {
-  const ui = cargar("src/app/(crm)/_ui/prototipo-ui.tsx", { "@/hooks/use-focus-trap": {} });
+  const ui = cargar("src/app/(crm)/_ui/prototipo-ui.tsx", {
+    "@/hooks/use-focus-trap": {},
+    "@/components/modulo": { PageHeader: ({ title, description, actions }: { title: string; description?: string; actions?: unknown }) => createElement("header", null, title, description, actions as never) },
+  });
   const table = cargar("src/components/ui/data-table.tsx", { "@/lib/utils": { cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") } });
   const { LeadsVista } = cargar("src/app/(crm)/leads/vista.tsx", {
     "next/navigation": { useRouter: () => ({}), usePathname: () => "/leads", useSearchParams: () => new URLSearchParams({ q, page: "4", lead: "5" }) },
+    "@/components/modulo": { ModuleTabs: ({ items }: { items: Array<{ href: string; label: string }> }) => createElement("nav", null, ...items.map(item => createElement("a", { key: item.href, href: item.href }, item.label))) },
     "./_componentes/sla-preview": { SlaPolicyPreview: () => null },
     "../inicio/estado-conexion": { EstadoConexion: () => null },
     "@/hooks/use-focus-trap": {},

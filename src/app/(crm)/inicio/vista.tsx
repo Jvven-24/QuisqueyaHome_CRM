@@ -4,6 +4,7 @@ import Link from "next/link";
 import { EstadoConexion } from "./estado-conexion";
 import type { DashboardMetrics } from "@/application/dashboard/puertos";
 import { formatNumber } from "@/lib/formato-analitica";
+import { mostrarDemo } from "@/lib/flags";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -106,7 +107,7 @@ export function InicioVista({
           {permissions.leads && <Link className="button min-h-12" href="/leads?cola=1" prefetch={false}>Cola de primer contacto</Link>}
           {permissions.activities && <Link className="button min-h-12" href="/tareas" prefetch={false}>Tareas pendientes · {metricas.tareasPendientesCount}</Link>}
           {permissions.activities && <Link className="button min-h-12" href="/agenda" prefetch={false}>Citas de hoy · {metricas.citasHoyCount}</Link>}
-          {!isBroker && <Link className="button min-h-12" href="/aprobaciones" prefetch={false}>Revisar aprobaciones</Link>}
+          {!isBroker && mostrarDemo() && <Link className="button min-h-12" href="/aprobaciones" prefetch={false}>Revisar aprobaciones</Link>}
         </div>
         <p role="note" className="text-sm text-ink-muted mt-3">Alertas de SLA y contador de aprobaciones: pendientes de un servicio operativo; no se presentan como cero.</p>
       </section>
