@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2, Lock } from "lucide-react";
-import { createBrowserClient } from "@supabase/ssr";
 
 export default function NuevaClavePage() {
   const router = useRouter();
@@ -21,8 +20,8 @@ export default function NuevaClavePage() {
     event.preventDefault();
     setError(null);
 
-    if (nuevaPassword.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres.");
+    if (nuevaPassword.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres.");
       return;
     }
 
@@ -34,21 +33,15 @@ export default function NuevaClavePage() {
     setEnviando(true);
 
     try {
-      // Supabase client from browser session
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-      if (!supabaseUrl || !supabaseKey) {
-        throw new Error("Configuración de autenticación no disponible.");
-      }
-
-      const supabase = createBrowserClient(supabaseUrl, supabaseKey);
-      const { error: updateError } = await supabase.auth.updateUser({
-        password: nuevaPassword,
+      const q = new URLSearchParams(window.location.search);
+      const response = await fetch("/api/auth/nueva-clave", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ token_hash: q.get("token_hash"), type: q.get("type") ?? "recovery", password: nuevaPassword }),
       });
-
-      if (updateError) {
-        throw new Error(updateError.message);
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(typeof body.error === "string" ? body.error : "No se pudo actualizar la contraseña.");
       }
 
       setCompletado(true);
@@ -124,7 +117,7 @@ export default function NuevaClavePage() {
                   Crear nueva contraseña
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1.5">
-                  Ingresa tu nueva clave de acceso de al menos 6 caracteres.
+                  Ingresa tu nueva clave de acceso de al menos 8 caracteres.
                 </p>
               </div>
 
@@ -143,7 +136,7 @@ export default function NuevaClavePage() {
                       name="nuevaPassword"
                       type={mostrar1 ? "text" : "password"}
                       required
-                      minLength={6}
+                      minLength={8}
                       autoComplete="new-password"
                       value={nuevaPassword}
                       onChange={(e) => setNuevaPassword(e.target.value)}
@@ -176,7 +169,7 @@ export default function NuevaClavePage() {
                       name="confirmarPassword"
                       type={mostrar2 ? "text" : "password"}
                       required
-                      minLength={6}
+                      minLength={8}
                       autoComplete="new-password"
                       value={confirmarPassword}
                       onChange={(e) => setConfirmarPassword(e.target.value)}

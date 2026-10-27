@@ -11,7 +11,11 @@
  */
 
 import { createHash } from "node:crypto";
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import {
+  constanciaAcreditaFormacion,
+  estadoVigenciaConstancia,
+} from "../../../domain/academy-vigencia.ts";
 import { ForbiddenError, NotFoundError, ValidationError } from "../../../domain/errors.ts";
 import type { Actor } from "../../../domain/rbac.ts";
 import type {
@@ -550,11 +554,28 @@ export function repositorioAcademy(tx: Tx): RepositorioAcademy {
         )
         .orderBy(desc(academyReviewRequests.id));
 
-      const aprobada = existentes.find((e) => e.status === "aprobado");
-      if (aprobada) {
-        throw new ValidationError(
-          "Ya existe una solicitud aprobada con constancia vigente para este curso.",
+      // Una aprobación solo bloquea mientras su constancia siga acreditando formación.
+      // Vencida o revocada, el broker puede pedir recertificación.
+      const aprobadas = existentes.filter((e) => e.status === "aprobado");
+      if (aprobadas.length > 0) {
+        const constanciasAprobadas = await tx
+          .select({ status: academyCertificates.status, issuedAt: academyCertificates.issuedAt })
+          .from(academyCertificates)
+          .where(
+            and(
+              inArray(academyCertificates.reviewRequestId, aprobadas.map((a) => a.id)),
+              isNull(academyCertificates.deletedAt),
+            ),
+          );
+        const ahora = new Date();
+        const acreditada = constanciasAprobadas.some((c) =>
+          constanciaAcreditaFormacion(estadoVigenciaConstancia(c, ahora)),
         );
+        if (acreditada) {
+          throw new ValidationError(
+            "Ya existe una solicitud aprobada con constancia vigente para este curso.",
+          );
+        }
       }
 
       const pendiente = existentes.find((e) => e.status === "pendiente");

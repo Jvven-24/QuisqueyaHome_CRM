@@ -1,0 +1,3 @@
+# Quisqueya CRM: respaldo diario 03:15 (hora del servidor) y chequeo de salud
+15 3 * * * root /opt/qh-dev/respaldo-diario.sh
+*/5 * * * * root /opt/qh-dev/vigilar.sh

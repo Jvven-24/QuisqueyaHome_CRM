@@ -451,7 +451,7 @@ export function AcademyAdministracionVista({
           <button
             type="button"
             onClick={() => setErrorUi(null)}
-            className="min-h-[36px] px-2.5 rounded-lg text-xs font-semibold text-red-700 hover:bg-red-100"
+            className="min-h-[44px] px-2.5 rounded-lg text-xs font-semibold text-red-700 hover:bg-red-100"
           >
             Cerrar
           </button>
@@ -474,7 +474,7 @@ export function AcademyAdministracionVista({
           <button
             type="button"
             onClick={() => setExitoUi(null)}
-            className="min-h-[36px] px-2.5 rounded-lg text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+            className="min-h-[44px] px-2.5 rounded-lg text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
           >
             Cerrar
           </button>
@@ -485,14 +485,14 @@ export function AcademyAdministracionVista({
       <div
         role="tablist"
         aria-label="Secciones de administración de Academy"
-        className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 rounded-xl bg-slate-100 p-1.5 overflow-x-auto"
+        className="flex flex-nowrap items-center gap-1.5 rounded-xl bg-slate-100 p-1.5 overflow-x-auto scroll-smooth snap-x snap-mandatory overscroll-x-contain"
       >
         <button
           type="button"
           role="tab"
           aria-selected={tabActiva === "progreso"}
           onClick={() => setTabActiva("progreso")}
-          className={`flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
+          className={`snap-start flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
             tabActiva === "progreso"
               ? "bg-white text-slate-900 shadow-sm"
               : "text-slate-600 hover:text-slate-900"
@@ -507,7 +507,7 @@ export function AcademyAdministracionVista({
           role="tab"
           aria-selected={tabActiva === "matricular"}
           onClick={() => setTabActiva("matricular")}
-          className={`flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
+          className={`snap-start flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
             tabActiva === "matricular"
               ? "bg-white text-slate-900 shadow-sm"
               : "text-slate-600 hover:text-slate-900"
@@ -522,7 +522,7 @@ export function AcademyAdministracionVista({
           role="tab"
           aria-selected={tabActiva === "crear"}
           onClick={() => setTabActiva("crear")}
-          className={`flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
+          className={`snap-start flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
             tabActiva === "crear"
               ? "bg-white text-slate-900 shadow-sm"
               : "text-slate-600 hover:text-slate-900"
@@ -537,7 +537,7 @@ export function AcademyAdministracionVista({
           role="tab"
           aria-selected={tabActiva === "revisiones"}
           onClick={() => setTabActiva("revisiones")}
-          className={`flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
+          className={`snap-start flex-1 min-w-[140px] min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs sm:text-sm font-semibold transition-all ${
             tabActiva === "revisiones"
               ? "bg-white text-slate-900 shadow-sm"
               : "text-slate-600 hover:text-slate-900"
@@ -617,7 +617,7 @@ export function AcademyAdministracionVista({
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-100"
+                  className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-100"
                 >
                   <Pencil className="w-3.5 h-3.5 text-slate-600" />
                   <span>Editar curso en Moodle</span>
@@ -628,7 +628,7 @@ export function AcademyAdministracionVista({
                     href={cursoActivo.urlLanzamiento}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
+                    className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
                   >
                     <span>Ver curso en Moodle</span>
                     <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
@@ -770,7 +770,7 @@ export function AcademyAdministracionVista({
                         href={c.urlEdicion || `${saludLms.url}/course/edit.php?id=${c.id}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50"
+                        className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50"
                       >
                         <Pencil className="w-3.5 h-3.5 text-slate-600" />
                         <span>Editar curso</span>
@@ -781,7 +781,7 @@ export function AcademyAdministracionVista({
                           href={c.urlLanzamiento}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-slate-900 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+                          className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-slate-900 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-800"
                         >
                           <span>Abrir en Moodle</span>
                           <ExternalLink className="w-3.5 h-3.5 text-amber-400" />

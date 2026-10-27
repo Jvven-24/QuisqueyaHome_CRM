@@ -1,0 +1,83 @@
+# Quisqueya Home CRM — Índice maestro
+
+_Generado automáticamente por `/workspace/crm-plan/central/sync.sh` · 2026-10-27 10:18 (hora RD, UTC-4). No editar a mano._
+
+Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.com/drive/folders/16LGfWveOKvE2xxCazeecmoLbl1aDIYkD) · Índice como Google Doc: [INDICE (Doc)](https://docs.google.com/document/d/12ACs5SVspYWg2Ir80kEfJ1v5SfAHKYXga-ikSFD3V5Y/edit)
+
+## 1. Tablero
+- Tablero vivo (local): `/workspace/crm-plan/tablero/index.html` · copia estática: [Drive 01-Tablero](https://drive.google.com/drive/folders/1G0sThKml0_UrSvqqAE7YBn5AIw9XfHqT)
+- Avance global: **176/760 ítems (23%)** · estado.json actualizado 2026-10-27T10:17-04:00
+- Pendientes abiertos: **584**
+
+- Specs en Drive: [Doc 22 módulos](https://docs.google.com/document/d/13Gc3K6w-uXysv-S164mRpByiVNieLRmCTatiCVpwOuQ/edit) · Revisiones: [Doc revisiones](https://docs.google.com/document/d/1uR7SaZE-7kflhMIy9z92qlg3I04RlROEKyKwq-MhJCA/edit) · Estado: [Doc login/Google/correo](https://docs.google.com/document/d/1vSmWraP9B-RDM-KSB4HU-eSh1rs3X44TFMtQl1Y2iqE/edit)
+
+## 2. Módulos (22)
+
+| Módulo | Spec | Avance |
+|---|---|---|
+| Inicio | [inicio.md](modulos/inicio.md) | 7/30 (23%) |
+| Leads | [leads.md](modulos/leads.md) | 11/37 (29%) |
+| Negocios | [negocios.md](modulos/negocios.md) | 9/34 (26%) |
+| Contactos | [contactos.md](modulos/contactos.md) | 6/33 (18%) |
+| Propiedades | [propiedades.md](modulos/propiedades.md) | 9/34 (26%) |
+| Agenda | [agenda.md](modulos/agenda.md) | 13/43 (30%) |
+| Tareas | [tareas.md](modulos/tareas.md) | 7/30 (23%) |
+| Comunicaciones | [comunicaciones.md](modulos/comunicaciones.md) | 8/45 (17%) |
+| Brokers | [brokers.md](modulos/brokers.md) | 7/31 (22%) |
+| Comisiones | [comisiones.md](modulos/comisiones.md) | 7/32 (21%) |
+| Metas | [metas.md](modulos/metas.md) | 8/29 (27%) |
+| Reportes | [reportes.md](modulos/reportes.md) | 7/30 (23%) |
+| Reservas | [reservas.md](modulos/reservas.md) | 8/31 (25%) |
+| Portal | [portal.md](modulos/portal.md) | 6/32 (18%) |
+| Comunidad | [comunidad.md](modulos/comunidad.md) | 1/36 (2%) |
+| Aprobaciones | [aprobaciones.md](modulos/aprobaciones.md) | 2/38 (5%) |
+| Automatizaciones | [automatizaciones.md](modulos/automatizaciones.md) | 4/36 (11%) |
+| Academy | [academy.md](modulos/academy.md) | 13/39 (33%) |
+| Documentos | [documentos.md](modulos/documentos.md) | 4/28 (14%) |
+| Posventa | [posventa.md](modulos/posventa.md) | 3/27 (11%) |
+| Configuración | [configuracion.md](modulos/configuracion.md) | 14/37 (37%) |
+| Login y seguridad | [acceso.md](modulos/acceso.md) | 18/43 (41%) |
+| Plataforma | [plataforma.md](modulos/plataforma.md) | 4/5 (80%) |
+
+## 3. Compendio
+- [Compendio maestro (PDF)](https://drive.google.com/file/d/1aBtdPm_Rkf5NthRYDHTBhyY6N3IkePQE/view) · [Plan maestro comercial (PDF)](https://drive.google.com/file/d/1GCDTpGI1FYXaLYWrfpDyIjt5tpIje_Yd/view)
+- Texto plano local: `/workspace/crm-plan/ref/compendio.txt`
+- Inducción CRM (transcripción): `/workspace/crm-plan/fuente/quisqueya-1-induccion-crm.md`
+
+## 4. Infraestructura
+- [Inventario Docker](infra/inventario-docker.md) · [PDF VT-INF-R01](https://drive.google.com/file/d/10HxbIf5QpU1vOV0jgc6iF07bRUYU7eTm/view)
+- [DESPLIEGUE.md](DESPLIEGUE.md) · [ops/](ops/) · [SUPABASE.md](SUPABASE.md)
+
+## 5. Revisiones por rama
+
+| Rama | Estado | Hallazgos | Actualizado |
+|---|---|---|---|
+| [claude-haiku](revisiones/claude-haiku.md) | corriendo: items-academy-0 | 67 | 2026-10-27T10:16-04:00 |
+| [codex-luna](revisiones/codex-luna.md) | corriendo: g20-automatizaciones | 44 | 2026-10-27T10:16-04:00 |
+| [opencode-free](revisiones/opencode-free.md) | corriendo | 0 | 2026-10-27T10:12-04:00 |
+| [grok-build](revisiones/grok-build.md) | corriendo: modular-continuar | 62 | 2026-10-27T10:16-04:00 |
+| [antigravity](revisiones/antigravity.md) | corriendo: rev-configuracion | 88 | 2026-10-27T10:16-04:00 |
+
+Últimas reasignaciones:
+```
+(aún no existe reasignaciones.log)
+```
+
+## 6. Estado Login / Google / Correo
+- [estado/login-google-correo.md](estado/login-google-correo.md)
+
+## 7. Diseño
+- [DESIGN.md](DESIGN.md) · [plan/VILTRUM-DESIGN-PLAN.md](plan/VILTRUM-DESIGN-PLAN.md) · tokens: `design/viltrum/`
+- [Drive 07-Diseño](https://drive.google.com/drive/folders/1_CKKOwwZqWKrQEZqaaTliOL-Xs5jT55K)
+
+## 8. Decisiones y pendientes
+- [plan/ORQUESTACION.md](plan/ORQUESTACION.md) · [plan/AUDITORIA-MODULOS.md](plan/AUDITORIA-MODULOS.md) · [plan/REQUISITOS-ENTREGA.md](plan/REQUISITOS-ENTREGA.md)
+- [plan/MODELOS-POR-TAREA.md](plan/MODELOS-POR-TAREA.md) · [plan/PLAN-EQUIPO.md](plan/PLAN-EQUIPO.md) · [plan/INTEGRACIONES-LISTAS.md](plan/INTEGRACIONES-LISTAS.md)
+- QA: [plan/QA-FASE2.md](plan/QA-FASE2.md) · [plan/QA-INTEGRACIONES.md](plan/QA-INTEGRACIONES.md) · [plan/FASE2-REPORTE.md](plan/FASE2-REPORTE.md)
+- Fases previas: [ENTREGA_FASE3_RBAC.md](ENTREGA_FASE3_RBAC.md) · [ENTREGA_NOTAS_PIPELINE.md](ENTREGA_NOTAS_PIPELINE.md) · [F0_ANALISIS_Y_PLAN.md](F0_ANALISIS_Y_PLAN.md) · [F0_ESTADO.md](F0_ESTADO.md) · [F1_ANALISIS_Y_PLAN.md](F1_ANALISIS_Y_PLAN.md) · [F2_ANALISIS_Y_PLAN.md](F2_ANALISIS_Y_PLAN.md) · [F2_ESTADO.md](F2_ESTADO.md) · [F3_ANALISIS_Y_PLAN.md](F3_ANALISIS_Y_PLAN.md) · [F3_ESTADO.md](F3_ESTADO.md) · [R_ANALISIS_Y_PLAN.md](R_ANALISIS_Y_PLAN.md) · [R_HALLAZGOS.md](R_HALLAZGOS.md) · [R_REGRESION.md](R_REGRESION.md) · [R_RELEVO.md](R_RELEVO.md)
+- Viltrum OS (perfiles): pendiente de que Wilber los comparta.
+- Mantenimiento: [MANTENIMIENTO-VILTRUM-DOCS.md](MANTENIMIENTO-VILTRUM-DOCS.md)
+
+## 9. Vault Obsidian (Viltrum OS)
+- Vault local: `/workspace/obsidian/viltrum-crm/` · MOC: `/workspace/obsidian/viltrum-crm/00-MOC.md` · informes: `/workspace/obsidian/viltrum-crm/informes/`
+

@@ -36,7 +36,9 @@ test("toda tabla creada en una migración tiene RLS activado", () => {
 const RUTAS_PUBLICAS: Record<string, RegExp> = {
   "auth/login/route.ts": /signInWithPassword\(/,
   "auth/logout/route.ts": /signOut\(/,
-  "auth/recuperar/route.ts": /resetPasswordForEmail\(/,
+  "auth/recuperar/route.ts": /enviarRecuperacion\(/, // límite por IP y correo; solo cuentas activas reciben correo
+  "auth/nueva-clave/route.ts": /verifyOtp\(/, // exige token_hash de un solo uso emitido por GoTrue
+  "integraciones/google/login/route.ts": /crearState\(0\)/, // solo redirige a Google con state firmado
   "auth/demo/route.ts": /qh_dev_role/,
   "leads/externo/route.ts": /coincideToken\(/,
   "health/route.ts": /select 1/, // solo responde ok/503, sin datos ni sesión

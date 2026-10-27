@@ -7,7 +7,10 @@
  * persiste las solicitudes de revisión y constancias en PostgreSQL.
  */
 
-import { consultarContextoBrokerAcademy } from "@/application/academy/consultas";
+import {
+  consultarContextoBrokerAcademy,
+  consultarProgresoEquipoAcademy,
+} from "@/application/academy/consultas";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { academyRepositorio, lmsAdaptador } from "@/infrastructure/contenedor/academy";
 import { requireScopeInPage } from "@/infrastructure/page-guard";
@@ -22,6 +25,9 @@ export default async function AcademyPage() {
   const lms = lmsAdaptador();
   const datos = await academyRepositorio().ejecutar((repo) =>
     consultarContextoBrokerAcademy(repo, lms, actor),
+  );
+  const progresoEquipo = await academyRepositorio().ejecutar((repo) =>
+    consultarProgresoEquipoAcademy(repo, actor),
   );
 
   const contenidosSerializados = datos.contenidos.map((item) => ({
@@ -65,6 +71,7 @@ export default async function AcademyPage() {
       usuarioId={actor.userId}
       usuarioNombre={datos.perfil?.fullName || actor.roleSlug}
       usuarioEmail={datos.perfil?.email || ""}
+      progresoEquipo={progresoEquipo}
     />
   );
 }
