@@ -1,5 +1,5 @@
 #!/bin/sh
-# Se ejecuta EN LA VPS dentro de /opt/qh-dev. Uso: sh remoto.sh preparar|construir|levantar|estado
+# Se ejecuta EN LA VPS dentro de /opt/qh-dev. Uso: sh remoto.sh preparar|construir|desplegar|cambiar|revertir|levantar|estado
 # Los secretos se generan aquí y no salen de la VPS (/opt/qh-dev/.env y app.env, chmod 600).
 set -eu
 cd /opt/qh-dev
@@ -48,6 +48,45 @@ construir() {
   echo "construido"
 }
 
+# Despliegue sin caída: se compila en app-next mientras app sigue sirviendo,
+# y solo al final se cambia la carpeta y se recrea el contenedor (segundos).
+# Uso: sh remoto.sh desplegar [/ruta/al/repo]   (por defecto /opt/dev/QuisqueyaHome_CRM)
+REPO_DEFECTO=/opt/dev/QuisqueyaHome_CRM
+
+construir_nuevo() {
+  ORIGEN=${1:-$REPO_DEFECTO}
+  rm -rf app-next && mkdir app-next
+  # Solo lo versionado en HEAD (sin .env, node_modules ni .next del repo).
+  git -C "$ORIGEN" archive HEAD | tar -x -C app-next
+  docker run --rm --cpus=2 --memory=3g --env-file app.env -e NEXT_TELEMETRY_DISABLED=1 -e NODE_OPTIONS=--max-old-space-size=2560 \
+    -v /opt/qh-dev/app-next:/app -w /app node:22-alpine sh -c "npm ci --no-audit --no-fund && npx next build"
+  test -f app-next/.next/BUILD_ID || { echo "build incompleto: app sigue intacta"; exit 1; }
+  echo "construido en app-next ($(git -C "$ORIGEN" rev-parse --short HEAD))"
+}
+
+cambiar() {
+  test -f app-next/.next/BUILD_ID || { echo "no hay build en app-next"; exit 1; }
+  rm -rf app-old && mv app app-old && mv app-next app
+  docker compose -p qh-dev up -d --force-recreate app
+  for i in $(seq 1 45); do
+    if docker compose -p qh-dev exec -T app wget -qO- http://127.0.0.1:3000/api/health >/dev/null 2>&1; then echo "en vivo (anterior en app-old)"; return 0; fi
+    sleep 2
+  done
+  echo "health falló: revirtiendo"; revertir; exit 1
+}
+
+revertir() {
+  test -d app-old || { echo "no hay app-old"; exit 1; }
+  rm -rf app-fallida && mv app app-fallida && mv app-old app
+  docker compose -p qh-dev up -d --force-recreate app
+  echo "revertido a la versión anterior"
+}
+
+desplegar() {
+  construir_nuevo "${1:-$REPO_DEFECTO}"
+  cambiar
+}
+
 levantar() {
   docker compose -p qh-dev up -d
   docker compose -p qh-dev ps --format "{{.Service}} {{.Status}}"
@@ -69,4 +108,4 @@ estado() {
   docker stats --no-stream --format "{{.Name}} {{.CPUPerc}} {{.MemUsage}}" | grep qh-dev || true
 }
 
-"$1"
+ACCION=$1; shift; "$ACCION" "$@"
