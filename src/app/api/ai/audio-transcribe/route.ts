@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { procesarNotaDeVozLead } from "@/application/ai/casos-de-uso";
 import { requireScope } from "@/domain/rbac";
+import { demasiadasPeticiones, leerJsonLimitado, limiteAudio } from "@/infrastructure/limites";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
@@ -32,7 +33,11 @@ export async function POST(request: Request) {
     const actor = await requireActor();
     requireScope(actor, "leads", "create");
 
-    const cuerpo = await request.json().catch(() => ({}));
+    const espera = limiteAudio.consumir(String(actor.userId));
+    if (espera) return demasiadasPeticiones(espera);
+    // ~15 MB de audio en base64 (+33 %).
+    const cuerpo = await leerJsonLimitado(request, 20 * 1024 * 1024);
+    if (cuerpo instanceof Response) return cuerpo;
     const datos = parseInput(TranscribirAudioInput, cuerpo);
 
     let audioBuffer: Buffer | undefined;

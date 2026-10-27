@@ -16,9 +16,10 @@ import { ReiniciarMetaInput } from "@/application/metas/alcances-validacion";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { metasParaEscritura } from "@/infrastructure/contenedor/metas";
+import { conIdempotencia } from "@/infrastructure/idempotencia-db";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
-export async function PUT(request: Request) {
+async function PUTSinIdempotencia(request: Request) {
   try {
     const datos = parseInput(FijarMetaInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
@@ -42,7 +43,7 @@ export async function PUT(request: Request) {
 }
 
 /** Reinicia el objetivo del periodo (solo Administrador). Lo logrado se conserva. */
-export async function DELETE(request: Request) {
+async function DELETESinIdempotencia(request: Request) {
   try {
     const datos = parseInput(ReiniciarMetaInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
@@ -53,3 +54,7 @@ export async function DELETE(request: Request) {
     return errorResponse(error);
   }
 }
+
+export const PUT = conIdempotencia("META", PUTSinIdempotencia);
+
+export const DELETE = conIdempotencia("META", DELETESinIdempotencia);

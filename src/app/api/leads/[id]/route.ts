@@ -16,7 +16,11 @@ import { leadsParaEscritura } from "@/infrastructure/contenedor/leads";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
 const AsignarBrokerInput = z.object({
-  brokerId: z.coerce.number().int().positive(),
+  // Sin broker, `coerce` daba NaN y el 400 decía "expected number, received NaN".
+  brokerId: z.preprocess(
+    (valor) => (valor === undefined || valor === null || valor === "" ? undefined : valor),
+    z.coerce.number({ error: "Elige un broker." }).int("Elige un broker.").positive("Elige un broker."),
+  ),
   reason: z.string().trim().min(1,"Escribe una justificación.").max(1000,"Usa hasta 1000 caracteres.").optional(),
 });
 

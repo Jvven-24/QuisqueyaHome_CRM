@@ -1768,7 +1768,9 @@ function ModalResultadoVisita({
           method: "PATCH",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            status: asistencia === "asistio" ? "completed" : "pending",
+            // "No asistió" cierra la cita (cancelada) en lugar de devolverla a
+            // pendiente; solo "Solicitó reprogramación" la deja abierta.
+            status: asistencia === "asistio" ? "completed" : asistencia === "no_asistio" ? "cancelled" : "pending",
             description: bitacora,
           }),
         });

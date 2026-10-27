@@ -20,6 +20,7 @@ import { NotFoundError } from "@/domain/errors";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { comisionesParaEscritura } from "@/infrastructure/contenedor/comisiones";
+import { conIdempotencia } from "@/infrastructure/idempotencia-db";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
 const EditarComisionInput = z
@@ -32,7 +33,7 @@ const EditarComisionInput = z
     path: ["_"],
   });
 
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+async function PATCHSinIdempotencia(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idParam } = await params;
     const id = Number(idParam);
@@ -54,3 +55,5 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return errorResponse(error);
   }
 }
+
+export const PATCH = conIdempotencia("COMISION", PATCHSinIdempotencia);

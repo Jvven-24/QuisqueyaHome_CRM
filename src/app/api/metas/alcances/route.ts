@@ -7,9 +7,10 @@ import { eliminarMetaAlcance, fijarMetaAlcance } from "@/application/metas/alcan
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { metasAlcanceParaEscritura } from "@/infrastructure/contenedor/metas-alcances";
+import { conIdempotencia } from "@/infrastructure/idempotencia-db";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
-export async function PUT(request: Request) {
+async function PUTSinIdempotencia(request: Request) {
   try {
     const datos = parseInput(FijarMetaAlcanceInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
@@ -29,7 +30,7 @@ export async function PUT(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+async function DELETESinIdempotencia(request: Request) {
   try {
     const datos = parseInput(EliminarMetaAlcanceInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
@@ -40,3 +41,7 @@ export async function DELETE(request: Request) {
     return errorResponse(error);
   }
 }
+
+export const PUT = conIdempotencia("META_ALCANCE", PUTSinIdempotencia);
+
+export const DELETE = conIdempotencia("META_ALCANCE", DELETESinIdempotencia);

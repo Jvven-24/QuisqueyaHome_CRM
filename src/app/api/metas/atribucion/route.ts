@@ -4,9 +4,10 @@ import { publicarReglaAtribucion } from "@/application/metas/alcances";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { metasAlcanceParaEscritura } from "@/infrastructure/contenedor/metas-alcances";
+import { conIdempotencia } from "@/infrastructure/idempotencia-db";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
-export async function POST(request: Request) {
+async function POSTSinIdempotencia(request: Request) {
   try {
     const datos = parseInput(PublicarReglaInput, await request.json().catch(() => ({})));
     const actor = await requireActor();
@@ -17,3 +18,5 @@ export async function POST(request: Request) {
     return errorResponse(error);
   }
 }
+
+export const POST = conIdempotencia("META_ATRIBUCION", POSTSinIdempotencia);

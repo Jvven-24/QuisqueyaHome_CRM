@@ -2932,8 +2932,7 @@ function ModalDesplegarPackBroker({
     setError(null);
 
     try {
-      let creadas = 0;
-      for (const etapa of playbook.secuenciaMultiTarea) {
+      const actividades = playbook.secuenciaMultiTarea.map((etapa) => {
         const fechaTarea = sumarDias(fechaBase || hoy, etapa.offsetDias);
         const startsAtIso = new Date(`${fechaTarea}T09:30:00-04:00`).toISOString();
         const descripcion = serializarDescripcionChecklist(
@@ -2941,10 +2940,7 @@ function ModalDesplegarPackBroker({
           etapa.pasos.map((texto) => ({ texto, completado: false })),
         );
 
-        const res = await fetch("/api/actividades", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
+        return {
             activityType: "task",
             title: etapa.titulo,
             description: descripcion,
@@ -2955,11 +2951,19 @@ function ModalDesplegarPackBroker({
             projectId: projectId ? Number(projectId) : null,
             dealId: dealId ? Number(dealId) : null,
             contactId: contactId ? Number(contactId) : null,
-          }),
-        });
-        if (res.ok) creadas++;
+        };
+      });
+      const res = await fetch("/api/actividades/lote", {
+        method: "POST",
+        headers: { "content-type": "application/json", "Idempotency-Key": crypto.randomUUID() },
+        body: JSON.stringify({ actividades }),
+      });
+      const cuerpo = (await res.json().catch(() => ({}))) as { creadas?: number; error?: string };
+      const creadas = res.ok ? (cuerpo.creadas ?? actividades.length) : 0;
+      if (!res.ok) {
+        setError(cuerpo.error ?? "No se pudo desplegar la secuencia de tareas. No se creó ninguna; puedes reintentar.");
+        return;
       }
-
       if (creadas > 0) {
         const nombreBroker =
           personas.find((p) => String(p.id) === assigneeId)?.fullName ?? "el broker";

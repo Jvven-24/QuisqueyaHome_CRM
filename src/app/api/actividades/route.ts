@@ -12,44 +12,12 @@
  * crea — nunca queda huérfana de responsable.
  */
 
-import { tituloActividad } from "@/application/actividades/validacion";
-import { z } from "zod";
-import { ACTIVITY_PRIORITIES, ACTIVITY_TYPES } from "@/domain/catalogs";
+import { aEntradaCrear, CrearActividadInput, limpiarVacios } from "./_entrada";
 import { requireScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
 import { actividadesParaEscritura } from "@/infrastructure/contenedor/actividades";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 import { crearActividad } from "@/application/actividades/casos-de-uso";
-
-const CrearActividadInput = z.object({
-  activityType: z.enum(ACTIVITY_TYPES),
-  title: tituloActividad,
-  description: z.string().optional(),
-  contactId: z.coerce.number().int().positive().optional(),
-  dealId: z.coerce.number().int().positive().optional(),
-  projectId: z.coerce.number().int().positive().optional(),
-  assigneeId: z.coerce.number().int().positive().optional(),
-  startsAt: z.iso.datetime({ offset: true, error: "Indica una fecha y hora válidas." }).optional(),
-  endsAt: z.iso.datetime({ offset: true, error: "Indica una fecha y hora válidas." }).optional(),
-  isAllDay: z.coerce.boolean().optional(),
-  location: z.string().optional(),
-  meetingUrl: z.string().optional(),
-  priority: z.enum(ACTIVITY_PRIORITIES).optional(),
-  /** Solo para registrar algo ya hecho (ej. una llamada que acaba de terminar). Por defecto `pending`. */
-  status: z.enum(["pending", "completed"]).optional(),
-});
-
-function limpiarVacios(cuerpo: unknown): unknown {
-  if (typeof cuerpo !== "object" || cuerpo === null) return cuerpo;
-  const copia: Record<string, unknown> = { ...(cuerpo as Record<string, unknown>) };
-  for (const campo of [
-    "description", "contactId", "dealId", "projectId", "assigneeId",
-    "startsAt", "endsAt", "location", "meetingUrl", "priority",
-  ]) {
-    if (copia[campo] === "") delete copia[campo];
-  }
-  return copia;
-}
 
 export async function POST(request: Request) {
   try {
@@ -59,22 +27,7 @@ export async function POST(request: Request) {
     );
     const actor = await requireActor();
     const alcance = requireScope(actor, "activities", "create");
-    const actividad = await crearActividad(actividadesParaEscritura(), actor, alcance, {
-      activityType: datos.activityType,
-      title: datos.title,
-      description: datos.description ?? null,
-      contactId: datos.contactId ?? null,
-      dealId: datos.dealId ?? null,
-      projectId: datos.projectId ?? null,
-      assigneeId: datos.assigneeId,
-      startsAt: datos.startsAt ? new Date(datos.startsAt) : null,
-      endsAt: datos.endsAt ? new Date(datos.endsAt) : null,
-      isAllDay: datos.isAllDay ?? false,
-      location: datos.location ?? null,
-      meetingUrl: datos.meetingUrl ?? null,
-      priority: datos.priority,
-      status: datos.status ?? "pending",
-    });
+    const actividad = await crearActividad(actividadesParaEscritura(), actor, alcance, aEntradaCrear(datos));
     return Response.json({ ok: true, actividad });
   } catch (error) {
     return errorResponse(error);

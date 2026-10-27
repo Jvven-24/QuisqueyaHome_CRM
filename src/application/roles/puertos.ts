@@ -7,6 +7,7 @@ import type { Auditoria } from "../compartido/auditoria.ts";
 export type Rol = {
   id: number;
   isProtected: boolean;
+  slug?: string;
 };
 
 export type Permiso = {

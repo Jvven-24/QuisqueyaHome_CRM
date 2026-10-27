@@ -11,6 +11,7 @@ import { runInNewContext } from "node:vm";
 import ts from "typescript";
 import { z } from "zod";
 import { ValidationError } from "../../../../domain/errors.ts";
+import * as limites from "../../../../infrastructure/limites.ts";
 
 const TOKEN = "token-de-prueba-0123456789";
 
@@ -34,6 +35,7 @@ function cargar(opciones: { creado?: boolean } = {}) {
     "@/domain/catalogs": { OPERATION_TYPES: ["sale", "rent"] },
     "@/infrastructure/contenedor/leads": { leadsParaEscritura: () => ({}) },
     "@/infrastructure/env": { leadsWebhookToken: () => TOKEN },
+    "@/infrastructure/limites": limites,
     "@/infrastructure/http": {
       parseInput: (schema: z.ZodType, input: unknown) => {
         const r = schema.safeParse(input);
@@ -99,6 +101,7 @@ test("leads/externo: el token se comprueba ANTES de leer el cuerpo", async () =>
   let leido = false;
   const peticion = new Request("http://localhost/api/leads/externo", { method: "POST", body: "{}" });
   Object.defineProperty(peticion, "json", { value: async () => { leido = true; return {}; } });
+  Object.defineProperty(peticion, "text", { value: async () => { leido = true; return "{}"; } });
   const respuesta = await ruta.post(peticion);
   assert.equal(respuesta.status, 401);
   assert.equal(leido, false);

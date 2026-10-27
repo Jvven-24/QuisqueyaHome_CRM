@@ -30,6 +30,7 @@ import { capturarLeadExterno } from "@/application/leads/casos-de-uso";
 import { OPERATION_TYPES } from "@/domain/catalogs";
 import { leadsParaEscritura } from "@/infrastructure/contenedor/leads";
 import { leadsWebhookToken } from "@/infrastructure/env";
+import { demasiadasPeticiones, ipCliente, leerJsonLimitado, limiteLeadsExterno } from "@/infrastructure/limites";
 import { errorResponse, parseInput } from "@/infrastructure/http";
 
 const LeadExternoInput = z.object({
@@ -74,6 +75,8 @@ function coincideToken(recibido: string, esperado: string): boolean {
 
 export async function POST(request: Request) {
   try {
+    const espera = limiteLeadsExterno.consumir(ipCliente(request));
+    if (espera) return demasiadasPeticiones(espera);
     const token = request.headers.get("x-webhook-token");
     // 401 sin distinguir "falta la cabecera" de "token incorrecto": lo mismo
     // que `NotFoundError` en RBAC, no hay que confirmarle nada a quien pregunta.
@@ -81,7 +84,9 @@ export async function POST(request: Request) {
       return Response.json({ error: "No autorizado." }, { status: 401 });
     }
 
-    const datos = parseInput(LeadExternoInput, await request.json().catch(() => ({})));
+    const cuerpo = await leerJsonLimitado(request, 64 * 1024);
+    if (cuerpo instanceof Response) return cuerpo;
+    const datos = parseInput(LeadExternoInput, cuerpo);
 
     // Campo por campo, nunca `...datos`.
     const resultado = await capturarLeadExterno(leadsParaEscritura(), {

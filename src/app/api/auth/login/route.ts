@@ -13,6 +13,7 @@ import { serverClient } from "@/infrastructure/auth/supabase";
 import { getDb } from "@/infrastructure/db/client";
 import { users } from "@/infrastructure/db/schema";
 import { errorResponse, parseInput } from "@/infrastructure/http";
+import { demasiadasPeticiones, ipCliente, leerJsonLimitado, limiteLoginCorreo, limiteLoginIp } from "@/infrastructure/limites";
 
 // El segundo mensaje no es redundante: `min` cubre la cadena vacía, `error`
 // cubre que el campo llegue ausente o con otro tipo. Sin él, Zod responde su
@@ -26,10 +27,13 @@ const LoginInput = z.object({
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = parseInput(
-      LoginInput,
-      await request.json().catch(() => ({})),
-    );
+    const espera = limiteLoginIp.consumir(ipCliente(request));
+    if (espera) return demasiadasPeticiones(espera);
+    const cuerpo = await leerJsonLimitado(request, 8 * 1024);
+    if (cuerpo instanceof Response) return cuerpo;
+    const { email, password } = parseInput(LoginInput, cuerpo);
+    const esperaCorreo = limiteLoginCorreo.consumir(email.trim().toLowerCase());
+    if (esperaCorreo) return demasiadasPeticiones(esperaCorreo);
 
     const supabase = await serverClient();
     const { data, error } = await supabase.auth.signInWithPassword({

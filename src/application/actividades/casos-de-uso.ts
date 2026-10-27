@@ -13,54 +13,69 @@ export type EntradaEditarActividad = Omit<CambiosActividad, "updatedBy">;
 
 type Escritura = { actividades: RepositorioActividades; unidad: UnidadDeTrabajo<ReposActividades> };
 
+async function crearEnUnidad({ actividades, auditoria }: ReposActividades, actor: Actor, alcance: PermissionScope, entrada: EntradaCrearActividad): Promise<Actividad> {
+  await validarReferencias(actividades, actor, alcance, entrada);
+  validarResultadoTarea(entrada.activityType, entrada.status, entrada.description);
+  if (entrada.dealId !== null) {
+    // Hallazgo H15 de `docs/R_HALLAZGOS.md`: antes el alcance se pedía y se
+    // tiraba, y `dealId` entraba sin comprobar. Como más abajo se escribe la
+    // próxima acción de ese negocio, un broker con alcance `own` podía
+    // sobrescribir la próxima acción del negocio de otro broker mandando su
+    // id a mano. `seguridad.test.ts` no lo veía porque comprueba que
+    // `requireScope` se *llame*, y se llamaba: lo que faltaba era usarlo.
+    //
+    // Se relee con el alcance antes de crear la actividad: `NotFoundError`
+    // cubre a la vez "no existe" y "existe fuera de tu alcance", sin
+    // distinguirlos.
+    const negocio = await actividades.buscarNegocioVisible(actor, alcance, entrada.dealId);
+    if (!negocio) throw new NotFoundError();
+  }
+
+  const actividad = await actividades.crear({
+    activityType: entrada.activityType,
+    title: entrada.title.trim(),
+    description: entrada.description,
+    contactId: entrada.contactId,
+    dealId: entrada.dealId,
+    projectId: entrada.projectId,
+    assigneeId: entrada.assigneeId ?? actor.userId,
+    startsAt: entrada.startsAt,
+    endsAt: entrada.endsAt,
+    isAllDay: entrada.isAllDay,
+    location: entrada.location,
+    meetingUrl: entrada.meetingUrl,
+    priority: entrada.priority,
+    status: entrada.status,
+    completedAt: entrada.status === "completed" ? new Date() : null,
+    createdBy: actor.userId,
+    updatedBy: actor.userId,
+  });
+
+  await auditoria.registrar(actor, { accion: "crear", entidad: "activity", entidadId: actividad.id, despues: actividad });
+  // La próxima acción del negocio (§10.1, → Presentación): la actividad
+  // pendiente más reciente que se crea para un negocio es la que cuenta
+  // como "próxima acción". Una ya completada al crearla (una llamada que
+  // se registra después de hecha) no reemplaza lo que ya estaba agendado.
+  if (entrada.dealId !== null && entrada.status === "pending") {
+    await actividades.actualizarProximaActividad(entrada.dealId, actividad.id);
+  }
+  return actividad;
+}
+
 export async function crearActividad(deps: Escritura, actor: Actor, alcance: PermissionScope, entrada: EntradaCrearActividad): Promise<Actividad> {
-  return deps.unidad.ejecutar(async ({ actividades, auditoria }) => {
-    await validarReferencias(actividades, actor, alcance, entrada);
-    validarResultadoTarea(entrada.activityType, entrada.status, entrada.description);
-    if (entrada.dealId !== null) {
-      // Hallazgo H15 de `docs/R_HALLAZGOS.md`: antes el alcance se pedía y se
-      // tiraba, y `dealId` entraba sin comprobar. Como más abajo se escribe la
-      // próxima acción de ese negocio, un broker con alcance `own` podía
-      // sobrescribir la próxima acción del negocio de otro broker mandando su
-      // id a mano. `seguridad.test.ts` no lo veía porque comprueba que
-      // `requireScope` se *llame*, y se llamaba: lo que faltaba era usarlo.
-      //
-      // Se relee con el alcance antes de crear la actividad: `NotFoundError`
-      // cubre a la vez "no existe" y "existe fuera de tu alcance", sin
-      // distinguirlos.
-      const negocio = await actividades.buscarNegocioVisible(actor, alcance, entrada.dealId);
-      if (!negocio) throw new NotFoundError();
-    }
+  return deps.unidad.ejecutar((repos) => crearEnUnidad(repos, actor, alcance, entrada));
+}
 
-    const actividad = await actividades.crear({
-      activityType: entrada.activityType,
-      title: entrada.title.trim(),
-      description: entrada.description,
-      contactId: entrada.contactId,
-      dealId: entrada.dealId,
-      projectId: entrada.projectId,
-      assigneeId: entrada.assigneeId ?? actor.userId,
-      startsAt: entrada.startsAt,
-      endsAt: entrada.endsAt,
-      isAllDay: entrada.isAllDay,
-      location: entrada.location,
-      meetingUrl: entrada.meetingUrl,
-      priority: entrada.priority,
-      status: entrada.status,
-      completedAt: entrada.status === "completed" ? new Date() : null,
-      createdBy: actor.userId,
-      updatedBy: actor.userId,
-    });
-
-    await auditoria.registrar(actor, { accion: "crear", entidad: "activity", entidadId: actividad.id, despues: actividad });
-    // La próxima acción del negocio (§10.1, → Presentación): la actividad
-    // pendiente más reciente que se crea para un negocio es la que cuenta
-    // como "próxima acción". Una ya completada al crearla (una llamada que
-    // se registra después de hecha) no reemplaza lo que ya estaba agendado.
-    if (entrada.dealId !== null && entrada.status === "pending") {
-      await actividades.actualizarProximaActividad(entrada.dealId, actividad.id);
-    }
-    return actividad;
+/**
+ * Pack de tareas: todas o ninguna en una sola transacción (auditoría
+ * 27/10/2026: antes eran N POST sueltos y un reintento duplicaba las creadas).
+ */
+export async function crearActividadesEnLote(deps: Escritura, actor: Actor, alcance: PermissionScope, entradas: readonly EntradaCrearActividad[]): Promise<Actividad[]> {
+  if (entradas.length === 0) throw new ValidationError("El pack no tiene tareas.");
+  return deps.unidad.ejecutar(async (repos) => {
+    const creadas: Actividad[] = [];
+    for (const entrada of entradas) creadas.push(await crearEnUnidad(repos, actor, alcance, entrada));
+    return creadas;
   });
 }
 

@@ -15,6 +15,7 @@ export function repositorioRoles(ejecutor: Ejecutor): RepositorioRoles {
         .select({
           id: roles.id,
           isProtected: roles.isProtected,
+          slug: roles.slug,
         })
         .from(roles)
         .where(eq(roles.id, id))
