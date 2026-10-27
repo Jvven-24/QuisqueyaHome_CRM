@@ -10,8 +10,3 @@ export const APPROVAL_EXAMPLES: readonly Approval[] = [
   { id: "DEMO-03", kind: "liquidacion", title: "Validar liquidación de comisión", detail: "Ejemplo de revisión de reparto y comprobantes antes de autorizar un pago.", owner: "Finanzas · ejemplo", date: "Pendiente de revisión" },
   { id: "DEMO-04", kind: "fusion", title: "Revisar fusión de contactos", detail: "Ejemplo de detección de duplicados; requiere elegir el registro que se conserva.", owner: "Equipo comercial · ejemplo", date: "Requiere decisión" },
 ];
-export const APPROVAL_STATES = [
-  { id: "data", label: "Con ejemplos" }, { id: "loading", label: "Cargando" }, { id: "empty", label: "Vacío" },
-  { id: "error", label: "Error" }, { id: "offline", label: "Sin conexión" }, { id: "permission", label: "Sin permiso" },
-] as const;
-export type ApprovalState = typeof APPROVAL_STATES[number]["id"];
