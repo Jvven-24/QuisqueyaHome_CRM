@@ -956,33 +956,6 @@ export const teamMembers = pgTable(
   ],
 ).enableRLS();
 
-/** Gerentes que supervisan equipos además del que lideran (`teams.leader_id`). */
-export const managerScopes = pgTable(
-  "manager_scopes",
-  {
-    managerId: integer("manager_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-    teamId: integer("team_id").notNull().references(() => teams.id, { onDelete: "cascade" }),
-    createdAt: instant("created_at").notNull().defaultNow(),
-  },
-  (table) => [primaryKey({ name: "manager_scopes_pk", columns: [table.managerId, table.teamId] })],
-).enableRLS();
-
-/** Excepción por usuario sobre el permiso de su rol (sube o baja una celda). */
-export const userPermissionOverrides = pgTable(
-  "user_permission_overrides",
-  {
-    id: serial("id").primaryKey(),
-    userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-    resource: text("resource", { enum: PERMISSION_RESOURCES }).notNull(),
-    action: text("action", { enum: PERMISSION_ACTIONS }).notNull(),
-    scope: text("scope", { enum: PERMISSION_SCOPES }).notNull(),
-    grantedBy: integer("granted_by").references(() => users.id),
-    reason: text("reason"),
-    createdAt: instant("created_at").notNull().defaultNow(),
-  },
-  (table) => [uniqueIndex("user_permission_overrides_unq").on(table.userId, table.resource, table.action)],
-).enableRLS();
-
 /**
  * Metas de proyecto o de equipo. Solo guardan el objetivo: lo logrado se deriva
  * de los negocios ganados del periodo con su atribución congelada al cierre.

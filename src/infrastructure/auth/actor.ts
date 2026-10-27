@@ -6,13 +6,13 @@
  * cosa. Aquí se cruzan las dos cosas, una vez por petición.
  */
 
-import { and, eq, inArray, isNull, ne, or, type SQL } from "drizzle-orm";
+import { and, eq, isNull, type SQL } from "drizzle-orm";
 import { cookies, headers } from "next/headers";
 import { cache } from "react";
 import { UnauthorizedError } from "@/domain/errors";
-import { canViewAs, effectivePermissions, type Actor, type Permission } from "@/domain/rbac";
+import type { Actor, Permission } from "@/domain/rbac";
 import { getDb } from "../db/client";
-import { managerScopes, permissions, roles, teamMembers, teams, userPermissionOverrides, users } from "../db/schema";
+import { permissions, roles, users } from "../db/schema";
 import { evaluationLoginAllowed } from "../env";
 import { serverClient } from "./supabase";
 import { hasSupabaseSessionCookie } from "./session-cookie";
@@ -33,8 +33,7 @@ export const getActor = cache(async (): Promise<Actor | null> => {
   if (cookieStore && evaluationLoginAllowed(requestHeaders?.get("host") ?? null)
       && !hasSupabaseSessionCookie(cookieStore.getAll())) {
     const devRole = cookieStore.get("qh_dev_role")?.value ?? "admin";
-    const ev = devRole ? await getEvaluationActor(devRole) : null;
-    return ev ? applyViewAs(ev, cookieStore.get(VIEW_AS_COOKIE)?.value) : null;
+    return devRole ? getEvaluationActor(devRole) : null;
   }
 
   const supabase = await serverClient();
@@ -44,24 +43,8 @@ export const getActor = cache(async (): Promise<Actor | null> => {
 
   if (!user) return null;
 
-  const real = await actorFor(eq(users.authUserId, user.id));
-  return real ? applyViewAs(real, cookieStore?.get(VIEW_AS_COOKIE)?.value) : null;
+  return actorFor(eq(users.authUserId, user.id));
 });
-
-/** Cookie del selector "Ver como broker". Se valida en cada petición. */
-export const VIEW_AS_COOKIE = "qh_view_as";
-
-/**
- * Si hay "ver como" válido, devuelve el actor del broker en solo lectura.
- * Inválido o no autorizado → el actor real, sin escalar nada.
- */
-export async function applyViewAs(real: Actor, raw: string | undefined): Promise<Actor> {
-  const targetId = Number(raw);
-  if (!raw || !Number.isInteger(targetId) || targetId <= 0) return real;
-  const target = await actorFor(eq(users.id, targetId));
-  if (!target || !canViewAs(real, target)) return real;
-  return { ...target, viewAsBy: real.userId };
-}
 
 /** Rol y usuario reales: nunca inventar identidad ni conceder permisos extra. */
 export async function getEvaluationActor(roleSlug: string): Promise<Actor | null> {
@@ -83,7 +66,6 @@ async function actorFor(identity: SQL): Promise<Actor | null> {
     .select({
       userId: users.id,
       roleSlug: roles.slug,
-      roleProtected: roles.isProtected,
       resource: permissions.resource,
       action: permissions.action,
       scope: permissions.scope,
@@ -110,40 +92,10 @@ async function actorFor(identity: SQL): Promise<Actor | null> {
       scope: r.scope!,
     }));
 
-  const db = getDb();
-  const overrides = first.roleProtected
-    ? []
-    : await db
-        .select({
-          resource: userPermissionOverrides.resource,
-          action: userPermissionOverrides.action,
-          scope: userPermissionOverrides.scope,
-        })
-        .from(userPermissionOverrides)
-        .where(eq(userPermissionOverrides.userId, first.userId));
-
-  // Equipos que lidera o supervisa → miembros (alcance `team` real).
-  const supervisados = db
-    .select({ id: managerScopes.teamId })
-    .from(managerScopes)
-    .where(eq(managerScopes.managerId, first.userId));
-  const miembros = await db
-    .select({ userId: teamMembers.userId })
-    .from(teamMembers)
-    .innerJoin(teams, eq(teams.id, teamMembers.teamId))
-    .where(
-      and(
-        eq(teams.isActive, true),
-        ne(teamMembers.userId, first.userId),
-        or(eq(teams.leaderId, first.userId), inArray(teams.id, supervisados)),
-      ),
-    );
-
   return {
     userId: first.userId,
     roleSlug: first.roleSlug,
-    permissions: effectivePermissions(granted, overrides, first.roleProtected),
-    teamUserIds: [...new Set(miembros.map((m) => m.userId))],
+    permissions: granted,
   };
 }
 

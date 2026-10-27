@@ -5,7 +5,6 @@ import { runInNewContext } from "node:vm";
 import ts from "typescript";
 import { z } from "zod";
 import { UnauthorizedError } from "../../domain/errors.ts";
-import * as rbac from "../../domain/rbac.ts";
 import { requireScope, reaches } from "../../domain/rbac.ts";
 import type { Actor } from "../../domain/rbac.ts";
 
@@ -30,8 +29,8 @@ function loadSource<T>(path: string, dependencies: Record<string, unknown>, env:
 type CatalogRow = Record<string, unknown>;
 type Predicate = (row: CatalogRow) => boolean;
 const catalog: CatalogRow[] = [
-  { userId: 27, authUserId: "real-broker", roleSlug: "broker", roleProtected: false, isActive: true, deletedAt: null, resource: "leads", action: "view", scope: "own" },
-  { userId: 27, authUserId: "real-broker", roleSlug: "broker", roleProtected: false, isActive: true, deletedAt: null, resource: "academy", action: "view", scope: "all" },
+  { userId: 27, authUserId: "real-broker", roleSlug: "broker", isActive: true, deletedAt: null, resource: "leads", action: "view", scope: "own" },
+  { userId: 27, authUserId: "real-broker", roleSlug: "broker", isActive: true, deletedAt: null, resource: "academy", action: "view", scope: "all" },
   { userId: 42, authUserId: "real-assistant", roleSlug: "assistant", isActive: true, deletedAt: null, resource: "contacts", action: "view", scope: "all" },
   { userId: 50, roleSlug: "inactive", isActive: false, deletedAt: null, resource: "users", action: "edit", scope: "all" },
   { userId: 51, roleSlug: "deleted", isActive: true, deletedAt: "deleted", resource: "users", action: "edit", scope: "all" },
@@ -63,13 +62,8 @@ function setup(options: { mode?: string | null; flag?: string | null; host?: str
   const sessionCookie = loadSource<{ hasSupabaseSessionCookie: (cookies: { name: string }[]) => boolean }>("./session-cookie.ts", {});
   const schema = {
     users: { id: "userId", roleId: "roleId", authUserId: "authUserId", isActive: "isActive", deletedAt: "deletedAt" },
-    roles: { id: "roleId", slug: "roleSlug", isProtected: "roleProtected" },
+    roles: { id: "roleId", slug: "roleSlug" },
     permissions: { roleId: "roleId", resource: "resource", action: "action", scope: "scope" },
-    // Tablas sin filas en el catálogo de prueba: columnas que ninguna fila tiene.
-    userPermissionOverrides: { userId: "ov.userId", resource: "ov.resource", action: "ov.action", scope: "ov.scope" },
-    teams: { id: "team.id", leaderId: "team.leaderId", isActive: "team.isActive" },
-    teamMembers: { teamId: "tm.teamId", userId: "tm.userId" },
-    managerScopes: { managerId: "ms.managerId", teamId: "ms.teamId" },
   };
   const db = {
     select(fields: Record<string, string>) {
@@ -94,11 +88,7 @@ function setup(options: { mode?: string | null; flag?: string | null; host?: str
       eq: (column: string, value: unknown): Predicate => (row) => row[column] === value,
       isNull: (column: string): Predicate => (row) => row[column] === null,
       and: (...conditions: Predicate[]): Predicate => (row) => conditions.every((condition) => condition(row)),
-      or: (...conditions: Predicate[]): Predicate => (row) => conditions.some((condition) => condition(row)),
-      ne: (column: string, value: unknown): Predicate => (row) => row[column] !== value,
-      inArray: (): Predicate => () => false,
     },
-    "@/domain/rbac": rbac,
     "next/headers": nextHeaders, react: { cache: (fn: unknown) => fn },
     "@/domain/errors": { UnauthorizedError }, "../db/client": { getDb: () => db },
     "../db/schema": schema, "../env": env, "./supabase": { serverClient: async () => auth }, "./session-cookie": sessionCookie,
