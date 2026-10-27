@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, MotionConfig } from "motion/react";
 import { EstadoConexion } from "../../inicio/estado-conexion";
 import s from "./desk.module.css";
+import { ModuleTabs } from "@/components/modulo";
+import { mostrarDemo } from "@/lib/flags";
 export { s };
 export function ComercialNav({ grupo = "leads" }: {
     grupo?: "leads" | "contactos";
@@ -14,7 +16,7 @@ export function ComercialNav({ grupo = "leads" }: {
         string,
         string
     ][] = grupo === "leads" ? [["/leads", "Bandeja"], ["/leads/asignacion", "Distribución"], ["/leads/importaciones", "Importación"], ["/leads/duplicados", "Duplicados"]] : [["/contactos", "Personas"], ["/contactos/empresas", "Empresas"], ["/contactos/demandas", "Demandas y matching"]];
-    return <nav aria-label={grupo === "leads" ? "Gestión de leads" : "Gestión de contactos"} className={s.nav}>{links.map(([href, label]) => <Link key={href} href={href} aria-current={path === href ? "page" : undefined}>{label}</Link>)}</nav>;
+    return <ModuleTabs label={grupo === "leads" ? "Gestión de leads" : "Gestión de contactos"} items={links.map(([href, label]) => ({ href, label }))} className={s.nav} />;
 }
 export function Desk({ title, subtitle, grupo, children }: {
     title: string;
@@ -40,8 +42,7 @@ export function Preview({ falta, children }: {
     <strong>Vista previa · datos de ejemplo — falta: {falta}</strong>. Los cambios de esta vista no se guardan en el CRM.</p>
     <details className={s.panel}>
     <summary>Revisar los estados de esta vista previa</summary>
-    <label>Estado de demostración<select aria-label="Estado de demostración" value={state} onChange={e => setState(e.target.value)}>{[["datos", "Con datos"], ["carga", "Cargando"], ["vacio", "Vacío"], ["error", "Error"], ["offline", "Sin conexión"], ["permiso", "Sin permiso"]].map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
-    </label>
+    {mostrarDemo() && <label>Estado de demostración<select aria-label="Estado de demostración" value={state} onChange={e => setState(e.target.value)}>{[["datos", "Con datos"], ["carga", "Cargando"], ["vacio", "Vacío"], ["error", "Error"], ["offline", "Sin conexión"], ["permiso", "Sin permiso"]].map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>}
     </details>{state === "datos" ? children : state === "carga" ? <div className={s.panel} role="status" aria-busy="true">Cargando registros de ejemplo…</div> : state === "vacio" ? <div className={s.empty}>
         <h2>No hay registros en esta demostración</h2>
         <button className={s.button} onClick={() => setState("datos")}>Cargar ejemplos</button>

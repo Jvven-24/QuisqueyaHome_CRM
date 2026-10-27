@@ -7,6 +7,7 @@ import { EstadoConexion } from "../inicio/estado-conexion";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { CrearContactoInput, erroresDeCampos } from "@/application/contactos/entrada";
 import { Avatar, PageHeader } from "../_ui/prototipo-ui";
+import { ModuleTabs } from "@/components/modulo";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { ContactoInspector } from "./inspector";
 import { DataTable, type Columna } from "@/components/ui/data-table";
@@ -270,11 +271,7 @@ export function ContactosVista({
         }
       />
 
-      <nav aria-label="Gestión de contactos" className="flex flex-wrap gap-2 mb-4">
-        <Link className="button min-h-12" href="/contactos">Personas</Link>
-        <Link className="button min-h-12" href="/contactos/empresas">Empresas y representantes</Link>
-        <Link className="button min-h-12" href="/contactos/demandas">Demandas y matching</Link>
-      </nav>
+      <ModuleTabs label="Gestión de contactos" items={[{href:"/contactos",label:"Personas"},{href:"/contactos/empresas",label:"Empresas y representantes",match:"prefix"},{href:"/contactos/demandas",label:"Demandas y matching",match:"prefix"}]} className="mb-4" />
       {/* Franja de búsqueda y filtros ejecutivos */}
       <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-surface border border-line rounded-xl mb-4 shadow-xs">
         <div className="flex items-center gap-2 flex-1 min-w-0 w-full max-w-md">
