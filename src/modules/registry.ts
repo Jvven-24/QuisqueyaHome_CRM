@@ -26,6 +26,20 @@ export type ModuloRegistro = {
   subrutas?: readonly string[];
   /** Estado de implementación para migración por fases */
   estado: EstadoModulo;
+  /** Permisos específicos del módulo (acciones sobre el recurso) */
+  permisos?: readonly string[];
+  /** Metadatos de navegación generados/consolidados */
+  navegacion?: {
+    workspaceId?: "comercial" | "operaciones" | "brokerage" | "herramientas";
+    descripcion?: string;
+    atajo?: string;
+    grupo?: string;
+  };
+  /** Flags de feature y estado */
+  flags?: {
+    visibleEnMenu?: boolean;
+    requiereFeatureFlag?: string;
+  };
 };
 
 /** Los 22 módulos en orden de aparición en la navegación canónica (sin alterar orden). */
@@ -33,6 +47,9 @@ export const REGISTRO_MODULOS: readonly ModuloRegistro[] = [
   // Módulos adicionales / workspaces (aparecen primero en MODULOS)
   {
     id: "M16",
+    permisos: ["view", "aprobar"],
+    navegacion: { workspaceId: "comercial", descripcion: "Descuentos, reservas y liquidaciones pendientes", atajo: "G Q" },
+    flags: { visibleEnMenu: true },
     nombre: "Aprobaciones",
     rutaBase: "/aprobaciones",
     icono: "CheckSquare",
@@ -116,6 +133,9 @@ export const REGISTRO_MODULOS: readonly ModuloRegistro[] = [
   },
   {
     id: "M2",
+    permisos: ["view", "create", "import"],
+    navegacion: { workspaceId: "comercial", descripcion: "Captación, calificación y gestión de prospectos", atajo: "G L" },
+    flags: { visibleEnMenu: true },
     nombre: "Leads",
     rutaBase: "/leads",
     icono: "UserPlus",
@@ -273,3 +293,47 @@ export function getModuloPorRuta(ruta: string): ModuloRegistro | undefined {
 export function getTodasLasRutas(): readonly string[] {
   return REGISTRO_MODULOS.flatMap((m) => m.subrutas ?? [m.rutaBase]);
 }
+
+
+/** Genera lista de permisos únicos desde el registro (sin hardcode) */
+export function getPermisosDesdeRegistro(): readonly string[] {
+  const set = new Set<string>();
+  for (const m of REGISTRO_MODULOS) {
+    set.add(m.recurso);
+    if (m.permisos) m.permisos.forEach((p: string) => set.add(p));
+  }
+  return Array.from(set);
+}
+
+/** Generador de entradas de navegación base desde registry (rutas NO hardcodeadas) */
+export function generarEntradasN1Base() {
+  const find = (id: string) => REGISTRO_MODULOS.find(m => m.id === id || m.idLegado === id);
+  const mk = (g: any) => {
+    const base = find(g.refs[0]!);
+    const hijas = (g.hijasRefs || g.refs).map((r: string) => find(r)?.rutaBase).filter(Boolean) as string[];
+    return {
+      id: g.id,
+      ruta: base?.rutaBase || "/",
+      nombre: g.nombre || base?.nombre || g.id,
+      recurso: base?.recurso || ("dashboard" as PermissionResource),
+      icono: base?.icono || "Circle",
+      descripcion: g.descripcion || base?.nombre || "",
+      atajo: g.atajo || "",
+      rutasHijas: hijas.length > 1 ? hijas : undefined,
+    };
+  };
+  return [
+    { id: "N1_INICIO", refs: ["M14"], hijasRefs: ["M14", "M16"], nombre: "Inicio", descripcion: "Resumen ejecutivo y tablero operativo del día", atajo: "G I" },
+    { id: "N1_LEADS", refs: ["M2"], nombre: "Leads", descripcion: "Captación, calificación y gestión de prospectos", atajo: "G L" },
+    { id: "N1_NEGOCIOS", refs: ["M3"], hijasRefs: ["M3", "M18"], nombre: "Negocios", descripcion: "Embudo comercial de oportunidades y cierres de venta", atajo: "G P" },
+    { id: "N1_CONTACTOS", refs: ["M1"], nombre: "Contactos", descripcion: "Directorio unificado de clientes e inversionistas", atajo: "G C" },
+    { id: "N1_INVENTARIO", refs: ["M5"], hijasRefs: ["M5", "M6", "M19"], nombre: "Inventario y Obra", descripcion: "Catálogo de proyectos, tipologías y avance constructivo", atajo: "G R" },
+    { id: "N1_AGENDA", refs: ["M4-agenda", "M4-tareas"], hijasRefs: ["M4-agenda", "M4-tareas"], nombre: "Agenda y Tareas", descripcion: "Citas con clientes, visitas y actividades operativas", atajo: "G A" },
+    { id: "N1_COMUNICACIONES", refs: ["M11"], nombre: "Comunicaciones", descripcion: "Mensajería, WhatsApp y plantillas de contacto", atajo: "G W" },
+    { id: "N1_BROKERS", refs: ["M7"], hijasRefs: ["M7", "M21"], nombre: "Red de Brokers", descripcion: "Red de intermediarios inmobiliarios y agencias aliadas", atajo: "G B" },
+    { id: "N1_FINANZAS", refs: ["M9"], hijasRefs: ["M9", "M8", "M12", "M17"], nombre: "Finanzas & Reportes", descripcion: "Comisiones, metas comerciales e inteligencia analítica", atajo: "G $" },
+  ].map(mk);
+}
+
+export const REGISTRO_VERSION = "1.1-manifiesto-completo" as const;
+
