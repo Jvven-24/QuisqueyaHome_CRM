@@ -1,6 +1,6 @@
 # Revisión — rama `opencode-free`
 
-- Estado: corriendo: items-automatizaciones-2 (actualizado 2026-10-27T10:42-04:00)
+- Estado: corriendo: doc-luna-ui (actualizado 2026-10-27T13:38-04:00)
 - Hallazgos: 80 — por tipo: funcionalidad 63, diseño 10, mejora 6, movil 1
 - Log completo (no versionado): `/workspace/crm-plan/tablero/revisiones/opencode-free.log`
 
