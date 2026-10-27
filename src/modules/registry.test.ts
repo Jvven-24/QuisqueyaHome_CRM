@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { existsSync } from "node:fs";
@@ -81,8 +82,15 @@ test("registry: generarEntradasN1Base produce entradas con rutas del registry (s
   const rutasReg = new Set(mod.REGISTRO_MODULOS.map((m: any) => m.rutaBase));
   entradas.forEach((e: any) => {
     assert.ok(e.ruta.startsWith("/"));
-    assert.ok(rutasReg.has(e.ruta) || e.ruta === "/");
+    assert.ok(rutasReg.has(e.ruta), `ruta fuera del registro: ${e.ruta}`);
     if (e.rutasHijas) e.rutasHijas.forEach((r: string) => assert.ok(rutasReg.has(r)));
   });
 });
 
+
+test("registry: generarEntradasN1Base no cae a '/' ni a 'dashboard' por un id inexistente (lanza error)", () => {
+  const src = readFileSync(new URL("./registry.ts", import.meta.url), "utf8");
+  assert.doesNotMatch(src, /rutaBase \|\| "\/"/);
+  assert.doesNotMatch(src, /\|\| \("dashboard" as PermissionResource\)/);
+  assert.match(src, /throw new Error\(`registry: módulo inexistente/);
+});
