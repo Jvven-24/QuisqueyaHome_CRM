@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { formatoFechaIcs, generarIcs } from "@/domain/ics";
 import { fechaSantoDomingo, horaSantoDomingo, sumarDias } from "@/domain/zona-horaria";
+import { intervalosSeSolapan } from "./_componentes/operaciones";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 
@@ -988,6 +989,22 @@ export function AgendaVista({
             })}
           </div>
 
+          {citasFiltradas.length === 0 && (
+            <div role="status" className="m-4 flex flex-col items-center gap-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center">
+              <p className="m-0 text-[14px] font-semibold text-slate-700">
+                No hay citas para esta semana con los filtros seleccionados.
+              </p>
+              <button
+                type="button"
+                onClick={() => abrirCrearEnSlot(diaEnfocado, 9)}
+                className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-navy-950 px-4 text-[13px] font-bold text-white hover:bg-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-700"
+              >
+                <Plus className="size-4" />
+                Crear cita
+              </button>
+            </div>
+          )}
+
           {/* Rejilla de horas */}
           <div className="overflow-x-auto max-h-[720px] divide-y divide-slate-100">
             {HORAS.map((hora) => (
@@ -1027,6 +1044,18 @@ export function AgendaVista({
                         <Plus className="w-3.5 h-3.5" />
                         <span>Agendar {hora}:00</span>
                       </button>
+
+                      {eventos.length === 0 && (
+                        <button
+                          type="button"
+                          onClick={() => abrirCrearEnSlot(dia, hora)}
+                          className="sm:hidden inline-flex min-h-11 w-full items-center justify-center gap-1 rounded-lg border border-dashed border-slate-300 bg-white/80 px-2 text-[13px] font-semibold text-slate-600 active:bg-amber-50 active:text-amber-900"
+                          aria-label={`Crear cita el ${dia} a las ${hora}:00`}
+                        >
+                          <Plus className="size-4" />
+                          Crear cita
+                        </button>
+                      )}
 
                       {hayChoque && (
                         <span className="text-[13px] font-bold text-amber-900 bg-amber-100 border border-amber-300 rounded px-1.5 py-0.5">
@@ -1165,6 +1194,7 @@ function ModalCita({
   const [confirmarEliminar, setConfirmarEliminar] = useState(false);
   const [errores, setErrores] = useState<Record<string, string>>({});
   const [errorRed, setErrorRed] = useState<string | null>(null);
+  const [avisoParcial, setAvisoParcial] = useState<string | null>(null);
 
   const esEdicion = Boolean(cita && cita.id > 0);
 
@@ -1210,19 +1240,25 @@ function ModalCita({
     }
   }, [diaElegido, horaElegida]);
 
-  // Detector de choques de horario en la misma hora
+  // Detector de choques mediante el intervalo completo de cada cita.
   const citasEnConflicto = useMemo(() => {
-    const prefijoHora = horaElegida.split(":")[0];
+    const inicioElegido = new Date(`${diaElegido}T${horaElegida}:00-04:00`).getTime();
+    const duracionMs = Math.max(1, Number(duracionCita) || 60) * 60_000;
+    const finElegido = inicioElegido + duracionMs;
+    if (!Number.isFinite(inicioElegido) || !Number.isFinite(finElegido)) return [];
     return citasSemana.filter((c) => {
       if (cita && c.id === cita.id) return false;
       if (!c.startsAt) return false;
-      const mismoDia = fechaSantoDomingo(c.startsAt) === diaElegido;
-      const mismaHora = horaSantoDomingo(c.startsAt).split(":")[0] === prefijoHora;
-      if (!mismoDia || !mismaHora) return false;
+      if (c.status === "cancelled") return false;
       if (asignadoId && c.assigneeId && String(c.assigneeId) !== asignadoId) return false;
-      return true;
+      const inicioExistente = new Date(c.startsAt).getTime();
+      const finExistente = c.endsAt
+        ? new Date(c.endsAt).getTime()
+        : inicioExistente + 60 * 60_000;
+      return Number.isFinite(inicioExistente) && Number.isFinite(finExistente) &&
+        intervalosSeSolapan(inicioElegido, finElegido, inicioExistente, finExistente);
     });
-  }, [citasSemana, cita, diaElegido, horaElegida, asignadoId]);
+  }, [citasSemana, cita, diaElegido, horaElegida, duracionCita, asignadoId]);
 
   function aplicarPlantillaVisita(pl: (typeof PLANTILLAS_VISITAS_REA)[number]) {
     setTituloCita(pl.titulo);
@@ -1251,6 +1287,7 @@ function ModalCita({
     setEnviando(true);
     setErrores({});
     setErrorRed(null);
+    setAvisoParcial(null);
 
     try {
       const dia = String(form.get("day"));
@@ -1292,6 +1329,13 @@ function ModalCita({
       if (!respuesta.ok) {
         setErrores(cuerpo.fields ?? {});
         setErrorRed(cuerpo.error ?? "No se pudo guardar la cita. Revisa los datos.");
+        return;
+      }
+
+      if (typeof cuerpo.google?.error === "string") {
+        setAvisoParcial("La cita se guardó en la agenda, pero Google no respondió. La cita sigue disponible en el CRM; revisa la integración antes de reintentar la sincronización.");
+        toast.warning("Cita guardada; Google no respondió.");
+        router.refresh();
         return;
       }
 
@@ -1345,6 +1389,12 @@ function ModalCita({
           </div>
         )}
 
+        {avisoParcial && (
+          <p role="status" className="span-2 m-0 rounded-xl border border-amber-300 bg-amber-50 p-3 text-[13px] font-medium text-amber-950">
+            {avisoParcial}
+          </p>
+        )}
+
         {/* Plantillas Rápidas de Visita Inmobiliaria REA */}
         {!esEdicion && (
           <div className="span-2 rounded-xl border border-slate-200 bg-slate-50 p-3">
@@ -1372,8 +1422,8 @@ function ModalCita({
           <div className="span-2 rounded-xl bg-amber-50 border border-amber-300 p-3 text-[13px] text-amber-950 flex items-start gap-2">
             <AlertTriangle className="size-4 text-amber-700 shrink-0 mt-0.5" />
             <div>
-              <strong>Posible choque de horario detectado:</strong> Ya existe{" "}
-              {citasEnConflicto.map((c) => `«${c.title}»`).join(", ")} en esa misma franja horaria.
+              <strong>Posible solapamiento detectado:</strong> El intervalo se cruza con{" "}
+              {citasEnConflicto.map((c) => `«${c.title}»`).join(", ")}.
             </div>
           </div>
         )}
