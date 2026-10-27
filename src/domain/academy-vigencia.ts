@@ -50,3 +50,28 @@ export function constanciaAcreditaFormacion(estado: EstadoVigenciaConstancia): b
 export function requiereRecertificacion(estado: EstadoVigenciaConstancia): boolean {
   return estado === "por_vencer" || estado === "vencida";
 }
+
+/**
+ * Una constancia bloquea una nueva solicitud solo mientras está plenamente vigente.
+ * `por_vencer` sigue siendo válida (acredita formación) pero ya es elegible para
+ * recertificar, así que NO bloquea. Coherente con `requiereRecertificacion`.
+ */
+export function bloqueaNuevaSolicitud(estado: EstadoVigenciaConstancia): boolean {
+  return constanciaAcreditaFormacion(estado) && !requiereRecertificacion(estado);
+}
+
+/** La constancia más reciente (por `issuedAt`) de una lista, o `undefined` si está vacía. */
+export function constanciaMasReciente<T extends { issuedAt: Date | string }>(
+  constancias: readonly T[],
+): T | undefined {
+  let mejor: T | undefined;
+  for (const c of constancias) {
+    if (!mejor || new Date(c.issuedAt).getTime() > new Date(mejor.issuedAt).getTime()) mejor = c;
+  }
+  return mejor;
+}
+
+/** Etiqueta visible del estado calculado (no del `status` crudo de BD). */
+export function etiquetaEstadoConstancia(estado: EstadoVigenciaConstancia): string {
+  return { vigente: "VIGENTE", por_vencer: "POR VENCER", vencida: "VENCIDA", revocada: "REVOCADA" }[estado];
+}
