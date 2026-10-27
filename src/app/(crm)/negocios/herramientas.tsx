@@ -6,6 +6,7 @@ import { CAMPOS_TARJETA, COLUMNAS_LISTA, ETIQUETA_CAMPO, ETIQUETA_COLUMNA, despl
 import { guardarVista, leerVistas, VISTAS_SISTEMA, type VistaGuardada } from "./vistas-guardadas";
 import { AccionesMasivas } from "./acciones-masivas";
 import { filasACsv } from "./filtros-cliente";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 export function HerramientasNegocios({ filas, etapas, preferencias, onPreferencias, consulta, onNavegar, puedeEditar, puedeExportar, sinConexion, ocupado }: {
   filas: NegocioFila[]; etapas: Etapa[]; preferencias: Preferencias; onPreferencias: (p: Preferencias) => void;
@@ -30,8 +31,9 @@ export function HerramientasNegocios({ filas, etapas, preferencias, onPreferenci
     const a = document.createElement("a"); a.href = url; a.download = "negocios.csv"; a.click(); URL.revokeObjectURL(url);
     setAviso("Exportados " + elegidas.length + " negocios visibles seleccionados.");
   }
-  return <details className="my-3 rounded-xl border border-line bg-surface p-3 text-sm">
-    <summary className="min-h-12 cursor-pointer py-3 font-bold">Vistas, presentación, filtros avanzados y selección</summary>
+  return <Collapsible className="my-3 rounded-xl border border-line bg-surface p-3 text-sm">
+    <CollapsibleTrigger className="w-full py-3 text-left font-bold">Vistas, presentación, filtros avanzados y selección</CollapsibleTrigger>
+    <CollapsibleContent>
     {aviso && <p role="status">{aviso}</p>}
     <div className="grid gap-3">
       <label>Vista guardada <select aria-label="Vista guardada" className={campo} value="" onChange={(e) => { const v = [...VISTAS_SISTEMA, ...vistas].find((v) => v.id === e.target.value); if (v) onNavegar(v.consulta); }}><option value="">Elegir vista</option>{[...VISTAS_SISTEMA, ...vistas].map((v) => <option key={v.id} value={v.id}>{v.nombre}</option>)}</select></label>
@@ -46,7 +48,8 @@ export function HerramientasNegocios({ filas, etapas, preferencias, onPreferenci
         <label>Probabilidad mínima <input name="probMin" type="number" min="0" max="100" className={campo} defaultValue={new URLSearchParams(consulta).get("probMin") ?? ""} /></label>
         <label className="inline-flex min-h-12 items-center gap-2"><Checkbox name="sinAccion" value="1" defaultChecked={new URLSearchParams(consulta).get("sinAccion") === "1"} />Sin próxima acción</label><button className={campo}>Aplicar filtros</button>
       </form>
-      <details><summary className="min-h-12 cursor-pointer py-3">Selección masiva de esta página</summary><button className={campo} type="button" onClick={() => setSeleccion(filas.map((f) => f.id))}>Seleccionar esta página</button> <button className={campo} type="button" onClick={() => setSeleccion([])}>Limpiar selección</button><div className="grid gap-1">{filas.map((f) => <label className="inline-flex min-h-12 items-center gap-2" key={f.id}><Checkbox checked={seleccion.includes(f.id)} onCheckedChange={(checked) => setSeleccion(checked ? [...seleccion, f.id] : seleccion.filter((id) => id !== f.id))} />{f.contactName}</label>)}</div><button className={campo} type="button" disabled={!puedeExportar || sinConexion || ocupado || !filas.some((f) => seleccion.includes(f.id))} onClick={exportar}>Exportar selección CSV</button><AccionesMasivas filas={filas.filter((f) => seleccion.includes(f.id))} etapas={etapas} puedeEditar={puedeEditar} sinConexion={sinConexion} ocupado={ocupado} />{!puedeExportar && <p>Tu rol no tiene permiso para exportar negocios.</p>}</details>
+      <Collapsible className="border-t border-line pt-2"><CollapsibleTrigger className="w-full py-3 text-left">Selección masiva de esta página</CollapsibleTrigger><CollapsibleContent><button className={campo} type="button" onClick={() => setSeleccion(filas.map((f) => f.id))}>Seleccionar esta página</button> <button className={campo} type="button" onClick={() => setSeleccion([])}>Limpiar selección</button><div className="grid gap-1">{filas.map((f) => <label className="inline-flex min-h-12 items-center gap-2" key={f.id}><Checkbox checked={seleccion.includes(f.id)} onCheckedChange={(checked) => setSeleccion(checked ? [...seleccion, f.id] : seleccion.filter((id) => id !== f.id))} />{f.contactName}</label>)}</div><button className={campo} type="button" disabled={!puedeExportar || sinConexion || ocupado || !filas.some((f) => seleccion.includes(f.id))} onClick={exportar}>Exportar selección CSV</button><AccionesMasivas filas={filas.filter((f) => seleccion.includes(f.id))} etapas={etapas} puedeEditar={puedeEditar} sinConexion={sinConexion} ocupado={ocupado} />{!puedeExportar && <p>Tu rol no tiene permiso para exportar negocios.</p>}</CollapsibleContent></Collapsible>
     </div>
-  </details>;
+    </CollapsibleContent>
+  </Collapsible>;
 }

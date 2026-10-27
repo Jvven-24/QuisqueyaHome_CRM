@@ -5,6 +5,7 @@ import { ChartCard } from "@/components/ui/chart-card";
 import MetricChart from "../_ui/metric-chart";
 import { formatNumber } from "@/lib/formato-analitica";
 import { formatearMonto } from "../_ui/formato";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   antiguedadPorEtapa,
   conteoPorEtapa,
@@ -19,8 +20,9 @@ import type { ResumenEtapaNegocio } from "@/application/pipeline/puertos";
 
 function TablaAlternativa({ titulo, columnas, filas }: { titulo: string; columnas: [string, string]; filas: [string, string][] }) {
   return (
-    <details className="mt-3 text-sm">
-      <summary className="inline-flex min-h-12 cursor-pointer items-center font-semibold text-navy-900">Ver datos en tabla</summary>
+    <Collapsible className="mt-3 text-sm">
+      <CollapsibleTrigger className="inline-flex items-center font-semibold text-navy-900">Ver datos en tabla</CollapsibleTrigger>
+      <CollapsibleContent>
       <table className="mt-2 w-full border-collapse text-[13px]">
         <caption className="sr-only">{titulo}</caption>
         <thead>
@@ -38,7 +40,8 @@ function TablaAlternativa({ titulo, columnas, filas }: { titulo: string; columna
           ))}
         </tbody>
       </table>
-    </details>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 
