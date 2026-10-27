@@ -497,6 +497,7 @@
   .private-saved-view { margin: 4px 6px 0 0; max-width: 100%; overflow-wrap: anywhere; }
   .private-filter[aria-pressed=true] { background: var(--navy-950); color: white; border-color: var(--navy-950); }
   .private-approvals input, .private-approvals select { min-height: 44px; max-width: 100%; }
+  .private-action { min-height: 44px; min-width: 44px; }
   .private-workspace :is(a,button,input,select):focus-visible, .private-command-bar :is(a,button):focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
   .private-sidebar :is(a,button,input):focus-visible { outline: 2px solid var(--sidebar-ring); outline-offset: 2px; }
   .skip-link { position: fixed; left: 16px; top: -100px; z-index: 100; padding: 12px; background: var(--navy-950); color: white; }
