@@ -17,3 +17,15 @@ test("vista de Academy usa el reproductor en móvil y botones táctiles de 44 px
  assert.match(reproductor,/playsInline/);assert.match(reproductor,/bg-gold-50/);assert.match(reproductor,/bg-navy-950/);
  assert.doesNotMatch(reproductor,/min-h-\[(36|38|40)px\]/);
 });
+test("bg-gold-50 tiene token --color-gold-50 en @theme (si no, Tailwind v4 no genera la clase)",()=>{
+ const tokens=readFileSync(new URL("../../../tokens.css",import.meta.url),"utf8");
+ const theme=tokens.slice(tokens.indexOf("@theme {"),tokens.indexOf("}",tokens.indexOf("@theme {")));
+ assert.match(theme,/--color-gold-50:\s*#[0-9a-f]{6};/i);
+});
+test("las vistas de constancias no usan el status crudo de BD para mostrar 'vigente'",()=>{
+ for(const f of ["../vista.tsx","../administracion/vista.tsx"]){
+  const src=readFileSync(new URL(f,import.meta.url),"utf8");
+  assert.doesNotMatch(src,/cert\.status === "vigente"/,f);
+  assert.doesNotMatch(src,/c\.status === "vigente"/,f);
+ }
+});

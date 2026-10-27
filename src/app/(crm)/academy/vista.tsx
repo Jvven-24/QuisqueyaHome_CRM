@@ -43,6 +43,8 @@ import {
   constanciaAcreditaFormacion,
   estadoVigenciaConstancia,
   fechaVencimientoConstancia,
+  constanciaMasReciente,
+  etiquetaEstadoConstancia,
   requiereRecertificacion,
   type EstadoVigenciaConstancia,
 } from "@/domain/academy-vigencia";
@@ -214,7 +216,10 @@ export function AcademyVista({
   }, [cursosAsignados]);
 
   const constanciasVigentes = useMemo(
-    () => constancias.filter((c) => c.status === "vigente").length,
+    () => {
+      const ahora = new Date();
+      return constancias.filter((c) => constanciaAcreditaFormacion(estadoDeConstancia(c, ahora))).length;
+    },
     [constancias],
   );
 
@@ -722,12 +727,14 @@ export function AcademyVista({
                     c.brokerId === usuarioId &&
                     constanciaAcreditaFormacion(estadoDeConstancia(c, ahora)),
                 );
-                const constanciaParaRecertificar = constancias.find(
-                  (c) =>
-                    c.courseCode === curso.codigo &&
-                    c.brokerId === usuarioId &&
-                    requiereRecertificacion(estadoDeConstancia(c, ahora)),
+                // Solo cuenta la constancia MÁS RECIENTE del curso: tras recertificar, la vieja ya no habilita el botón.
+                const ultimaConstancia = constanciaMasReciente(
+                  constancias.filter((c) => c.courseCode === curso.codigo && c.brokerId === usuarioId),
                 );
+                const constanciaParaRecertificar =
+                  ultimaConstancia && requiereRecertificacion(estadoDeConstancia(ultimaConstancia, ahora))
+                    ? ultimaConstancia
+                    : undefined;
 
                 return (
                   <div
@@ -1105,12 +1112,14 @@ export function AcademyVista({
                       </div>
                       <span
                         className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                          cert.status === "vigente"
+                          estadoDeConstancia(cert, new Date()) === "vigente"
                             ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                            : "bg-red-50 text-red-800 border border-red-200"
+                            : estadoDeConstancia(cert, new Date()) === "por_vencer"
+                              ? "bg-amber-50 text-amber-900 border border-amber-200"
+                              : "bg-red-50 text-red-800 border border-red-200"
                         }`}
                       >
-                        {cert.status.toUpperCase()}
+                        {etiquetaEstadoConstancia(estadoDeConstancia(cert, new Date()))}
                       </span>
                     </div>
 
@@ -1143,7 +1152,7 @@ export function AcademyVista({
                       </p>
                     )}
 
-                    {cert.status === "vigente" && esAdmin && cert.brokerId !== usuarioId && (
+                    {constanciaAcreditaFormacion(estadoDeConstancia(cert, new Date())) && esAdmin && cert.brokerId !== usuarioId && (
                       <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row gap-2">
                         <input
                           type="text"

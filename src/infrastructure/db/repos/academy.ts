@@ -13,7 +13,7 @@
 import { createHash } from "node:crypto";
 import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import {
-  constanciaAcreditaFormacion,
+  bloqueaNuevaSolicitud,
   estadoVigenciaConstancia,
 } from "../../../domain/academy-vigencia.ts";
 import { ForbiddenError, NotFoundError, ValidationError } from "../../../domain/errors.ts";
@@ -568,8 +568,9 @@ export function repositorioAcademy(tx: Tx): RepositorioAcademy {
             ),
           );
         const ahora = new Date();
+        // `por_vencer` acredita pero ya es elegible para recertificar: solo bloquea `vigente`.
         const acreditada = constanciasAprobadas.some((c) =>
-          constanciaAcreditaFormacion(estadoVigenciaConstancia(c, ahora)),
+          bloqueaNuevaSolicitud(estadoVigenciaConstancia(c, ahora)),
         );
         if (acreditada) {
           throw new ValidationError(
