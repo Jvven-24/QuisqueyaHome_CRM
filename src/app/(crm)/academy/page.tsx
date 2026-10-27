@@ -59,6 +59,7 @@ export default async function AcademyPage() {
 
   return (
     <AcademyVista
+      instanteInicial={new Date().toISOString()}
       initialContenidos={contenidosSerializados}
       initialResumen={datos.resumen}
       saludLms={datos.saludLms}
