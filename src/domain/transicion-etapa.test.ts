@@ -38,13 +38,13 @@ function contextoBase(overrides: Partial<ContextoTransicion> = {}): ContextoTran
   };
 }
 
-const etapaNuevo: EtapaDestino = { kind: "open", position: 1 };
-const etapaContactado: EtapaDestino = { kind: "open", position: 2 };
-const etapaPresentacion: EtapaDestino = { kind: "open", position: 3 };
-const etapaPreseleccion: EtapaDestino = { kind: "open", position: 4 };
-const etapaNegociacion: EtapaDestino = { kind: "open", position: 5 };
-const etapaCierre: EtapaDestino = { kind: "won", position: 6 };
-const etapaPerdido: EtapaDestino = { kind: "lost", position: 7 };
+const etapaNuevo: EtapaDestino = { kind: "open", slug: "nuevo" };
+const etapaContactado: EtapaDestino = { kind: "open", slug: "contactado" };
+const etapaPresentacion: EtapaDestino = { kind: "open", slug: "presentacion" };
+const etapaPreseleccion: EtapaDestino = { kind: "open", slug: "preseleccion" };
+const etapaNegociacion: EtapaDestino = { kind: "open", slug: "negociacion" };
+const etapaCierre: EtapaDestino = { kind: "won", slug: "cierre" };
+const etapaPerdido: EtapaDestino = { kind: "lost", slug: "perdido" };
 
 test("una transición sin requisito propio en §10.1 (la primera del embudo) no lanza nada", () => {
   assert.doesNotThrow(() =>
@@ -246,4 +246,13 @@ test("un negocio ya perdido no puede volver a transicionar", () => {
       ),
     ConflictError,
   );
+});
+
+test("las reglas siguen al slug al renombrar o reordenar y no se heredan por posición", () => {
+  for (const position of [1, 4, 100]) {
+    const movida = { ...etapaContactado, position };
+    const nueva = { kind: "open" as const, slug: "visita", position };
+    assert.throws(() => validarTransicion(negocioBase(), movida, contextoBase({ tieneActividadDeContacto: false })), ConflictError);
+    assert.doesNotThrow(() => validarTransicion(negocioBase(), nueva, contextoBase({ tieneActividadDeContacto: false })));
+  }
 });

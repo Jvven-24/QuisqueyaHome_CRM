@@ -2,7 +2,7 @@
 
 ## Entrega autorizada en rama fase2-tmp — 2026-10-27
 
-Fase 1 implementada: bitácora de notas persistente para lead y negocio, permisos y borrado lógico. Evidencia y límites en `docs/ENTREGA_NOTAS_PIPELINE.md`; ficha READY en `specs/entrega-notas-pipeline/spec.md`. Pruebas enfocadas de actividades/notas: 16/16 verdes con Node 22. No migraciones nuevas ni aplicadas. Sin push. El relevo histórico de abajo se conserva como contexto; esta tarea autoriza explícitamente producir y commitear en la rama actual.
+Ambas fases implementadas: bitácora de notas persistente para lead y negocio, permisos y borrado lógico; pipeline configurable, reglas por slug/kind, versión de transición e historial visible. Fase 1: afc59f1; fase 2: este commit. Evidencia y límites en `docs/ENTREGA_NOTAS_PIPELINE.md`; ficha READY en `specs/entrega-notas-pipeline/spec.md`. Verificación final observada: typecheck y lint limpios; npm test 1095 aprobadas, 2 omitidas, 0 fallos con Node 22. UI/BD real pendientes porque no hay servidor local. No migraciones nuevas ni aplicadas. Sin push. El relevo histórico de abajo se conserva como contexto; esta tarea autoriza explícitamente producir y commitear en la rama actual.
 
 
 **Este archivo se reescribe en cada push y describe el commit donde vive.** Si

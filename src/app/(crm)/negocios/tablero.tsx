@@ -211,7 +211,7 @@ function Contador({ valor }: { valor: number }) {
 }
 
 function ColumnaEscritorio({ columna, destacada, children }: { columna: ColumnaEtapa; destacada: boolean; children: ReactNode }) {
-  const { setNodeRef } = useDroppable({ id: idEtapa(columna.etapa.id), data: { tipo: "etapa" } });
+  const { setNodeRef } = useDroppable({ disabled: columna.etapa.isActive === false, id: idEtapa(columna.etapa.id), data: { tipo: "etapa" } });
   const montos = resumenMontos(columna.totales);
   return (
     <section ref={setNodeRef} className={`kanban-column ${destacada ? "drag-over" : ""}`} aria-label={`Etapa ${columna.etapa.name}`}>
@@ -242,7 +242,7 @@ function SeccionMovil({ columna, expandida, destacada, onAlternar, children }: {
   onAlternar: () => void;
   children: ReactNode;
 }) {
-  const { setNodeRef } = useDroppable({ id: idEtapa(columna.etapa.id), data: { tipo: "etapa" } });
+  const { setNodeRef } = useDroppable({ disabled: columna.etapa.isActive === false, id: idEtapa(columna.etapa.id), data: { tipo: "etapa" } });
   const id = columna.etapa.id;
   const montos = resumenMontos(columna.totales);
   return (

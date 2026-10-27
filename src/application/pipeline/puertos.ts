@@ -272,12 +272,13 @@ export type FilaNegocio = {
 };
 export type ResumenEtapaNegocio = { stageId: number; kind: StageKind; currency: string; count: number; amountCents?: number };
 export type CatalogosNegocios = {
-  etapas: Pick<EtapaPipeline, "id" | "slug" | "name" | "position" | "kind" | "defaultProbability">[];
+  etapas: (Pick<EtapaPipeline, "id" | "slug" | "name" | "position" | "kind" | "defaultProbability"> & { isActive?: boolean })[];
   motivos: { id: number; name: string; isActive: boolean }[];
   brokers: { id: number; name: string }[];
   proyectos: { id: number; name: string }[];
 };
-export type FichaNegocio = { negocio: FilaNegocio; propiedades: InteresNegocio[]; proyectosDisponibles: ProyectoDisponibleNegocio[] };
+export type HistorialEtapaNegocio = { id: number; desde: string | null; hasta: string; autor: string | null; fecha: Date };
+export type FichaNegocio = { historialEtapas?: HistorialEtapaNegocio[]; negocio: FilaNegocio; propiedades: InteresNegocio[]; proyectosDisponibles: ProyectoDisponibleNegocio[] };
 export type ListaNegocios = { filas: FilaNegocio[]; siguiente: CursorNegocios | null; resumen: ResumenEtapaNegocio[] };
 export interface LecturaPipeline {
   listar(actor: Actor, alcance: PermissionScope, filtros: FiltrosNegocios, orden: OrdenNegocios, cursor: CursorNegocios | null, limite: number): Promise<FilaNegocio[]>;

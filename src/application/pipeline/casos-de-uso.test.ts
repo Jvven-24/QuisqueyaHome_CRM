@@ -36,7 +36,7 @@ const MENSAJE_CERRADO_EDICION = "Este negocio ya está cerrado; no se puede edit
 function etapa(id: number, kind: EtapaPipeline["kind"], position: number, parcial: Partial<EtapaPipeline> = {}): EtapaPipeline {
   return {
     id,
-    slug: `etapa-${id}`,
+    slug: ["", "nuevo", "contactado", "presentacion", "preseleccion", "negociacion", "cierre", "perdido"][id] ?? `etapa-${id}`,
     name: `Etapa ${id}`,
     position,
     kind,
@@ -462,4 +462,34 @@ test("b2: retirada requiere motivo y principal sustituta", async () => {
   await assert.rejects(quitarPropiedad(deps, broker, "own", 1, 1, ""), /motivo/);
   await assert.rejects(quitarPropiedad(deps, broker, "own", 1, 1, "Retirado"), /principal/);
   assert.ok(!pipeline.propiedades[0]!.deletedAt);
+});
+
+test("rechaza transición con versión de etapa obsoleta sin historial ni efectos", async () => {
+  const { deps, pipeline, auditoria, outbox } = montar();
+  await assert.rejects(() => cambiarEtapaDeNegocio(deps, broker, "own", 1, {
+    stageId: 2, expectedStageId: 3, expectedStageChangedAt: null,
+  }), ConflictError);
+  assert.equal(pipeline.negocios[0]!.stageId, 1);
+  assert.equal(pipeline.historial.length, 0);
+  assert.equal(auditoria.registros.length, 0);
+  assert.equal(outbox.eventos.length, 0);
+});
+
+test("detecta ida y vuelta a la misma etapa mediante fecha de versión", async () => {
+  const { deps } = montar({ negocios: [negocio({ id: 1, stageChangedAt: new Date("2026-10-27T00:00:00Z") })] });
+  await assert.rejects(() => cambiarEtapaDeNegocio(deps, broker, "own", 1, {
+    stageId: 2, expectedStageId: 1, expectedStageChangedAt: null,
+  }), ConflictError);
+});
+
+test("desactivar una etapa conserva salida de sus negocios y bloquea entrada de nuevos", async () => {
+  const m = montar({ negocios: [negocio({ id: 1, stageId: 8 })] });
+  assert.equal((await cambiarEtapaDeNegocio(m.deps, broker, "own", 1, { stageId: 1 })).stageId, 1);
+  await assert.rejects(() => cambiarEtapaDeNegocio(m.deps, broker, "own", 1, { stageId: 8 }), NotFoundError);
+});
+
+test("renombrar y reordenar Contactado mantiene su regla y una etapa intermedia no la hereda", async () => {
+  const { deps } = montar({ etapas: [etapa(1, "open", 10), etapa(2, "open", 1, { name: "Primer diálogo" }), etapa(9, "open", 2)] });
+  await assert.rejects(() => cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 2 }), ConflictError);
+  assert.equal((await cambiarEtapaDeNegocio(deps, broker, "own", 1, { stageId: 9 })).stageId, 9);
 });

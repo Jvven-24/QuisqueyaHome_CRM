@@ -100,8 +100,16 @@ export default async function PipelinePage({ searchParams }: {
     resumen={lista.resumen} siguiente={lista.siguiente} modo={modo} catalogos={catalogos}
     negocioSeleccionado={ficha?.negocio ?? null} propiedades={ficha?.propiedades ?? []}
     proyectosDisponibles={ficha?.proyectosDisponibles ?? []}
-    historial={ficha && actor.roleSlug === "admin" ? <Historial entidad="deal" entidadId={ficha.negocio.id} /> : null}
+    historial={ficha ? <>
+      <h3>Historial de etapas</h3>
+      {ficha.historialEtapas?.length ? <ol className="space-y-3">{ficha.historialEtapas.map(h => <li key={h.id}>
+        <strong>{h.desde ?? "Inicio"} → {h.hasta}</strong><br />
+        <span>{h.autor ?? "Usuario no disponible"} · {new Intl.DateTimeFormat("es-DO", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Santo_Domingo" }).format(h.fecha)}</span>
+      </li>)}</ol> : <p>No hay cambios de etapa registrados.</p>}
+      {actor.roleSlug === "admin" && <Historial entidad="deal" entidadId={ficha.negocio.id} />}
+    </> : null}
     rol={actor.roleSlug}
+    puedeEditarNegocios={scopeFor(actor, "deals", "edit") !== "none"}
     puedeVerLeads={scopeFor(actor, "leads", "view") !== "none"}
     puedeExportar={scopeFor(actor, "deals", "export") !== "none"}
     puedeVerAnalisis={puedeVerAnalisis} />;

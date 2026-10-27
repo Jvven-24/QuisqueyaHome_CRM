@@ -11,7 +11,7 @@ const FECHA_FIJA = new Date("2026-01-01T00:00:00Z");
 
 export type EtapasEnMemoria = RepositorioEtapas & Reversible & { readonly etapas: readonly Etapa[] };
 
-export function etapasEnMemoria(semilla: readonly Etapa[] = []): EtapasEnMemoria {
+export function etapasEnMemoria(semilla: readonly Etapa[] = [], etapasEnUso: readonly number[] = []): EtapasEnMemoria {
   let etapas: Etapa[] = [...semilla];
 
   return {
@@ -19,6 +19,14 @@ export function etapasEnMemoria(semilla: readonly Etapa[] = []): EtapasEnMemoria
       return etapas;
     },
 
+    async bloquearCatalogo() {},
+    async listar() { return [...etapas]; },
+    async estaEnUso(id) { return etapasEnUso.includes(id); },
+    async crear(datos) {
+      const fila = { ...datos, id: Math.max(0, ...etapas.map(e => e.id)) + 1, createdAt: FECHA_FIJA, updatedAt: FECHA_FIJA };
+      etapas = [...etapas, fila];
+      return fila;
+    },
     async buscar(id) {
       return etapas.find((e) => e.id === id);
     },
@@ -28,6 +36,7 @@ export function etapasEnMemoria(semilla: readonly Etapa[] = []): EtapasEnMemoria
       if (!anterior) throw new Error(`etapasEnMemoria: no existe la etapa ${id}.`);
       const set: Partial<Etapa> = {};
       if (cambios.name !== undefined) set.name = cambios.name;
+      if (cambios.kind !== undefined) set.kind = cambios.kind;
       if (cambios.position !== undefined) set.position = cambios.position;
       if ("defaultProbability" in cambios) set.defaultProbability = cambios.defaultProbability;
       if (cambios.isActive !== undefined) set.isActive = cambios.isActive;

@@ -51,10 +51,10 @@ export function PipelineVista({
   siguiente,
   modo,
   catalogos,
-  rol,
   puedeVerLeads,
   puedeVerAnalisis,
   puedeExportar = false,
+  puedeEditarNegocios = false,
 }: {
   negocios: NegocioFila[];
   etapas: Etapa[];
@@ -71,6 +71,7 @@ export function PipelineVista({
   puedeVerLeads: boolean;
   puedeVerAnalisis: boolean;
   puedeExportar?: boolean;
+  puedeEditarNegocios?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -130,7 +131,7 @@ export function PipelineVista({
   const total = totalNegocios(resumen);
   const valorActivo = valorActivoPorDivisa(resumenVisible);
   const veMontos = resumen.some((r) => r.amountCents !== undefined) || negocios.some((n) => n.amountCents !== undefined);
-  const puedeEditar = rol !== "assistant";
+  const puedeEditar = puedeEditarNegocios;
 
   /* ------------------------------ navegación ------------------------------ */
 
@@ -184,7 +185,7 @@ export function PipelineVista({
     dispatch({ tipo: "mover", dealId: negocio.id, hacia: stageId, estado: "enviando" });
     dispatch({ tipo: "enviar", dealId: negocio.id });
     setOcupado(true);
-    const respuesta = await enviarJson(`${negocio.id}/etapa`, "PATCH", { stageId, ...extra });
+    const respuesta = await enviarJson(`${negocio.id}/etapa`, "PATCH", { stageId, expectedStageId: negocio.stageId, expectedStageChangedAt: negocio.stageChangedAt ? new Date(negocio.stageChangedAt).toISOString() : null, ...extra });
     enCurso.current = false;
     rutaEnCurso.current = null;
     setOcupado(false);
@@ -209,7 +210,7 @@ export function PipelineVista({
 
   function solicitarMover(negocio: NegocioFila, etapaId: number, indice = 0) {
     const destino = etapaPorId.get(etapaId);
-    if (!destino || destino.id === negocio.stageId || negocio.stageKind !== "open" || !puedeEditar || ocupado || enCurso.current || pendiente || Object.keys(kanban.pendientes).length > 0) return;
+    if (!destino || destino.isActive === false || destino.id === negocio.stageId || negocio.stageKind !== "open" || !puedeEditar || ocupado || enCurso.current || pendiente || Object.keys(kanban.pendientes).length > 0) return;
     if (sinConexion) {
       setAviso({ tipo: "error", texto: "Sin conexión a internet. No se movió nada; vuelve a intentarlo cuando regrese la conexión." });
       return;

@@ -133,3 +133,15 @@ test("negocios: rechaza fechas imposibles, rangos invertidos, coerción, dinero 
   await assert.rejects(consultarListaNegocios(repo, actor("own"), {}, { campo: "id", direccion: "asc" },
     { id: 1, valor: 1, orden: { campo: "id", direccion: "desc" } }), ValidationError);
 });
+
+test("historial de etapas visible al broker solo en la ficha de su ámbito y con DTO explícito", async () => {
+  const { datos, repo } = montar();
+  const evento = { id: 1, desde: "Nuevo", hasta: "Visita", autor: "Asesor", fecha: new Date("2026-10-27T15:00:00Z"), secreto: "no exponer" };
+  datos[0]!.historialEtapas = [evento];
+  datos[1]!.historialEtapas = [evento];
+  assert.deepEqual((await consultarFichaNegocio(repo, actor("own"), 1)).historialEtapas, [{
+    id: evento.id, desde: evento.desde, hasta: evento.hasta, autor: evento.autor, fecha: evento.fecha,
+  }]);
+  await assert.rejects(consultarFichaNegocio(repo, actor("own"), 2), NotFoundError);
+  await assert.rejects(consultarFichaNegocio(repo, actor("none"), 1), NotFoundError);
+});

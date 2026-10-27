@@ -1,58 +1,7 @@
-/**
- * Reglas de negocio de cambio de etapa (M3a, `MAPEO_FRONTEND_CRM.md` §10.1).
- * Lógica pura, sin base de datos: recibe todo lo que necesita ya resuelto —
- * el route handler del paso 6 (M3b) hace las consultas antes de llamar aquí y
- * decide qué hacer con el `ConflictError` que esta función lanza.
- *
- * Igual que `rbac.ts`, este archivo no importa nada de `infrastructure/`, ni
- * de Drizzle ni de Next: se prueba entero con `node --test`.
- *
- * ## Por qué se engancha a `kind` y a `position`, nunca al nombre de la etapa
- *
- * Decisión #1 (`MAPEO_FRONTEND_CRM.md` §9): las etapas viven en la tabla
- * `pipeline_stages` y son renombrables desde M13. Un `if (etapa.name ===
- * "Contactado")` se rompe el día que alguien le cambie el nombre a "Primer
- * contacto" en Configuración, y se rompe en silencio porque el `if` deja de
- * cumplirse sin que nadie lo note en un `WHERE` ni en un tipo.
- *
- * `kind` (`open`/`won`/`lost`) distingue de sobra Cierre y Perdido. Pero las
- * cuatro etapas intermedias del embudo (Contactado, Presentación,
- * Preselección, Negociación) son todas `kind: "open"` — `kind` no alcanza
- * para distinguirlas entre sí. Lo que sí es estructural y no depende del
- * nombre es su **posición** en el embudo: la que hoy se llama "Contactado" es,
- * y seguirá siendo mientras el embudo tenga esta forma, la segunda etapa
- * (`position` inmediatamente posterior a la primera). Por eso las constantes
- * de abajo se documentan con la posición real sembrada en `db/seed.sql`, no
- * con el nombre.
- */
-
+/** Reglas por kind y slug: reordenar o renombrar el catálogo no cambia requisitos. */
 import { ConflictError } from "./errors.ts";
 import type { StageKind } from "./catalogs.ts";
 
-/**
- * Posiciones de las etapas abiertas intermedias, tal como las siembra
- * `db/seed.sql`: 1 Nuevo, 2 Contactado, 3 Presentación, 4 Preselección,
- * 5 Negociación, 6 Cierre (`won`), 7 Perdido (`lost`). Si algún día se inserta
- * una etapa nueva entre medio, estas posiciones se corren y hay que revisar
- * `db/seed.sql` de nuevo — es el mismo costo que tendría corregir un nombre,
- * pero aquí el compilador no puede avisar porque es un dato, no un tipo.
- */
-const STAGE_POSITION = {
-  /** "Contactado": exige actividad de contacto (§10.1, fila 1). */
-  contacto: 2,
-  /** "Presentación": exige próxima acción con responsable y fecha. */
-  presentacion: 3,
-  /** "Preselección": exige al menos una propiedad de interés. */
-  preseleccion: 4,
-  /** "Negociación": exige monto, probabilidad, comisión y fecha estimada. */
-  negociacion: 5,
-} as const;
-
-/**
- * Próxima acción del negocio: quién la hace y cuándo. Vive en `deals` como
- * `next_activity_id` (sin FK, decisión #8) o se resuelve en el contexto —
- * a esta función le da igual de dónde salga, solo necesita el resultado.
- */
 export type ProximaAccion = {
   responsableId: number;
   fecha: string;
@@ -76,7 +25,7 @@ export type Negocio = {
 /** La etapa a la que se quiere mover el negocio. Solo lo que estas reglas leen. */
 export type EtapaDestino = {
   kind: StageKind;
-  position: number;
+  slug: string;
 };
 
 /**
@@ -149,10 +98,9 @@ export function validarTransicion(
     return;
   }
 
-  // etapaDestino.kind === "open": el requisito depende de en qué punto del
-  // embudo cae, no de su nombre — ver la nota de posiciones arriba.
-  switch (etapaDestino.position) {
-    case STAGE_POSITION.contacto:
+  // Una etapa intermedia nueva no hereda reglas de la posición que ocupa.
+  switch (etapaDestino.slug) {
+    case "contactado":
       if (!contexto.tieneActividadDeContacto) {
         throw new ConflictError(
           "Para mover el negocio a esta etapa hace falta registrar al menos una actividad de contacto.",
@@ -160,7 +108,7 @@ export function validarTransicion(
       }
       return;
 
-    case STAGE_POSITION.presentacion:
+    case "presentacion":
       if (contexto.proximaAccion == null) {
         throw new ConflictError(
           "Para mover el negocio a esta etapa hace falta una próxima acción con responsable y fecha.",
@@ -168,7 +116,7 @@ export function validarTransicion(
       }
       return;
 
-    case STAGE_POSITION.preseleccion:
+    case "preseleccion":
       if (contexto.cantidadPropiedades < 1) {
         throw new ConflictError(
           "Para mover el negocio a esta etapa hace falta al menos una propiedad de interés.",
@@ -176,7 +124,7 @@ export function validarTransicion(
       }
       return;
 
-    case STAGE_POSITION.negociacion:
+    case "negociacion":
       // Los cuatro campos son requisitos independientes: cada uno se reporta
       // por separado para que el usuario sepa exactamente cuál falta, en vez
       // de un mensaje genérico de "datos incompletos".
@@ -203,7 +151,7 @@ export function validarTransicion(
       return;
 
     default:
-      // Posición 1 ("Nuevo") u otra etapa abierta sin requisito propio en
+      // "Nuevo" u otra etapa abierta sin requisito propio en
       // §10.1: la transición no exige nada especial.
       return;
   }

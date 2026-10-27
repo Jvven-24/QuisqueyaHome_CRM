@@ -92,8 +92,8 @@ test("CA-07 pérdida: motivo y comentario obligatorios y el error conserva lo es
   assert.ok(vista.includes("if (r.ok) setPerdida(null);"));
 });
 
-test("el asistente no ejecuta cambios directos: los controles de edición quedan ocultos", () => {
+test("los controles de edición usan el permiso efectivo calculado en servidor", () => {
   const vista = fuente("vista.tsx");
-  assert.ok(vista.includes('const puedeEditar = rol !== "assistant";'));
+  assert.ok(vista.includes('const puedeEditar = puedeEditarNegocios;'));
   assert.ok(fuente("inspector.tsx").includes("const editable = abierto && puedeEditar;"));
 });

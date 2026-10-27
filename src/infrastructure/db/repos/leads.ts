@@ -319,9 +319,9 @@ export function repositorioLeads(ejecutor: Ejecutor, transaccional = false): Rep
       const [fila] = await ejecutor
         .select({ id: pipelineStages.id })
         .from(pipelineStages)
-        .where(eq(pipelineStages.kind, "open"))
-        .orderBy(asc(pipelineStages.position))
-        .limit(1);
+        .where(and(eq(pipelineStages.kind, "open"), eq(pipelineStages.isActive, true)))
+        .orderBy(asc(pipelineStages.position), asc(pipelineStages.id))
+        .limit(1).for("share");
       return fila;
     },
 

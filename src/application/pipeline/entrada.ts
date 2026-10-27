@@ -10,6 +10,7 @@ export const editarNegocioSchema = z.object({
   expectedCloseDate: z.iso.date().nullable().optional(),
 }).strict();
 export const cambiarEtapaSchema = z.object({
+  expectedStageId: id.optional(), expectedStageChangedAt: z.iso.datetime().nullable().optional(),
   stageId: id, lossReasonId: id.optional(), lossComment: z.string().optional(),
   amountCents: dinero.optional(),
   unitId: id.optional(), unitCode: z.string().max(200).optional(),

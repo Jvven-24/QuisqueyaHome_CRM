@@ -302,7 +302,7 @@ export function DealInspector({
                   aria-describedby={errorEtapa ? "inspector-etapa-error" : undefined}
                   onChange={(e) => { setEtapaElegida(e.target.value); setErrorEtapa(null); }}>
                   <option value="">Elige una etapa…</option>
-                  {etapas.filter((e) => e.id !== negocio.stageId).map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
+                  {etapas.filter((e) => e.id !== negocio.stageId && e.isActive !== false).map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
                 </select>
               </label>
               {errorEtapa && <p id="inspector-etapa-error" role="alert" className="m-0 text-[13px] font-medium text-danger">{errorEtapa}</p>}

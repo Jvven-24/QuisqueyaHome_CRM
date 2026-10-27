@@ -24,11 +24,11 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     const id = Number(idParam);
     if (!Number.isInteger(id) || id <= 0 || id > 2147483647) throw new NotFoundError();
 
-    const datos = parseInput(cambiarEtapaSchema, await request.json().catch(() => ({})));
+    const datos = parseInput(cambiarEtapaSchema.required({ expectedStageId: true, expectedStageChangedAt: true }), await request.json().catch(() => ({})));
     const actor = await requireActor();
     const scope = requireScope(actor, "deals", "edit");
 
-    const entrada: EntradaCambiarEtapa = { stageId: datos.stageId };
+    const entrada: EntradaCambiarEtapa = { stageId: datos.stageId, expectedStageId: datos.expectedStageId, expectedStageChangedAt: datos.expectedStageChangedAt };
     if (datos.lossReasonId !== undefined) entrada.lossReasonId = datos.lossReasonId;
     if (datos.lossComment !== undefined) entrada.lossComment = datos.lossComment;
     if (datos.amountCents !== undefined) entrada.amountCents = datos.amountCents;

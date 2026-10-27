@@ -486,7 +486,8 @@ function codigoDelAdaptador(nombre: string): string {
 test("el adaptador real bloquea la fila del negocio: bloquearNegocio usa .for(\"update\")", () => {
   const codigo = codigoDelAdaptador("pipeline.ts") + codigoDelAdaptador("compromisos.ts");
   const bloqueos = codigo.match(/\.for\(/g) ?? [];
-  assert.equal(bloqueos.length, 4, "negocio, unidad, proyecto de alta y compromisos del cierre");
+  assert.equal(bloqueos.length, 5, "negocio, etapa destino, unidad, proyecto de alta y compromisos del cierre");
+  assert.match(codigo, /async buscarEtapaActiva[\s\S]*?from\(pipelineStages\)[\s\S]*?\.for\("share"\)/);
   assert.match(codigo, /async bloquearNegocio[\s\S]*?from\(deals\)[\s\S]*?\.for\("update"\)/);
   assert.match(codigo, /async bloquearUnidad[\s\S]*?from\(units\)[\s\S]*?\.for\("update"\)/);
   assert.match(codigo, /async resolverUnidadDeCierre[\s\S]*?from\(projects\)[\s\S]*?\.for\("update"\)/);

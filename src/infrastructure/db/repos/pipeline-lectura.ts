@@ -1,11 +1,12 @@
 import { and, asc, desc, eq, exists, gt, gte, inArray, isNull, lt, lte, notExists, or, sql } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import type { Actor, PermissionScope } from "../../../domain/rbac.ts";
 import { scopeFor } from "../../../domain/rbac.ts";
 import { camposNegocios, ZONA_NEGOCIOS } from "../../../application/pipeline/consultas.ts";
 import type { CursorNegocios, FiltrosNegocios, LecturaPipeline, OrdenNegocios, ProyectoDisponibleNegocio } from "../../../application/pipeline/puertos.ts";
 import type { Db } from "../client.ts";
 import type { Tx } from "./compartido.ts";
-import { activities, commissions, contacts, dealProperties, deals, leadSources, lossReasons, pipelineStages, projects, unitSales, units, users } from "../schema.ts";
+import { activities, commissions, contacts, dealProperties, dealStageHistory, deals, leadSources, lossReasons, pipelineStages, projects, unitSales, units, users } from "../schema.ts";
 import { visibleRows } from "../../rbac-filter.ts";
 
 // Sitio único de mutación en el loader de test:db; producto siempre usa EXISTS.
@@ -129,14 +130,24 @@ export function lecturaPipeline(db: Db | Tx): LecturaPipeline {
       if (!rows.length) return undefined;
       const [negocio] = await enriquecer(actor, scope, rows);
       const [propiedades, disponibles] = await Promise.all([intereses(actor, scope, [id]), proyectosDisponibles(actor)]);
-      return { negocio: negocio!, propiedades, proyectosDisponibles: disponibles };
+      const desde = alias(pipelineStages, "etapa_desde");
+      const historialEtapas = await db.select({ id: dealStageHistory.id, desde: desde.name, hasta: pipelineStages.name,
+        autor: users.fullName, fecha: dealStageHistory.changedAt }).from(dealStageHistory)
+        .innerJoin(deals, eq(deals.id, dealStageHistory.dealId))
+        .innerJoin(pipelineStages, eq(pipelineStages.id, dealStageHistory.toStageId))
+        .leftJoin(desde, eq(desde.id, dealStageHistory.fromStageId))
+        .leftJoin(users, eq(users.id, dealStageHistory.changedBy))
+        .where(and(eq(dealStageHistory.dealId, id), visibleRows(actor, scope, deals.brokerId, deals.deletedAt)))
+        .orderBy(desc(dealStageHistory.changedAt), desc(dealStageHistory.id));
+      return { negocio: negocio!, propiedades, proyectosDisponibles: disponibles, historialEtapas };
     },
     async catalogos(actor, scope) {
       if (scope === "none") return { etapas: [], motivos: [], brokers: [], proyectos: [] };
       const [etapas, motivos, brokers, proyectos] = await Promise.all([
         db.select({ id: pipelineStages.id, slug: pipelineStages.slug, name: pipelineStages.name, position: pipelineStages.position,
-          kind: pipelineStages.kind, defaultProbability: pipelineStages.defaultProbability }).from(pipelineStages)
-          .where(eq(pipelineStages.isActive, true)).orderBy(asc(pipelineStages.position), asc(pipelineStages.id)),
+          kind: pipelineStages.kind, defaultProbability: pipelineStages.defaultProbability, isActive: pipelineStages.isActive }).from(pipelineStages)
+          .where(or(eq(pipelineStages.isActive, true), exists(db.select({ id: deals.id }).from(deals)
+            .where(and(eq(deals.stageId, pipelineStages.id), visibleRows(actor, scope, deals.brokerId, deals.deletedAt)))))).orderBy(asc(pipelineStages.position), asc(pipelineStages.id)),
         // Incluye motivos históricos usados en el alcance; las bajas no borran el significado de una pérdida.
         db.select({ id: lossReasons.id, name: lossReasons.name, isActive: lossReasons.isActive }).from(lossReasons)
           .where(or(eq(lossReasons.isActive, true), exists(db.select({ id: deals.id }).from(deals)

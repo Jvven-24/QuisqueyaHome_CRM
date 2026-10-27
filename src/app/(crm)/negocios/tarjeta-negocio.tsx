@@ -227,7 +227,7 @@ export function TarjetaNegocio({
                 <DropdownMenuContent align="end" className="w-64">
                   <DropdownMenuLabel className="text-[13px] text-ink-muted">Mover a…</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {etapas.map((etapa) => {
+                  {etapas.filter(etapa => etapa.isActive !== false).map((etapa) => {
                     const actual = etapa.id === negocio.stageId;
                     return (
                       <DropdownMenuItem

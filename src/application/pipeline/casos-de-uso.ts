@@ -35,6 +35,8 @@ export type DepsPipeline = { unidad: UnidadDeTrabajo<ReposPipeline> };
 
 export type EntradaCambiarEtapa = {
   stageId: number;
+  expectedStageId?: number;
+  expectedStageChangedAt?: string | null;
   /** Obligatorio cuando la etapa destino es `lost` — lo valida `validarTransicion`, no la ruta: Zod no conoce todavía el `kind` de la etapa. */
   lossReasonId?: number;
   lossComment?: string;
@@ -60,6 +62,11 @@ export async function cambiarEtapaDeNegocio(
     // Mismo criterio que `dentroDeAlcance` en `api/leads/[id]/convertir/route.ts`:
     // un id fuera del alcance del actor responde igual que uno inexistente.
     if (!reaches(actor, alcance, deal.brokerId)) throw new NotFoundError();
+
+    if ((entrada.expectedStageId !== undefined && entrada.expectedStageId !== deal.stageId) ||
+      ("expectedStageChangedAt" in entrada && entrada.expectedStageChangedAt !== (deal.stageChangedAt?.toISOString() ?? null))) {
+      throw new ConflictError("La etapa cambió desde que abriste el negocio. Actualiza antes de moverlo.");
+    }
 
     const etapaActual = await pipeline.buscarEtapa(deal.stageId);
     if (!etapaActual) {
@@ -126,7 +133,7 @@ export async function cambiarEtapaDeNegocio(
     // No se duplica la validación aquí: si algo falta, esto lanza
     // `ConflictError` y `errorResponse` lo traduce a 409 con el mensaje
     // exacto que redactó `transicion-etapa.ts`.
-    validarTransicion(negocio, { kind: etapaDestino.kind, position: etapaDestino.position }, contexto);
+    validarTransicion(negocio, { kind: etapaDestino.kind, slug: etapaDestino.slug }, contexto);
 
     // --- Cierre (won): delega en los ocho pasos de §10.2 ------------------
     if (etapaDestino.kind === "won") {
@@ -157,7 +164,7 @@ export async function cambiarEtapaDeNegocio(
     const dealActualizado = await pipeline.aplicarCambioDeEtapa({
       dealId: id,
       etapaDestinoId: etapaDestino.id,
-      cuando: new Date(),
+      cuando: new Date(Math.max(Date.now(), (deal.stageChangedAt?.getTime() ?? 0) + 1)),
       perdida:
         etapaDestino.kind === "lost"
           ? { lossReasonId: entrada.lossReasonId, lossComment: entrada.lossComment!.trim() }
@@ -373,7 +380,7 @@ export async function quitarPropiedad(
     const intereses = await pipeline.propiedadesDelNegocio(dealId);
     const negocio = await pipeline.buscarNegocio(dealId);
     const etapa = negocio && await pipeline.buscarEtapa(negocio.stageId);
-    if (etapa?.kind === "open" && etapa.position >= 4 && intereses.length <= 1) throw new ConflictError("Esta etapa requiere conservar un interés activo.");
+    if (etapa?.kind === "open" && ["preseleccion", "negociacion"].includes(etapa.slug) && intereses.length <= 1) throw new ConflictError("Esta etapa requiere conservar un interés activo.");
 
     await pipeline.eliminarPropiedad(propId, actor.userId, motivo.trim());
 

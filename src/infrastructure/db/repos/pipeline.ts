@@ -71,7 +71,7 @@ export function repositorioPipeline(tx: Tx): RepositorioPipeline {
         .select()
         .from(pipelineStages)
         .where(and(eq(pipelineStages.id, id), eq(pipelineStages.isActive, true)))
-        .limit(1);
+        .limit(1).for("share");
       return fila;
     },
 

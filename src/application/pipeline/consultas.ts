@@ -113,7 +113,7 @@ export async function consultarFichaNegocio(repo: LecturaPipeline, actor: Actor,
     const dto = { id: p.id, projectId: p.projectId, projectName: p.projectName, unitId: p.unitId, unitCode: p.unitCode, isPrimary: p.isPrimary };
     return camposNegocios(actor).precio ? { ...dto, realPriceCents: p.realPriceCents } : dto;
   });
-  const dto = { negocio: proyectarNegocio(actor, ficha.negocio), propiedades, proyectosDisponibles: ficha.proyectosDisponibles.map(p => ({ id: p.id, name: p.name, unidades: p.unidades.map(u => ({ id: u.id, code: u.code })) })) };
+  const dto = { historialEtapas: (ficha.historialEtapas ?? []).map(h => ({ id: h.id, desde: h.desde, hasta: h.hasta, autor: h.autor, fecha: h.fecha })), negocio: proyectarNegocio(actor, ficha.negocio), propiedades, proyectosDisponibles: ficha.proyectosDisponibles.map(p => ({ id: p.id, name: p.name, unidades: p.unidades.map(u => ({ id: u.id, code: u.code })) })) };
   assertMonetaryTotals(dto);
   return dto;
 }
