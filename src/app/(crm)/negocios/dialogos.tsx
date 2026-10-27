@@ -3,6 +3,7 @@
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import { AlertTriangle } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { centavosAUnidad, unidadACentavos } from "../_ui/formato";
 import type { MotivoPerdida, NegocioFila, PropiedadDeal, ProyectoOpcion } from "./logica";
 
@@ -207,12 +208,15 @@ export function DialogoCierre({ negocio, propiedades, proyectos, nombreEtapa, on
 
           <fieldset className="m-0 grid gap-2 border-0 p-0">
             <legend className="mb-1 p-0 text-sm font-bold text-ink">Unidad<Obligatorio /></legend>
+            <RadioGroup aria-label="Modo de unidad" value={modo} onValueChange={(value) => setModo(value as typeof modo)} className="gap-1">
             {unidades.length > 0 && (
               <label className="flex min-h-12 cursor-pointer items-center gap-2 text-sm text-ink">
-                <input type="radio" name="modo-unidad" checked={modo === "elegir"} onChange={() => setModo("elegir")} className="size-5" />
+                <RadioGroupItem value="elegir" />
                 <span>Elegir unidad</span>
               </label>
             )}
+            <label className="flex min-h-12 cursor-pointer items-center gap-2 text-sm text-ink"><RadioGroupItem value="crear" /><span>Crear unidad</span></label>
+            </RadioGroup>
             {modo === "elegir" && unidades.length > 0 && (
               <select aria-label="Unidad del proyecto" value={unidadId} onChange={(e) => setUnidadId(e.target.value)} className={CAMPO}
                 aria-invalid={Boolean(errUnidad)} aria-describedby={errUnidad ? "cierre-unidad-error" : undefined}>
@@ -220,10 +224,6 @@ export function DialogoCierre({ negocio, propiedades, proyectos, nombreEtapa, on
                 {unidades.map((u) => <option key={u.id} value={u.id}>{u.code}</option>)}
               </select>
             )}
-            <label className="flex min-h-12 cursor-pointer items-center gap-2 text-sm text-ink">
-              <input type="radio" name="modo-unidad" checked={modo === "crear"} onChange={() => setModo("crear")} className="size-5" />
-              <span>Crear unidad</span>
-            </label>
             {modo === "crear" && (
               <input type="text" aria-label="Código de la unidad nueva" maxLength={200} value={codigo} onChange={(e) => setCodigo(e.target.value)}
                 placeholder="Código, por ejemplo A-101" className={CAMPO}

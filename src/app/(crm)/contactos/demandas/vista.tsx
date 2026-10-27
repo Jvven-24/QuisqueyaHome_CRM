@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { z } from "zod";
@@ -75,7 +76,7 @@ export function DemandasVista({ initial }: {
         </select>
         </label>
         <label className={s.toolbar}>
-        <input type="checkbox" checked={onlyAvailable} onChange={e => setOnlyAvailable(e.target.checked)}/>Solo candidatas disponibles y de la misma operación y moneda</label>
+        <Checkbox checked={onlyAvailable} onCheckedChange={checked => setOnlyAvailable(checked)} />Solo candidatas disponibles y de la misma operación y moneda</label>
         </div>
         <p>Regla de ejemplo: presupuesto 40 puntos, zona 30, habitaciones 20 y área 10. Las unidades ocupadas o de otra operación o moneda se excluyen. Un puntaje alto no garantiza disponibilidad ni reserva.</p>
         <div className={s.grid}>{filtered.map(match => <article key={match.candidate.id} className={s.panel}>

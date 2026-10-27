@@ -1,3 +1,4 @@
+import { Checkbox } from "@/components/ui/checkbox";
 import { useMemo, useState, type ReactNode, type ElementType } from "react";
 import { ArrowUpDown, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Inbox } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -75,6 +76,7 @@ export function DataTable<F>({
   const visibles = ordenadas.slice(actual * porPagina, actual * porPagina + porPagina);
   const idsVisibles = visibles.map(idDe);
   const todasMarcadas = idsVisibles.length > 0 && idsVisibles.every((id) => marcadas.has(id));
+  const algunasMarcadas = !todasMarcadas && idsVisibles.some((id) => marcadas.has(id));
 
   function alternar(id: string) {
     setMarcadas((previas) => {
@@ -162,13 +164,7 @@ export function DataTable<F>({
               <tr className="border-b border-border bg-muted/40 h-9">
                 {seleccionables && (
                   <th scope="col" className="w-10 px-3 py-2">
-                    <input
-                      type="checkbox"
-                      checked={todasMarcadas}
-                      onChange={alternarTodas}
-                      aria-label="Seleccionar todo lo visible"
-                      className="size-4 cursor-pointer accent-gold-500 rounded"
-                    />
+                    <Checkbox checked={todasMarcadas ? true : algunasMarcadas ? "indeterminate" : false} onCheckedChange={alternarTodas} aria-label="Seleccionar todo lo visible" />
                   </th>
                 )}
                 {columnas.map((columna) => (
@@ -226,13 +222,7 @@ export function DataTable<F>({
                   >
                     {seleccionables && (
                       <td className="px-3 py-2" onClick={(evento) => evento.stopPropagation()}>
-                        <input
-                          type="checkbox"
-                          checked={marcadas.has(id)}
-                          onChange={() => alternar(id)}
-                          aria-label={"Seleccionar fila"}
-                          className="size-4 cursor-pointer accent-gold-500"
-                        />
+                        <Checkbox checked={marcadas.has(id)} onCheckedChange={() => alternar(id)} aria-label={"Seleccionar fila"} />
                       </td>
                     )}
                     {columnas.map((columna) => (
@@ -273,13 +263,7 @@ export function DataTable<F>({
               >
                 <div className="flex items-start gap-2.5">
                   {seleccionables && (
-                    <input
-                      type="checkbox"
-                      checked={marcadas.has(id)}
-                      onChange={() => alternar(id)}
-                      aria-label={"Seleccionar ficha"}
-                      className="mt-1 size-4 shrink-0 cursor-pointer accent-gold-500"
-                    />
+                    <Checkbox checked={marcadas.has(id)} onCheckedChange={() => alternar(id)} aria-label={"Seleccionar ficha"} />
                   )}
                   {medioMovil && <span className="shrink-0">{medioMovil(fila)}</span>}
                   {/* Sin onAbrir no hay acción: un div evita anidar un botón dentro de otro botón

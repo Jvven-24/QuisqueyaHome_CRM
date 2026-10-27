@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import { useEnLinea } from "./usar-entorno";
 import { UNIDADES_EJEMPLO } from "./_ejemplo";
@@ -19,7 +20,7 @@ export function ComercialPreview({ puedeEditar }: { puedeEditar: boolean }) {
     {!enLinea && <p role="status">Sin conexión. Puedes comparar los ejemplos; el envío está en pausa.</p>}
     {!puedeEditar && <p role="status">Tu rol solo puede consultar esta vista previa.</p>}
     <details><summary className="min-h-12 cursor-pointer py-3">Comparar unidades de ejemplo</summary>
-      {UNIDADES_EJEMPLO.map((u) => <label key={u.id} className="flex min-h-12 items-center gap-2"><input type="checkbox" checked={ids.includes(u.id)} onChange={() => { const r = alternarSeleccion(ids, u.id); setIds(r.ids); setAviso(r.error ?? ""); }} />{u.unidad} · {u.m2} m² · {formatearMonto(u.precioCents, u.moneda)}</label>)}
+      {UNIDADES_EJEMPLO.map((u) => <label key={u.id} className="flex min-h-12 items-center gap-2"><Checkbox checked={ids.includes(u.id)} onCheckedChange={() => { const r = alternarSeleccion(ids, u.id); setIds(r.ids); setAviso(r.error ?? ""); }} />{u.unidad} · {u.m2} m² · {formatearMonto(u.precioCents, u.moneda)}</label>)}
       {opciones.length === 0 ? <p>Selecciona unidades para compararlas.</p> : <div className="grid gap-2">{opciones.map((u) => { const c = cuotasPlan(u.precioCents, u.plan); return <article key={u.id} className="rounded-lg border border-line p-3"><h4>{u.unidad} · {u.habitaciones} habitaciones · {u.banos} baños</h4><p>{u.m2} m² · Piso {u.piso} · {u.vista}</p><p>{formatearMonto(u.precioCents, u.moneda)} · Separación orientativa {formatearMonto(c.separacionCents, u.moneda)}</p><p>Entrega: {u.entrega}. Gastos y disponibilidad pendientes de verificación.</p></article>; })}</div>}
     </details>
     <div className="flex flex-wrap gap-2"><button type="button" className={boton} disabled={!puedeEditar || !enLinea || opciones.length === 0} onClick={() => setPanel("oferta")}>Preparar propuesta</button><button type="button" className={boton} disabled={!puedeEditar || !enLinea} onClick={() => setPanel("aprobacion")}>Solicitar aprobación</button><button type="button" className={boton} disabled={!puedeEditar || !enLinea} onClick={() => setPanel("reabrir")}>Consultar reapertura</button></div>

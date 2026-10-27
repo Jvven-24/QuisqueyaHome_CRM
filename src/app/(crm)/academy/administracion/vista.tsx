@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -1036,12 +1037,7 @@ export function AcademyAdministracionVista({
                       className="min-h-[44px] flex items-center justify-between gap-3 px-4 py-2.5 text-xs sm:text-sm hover:bg-slate-50 cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <input
-                          type="checkbox"
-                          checked={marcado}
-                          onChange={() => alternarSeleccionUsuario(u.id)}
-                          className="h-4 w-4 rounded border-slate-300 text-slate-900"
-                        />
+                        <Checkbox checked={marcado} onCheckedChange={() => alternarSeleccionUsuario(u.id)} />
                         <div>
                           <span className="font-semibold text-slate-900">{u.fullName}</span>
                           <span className="text-slate-500 ml-2">{u.email}</span>

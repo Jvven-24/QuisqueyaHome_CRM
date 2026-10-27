@@ -19,6 +19,7 @@ function cargar(path: string, mocks: Record<string, unknown>): Record<string, un
 test("G1-01: render de Contactos no muestra epoch ni cero como identidad movil", () => {
   const { DataTable } = cargar("src/components/ui/data-table.tsx", {
     "@/lib/utils": { cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") },
+    "@/components/ui/checkbox": { Checkbox: () => null },
   });
   const { ContactosVista } = cargar("src/app/(crm)/contactos/vista.tsx", {
     "next/navigation": { useRouter: () => ({}), usePathname: () => "/contactos", useSearchParams: () => new URLSearchParams() },

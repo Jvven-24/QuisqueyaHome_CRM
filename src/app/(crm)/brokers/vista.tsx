@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -676,13 +677,7 @@ function AsignarPropiedadesModal({
                 className="flex items-center justify-between gap-3 p-3.5 hover:bg-surface-alt/70 transition-colors cursor-pointer min-h-[48px]"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <input
-                    type="checkbox"
-                    className="size-5 rounded border-line text-gold-600 focus:ring-2 focus:ring-gold-700 cursor-pointer"
-                    checked={estaAsignadoAEste}
-                    onChange={() => alternar(proyecto.id)}
-                    aria-label={`Asignar ${proyecto.name}`}
-                  />
+                  <Checkbox checked={estaAsignadoAEste} onCheckedChange={() => alternar(proyecto.id)} aria-label={`Asignar ${proyecto.name}`} />
                   <span className="text-[13.5px] font-semibold text-navy-950 truncate">{proyecto.name}</span>
                 </div>
                 <div className="shrink-0 text-right">

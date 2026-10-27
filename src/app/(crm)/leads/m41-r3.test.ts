@@ -154,6 +154,7 @@ for (const editar of [false, true]) {
     const { CatalogosPanel } = env.cargar("../configuracion/_catalogos.tsx", {
       "next/navigation": { useRouter: () => ({ refresh() { refrescos++; } }) },
       "sonner": { toast: { success(mensaje: string) { avisos.push(mensaje); } } },
+      "@/components/ui/switch": { Switch: "switch" },
       "@/application/catalogos/entrada": { CrearEntradaInput, EditarEntradaInput }, "./envio": { crearEnvioUnico }, "../_ui/prototipo-ui": {},
     });
     const panel = (CatalogosPanel as Componente)({ motivos: [{ id: 1, name: "Original", position: 0, isActive: true }], canales: [], puedeCrear: true, puedeEditar: true });

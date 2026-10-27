@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { Desk, Preview, Dialog, download, s } from "../../../leads/_componentes/desk";
@@ -81,6 +82,6 @@ export function PrivacidadVista({ id, name, consentAt, consentSource, canExport 
             <label>Motivo (obligatorio)<textarea value={reason} maxLength={1000} onChange={e => setReason(e.target.value)} aria-required="true"/>
             </label>
             <label className={s.toolbar}>
-            <input type="checkbox" checked={ack} onChange={e => setAck(e.target.checked)}/>He revisado la identidad, el alcance y las relaciones del contacto.</label>{error && <p className={s.error} role="alert">{error}</p>}<button className={s.primary} onClick={prepare}>Preparar solicitud de ejemplo</button>
+            <Checkbox checked={ack} onCheckedChange={checked => setAck(checked)} />He revisado la identidad, el alcance y las relaciones del contacto.</label>{error && <p className={s.error} role="alert">{error}</p>}<button className={s.primary} onClick={prepare}>Preparar solicitud de ejemplo</button>
             </>}</Dialog>}</Desk>;
 }
