@@ -1,5 +1,11 @@
 # R · Relevo
 
+<!-- fase3:start -->
+## Fase 3 RBAC · entrega autorizada (1/4)
+
+Datos y dominio: migración 0017 preparada sin aplicar; precedencia de excepciones, equipos reales y contexto de solo lectura. Continúan administración, interfaz y concesión de reasignación en los próximos commits locales. Ficha `specs/fase3-rbac/spec.md` READY. Verificación observada del árbol de trabajo completo con Node 22: typecheck/lint limpios; 1126 pruebas aprobadas, 2 omitidas. Sin build/dev, migración ni push. Revisión independiente pendiente: Gemini CLI no pudo autenticarse.
+<!-- fase3:end -->
+
 ## Entrega autorizada en rama fase2-tmp — 2026-10-27
 
 Ambas fases implementadas: bitácora de notas persistente para lead y negocio, permisos y borrado lógico; pipeline configurable, reglas por slug/kind, versión de transición e historial visible. Fase 1: afc59f1; fase 2: este commit. Evidencia y límites en `docs/ENTREGA_NOTAS_PIPELINE.md`; ficha READY en `specs/entrega-notas-pipeline/spec.md`. Verificación final observada: typecheck y lint limpios; npm test 1095 aprobadas, 2 omitidas, 0 fallos con Node 22. UI/BD real pendientes porque no hay servidor local. No migraciones nuevas ni aplicadas. Sin push. El relevo histórico de abajo se conserva como contexto; esta tarea autoriza explícitamente producir y commitear en la rama actual.

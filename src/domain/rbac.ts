@@ -37,6 +37,10 @@ export type Actor = {
   userId: number;
   roleSlug: string;
   permissions: readonly Permission[];
+  teamUserIds?: readonly number[];
+  readOnly?: boolean;
+  visibilityOwnerIds?: readonly number[];
+  viewingAs?: { operatorId: number; brokerName: string };
 };
 
 /**
@@ -51,6 +55,7 @@ export function scopeFor(
   resource: PermissionResource,
   action: PermissionAction,
 ): PermissionScope {
+  if (actor.readOnly && action !== "view") return "none";
   const match = actor.permissions.find(
     (p) => p.resource === resource && p.action === action,
   );
@@ -116,17 +121,14 @@ export function reaches(
   scope: PermissionScope,
   ownerId: number | null | undefined,
 ): boolean {
+  if (actor.visibilityOwnerIds && (ownerId == null || !actor.visibilityOwnerIds.includes(ownerId))) return false;
   switch (scope) {
     case "all":
       return true;
     case "own":
-    case "team":
-      // ponytail: `team` se comporta como `own` porque el esquema no tiene
-      // equipos (no hay tabla de equipos ni `team_id` en `users`). Fallar hacia
-      // lo restrictivo es el lado correcto del error. Cuando exista el modelo de
-      // equipos, este caso se separa aquí y en `rbac-filter.ts`, y en ningún
-      // otro sitio.
       return ownerId != null && ownerId === actor.userId;
+    case "team":
+      return ownerId != null && (ownerId === actor.userId || (actor.teamUserIds ?? []).includes(ownerId));
     case "none":
       return false;
   }
@@ -147,4 +149,38 @@ export function stripRestrictedPrices<
   if ("realPriceCents" in copy) copy.realPriceCents = null;
   if ("internalPriceCents" in copy) copy.internalPriceCents = null;
   return copy;
+}
+
+/** Único algoritmo de precedencia; un override none también reemplaza el rol. */
+export function effectivePermissions(role: readonly Permission[], overrides: readonly Permission[], protectedAdmin: boolean): Permission[] {
+  const cells = new Map(role.map(p => [`${p.resource}:${p.action}`, p]));
+  if (!protectedAdmin) for (const p of overrides) cells.set(`${p.resource}:${p.action}`, p);
+  return [...cells.values()];
+}
+
+/** Solo una identidad administrativa real puede iniciar una vista de broker. */
+export function viewAsBroker(operator: Actor, broker: Actor, brokerName: string): Actor {
+  if (operator.readOnly || !["admin", "manager"].includes(operator.roleSlug) || broker.roleSlug !== "broker") {
+    throw new ForbiddenError("No puedes consultar como este broker.");
+  }
+  const brokerScope = requireScope(operator, "brokers", "view");
+  if (brokerScope === "own" && operator.userId !== broker.userId) throw new ForbiddenError("No puedes consultar otros brokers.");
+  if (operator.roleSlug === "manager" && !reaches(operator, "team", broker.userId)) {
+    throw new ForbiddenError("El broker no pertenece a tus equipos.");
+  }
+  return {
+    ...broker,
+    permissions: broker.permissions.filter(p => p.action === "view" && (operator.roleSlug === "admin" || ["team", "all"].includes(scopeFor(operator, p.resource, "view")))),
+    readOnly: true,
+    viewingAs: { operatorId: operator.userId, brokerName },
+    ...(operator.roleSlug === "manager" ? { visibilityOwnerIds: [operator.userId, ...(operator.teamUserIds ?? [])] } : {}),
+  };
+}
+
+/** Incluye lecturas con efectos secundarios (OAuth) y descargas que usan view. */
+export function previewRequestAllowed(method: string, pathname: string): boolean {
+  if (pathname === "/api/ver-como") return true;
+  if (!["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase())) return false;
+  return !/^\/api\/(?:integraciones\/google\/(?:conectar|callback)|actividades\/ics)(?:\/|$)/.test(pathname)
+    && !/^\/api\/.*\/(?:export|exportar)(?:\/|$)/.test(pathname);
 }

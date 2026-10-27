@@ -194,3 +194,20 @@ test("TX-43: cuotas se filtran por su plan; aplicaciones y reversos por su pago"
     assert.doesNotMatch(query, /"(?:holder_id|payer_id|created_by)"/);
   }
 });
+
+test("team SQL incluye propio y miembros de equipos liderados/supervisados, sin duplicados", () => {
+  const { sql, params } = compilar(scopeCondition({ ...broker, teamUserIds: [11, 12, 11, 7] }, "team", tabla.brokerId));
+  assert.match(sql, /"broker_id" in \(/i);
+  assert.deepEqual(params, [7, 11, 12]);
+  assert.ok(!params.includes(99), "no incluye miembros ajenos");
+});
+
+test("ver-como manager limita incluso un permiso all del broker al perímetro original", () => {
+  const actor = { ...broker, readOnly: true, visibilityOwnerIds: [7, 11] };
+  const { sql, params } = compilar(scopeCondition(actor, "all", tabla.brokerId));
+  assert.match(sql, /"broker_id" in \(/i);
+  assert.deepEqual(params, [7, 11]);
+  const own = compilar(visibleRows(actor, "own", tabla.brokerId, tabla.deletedAt));
+  assert.match(own.sql, /is null/i);
+  assert.deepEqual(own.params, [7, 11, 7]);
+});

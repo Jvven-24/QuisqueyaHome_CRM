@@ -12,6 +12,7 @@
  * quien la tiene. El permiso se comprueba en cada caso de uso (§16, criterio #1).
  */
 
+import { previewRequestAllowed } from "@/domain/rbac";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { evaluationLoginAllowed, supabaseAnonKey, supabaseUrl } from "@/infrastructure/env";
@@ -39,6 +40,10 @@ const PUBLIC_PATHS = [
 ];
 
 export async function middleware(request: NextRequest) {
+  // Defensa transversal: incluso endpoints que escriben sin una acción RBAC propia.
+  if (request.cookies.has("qh_view_as") && !previewRequestAllowed(request.method, request.nextUrl.pathname)) {
+    return NextResponse.json({ error: "Ver como broker es de solo lectura. Sal de esta vista para modificar datos." }, { status: 403 });
+  }
   let response = NextResponse.next({ request });
 
   const host = request.headers.get("host");

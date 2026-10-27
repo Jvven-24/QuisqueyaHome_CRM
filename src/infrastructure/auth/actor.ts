@@ -6,13 +6,13 @@
  * cosa. Aquí se cruzan las dos cosas, una vez por petición.
  */
 
-import { and, eq, isNull, type SQL } from "drizzle-orm";
+import { and, eq, inArray, isNull, or, type SQL } from "drizzle-orm";
 import { cookies, headers } from "next/headers";
 import { cache } from "react";
-import { UnauthorizedError } from "@/domain/errors";
-import type { Actor, Permission } from "@/domain/rbac";
+import { ForbiddenError, UnauthorizedError } from "@/domain/errors";
+import { effectivePermissions, viewAsBroker, type Actor, type Permission } from "@/domain/rbac";
 import { getDb } from "../db/client";
-import { permissions, roles, users } from "../db/schema";
+import { managerScopes, permissions, roles, teamMembers, teams, userPermissionOverrides, users } from "../db/schema";
 import { evaluationLoginAllowed } from "../env";
 import { serverClient } from "./supabase";
 import { hasSupabaseSessionCookie } from "./session-cookie";
@@ -27,7 +27,7 @@ import { hasSupabaseSessionCookie } from "./session-cookie";
  * o está en la papelera, el resultado es `null` — sin sesión utilizable. Alguien
  * dado de baja en el CRM no entra por conservar su credencial de Supabase.
  */
-export const getActor = cache(async (): Promise<Actor | null> => {
+export const getAuthenticatedActor = cache(async (): Promise<Actor | null> => {
   const cookieStore = await cookies().catch(() => null);
   const requestHeaders = await headers().catch(() => null);
   if (cookieStore && evaluationLoginAllowed(requestHeaders?.get("host") ?? null)
@@ -66,6 +66,7 @@ async function actorFor(identity: SQL): Promise<Actor | null> {
     .select({
       userId: users.id,
       roleSlug: roles.slug,
+      isProtected: roles.isProtected,
       resource: permissions.resource,
       action: permissions.action,
       scope: permissions.scope,
@@ -77,6 +78,7 @@ async function actorFor(identity: SQL): Promise<Actor | null> {
       and(
         identity,
         eq(users.isActive, true),
+        eq(roles.isActive, true),
         isNull(users.deletedAt),
       ),
     );
@@ -92,10 +94,19 @@ async function actorFor(identity: SQL): Promise<Actor | null> {
       scope: r.scope!,
     }));
 
+  const overrides = await getDb().select({ resource: userPermissionOverrides.resource, action: userPermissionOverrides.action, scope: userPermissionOverrides.scope })
+    .from(userPermissionOverrides).where(eq(userPermissionOverrides.userId, first.userId));
+  const supervised = await getDb().select({ id: teams.id }).from(teams)
+    .leftJoin(managerScopes, eq(managerScopes.teamId, teams.id))
+    .where(and(eq(teams.isActive, true), or(eq(teams.leaderId, first.userId), eq(managerScopes.managerId, first.userId))));
+  const members = supervised.length ? await getDb().select({ userId: users.id }).from(teamMembers)
+    .innerJoin(users, eq(users.id, teamMembers.userId))
+    .where(and(inArray(teamMembers.teamId, supervised.map(t => t.id)), eq(users.isActive, true), isNull(users.deletedAt))) : [];
   return {
     userId: first.userId,
     roleSlug: first.roleSlug,
-    permissions: granted,
+    permissions: effectivePermissions(granted, overrides, first.isProtected || first.roleSlug === "admin"),
+    teamUserIds: [...new Set(members.map(m => m.userId))],
   };
 }
 
@@ -105,3 +116,30 @@ export async function requireActor(): Promise<Actor> {
   if (!actor) throw new UnauthorizedError();
   return actor;
 }
+
+
+/** Se revalida identidad, rol, actividad y equipos en cada petición; la cookie solo indica intención. */
+export async function brokerPreview(operator: Actor, brokerId: number): Promise<Actor> {
+  const broker = await actorFor(eq(users.id, brokerId));
+  if (!broker) throw new ForbiddenError("El broker no está disponible.");
+  const [row] = await getDb().select({ name: users.fullName }).from(users).where(eq(users.id, brokerId));
+  return viewAsBroker(operator, broker, row?.name ?? "Broker");
+}
+
+export const getActor = cache(async (): Promise<Actor | null> => {
+  const operator = await getAuthenticatedActor();
+  if (!operator) return null;
+  const store = await cookies();
+  const requested = store.get("qh_view_as")?.value;
+  if (requested === undefined) return operator;
+  const brokerId = Number(requested);
+  try {
+    if (!Number.isSafeInteger(brokerId) || brokerId <= 0 || brokerId > 2147483647) throw new ForbiddenError("Vista inválida.");
+    return await brokerPreview(operator, brokerId);
+  } catch (error) {
+    if (!(error instanceof ForbiddenError)) throw error;
+    // Una asignación revocada no deja una sesión atrapada ni devuelve la cartera del broker.
+    return { ...operator, permissions: operator.permissions.filter(p => p.action === "view"), readOnly: true,
+      viewingAs: { operatorId: operator.userId, brokerName: "Vista caducada: sal para continuar" } };
+  }
+});

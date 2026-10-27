@@ -7,7 +7,7 @@
  * `WHERE broker_id = ?`.
  */
 
-import { and, eq, isNull, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql, type SQL } from "drizzle-orm";
 import type { PgColumn } from "drizzle-orm/pg-core";
 import { alias } from "drizzle-orm/pg-core";
 import type { Actor, PermissionScope } from "../domain/rbac.ts";
@@ -27,14 +27,19 @@ export function scopeCondition(
   scope: PermissionScope,
   ownerColumn: PgColumn,
 ): SQL | undefined {
+  if (actor.visibilityOwnerIds) {
+    const { visibilityOwnerIds, ...unrestricted } = actor;
+    return and(inArray(ownerColumn, [...visibilityOwnerIds]), scopeCondition(unrestricted, scope, ownerColumn));
+  }
   switch (scope) {
     case "all":
       return undefined;
     case "own":
-    case "team":
-      // Ver la nota sobre `team` en `domain/rbac.ts`: sin modelo de equipos se
-      // comporta como `own`, que es el lado seguro del error.
       return eq(ownerColumn, actor.userId);
+    case "team": {
+      const ids = [...new Set([actor.userId, ...(actor.teamUserIds ?? [])])];
+      return ids.length === 1 ? eq(ownerColumn, actor.userId) : inArray(ownerColumn, ids);
+    }
     case "none":
       // Defensa en profundidad: si alguien salta `requireScope`, no filtra nada.
       return sql`false`;

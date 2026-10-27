@@ -4,8 +4,8 @@ import { test } from "node:test";
 import { runInNewContext } from "node:vm";
 import ts from "typescript";
 import { z } from "zod";
-import { UnauthorizedError } from "../../domain/errors.ts";
-import { requireScope, reaches } from "../../domain/rbac.ts";
+import { ForbiddenError, UnauthorizedError } from "../../domain/errors.ts";
+import { effectivePermissions, previewRequestAllowed, viewAsBroker, requireScope, reaches } from "../../domain/rbac.ts";
 import type { Actor } from "../../domain/rbac.ts";
 
 // Ejecuta las fuentes reales con dependencias aisladas. No requiere aliases de
@@ -41,7 +41,7 @@ class RequestUrl extends URL {
   clone() { return new RequestUrl(this.href); }
 }
 
-function setup(options: { mode?: string | null; flag?: string | null; host?: string | null; role?: string; authId?: string; sessionCookie?: string; authFails?: boolean; rows?: CatalogRow[] } = {}) {
+function setup(options: { mode?: string | null; flag?: string | null; host?: string | null; role?: string; authId?: string; sessionCookie?: string; authFails?: boolean; rows?: CatalogRow[]; viewAs?: string } = {}) {
   const host = options.host === undefined ? "localhost:9300" : options.host;
   let role = options.role ?? "broker";
   let dbCalls = 0;
@@ -52,7 +52,8 @@ function setup(options: { mode?: string | null; flag?: string | null; host?: str
     CRM_EVAL_LOGIN: options.flag === null ? undefined : options.flag ?? "1", CRM_DEMO_MODE: "true",
   });
   const store = {
-    get: () => ({ value: role }), getAll: () => options.sessionCookie || options.authId ? [{ name: options.sessionCookie ?? "sb-test-auth-token", value: "present" }] : [],
+    has: (name: string) => name === "qh_view_as" && options.viewAs !== undefined,
+    get: (name: string) => name === "qh_dev_role" ? ({ value: role }) : name === "qh_view_as" && options.viewAs !== undefined ? { value: options.viewAs } : undefined, getAll: () => options.sessionCookie || options.authId ? [{ name: options.sessionCookie ?? "sb-test-auth-token", value: "present" }] : [],
     set: (...args: unknown[]) => { writes.push(args); role = String(args[1]); },
     delete: (...args: unknown[]) => { writes.push(args); },
   };
@@ -62,7 +63,11 @@ function setup(options: { mode?: string | null; flag?: string | null; host?: str
   const sessionCookie = loadSource<{ hasSupabaseSessionCookie: (cookies: { name: string }[]) => boolean }>("./session-cookie.ts", {});
   const schema = {
     users: { id: "userId", roleId: "roleId", authUserId: "authUserId", isActive: "isActive", deletedAt: "deletedAt" },
-    roles: { id: "roleId", slug: "roleSlug" },
+    roles: { id: "roleId", slug: "roleSlug", isActive: "roleIsActive", isProtected: "isProtected" },
+    userPermissionOverrides: { userId: "overrideUserId" },
+    teams: { id: "teamId", isActive: "teamIsActive", leaderId: "leaderId" },
+    managerScopes: { managerId: "managerId", teamId: "teamId" },
+    teamMembers: { teamId: "teamId", userId: "userId" },
     permissions: { roleId: "roleId", resource: "resource", action: "action", scope: "scope" },
   };
   const db = {
@@ -75,7 +80,7 @@ function setup(options: { mode?: string | null; flag?: string | null; host?: str
         where: (condition: Predicate) => { predicate = condition; return query; },
         orderBy: () => query, limit: (count: number) => { limit = count; return query; },
         then: (resolve: (rows: CatalogRow[]) => unknown) => Promise.resolve(
-          (options.rows ?? catalog).filter(predicate).slice(0, limit).map((row) =>
+          (options.rows ?? catalog).map((row): CatalogRow => ({ roleIsActive: true, ...row })).filter(predicate).slice(0, limit).map((row) =>
             Object.fromEntries(Object.entries(fields).map(([key, column]) => [key, row[column]])),
           ),
         ).then(resolve),
@@ -86,11 +91,13 @@ function setup(options: { mode?: string | null; flag?: string | null; host?: str
   const actor = loadSource<{ getActor: () => Promise<Actor | null>; getEvaluationActor: (role: string) => Promise<Actor | null>; requireActor: () => Promise<Actor> }>("./actor.ts", {
     "drizzle-orm": {
       eq: (column: string, value: unknown): Predicate => (row) => row[column] === value,
+      or: (...conditions: Predicate[]): Predicate => row => conditions.some(condition => condition(row)),
+      inArray: (column: string, values: unknown[]): Predicate => row => values.includes(row[column]),
       isNull: (column: string): Predicate => (row) => row[column] === null,
       and: (...conditions: Predicate[]): Predicate => (row) => conditions.every((condition) => condition(row)),
     },
     "next/headers": nextHeaders, react: { cache: (fn: unknown) => fn },
-    "@/domain/errors": { UnauthorizedError }, "../db/client": { getDb: () => db },
+    "@/domain/errors": { ForbiddenError, UnauthorizedError }, "@/domain/rbac": { effectivePermissions, viewAsBroker }, "../db/client": { getDb: () => db },
     "../db/schema": schema, "../env": env, "./supabase": { serverClient: async () => auth }, "./session-cookie": sessionCookie,
   });
   const nextResponse = {
@@ -99,6 +106,7 @@ function setup(options: { mode?: string | null; flag?: string | null; host?: str
     redirect: (url: URL) => new Response(null, { status: 307, headers: { location: url.href } }),
   };
   const middleware = loadSource<{ middleware: (request: unknown) => Promise<Response> }>("../../middleware.ts", {
+    "@/domain/rbac": { previewRequestAllowed },
     "@supabase/ssr": { createServerClient: () => auth }, "next/server": { NextResponse: nextResponse },
     "@/infrastructure/env": { ...env, supabaseUrl: () => "unused", supabaseAnonKey: () => "unused" }, "@/infrastructure/auth/session-cookie": sessionCookie,
   });
@@ -109,7 +117,7 @@ function setup(options: { mode?: string | null; flag?: string | null; host?: str
   const request = (body: string = JSON.stringify({ role })) => new Request("http://localhost:9300/api/auth/demo", {
     method: "POST", headers: requestHeaders, body,
   });
-  const guard = (path: string) => middleware.middleware({ headers: requestHeaders, cookies: store, nextUrl: new RequestUrl(`http://localhost:9300${path}`) });
+  const guard = (path: string, method = "GET") => middleware.middleware({ method, headers: requestHeaders, cookies: store, nextUrl: new RequestUrl(`http://localhost:9300${path}`) });
   return { env, actor, route, request, guard, writes, dbCalls: () => dbCalls, authCalls: () => authCalls };
 }
 
@@ -245,3 +253,12 @@ for (const sessionCookie of ["sb-test-auth-token", "sb-test-auth-token.0", "sb-1
     assert.equal(real.authCalls(), 2);
   });
 }
+
+
+test("middleware de ver-como bloquea escrituras y GET con efectos antes de Auth; permite salir", async () => {
+  const s = setup({ viewAs: "7" });
+  for (const method of ["POST", "PUT", "PATCH", "DELETE"]) assert.equal((await s.guard("/api/leads/7", method)).status, 403);
+  for (const path of ["/api/integraciones/google/conectar", "/api/integraciones/google/callback", "/api/actividades/ics"]) assert.equal((await s.guard(path)).status, 403);
+  assert.equal(s.authCalls(), 0); assert.equal(s.dbCalls(), 0);
+  assert.equal((await s.guard("/api/ver-como", "DELETE")).status, 200);
+});

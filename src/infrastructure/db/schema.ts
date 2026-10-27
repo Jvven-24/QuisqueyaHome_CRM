@@ -2098,3 +2098,24 @@ export const googleCalendars = pgTable("google_calendars", {
   selected: boolean("selected").notNull().default(false),
   defaultForVisits: boolean("default_for_visits").notNull().default(false),
 }, (t) => [uniqueIndex("google_calendars_account_cal_unq").on(t.accountId, t.calendarId)]).enableRLS();
+
+
+/** Fase 3: excepciones explícitas, también denegaciones (none). */
+export const userPermissionOverrides = pgTable("user_permission_overrides", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  resource: text("resource", { enum: PERMISSION_RESOURCES }).notNull(),
+  action: text("action", { enum: PERMISSION_ACTIONS }).notNull(),
+  scope: text("scope", { enum: PERMISSION_SCOPES }).notNull(),
+  grantedBy: integer("granted_by").notNull().references(() => users.id),
+  reason: text("reason").notNull(),
+  createdAt: instant("created_at").notNull().defaultNow(),
+}, t => [uniqueIndex("user_permission_overrides_cell_unq").on(t.userId, t.resource, t.action),
+  check("user_permission_overrides_scope_check", sql`${t.scope} in ('none','own','team','all')`),
+  check("user_permission_overrides_reason_check", sql`length(btrim(${t.reason})) > 0`),
+]).enableRLS();
+
+export const managerScopes = pgTable("manager_scopes", {
+  managerId: integer("manager_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  teamId: integer("team_id").notNull().references(() => teams.id, { onDelete: "cascade" }),
+}, t => [primaryKey({ name: "manager_scopes_pk", columns: [t.managerId, t.teamId] })]).enableRLS();

@@ -43,3 +43,5 @@ D10 (run `20261004T205251Z`, `D10-rentas.md`): faltan contrato de módulo (D03) 
 
 Herramienta de seguimiento: `npm run spec:check` (tarea `tareas/T-P1-spec-check.md`, en cola). Método compatible con
 GitHub Spec Kit (MIT, `github/spec-kit`); su adopción formal (`specify init`) queda pendiente de aprobación de Wilber.
+
+Fase 3 RBAC: `../../../specs/fase3-rbac/spec.md` · READY/L2 · autorización directa 2026-10-27; revisión independiente pendiente.
