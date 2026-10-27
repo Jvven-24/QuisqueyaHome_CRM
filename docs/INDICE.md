@@ -1,13 +1,13 @@
 # Quisqueya Home CRM — Índice maestro
 
-_Generado automáticamente por `/workspace/crm-plan/central/sync.sh` · 2026-10-27 10:18 (hora RD, UTC-4). No editar a mano._
+_Generado automáticamente por `/workspace/crm-plan/central/sync.sh` · 2026-10-27 10:48 (hora RD, UTC-4). No editar a mano._
 
 Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.com/drive/folders/16LGfWveOKvE2xxCazeecmoLbl1aDIYkD) · Índice como Google Doc: [INDICE (Doc)](https://docs.google.com/document/d/12ACs5SVspYWg2Ir80kEfJ1v5SfAHKYXga-ikSFD3V5Y/edit)
 
 ## 1. Tablero
 - Tablero vivo (local): `/workspace/crm-plan/tablero/index.html` · copia estática: [Drive 01-Tablero](https://drive.google.com/drive/folders/1G0sThKml0_UrSvqqAE7YBn5AIw9XfHqT)
-- Avance global: **176/760 ítems (23%)** · estado.json actualizado 2026-10-27T10:17-04:00
-- Pendientes abiertos: **584**
+- Avance global: **216/989 ítems (21%)** · estado.json actualizado 2026-10-27T10:48-04:00
+- Pendientes abiertos: **773**
 
 - Specs en Drive: [Doc 22 módulos](https://docs.google.com/document/d/13Gc3K6w-uXysv-S164mRpByiVNieLRmCTatiCVpwOuQ/edit) · Revisiones: [Doc revisiones](https://docs.google.com/document/d/1uR7SaZE-7kflhMIy9z92qlg3I04RlROEKyKwq-MhJCA/edit) · Estado: [Doc login/Google/correo](https://docs.google.com/document/d/1vSmWraP9B-RDM-KSB4HU-eSh1rs3X44TFMtQl1Y2iqE/edit)
 
@@ -15,29 +15,30 @@ Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.
 
 | Módulo | Spec | Avance |
 |---|---|---|
-| Inicio | [inicio.md](modulos/inicio.md) | 7/30 (23%) |
-| Leads | [leads.md](modulos/leads.md) | 11/37 (29%) |
-| Negocios | [negocios.md](modulos/negocios.md) | 9/34 (26%) |
-| Contactos | [contactos.md](modulos/contactos.md) | 6/33 (18%) |
-| Propiedades | [propiedades.md](modulos/propiedades.md) | 9/34 (26%) |
-| Agenda | [agenda.md](modulos/agenda.md) | 13/43 (30%) |
-| Tareas | [tareas.md](modulos/tareas.md) | 7/30 (23%) |
-| Comunicaciones | [comunicaciones.md](modulos/comunicaciones.md) | 8/45 (17%) |
-| Brokers | [brokers.md](modulos/brokers.md) | 7/31 (22%) |
-| Comisiones | [comisiones.md](modulos/comisiones.md) | 7/32 (21%) |
-| Metas | [metas.md](modulos/metas.md) | 8/29 (27%) |
-| Reportes | [reportes.md](modulos/reportes.md) | 7/30 (23%) |
-| Reservas | [reservas.md](modulos/reservas.md) | 8/31 (25%) |
-| Portal | [portal.md](modulos/portal.md) | 6/32 (18%) |
-| Comunidad | [comunidad.md](modulos/comunidad.md) | 1/36 (2%) |
-| Aprobaciones | [aprobaciones.md](modulos/aprobaciones.md) | 2/38 (5%) |
-| Automatizaciones | [automatizaciones.md](modulos/automatizaciones.md) | 4/36 (11%) |
-| Academy | [academy.md](modulos/academy.md) | 13/39 (33%) |
-| Documentos | [documentos.md](modulos/documentos.md) | 4/28 (14%) |
-| Posventa | [posventa.md](modulos/posventa.md) | 3/27 (11%) |
-| Configuración | [configuracion.md](modulos/configuracion.md) | 14/37 (37%) |
-| Login y seguridad | [acceso.md](modulos/acceso.md) | 18/43 (41%) |
-| Plataforma | [plataforma.md](modulos/plataforma.md) | 4/5 (80%) |
+| Inicio | [inicio.md](modulos/inicio.md) | 8/43 (18%) |
+| Leads | [leads.md](modulos/leads.md) | 11/57 (19%) |
+| Negocios | [negocios.md](modulos/negocios.md) | 9/48 (18%) |
+| Contactos | [contactos.md](modulos/contactos.md) | 6/51 (11%) |
+| Propiedades | [propiedades.md](modulos/propiedades.md) | 9/49 (18%) |
+| Agenda | [agenda.md](modulos/agenda.md) | 25/46 (54%) |
+| Tareas | [tareas.md](modulos/tareas.md) | 7/33 (21%) |
+| Comunicaciones | [comunicaciones.md](modulos/comunicaciones.md) | 9/49 (18%) |
+| Brokers | [brokers.md](modulos/brokers.md) | 7/35 (20%) |
+| Comisiones | [comisiones.md](modulos/comisiones.md) | 8/36 (22%) |
+| Metas | [metas.md](modulos/metas.md) | 8/43 (18%) |
+| Reportes | [reportes.md](modulos/reportes.md) | 7/42 (16%) |
+| Reservas | [reservas.md](modulos/reservas.md) | 8/35 (22%) |
+| Portal | [portal.md](modulos/portal.md) | 6/45 (13%) |
+| Comunidad | [comunidad.md](modulos/comunidad.md) | 2/40 (5%) |
+| Aprobaciones | [aprobaciones.md](modulos/aprobaciones.md) | 7/40 (17%) |
+| Automatizaciones | [automatizaciones.md](modulos/automatizaciones.md) | 5/40 (12%) |
+| Academy | [academy.md](modulos/academy.md) | 20/41 (48%) |
+| Documentos | [documentos.md](modulos/documentos.md) | 4/42 (9%) |
+| Posventa | [posventa.md](modulos/posventa.md) | 3/40 (7%) |
+| Configuración | [configuracion.md](modulos/configuracion.md) | 14/52 (26%) |
+| Login y seguridad | [acceso.md](modulos/acceso.md) | 18/45 (40%) |
+| Plataforma | [plataforma.md](modulos/plataforma.md) | 6/17 (35%) |
+| Avances | [avances.md](modulos/avances.md) | 9/20 (45%) |
 
 ## 3. Compendio
 - [Compendio maestro (PDF)](https://drive.google.com/file/d/1aBtdPm_Rkf5NthRYDHTBhyY6N3IkePQE/view) · [Plan maestro comercial (PDF)](https://drive.google.com/file/d/1GCDTpGI1FYXaLYWrfpDyIjt5tpIje_Yd/view)
@@ -52,11 +53,11 @@ Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.
 
 | Rama | Estado | Hallazgos | Actualizado |
 |---|---|---|---|
-| [claude-haiku](revisiones/claude-haiku.md) | corriendo: items-academy-0 | 67 | 2026-10-27T10:16-04:00 |
-| [codex-luna](revisiones/codex-luna.md) | corriendo: g20-automatizaciones | 44 | 2026-10-27T10:16-04:00 |
-| [opencode-free](revisiones/opencode-free.md) | corriendo | 0 | 2026-10-27T10:12-04:00 |
-| [grok-build](revisiones/grok-build.md) | corriendo: modular-continuar | 62 | 2026-10-27T10:16-04:00 |
-| [antigravity](revisiones/antigravity.md) | corriendo: rev-configuracion | 88 | 2026-10-27T10:16-04:00 |
+| [claude-haiku](revisiones/claude-haiku.md) | terminada: items-aprobaciones-3 rc=97 | 67 | 2026-10-27T10:45-04:00 |
+| [codex-luna](revisiones/codex-luna.md) | corriendo: gate-104014-luna | 44 | 2026-10-27T10:48-04:00 |
+| [opencode-free](revisiones/opencode-free.md) | corriendo: items-automatizaciones-2 | 80 | 2026-10-27T10:42-04:00 |
+| [grok-build](revisiones/grok-build.md) | terminada: items-avances-0 rc=97 | 62 | 2026-10-27T10:45-04:00 |
+| [antigravity](revisiones/antigravity.md) | corriendo: rev-reservas | 88 | 2026-10-27T10:48-04:00 |
 
 Últimas reasignaciones:
 ```

@@ -7,17 +7,16 @@ import { type DragEvent, type FormEvent, useMemo, useRef, useState } from "react
 import { PHASE_STATUSES, type PhaseStatus } from "@/domain/catalogs";
 import { evaluarAptitudPublicacionFase, PHASE_STATUS_LABELS } from "@/domain/avance-obra";
 import type { constructionPhases } from "@/infrastructure/db/schema";
-import { PageHeader } from "../_ui/prototipo-ui";
+import { ModuleTabs, PageHeader, Section } from "@/components/modulo";
 import { Vacio } from "../_ui/estados";
 import { BeforeAfterSlider } from "@/components/ui/before-after-slider";
 import { MilestoneTimeline } from "./_componentes/milestone-timeline";
+import { normalizarModoSupervision } from "./_componentes/modo-supervision";
 import {
   AlertTriangle,
-  BarChart3,
   Calendar,
   Camera,
   CheckCircle2,
-  Compass,
   Copy,
   FileText,
   HardHat,
@@ -26,7 +25,6 @@ import {
   Plus,
   Printer,
   Share2,
-  SplitSquareVertical,
   Trash2,
   UploadCloud,
   User,
@@ -54,8 +52,6 @@ type FaseRow = typeof constructionPhases.$inferSelect;
 export type FaseVista = FaseRow & { responsableNombre: string | null };
 export type UsuarioOpcion = { id: number; fullName: string };
 export type FotoVista = { id: number; name: string; url: string | null };
-
-type ModoSupervision = "edicion" | "gantt" | "comparador" | "recorrido360";
 
 /**
  * M6 · Avances de obra de estándar de lujo con guía interactiva de requisitos,
@@ -90,7 +86,8 @@ export function AvancesVista({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [ocupada, setOcupada] = useState(false);
-  const [modoVista, setModoVista] = useState<ModoSupervision>("edicion");
+  const modoVista = normalizarModoSupervision(searchParams.get("tab"));
+  const hrefPestanas = `${pathname}${searchParams.size ? `?${searchParams.toString()}` : ""}`;
 
   // Estados para diálogos accesibles
   const [modalAgregarFase, setModalAgregarFase] = useState(false);
@@ -310,14 +307,14 @@ export function AvancesVista({
       <PageHeader
         eyebrow="Supervisión Constructiva · Private Desk"
         title="Avances de obra"
-        subtitle={
+        description={
           proyecto
             ? `${proyecto.name} · ${fases.length} fase${fases.length === 1 ? "" : "s"} constructiva${fases.length === 1 ? "" : "s"}${
                 proyecto.estimatedDeliveryDate ? ` · Entrega estimada: ${proyecto.estimatedDeliveryDate}` : ""
               }`
             : "No tienes proyectos visibles asignados todavía."
         }
-        action={
+        actions={
           <div className="flex flex-wrap items-center gap-2">
             {faseSeleccionada && (
               <button
@@ -366,9 +363,23 @@ export function AvancesVista({
         }
       />
 
+      <ModuleTabs
+        label="Vistas de avances de obra"
+        queryParam="tab"
+        activeTab={modoVista}
+        panelId="avances-panel"
+        className="mb-4"
+        items={[
+          { href: hrefPestanas, label: "Edición y Evidencia", value: "edicion" },
+          { href: hrefPestanas, label: "Fases e hitos", value: "gantt" },
+          { href: hrefPestanas, label: "Antes / Después", value: "comparador" },
+          { href: hrefPestanas, label: "Inspección 360°", value: "recorrido360" },
+        ]}
+      />
+
       {/* Selector de proyecto de lujo con barra de avance global y selector de vistas */}
       {proyectos.length > 0 && (
-        <div className="rounded-2xl border border-line bg-surface p-4 shadow-xs flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        <Section className="flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
           <div className="flex items-center gap-3">
             <div className="size-11 rounded-xl bg-navy-950 text-gold-400 flex items-center justify-center shrink-0 border border-gold-500/30">
               <HardHat className="size-5" />
@@ -387,58 +398,6 @@ export function AvancesVista({
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            {/* Selector de modo de supervisión */}
-            <div className="flex flex-wrap w-full sm:w-auto rounded-xl bg-surface-alt p-1 border border-line">
-              <button
-                type="button"
-                onClick={() => setModoVista("edicion")}
-                className={`min-h-[44px] px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
-                  modoVista === "edicion"
-                    ? "bg-navy-950 text-white shadow-xs"
-                    : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                <Layers className="size-3.5" />
-                Edición y Evidencia
-              </button>
-              <button
-                type="button"
-                onClick={() => setModoVista("gantt")}
-                className={`min-h-[44px] px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
-                  modoVista === "gantt"
-                    ? "bg-navy-950 text-white shadow-xs"
-                    : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                <BarChart3 className="size-3.5" />
-                Fases e hitos
-              </button>
-              <button
-                type="button"
-                onClick={() => setModoVista("comparador")}
-                className={`min-h-[44px] px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
-                  modoVista === "comparador"
-                    ? "bg-navy-950 text-white shadow-xs"
-                    : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                <SplitSquareVertical className="size-3.5" />
-                Antes / Después
-              </button>
-              <button
-                type="button"
-                onClick={() => setModoVista("recorrido360")}
-                className={`min-h-[44px] px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
-                  modoVista === "recorrido360"
-                    ? "bg-navy-950 text-white shadow-xs"
-                    : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                <Compass className="size-3.5" />
-                Inspección 360°
-              </button>
-            </div>
-
             {/* Barra de progreso global del proyecto */}
             <div className="flex items-center gap-3 bg-surface-alt px-3.5 py-2 rounded-xl border border-line">
               <div className="space-y-1">
@@ -474,13 +433,14 @@ export function AvancesVista({
               </select>
             )}
           </div>
-        </div>
+        </Section>
       )}
 
+      <div id="avances-panel" role="tabpanel" aria-labelledby={`avances-panel-tab-${modoVista}`}>
       {!proyecto ? (
         <Vacio titulo="Sin proyectos" texto="No hay proyectos visibles para tu usuario todavía." />
       ) : fases.length === 0 ? (
-        <div className="rounded-2xl border border-line bg-surface p-10 text-center space-y-4">
+        <Section className="space-y-4 text-center">
           <Vacio
             titulo="Sin fases de obra todavía"
             texto={puedeCrear ? "Inicia el seguimiento cargando la plantilla estándar de 8 fases constructivas." : "Este proyecto no tiene fases constructivas registradas."}
@@ -496,11 +456,11 @@ export function AvancesVista({
               Crear las 8 fases estándar
             </button>
           )}
-        </div>
+        </Section>
       ) : (
         <>
           {/* Línea de tiempo constructiva de 8 fases con nodos dorados */}
-          <div className="rounded-2xl border border-line bg-surface p-6 shadow-xs space-y-4 overflow-hidden">
+          <Section className="space-y-4 overflow-hidden">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <h2 className="text-lg font-bold text-ink flex items-center gap-2">
@@ -602,14 +562,14 @@ export function AvancesVista({
                 })}
               </div>
             </div>
-          </div>
+          </Section>
 
           {/* MODO 2: CRONOGRAMA GANTT CONSTRUCTIVO */}
-          {modoVista === "gantt" && <MilestoneTimeline phases={fases} onSelect={phase=>{irCon({fase:String(phase.id)});setModoVista("edicion");}} />}
+          {modoVista === "gantt" && <MilestoneTimeline phases={fases} onSelect={phase=>{irCon({fase:String(phase.id),tab:"edicion"});}} />}
 
           {/* MODO 3: COMPARADOR ANTES / DESPUÉS (21st.dev component) */}
           {modoVista === "comparador" && (
-            <section className="rounded-2xl border border-line bg-surface p-6 shadow-xs space-y-5">
+            <Section className="space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-line">
                 <div>
                   <span className="text-xs font-bold uppercase tracking-wider text-gold-800">
@@ -665,11 +625,11 @@ export function AvancesVista({
                 beforeSubtext="Evidencia seleccionada A"
                 afterSubtext="Evidencia seleccionada B; cronología sin verificar"
               /> : <p role="status" className="rounded-lg border border-line bg-surface-alt p-4 text-sm">Se necesitan al menos dos fotografías reales con acceso vigente. No se sustituyen fotos de obra con imágenes de muestra.</p>}
-            </section>
+            </Section>
           )}
 
           {/* MODO 4: RECORRIDO PANORÁMICO 360° */}
-          {modoVista === "recorrido360" && <section className="rounded-xl border border-line bg-surface p-5"><h2 className="text-lg">Inspección 360° · vista previa</h2><p role="note" className="text-sm">Falta: activos panorámicos verificados, fecha de captura, licencia y acceso aprobado. Una foto ordinaria de obra no se presenta como recorrido 360°.</p><button type="button" className="button min-h-11" onClick={()=>setDialogoError("No se ha solicitado un recorrido real. Falta el servicio de activos panorámicos y revisión de publicación.")}>Solicitar recorrido · vista previa</button></section>}
+          {modoVista === "recorrido360" && <Section title="Inspección 360° · vista previa"><p role="note" className="text-sm">Falta: activos panorámicos verificados, fecha de captura, licencia y acceso aprobado. Una foto ordinaria de obra no se presenta como recorrido 360°.</p><button type="button" className="button min-h-11" onClick={()=>setDialogoError("No se ha solicitado un recorrido real. Falta el servicio de activos panorámicos y revisión de publicación.")}>Solicitar recorrido · vista previa</button></Section>}
 
           {modoVista === "edicion" && faseSeleccionada && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -691,7 +651,7 @@ export function AvancesVista({
 
               {/* Bóveda fotográfica de evidencia + Video embebido */}
               <div className="lg:col-span-5 space-y-4">
-                <section className="rounded-2xl border border-line bg-surface p-6 shadow-xs space-y-4">
+                <Section className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-[13px] font-semibold text-gold-800 uppercase tracking-wider">
@@ -833,12 +793,13 @@ export function AvancesVista({
                       </span>
                     </div>
                   </div>
-                </section>
+                </Section>
               </div>
             </div>
           )}
         </>
       )}
+      </div>
 
       {/* Modal Boletín Ejecutivo para Compradores (WhatsApp & Impresión) */}
       <Dialog open={modalBoletin} onOpenChange={setModalBoletin}>
@@ -1139,7 +1100,7 @@ function EditorFase({
   }
 
   return (
-    <section className="rounded-2xl border border-line bg-surface p-6 shadow-xs space-y-5">
+    <Section className="space-y-5">
       <div className="flex items-center justify-between pb-3 border-b border-line">
         <div>
           <span className="text-[13px] font-bold text-gold-800 uppercase tracking-wider">
@@ -1411,6 +1372,6 @@ function EditorFase({
           </div>
         )}
       </form>
-    </section>
+    </Section>
   );
 }

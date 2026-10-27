@@ -1,6 +1,6 @@
 # Revisión — rama `claude-haiku`
 
-- Estado: corriendo: items-academy-0 (actualizado 2026-10-27T10:16-04:00)
+- Estado: terminada: items-aprobaciones-3 rc=97 (actualizado 2026-10-27T10:45-04:00)
 - Hallazgos: 67 — por tipo: funcionalidad 40, móvil 12, diseño 10, mejora 5
 - Log completo (no versionado): `/workspace/crm-plan/tablero/revisiones/claude-haiku.log`
 
