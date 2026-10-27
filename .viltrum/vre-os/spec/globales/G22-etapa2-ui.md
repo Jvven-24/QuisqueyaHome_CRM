@@ -18,3 +18,6 @@ Alcance permitido: src/components/ui/** (checkbox, radio-group, switch, accordio
 7. Contraste INV-04..INV-07 y área táctil INV-08 (ver /workspace/crm-plan/qa-antigravity/INVENTARIO-SIN-PROPIEDAD-2026-10-27.md).
 Sin cambios de rutas, datos, permisos ni migraciones. Sin deploy. Revisión cruzada por otro modelo antes de merge. Pruebas: node22 --test, tsc.
 Referencia de diseño: /workspace/crm-plan/diseno/GUIA-UI-REFERENCIA.md.
+## Enmienda 1 · 2026-10-27 (misma aprobación de Wilber, voz 11:19 AM RD vía Grok Bot)
+8. OpenSlotBooking (open-slot-booking.tsx, 21st.dev) en Agenda (visitas y citas con brokers) y en una página pública de cita para leads, conectado a la integración multi-cuenta de Google Calendar: free/busy alimenta loadHostBusy y onBook crea el evento. Alcance extra: src/app/(crm)/agenda/**, la ruta pública de cita y el adaptador de Google Calendar existente (sin migraciones; si hace falta una, ficha aparte).
+9. Patrones de tallyho.app: barra de presupuesto que se consume en Metas y en Avances de obra; archivar en lugar de borrar; Quick Add que se rellena con lo último registrado; jerarquía cliente > proyecto > fase (solo UI/navegación sobre datos existentes).
