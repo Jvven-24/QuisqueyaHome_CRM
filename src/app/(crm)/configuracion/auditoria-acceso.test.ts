@@ -12,6 +12,7 @@ test("auditoría: settings all no sustituye audit_log:view all; permiso se verif
   let actor: Actor = { userId: 1, roleSlug: "administrador", permissions: [] };
   const deps: Record<string, unknown> = {
     "@/domain/rbac": rbac,
+    "@/infrastructure/db/repos/permisos": { permissionAdminData() { consultas++; throw new Error("lectura indebida de permisos"); } },
     "next/navigation": { forbidden() { throw new Error("403-auditoria"); } },
     "@/infrastructure/auth/actor": { requireActor: async () => actor },
     "@/infrastructure/page-guard": { requireScopeInPage: (a: Actor) => rbac.requireScope(a, "settings", "view") },

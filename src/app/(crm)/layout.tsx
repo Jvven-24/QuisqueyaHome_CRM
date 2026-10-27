@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { can } from "@/domain/rbac";
-import { getActor } from "@/infrastructure/auth/actor";
+import { VerComoBroker } from "./_ui/ver-como-broker";
+import { getActor, getAuthenticatedActor } from "@/infrastructure/auth/actor";
 import { getDb } from "@/infrastructure/db/client";
 import { users } from "@/infrastructure/db/schema";
 import { ENTRADAS_N1, ENTRADAS_PIE, MODULOS } from "./modulos";
@@ -36,6 +37,7 @@ import { ConnectionStatus } from "./_ui/connection-status";
 const ETIQUETAS_ROL: Record<string, string> = {
   admin: "Administrador",
   assistant: "Asistente",
+  manager: "Gerente/Supervisor",
   broker: "Broker",
 };
 
@@ -47,6 +49,8 @@ export default async function CrmLayout({
   const actor = await getActor();
   if (!actor) redirect("/login");
 
+  const operator = await getAuthenticatedActor();
+  const showPreview = !!operator && ["admin", "manager"].includes(operator.roleSlug);
   const visibles = MODULOS.filter((m) => can(actor, m.recurso, "view"));
   const n1Visibles = visibleEntries(ENTRADAS_N1, visibles);
   const pieVisibles = visibleEntries(ENTRADAS_PIE, visibles);
@@ -96,6 +100,7 @@ export default async function CrmLayout({
         <a href="#crm-main" className="skip-link">Saltar al contenido</a>
         <CrmHeader etiquetaRol={etiquetaRol} modulosVisibles={visibles} />
         <SectionNavigation entries={[...n1Visibles, ...pieVisibles]} modules={visibles} />
+        {((showPreview || actor.viewingAs) && <VerComoBroker activeName={actor.viewingAs?.brokerName} />)}
         <ConnectionStatus />
 
         {/* Viewport Content Container (with pb-24 on mobile to prevent dock collision) */}

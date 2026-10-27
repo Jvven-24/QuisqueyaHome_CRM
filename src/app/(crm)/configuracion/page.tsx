@@ -13,6 +13,7 @@
  * no se subdivide por recurso (ver `api/papelera/restaurar/route.ts`).
  */
 
+import { permissionAdminData } from "@/infrastructure/db/repos/permisos";
 import { eq, isNotNull, isNull } from "drizzle-orm";
 import { scopeFor } from "@/domain/rbac";
 import { forbidden } from "next/navigation";
@@ -27,7 +28,6 @@ import {
   leadSources,
   leads,
   lossReasons,
-  permissions,
   pipelineStages,
   projects,
   roles,
@@ -105,26 +105,8 @@ export default async function ConfiguracionPage({
   }
 
   if (tab === "permisos") {
-    const listaRoles = await db
-      .select({ id: roles.id, name: roles.name, slug: roles.slug, isProtected: roles.isProtected })
-      .from(roles)
-      .where(eq(roles.isActive, true))
-      .orderBy(roles.name);
-    const rolIdParam = Number(primero(params.rol));
-    const rolSeleccionado = listaRoles.find((r) => r.id === rolIdParam) ?? listaRoles.find((r) => !r.isProtected) ?? listaRoles[0] ?? null;
-    const filasPermiso = rolSeleccionado
-      ? await db
-          .select({ resource: permissions.resource, action: permissions.action, scope: permissions.scope })
-          .from(permissions)
-          .where(eq(permissions.roleId, rolSeleccionado.id))
-      : [];
-    return (
-      <ConfiguracionVista
-        tab={tab}
-        puedeEditar={puedeEditar}
-        permisos={{ roles: listaRoles, rolSeleccionado, permisos: filasPermiso }}
-      />
-    );
+    const accessData = await permissionAdminData(actor);
+    return <ConfiguracionVista tab={tab} puedeEditar={puedeEditar} accessData={accessData} puedeAdministrarAcceso={puedeEditar && actor.roleSlug === "admin" && !actor.readOnly} />;
   }
 
   if (tab === "etapas") {

@@ -1,9 +1,9 @@
 # R · Relevo
 
 <!-- fase3:start -->
-## Fase 3 RBAC · entrega autorizada (2/4)
+## Fase 3 RBAC · entrega autorizada (3/4)
 
-Datos/dominio en 88fd49d. Este commit añade API de permisos personales y equipos, auditoría transaccional, protección del admin y selector ver-como validado en servidor. Solo admin concede permisos personales o de rol. Restan interfaz y reasignación por concesión. Ficha `specs/fase3-rbac/spec.md`. Verificación observada del árbol completo con Node 22: typecheck/lint limpios; 1126 aprobadas, 2 omitidas. Sin migración aplicada, build/dev ni push. Revisión independiente pendiente: Gemini CLI no pudo autenticarse.
+Datos/dominio en 88fd49d; administración/API en fa4c183. Este commit integra matriz por rol y broker, herencia, badge personalizado, restablecimiento al rol con motivo, asignación de equipos y supervisores, y barra ver-como de solo lectura con salida. Resta concesión de reasignación y evidencia final. Verificación observada del árbol completo con Node 22: typecheck/lint limpios; 1126 aprobadas, 2 omitidas. Sin migración aplicada, build/dev ni push. UI real/BD y revisión independiente pendientes; Gemini CLI sin autenticación.
 <!-- fase3:end -->
 
 ## Entrega autorizada en rama fase2-tmp — 2026-10-27

@@ -1,5 +1,7 @@
 "use client";
 
+import { PermisosPersonales } from "./permisos-personales";
+import type { PermissionAdminData } from "@/application/permisos/administracion";
 import { useState } from "react";
 import type { PresenciaIntegraciones } from "@/application/configuracion/integraciones-catalogo";
 import { ConfiguracionAvanzada, type EventoAuditoria } from "./avanzada";
@@ -47,7 +49,7 @@ const ITEMS_NAVEGACION: ItemNavegacion[] = [
   },
   {
     id: "permisos",
-    titulo: "Permisos RBAC",
+    titulo: "Usuarios y permisos",
     subtitulo: "Matriz de acceso y candados por rol",
     icono: ShieldCheck,
   },
@@ -80,6 +82,8 @@ const ITEMS_NAVEGACION: ItemNavegacion[] = [
 export function ConfiguracionVista(props: {
   tab: Tab;
   puedeEditar: boolean;
+  accessData?: PermissionAdminData;
+  puedeAdministrarAcceso?: boolean;
   puedeCrearCatalogos?: boolean;
   usuarios?: { lista: UsuarioFila[]; roles: RolOpcion[] };
   permisos?: { roles: RolOpcion[]; rolSeleccionado: RolOpcion | null; permisos: PermisoCelda[] };
@@ -251,6 +255,7 @@ export function ConfiguracionVista(props: {
           {tab === "usuarios" && props.usuarios && (
             <UsuariosPanel {...props.usuarios} puedeEditar={puedeEditar} />
           )}
+          {tab === "permisos" && props.accessData && <PermisosPersonales data={props.accessData} puedeEditar={props.puedeAdministrarAcceso ?? false} />}
           {tab === "permisos" && props.permisos && (
             <PermisosPanel key={props.permisos.rolSeleccionado?.id ?? "sin-rol"} {...props.permisos} puedeEditar={puedeEditar} />
           )}

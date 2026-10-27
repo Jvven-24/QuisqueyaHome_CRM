@@ -16,7 +16,7 @@ import type { RolOpcion } from "./_usuarios";
 
 export type PermisoCelda = { resource: string; action: string; scope: string };
 
-const ETIQUETAS_RECURSO: Record<string, string> = {
+export const ETIQUETAS_RECURSO: Record<string, string> = {
   dashboard: "Panel de inicio",
   leads: "Leads comerciales",
   contacts: "Contactos",
@@ -40,7 +40,7 @@ const ETIQUETAS_RECURSO: Record<string, string> = {
   integrations: "Integraciones",
 };
 
-const ETIQUETAS_ACCION: Record<string, string> = {
+export const ETIQUETAS_ACCION: Record<string, string> = {
   view: "Ver",
   create: "Crear",
   edit: "Editar",
@@ -67,11 +67,13 @@ export function PermisosPanel({
   rolSeleccionado,
   permisos,
   puedeEditar,
+  onSelectRole,
 }: {
   roles: RolOpcion[];
   rolSeleccionado: RolOpcion | null;
   permisos: PermisoCelda[];
   puedeEditar: boolean;
+  onSelectRole?: (id: number) => void;
 }) {
   const router = useRouter();
   const enviarUnico = useRef(crearEnvioUnico()).current;
@@ -89,6 +91,7 @@ export function PermisosPanel({
   const soloLectura = !puedeEditar || esProtegido;
 
   function irARol(rolId: number) {
+    if (onSelectRole) { onSelectRole(rolId); return; }
     setError(null);
     setExito(null);
     const params = new URLSearchParams(searchParams.toString());
@@ -395,6 +398,7 @@ export function PermisosPanel({
                         <div style={{ position: "relative", display: "inline-block", width: "100%", maxWidth: "120px" }}>
                           <select
                             value={valorActual}
+                            disabled={guardando}
                             onChange={(e) => cambiarCelda(recurso, accion, e.target.value)}
                             aria-label={`${ETIQUETAS_RECURSO[recurso] ?? recurso} - ${ETIQUETAS_ACCION[accion]}`}
                             style={{
