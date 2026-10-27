@@ -50,10 +50,11 @@ test("G4-03: alta y edición usan el mismo esquema de teléfono", () => {
  }
 });
 
-test("G4-07/14: matriz y usuarios permiten desplazamiento; cada rol remonta su matriz", () => {
- for (const archivo of ["_permisos.tsx", "_usuarios.tsx"]) {
-  const codigo = readFileSync(new URL(`./${archivo}`, import.meta.url), "utf8");
-  assert.match(codigo, /overflowX: "auto"/);
- }
+test("G4-07/14: matriz RBAC es adaptable y cada rol remonta su matriz", () => {
+ const permisos = readFileSync(new URL("./_permisos.tsx", import.meta.url), "utf8");
+ assert.match(permisos, /ResponsivePermissionMatrix/);
+ assert.doesNotMatch(permisos, /overflowX: "auto"/);
+ const usuarios = readFileSync(new URL("./_usuarios.tsx", import.meta.url), "utf8");
+ assert.match(usuarios, /overflowX: "auto"/);
  assert.match(readFileSync(new URL("./vista.tsx", import.meta.url), "utf8"), /PermisosPanel key=\{props.permisos.rolSeleccionado/);
 });
