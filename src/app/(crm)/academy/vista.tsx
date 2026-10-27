@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { fechaEmisionAcademy, fechaVencimientoAcademy, horaSincronizacionAcademy } from "@/lib/academy-fechas";
 import {filtrarBiblioteca} from "./_ui/biblioteca";
 import {ReproductorLeccion} from "./_ui/reproductor-leccion";
 import {
@@ -127,6 +128,7 @@ export type ConstanciaSerializada = {
 };
 
 interface AcademyVistaProps {
+  instanteInicial: string;
   initialContenidos: ItemAcademySerializado[];
   initialResumen: ResumenProgresoAcademy;
   saludLms: EstadoLms;
@@ -145,9 +147,6 @@ interface AcademyVistaProps {
 
 type TabActiva = "cursos" | "checklists" | "constancias" | "equipo";
 
-const formatoFechaUtc = (fecha: Date) =>
-  fecha.toLocaleDateString("es-DO", { timeZone: "UTC", year: "numeric", month: "2-digit", day: "2-digit" });
-
 function estadoDeConstancia(c: ConstanciaSerializada, ahora: Date): EstadoVigenciaConstancia {
   return estadoVigenciaConstancia({ status: c.status, issuedAt: new Date(c.issuedAt) }, ahora);
 }
@@ -161,6 +160,7 @@ const ETIQUETA_ESTADO: Record<EstadoVigenciaConstancia | "sin_constancia", strin
 };
 
 export function AcademyVista({
+  instanteInicial,
   initialContenidos,
   initialResumen,
   saludLms,
@@ -175,6 +175,11 @@ export function AcademyVista({
   usuarioEmail,
   progresoEquipo,
 }: AcademyVistaProps) {
+  // SSR y primera hidratación usan el mismo reloj, incluso en un límite de vigencia.
+  const [hidratada, setHidratada] = useState(false);
+  useEffect(() => setHidratada(true), []);
+  const ahoraMs = hidratada ? Date.now() : Date.parse(instanteInicial);
+  const ahora = useMemo(() => new Date(ahoraMs), [ahoraMs]);
   const esAdmin = rol === "admin";
   const [busquedaCurso,setBusquedaCurso]=useState("");
   const [categoriaCurso,setCategoriaCurso]=useState("");
@@ -217,10 +222,9 @@ export function AcademyVista({
 
   const constanciasVigentes = useMemo(
     () => {
-      const ahora = new Date();
       return constancias.filter((c) => constanciaAcreditaFormacion(estadoDeConstancia(c, ahora))).length;
     },
-    [constancias],
+    [constancias, ahora],
   );
 
   const rutasFormacion = useMemo(
@@ -230,9 +234,9 @@ export function AcademyVista({
         constancias
           .filter((c) => c.brokerId === usuarioId)
           .map((c) => ({ courseCode: c.courseCode, status: c.status, issuedAt: new Date(c.issuedAt) })),
-        new Date(),
+        ahora,
       ),
-    [cursosAsignados, constancias, usuarioId],
+    [cursosAsignados, constancias, usuarioId, ahora],
   );
 
   const solicitudesPendientes = useMemo(
@@ -720,7 +724,6 @@ export function AcademyVista({
                     s.brokerId === usuarioId &&
                     (s.status === "pendiente" || s.status === "aprobado"),
                 );
-                const ahora = new Date();
                 const constanciaAcreditada = constancias.find(
                   (c) =>
                     c.courseCode === curso.codigo &&
@@ -802,7 +805,7 @@ export function AcademyVista({
                           <span className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-navy-900 border border-gold-600 px-4 py-2 text-xs font-semibold text-gold-100">
                             <ShieldCheck className="w-4 h-4 text-gold-600" />
                             Certificado ({constanciaAcreditada.verificationCode}) · vence{" "}
-                            {formatoFechaUtc(fechaVencimientoConstancia(new Date(constanciaAcreditada.issuedAt)))}
+                            {fechaVencimientoAcademy(fechaVencimientoConstancia(new Date(constanciaAcreditada.issuedAt)))}
                           </span>
                         )}
 
@@ -875,10 +878,7 @@ export function AcademyVista({
                         {ev?.sincronizadoEn && (
                           <span>
                             Sincronizado:{" "}
-                            {new Date(ev.sincronizadoEn).toLocaleTimeString("es-DO", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {horaSincronizacionAcademy(new Date(ev.sincronizadoEn))}
                           </span>
                         )}
                       </div>
@@ -1112,21 +1112,21 @@ export function AcademyVista({
                       </div>
                       <span
                         className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                          estadoDeConstancia(cert, new Date()) === "vigente"
+                          estadoDeConstancia(cert, ahora) === "vigente"
                             ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                            : estadoDeConstancia(cert, new Date()) === "por_vencer"
+                            : estadoDeConstancia(cert, ahora) === "por_vencer"
                               ? "bg-amber-50 text-amber-900 border border-amber-200"
                               : "bg-red-50 text-red-800 border border-red-200"
                         }`}
                       >
-                        {etiquetaEstadoConstancia(estadoDeConstancia(cert, new Date()))}
+                        {etiquetaEstadoConstancia(estadoDeConstancia(cert, ahora))}
                       </span>
                     </div>
 
                     <p className="text-xs text-slate-600">
                       Titular: <strong>{cert.brokerNombre}</strong> · Aprobada por:{" "}
                       <strong>{cert.approvedByNombre}</strong> · Fecha:{" "}
-                      {new Date(cert.issuedAt).toLocaleDateString("es-DO")}
+                      {fechaEmisionAcademy(new Date(cert.issuedAt))}
                     </p>
 
                     <p className="text-xs text-slate-600">
@@ -1136,8 +1136,8 @@ export function AcademyVista({
                       ) : (
                         <strong>
                           vence el{" "}
-                          {formatoFechaUtc(fechaVencimientoConstancia(new Date(cert.issuedAt)))} ·{" "}
-                          {ETIQUETA_ESTADO[estadoDeConstancia(cert, new Date())]}
+                          {fechaVencimientoAcademy(fechaVencimientoConstancia(new Date(cert.issuedAt)))} ·{" "}
+                          {ETIQUETA_ESTADO[estadoDeConstancia(cert, ahora)]}
                         </strong>
                       )}
                     </p>
@@ -1152,7 +1152,7 @@ export function AcademyVista({
                       </p>
                     )}
 
-                    {constanciaAcreditaFormacion(estadoDeConstancia(cert, new Date())) && esAdmin && cert.brokerId !== usuarioId && (
+                    {constanciaAcreditaFormacion(estadoDeConstancia(cert, ahora)) && esAdmin && cert.brokerId !== usuarioId && (
                       <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row gap-2">
                         <input
                           type="text"
