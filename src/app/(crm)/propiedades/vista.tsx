@@ -128,7 +128,7 @@ export function PropiedadesVista({
       {/* Banner de confidencialidad y doble esquema */}
       <div className="rounded-xl border border-line bg-surface p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-lg bg-navy-950 text-gold-400 flex items-center justify-center shrink-0 border border-gold-500/30">
+          <div className="size-10 rounded-lg bg-navy-950 text-[var(--gold-600)] flex items-center justify-center shrink-0 border border-[var(--gold-600)]/30">
             <ShieldCheck className="size-5" />
           </div>
           <div>
@@ -271,7 +271,7 @@ export function PropiedadesVista({
                   <div className="space-y-2 rounded-xl bg-surface-alt/70 p-3.5 border border-line/60">
                     <div className="flex justify-between items-center text-[13px]">
                       <span className="font-semibold text-ink flex items-center gap-1.5">
-                        <Layers className="size-4 text-gold-600" />
+                        <Layers className="size-4 text-gold-700" />
                         Absorción comercial
                       </span>
                       <span className="font-bold text-ink tabular-nums text-[13px]">
@@ -341,7 +341,7 @@ export function PropiedadesVista({
                         </p>
                         {proyecto.estimatedDeliveryDate && (
                           <p className="text-[13px] text-muted-foreground flex items-center gap-1">
-                            <Calendar className="size-3 text-gold-600" />
+                            <Calendar className="size-3 text-gold-700" />
                             Entrega {fechaLocal(proyecto.estimatedDeliveryDate)}
                           </p>
                         )}

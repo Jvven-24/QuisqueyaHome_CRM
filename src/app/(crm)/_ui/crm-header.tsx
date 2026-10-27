@@ -152,16 +152,16 @@ export function CrmHeader({
       <header className="private-command-bar sticky top-0 z-30 flex min-h-14 w-full items-center justify-between border-b border-border bg-surface px-4 sm:px-6">
         {/* Left section: mobile hamburger & breadcrumbs */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink">
-          <SidebarTrigger className="shrink-0 text-slate-600 hover:text-slate-900 focus:outline-none" />
+          <SidebarTrigger className="min-h-11 min-w-11 shrink-0 text-slate-600 hover:text-slate-900 focus:outline-none" />
 
           {/* Breadcrumb path */}
           <nav aria-label="Ruta actual" className="hidden sm:flex min-w-0 items-center gap-1.5 text-xs">
-            <span className="hidden xl:inline font-medium text-slate-400">Quisqueya</span>
-            <ChevronRight className="hidden xl:block size-3 text-slate-300 shrink-0" />
+            <span className="hidden xl:inline font-medium text-muted-foreground">Quisqueya</span>
+            <ChevronRight className="hidden xl:block size-3 text-muted-foreground shrink-0" />
             {currentWorkspace && (
               <>
-                <span className="hidden lg:inline font-medium text-slate-500">{currentWorkspace.nombre}</span>
-                <ChevronRight className="hidden lg:block size-3 text-slate-300 shrink-0" />
+                <span className="hidden lg:inline font-medium text-muted-foreground">{currentWorkspace.nombre}</span>
+                <ChevronRight className="hidden lg:block size-3 text-muted-foreground shrink-0" />
               </>
             )}
             <span className="truncate font-semibold text-slate-900" title={currentModule?.nombre ?? "Panel"}>
@@ -179,10 +179,10 @@ export function CrmHeader({
             aria-label="Buscar en el CRM (Ctrl+K)"
           >
             <div className="flex items-center gap-2 truncate">
-              <Search className="size-3.5 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
+              <Search className="size-3.5 text-muted-foreground group-hover:text-ink transition-colors shrink-0" />
               <span className="truncate text-[12px]">Buscar en el CRM...</span>
             </div>
-            <kbd className="hidden lg:inline-flex shrink-0 items-center gap-0.5 px-1.5 py-0.2 text-[10px] font-mono text-slate-400 bg-white border border-slate-200 rounded">
+            <kbd className="hidden lg:inline-flex shrink-0 items-center gap-0.5 px-1.5 py-0.2 text-[10px] font-mono text-muted-foreground bg-white border border-line rounded">
               ⌘K
             </kbd>
           </button>
@@ -200,7 +200,8 @@ export function CrmHeader({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-medium text-ink bg-surface hover:bg-surface-hover border border-border rounded-md shadow-none transition-colors cursor-pointer"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 px-2.5 text-xs font-medium text-ink bg-surface hover:bg-surface-hover border border-border rounded-md shadow-none transition-colors cursor-pointer"
+                aria-label="Nueva acción"
               >
                 <Plus className="size-3.5 text-slate-600" />
                 <span className="hidden sm:inline">Nueva acción</span>
