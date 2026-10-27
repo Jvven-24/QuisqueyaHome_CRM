@@ -40,14 +40,14 @@ test("un rol no admin no puede editar su propio rol", async () => {
   assert.deepEqual(roles.permisos, [permiso]);
 });
 
-test("un rol no admin no concede más alcance del que tiene", async () => {
+test("un rol no admin no puede conceder permisos, tampoco de menor alcance", async () => {
   const roles = rolesEnMemoria({ id: 4, isProtected: false, slug: "broker" }, []);
   const auditoria = auditoriaEnMemoria();
   const unidad = unidadDeTrabajoEnMemoria({ roles, auditoria }, [roles, auditoria]);
   await assert.rejects(() => editarPermisos({ unidad }, editor, 4, [{ resource: "contacts", action: "view", scope: "all" }]), ForbiddenError);
   await assert.rejects(() => editarPermisos({ unidad }, editor, 4, [{ resource: "users", action: "delete", scope: "own" }]), ForbiddenError);
-  await editarPermisos({ unidad }, editor, 4, [{ resource: "contacts", action: "view", scope: "own" }]);
-  assert.equal(roles.permisos.length, 1);
+  await assert.rejects(() => editarPermisos({ unidad }, editor, 4, [{ resource: "contacts", action: "view", scope: "own" }]), ForbiddenError);
+  assert.equal(roles.permisos.length, 0);
 });
 
 test("rechaza celdas duplicadas", async () => {

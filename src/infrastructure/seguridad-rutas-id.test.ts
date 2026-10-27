@@ -37,6 +37,8 @@ const caso = (modulo: string, patron: RegExp, archivo?: string): Garantia => ({
 
 /** Ruta (relativa a src/app/api) -> garantía comprobable. */
 const REVISADAS: Record<string, Garantia> = {
+  "permisos/usuarios/[id]/route.ts": global("permisos/usuarios/[id]/route.ts", "settings:edit"),
+  "permisos/equipos/[id]/route.ts": global("permisos/equipos/[id]/route.ts", "settings:edit"),
   "academy/[id]/progreso/route.ts": propio("academy/[id]/progreso/route.ts"),
   "academy/checklist/[id]/route.ts": propio("academy/checklist/[id]/route.ts"),
   "actividades/[id]/route.ts": caso("actividades", /buscarVisible\(actor, alcance, id\)/),

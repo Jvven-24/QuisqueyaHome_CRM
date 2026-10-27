@@ -1,7 +1,7 @@
 /** M13 · Permisos (`docs/R_ANALISIS_Y_PLAN.md` §7 R3.5; decisión #27). */
 
 import { z } from "zod";
-import { NotFoundError } from "@/domain/errors";
+import { ForbiddenError, NotFoundError } from "@/domain/errors";
 import { PERMISSION_ACTIONS, PERMISSION_RESOURCES, PERMISSION_SCOPES } from "@/domain/catalogs";
 import { requireFullScope } from "@/domain/rbac";
 import { requireActor } from "@/infrastructure/auth/actor";
@@ -23,6 +23,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   try {
     const actor = await requireActor();
     requireFullScope(actor, "settings", "edit");
+    if (actor.roleSlug !== "admin") throw new ForbiddenError("Solo el administrador puede conceder permisos.");
     const { id: idParam } = await params;
     const roleId = Number(idParam);
     if (!Number.isInteger(roleId) || roleId <= 0) throw new NotFoundError("El rol indicado no existe.");
