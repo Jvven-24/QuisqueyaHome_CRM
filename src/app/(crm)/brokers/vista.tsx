@@ -1,5 +1,6 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -159,58 +160,11 @@ export function BrokersVista({
       />
 
       {/* KPI Maestros del Equipo Comercial */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-surface border border-line/80 rounded-2xl p-5 shadow-xs hover:border-gold-600/40 transition-colors">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[13px] font-bold text-ink-muted uppercase tracking-wider">Fuerza Comercial</span>
-            <div className="size-9 rounded-xl bg-navy-50 flex items-center justify-center text-navy-800">
-              <Users className="size-5" />
-            </div>
-          </div>
-          <strong className="block font-heading font-black text-2xl md:text-3xl text-navy-950 tabular-nums">
-            {resumen.totalBrokers}
-          </strong>
-          <small className="text-[13px] text-ink-muted mt-1 block">Asesores activos en roster</small>
-        </div>
-
-        <div className="bg-surface border border-line/80 rounded-2xl p-5 shadow-xs hover:border-gold-600/40 transition-colors">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[13px] font-bold text-ink-muted uppercase tracking-wider">Cartera en Gestión</span>
-            <div className="size-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700">
-              <Briefcase className="size-5" />
-            </div>
-          </div>
-          <strong className="block font-heading font-black text-2xl md:text-3xl text-navy-950 tabular-nums">
-            {resumen.carteraTotal}
-          </strong>
-          <small className="text-[13px] text-ink-muted mt-1 block">Negocios activos asignados</small>
-        </div>
-
-        <div className="bg-surface border border-line/80 rounded-2xl p-5 shadow-xs hover:border-gold-600/40 transition-colors">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[13px] font-bold text-ink-muted uppercase tracking-wider">Volumen Acumulado</span>
-            <div className="size-9 rounded-xl bg-gold-100 flex items-center justify-center text-gold-800">
-              <DollarSign className="size-5" />
-            </div>
-          </div>
-          <strong className="block font-heading font-black text-2xl md:text-3xl text-navy-950 tabular-nums">
-            {formatearMonto(resumen.volumenTotalCents, "USD")}
-          </strong>
-          <small className="text-[13px] text-ink-muted mt-1 block">Ventas cerradas del año (USD)</small>
-        </div>
-
-        <div className="bg-surface border border-line/80 rounded-2xl p-5 shadow-xs hover:border-gold-600/40 transition-colors">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[13px] font-bold text-ink-muted uppercase tracking-wider">Cumplimiento Medio</span>
-            <div className="size-9 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700">
-              <TrendingUp className="size-5" />
-            </div>
-          </div>
-          <strong className="block font-heading font-black text-2xl md:text-3xl text-navy-950 tabular-nums">
-            {resumen.cumplimientoPromedio === null ? "—" : `${resumen.cumplimientoPromedio}%`}
-          </strong>
-          <small className="text-[13px] text-ink-muted mt-1 block">Avance contra metas del mes</small>
-        </div>
+      <section aria-label="Indicadores del equipo comercial" className="grid grid-cols-2 gap-3 mb-6 xl:grid-cols-4">
+        <ResumenCompacto etiqueta="Fuerza Comercial" valor={resumen.totalBrokers} detalle="Asesores activos en roster" icono={<Users className="size-5 text-navy-800" />} />
+        <ResumenCompacto etiqueta="Cartera en Gestión" valor={resumen.carteraTotal} detalle="Negocios activos asignados" icono={<Briefcase className="size-5 text-blue-700" />} />
+        <ResumenCompacto etiqueta="Volumen Acumulado" valor={formatearMonto(resumen.volumenTotalCents, "USD")} detalle="Ventas cerradas del año (USD)" icono={<DollarSign className="size-5 text-gold-800" />} />
+        <ResumenCompacto etiqueta="Cumplimiento Medio" valor={resumen.cumplimientoPromedio === null ? "—" : `${resumen.cumplimientoPromedio}%`} detalle="Avance contra metas del mes" icono={<TrendingUp className="size-5 text-emerald-700" />} />
       </section>
 
       {/* Escala Interactiva de Carrera */}
