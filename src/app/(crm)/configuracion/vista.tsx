@@ -89,6 +89,7 @@ export function ConfiguracionVista(props: {
   integraciones?: IntegracionFila[];
   estadoOutbox?: EstadoOutbox | null;
   presencias?: PresenciaIntegraciones;
+  proveedores?: import("./_proveedores").EstadoProveedor[];
   auditoria?: EventoAuditoria[];
   puedeExportarAuditoria?: boolean;
 }) {
@@ -266,6 +267,7 @@ export function ConfiguracionVista(props: {
             <IntegracionesPanel
               integraciones={props.integraciones}
               presencias={props.presencias}
+              proveedores={props.proveedores}
               puedeEditar={puedeEditar}
               estadoOutbox={props.estadoOutbox ?? null}
             />

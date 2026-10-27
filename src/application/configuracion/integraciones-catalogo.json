@@ -36,6 +36,24 @@
     "falta": "Prueba de salud del proveedor y entrega supervisada."
   },
   {
+    "id": "whatsapp_ycloud",
+    "nombre": "WhatsApp vía YCloud",
+    "categoria": "Meta",
+    "variables": [
+      "YCLOUD_API_KEY",
+      "YCLOUD_WHATSAPP_FROM",
+      "YCLOUD_WEBHOOK_SECRET"
+    ],
+    "docs": "https://docs.ycloud.com/reference/whatsapp_message-send-directly",
+    "pasos": [
+      "Crear API key en YCloud.",
+      "Registrar el número WABA y ponerlo en YCLOUD_WHATSAPP_FROM.",
+      "Webhook: https://crm.quisqueyahome.com/api/integraciones/webhooks/whatsapp con secreto.",
+      "Probar desde Configuración > Integraciones en modo prueba."
+    ],
+    "falta": "Alternativa a Cloud API; se elige con WHATSAPP_PROVIDER=ycloud."
+  },
+  {
     "id": "instagram",
     "nombre": "Instagram Business",
     "categoria": "Meta",

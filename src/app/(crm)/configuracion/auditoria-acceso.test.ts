@@ -19,6 +19,7 @@ test("auditoría: settings all no sustituye audit_log:view all; permiso se verif
     "@/infrastructure/db/client": { getDb: () => ({ select() { consultas++; throw new Error("lectura indebida"); } }) },
     "@/infrastructure/db/schema": {},
     "@/infrastructure/env": {},
+    "@/infrastructure/proveedores-externos": {},
     "@/application/configuracion/integraciones-catalogo": {},
     "@/application/configuracion/auditoria": {},
     "@/infrastructure/db/repos/configuracion-auditoria": {},

@@ -37,6 +37,7 @@ import {
 import { requireScopeInPage } from "@/infrastructure/page-guard";
 import { INTEGRACIONES } from "@/application/configuracion/integraciones-catalogo";
 import { presenciaIntegraciones } from "@/infrastructure/env";
+import { estadoProveedores } from "@/infrastructure/proveedores-externos";
 import { consultarAuditoriaConfiguracion } from "@/application/configuracion/auditoria";
 import { repositorioAuditoriaConfiguracion } from "@/infrastructure/db/repos/configuracion-auditoria";
 import { ConfiguracionVista, type Tab } from "./vista";
@@ -170,5 +171,5 @@ export default async function ConfiguracionPage({
     // Si la cola no se puede leer se dice "no disponible"; nunca se inventa un estado.
     estadoOutbox().catch(() => null),
   ]);
-  return <ConfiguracionVista tab={tab} puedeEditar={puedeEditar} integraciones={integraciones} estadoOutbox={estado} presencias={presenciaIntegraciones(INTEGRACIONES)} />;
+  return <ConfiguracionVista tab={tab} puedeEditar={puedeEditar} integraciones={integraciones} estadoOutbox={estado} presencias={presenciaIntegraciones(INTEGRACIONES)} proveedores={estadoProveedores()} />;
 }

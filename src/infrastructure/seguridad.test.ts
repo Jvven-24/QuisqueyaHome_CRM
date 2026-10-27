@@ -40,6 +40,8 @@ const RUTAS_PUBLICAS: Record<string, RegExp> = {
   "auth/demo/route.ts": /qh_dev_role/,
   "leads/externo/route.ts": /coincideToken\(/,
   "health/route.ts": /select 1/, // solo responde ok/503, sin datos ni sesión
+  "integraciones/webhooks/meta/route.ts": /firmaMetaValida\(/, // firma HMAC del app secret
+  "integraciones/webhooks/whatsapp/route.ts": /firmaYCloudValida\(/, // firma YCloud o Meta
 };
 
 test("toda ruta de la API comprueba permisos en servidor, salvo las públicas declaradas", () => {
