@@ -15,7 +15,8 @@ export async function GET(request: Request) {
     const actor = await requireActor();
     requireScope(actor, "activities", "view");
     const url = new URL(request.url);
-    const origin = process.env.APP_PUBLIC_URL || url.origin;
+    // Detrás del proxy `url.origin` es el host interno; el redirect registrado es la fuente fiable.
+    const origin = process.env.GOOGLE_OAUTH_REDIRECT_URI ? new URL(process.env.GOOGLE_OAUTH_REDIRECT_URI).origin : url.origin;
     const cookie = request.headers.get("cookie")?.match(new RegExp(`(?:^|; )${STATE_COOKIE}=([^;]+)`))?.[1] ?? null;
     if (!validarState(url.searchParams.get("state"), cookie, actor.userId)) return volver(origin, "estado-invalido");
     if (url.searchParams.get("error")) return volver(origin, "cancelado");
