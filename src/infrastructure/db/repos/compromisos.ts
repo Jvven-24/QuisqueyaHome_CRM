@@ -563,7 +563,7 @@ export function repositorioCompromisos(tx: Tx, pipeline?: RepositorioPipeline): 
         resultPublicId: nuevoHold.publicId,
         resultCode: "HoldCreado",
         completedAt: effectiveAt,
-        retainUntil: sql`${effectiveAt}::timestamptz + interval '5 years 1 day'`,
+        retainUntil: sql`${effectiveAt.toISOString()}::timestamptz + interval '5 years 1 day'`,
       }).where(eq(transactionCommands.id, comando.id));
 
       return mapearHold(nuevoHold, unidadesInsertadas);
@@ -735,7 +735,7 @@ export function repositorioCompromisos(tx: Tx, pipeline?: RepositorioPipeline): 
         resultPublicId: hold.publicId,
         resultCode: "HoldExtendido",
         completedAt: effectiveAt,
-        retainUntil: sql`${effectiveAt}::timestamptz + interval '5 years 1 day'`,
+        retainUntil: sql`${effectiveAt.toISOString()}::timestamptz + interval '5 years 1 day'`,
       }).where(eq(transactionCommands.id, comando.id));
 
       return mapearHold(holdActualizado, unidadesHold);
@@ -884,7 +884,7 @@ export function repositorioCompromisos(tx: Tx, pipeline?: RepositorioPipeline): 
         resultPublicId: hold.publicId,
         resultCode: "HoldCancelado",
         completedAt: effectiveAt,
-        retainUntil: sql`${effectiveAt}::timestamptz + interval '5 years 1 day'`,
+        retainUntil: sql`${effectiveAt.toISOString()}::timestamptz + interval '5 years 1 day'`,
       }).where(eq(transactionCommands.id, comando.id));
 
       return mapearHold(holdActualizado, unidadesHold);
