@@ -19,6 +19,9 @@ export function conflictosVisibles(cita: Intervalo, rows: readonly Intervalo[], 
  const from=Date.parse(start);const to=end?Date.parse(end):from+1;
  return rows.filter(row=>row.id!==cita.id&&row.status!=="cancelled"&&row.assigneeId===cita.assigneeId&&row.startsAt&&new Date(row.startsAt).getTime()<to&&(row.endsAt?new Date(row.endsAt).getTime():new Date(row.startsAt).getTime()+1)>from).map(row=>row.id);
 }
+export function intervalosSeSolapan(inicioA: number, finA: number, inicioB: number, finB: number): boolean {
+ return inicioA < finB && inicioB < finA;
+}
 export function ordenParadas<T>(rows: readonly T[], from: number, direction: -1 | 1): T[] {
  const result=[...rows];const to=from+direction;if(from<0||to<0||from>=rows.length||to>=rows.length)return result;
  [result[from],result[to]]=[result[to]!,result[from]!];return result;
