@@ -7,7 +7,7 @@
  * `WHERE broker_id = ?`.
  */
 
-import { and, eq, isNull, sql, type SQL } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql, type SQL } from "drizzle-orm";
 import type { PgColumn } from "drizzle-orm/pg-core";
 import { alias } from "drizzle-orm/pg-core";
 import type { Actor, PermissionScope } from "../domain/rbac.ts";
@@ -31,10 +31,14 @@ export function scopeCondition(
     case "all":
       return undefined;
     case "own":
-    case "team":
-      // Ver la nota sobre `team` en `domain/rbac.ts`: sin modelo de equipos se
-      // comporta como `own`, que es el lado seguro del error.
       return eq(ownerColumn, actor.userId);
+    case "team":
+      // Equipo real: el actor más los miembros que lidera o supervisa
+      // (`actor.teamUserIds`, resuelto una vez por petición en auth/actor).
+      // Sin equipo, `team` equivale a `own` (mismo SQL).
+      return actor.teamUserIds?.length
+        ? inArray(ownerColumn, [actor.userId, ...actor.teamUserIds])
+        : eq(ownerColumn, actor.userId);
     case "none":
       // Defensa en profundidad: si alguien salta `requireScope`, no filtra nada.
       return sql`false`;

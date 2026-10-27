@@ -49,11 +49,24 @@ test("alcance all no añade condición: no hay nada que restringir", () => {
   assert.equal(scopeCondition(broker, "all", tabla.brokerId), undefined);
 });
 
-test("team filtra igual que own mientras no exista modelo de equipos", () => {
+test("team sin equipo filtra igual que own", () => {
   const own = compilar(scopeCondition(broker, "own", tabla.brokerId));
   const team = compilar(scopeCondition(broker, "team", tabla.brokerId));
   assert.equal(team.sql, own.sql);
   assert.deepEqual(team.params, own.params);
+});
+
+test("team con equipo incluye al gerente y a sus miembros, nadie más", () => {
+  const gerente = { userId: 10, roleSlug: "manager", permissions: [], teamUserIds: [21, 22] };
+  const { sql, params } = compilar(scopeCondition(gerente, "team", tabla.brokerId));
+  assert.match(sql, /"broker_id"\s+in\s+\(\$1, \$2, \$3\)/);
+  assert.deepEqual(params, [10, 21, 22]);
+});
+
+test("own ignora teamUserIds: no hay escalada por pertenecer a un equipo", () => {
+  const gerente = { userId: 10, roleSlug: "manager", permissions: [], teamUserIds: [21] };
+  const { params } = compilar(scopeCondition(gerente, "own", tabla.brokerId));
+  assert.deepEqual(params, [10]);
 });
 
 test("alcance none no devuelve nada, aunque alguien se salte requireScope", () => {

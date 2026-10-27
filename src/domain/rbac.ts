@@ -37,7 +37,53 @@ export type Actor = {
   userId: number;
   roleSlug: string;
   permissions: readonly Permission[];
+  /**
+   * Miembros de los equipos que el actor lidera o supervisa (sin incluirse).
+   * Es lo que da contenido real al alcance `team`. Ausente = sin equipo.
+   */
+  teamUserIds?: readonly number[];
+  /**
+   * "Ver como broker": usuario real que está mirando (admin o gerente). Cuando
+   * existe, el actor es de solo lectura: cualquier acción distinta de `view`
+   * se rechaza en `requireScope`, el único sitio por el que pasa toda autorización.
+   */
+  viewAsBy?: number;
 };
+
+/** Sobrescritura por usuario: sube o baja una celda respecto a su rol. */
+export type PermissionOverride = Permission;
+
+/**
+ * Permisos efectivos: la sobrescritura del usuario gana sobre la del rol.
+ * El admin protegido no admite sobrescrituras (quien las pase se ignora).
+ */
+export function effectivePermissions(
+  rolePermissions: readonly Permission[],
+  overrides: readonly PermissionOverride[],
+  roleIsProtected: boolean,
+): Permission[] {
+  const key = (p: { resource: string; action: string }) => `${p.resource}:${p.action}`;
+  const merged = new Map<string, Permission>();
+  for (const p of rolePermissions) merged.set(key(p), p);
+  if (!roleIsProtected) for (const o of overrides) merged.set(key(o), o);
+  return [...merged.values()].filter((p) => p.scope !== "none");
+}
+
+/**
+ * ¿Puede `viewer` mirar el CRM como `target`? El admin a cualquiera que no sea
+ * otro admin; el gerente solo a miembros de sus equipos. Nadie a sí mismo.
+ */
+export function canViewAs(
+  viewer: Actor,
+  target: { userId: number; roleSlug: string },
+): boolean {
+  if (viewer.viewAsBy !== undefined) return false;
+  if (target.userId === viewer.userId) return false;
+  if (target.roleSlug === "admin") return false;
+  if (viewer.roleSlug === "admin") return true;
+  if (scopeFor(viewer, "users", "view") === "all") return true;
+  return (viewer.teamUserIds ?? []).includes(target.userId) && can(viewer, "brokers", "view");
+}
 
 /**
  * Alcance del actor sobre un recurso y una acción.
@@ -76,6 +122,9 @@ export function requireScope(
   action: PermissionAction,
 ): Exclude<PermissionScope, "none"> {
   const scope = scopeFor(actor, resource, action);
+  if (actor.viewAsBy !== undefined && action !== "view") {
+    throw new ForbiddenError("Modo \"ver como\": solo lectura.");
+  }
   if (scope === "none") {
     throw new ForbiddenError(
       `Sin permiso para ${action} sobre ${resource}.`,
@@ -120,13 +169,10 @@ export function reaches(
     case "all":
       return true;
     case "own":
-    case "team":
-      // ponytail: `team` se comporta como `own` porque el esquema no tiene
-      // equipos (no hay tabla de equipos ni `team_id` en `users`). Fallar hacia
-      // lo restrictivo es el lado correcto del error. Cuando exista el modelo de
-      // equipos, este caso se separa aquí y en `rbac-filter.ts`, y en ningún
-      // otro sitio.
       return ownerId != null && ownerId === actor.userId;
+    case "team":
+      return ownerId != null
+        && (ownerId === actor.userId || (actor.teamUserIds ?? []).includes(ownerId));
     case "none":
       return false;
   }
