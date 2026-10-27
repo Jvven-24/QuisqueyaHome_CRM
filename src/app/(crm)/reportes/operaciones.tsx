@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import type { ReportesBiData } from "@/application/reportes/puertos";
 import { resumenCalidad } from "@/application/reportes/automatizaciones";
@@ -27,7 +28,7 @@ export function OperacionesReportes({ metricas, canExport }: { metricas: Reporte
       {!online && <p role="status">Sin conexión. Puedes consultar los datos cargados; las acciones están en pausa.</p>}
       <section className="grid gap-3"><h2 className="font-bold">Análisis por canal</h2><p>Este filtro se aplica sólo a esta tabla. Los filtros de proyecto, broker y periodo del informe ya se aplicaron en servidor. Los importes disponibles en este contrato son USD; no hay conversión a DOP.</p>
         <label>Canal <select className={CAMPO} value={canal} onChange={(e) => setCanal(e.target.value)}><option value="">Todos los canales disponibles</option>{metricas.sources.map((s) => <option key={String(s.sourceId)} value={String(s.sourceId)}>{s.source}</option>)}</select></label>
-        <fieldset className="flex flex-wrap gap-3"><legend>Columnas visibles</legend>{COLUMNAS.map((c) => <label key={c} className="flex min-h-12 items-center gap-2"><input type="checkbox" checked={columnas.includes(c)} onChange={(e) => setColumnas(e.target.checked ? COLUMNAS.filter((x) => columnas.includes(x) || x === c) : columnas.filter((x) => x !== c))} />{ETIQUETAS[c]}</label>)}</fieldset>
+        <fieldset className="flex flex-wrap gap-3"><legend>Columnas visibles</legend>{COLUMNAS.map((c) => <label key={c} className="flex min-h-12 items-center gap-2"><Checkbox checked={columnas.includes(c)} onCheckedChange={(checked) => setColumnas(checked ? COLUMNAS.filter((x) => columnas.includes(x) || x === c) : columnas.filter((x) => x !== c))} />{ETIQUETAS[c]}</label>)}</fieldset>
         {filas.length === 0 ? <p>No hay canales que coincidan.</p> : <div className="max-w-full overflow-x-auto" tabIndex={0} role="region" aria-label="Canales y columnas elegidas"><table className="w-full border-collapse text-left"><thead><tr><th className="p-3">Canal</th>{columnas.map((c) => <th className="p-3" key={c}>{ETIQUETAS[c]}</th>)}</tr></thead><tbody>{filas.map((f) => <tr key={String(f.sourceId)}><th className="p-3">{f.source}</th>{columnas.map((c) => { const v = f[c === "leads" ? "count" : c]; return <td className="p-3 tabular-nums" key={c}>{v === null ? "No medido" : c.endsWith("Cents") ? dinero(v) : v}</td>; })}</tr>)}</tbody></table></div>}
         <button type="button" className={CAMPO} disabled={!canExport || !online || !filas.length} onClick={exportar}>Exportar tabla visible CSV</button>{!canExport && <p>Tu permiso de reportes no permite exportar.</p>}
       </section>

@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { NotasBitacora } from "../_ui/notas-bitacora";
 
@@ -512,7 +513,7 @@ function FormularioPropiedad({ dealId, proyectos, tienePrincipal, onClose, onExi
         </select>
       </label>
       <label className="span-2 flex min-h-12 cursor-pointer items-center gap-2">
-        <input type="checkbox" checked={principal} onChange={(e) => setPrincipal(e.target.checked)} className="size-5" />
+        <Checkbox checked={principal} onCheckedChange={(checked) => setPrincipal(checked)} />
         <span>Marcar como principal</span>
       </label>
       <div className="form-actions span-2">

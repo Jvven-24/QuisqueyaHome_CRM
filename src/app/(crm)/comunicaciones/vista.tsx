@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -1183,7 +1184,7 @@ export function ComunicacionesVista({
               </a>
             ) : <p className="text-sm text-slate-600">Este canal utiliza el despacho del proveedor; no tiene enlace de borrador a otra aplicación.</p>}
 
-            <label className="flex min-h-11 items-center gap-3 text-sm"><input type="checkbox" checked={revisionHumana} onChange={event=>setRevisionHumana(event.target.checked)}/>He revisado destinatario, consentimiento, ventana aplicable y contenido. Esta confirmación local no acredita consentimiento en servidor.</label>
+            <label className="flex min-h-11 items-center gap-3 text-sm"><Checkbox checked={revisionHumana} onCheckedChange={checked=>setRevisionHumana(checked)} />He revisado destinatario, consentimiento, ventana aplicable y contenido. Esta confirmación local no acredita consentimiento en servidor.</label>
             {!puedeDespachar && <p className="text-sm">Sin permiso de despacho con alcance total; puedes revisar el borrador sin enviar.</p>}
             {/* Alternativa: Despacho Directo por API Oficial / SMTP */}
             <div className="flex items-center gap-2 pt-1">

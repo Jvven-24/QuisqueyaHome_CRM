@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useRef, useState } from "react";
@@ -375,12 +376,7 @@ export function NotaDeVozLeadModal({
 
                 <div className="span-2 rounded-xl border border-gold-500/40 bg-gold-50/30 p-3.5 grid gap-2">
                   <label className="flex items-center gap-2.5 text-[13.5px] font-bold text-navy-950 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={crearTareaSugerida}
-                      onChange={(e) => setCrearTareaSugerida(e.target.checked)}
-                      className="size-4 accent-gold-600"
-                    />
+                    <Checkbox checked={crearTareaSugerida} onCheckedChange={(checked) => setCrearTareaSugerida(checked)} />
                     <span>Agendar automáticamente tarea de seguimiento al guardar</span>
                   </label>
                   <input

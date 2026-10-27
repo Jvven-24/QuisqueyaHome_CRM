@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import Link from "next/link";
 import { SelectorCalendarioGoogle } from "../_ui/google-cuentas";
@@ -1958,12 +1959,7 @@ function ModalResultadoVisita({
 
         <div className="span-2 rounded-xl border border-emerald-200 bg-emerald-50/40 p-3.5 space-y-3">
           <label className="flex items-center gap-2 text-[13px] font-bold text-emerald-950 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={crearSeguimiento}
-              onChange={(e) => setCrearSeguimiento(e.target.checked)}
-              className="size-4 accent-emerald-700"
-            />
+            <Checkbox checked={crearSeguimiento} onCheckedChange={(checked) => setCrearSeguimiento(checked)} />
             <CheckCircle2 className="size-4 text-emerald-700" />
             <span>Programar automáticamente tarea To-Do de siguiente paso para el Broker</span>
           </label>
