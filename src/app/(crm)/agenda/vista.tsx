@@ -34,6 +34,7 @@ import {
 import { formatoFechaIcs, generarIcs } from "@/domain/ics";
 import { fechaSantoDomingo, horaSantoDomingo, sumarDias } from "@/domain/zona-horaria";
 import { intervalosSeSolapan } from "./_componentes/operaciones";
+import { destinoGuardadoCita, idActividadCreada } from "./_lib/guardado-cita";
 import { AlertaErrorFormulario } from "../_ui/alerta-error-formulario";
 import { Avatar, Badge, Modal, PageHeader } from "../_ui/prototipo-ui";
 
@@ -275,6 +276,8 @@ type ModoAgenda = "semana" | "dia" | "brokers" | "lista";
 export function AgendaVista({
   citas,
   personas,
+  asignables = [],
+  puedeCrear = false,
   lunes,
   proyectos = [],
   negocios = [],
@@ -282,7 +285,11 @@ export function AgendaVista({
   muestraEquipo = false,
 }: {
   citas: CitaFila[];
+  /** Consulta (filtro y «Por Broker»): alcance de ver. */
   personas: PersonaOpcion[];
+  /** Selector de responsable: alcance de crear (ver `_lib/personas-agenda.ts`). */
+  asignables?: PersonaOpcion[];
+  puedeCrear?: boolean;
   lunes: string;
   proyectos?: ProyectoAgendaOpcion[];
   negocios?: NegocioAgendaOpcion[];
@@ -377,6 +384,7 @@ export function AgendaVista({
   }
 
   const diasParaRejilla = modoAgenda === "dia" ? [diaEnfocado] : dias;
+  const idsAsignables = useMemo(() => new Set(puedeCrear ? asignables.map((p) => p.id) : []), [asignables, puedeCrear]);
 
   return (
     <>
@@ -402,14 +410,16 @@ export function AgendaVista({
               <Download className="w-4 h-4 text-slate-600" />
               <span>Exportar semana (.ics)</span>
             </a>
-            <button
-              className="button primary inline-flex items-center gap-2 min-h-[44px] px-5 font-bold text-[13px]"
-              type="button"
-              onClick={() => abrirCrearNuevo()}
-            >
-              <Plus className="w-4 h-4" />
-              <span>Nueva cita / visita</span>
-            </button>
+            {puedeCrear && (
+              <button
+                className="button primary inline-flex items-center gap-2 min-h-[44px] px-5 font-bold text-[13px]"
+                type="button"
+                onClick={() => abrirCrearNuevo()}
+              >
+                <Plus className="w-4 h-4" />
+                <span>Nueva cita / visita</span>
+              </button>
+            )}
           </div>
         }
       />
@@ -621,16 +631,18 @@ export function AgendaVista({
         {citasDeHoy.length === 0 ? (
           <div className="py-6 px-4 text-center rounded-lg bg-slate-50/70 border border-dashed border-slate-200">
             <p className="text-[13px] text-slate-600 m-0 mb-3">
-              No hay citas programadas para hoy con los filtros actuales. Mantén el ritmo agendando un Tour de Obra o Videollamada.
+              No hay citas programadas para hoy con los filtros actuales.{puedeCrear ? " Mantén el ritmo agendando un Tour de Obra o Videollamada." : ""}
             </p>
-            <button
-              type="button"
-              className="button secondary inline-flex items-center gap-2 min-h-[44px] px-4 text-[13px] font-semibold"
-              onClick={() => abrirCrearEnSlot(hoy, 10)}
-            >
-              <Plus className="w-4 h-4" />
-              <span>Agendar cita para hoy</span>
-            </button>
+            {puedeCrear && (
+              <button
+                type="button"
+                className="button secondary inline-flex items-center gap-2 min-h-[44px] px-4 text-[13px] font-semibold"
+                onClick={() => abrirCrearEnSlot(hoy, 10)}
+              >
+                <Plus className="w-4 h-4" />
+                <span>Agendar cita para hoy</span>
+              </button>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -876,16 +888,18 @@ export function AgendaVista({
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-3">
-                  <button
-                    type="button"
-                    onClick={() => abrirCrearNuevo(broker.id)}
-                    className="button secondary inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 text-[13px] font-bold"
-                  >
-                    <Plus className="size-4 text-[#059669]" />
-                    <span>Agendar Visita / Cita a {broker.fullName.split(" ")[0]}</span>
-                  </button>
-                </div>
+                {idsAsignables.has(broker.id) && (
+                  <div className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-3">
+                    <button
+                      type="button"
+                      onClick={() => abrirCrearNuevo(broker.id)}
+                      className="button secondary inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 text-[13px] font-bold"
+                    >
+                      <Plus className="size-4 text-[#059669]" />
+                      <span>Agendar Visita / Cita a {broker.fullName.split(" ")[0]}</span>
+                    </button>
+                  </div>
+                )}
               </article>
             );
           })}
@@ -994,14 +1008,16 @@ export function AgendaVista({
               <p className="m-0 text-[14px] font-semibold text-slate-700">
                 No hay citas para esta semana con los filtros seleccionados.
               </p>
-              <button
-                type="button"
-                onClick={() => abrirCrearEnSlot(diaEnfocado, 9)}
-                className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-navy-950 px-4 text-[13px] font-bold text-white hover:bg-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-700"
-              >
-                <Plus className="size-4" />
-                Crear cita
-              </button>
+              {puedeCrear && (
+                <button
+                  type="button"
+                  onClick={() => abrirCrearEnSlot(diaEnfocado, 9)}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-navy-950 px-4 text-[13px] font-bold text-white hover:bg-navy-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-700"
+                >
+                  <Plus className="size-4" />
+                  Crear cita
+                </button>
+              )}
             </div>
           )}
 
@@ -1035,6 +1051,7 @@ export function AgendaVista({
                       className="relative border-r border-slate-200 last:border-r-0 p-1.5 flex flex-col gap-1.5 group min-h-[86px]"
                     >
                       {/* Botón flotante al hover para crear cita rápida en este slot */}
+                      {puedeCrear && (
                       <button
                         type="button"
                         onClick={() => abrirCrearEnSlot(dia, hora)}
@@ -1044,8 +1061,9 @@ export function AgendaVista({
                         <Plus className="w-3.5 h-3.5" />
                         <span>Agendar {hora}:00</span>
                       </button>
+                      )}
 
-                      {eventos.length === 0 && (
+                      {puedeCrear && eventos.length === 0 && (
                         <button
                           type="button"
                           onClick={() => abrirCrearEnSlot(dia, hora)}
@@ -1134,7 +1152,8 @@ export function AgendaVista({
           citasSemana={citas}
           slotInicial={slotInicial}
           dias={dias}
-          personas={personas}
+          personas={asignables}
+          puedeCrear={puedeCrear}
           proyectos={proyectos}
           negocios={negocios}
           contactos={contactos}
@@ -1154,7 +1173,7 @@ export function AgendaVista({
       {citaParaResultado && (
         <ModalResultadoVisita
           cita={citaParaResultado}
-          personas={personas}
+          personas={asignables}
           onClose={() => setCitaParaResultado(null)}
         />
       )}
@@ -1168,6 +1187,7 @@ function ModalCita({
   slotInicial,
   dias,
   personas,
+  puedeCrear,
   proyectos,
   negocios,
   contactos,
@@ -1178,7 +1198,9 @@ function ModalCita({
   citasSemana: CitaFila[];
   slotInicial: { dia: string; hora: string; brokerId?: number | null } | null;
   dias: string[];
+  /** Solo personas asignables (alcance de crear). */
   personas: PersonaOpcion[];
+  puedeCrear: boolean;
   proyectos: ProyectoAgendaOpcion[];
   negocios: NegocioAgendaOpcion[];
   contactos: ContactoAgendaOpcion[];
@@ -1196,7 +1218,12 @@ function ModalCita({
   const [errorRed, setErrorRed] = useState<string | null>(null);
   const [avisoParcial, setAvisoParcial] = useState<string | null>(null);
 
-  const esEdicion = Boolean(cita && cita.id > 0);
+  // Si el POST creó la cita pero falló Google, el modal pasa a editar ese id:
+  // un segundo «Guardar» no puede volver a crearla.
+  const [idCreado, setIdCreado] = useState<number | null>(null);
+  const destino = destinoGuardadoCita(cita?.id, idCreado);
+  const esEdicion = destino.method === "PATCH";
+  const bloqueadoCrear = !esEdicion && !puedeCrear;
 
   const diaPorDefecto = cita?.startsAt
     ? fechaSantoDomingo(cita.startsAt)
@@ -1217,7 +1244,7 @@ function ModalCita({
   const [asignadoId, setAsignadoId] = useState(
     cita?.assigneeId
       ? String(cita.assigneeId)
-      : slotInicial?.brokerId
+      : slotInicial?.brokerId && personas.some((p) => p.id === slotInicial.brokerId)
         ? String(slotInicial.brokerId)
         : "",
   );
@@ -1271,7 +1298,7 @@ function ModalCita({
 
   async function guardar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!formRef.current || submittingRef.current) return;
+    if (!formRef.current || submittingRef.current || bloqueadoCrear) return;
     const form = new FormData(formRef.current);
     const erroresCliente = erroresActividad({
       title: form.get("title"),
@@ -1315,8 +1342,7 @@ function ModalCita({
         ...(esEdicion ? {} : { googleCalendarId: form.get("googleCalendarId") || undefined }),
       };
 
-      const url = esEdicion ? `/api/actividades/${cita!.id}` : "/api/actividades";
-      const method = esEdicion ? "PATCH" : "POST";
+      const { url, method } = destino;
 
       const respuesta = await fetch(url, {
         method,
@@ -1333,6 +1359,15 @@ function ModalCita({
       }
 
       if (typeof cuerpo.google?.error === "string") {
+        const creada = method === "POST" ? idActividadCreada(cuerpo) : null;
+        if (method === "POST" && creada === null) {
+          // Sin id no se puede editar lo creado: se cierra para no duplicar la cita.
+          toast.warning("Cita guardada; Google no respondió.");
+          router.refresh();
+          onClose();
+          return;
+        }
+        if (creada !== null) setIdCreado(creada);
         setAvisoParcial("La cita se guardó en la agenda, pero Google no respondió. La cita sigue disponible en el CRM; revisa la integración antes de reintentar la sincronización.");
         toast.warning("Cita guardada; Google no respondió.");
         router.refresh();
@@ -1356,11 +1391,11 @@ function ModalCita({
   }
 
   async function ejecutarEliminar() {
-    if (!cita) return;
+    if (destino.id === null) return;
     setEliminando(true);
     setErrorRed(null);
     try {
-      const respuesta = await fetch(`/api/actividades/${cita.id}`, {
+      const respuesta = await fetch(`/api/actividades/${destino.id}`, {
         method: "DELETE",
       });
       if (!respuesta.ok) {
@@ -1555,6 +1590,7 @@ function ModalCita({
             value={asignadoId}
             onChange={(e) => setAsignadoId(e.target.value)}
             className="min-h-[44px] text-[14px]"
+            disabled={bloqueadoCrear}
           >
             <option value="">Quien la crea (Automático)</option>
             {personas.map((persona) => (
@@ -1747,7 +1783,7 @@ function ModalCita({
             <button
               className="button primary min-h-[44px] px-5 text-[13px] font-bold"
               type="submit"
-              disabled={enviando || eliminando}
+              disabled={enviando || eliminando || bloqueadoCrear}
             >
               {enviando ? "Guardando…" : esEdicion ? "Guardar cambios" : "Agendar cita"}
             </button>
