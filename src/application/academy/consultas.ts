@@ -2,7 +2,11 @@
  * M10 / M13 · Academy — Consultas de lectura para componentes de servidor y rutas API.
  */
 
-import type { Actor } from "../../domain/rbac.ts";
+import { reaches, scopeFor, type Actor } from "../../domain/rbac.ts";
+import {
+  constanciaAcreditaFormacion,
+  estadoVigenciaConstancia,
+} from "../../domain/academy-vigencia.ts";
 import type {
   CategoriaLms,
   CursoLms,
@@ -152,4 +156,51 @@ export async function consultarContextoAdminAcademy(
     solicitudes,
     constancias,
   };
+}
+
+export type FilaEquipoAcademy = {
+  brokerId: number;
+  nombre: string;
+  email: string;
+  constanciasAcreditadas: number;
+  porVencer: number;
+  vencidas: number;
+  solicitudesPendientes: number;
+};
+
+/**
+ * Progreso formativo del equipo de un gerente (alcance `team`).
+ * Devuelve `null` si el actor no tiene alcance `team` sobre Academy: el admin usa Administración.
+ * Cada miembro pasa por `reaches`, así que nunca aparece alguien fuera del equipo.
+ */
+export async function consultarProgresoEquipoAcademy(
+  repo: RepositorioAcademy,
+  actor: Actor,
+  ahora: Date = new Date(),
+): Promise<FilaEquipoAcademy[] | null> {
+  if (scopeFor(actor, "academy", "view") !== "team") return null;
+
+  const miembros = [...new Set(actor.teamUserIds ?? [])].filter(
+    (brokerId) => brokerId !== actor.userId && reaches(actor, "team", brokerId),
+  );
+
+  return Promise.all(
+    miembros.map(async (brokerId) => {
+      const [perfil, solicitudes, constancias] = await Promise.all([
+        repo.obtenerPerfilActor(brokerId),
+        repo.listarSolicitudesRevision(brokerId),
+        repo.listarConstancias(brokerId),
+      ]);
+      const estados = constancias.map((c) => estadoVigenciaConstancia(c, ahora));
+      return {
+        brokerId,
+        nombre: perfil?.fullName ?? "Sin nombre",
+        email: perfil?.email ?? "",
+        constanciasAcreditadas: estados.filter(constanciaAcreditaFormacion).length,
+        porVencer: estados.filter((e) => e === "por_vencer").length,
+        vencidas: estados.filter((e) => e === "vencida").length,
+        solicitudesPendientes: solicitudes.filter((s) => s.status === "pendiente").length,
+      };
+    }),
+  );
 }
