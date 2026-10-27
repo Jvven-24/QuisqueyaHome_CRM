@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useState, type ReactNode, type ButtonHTMLAttributes } from "react";
 import { Modal } from "../../_ui/prototipo-ui";
+import { NavegacionFinanzas } from "../_finanzas/navegacion";
 import s from "./finanzas.module.css";
 export { s };
 export function Button({ children, primary, className = "", ...props }: ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -13,10 +13,6 @@ export function FinanceLink({ href, children }: {
     children: ReactNode;
 }) { return <Link className={s.link} href={href} onClick={e => { if (!navigator.onLine)
     e.preventDefault(); }}>{children}</Link>; }
-export function FinanceNav({ group = "reservas" }: {
-    group?: "reservas" | "comisiones";
-}) { const path = usePathname(); const links = group === "reservas" ? [["/reservas", "Reservas"], ["/reservas/holds", "Holds temporales"], ["/reservas/cartera", "Cartera y planes"], ["/reservas/conciliacion", "Conciliación"], ["/reservas/excepciones", "Excepciones"], ["/reservas/documentos", "Documentos fiscales"]] : [["/comisiones", "Libro de comisiones"], ["/comisiones/reglas", "Reglas y reparto"], ["/comisiones/liquidaciones", "Liquidaciones"], ["/metas", "Metas"]]; return <nav aria-label="Operaciones financieras" className={s.nav}>{links.map(([href, label]) => <Link key={href} href={href!} onClick={e => { if (!navigator.onLine)
-    e.preventDefault(); }} aria-current={path === href ? "page" : undefined} className={s.link + " " + (path === href ? s.active : "")}>{label}</Link>)}</nav>; }
 export function Connectivity() { const [offline, setOffline] = useState(false); useEffect(() => { const sync = () => setOffline(!navigator.onLine); const protect = (event: MouseEvent) => { const link = event.target instanceof Element ? event.target.closest("a[href]") : null; if (!navigator.onLine && link && !link.getAttribute("href")?.startsWith("#")) {
     event.preventDefault();
     event.stopPropagation();
@@ -25,7 +21,7 @@ export function Connectivity() { const [offline, setOffline] = useState(false); 
 export function FinanceShell({ children, group }: {
     children: ReactNode;
     group?: "reservas" | "comisiones";
-}) { return <div className={s.desk}><Connectivity /><FinanceNav group={group}/>{children}</div>; }
+}) { return <div className={s.desk}><Connectivity /><NavegacionFinanzas section={group === "comisiones" ? "comisiones" : "reservas"}/>{children}</div>; }
 export function PreviewNotice({ missing }: {
     missing: string;
 }) { return <div className={s.notice} role="note"><strong>Vista previa · datos de ejemplo — falta: {missing}</strong><div>Las simulaciones no registran movimientos ni emiten documentos.</div></div>; }
