@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { DUPLICATES, type DuplicateExample } from "../_ejemplo";
 import { Desk, Preview, Dialog, s } from "../_componentes/desk";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 const fields = { name: "Nombre", phone: "Teléfono", email: "Correo" } as const;
 export function DuplicadosVista() {
     const [query, setQuery] = useState("");
@@ -76,8 +77,8 @@ export function DuplicadosVista() {
                 keyof typeof fields,
                 string
             ][]).map(([key, label]) => <fieldset key={key}>
-            <legend>{label}: valor que se conservaría</legend>{DUPLICATES.map(d => <label key={d.id} className={s.toolbar}>
-                <input type="radio" name={key} value={d.id} checked={choices[key] === d.id} onChange={() => setChoices(c => ({ ...c, [key]: d.id }))}/>{d[key]} ({d.id})</label>)}</fieldset>)}<p>El consentimiento seguirá como «No acreditado». La fusión nunca autoriza un canal por sí sola.</p>
+            <legend>{label}: valor que se conservaría</legend><RadioGroup aria-label={`${label}: valor que se conservaría`} value={choices[key] ?? ""} onValueChange={id => setChoices(c => ({ ...c, [key]: id }))}>{DUPLICATES.map(d => <label key={d.id} className={`${s.toolbar} min-h-11 items-center`}>
+                <RadioGroupItem value={d.id}/>{d[key]} ({d.id})</label>)}</RadioGroup></fieldset>)}<p>El consentimiento seguirá como «No acreditado». La fusión nunca autoriza un canal por sí sola.</p>
         <label>Motivo (obligatorio)<textarea value={reason} onChange={e => setReason(e.target.value)} aria-required="true" maxLength={1000}/>
         </label>
         <label>Escribe FUSIONAR para revisar el plan<input value={confirmation} onChange={e => setConfirmation(e.target.value)} aria-required="true"/>

@@ -19,10 +19,11 @@ const url = (s: string) => "data:text/javascript;base64," + Buffer.from(s).toStr
 const hooksUrl = url('let slots=[],i=0; export function reset(){slots=[];i=0;} export function render(){i=0;} export function useState(v){const j=i++;if(!(j in slots))slots[j]=v;return [slots[j],v=>{slots[j]=typeof v==="function"?v(slots[j]):v;}];} export function useRef(v){const j=i++;if(!(j in slots))slots[j]={current:v};return slots[j];}');
 const dialogUrl = url('export const Dialog="dialog",DialogContent="content",DialogDescription="description",DialogFooter="footer",DialogHeader="header",DialogTitle="title";');
 const iconsUrl = url('export const AlertTriangle="icon";');
+const radioUrl = url('export const RadioGroup="radio-group",RadioGroupItem="radio-item";');
 const formatoUrl = url('export const centavosAUnidad=v=>v===null?null:v/100,unidadACentavos=v=>v===""?null:Math.round(Number(v)*100);');
 const source = readFileSync("src/app/(crm)/negocios/dialogos.tsx", "utf8");
 let js = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, jsx: ts.JsxEmit.ReactJSX } }).outputText;
-for (const [from, to] of [["react", hooksUrl], ["react/jsx-runtime", pathToFileURL(require.resolve("react/jsx-runtime")).href], ["lucide-react", iconsUrl], ["@/components/ui/dialog", dialogUrl], ["../_ui/formato", formatoUrl]]) js = js.replaceAll('from "' + from + '"', 'from ' + JSON.stringify(to));
+for (const [from, to] of [["react", hooksUrl], ["react/jsx-runtime", pathToFileURL(require.resolve("react/jsx-runtime")).href], ["lucide-react", iconsUrl], ["@/components/ui/dialog", dialogUrl], ["@/components/ui/radio-group", radioUrl], ["../_ui/formato", formatoUrl]]) js = js.replaceAll('from "' + from + '"', 'from ' + JSON.stringify(to));
 const modulo = await import(url(js));
 const hooks = await import(hooksUrl);
 

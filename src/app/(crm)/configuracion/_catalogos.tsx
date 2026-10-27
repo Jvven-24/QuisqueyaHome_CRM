@@ -1,4 +1,5 @@
 "use client";
+import { Switch } from "@/components/ui/switch";
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
@@ -217,7 +218,7 @@ function ListaCatalogo({
                 <input name="position" type="number" min="0" step="1" defaultValue={fila.position} aria-invalid={Boolean(errores.position)} aria-describedby={errores.position ? `${tipo}-${fila.id}-position-error` : undefined} style={{ minHeight: "44px", fontSize: "13px" }} />
               </label>
               <label className="checkbox-inline span-2" style={{ minHeight: "44px", display: "flex", alignItems: "center", gap: "8px", fontSize: "13px" }}>
-                <input name="isActive" type="checkbox" defaultChecked={fila.isActive} style={{ width: "20px", height: "20px" }} />
+                <Switch name="isActive" defaultChecked={fila.isActive} aria-label="Opción activa en formularios" />
                 <span>Opción activa en formularios</span>
               </label>
               <div className="form-actions span-2" style={{ display: "flex", justifyContent: "flex-end", flexWrap: "wrap", gap: "8px" }}>

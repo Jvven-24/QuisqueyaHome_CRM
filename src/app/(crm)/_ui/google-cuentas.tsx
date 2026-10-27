@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 /** Cuentas Google del usuario: conectar otra, calendarios, activar/desactivar, predeterminado para visitas y desconectar. */
 import { useCallback, useEffect, useState } from "react";
 
@@ -60,7 +61,7 @@ export function GoogleCuentasPanel({ titulo = "Cuentas de Google Calendar" }: { 
               {c.calendarios.map((k) => (
                 <li key={k.id} className="flex items-center justify-between gap-2 rounded-md border border-line px-3 py-2">
                   <label className="flex min-w-0 items-center gap-2 text-sm">
-                    <input type="checkbox" checked={k.selected} disabled={!!ocupado || !c.active} onChange={(e) => llamar(`k${k.id}`, `/api/integraciones/google/calendarios/${k.id}`, "PATCH", { selected: e.target.checked })} />
+                    <Checkbox checked={k.selected} disabled={!!ocupado || !c.active} onCheckedChange={(checked) => llamar(`k${k.id}`, `/api/integraciones/google/calendarios/${k.id}`, "PATCH", { selected: checked })} />
                     <span className="truncate">{k.summary}{k.isPrimary ? " (principal)" : ""}</span>
                   </label>
                   {k.defaultForVisits ? <span className="rounded-full bg-brand/10 px-2 py-0.5 text-xs font-semibold text-brand">Visitas</span>

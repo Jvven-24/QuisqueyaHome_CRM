@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -675,7 +676,7 @@ export function AcademyVista({
         )}
       </div>
 
-      {tabActiva === "cursos" && <section className="mb-4 rounded-xl border border-slate-200 bg-white p-4"><div className="flex flex-wrap gap-3"><label className="grid gap-1 text-sm">Buscar curso<input className="min-h-11 rounded border border-slate-300 p-2" type="search" value={busquedaCurso} onChange={event=>setBusquedaCurso(event.target.value)}/></label><label className="grid gap-1 text-sm">Categoría<select className="min-h-11 rounded border border-slate-300 p-2" value={categoriaCurso} onChange={event=>setCategoriaCurso(event.target.value)}><option value="">Todas las categorías</option>{Array.from(new Set(cursosAsignados.map(c=>c.categoria))).map(c=><option key={c}>{c}</option>)}</select></label><label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={soloMatriculados} onChange={event=>setSoloMatriculados(event.target.checked)}/>Sólo matriculados</label></div><p className="mt-2 text-sm text-slate-600">La evidencia procede del LMS; completar un curso no emite una constancia automáticamente. La decisión independiente permanece en el CRM.</p>{cursosAsignados.length>0&&cursosVisibles.length===0&&<p role="status">Sin cursos para estos filtros. Limpia la búsqueda o cambia categoría.</p>}</section>}
+      {tabActiva === "cursos" && <section className="mb-4 rounded-xl border border-slate-200 bg-white p-4"><div className="flex flex-wrap gap-3"><label className="grid gap-1 text-sm">Buscar curso<input className="min-h-11 rounded border border-slate-300 p-2" type="search" value={busquedaCurso} onChange={event=>setBusquedaCurso(event.target.value)}/></label><label className="grid gap-1 text-sm">Categoría<select className="min-h-11 rounded border border-slate-300 p-2" value={categoriaCurso} onChange={event=>setCategoriaCurso(event.target.value)}><option value="">Todas las categorías</option>{Array.from(new Set(cursosAsignados.map(c=>c.categoria))).map(c=><option key={c}>{c}</option>)}</select></label><label className="flex min-h-11 items-center gap-2 text-sm"><Checkbox checked={soloMatriculados} onCheckedChange={checked=>setSoloMatriculados(checked)} />Sólo matriculados</label></div><p className="mt-2 text-sm text-slate-600">La evidencia procede del LMS; completar un curso no emite una constancia automáticamente. La decisión independiente permanece en el CRM.</p>{cursosAsignados.length>0&&cursosVisibles.length===0&&<p role="status">Sin cursos para estos filtros. Limpia la búsqueda o cambia categoría.</p>}</section>}
       {tabActiva === "cursos" && (
         <section
           aria-labelledby="rutas-formacion"
@@ -1240,14 +1241,7 @@ export function AcademyVista({
                           }
                           className="w-full min-h-[44px] flex items-center gap-3 rounded-xl border border-slate-200 px-3.5 py-3 text-left text-sm hover:bg-slate-50 active:bg-slate-100 transition-colors disabled:opacity-50"
                         >
-                          <input
-                            type="checkbox"
-                            checked={paso.isCompleted}
-                            readOnly
-                            tabIndex={-1}
-                            aria-hidden="true"
-                            className="h-5 w-5 shrink-0 rounded border-slate-300 text-amber-600"
-                          />
+                          <span aria-hidden="true" className="inline-flex size-4 shrink-0 items-center justify-center rounded-[3px] border-2 border-navy-700 bg-surface">{paso.isCompleted && <span className="size-2.5 rounded-[1px] bg-navy-900" />}</span>
                           <span
                             className={
                               paso.isCompleted

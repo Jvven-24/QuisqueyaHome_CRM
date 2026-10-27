@@ -26,7 +26,7 @@ export function renderLeads(q = "", hayFilas = true): string {
     "@/hooks/use-focus-trap": {},
     "@/components/modulo": { PageHeader: ({ title, description, actions }: { title: string; description?: string; actions?: unknown }) => createElement("header", null, title, description, actions as never) },
   });
-  const table = cargar("src/components/ui/data-table.tsx", { "@/lib/utils": { cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") } });
+  const table = cargar("src/components/ui/data-table.tsx", { "@/lib/utils": { cn: (...parts: unknown[]) => parts.filter(Boolean).join(" ") }, "@/components/ui/checkbox": { Checkbox: () => null } });
   const { LeadsVista } = cargar("src/app/(crm)/leads/vista.tsx", {
     "next/navigation": { useRouter: () => ({}), usePathname: () => "/leads", useSearchParams: () => new URLSearchParams({ q, page: "4", lead: "5" }) },
     "@/components/modulo": { ModuleTabs: ({ items }: { items: Array<{ href: string; label: string }> }) => createElement("nav", null, ...items.map(item => createElement("a", { key: item.href, href: item.href }, item.label))) },

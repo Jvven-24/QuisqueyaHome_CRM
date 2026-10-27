@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { useMemo, useState } from "react";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
@@ -459,12 +460,7 @@ export function CotizadorConfoturModal({
             <div className="rounded-xl border border-emerald-500/40 bg-emerald-50/20 p-5 shadow-xs grid gap-3.5">
               <div className="flex items-center justify-between border-b border-emerald-500/20 pb-2.5">
                 <label className="font-heading text-[15px] font-bold text-navy-950 flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={aplicaConfotur}
-                    onChange={(e) => setAplicaConfotur(e.target.checked)}
-                    className="size-4 accent-emerald-600"
-                  />
+                  <Checkbox checked={aplicaConfotur} onCheckedChange={(checked) => setAplicaConfotur(checked)} />
                   <ShieldCheck className="size-4 text-emerald-700" />
                   <span>Escudo Fiscal Confotur (Ley 158-01)</span>
                 </label>

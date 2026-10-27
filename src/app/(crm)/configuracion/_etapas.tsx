@@ -1,4 +1,5 @@
 "use client";
+import { Switch } from "@/components/ui/switch";
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useRef, useState } from "react";
@@ -16,7 +17,7 @@ function CamposEtapa({ etapa, posicion }: { etapa?: EtapaFila; posicion: number 
     <label>Posición<input name="position" type="number" min="1" required defaultValue={etapa?.position ?? posicion} /></label>
     <label>Tipo<select name="kind" defaultValue={etapa?.kind ?? "open"}>{TIPOS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}</select></label>
     <label>Probabilidad (%)<input name="defaultProbability" type="number" min="0" max="100" defaultValue={etapa?.defaultProbability ?? ""} /></label>
-    <label className="checkbox-inline"><input name="isActive" type="checkbox" defaultChecked={etapa?.isActive ?? true} />Etapa activa</label>
+    <label className="checkbox-inline min-h-11 items-center"><Switch name="isActive" defaultChecked={etapa?.isActive ?? true} aria-label="Etapa activa" />Etapa activa</label>
   </>;
 }
 export function EtapasPanel({ etapas, puedeEditar }: { etapas: EtapaFila[]; puedeEditar: boolean }) {

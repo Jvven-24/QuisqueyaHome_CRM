@@ -1,4 +1,5 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -82,7 +83,7 @@ export function AsignacionVista({ leads, brokers, total, page, canAssign, q }: {
     <tr>
     <th>
     <label>
-    <input type="checkbox" aria-label="Seleccionar todos los leads abiertos de esta página" checked={eligible.length > 0 && selected.length === eligible.length} disabled={!canAssign || busy} onChange={e => setSelected(e.target.checked ? eligible.map(l => l.id) : [])}/>Seleccionar</label>
+    <Checkbox aria-label="Seleccionar todos los leads abiertos de esta página" checked={eligible.length > 0 && selected.length === eligible.length} disabled={!canAssign || busy} onCheckedChange={checked => setSelected(checked ? eligible.map(l => l.id) : [])} />Seleccionar</label>
     </th>
     <th>Lead</th>
     <th>Estado</th>
@@ -92,7 +93,7 @@ export function AsignacionVista({ leads, brokers, total, page, canAssign, q }: {
     </thead>
     <tbody>{leads.map(lead => <tr key={lead.id}>
         <td>
-        <label className={s.checkTarget}><input type="checkbox" aria-label={"Seleccionar " + lead.contactName} checked={selected.includes(lead.id)} disabled={!canAssign || busy || !eligible.some(l => l.id === lead.id)} onChange={e => setSelected(ids => e.target.checked ? [...ids, lead.id] : ids.filter(id => id !== lead.id))}/></label>
+        <label className={s.checkTarget}><Checkbox aria-label={"Seleccionar " + lead.contactName} checked={selected.includes(lead.id)} disabled={!canAssign || busy || !eligible.some(l => l.id === lead.id)} onCheckedChange={checked => setSelected(ids => checked ? [...ids, lead.id] : ids.filter(id => id !== lead.id))} /></label>
         </td>
         <td>
         <Link href={"/leads/" + lead.id}>{lead.contactName}</Link>
@@ -113,7 +114,7 @@ export function AsignacionVista({ leads, brokers, total, page, canAssign, q }: {
             <option value="">Elegir broker activo</option>{brokers.map(b => <option key={b.userId} value={b.userId}>{b.fullName}</option>)}</select>
             </label> : <fieldset>
             <legend>Participantes del reparto</legend>{brokers.map(b => <label key={b.userId} className={s.toolbar}>
-                <input type="checkbox" checked={pool.includes(b.userId)} onChange={e => setPool(ids => e.target.checked ? [...ids, b.userId] : ids.filter(id => id !== b.userId))}/>{b.fullName}</label>)}<p>Reparte en orden entre los participantes activos. El cursor no persiste entre lotes; la asignación automática continua requiere un motor de reglas.</p>
+                <Checkbox checked={pool.includes(b.userId)} onCheckedChange={checked => setPool(ids => checked ? [...ids, b.userId] : ids.filter(id => id !== b.userId))} />{b.fullName}</label>)}<p>Reparte en orden entre los participantes activos. El cursor no persiste entre lotes; la asignación automática continua requiere un motor de reglas.</p>
             </fieldset>}</div>
         <button className={s.primary} disabled={busy} onClick={prepare}>Revisar distribución</button>{error && !plan && <p role="alert" className={s.error}>{error}</p>}</section>}<section className={s.panel}>
     <h2>Reglas automáticas</h2>

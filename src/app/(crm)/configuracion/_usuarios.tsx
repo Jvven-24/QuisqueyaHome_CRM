@@ -1,4 +1,6 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 
 import { useRouter } from "next/navigation";
 import { EdicionFormularioInput, InvitacionFormularioInput, enmascararTelefonoUsuario } from "@/application/usuarios/formulario";
@@ -429,14 +431,14 @@ export function FormularioUsuario({
                 {errores.monthlyTargetDeals && <small id="usuario-target-error" role="alert">{errores.monthlyTargetDeals}</small>}
               </label>
               <label className="span-2 checkbox-inline" style={{ minHeight: "44px", display: "flex", alignItems: "center", gap: "8px", fontSize: "13px" }}>
-                <input name="handlesRentals" type="checkbox" defaultChecked={usuario?.handlesRentals ?? false} style={{ width: "20px", height: "20px" }} />
+                <Checkbox name="handlesRentals" defaultChecked={usuario?.handlesRentals ?? false} />
                 <span>Maneja alquileres inmobiliarios</span>
               </label>
             </>
           )}
           {editando && (
             <label className="span-2 checkbox-inline" style={{ minHeight: "44px", display: "flex", alignItems: "center", gap: "8px", fontSize: "13px" }}>
-              <input name="isActive" type="checkbox" defaultChecked={usuario!.isActive} style={{ width: "20px", height: "20px" }} />
+              <Switch name="isActive" defaultChecked={usuario!.isActive} aria-label="Usuario activo para acceso al sistema" />
               <span>Usuario activo para acceso al sistema</span>
             </label>
           )}
