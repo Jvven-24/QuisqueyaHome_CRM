@@ -4,7 +4,6 @@ import { test } from "node:test";
 
 const tareasPageSrc = readFileSync(new URL("./page.tsx", import.meta.url), "utf8");
 const tareasVistaSrc = readFileSync(new URL("./vista.tsx", import.meta.url), "utf8");
-const playbooksSrc = readFileSync(new URL("./_lib/playbooks.ts", import.meta.url), "utf8");
 const tareasTableroSrc = readFileSync(new URL("./_componentes/tablero.tsx", import.meta.url), "utf8");
 const agendaPageSrc = readFileSync(new URL("../agenda/page.tsx", import.meta.url), "utf8");
 const agendaVistaSrc = readFileSync(new URL("../agenda/vista.tsx", import.meta.url), "utf8");
@@ -45,21 +44,21 @@ test("REA-2: TareasVista expone los 8 Playbooks Inmobiliarios RD con modelo REA 
   ];
   for (const id of playbooksRequeridos) {
     assert.ok(
-      playbooksSrc.includes(`id: "${id}"`) || tareasVistaSrc.includes(`id: "${id}"`),
+      tareasVistaSrc.includes(`id: "${id}"`),
       `Falta el playbook inmobiliario RD: ${id}`,
     );
   }
-  assert.ok(
-    playbooksSrc.includes("parsearDescripcionChecklist") ||
-    tareasVistaSrc.includes("parsearDescripcionChecklist") ||
-    readFileSync(new URL("./_lib/utilidades.ts", import.meta.url), "utf8").includes("parsearDescripcionChecklist")
-  );
-  assert.match(playbooksSrc, /secuenciaMultiTarea/);
+  assert.match(tareasVistaSrc, /parsearDescripcionChecklist/);
+  assert.match(tareasVistaSrc, /serializarDescripcionChecklist/);
+  assert.match(tareasVistaSrc, /RELEVO OPERATIVO · America\/Santo_Domingo/);
+  assert.match(tareasVistaSrc, /secuenciaMultiTarea/);
+  assert.match(tareasVistaSrc, /reasignarLotePorBroker/);
 });
 
 test("REA-3: Tareas y Agenda incluyen matriz de asignación y disponibilidad Broker por Broker", () => {
-  const filtrosSrc = readFileSync(new URL("./_lib/use-tareas-filtros.ts", import.meta.url), "utf8");
-  assert.ok(true); // preservado en subcomponentes extraídos y _lib (stub de vista no rompe el test de fuentes)
+  assert.match(tareasVistaSrc, /modoVista === "brokers"/);
+  assert.match(tareasVistaSrc, /modoVista === "playbooks"/);
+  assert.match(tareasVistaSrc, /resumenPorBroker/);
   assert.match(tareasTableroSrc, /Sub-tareas To-Do/);
   assert.match(agendaVistaSrc, /PLANTILLAS_VISITAS_REA/);
   assert.match(agendaVistaSrc, /modoAgenda === "brokers"/);
