@@ -7,7 +7,7 @@
  */
 
 import type { PermissionResource } from "@/domain/catalogs";
-import { REGISTRO_MODULOS } from "../../modules/registry.ts";
+import { REGISTRO_MODULOS, generarEntradasN1Base } from "../../modules/registry.ts";
 
 export type WorkspaceId =
   | "comercial"
@@ -97,7 +97,7 @@ export const MODULOS: readonly Modulo[] = REGISTRO_MODULOS.map((r) => {
     atajo: meta.atajo,
     ...(meta.badge ? { badge: meta.badge } : {}),
   };
-});
+})
 
 export type EntradaN1 = {
   id: string;
@@ -110,118 +110,27 @@ export type EntradaN1 = {
   rutasHijas?: readonly string[];
 };
 
-/**
- * Entradas de navegación N1 consolidadas por rol (D04/D05).
- * 9 entradas directas en SidebarContent; 2 entradas ancladas en SidebarFooter.
- */
-export const ENTRADAS_N1: readonly EntradaN1[] = [
-  {
-    id: "N1_INICIO",
-    rutasHijas: ["/inicio", "/aprobaciones"],
-    ruta: "/inicio",
-    nombre: "Inicio",
-    recurso: "dashboard",
-    icono: "LayoutDashboard",
-    descripcion: "Resumen ejecutivo y tablero operativo del día",
-    atajo: "G I",
-  },
-  {
-    id: "N1_LEADS",
-    ruta: "/leads",
-    nombre: "Leads",
-    recurso: "leads",
-    icono: "UserPlus",
-    descripcion: "Captación, calificación y gestión de prospectos",
-    atajo: "G L",
-  },
-  {
-    id: "N1_NEGOCIOS",
-    rutasHijas: ["/negocios", "/documentos"],
-    ruta: "/negocios",
-    nombre: "Negocios",
-    recurso: "deals",
-    icono: "Kanban",
-    descripcion: "Embudo comercial de oportunidades y cierres de venta",
-    atajo: "G P",
-  },
-  {
-    id: "N1_CONTACTOS",
-    ruta: "/contactos",
-    nombre: "Contactos",
-    recurso: "contacts",
-    icono: "Users",
-    descripcion: "Directorio unificado de clientes e inversionistas",
-    atajo: "G C",
-  },
-  {
-    id: "N1_INVENTARIO",
-    ruta: "/propiedades",
-    nombre: "Inventario y Obra",
-    recurso: "projects",
-    icono: "Building2",
-    descripcion: "Catálogo de proyectos, tipologías y avance constructivo",
-    atajo: "G R",
-    rutasHijas: ["/propiedades", "/avances", "/posventa"],
-  },
-  {
-    id: "N1_AGENDA",
-    ruta: "/agenda",
-    nombre: "Agenda y Tareas",
-    recurso: "activities",
-    icono: "Calendar",
-    descripcion: "Citas con clientes, visitas y actividades operativas",
-    atajo: "G A",
-    rutasHijas: ["/agenda", "/tareas"],
-  },
-  {
-    id: "N1_COMUNICACIONES",
-    ruta: "/comunicaciones",
-    nombre: "Comunicaciones",
-    recurso: "communications",
-    icono: "MessageSquare",
-    descripcion: "Mensajería, WhatsApp y plantillas de contacto",
-    atajo: "G W",
-  },
-  {
-    id: "N1_BROKERS",
-    rutasHijas: ["/brokers", "/comunidad"],
-    ruta: "/brokers",
-    nombre: "Red de Brokers",
-    recurso: "brokers",
-    icono: "Briefcase",
-    descripcion: "Red de intermediarios inmobiliarios y agencias aliadas",
-    atajo: "G B",
-  },
-  {
-    id: "N1_FINANZAS",
-    ruta: "/comisiones",
-    nombre: "Finanzas & Reportes",
-    recurso: "commissions",
-    icono: "BadgeDollarSign",
-    descripcion: "Comisiones, metas comerciales e inteligencia analítica",
-    atajo: "G $",
-    rutasHijas: ["/comisiones", "/metas", "/reportes", "/reservas"],
-  },
+// Generado desde registry (sin rutas hardcodeadas)
+const _n1 = generarEntradasN1Base();
+export const ENTRADAS_N1: readonly EntradaN1[] = _n1.map((e: any) => ({
+  id: e.id,
+  ruta: e.ruta,
+  nombre: e.nombre,
+  recurso: e.recurso,
+  icono: e.icono,
+  descripcion: e.descripcion,
+  atajo: e.atajo,
+  ...(e.rutasHijas ? { rutasHijas: e.rutasHijas } : {}),
+})) as readonly EntradaN1[];
+
+// Pie derivado desde registry
+const findPie = (id: string) => REGISTRO_MODULOS.find(m => m.id === id);
+const academy = findPie("M10");
+const config = findPie("M13");
+export const ENTRADAS_PIE: readonly EntradaN1[] = [
+  { id: "PIE_ACADEMY", ruta: academy?.rutaBase || "/academy", nombre: academy?.nombre || "Academy", recurso: academy?.recurso || "academy", icono: academy?.icono || "GraduationCap", descripcion: "Centro de capacitación y recursos para brokers y asesores", atajo: "G Y" },
+  { id: "PIE_CONFIGURACION", rutasHijas: ["/configuracion", "/portal", "/automatizaciones"], ruta: config?.rutaBase || "/configuracion", nombre: config?.nombre || "Configuración", recurso: config?.recurso || "settings", icono: config?.icono || "Settings", descripcion: "Ajustes del sistema, parámetros de seguridad y preferencias", atajo: "G S" },
 ];
 
-export const ENTRADAS_PIE: readonly EntradaN1[] = [
-  {
-    id: "PIE_ACADEMY",
-    ruta: "/academy",
-    nombre: "Academy",
-    recurso: "academy",
-    icono: "GraduationCap",
-    descripcion: "Centro de capacitación y recursos para brokers y asesores",
-    atajo: "G Y",
-  },
-  {
-    id: "PIE_CONFIGURACION",
-    rutasHijas: ["/configuracion", "/portal", "/automatizaciones"],
-    ruta: "/configuracion",
-    nombre: "Configuración",
-    recurso: "settings",
-    icono: "Settings",
-    descripcion: "Ajustes del sistema, parámetros de seguridad y preferencias",
-    atajo: "G S",
-  },
-];
+
+
