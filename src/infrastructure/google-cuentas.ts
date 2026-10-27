@@ -15,6 +15,9 @@ export const GOOGLE_SCOPES = [
   "https://www.googleapis.com/auth/calendar.events",
 ];
 export const STATE_COOKIE = "qh_google_state";
+/** Cookie del flujo "Iniciar sesión con Google" (state con userId 0, mismo callback). */
+export const LOGIN_COOKIE = "qh_google_login";
+export const LOGIN_SCOPES = ["openid", "email"];
 
 function clave(env: Env): Buffer {
   const raw = v(env, "GOOGLE_TOKEN_ENC_KEY");
@@ -42,6 +45,10 @@ export function crearState(userId: number, env: Env = process.env): { state: str
   const firma = createHmac("sha256", clave(env)).update(`${nonce}.${userId}`).digest("hex");
   return { state: `${nonce}.${userId}.${firma}`, nonce };
 }
+/** Lee el userId del state sin validarlo (para elegir flujo); la validación real sigue siendo `validarState`. */
+export function usuarioDelState(state: string | null): string | null {
+  return state?.split(".")[1] ?? null;
+}
 export function validarState(state: string | null, cookieNonce: string | null, userId: number, env: Env = process.env): boolean {
   if (!state || !cookieNonce) return false;
   const [nonce, uid, firma] = state.split(".");
@@ -55,12 +62,14 @@ export function configuradoGoogle(env: Env = process.env): string[] {
   return ["GOOGLE_OAUTH_CLIENT_ID", "GOOGLE_OAUTH_CLIENT_SECRET", "GOOGLE_OAUTH_REDIRECT_URI", "GOOGLE_TOKEN_ENC_KEY"].filter((k) => !v(env, k));
 }
 
-export function urlConsentimiento(state: string, env: Env = process.env): string {
+export function urlConsentimiento(state: string, env: Env = process.env, modo: "conectar" | "login" = "conectar"): string {
   const q = new URLSearchParams({
     client_id: v(env, "GOOGLE_OAUTH_CLIENT_ID"), redirect_uri: v(env, "GOOGLE_OAUTH_REDIRECT_URI"),
-    response_type: "code", scope: GOOGLE_SCOPES.join(" "), access_type: "offline",
-    // select_account permite conectar otra cuenta distinta; consent asegura refresh_token.
-    prompt: "select_account consent", include_granted_scopes: "true", state,
+    response_type: "code", scope: (modo === "login" ? LOGIN_SCOPES : GOOGLE_SCOPES).join(" "),
+    ...(modo === "login"
+      ? { prompt: "select_account", state }
+      // select_account permite conectar otra cuenta distinta; consent asegura refresh_token.
+      : { access_type: "offline", prompt: "select_account consent", include_granted_scopes: "true", state }),
   });
   return `https://accounts.google.com/o/oauth2/v2/auth?${q}`;
 }
@@ -82,10 +91,10 @@ export async function revocar(tokenPlano: string, f: Fetch = fetch): Promise<boo
   const r = await f("https://oauth2.googleapis.com/revoke", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ token: tokenPlano }) });
   return r.ok || r.status === 400; // 400 = ya revocado/expirado
 }
-export async function perfil(accessToken: string, f: Fetch = fetch): Promise<{ sub: string; email: string }> {
+export async function perfil(accessToken: string, f: Fetch = fetch): Promise<{ sub: string; email: string; email_verified?: boolean }> {
   const r = await f("https://openidconnect.googleapis.com/v1/userinfo", { headers: { Authorization: `Bearer ${accessToken}` } });
   if (!r.ok) throw new Error(`Google userinfo HTTP ${r.status}`);
-  return (await r.json()) as { sub: string; email: string };
+  return (await r.json()) as { sub: string; email: string; email_verified?: boolean };
 }
 export type CalendarioGoogle = { id: string; summary: string; primary: boolean };
 export async function listarCalendarios(accessToken: string, f: Fetch = fetch): Promise<CalendarioGoogle[]> {
