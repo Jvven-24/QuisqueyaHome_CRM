@@ -13,6 +13,7 @@ import {
 import { crearEnvioUnico } from "./envio";
 import { PERMISSION_ACTIONS, PERMISSION_RESOURCES, PERMISSION_SCOPES } from "@/domain/catalogs";
 import type { RolOpcion } from "./_usuarios";
+import { ResponsivePermissionMatrix } from "@/components/modulo/responsive-permission-matrix";
 
 export type PermisoCelda = { resource: string; action: string; scope: string };
 
@@ -342,94 +343,54 @@ export function PermisosPanel({
 
       {/* Matriz Visual RBAC */}
       {!rolSeleccionado && <p role="status">No hay roles disponibles para configurar.</p>}
-      <p id="permission-scroll-help">Desplaza la tabla horizontalmente para consultar todas las acciones.</p>
-      <div className="table-wrap" role="region" aria-label="Matriz de permisos" aria-describedby="permission-scroll-help" tabIndex={0} style={{ border: "1px solid var(--line)", borderRadius: "10px", overflowX: "auto", maxWidth: "100%" }}>
-        <table className="permission-table" style={{ width: "100%", fontSize: "13px" }}>
-          <thead>
-            <tr>
-              <th style={{ minWidth: "220px", fontSize: "12px" }}>Recurso del Sistema</th>
-              {PERMISSION_ACTIONS.map((accion) => (
-                <th key={accion} style={{ textAlign: "center", fontSize: "12px", minWidth: "110px" }}>
-                  {ETIQUETAS_ACCION[accion]}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {recursosFiltrados.map((recurso) => (
-              <tr key={recurso} style={{ borderBottom: "1px solid var(--line)" }}>
-                <td style={{ padding: "12px 16px", fontWeight: 700, color: "var(--navy-950)" }}>
-                  <div>{ETIQUETAS_RECURSO[recurso] ?? recurso}</div>
-                  <span style={{ fontSize: "11px", color: "var(--muted)", fontWeight: 500, fontFamily: "monospace" }}>
-                    {recurso}
-                  </span>
-                </td>
-                {PERMISSION_ACTIONS.map((accion) => {
-                  const valorActual = matriz[clave(recurso, accion)] ?? "none";
-                  const infoEstilo = ETIQUETAS_ALCANCE[valorActual] ?? ESTILO_DEFAULT;
+      <ResponsivePermissionMatrix
+        resources={recursosFiltrados}
+        actions={PERMISSION_ACTIONS}
+        resourceLabels={ETIQUETAS_RECURSO}
+        actionLabels={ETIQUETAS_ACCION}
+        renderCell={(recurso, accion) => {
+          const valorActual = matriz[clave(recurso, accion)] ?? "none";
+          const infoEstilo = ETIQUETAS_ALCANCE[valorActual] ?? ESTILO_DEFAULT;
 
-                  return (
-                    <td key={accion} style={{ padding: "8px", textAlign: "center" }}>
-                      {soloLectura ? (
-                        /* Celda restringida / bloqueada con candado */
-                        <div
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "6px",
-                            minHeight: "44px",
-                            minWidth: "90px",
-                            padding: "6px 12px",
-                            borderRadius: "8px",
-                            background: esProtegido ? "#FEF9C3" : infoEstilo.bg,
-                            border: `1px solid ${esProtegido ? "#FDE047" : infoEstilo.border}`,
-                            color: esProtegido ? "#854D0E" : infoEstilo.color,
-                            fontSize: "12px",
-                            fontWeight: 700,
-                          }}
-                          title={esProtegido ? "Celda protegida: acceso total irrestricto de administrador" : "Lectura bloqueada"}
-                        >
-                          <Lock size={13} color={esProtegido ? "var(--gold-700)" : "#64748B"} />
-                          <span>{esProtegido ? "Todos" : infoEstilo.label}</span>
-                        </div>
-                      ) : (
-                        /* Selector accesible con feedback visual */
-                        <div style={{ position: "relative", display: "inline-block", width: "100%", maxWidth: "120px" }}>
-                          <select
-                            value={valorActual}
-                            disabled={guardando}
-                            onChange={(e) => cambiarCelda(recurso, accion, e.target.value)}
-                            aria-label={`${ETIQUETAS_RECURSO[recurso] ?? recurso} - ${ETIQUETAS_ACCION[accion]}`}
-                            style={{
-                              minHeight: "44px",
-                              padding: "6px 10px",
-                              fontSize: "13px",
-                              fontWeight: 700,
-                              borderRadius: "8px",
-                              background: infoEstilo.bg,
-                              color: infoEstilo.color,
-                              border: `1px solid ${infoEstilo.border}`,
-                              cursor: "pointer",
-                              textAlign: "center",
-                            }}
-                          >
-                            {PERMISSION_SCOPES.map((alcance) => (
-                              <option key={alcance} value={alcance}>
-                                {ETIQUETAS_ALCANCE[alcance]?.label ?? alcance}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          if (soloLectura) {
+            return (
+              <div
+                className="flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border px-3 text-[13px] font-semibold"
+                style={{
+                  background: esProtegido ? "#FEF9C3" : infoEstilo.bg,
+                  borderColor: esProtegido ? "#FDE047" : infoEstilo.border,
+                  color: esProtegido ? "#854D0E" : infoEstilo.color,
+                }}
+                title={esProtegido ? "Celda protegida: acceso total irrestricto de administrador" : "Lectura bloqueada"}
+              >
+                <Lock size={14} aria-hidden="true" />
+                <span>{esProtegido ? "Todos" : infoEstilo.label}</span>
+              </div>
+            );
+          }
+
+          return (
+            <select
+              value={valorActual}
+              disabled={guardando}
+              onChange={(e) => cambiarCelda(recurso, accion, e.target.value)}
+              aria-label={`${ETIQUETAS_RECURSO[recurso] ?? recurso} - ${ETIQUETAS_ACCION[accion]}`}
+              className="min-h-11 w-full min-w-0 rounded-lg border px-2 text-[13px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              style={{
+                background: infoEstilo.bg,
+                color: infoEstilo.color,
+                borderColor: infoEstilo.border,
+              }}
+            >
+              {PERMISSION_SCOPES.map((alcance) => (
+                <option key={alcance} value={alcance}>
+                  {ETIQUETAS_ALCANCE[alcance]?.label ?? alcance}
+                </option>
+              ))}
+            </select>
+          );
+        }}
+      />
     </>
   );
 }

@@ -10,6 +10,7 @@ import { PERMISSION_ACTIONS, PERMISSION_RESOURCES, PERMISSION_SCOPES } from "@/d
 import type { Permission } from "@/domain/rbac";
 import type { PermissionAdminData, PermissionTeam } from "@/application/permisos/administracion";
 import { ETIQUETAS_ACCION, ETIQUETAS_RECURSO, PermisosPanel } from "./_permisos";
+import { ResponsivePermissionMatrix } from "@/components/modulo/responsive-permission-matrix";
 
 const scopes = { none: "Ninguno", own: "Propio", team: "Equipo", all: "Todo" };
 const cellKey = (p: { resource: string; action: string }) => `${p.resource}:${p.action}`;
@@ -94,24 +95,26 @@ function PersonalMatrix({ user, data, puedeEditar }: { user: PermissionAdminData
     {error && <p role="alert" className="rounded-lg bg-danger-bg p-4 text-sm text-danger">{error}</p>}
     {message && <p role="status" className="rounded-lg bg-success-bg p-4 text-sm text-success">{message}</p>}
     <label className="block text-sm font-semibold">Buscar recurso<input type="search" value={search} onChange={e => setSearch(e.target.value)} className="mt-2 block min-h-12 w-full rounded-md border border-line bg-surface px-3 sm:max-w-md" placeholder="Leads, contactos, proyectos…" /></label>
-    <p id="personal-matrix-help" className="text-sm text-muted-foreground">Selecciona «Heredar» para quitar una excepción. «Ninguno» revoca el acceso de esa celda. Desplaza la matriz para ver todas las acciones.</p>
-    <div role="region" aria-label="Matriz personal de permisos" aria-describedby="personal-matrix-help" tabIndex={0} className="max-w-full overflow-x-auto rounded-lg border border-line">
-      <table className="w-full text-sm"><thead className="bg-surface-alt"><tr><th className="p-4 text-left">Recurso</th>{PERMISSION_ACTIONS.map(a => <th key={a} className="p-3 text-left">{ETIQUETAS_ACCION[a]}</th>)}</tr></thead><tbody>
-        {PERMISSION_RESOURCES.filter(r => `${r} ${ETIQUETAS_RECURSO[r] ?? ""}`.toLowerCase().includes(search.toLowerCase())).map(resource => <tr key={resource} className="border-t border-line">
-          <th scope="row" className="min-w-52 p-4 text-left font-semibold">{ETIQUETAS_RECURSO[resource] ?? resource}</th>
-          {PERMISSION_ACTIONS.map(action => {
-            const key = cellKey({ resource, action });
-            const personal = !protectedUser && cells.has(key);
-            const value = draft[key] ?? (personal ? cells.get(key)! : "inherit");
-            const inheritedScope = inherited.get(key) ?? "none";
-            return <td key={action} className="min-w-44 p-3 align-top"><select disabled={!editable || busy} aria-label={`${ETIQUETAS_RECURSO[resource] ?? resource}: ${ETIQUETAS_ACCION[action]}`} value={value} onChange={e => setDraft(v => ({ ...v, [key]: e.target.value }))} className={`min-h-12 w-full rounded-md border bg-surface px-2 text-[13px] ${personal ? "border-gold-700" : "border-line"}`}><option value="inherit">Heredar · {scopes[inheritedScope]}</option>{PERMISSION_SCOPES.map(s => <option key={s} value={s}>{scopes[s]}</option>)}</select>
-              {personal && <Badge variant="outline" className="mt-2 text-[13px] border-gold-700 text-gold-800">Personalizado</Badge>}
-              {draft[key] !== undefined && <span className="mt-2 block text-[13px] text-muted-foreground">Sin guardar</span>}
-            </td>;
-          })}
-        </tr>)}
-      </tbody></table>
-    </div>
+    <p className="text-sm text-muted-foreground">Selecciona «Heredar» para quitar una excepción. «Ninguno» revoca el acceso de esa celda.</p>
+    <ResponsivePermissionMatrix
+      resources={PERMISSION_RESOURCES.filter(r => `${r} ${ETIQUETAS_RECURSO[r] ?? ""}`.toLowerCase().includes(search.toLowerCase()))}
+      actions={PERMISSION_ACTIONS}
+      resourceLabels={ETIQUETAS_RECURSO}
+      actionLabels={ETIQUETAS_ACCION}
+      renderCell={(resource, action) => {
+        const key = cellKey({ resource, action });
+        const personal = !protectedUser && cells.has(key);
+        const value = draft[key] ?? (personal ? cells.get(key)! : "inherit");
+        const inheritedScope = inherited.get(key) ?? "none";
+        return <>
+          <select disabled={!editable || busy} aria-label={`${ETIQUETAS_RECURSO[resource] ?? resource}: ${ETIQUETAS_ACCION[action]}`} value={value} onChange={e => setDraft(v => ({ ...v, [key]: e.target.value }))} className={`min-h-11 w-full min-w-0 rounded-md border bg-surface px-2 text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${personal ? "border-gold-700" : "border-line"}`}>
+            <option value="inherit">Heredar · {scopes[inheritedScope]}</option>{PERMISSION_SCOPES.map(s => <option key={s} value={s}>{scopes[s]}</option>)}
+          </select>
+          {personal && <Badge variant="outline" className="mt-2 text-[13px] border-gold-700 text-gold-800">Personalizado</Badge>}
+          {draft[key] !== undefined && <span className="mt-2 block text-[13px] text-muted-foreground">Sin guardar</span>}
+        </>;
+      }}
+    />
   </div>;
 }
 
