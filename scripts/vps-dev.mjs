@@ -81,7 +81,7 @@ if (orden === "subir") {
   }
 } else if (orden === "tunel") {
   console.log("Túnel abierto: CRM http://localhost:3201 · Moodle http://localhost:9330 (Ctrl+C para cerrar)");
-  spawnSync("ssh", ["-N", "-o", "ExitOnForwardFailure=yes", "-L", "3201:127.0.0.1:3201",
+  spawnSync("ssh", ["-N", "-o", "ExitOnForwardFailure=yes", "-o", "ServerAliveInterval=30", "-o", "ServerAliveCountMax=6", "-L", "3201:127.0.0.1:3201",
     "-L", "54331:127.0.0.1:54331", "-L", "9330:127.0.0.1:9330", HOST], { stdio: "inherit" });
 } else if (orden === "estado") {
   ssh(`cd ${REMOTO} && sh remoto.sh estado`);

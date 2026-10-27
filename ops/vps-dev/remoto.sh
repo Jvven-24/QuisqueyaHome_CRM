@@ -43,7 +43,7 @@ preparar() {
 construir() {
   # Compilación con CPU y RAM acotadas para no afectar a los servicios de producción de la VPS.
   . ./app.env 2>/dev/null || true
-  docker run --rm --cpus=1 --memory=2g --env-file app.env -e NEXT_TELEMETRY_DISABLED=1 \
+  docker run --rm --cpus=2 --memory=3g --env-file app.env -e NEXT_TELEMETRY_DISABLED=1 -e NODE_OPTIONS=--max-old-space-size=2560 \
     -v /opt/qh-dev/app:/app -w /app node:22-alpine sh -c "npm ci --no-audit --no-fund && npx next build"
   echo "construido"
 }
