@@ -6,6 +6,7 @@ import { resumenCalidad } from "@/application/reportes/automatizaciones";
 import { generarCsv } from "@/domain/csv";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useOnline } from "../_ui/analytics-state";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const CAMPO = "min-h-12 rounded-lg border border-line bg-surface px-3 text-sm";
 const COLUMNAS = ["leads", "deals", "won", "revenueCents", "spendCents"] as const;
@@ -22,7 +23,7 @@ export function OperacionesReportes({ metricas, canExport }: { metricas: Reporte
     const csv = generarCsv(["Canal", ...columnas.map((c) => ETIQUETAS[c])], filas.map((f) => [f.source, ...columnas.map((c) => { const clave = c === "leads" ? "count" : c; const v = f[clave]; return v === null ? "No medido" : c.endsWith("Cents") ? v / 100 : v; })]));
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })); const a = document.createElement("a"); a.href = url; a.download = "reportes-canales-usd.csv"; a.click(); URL.revokeObjectURL(url); setAviso("CSV exportado con las filas y columnas visibles.");
   }
-  return <details className="my-4 rounded-xl border border-line bg-surface p-4 text-sm"><summary className="min-h-12 cursor-pointer py-3 font-bold">Reportes avanzados, calidad y programación</summary>
+  return <Collapsible className="my-4 rounded-xl border border-line bg-surface p-4 text-sm"><CollapsibleTrigger className="w-full py-3 text-left font-bold">Reportes avanzados, calidad y programación</CollapsibleTrigger><CollapsibleContent>
     <div className="grid min-w-0 gap-4">
       {aviso && <p role="status">{aviso}</p>}
       {!online && <p role="status">Sin conexión. Puedes consultar los datos cargados; las acciones están en pausa.</p>}
@@ -37,5 +38,5 @@ export function OperacionesReportes({ metricas, canExport }: { metricas: Reporte
       <section><h2 className="font-bold">Informes programados y constructor</h2><p>Vista previa · falta: informes persistentes, scheduler, destinatarios autorizados y entrega auditable. Cohortes por mes y tiempos por cada etapa requieren agregados adicionales; no se inventan porcentajes de absorción.</p><div className="flex flex-wrap gap-2"><button type="button" className={CAMPO} disabled={!online || !canExport} onClick={() => setModal("programar")}>Programar informe</button><button type="button" className={CAMPO} disabled={!online || !canExport} onClick={() => setModal("constructor")}>Diseñar informe</button><a className={CAMPO + " inline-flex items-center"} href="/automatizaciones">Abrir automatizaciones y copiloto</a></div></section>
     </div>
     <Dialog open={modal !== null} onOpenChange={(open) => { if (!open) setModal(null); }}><DialogContent><DialogHeader><DialogTitle>{modal === "programar" ? "Programación de informe" : modal === "constructor" ? "Constructor de informe" : "Revisión de conciliación"}</DialogTitle><DialogDescription>Vista previa sin persistencia ni envío. Usa datos de ejemplo para definir el contrato pendiente.</DialogDescription></DialogHeader><form className="grid gap-3" onSubmit={(e) => { e.preventDefault(); setAviso("Solicitud preparada sólo en esta vista. No se guardó, programó ni envió: falta el backend de informes y conciliación."); setModal(null); }}><label>Nombre <input className={CAMPO + " w-full"} required maxLength={100} /></label><label>Frecuencia <select className={CAMPO + " w-full"}><option>Una vez</option><option>Semanal</option><option>Mensual</option></select></label><label>Formato <select className={CAMPO + " w-full"}><option>CSV</option><option>PDF</option></select></label><label>Moneda del futuro contrato <select className={CAMPO + " w-full"}><option>USD</option><option>DOP (no ejecutable actualmente)</option></select></label><label>Destinatario de ejemplo <input type="email" className={CAMPO + " w-full"} required placeholder="ejemplo@dominio.test" /></label><button className={CAMPO} disabled={!online || !canExport}>Revisar disponibilidad del servicio</button><button className={CAMPO} type="button" onClick={() => setModal(null)}>Cancelar</button></form></DialogContent></Dialog>
-  </details>;
+  </CollapsibleContent></Collapsible>;
 }

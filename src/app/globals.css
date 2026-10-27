@@ -432,6 +432,8 @@ small { color: var(--muted); }
 .form-actions { display: flex; gap: 9px; grid-column: span 2; justify-content: end; padding-top: 6px; }
 .toast { animation: toast-in 180ms var(--ease); background: var(--navy-950); border: 1px solid rgba(199,153,14,.55); border-radius: 6px; bottom: 22px; box-shadow: 0 4px 12px rgba(16,23,45,.2); color: white; font-weight: 700; left: 50%; max-width: min(460px, calc(100vw - 32px)); padding: 12px 16px; position: fixed; transform: translateX(-50%); z-index: 60; }
 @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes accordion-down { from { height: 0; } to { height: var(--radix-accordion-content-height, var(--radix-collapsible-content-height)); } }
+@keyframes accordion-up { from { height: var(--radix-accordion-content-height, var(--radix-collapsible-content-height)); } to { height: 0; } }
 
 @media (max-width: 1250px) {
   .dashboard-grid { grid-template-columns: 1fr 1fr; }
