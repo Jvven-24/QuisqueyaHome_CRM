@@ -11,6 +11,9 @@ import {
   estadoVigenciaConstancia,
   fechaVencimientoConstancia,
   requiereRecertificacion,
+  bloqueaNuevaSolicitud,
+  constanciaMasReciente,
+  etiquetaEstadoConstancia,
 } from "./academy-vigencia.ts";
 
 const emitida = new Date("2026-01-15T12:00:00.000Z");
@@ -52,4 +55,29 @@ test("solo vigente y por_vencer acreditan formación; solo por_vencer y vencida 
   assert.equal(requiereRecertificacion("por_vencer"), true);
   assert.equal(requiereRecertificacion("vencida"), true);
   assert.equal(requiereRecertificacion("revocada"), false);
+});
+
+test("por_vencer acredita formación y NO bloquea pedir recertificación (coherente con repos/academy.ts)", () => {
+  assert.equal(constanciaAcreditaFormacion("por_vencer"), true);
+  assert.equal(requiereRecertificacion("por_vencer"), true);
+  assert.equal(bloqueaNuevaSolicitud("por_vencer"), false);
+  assert.equal(bloqueaNuevaSolicitud("vigente"), true);
+  assert.equal(bloqueaNuevaSolicitud("vencida"), false);
+  assert.equal(bloqueaNuevaSolicitud("revocada"), false);
+});
+
+test("una constancia vencida (status 'vigente' en BD) no se muestra vigente", () => {
+  const ahora = new Date("2027-03-01T00:00:00.000Z");
+  const estado = estadoVigenciaConstancia({ status: "vigente", issuedAt: emitida }, ahora);
+  assert.equal(estado, "vencida");
+  assert.equal(etiquetaEstadoConstancia(estado), "VENCIDA");
+  assert.equal(constanciaAcreditaFormacion(estado), false);
+});
+
+test("constanciaMasReciente elige la última emitida (tras recertificar, la vieja no cuenta)", () => {
+  const vieja = { id: 1, issuedAt: "2025-01-01T00:00:00.000Z" };
+  const nueva = { id: 2, issuedAt: new Date("2026-06-01T00:00:00.000Z") };
+  assert.equal(constanciaMasReciente([vieja, nueva])?.id, 2);
+  assert.equal(constanciaMasReciente([nueva, vieja])?.id, 2);
+  assert.equal(constanciaMasReciente([]), undefined);
 });

@@ -20,6 +20,11 @@ import {
   XCircle,
 } from "lucide-react";
 import type { UsuarioCrmAcademy } from "@/application/academy/puertos";
+import {
+  constanciaAcreditaFormacion,
+  estadoVigenciaConstancia,
+  etiquetaEstadoConstancia,
+} from "@/domain/academy-vigencia";
 import type {
   CategoriaLms,
   CursoLms,
@@ -1223,12 +1228,14 @@ export function AcademyAdministracionVista({
                       </span>
                       <span
                         className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                          cert.status === "vigente"
+                          estadoVigenciaConstancia({ status: cert.status, issuedAt: new Date(cert.issuedAt) }, new Date()) === "vigente"
                             ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                            : "bg-red-50 text-red-800 border border-red-200"
+                            : estadoVigenciaConstancia({ status: cert.status, issuedAt: new Date(cert.issuedAt) }, new Date()) === "por_vencer"
+                              ? "bg-amber-50 text-amber-900 border border-amber-200"
+                              : "bg-red-50 text-red-800 border border-red-200"
                         }`}
                       >
-                        {cert.status.toUpperCase()}
+                        {etiquetaEstadoConstancia(estadoVigenciaConstancia({ status: cert.status, issuedAt: new Date(cert.issuedAt) }, new Date()))}
                       </span>
                     </div>
                     <p className="text-xs text-slate-700">
@@ -1240,7 +1247,7 @@ export function AcademyAdministracionVista({
                       Hash SHA-256: {cert.cryptographicHash}
                     </p>
 
-                    {cert.status === "vigente" && cert.brokerId !== usuarioId && (
+                    {constanciaAcreditaFormacion(estadoVigenciaConstancia({ status: cert.status, issuedAt: new Date(cert.issuedAt) }, new Date())) && cert.brokerId !== usuarioId && (
                       <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row gap-2">
                         <input
                           type="text"
