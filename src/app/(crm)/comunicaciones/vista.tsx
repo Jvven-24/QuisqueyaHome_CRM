@@ -4,11 +4,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
-  AlertCircle,
   Bot,
   Check,
   CheckCheck,
-  CheckCircle2,
   Copy,
   ExternalLink,
   Mail,
@@ -16,7 +14,6 @@ import {
   MessageSquare,
   Plus,
   RefreshCw,
-  RotateCcw,
   Search,
   Send,
   ShieldCheck,
@@ -37,6 +34,7 @@ import { normalizarTelefono } from "@/domain/telefono";
 import { extraerVariablesDePlantilla } from "@/domain/comunicaciones";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { horaSantoDomingo } from "@/domain/zona-horaria";
+import { mostrarToast } from "@/components/ui/toast";
 
 export type PlantillaVista = {
   id: number;
@@ -155,8 +153,6 @@ export function ComunicacionesVista({
   const [despachando, setDespachando] = useState(false);
   const guardandoRef = useRef(false);
   const despachandoRef = useRef(false);
-  const [errorMensaje, setErrorMensaje] = useState<string | null>(null);
-  const [notificacionExito, setNotificacionExito] = useState<string | null>(null);
   const [copiado, setCopiado] = useState(false);
   const [revisionHumana, setRevisionHumana] = useState(false);
 
@@ -182,13 +178,6 @@ export function ComunicacionesVista({
     };
   }, []);
 
-  // Limpiar toast de éxito automáticamente
-  useEffect(() => {
-    if (!notificacionExito) return;
-    const timer = setTimeout(() => setNotificacionExito(null), 4000);
-    return () => clearTimeout(timer);
-  }, [notificacionExito]);
-
   // Sincronizar selección de plantilla con el formulario
   function seleccionarPlantilla(p: PlantillaVista) {
     setPlantillaSeleccionada(p);
@@ -197,7 +186,6 @@ export function ComunicacionesVista({
     setCanalActivo(p.channel);
     setCuerpoTemplate(p.body);
     setErroresFormulario({});
-    setErrorMensaje(null);
   }
 
   // Insertar variable en el cuerpo del mensaje
@@ -237,15 +225,15 @@ export function ComunicacionesVista({
 
   // Copiar al portapapeles
   async function handleCopiarMensaje() {
-    if (requiereRevisionFiscal(cuerpoTemplate + " " + categoriaTemplate)) {setErrorMensaje("Contenido fiscal pendiente de revisión acreditada.");return;}
-    if (!mensajeRenderizado.trim()) {setErrorMensaje("Redacta el mensaje antes de copiarlo.");return;}
+    if (requiereRevisionFiscal(cuerpoTemplate + " " + categoriaTemplate)) {mostrarToast("error", "Contenido fiscal pendiente de revisión acreditada.");return;}
+    if (!mensajeRenderizado.trim()) {mostrarToast("error", "Redacta el mensaje antes de copiarlo.");return;}
     try {await navigator.clipboard.writeText(mensajeRenderizado);setCopiado(true);setTimeout(()=>setCopiado(false),2000);}
-    catch {setErrorMensaje("No se pudo copiar. Selecciona el texto de la vista previa y cópialo manualmente.");}
+    catch {mostrarToast("error", "No se pudo copiar. Selecciona el texto de la vista previa y cópialo manualmente.");}
   }
 
   // Refrescar estado de canales
   async function refrescarCanales() {
-    if (!navigator.onLine) {setErrorMensaje("Sin conexión. Conservamos la última configuración conocida.");return;}
+    if (!navigator.onLine) {mostrarToast("error", "Sin conexión. Conservamos la última configuración conocida.");return;}
     setCargandoCanales(true);
     try {
       const res = await fetch("/api/comunicaciones/canales");
@@ -253,10 +241,10 @@ export function ComunicacionesVista({
       if (!res.ok || !Array.isArray(data.canales)) throw new Error("No se pudo consultar la configuración.");
       if (res.ok && data.canales) {
         setCanales(data.canales);
-        setNotificacionExito("Configuración de canales actualizada; disponibilidad y costos sin medición.");
+        mostrarToast("success", "Configuración de canales actualizada; disponibilidad y costos sin medición.");
       }
     } catch {
-      setErrorMensaje("No se pudo actualizar el estado de los canales.");
+      mostrarToast("error", "No se pudo actualizar el estado de los canales.");
     } finally {
       setCargandoCanales(false);
     }
@@ -265,8 +253,8 @@ export function ComunicacionesVista({
   // Guardar o Actualizar plantilla en el servidor
   async function handleGuardarPlantilla() {
     if (guardandoRef.current) return;
-    if (!(plantillaSeleccionada.id > 0 ? puedeEditar : puedeCrear)) {setErrorMensaje("No tienes permiso para guardar esta plantilla.");return;}
-    if (!navigator.onLine) {setErrorMensaje("Sin conexión. El texto se conserva para reintentar.");return;}
+    if (!(plantillaSeleccionada.id > 0 ? puedeEditar : puedeCrear)) {mostrarToast("error", "No tienes permiso para guardar esta plantilla.");return;}
+    if (!navigator.onLine) {mostrarToast("error", "Sin conexión. El texto se conserva para reintentar.");return;}
 
     // Validación limpia sin alerts
     const nuevosErrores: Record<string, string> = {};
@@ -286,7 +274,6 @@ export function ComunicacionesVista({
     setErroresFormulario({});
     guardandoRef.current = true;
     setGuardando(true);
-    setErrorMensaje(null);
 
     try {
       if (plantillaSeleccionada.id > 0) {
@@ -317,7 +304,7 @@ export function ComunicacionesVista({
           ),
         );
         setPlantillaSeleccionada(data.plantilla);
-        setNotificacionExito("Plantilla actualizada correctamente en el CRM.");
+        mostrarToast("success", "Plantilla actualizada correctamente en el CRM.");
       } else {
         // Crear nueva
         const res = await fetch("/api/comunicaciones/plantillas", {
@@ -339,11 +326,11 @@ export function ComunicacionesVista({
         const data = await res.json();
         setPlantillas((prev) => [...prev, data.plantilla]);
         setPlantillaSeleccionada(data.plantilla);
-        setNotificacionExito("Nueva plantilla oficial guardada con éxito.");
+        mostrarToast("success", "Nueva plantilla oficial guardada con éxito.");
       }
     } catch (err: unknown) {
       const offline = typeof navigator !== "undefined" && !navigator.onLine;
-      setErrorMensaje(
+      mostrarToast("error",
         offline
           ? "Sin conexión a internet. La plantilla no pudo guardarse pero tu texto sigue intacto."
           : err instanceof Error
@@ -359,27 +346,26 @@ export function ComunicacionesVista({
   // Despachar mensaje multicanal directamente
   async function handleDespacharMensaje() {
     if (despachandoRef.current) return;
-    if (!puedeDespachar) {setErrorMensaje("El despacho exige permiso de comunicaciones con alcance total.");return;}
-    if (!navigator.onLine) {setErrorMensaje("Sin conexión. No se solicita un despacho.");return;}
-    if (requiereRevisionFiscal(cuerpoTemplate + " " + categoriaTemplate)) {setErrorMensaje("Contenido fiscal pendiente de revisión acreditada. El envío está bloqueado.");return;}
-    if (!revisionHumana) {setErrorMensaje("Revisa destinatario, consentimiento y condiciones del canal antes de confirmar.");return;}
-    if (!mensajeRenderizado.trim() || extraerVariablesDePlantilla(mensajeRenderizado).length) {setErrorMensaje("Completa el texto y todas las variables antes de enviar.");return;}
+    if (!puedeDespachar) {mostrarToast("error", "El despacho exige permiso de comunicaciones con alcance total.");return;}
+    if (!navigator.onLine) {mostrarToast("error", "Sin conexión. No se solicita un despacho.");return;}
+    if (requiereRevisionFiscal(cuerpoTemplate + " " + categoriaTemplate)) {mostrarToast("error", "Contenido fiscal pendiente de revisión acreditada. El envío está bloqueado.");return;}
+    if (!revisionHumana) {mostrarToast("error", "Revisa destinatario, consentimiento y condiciones del canal antes de confirmar.");return;}
+    if (!mensajeRenderizado.trim() || extraerVariablesDePlantilla(mensajeRenderizado).length) {mostrarToast("error", "Completa el texto y todas las variables antes de enviar.");return;}
 
     let dest = "";
     if (canalActivo === "telegram") dest = `@${telegramUsername.replace(/^@/, "")}`;
     else if (canalActivo === "email") dest = destinatarioEmail.trim();
     else dest = destinatarioWhatsApp.trim();
 
-    if ((canalActivo === "whatsapp" || canalActivo === "sms") && !normalizarTelefono(dest).phone) {setErrorMensaje("Indica un teléfono válido con código de país.");return;}
-    if (canalActivo === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dest)) {setErrorMensaje("Indica un correo válido antes de enviar.");return;}
-    if (canalActivo === "webhook") {try {if (new URL(dest).protocol !== "https:") throw new Error();} catch {setErrorMensaje("Indica una dirección HTTPS válida para el webhook.");return;}}
+    if ((canalActivo === "whatsapp" || canalActivo === "sms") && !normalizarTelefono(dest).phone) {mostrarToast("error", "Indica un teléfono válido con código de país.");return;}
+    if (canalActivo === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dest)) {mostrarToast("error", "Indica un correo válido antes de enviar.");return;}
+    if (canalActivo === "webhook") {try {if (new URL(dest).protocol !== "https:") throw new Error();} catch {mostrarToast("error", "Indica una dirección HTTPS válida para el webhook.");return;}}
     if (!dest) {
-      setErrorMensaje("Indica un destinatario válido antes de despachar.");
+      mostrarToast("error", "Indica un destinatario válido antes de despachar.");
       return;
     }
 
     despachandoRef.current = true;
-    setErrorMensaje(null);
     setDespachando(true);
 
     try {
@@ -402,13 +388,13 @@ export function ComunicacionesVista({
         );
       }
 
-      setNotificacionExito(data.auditado
+      mostrarToast("success", data.auditado
         ? "El proveedor confirmó el despacho y se registró auditoría. La entrega y lectura requieren confirmación del canal."
         : "El proveedor confirmó el despacho, pero falta auditoría. No reenvíes: comprueba el estado con administración.");
       setRevisionHumana(false);
     } catch (err: unknown) {
       const offline = typeof navigator !== "undefined" && !navigator.onLine;
-      setErrorMensaje(
+      mostrarToast("error",
         offline
           ? "No se pudo confirmar el despacho. Comprueba su estado antes de reintentar; no se reenvía automáticamente."
           : err instanceof Error
@@ -458,38 +444,6 @@ export function ComunicacionesVista({
         <div className="flex items-center gap-2.5 p-3.5 mb-4 text-[13px] font-semibold text-amber-950 bg-amber-50 border border-amber-300 rounded-xl shadow-xs">
           <WifiOff className="w-5 h-5 text-amber-600 shrink-0" />
           <span>Modo sin conexión. Puedes redactar y probar plantillas localmente en el simulador.</span>
-        </div>
-      )}
-
-      {/* Banner de Estado: Error con botón de descarte */}
-      {errorMensaje && (
-        <div
-          role="alert"
-          className="flex items-center justify-between gap-3 p-3.5 mb-4 text-[13px] font-semibold text-red-950 bg-red-50 border border-red-300 rounded-xl shadow-xs"
-        >
-          <div className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
-            <span>{errorMensaje}</span>
-          </div>
-          <button
-            onClick={() => setErrorMensaje(null)}
-            className="flex items-center gap-1 px-3 py-1.5 text-[12px] font-bold text-red-700 bg-white border border-red-300 rounded-lg hover:bg-red-50 min-h-[44px]"
-            type="button"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Cerrar</span>
-          </button>
-        </div>
-      )}
-
-      {/* Banner de Estado: Éxito */}
-      {notificacionExito && (
-        <div
-          role="status"
-          className="flex items-center gap-2.5 p-3.5 mb-4 text-[13px] font-semibold text-emerald-950 bg-emerald-50 border border-emerald-300 rounded-xl shadow-xs"
-        >
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-          <span>{notificacionExito}</span>
         </div>
       )}
 

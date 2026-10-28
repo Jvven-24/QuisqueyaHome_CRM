@@ -15,7 +15,7 @@
     "vps": "node scripts/vps-dev.mjs",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test \"src/**/*.test.ts\"",
+    "test": "node src/components/ui/run-src-tests.mjs",
     "test:db": "node scripts/test-db/run.mjs",
     "test:db:guards": "node --test scripts/test-db/guards.mjs",
     "test:db:mutation:alias": "node scripts/test-db/run.mjs --mutation=alias",

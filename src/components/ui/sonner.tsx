@@ -9,12 +9,17 @@ import {
 } from "lucide-react"
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 
-/** Sin `next-themes`: el CRM no tiene modo oscuro (ver tokens.css, decisión 2). */
+/** El CRM no declara un tema oscuro (ver tokens.css, decisión 2). */
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme="light"
+      position="top-right"
+      closeButton
+      duration={4500}
+      visibleToasts={3}
       className="toaster group"
+      toastOptions={{ className: "qh-toast" }}
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,
