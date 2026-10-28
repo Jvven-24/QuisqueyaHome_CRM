@@ -1,6 +1,6 @@
 # Estado: Login / Google / Correo
 
-_Regenerado 2026-10-27 13:39 (hora RD, UTC-4). Sin secretos: las credenciales viven solo en el VPS._
+_Regenerado 2026-10-28 08:58 (hora RD, UTC-4). Sin secretos: las credenciales viven solo en el VPS._
 
 ## Resumen (al 27-oct-2026 09:45 RD)
 - **Login ID + clave**: activo; recuperación de contraseña por correo propio con canje en servidor y límites por IP/correo; nueva clave exige usuario activo y ≥8 caracteres.
@@ -21,7 +21,6 @@ _Regenerado 2026-10-27 13:39 (hora RD, UTC-4). Sin secretos: las credenciales vi
 | Commit | Fecha (RD) | Mensaje |
 |---|---|---|
 | `15e26ab` | 2026-10-27 11:04 | fix(agenda): tras POST con fallo de Google cerrar el modal (sin pasar a PATCH que exige activities.edit) |
-| `b26e55d` | 2026-10-27 10:36 | fix(agenda): listas de consulta (ver) y asignación (crear) por permiso, ver como, sin usuarios rechazados con 403, anti-duplicado si falla Google (claude Opus) |
 
 ## Guía OAuth
 - [plan/GUIA-GOOGLE-OAUTH.md](../plan/GUIA-GOOGLE-OAUTH.md)
