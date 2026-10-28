@@ -1,13 +1,13 @@
 # Quisqueya Home CRM — Índice maestro
 
-_Generado automáticamente por `/workspace/crm-plan/central/sync.sh` · 2026-10-28 09:28 (hora RD, UTC-4). No editar a mano._
+_Generado automáticamente por `/workspace/crm-plan/central/sync.sh` · 2026-10-28 13:47 (hora RD, UTC-4). No editar a mano._
 
 Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.com/drive/folders/16LGfWveOKvE2xxCazeecmoLbl1aDIYkD) · Índice como Google Doc: [INDICE (Doc)](https://docs.google.com/document/d/12ACs5SVspYWg2Ir80kEfJ1v5SfAHKYXga-ikSFD3V5Y/edit)
 
 ## 1. Tablero
 - Tablero vivo (local): `/workspace/crm-plan/tablero/index.html` · copia estática: [Drive 01-Tablero](https://drive.google.com/drive/folders/1G0sThKml0_UrSvqqAE7YBn5AIw9XfHqT)
-- Avance global: **266/1075 ítems (24%)** · estado.json actualizado 2026-10-28T09:28-04:00
-- Pendientes abiertos: **809**
+- Avance global: **272/1083 ítems (25%)** · estado.json actualizado 2026-10-28T09:38-04:00
+- Pendientes abiertos: **811**
 
 - Specs en Drive: [Doc 22 módulos](https://docs.google.com/document/d/13Gc3K6w-uXysv-S164mRpByiVNieLRmCTatiCVpwOuQ/edit) · Revisiones: [Doc revisiones](https://docs.google.com/document/d/1uR7SaZE-7kflhMIy9z92qlg3I04RlROEKyKwq-MhJCA/edit) · Estado: [Doc login/Google/correo](https://docs.google.com/document/d/1vSmWraP9B-RDM-KSB4HU-eSh1rs3X44TFMtQl1Y2iqE/edit)
 
@@ -22,9 +22,9 @@ Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.
 | Propiedades | [propiedades.md](modulos/propiedades.md) | 13/57 (22%) |
 | Agenda | [agenda.md](modulos/agenda.md) | 26/49 (53%) |
 | Tareas | [tareas.md](modulos/tareas.md) | 8/35 (22%) |
-| Comunicaciones | [comunicaciones.md](modulos/comunicaciones.md) | 9/55 (16%) |
+| Comunicaciones | [comunicaciones.md](modulos/comunicaciones.md) | 13/55 (23%) |
 | Brokers | [brokers.md](modulos/brokers.md) | 16/40 (40%) |
-| Comisiones | [comisiones.md](modulos/comisiones.md) | 20/40 (50%) |
+| Comisiones | [comisiones.md](modulos/comisiones.md) | 22/40 (55%) |
 | Metas | [metas.md](modulos/metas.md) | 8/44 (18%) |
 | Reportes | [reportes.md](modulos/reportes.md) | 8/45 (17%) |
 | Reservas | [reservas.md](modulos/reservas.md) | 9/48 (18%) |
@@ -33,9 +33,9 @@ Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.
 | Aprobaciones | [aprobaciones.md](modulos/aprobaciones.md) | 9/40 (22%) |
 | Automatizaciones | [automatizaciones.md](modulos/automatizaciones.md) | 11/43 (25%) |
 | Academy | [academy.md](modulos/academy.md) | 21/45 (46%) |
-| Documentos | [documentos.md](modulos/documentos.md) | 4/42 (9%) |
+| Documentos | [documentos.md](modulos/documentos.md) | 4/44 (9%) |
 | Posventa | [posventa.md](modulos/posventa.md) | 4/41 (9%) |
-| Configuración | [configuracion.md](modulos/configuracion.md) | 15/53 (28%) |
+| Configuración | [configuracion.md](modulos/configuracion.md) | 15/59 (25%) |
 | Login y seguridad | [acceso.md](modulos/acceso.md) | 18/45 (40%) |
 | Plataforma | [plataforma.md](modulos/plataforma.md) | 6/17 (35%) |
 | Avances | [avances.md](modulos/avances.md) | 13/21 (61%) |
@@ -54,11 +54,11 @@ Carpeta central en Drive: [Quisqueya Home CRM — Central](https://drive.google.
 
 | Rama | Estado | Hallazgos | Actualizado |
 |---|---|---|---|
-| [claude-haiku](revisiones/claude-haiku.md) | corriendo: items-comisiones-3 | 67 | 2026-10-28T09:28-04:00 |
+| [claude-haiku](revisiones/claude-haiku.md) | terminada: items-comunicaciones-1 rc=0 | 67 | 2026-10-28T09:38-04:00 |
 | [codex-luna](revisiones/codex-luna.md) | terminada: items-comisiones-0 rc=97 | 44 | 2026-10-28T08:57-04:00 |
 | [opencode-free](revisiones/opencode-free.md) | terminada: doc-luna-ui rc=0 | 80 | 2026-10-27T13:42-04:00 |
 | [grok-build](revisiones/grok-build.md) | terminada: items-avances-0 rc=97 | 62 | 2026-10-27T10:45-04:00 |
-| [antigravity](revisiones/antigravity.md) | terminada: rev-lote-12849fc1-0 rc=0 | 88 | 2026-10-28T09:14-04:00 |
+| [antigravity](revisiones/antigravity.md) | terminada: rev-lote-c7c16f86-0 rc=0 | 88 | 2026-10-28T09:36-04:00 |
 
 Últimas reasignaciones:
 ```
