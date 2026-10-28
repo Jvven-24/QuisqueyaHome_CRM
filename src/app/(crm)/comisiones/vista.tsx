@@ -15,14 +15,13 @@ import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Insignia } from "@/components/ui/bits";
 import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import { type Tone } from "@/components/ui/tone";
+import { mostrarToast } from "@/components/ui/toast";
 import {
-  AlertTriangle,
   BadgeDollarSign,
   Ban,
   Building2,
   Calculator,
   Check,
-  CheckCircle2,
   Download,
   Pencil,
   Search,
@@ -120,7 +119,6 @@ export function ComisionesVista({
   const [comisionParaAnular, setComisionParaAnular] = useState<FilaComisionVista | null>(null);
   const [comisionParaSplit, setComisionParaSplit] = useState<FilaComisionVista | null>(null);
   const [comisionInspector, setComisionInspector] = useState<FilaComisionVista | null>(null);
-  const [mensajeNotificacion, setMensajeNotificacion] = useState<{ tipo: "ok" | "error"; texto: string } | null>(null);
   const [filtroTexto, setFiltroTexto] = useState("");
 
   const esAdmin = scope === "all";
@@ -139,10 +137,9 @@ export function ComisionesVista({
   const aplicar = useCallback(
     async (id: number, body: Record<string, unknown>, mensajeExito: string, errorPorDefecto: string) => {
       if (envioEnCurso.current) return;
-      if (!navigator.onLine) { setMensajeNotificacion({tipo:"error",texto:"Sin conexión. Reconecta antes de actualizar la comisión."}); return; }
+      if (!navigator.onLine) { mostrarToast("error", "Sin conexión. Reconecta antes de actualizar la comisión."); return; }
       envioEnCurso.current = true;
       setOcupada(id);
-      setMensajeNotificacion(null);
       try {
         const respuesta = await fetch(`/api/comisiones/${id}`, {
           method: "PATCH",
@@ -151,13 +148,13 @@ export function ComisionesVista({
         });
         if (!respuesta.ok) {
           const cuerpo = await respuesta.json().catch(() => ({}));
-          setMensajeNotificacion({ tipo: "error", texto: cuerpo.error ?? errorPorDefecto });
+          mostrarToast("error", cuerpo.error ?? errorPorDefecto);
           return;
         }
-        setMensajeNotificacion({ tipo: "ok", texto: mensajeExito });
+        mostrarToast("success", mensajeExito);
         router.refresh();
       } catch {
-        setMensajeNotificacion({ tipo: "error", texto: errorPorDefecto });
+        mostrarToast("error", errorPorDefecto);
       } finally {
         envioEnCurso.current = false;
         setOcupada(null);
@@ -405,34 +402,6 @@ export function ComisionesVista({
           ) : undefined
         }
       />
-
-      {/* Banner de Feedback accesible en lugar de alerts */}
-      {mensajeNotificacion && (
-        <div
-          role="status"
-          className={`flex items-center justify-between p-4 mb-6 rounded-2xl border text-[13.5px] font-semibold transition-all ${
-            mensajeNotificacion.tipo === "ok"
-              ? "bg-emerald-50 text-emerald-900 border-emerald-300"
-              : "bg-rose-50 text-rose-900 border-rose-300"
-          }`}
-        >
-          <div className="flex items-center gap-2.5">
-            {mensajeNotificacion.tipo === "ok" ? (
-              <CheckCircle2 className="size-5 text-emerald-600 shrink-0" />
-            ) : (
-              <AlertTriangle className="size-5 text-rose-600 shrink-0" />
-            )}
-            <span>{mensajeNotificacion.texto}</span>
-          </div>
-          <button
-            type="button"
-            className="p-1.5 rounded-lg hover:bg-black/5 text-ink-muted hover:text-navy-950 transition-colors cursor-pointer"
-            onClick={() => setMensajeNotificacion(null)}
-          >
-            ✕
-          </button>
-        </div>
-      )}
 
       <div className="mb-4 grid gap-3 md:grid-cols-2">{kpis.porMoneda?.map(m=><Panel key={m.currency} title={`Comisiones · ${m.currency}`}><div className="grid grid-cols-2 gap-2"><ResumenCompacto etiqueta="Total registrado" valor={formatearMonto(m.totalCents,m.currency)} /><ResumenCompacto etiqueta="Pendientes y aprobadas" valor={formatearMonto(m.pendientesCents,m.currency)} /><ResumenCompacto etiqueta="Marcadas como pagadas" valor={formatearMonto(m.pagadasCents,m.currency)} /></div></Panel>)}</div>
 
