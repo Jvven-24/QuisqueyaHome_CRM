@@ -1,6 +1,6 @@
 # Revisión — rama `claude-haiku`
 
-- Estado: corriendo: items-brokers-2 (actualizado 2026-10-28T08:55-04:00)
+- Estado: corriendo: items-comisiones-3 (actualizado 2026-10-28T09:28-04:00)
 - Hallazgos: 67 — por tipo: funcionalidad 40, móvil 12, diseño 10, mejora 5
 - Log completo (no versionado): `/workspace/crm-plan/tablero/revisiones/claude-haiku.log`
 

@@ -1,6 +1,6 @@
 # Revisión — rama `antigravity`
 
-- Estado: corriendo: rev-lote-f7903c0d-0 (actualizado 2026-10-28T08:57-04:00)
+- Estado: terminada: rev-lote-12849fc1-0 rc=0 (actualizado 2026-10-28T09:14-04:00)
 - Hallazgos: 88 — por tipo: diseño 22, móvil 22, funcionalidad 22, mejora 22
 - Log completo (no versionado): `/workspace/crm-plan/tablero/revisiones/antigravity.log`
 
