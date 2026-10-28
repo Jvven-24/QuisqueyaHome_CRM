@@ -5,14 +5,13 @@ import { useRef, useState, useMemo } from "react";
 import {
   RotateCcw,
   Search,
-  CheckCircle2,
-  AlertTriangle,
   ShieldCheck,
   Filter,
 } from "lucide-react";
 import { crearEnvioUnico } from "./envio";
 import { Badge, Modal } from "../_ui/prototipo-ui";
 import { Vacio } from "../_ui/estados";
+import { mostrarToast } from "@/components/ui/toast";
 
 export type PapeleraFila = {
   entityType: "contact" | "lead" | "deal" | "project" | "unit" | "user";
@@ -43,8 +42,6 @@ export function PapeleraPanel({
   const [registroPorRestaurar, setRegistroPorRestaurar] = useState<PapeleraFila | null>(null);
   const [filtroTipo, setFiltroTipo] = useState<string>("todos");
   const [busqueda, setBusqueda] = useState("");
-  const [mensajeExito, setMensajeExito] = useState<string | null>(null);
-  const [mensajeError, setMensajeError] = useState<string | null>(null);
 
   const filasFiltradas = useMemo(() => {
     return filas.filter((fila) => {
@@ -63,10 +60,8 @@ export function PapeleraPanel({
 
   async function ejecutarRestauracion(fila: PapeleraFila) {
     await enviarUnico(async () => {
-      if (!navigator.onLine) { setMensajeError("Sin conexión. Conéctate para restaurar el registro."); return; }
+      if (!navigator.onLine) { mostrarToast("error", "Sin conexión. Conéctate para restaurar el registro."); return; }
       setRegistroPorRestaurar(null);
-      setMensajeError(null);
-      setMensajeExito(null);
 
       const clave = `${fila.entityType}:${fila.id}`;
       setRestaurando(clave);
@@ -81,15 +76,15 @@ export function PapeleraPanel({
 
         if (!respuesta.ok) {
           const cuerpo = await respuesta.json().catch(() => ({}));
-          setMensajeError(cuerpo.error ?? "No se pudo restaurar el registro.");
+          mostrarToast("error", cuerpo.error ?? "No se pudo restaurar el registro.");
           return;
         }
 
-        setMensajeExito(`Registro «${fila.nombre ?? `#${fila.id}`}» restaurado con éxito. Se encuentra activo nuevamente.`);
+        mostrarToast("success", `Registro «${fila.nombre ?? `#${fila.id}`}» restaurado con éxito. Se encuentra activo nuevamente.`);
         router.refresh();
       } catch {
         setRestaurando(null);
-        setMensajeError("Error de comunicación con el servidor al restaurar.");
+        mostrarToast("error", "Error de comunicación con el servidor al restaurar.");
       }
     });
   }
@@ -133,49 +128,6 @@ export function PapeleraPanel({
           </span>
         </div>
       </div>
-
-      {/* Alertas de Éxito y Error no nativas */}
-      {mensajeExito && (
-        <div
-          role="status"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            padding: "12px 16px",
-            borderRadius: "8px",
-            background: "#ECFDF5",
-            border: "1px solid #6EE7B7",
-            color: "#065F46",
-            marginBottom: "16px",
-            fontSize: "13px",
-          }}
-        >
-          <CheckCircle2 size={18} />
-          <span>{mensajeExito}</span>
-        </div>
-      )}
-
-      {mensajeError && (
-        <div
-          role="alert"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            padding: "12px 16px",
-            borderRadius: "8px",
-            background: "#FEF2F2",
-            border: "1px solid #FCA5A5",
-            color: "#991B1B",
-            marginBottom: "16px",
-            fontSize: "13px",
-          }}
-        >
-          <AlertTriangle size={18} />
-          <span>{mensajeError}</span>
-        </div>
-      )}
 
       {/* Filtros por Tipo y Buscador */}
       <div

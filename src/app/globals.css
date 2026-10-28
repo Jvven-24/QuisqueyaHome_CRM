@@ -430,10 +430,17 @@ small { color: var(--muted); }
 .modal { animation: modal-in 190ms var(--ease); background: white; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 4px 16px rgba(16,23,45,.14); max-width: 650px; padding: 20px; width: 100%; }
 @keyframes modal-in { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .form-actions { display: flex; gap: 9px; grid-column: span 2; justify-content: end; padding-top: 6px; }
-.toast { animation: toast-in 180ms var(--ease); background: var(--navy-950); border: 1px solid rgba(199,153,14,.55); border-radius: 6px; bottom: 22px; box-shadow: 0 4px 12px rgba(16,23,45,.2); color: white; font-weight: 700; left: 50%; max-width: min(460px, calc(100vw - 32px)); padding: 12px 16px; position: fixed; transform: translateX(-50%); z-index: 60; }
-@keyframes toast-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 @keyframes accordion-down { from { height: 0; } to { height: var(--radix-accordion-content-height, var(--radix-collapsible-content-height)); } }
 @keyframes accordion-up { from { height: var(--radix-accordion-content-height, var(--radix-collapsible-content-height)); } to { height: 0; } }
+
+/* Feedback transitorio único del CRM (Sonner), con estados semánticos Viltrum. */
+.toaster [data-sonner-toast] { max-width: min(460px, calc(100vw - 32px)); border-radius: var(--radius, 8px); font-size: 14px; box-shadow: 0 8px 24px rgb(16 23 45 / 14%); }
+.toaster [data-sonner-toast][data-type="success"] { background: var(--success-bg); border-color: var(--success); color: var(--success); }
+.toaster [data-sonner-toast][data-type="error"] { background: var(--danger-bg); border-color: var(--danger); color: var(--danger); }
+.toaster [data-sonner-toast][data-type="info"] { background: var(--info-bg); border-color: var(--info); color: var(--info); }
+.toaster [data-sonner-toast][data-type="warning"] { background: var(--warning-bg); border-color: var(--warning); color: var(--warning); }
+.toaster [data-sonner-toast] :is(button, a):focus-visible { outline: 2px solid var(--gold-700); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .toaster [data-sonner-toast] { animation-duration: 1ms !important; transition-duration: 1ms !important; } }
 
 @media (max-width: 1250px) {
   .dashboard-grid { grid-template-columns: 1fr 1fr; }
