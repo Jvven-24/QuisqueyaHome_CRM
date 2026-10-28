@@ -1,6 +1,6 @@
 # Estado: Login / Google / Correo
 
-_Regenerado 2026-10-28 13:47 (hora RD, UTC-4). Sin secretos: las credenciales viven solo en el VPS._
+_Regenerado 2026-10-28 14:17 (hora RD, UTC-4). Sin secretos: las credenciales viven solo en el VPS._
 
 ## Resumen (al 27-oct-2026 09:45 RD)
 - **Login ID + clave**: activo; recuperación de contraseña por correo propio con canje en servidor y límites por IP/correo; nueva clave exige usuario activo y ≥8 caracteres.
