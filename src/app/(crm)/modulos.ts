@@ -112,7 +112,7 @@ export type EntradaN1 = {
 
 // Generado desde registry (sin rutas hardcodeadas)
 const _n1 = generarEntradasN1Base();
-export const ENTRADAS_N1: readonly EntradaN1[] = _n1.map((e: any) => ({
+export const ENTRADAS_N1: readonly EntradaN1[] = _n1.map((e) => ({
   id: e.id,
   ruta: e.ruta,
   nombre: e.nombre,

@@ -79,8 +79,8 @@ test("registry: generarEntradasN1Base produce entradas con rutas del registry (s
   const mod = await import("./registry.ts");
   const entradas = mod.generarEntradasN1Base();
   assert.ok(entradas.length >= 9);
-  const rutasReg = new Set(mod.REGISTRO_MODULOS.map((m: any) => m.rutaBase));
-  entradas.forEach((e: any) => {
+  const rutasReg = new Set(mod.REGISTRO_MODULOS.map((m) => m.rutaBase));
+  entradas.forEach((e) => {
     assert.ok(e.ruta.startsWith("/"));
     assert.ok(rutasReg.has(e.ruta), `ruta fuera del registro: ${e.ruta}`);
     if (e.rutasHijas) e.rutasHijas.forEach((r: string) => assert.ok(rutasReg.has(r)));
