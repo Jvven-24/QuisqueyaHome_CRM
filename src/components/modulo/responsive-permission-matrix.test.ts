@@ -29,3 +29,9 @@ test("la presentación usa acordeones accesibles y controles fluidos sin tabla c
   assert.match(component, /grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3/);
   assert.doesNotMatch(component, /overflow-x-auto|min-w-(?:\d{2,}|\[)|<table/);
 });
+
+test("contraste AA: el texto de lectura de la matriz no usa text-muted (fondo #f8f9fb) y sí --ink-secondary", () => {
+  assert.doesNotMatch(component, /(?<![\w-])text-muted(?![\w-])/);
+  const conTinta = component.match(/text-\[var\(--ink-secondary\)\]/g) ?? [];
+  assert.equal(conTinta.length, 3, "estado vacío, contador de recursos e id técnico");
+});

@@ -32,3 +32,8 @@ test("INV-08: los botones de la barra superior respetan 44px y acción tiene nom
   assert.match(header, /aria-label="Notificaciones del sistema"/);
   assert.match(sidebar, /className=\{cn\("min-h-11 min-w-11", className\)\}/);
 });
+
+test("Tareas 1440: el encabezado compartido envuelve las acciones y no comprime el título en una columna estrecha", () => {
+  assert.match(pageHeader, /sm:flex-row sm:flex-wrap/);
+  assert.match(pageHeader, /<div className="min-w-0 sm:min-w-\[min\(100%,22rem\)\] sm:flex-1">/);
+});
