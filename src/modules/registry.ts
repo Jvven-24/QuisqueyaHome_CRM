@@ -305,10 +305,32 @@ export function getPermisosDesdeRegistro(): readonly string[] {
   return Array.from(set);
 }
 
+/** Definición de una entrada de navegación N1 (referencias a módulos del registro) */
+type DefinicionEntradaN1 = {
+  id: string;
+  refs: readonly string[];
+  hijasRefs?: readonly string[];
+  nombre?: string;
+  descripcion?: string;
+  atajo?: string;
+};
+
+/** Entrada de navegación N1 generada desde el registro */
+export type EntradaN1Base = {
+  id: string;
+  ruta: string;
+  nombre: string;
+  recurso: PermissionResource;
+  icono: string;
+  descripcion: string;
+  atajo: string;
+  rutasHijas: string[] | undefined;
+};
+
 /** Generador de entradas de navegación base desde registry (rutas NO hardcodeadas) */
-export function generarEntradasN1Base() {
+export function generarEntradasN1Base(): EntradaN1Base[] {
   const find = (id: string) => REGISTRO_MODULOS.find(m => m.id === id || m.idLegado === id);
-  const mk = (g: any) => {
+  const mk = (g: DefinicionEntradaN1): EntradaN1Base => {
     const base = find(g.refs[0]!);
     if (!base) throw new Error(`registry: módulo inexistente "${g.refs[0]}" en la entrada ${g.id}`);
     const faltante = (g.hijasRefs || []).find((r: string) => !find(r));
@@ -325,7 +347,7 @@ export function generarEntradasN1Base() {
       rutasHijas: hijas.length > 1 ? hijas : undefined,
     };
   };
-  return [
+  const definiciones: DefinicionEntradaN1[] = [
     { id: "N1_INICIO", refs: ["M14"], hijasRefs: ["M14", "M16"], nombre: "Inicio", descripcion: "Resumen ejecutivo y tablero operativo del día", atajo: "G I" },
     { id: "N1_LEADS", refs: ["M2"], nombre: "Leads", descripcion: "Captación, calificación y gestión de prospectos", atajo: "G L" },
     { id: "N1_NEGOCIOS", refs: ["M3"], hijasRefs: ["M3", "M18"], nombre: "Negocios", descripcion: "Embudo comercial de oportunidades y cierres de venta", atajo: "G P" },
@@ -335,7 +357,8 @@ export function generarEntradasN1Base() {
     { id: "N1_COMUNICACIONES", refs: ["M11"], nombre: "Comunicaciones", descripcion: "Mensajería, WhatsApp y plantillas de contacto", atajo: "G W" },
     { id: "N1_BROKERS", refs: ["M7"], hijasRefs: ["M7", "M21"], nombre: "Red de Brokers", descripcion: "Red de intermediarios inmobiliarios y agencias aliadas", atajo: "G B" },
     { id: "N1_FINANZAS", refs: ["M9"], hijasRefs: ["M9", "M8", "M12", "M17"], nombre: "Finanzas & Reportes", descripcion: "Comisiones, metas comerciales e inteligencia analítica", atajo: "G $" },
-  ].map(mk);
+  ];
+  return definiciones.map(mk);
 }
 
 export const REGISTRO_VERSION = "1.1-manifiesto-completo" as const;
