@@ -391,7 +391,7 @@ export function AgendaVista({
     <>
       <PageHeader
         eyebrow="Seguimiento comercial & Visitas REA · 7 días"
-        title="Agenda de Visitas, Showrooms y Citas por Broker"
+        title="Agenda de visitas y citas"
         subtitle="Control integral de visitas a obra, recorridos VIP, cierres Confotur y videollamadas con compradores locales y de diáspora, vinculadas por Broker, Proyecto y Negocio."
         action={
           <div className="flex flex-wrap items-center gap-2.5">
@@ -400,7 +400,7 @@ export function AgendaVista({
               className="button secondary inline-flex min-h-[44px] items-center gap-2 px-4 text-[13px] font-semibold"
             >
               <ClipboardCheck className="w-4 h-4 text-[#059669]" />
-              <span>Ir a To-Do por Broker</span>
+              <span>Tareas</span>
             </Link>
             <a
               className="button secondary inline-flex items-center gap-2 min-h-[44px] px-4 font-semibold text-[13px]"
@@ -409,7 +409,7 @@ export function AgendaVista({
               title="Descargar archivo .ics con las citas de toda la semana"
             >
               <Download className="w-4 h-4 text-slate-600" />
-              <span>Exportar semana (.ics)</span>
+              <span>Exportar .ics</span>
             </a>
             {puedeCrear && (
               <button
@@ -418,7 +418,7 @@ export function AgendaVista({
                 onClick={() => abrirCrearNuevo()}
               >
                 <Plus className="w-4 h-4" />
-                <span>Nueva cita / visita</span>
+                <span>Nueva cita</span>
               </button>
             )}
           </div>
@@ -426,9 +426,9 @@ export function AgendaVista({
       />
 
       {/* Barra de navegación de semanas, selector de vista y filtros REA (Broker / Proyecto / Tipo) */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 p-3.5 mb-5 bg-white border border-slate-200 rounded-xl shadow-xs">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2 p-3 mb-4 bg-white border border-slate-200 rounded-xl shadow-xs sm:gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <div className="segmented inline-flex p-1 bg-slate-100 rounded-lg">
+          <div className="segmented flex w-full p-1 bg-slate-100 rounded-lg sm:inline-flex sm:w-auto [&>button]:flex-1 sm:[&>button]:flex-none">
             <button
               type="button"
               className="min-h-[44px] px-3 py-1.5 text-[13px] font-semibold text-slate-700 hover:text-slate-900 rounded-md transition-colors"
@@ -452,12 +452,12 @@ export function AgendaVista({
             </button>
           </div>
 
-          <Link className="button secondary min-h-[44px] text-[13px]" href="/agenda/calendario">
+          <Link className="button secondary hidden min-h-[44px] text-[13px] sm:inline-flex" href="/agenda/calendario">
             Mes y disponibilidad
           </Link>
 
           {/* Selector de vista: Semana / Día / Por Broker / Lista */}
-          <div className="inline-flex flex-wrap p-1 bg-slate-100 rounded-lg border border-slate-200">
+          <div className="flex w-full overflow-x-auto p-1 bg-slate-100 rounded-lg border border-slate-200 no-scrollbar sm:inline-flex sm:w-auto sm:flex-wrap [&>button]:shrink-0 [&>button]:whitespace-nowrap">
             <button
               type="button"
               onClick={() => setModoAgenda("semana")}

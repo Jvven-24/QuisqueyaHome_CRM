@@ -504,5 +504,15 @@
   .skip-link { position: fixed; left: 16px; top: -100px; z-index: 100; padding: 12px; background: var(--navy-950); color: white; }
   .skip-link:focus { top: 8px; }
   @media(max-width: 767px) { .private-section-nav { padding-inline: 16px; gap: 4px 12px; } .private-connection { padding-inline: 16px; justify-content: space-between; } }
+  /* Rediseño móvil P1: los modales propios (.modal-backdrop/.modal) se anclan
+     abajo como hoja inferior en teléfonos. !important porque varios llevan
+     utilidades de centrado (items-center, p-4) que ganan a esta capa. */
+  @media(max-width: 639px) {
+    .modal-backdrop { align-items: flex-end !important; padding: 0 !important; }
+    /* Avisos «Vista previa · falta…»: tres líneas como máximo en teléfono;
+       el texto completo sigue en el DOM para lectores de pantalla. */
+    .private-workspace p[role=note], .private-workspace [role=note] > p { font-size: 13px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .modal-backdrop > .modal, .modal-backdrop > [role=dialog] { width: 100% !important; max-width: none !important; max-height: 92dvh !important; overflow-y: auto; border-radius: 16px 16px 0 0 !important; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  }
   @media(prefers-reduced-motion: reduce) { .private-nav-toggle svg { transition: none; } }
 }

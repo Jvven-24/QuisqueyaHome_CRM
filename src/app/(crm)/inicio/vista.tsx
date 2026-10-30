@@ -6,17 +6,14 @@ import type { DashboardMetrics } from "@/application/dashboard/puertos";
 import { formatNumber } from "@/lib/formato-analitica";
 import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import { mostrarDemo } from "@/lib/flags";
+import { ETIQUETAS_ESTADO } from "@/application/leads/presentacion";
 import {
   ArrowRight,
   ArrowUpRight,
   Briefcase,
-  Building2,
   Clock,
-  Compass,
-  GraduationCap,
   MessageCircle,
   Plus,
-  Sparkles,
   Users,
 } from "lucide-react";
 
@@ -51,163 +48,92 @@ export function InicioVista({
 
 
   return (
-    <div className="min-w-0 space-y-8 animate-in fade-in duration-300">
+    <div className="min-w-0 space-y-4 sm:space-y-6 animate-in fade-in duration-300">
       <EstadoConexion />
-      {/* ── CABECERA EJECUTIVA QUISQUEYA DESK ─────────────────────────────────── */}
-      <section className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 pb-6 border-b border-line/70">
-        <div className="space-y-1.5 max-w-3xl">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-bold tracking-wider uppercase bg-gold-50 text-gold-800 border border-gold-600/30">
-              <Sparkles className="size-3.5 text-gold-600" />
-              Operación Inmobiliaria Privada
-            </span>
-            <span className="text-sm text-ink-muted">·</span>
-            <span className="text-[13px] font-semibold text-navy-800/80">
-              {metricas.fechaTexto || "Jornada actual"}
-            </span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-navy-950 tracking-tight font-heading">
-            {isBroker ? "Hola, " : "Buenos días, "}
-            <span className="text-gold-700">{nombre?.trim() || "Usuario"}</span>
+      {/* ── CABECERA COMPACTA: fecha, título y acciones primarias ─────────── */}
+      <header className="flex flex-col gap-3 border-b border-line/70 pb-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <p className="m-0 text-[13px] font-semibold text-ink-muted">{metricas.fechaTexto || "Jornada actual"}</p>
+          <h1 className="m-0 font-heading text-xl font-bold tracking-tight text-navy-950 sm:text-2xl">
+            {isBroker ? "Mi jornada" : "Inicio"}
+            <span className="sr-only"> · {nombre?.trim() || "Usuario"}</span>
           </h1>
-          <p className="text-sm sm:text-base text-ink-muted leading-relaxed">
-            {isBroker
-              ? "Tu cartera activa, próximas acciones de seguimiento y avance hacia tu meta comercial."
-              : "Consola de control patrimonial: prioridades comerciales, conversión del embudo y actividad del equipo."}
-          </p>
         </div>
 
-        {/* Acciones Rápidas Primarias */}
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
-          {permissions.createLead && (
-            <Link
-              href="/leads?crear=1" prefetch={false}
-              className="inline-flex min-h-12 items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-navy-950 text-white hover:bg-navy-900 border border-white/10 shadow-sm font-bold text-sm transition-all "
-            >
-              <Plus className="size-4 text-gold-400" />
-              <span>Registrar Lead</span>
-            </Link>
-          )}
+        {(permissions.createLead || permissions.deals) && (
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
+            {permissions.createLead && (
+              <Link
+                href="/leads?crear=1" prefetch={false}
+                className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-navy-950 px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-navy-900 ${permissions.deals ? "" : "col-span-2"}`}
+              >
+                <Plus className="size-4 text-gold-400" />
+                <span>Registrar lead</span>
+              </Link>
+            )}
+            {permissions.deals && (
+              <Link
+                href="/negocios" prefetch={false}
+                className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-line bg-surface px-4 text-sm font-bold text-navy-950 transition-colors hover:border-gold-600/50 hover:bg-surface-alt ${permissions.createLead ? "" : "col-span-2"}`}
+              >
+                <Briefcase className="size-4 text-navy-700" />
+                <span>Tablero</span>
+              </Link>
+            )}
+          </div>
+        )}
+      </header>
 
-          {permissions.deals && (
-            <Link
-              href="/negocios" prefetch={false}
-              className="inline-flex min-h-12 items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-surface border border-line hover:border-gold-600/50 hover:bg-surface-alt text-navy-950 font-bold text-sm shadow-2xs transition-all"
-            >
-              <Briefcase className="size-4 text-navy-700" />
-              <span>Tablero de Negocios</span>
-            </Link>
-          )}
-        </div>
-      </section>
+      {/* ── HOY: accesos a la carga del día, sin texto de relleno ─────────── */}
+      <nav aria-label="Pendientes de hoy" className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 no-scrollbar">
+        {permissions.leads && <Link className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-navy-950 hover:bg-surface-alt" href="/leads?cola=1" prefetch={false}><Users className="size-4 text-gold-700" aria-hidden="true" />Primer contacto</Link>}
+        {permissions.activities && <Link className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-navy-950 hover:bg-surface-alt" href="/tareas" prefetch={false}>Tareas <span className="rounded-full bg-surface-alt px-2 tabular-nums">{metricas.tareasPendientesCount}</span></Link>}
+        {permissions.activities && <Link className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-navy-950 hover:bg-surface-alt" href="/agenda" prefetch={false}><Clock className="size-4 text-gold-700" aria-hidden="true" />Citas hoy <span className="rounded-full bg-surface-alt px-2 tabular-nums">{metricas.citasHoyCount}</span></Link>}
+        {!isBroker && mostrarDemo() && <Link className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-navy-950 hover:bg-surface-alt" href="/aprobaciones" prefetch={false}>Aprobaciones</Link>}
+      </nav>
 
-      <section aria-label="Prioridades operativas" className="rounded-xl border border-line bg-surface p-4">
-        <h2 className="font-heading text-lg font-bold text-navy-950">Cola de la jornada</h2>
-        <p className="text-sm text-ink-muted">{isAssistant ? "Carga operativa y seguimiento del día" : isBroker ? "Acciones de tu cartera" : "Supervisión del equipo y pendientes"}. Cada cifra respeta el alcance de tu usuario.</p>
-        <div className="flex flex-wrap gap-3 mt-3">
-          {permissions.leads && <Link className="button min-h-12" href="/leads?cola=1" prefetch={false}>Cola de primer contacto</Link>}
-          {permissions.activities && <Link className="button min-h-12" href="/tareas" prefetch={false}>Tareas pendientes · {metricas.tareasPendientesCount}</Link>}
-          {permissions.activities && <Link className="button min-h-12" href="/agenda" prefetch={false}>Citas de hoy · {metricas.citasHoyCount}</Link>}
-          {!isBroker && mostrarDemo() && <Link className="button min-h-12" href="/aprobaciones" prefetch={false}>Revisar aprobaciones</Link>}
-        </div>
-        <p role="note" className="text-sm text-ink-muted mt-3">Alertas de SLA y contador de aprobaciones: pendientes de un servicio operativo; no se presentan como cero.</p>
-      </section>
-      <section aria-label="Indicadores operativos por rol" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+      {/* ── INDICADORES: tarjetas compactas; la tarjeta completa es el enlace ── */}
+      <section aria-label="Indicadores operativos por rol" className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
         {(isAssistant ? [
-          {label:"Leads sin asignar",value:metricas.leadsSinAsignarCount,help:"Bandeja visible que requiere responsable",href:"/leads/asignacion",allowed:permissions.leads},
-          {label:"Citas de hoy",value:metricas.citasHoyCount,help:"Agenda operativa de hoy",href:"/agenda",allowed:permissions.activities},
-          {label:"Tareas pendientes",value:metricas.tareasPendientesCount,help:"Carga pendiente dentro de tu alcance",href:"/tareas",allowed:permissions.activities},
-          {label:"Revisión y aprobaciones",value:"Consultar",help:"El contador operativo aún no está disponible",href:"/aprobaciones",allowed:true},
+          {label:"Leads sin asignar",value:metricas.leadsSinAsignarCount,help:"Requieren responsable",href:"/leads/asignacion",allowed:permissions.leads},
+          {label:"Citas de hoy",value:metricas.citasHoyCount,help:"Agenda operativa",href:"/agenda",allowed:permissions.activities},
+          {label:"Tareas pendientes",value:metricas.tareasPendientesCount,help:"Dentro de tu alcance",href:"/tareas",allowed:permissions.activities},
+          {label:"Aprobaciones",value:"Consultar",help:"Contador aún no disponible",href:"/aprobaciones",allowed:true},
         ] : isBroker ? [
-          {label:"Mis leads activos",value:metricas.misLeadsCount,help:"Cartera dentro de tu alcance",href:"/leads",allowed:permissions.leads},
-          {label:"Citas de la semana",value:metricas.citasSemanaCount,help:"Citas registradas en tu agenda",href:"/agenda",allowed:permissions.activities},
-          {label:"Meta mensual",value:metricas.metaMesLabel,help:metricas.metaPorcentaje+"% de avance · "+metricas.miNivel,href:"/metas",allowed:permissions.goals},
-          {label:"Mi formación",value:metricas.academy?metricas.academy.progressPercent+"%":"Sin curso",help:"Progreso registrado en Academy",href:"/academy",allowed:permissions.academy},
+          {label:"Mis leads activos",value:metricas.misLeadsCount,help:"Tu cartera",href:"/leads",allowed:permissions.leads},
+          {label:"Citas de la semana",value:metricas.citasSemanaCount,help:"En tu agenda",href:"/agenda",allowed:permissions.activities},
+          {label:"Meta mensual",value:metricas.metaMesLabel,help:metricas.metaPorcentaje+"% · "+metricas.miNivel,href:"/metas",allowed:permissions.goals},
+          {label:"Mi formación",value:metricas.academy?metricas.academy.progressPercent+"%":"Sin curso",help:"Progreso en Academy",href:"/academy",allowed:permissions.academy},
         ] : [
-          {label:"Leads del mes",value:metricas.leadsMesCount,help:"Captaciones del mes actual",href:"/leads",allowed:permissions.leads},
+          {label:"Leads del mes",value:metricas.leadsMesCount,help:"Captaciones del mes",href:"/leads",allowed:permissions.leads},
           {label:"Negocios activos",value:metricas.negociosActivosCount,help:metricas.volumenPipelineDisplay,href:"/negocios",allowed:permissions.deals},
-          {label:"Cierres del mes",value:metricas.cierresMesCount,help:"Negocios ganados este mes",href:"/negocios",allowed:permissions.deals},
-          {label:"Cierres / captaciones",value:metricas.conversionPorcentaje,help:"Cierres ganados del mes / leads recibidos este mes; poblaciones distintas, no conversión de cohorte",href:"/reportes",allowed:permissions.leads&&permissions.deals},
-        ]).map(kpi=><ResumenCompacto key={kpi.label} etiqueta={kpi.label} valor={kpi.allowed ? (typeof kpi.value === "number" ? formatNumber(kpi.value) : kpi.value) : undefined} detalle={kpi.allowed ? kpi.help : "Tu rol no tiene permiso para consultar este indicador."} pie={kpi.allowed ? <Link href={kpi.href} prefetch={false} className="inline-flex min-h-11 items-center text-[13px] font-semibold text-navy-900 underline">Consultar</Link> : undefined} />)}
-      </section>
-
-      {/* ── BANDEJA DE ACCESOS RÁPIDOS OPERATIVOS ─────────────────────────────── */}
-      <section className="bg-gradient-to-r from-navy-950 to-navy-900 border border-gold-600/30 rounded-2xl p-4 sm:p-5 text-white shadow-md">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="size-11 rounded-xl bg-gold-600/20 border border-gold-500/40 flex items-center justify-center shrink-0">
-              <Compass className="size-5 text-gold-400" />
-            </div>
-            <div>
-              <h2 className="text-sm sm:text-base font-bold font-heading text-white">
-                Accesos Directos de la Jornada
-              </h2>
-              <p className="text-[13px] text-slate-300">
-                Herramientas rápidas para acelerar tu gestión comercial diaria.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href="/leads" prefetch={false}
-              className="inline-flex min-h-12 items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-[13px] font-semibold text-white transition-colors"
-            >
-              <Users className="size-4 text-gold-400" />
-              Bandeja de Leads
-            </Link>
-            <Link
-              href="/negocios"
-              className="inline-flex min-h-12 items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-[13px] font-semibold text-white transition-colors"
-            >
-              <Briefcase className="size-4 text-gold-400" />
-              Negocios en Curso
-            </Link>
-            <Link
-              href="/propiedades" prefetch={false}
-              className="inline-flex min-h-12 items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-[13px] font-semibold text-white transition-colors"
-            >
-              <Building2 className="size-4 text-gold-400" />
-              Inventario de Propiedades
-            </Link>
-            <Link
-              href="/academy" prefetch={false}
-              className="inline-flex min-h-12 items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-[13px] font-semibold text-white transition-colors"
-            >
-              <GraduationCap className="size-4 text-gold-400" />
-              Academy LMS (Moodle)
-            </Link>
-            <Link
-              href="/comunicaciones" prefetch={false}
-              className="inline-flex min-h-12 items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-[13px] font-semibold text-white transition-colors"
-            >
-              <MessageCircle className="size-4 text-emerald-400" />
-              Plantillas WhatsApp
-            </Link>
-          </div>
-        </div>
+          {label:"Cierres del mes",value:metricas.cierresMesCount,help:"Negocios ganados",href:"/negocios",allowed:permissions.deals},
+          {label:"Cierres / captaciones",value:metricas.conversionPorcentaje,help:"Poblaciones distintas, no cohorte",href:"/reportes",allowed:permissions.leads&&permissions.deals},
+        ]).map(kpi=>kpi.allowed
+          ? <Link key={kpi.label} href={kpi.href} prefetch={false} className="block min-w-0 rounded-xl transition-colors hover:[&>article]:border-gold-600/60"><ResumenCompacto etiqueta={kpi.label} valor={typeof kpi.value === "number" ? formatNumber(kpi.value) : kpi.value} detalle={kpi.help} className="h-full" /></Link>
+          : <ResumenCompacto key={kpi.label} etiqueta={kpi.label} detalle="Sin permiso para este indicador." />)}
       </section>
 
       {/* ── CUADRÍCULA PRINCIPAL DE TRABAJO (2 Columnas) ───────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
         {/* COLUMNA IZQUIERDA (7 Columnas): Leads Prioritarios y Embudo */}
-        <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+        <div className="lg:col-span-7 space-y-4 sm:space-y-6">
           {/* PANEL 1: LEADS QUE REQUIEREN ATENCIÓN INMEDIATA */}
-          <div className="bg-surface border border-line rounded-2xl p-5 sm:p-6 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-line mb-4">
+          <div className="bg-surface border border-line rounded-2xl p-4 sm:p-6 shadow-xs">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-line mb-3">
               <div className="space-y-0.5">
-                <span className="text-[13px] font-bold uppercase tracking-wider text-gold-700">
+                <span className="hidden text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:block">
                   Acción Inmediata
                 </span>
-                <h2 className="text-lg sm:text-xl font-bold font-heading text-navy-950">
-                  {isBroker ? "Mis Leads Prioritarios" : "Leads que Requieren Atención"}
+                <h2 className="m-0 text-base sm:text-xl font-bold font-heading text-navy-950">
+                  {isBroker ? "Mis leads prioritarios" : "Leads que requieren atención"}
                 </h2>
               </div>
               <Link
                 href="/leads"
                 className="inline-flex min-h-12 items-center gap-1.5 px-3 rounded-lg text-[13px] font-bold text-navy-900 hover:text-gold-700 transition-colors"
               >
-                <span>Ver todos ({leads.length})</span>
+                <span className="whitespace-nowrap">Ver todos ({leads.length})</span>
                 <ArrowRight className="size-4" />
               </Link>
             </div>
@@ -232,13 +158,15 @@ export function InicioVista({
                     .join("")
                     .toUpperCase();
 
-                  const isNuevo = lead.stage === "Nuevo";
-                  const isContactado = lead.stage === "Contactado";
+                  // El resumen trae el código del estado (`contacted`); se muestra su etiqueta.
+                  const etapa = (ETIQUETAS_ESTADO as Record<string, string>)[lead.stage] ?? lead.stage;
+                  const isNuevo = lead.stage === "new" || etapa === "Nuevo";
+                  const isContactado = lead.stage === "contacted" || etapa === "Contactado";
 
                   return (
                     <div
                       key={lead.id}
-                      className="py-3.5 flex items-center justify-between gap-3 hover:bg-surface-alt/70 px-2 rounded-xl transition-colors group"
+                      className="py-2.5 flex items-center justify-between gap-3 hover:bg-surface-alt/70 px-1 rounded-xl transition-colors group"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="size-10 rounded-full bg-navy-950 text-white font-bold font-heading text-xs flex items-center justify-center shrink-0 border border-gold-500/40 shadow-xs">
@@ -267,7 +195,7 @@ export function InicioVista({
                               : "bg-surface-alt text-slate-700 border-line"
                           }`}
                         >
-                          {lead.stage}
+                          {etapa}
                         </span>
 
                         <span className="hidden sm:inline-block text-[13px] text-slate-700 bg-slate-100 px-2.5 py-1.5 rounded-md font-medium max-w-[150px] truncate">
@@ -292,21 +220,21 @@ export function InicioVista({
           </div>
 
           {/* PANEL 2: EMBUDO COMERCIAL POR ETAPA (Visual Sales Funnel) */}
-          <div className="bg-surface border border-line rounded-2xl p-5 sm:p-6 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-line mb-5">
+          <div className="bg-surface border border-line rounded-2xl p-4 sm:p-6 shadow-xs">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-line mb-4">
               <div className="space-y-0.5">
-                <span className="text-[13px] font-bold uppercase tracking-wider text-gold-700">
+                <span className="hidden text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:block">
                   Embudo de Ventas
                 </span>
-                <h2 className="text-lg sm:text-xl font-bold font-heading text-navy-950">
-                  Conversión de Negocios
+                <h2 className="m-0 text-base sm:text-xl font-bold font-heading text-navy-950">
+                  Conversión de negocios
                 </h2>
               </div>
               <Link
                 href="/negocios"
                 className="inline-flex min-h-12 items-center gap-1.5 px-3 rounded-lg text-[13px] font-bold text-navy-900 hover:text-gold-700 transition-colors"
               >
-                <span>Ver Negocios</span>
+                <span className="whitespace-nowrap">Ver negocios</span>
                 <ArrowRight className="size-4" />
               </Link>
             </div>
@@ -324,7 +252,7 @@ export function InicioVista({
                       <div className="flex items-center justify-between text-[13px] font-semibold">
                         <span className="text-navy-950 font-bold">{etapa.label}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-ink-muted tabular-nums">{count} alcanzaron esta etapa</span>
+                          <span className="text-ink-muted tabular-nums">{count}<span className="hidden sm:inline"> alcanzaron esta etapa</span></span>
                           {etapa.passRatePercent !== null && (
                             <span className="text-[13px] font-bold text-gold-900 bg-gold-50 px-2 py-0.5 rounded border border-gold-200 tabular-nums">
                               {etapa.passRatePercent}% pase
@@ -347,16 +275,16 @@ export function InicioVista({
         </div>
 
         {/* COLUMNA DERECHA (5 Columnas): Agenda, Demanda & Formación */}
-        <div className="lg:col-span-5 space-y-6 sm:space-y-8">
+        <div className="lg:col-span-5 space-y-4 sm:space-y-6">
           {/* PANEL 3: AGENDA DE HOY Y ACTIVIDADES */}
-          <div className="bg-surface border border-line rounded-2xl p-5 sm:p-6 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-line mb-4">
+          <div className="bg-surface border border-line rounded-2xl p-4 sm:p-6 shadow-xs">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-line mb-3">
               <div className="space-y-0.5">
-                <span className="text-[13px] font-bold uppercase tracking-wider text-gold-700">
+                <span className="hidden text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:block">
                   Agenda del Día
                 </span>
-                <h2 className="text-lg sm:text-xl font-bold font-heading text-navy-950">
-                  Próximas Actividades
+                <h2 className="m-0 text-base sm:text-xl font-bold font-heading text-navy-950">
+                  Próximas actividades
                 </h2>
               </div>
               <Link
@@ -409,14 +337,14 @@ export function InicioVista({
           </div>
 
           {/* PANEL 4: DEMANDA INMOBILIARIA Y RANKING */}
-          <div className="bg-surface border border-line rounded-2xl p-5 sm:p-6 shadow-xs">
-            <div className="flex items-center justify-between pb-4 border-b border-line mb-4">
+          <div className="bg-surface border border-line rounded-2xl p-4 sm:p-6 shadow-xs">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-line mb-3">
               <div className="space-y-0.5">
-                <span className="text-[13px] font-bold uppercase tracking-wider text-gold-700">
+                <span className="hidden text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:block">
                   {isBroker ? "Formación Continua" : "Demanda de Proyectos"}
                 </span>
-                <h2 className="text-lg sm:text-xl font-bold font-heading text-navy-950">
-                  {isBroker ? "Quisqueya Academy" : "Proyectos más Cotizados"}
+                <h2 className="m-0 text-base sm:text-xl font-bold font-heading text-navy-950">
+                  {isBroker ? "Quisqueya Academy" : "Proyectos más cotizados"}
                 </h2>
               </div>
               <Link

@@ -49,12 +49,12 @@ export function ResumenCompacto({
           {variacion.periodo && <span>{variacion.periodo}</span>}
         </span>
       )}
-      {detalle && <span className="mt-1 line-clamp-2 block min-w-0 break-words text-[13px] leading-snug text-ink-muted dark:text-slate-300">{detalle}</span>}
+      {detalle && <span className="mt-1 line-clamp-2 max-sm:line-clamp-1 block min-w-0 break-words text-[13px] leading-snug text-ink-muted dark:text-slate-300">{detalle}</span>}
       {pie && <span className="mt-1 block">{pie}</span>}
     </>
   );
 
-  const classes = `block min-h-24 min-w-0 overflow-hidden rounded-xl border border-line bg-surface p-3 text-left shadow-xs dark:border-navy-700 dark:bg-navy-950 sm:p-4 ${className}`;
+  const classes = `block min-h-[72px] sm:min-h-24 min-w-0 overflow-hidden rounded-xl border border-line bg-surface p-3 text-left shadow-xs dark:border-navy-700 dark:bg-navy-950 sm:p-4 ${className}`;
   if (onClick) {
     return <button type="button" onClick={onClick} aria-pressed={pressed} className={`${classes} cursor-pointer transition-colors hover:border-gold-600/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-700 dark:focus-visible:outline-gold-400`}>{contenido}</button>;
   }

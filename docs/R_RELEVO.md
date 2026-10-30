@@ -1,5 +1,13 @@
 # R · Relevo
 
+<!-- rediseno-movil-p1:start -->
+## Rediseño móvil · pasada 1 de 2 — 2026-10-30
+
+Rama `orq/claude-web/rediseno-movil-p1` (desde `codex/wilber-crm-20261026`); sin merge, PR ni despliegue. Mejora móvil (390) y web (1440) vía piezas compartidas: `PageHeader`, `Dialog` como hoja inferior, hoja «Más» deslizable con vaul (anclajes 60 %/94 %), tarjeta móvil de `DataTable`, `ResumenCompacto`, «Ver como broker» flotante/en «Más», estado de conexión solo sin red, pestañas de sección unificadas. Inicio, Leads, Inventario, Contactos, Agenda y Tareas compactados. Menú y buscador sin tocar. Sin dependencias nuevas.
+
+**Verificación observada:** typecheck limpio; lint 0 errores (4 avisos previos); npm test **1216 · 1214 aprobadas · 0 fallos · 2 omitidas**; build OK. Se corrigió la prueba intermitente `google-cuentas.test.ts` (fallaba 1/16). Capturas antes/después de 22 módulos + 3 fichas en `docs/rediseno/p1/` (detalle en su README). Pendiente: revisión independiente y comentarios en vivo de Wilber (pasada 2).
+<!-- rediseno-movil-p1:end -->
+
 <!-- fase3:start -->
 ## Fase 3 RBAC · entrega local autorizada — 2026-10-27
 

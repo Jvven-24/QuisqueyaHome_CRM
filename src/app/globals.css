@@ -483,7 +483,7 @@ small { color: var(--muted); }
   .role-switch select { max-width: 134px; }
   .global-search { flex: 1; width: auto; }
   .global-search kbd { display: none; }
-  .page { padding: 18px 12px 38px; min-width: 0; max-width: 100%; overflow-x: hidden; }
+  .page { padding: 16px 16px 38px; min-width: 0; max-width: 100%; overflow-x: hidden; }
   .page-header { align-items: stretch; flex-direction: column; }
   .page-header .button, .page-header .header-select, .page-header .header-actions-inline { width: 100%; }
   .header-actions-inline { flex-direction: column; }

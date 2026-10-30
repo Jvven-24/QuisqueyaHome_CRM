@@ -20,7 +20,10 @@ test("state anti-CSRF: válido solo con cookie, usuario y firma correctos", () =
   assert.equal(G.validarState(state, nonce, 8, env), false);
   assert.equal(G.validarState(state, "otro", 7, env), false);
   assert.equal(G.validarState(state, null, 7, env), false);
-  assert.equal(G.validarState(state.replace(/.$/, "0"), nonce, 7, env) && state.endsWith("0"), false);
+  // Firma manipulada: el último dígito hex se cambia siempre por otro distinto
+  // (antes se forzaba "0" y fallaba 1/16 veces cuando la firma ya acababa en "0").
+  const otro = state.endsWith("0") ? "1" : "0";
+  assert.equal(G.validarState(state.replace(/.$/, otro), nonce, 7, env), false);
 });
 
 test("URL de consentimiento: scopes, offline y selector de cuenta", () => {

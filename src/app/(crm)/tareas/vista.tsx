@@ -844,13 +844,13 @@ export function TareasVista({
     <div className="space-y-6">
       <PageHeader
         eyebrow="Centro de Ejecución Comercial · Modelo REA (Resources · Events · Agents)"
-        title="To-Do List & Asignación de Tareas por Broker"
+        title="Tareas por broker"
         subtitle="Asigna tareas individuales o planes de acción inmobiliarios (KYC Ley 155-17, Reserva 48h, Promesa 10/40/50, Confotur, Tours VIP y Snag List) a cada broker, con sub-checklists interactivos y trazabilidad."
         action={
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Conmutador de las 4 Vistas Operativas */}
             <div
-              className="inline-flex flex-wrap rounded-xl border border-[#cbd5e1] bg-[#f8fafc] p-1"
+              className="col-span-2 flex max-w-full overflow-x-auto rounded-xl border border-[#cbd5e1] bg-[#f8fafc] p-1 no-scrollbar sm:inline-flex sm:flex-wrap"
               role="tablist"
               aria-label="Modo de visualización de tareas"
             >
@@ -859,7 +859,7 @@ export function TareasVista({
                 role="tab"
                 aria-selected={modoVista === "lista"}
                 onClick={() => setModoVista("lista")}
-                className={`inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
+                className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
                   modoVista === "lista"
                     ? "bg-[#0f172a] text-white shadow-xs"
                     : "text-[#475569] hover:text-[#0f172a]"
@@ -873,7 +873,7 @@ export function TareasVista({
                 role="tab"
                 aria-selected={modoVista === "brokers"}
                 onClick={() => setModoVista("brokers")}
-                className={`inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
+                className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
                   modoVista === "brokers"
                     ? "bg-[#0f172a] text-white shadow-xs"
                     : "text-[#475569] hover:text-[#0f172a]"
@@ -887,7 +887,7 @@ export function TareasVista({
                 role="tab"
                 aria-selected={modoVista === "tablero"}
                 onClick={() => setModoVista("tablero")}
-                className={`inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
+                className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
                   modoVista === "tablero"
                     ? "bg-[#0f172a] text-white shadow-xs"
                     : "text-[#475569] hover:text-[#0f172a]"
@@ -901,7 +901,7 @@ export function TareasVista({
                 role="tab"
                 aria-selected={modoVista === "playbooks"}
                 onClick={() => setModoVista("playbooks")}
-                className={`inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
+                className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
                   modoVista === "playbooks"
                     ? "bg-[#0f172a] text-white shadow-xs"
                     : "text-[#475569] hover:text-[#0f172a]"
@@ -924,7 +924,7 @@ export function TareasVista({
               className="inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-[#fde68a] bg-[#fffbeb] px-4 py-2 text-[13px] font-bold text-[#92400e] shadow-2xs transition-colors hover:bg-[#fef3c7]"
             >
               <Sparkles className="size-4 shrink-0 text-[#d97706]" aria-hidden="true" />
-              <span>Asignar Pack a Broker</span>
+              <span>Asignar pack</span>
             </button>
 
             <button
@@ -935,7 +935,7 @@ export function TareasVista({
               className="btn btn-primary min-h-[44px] gap-2 px-4 text-[14px]"
             >
               <Plus className="size-4" aria-hidden="true" />
-              <span>Nueva Tarea</span>
+              <span>Nueva tarea</span>
             </button>
           </div>
         }
@@ -943,7 +943,7 @@ export function TareasVista({
 
       {/* Semáforo Ejecutivo de Urgencia + Métricas REA */}
       <div
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5"
+        className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-5"
         role="region"
         aria-label="Semáforo de urgencia y métricas de ejecución"
       >
@@ -953,7 +953,7 @@ export function TareasVista({
             setFiltroEstado("pending");
             cambiarFiltroUrgencia("todas");
           }}
-          className={`flex min-h-[84px] items-center justify-between rounded-xl border p-4 text-left transition-all ${
+          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
             filtroEstado === "pending" && filtroUrgencia === "todas"
               ? "border-[#0f172a] bg-[#0f172a] text-white shadow-sm"
               : "border-[#e2e8f0] bg-white text-[#0f172a] hover:border-[#cbd5e1]"
@@ -990,7 +990,7 @@ export function TareasVista({
             setFiltroEstado("pending");
             cambiarFiltroUrgencia(filtroUrgencia === "vencidas" ? "todas" : "vencidas");
           }}
-          className={`flex min-h-[84px] items-center justify-between rounded-xl border p-4 text-left transition-all ${
+          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
             filtroUrgencia === "vencidas"
               ? "border-[#dc2626] bg-[#fef2f2] text-[#991b1b] shadow-sm ring-1 ring-[#dc2626]"
               : "border-[#fecaca] bg-white text-[#0f172a] hover:bg-[#fef2f2]/40"
@@ -1012,7 +1012,7 @@ export function TareasVista({
             setFiltroEstado("pending");
             cambiarFiltroUrgencia(filtroUrgencia === "hoy" ? "todas" : "hoy");
           }}
-          className={`flex min-h-[84px] items-center justify-between rounded-xl border p-4 text-left transition-all ${
+          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
             filtroUrgencia === "hoy"
               ? "border-[#d97706] bg-[#fffbeb] text-[#92400e] shadow-sm ring-1 ring-[#d97706]"
               : "border-[#fde68a] bg-white text-[#0f172a] hover:bg-[#fffbeb]/40"
@@ -1034,7 +1034,7 @@ export function TareasVista({
             setFiltroEstado("pending");
             cambiarFiltroUrgencia(filtroUrgencia === "proximas" ? "todas" : "proximas");
           }}
-          className={`flex min-h-[84px] items-center justify-between rounded-xl border p-4 text-left transition-all ${
+          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
             filtroUrgencia === "proximas"
               ? "border-[#059669] bg-[#ecfdf5] text-[#065f46] shadow-sm ring-1 ring-[#059669]"
               : "border-[#a7f3d0] bg-white text-[#0f172a] hover:bg-[#ecfdf5]/40"
@@ -1057,7 +1057,7 @@ export function TareasVista({
             setFiltroUrgencia("todas");
             setPagina(1);
           }}
-          className={`flex min-h-[84px] items-center justify-between rounded-xl border p-4 text-left transition-all ${
+          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
             filtroEstado === "completed"
               ? "border-[#2563eb] bg-[#eff6ff] text-[#1e40af] shadow-sm ring-1 ring-[#2563eb]"
               : "border-[#bfdbfe] bg-white text-[#0f172a] hover:bg-[#eff6ff]/40"

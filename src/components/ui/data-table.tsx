@@ -12,7 +12,8 @@ export type Columna<F> = {
   ancho?: string;
   ordenable?: boolean;
   secundaria?: boolean;
-  movil?: "titulo" | "subtitulo" | "insignia" | "oculta";
+  /** Papel en la tarjeta móvil; «acciones» va al pie sin etiqueta (por defecto, la columna `acciones`). */
+  movil?: "titulo" | "subtitulo" | "insignia" | "acciones" | "oculta";
 };
 
 export type AccionMasiva = {
@@ -252,12 +253,13 @@ export function DataTable<F>({
           const titulo = columnas.find((c) => c.movil === "titulo");
           const subtitulo = columnas.find((c) => c.movil === "subtitulo");
           const insignia = columnas.find((c) => c.movil === "insignia");
-          const resto = columnas.filter((c) => !c.movil && !c.secundaria);
+          const accionesMovil = columnas.find((c) => c.movil === "acciones" || (!c.movil && c.clave === "acciones"));
+          const resto = columnas.filter((c) => !c.movil && !c.secundaria && c !== accionesMovil);
           return (
             <li key={id}>
               <div
                 className={cn(
-                  "flex flex-col gap-2 rounded-lg border bg-card p-3 shadow-none transition-all",
+                  "flex flex-col gap-2 rounded-xl border bg-card p-3 shadow-xs transition-all",
                   activa === id ? "border-gold-500/50 bg-gold-500/5 ring-1 ring-gold-500/30" : "border-border"
                 )}
               >
@@ -272,36 +274,41 @@ export function DataTable<F>({
                     {...(onAbrir
                       ? { type: "button" as const, onClick: () => onAbrir(fila) }
                       : {})}
-                    className={"min-w-0 flex-1 text-left bg-transparent border-none p-0" + (onAbrir ? " cursor-pointer" : "")}
+                    className={"min-w-0 flex-1 text-left bg-transparent border-none p-0" + (onAbrir ? " cursor-pointer min-h-11" : "")}
                   >
-                    <strong className="line-clamp-2 text-[14px] font-bold leading-snug text-foreground">
+                    <strong className="line-clamp-2 text-[15px] font-bold leading-snug text-foreground">
                       {titulo ? textoPlano(titulo, fila, id) : id}
                     </strong>
                     {subtitulo && (
-                      <small className="mt-0.5 block truncate text-[12px] text-muted-foreground">
+                      <small className="mt-0.5 block truncate text-[13px] text-muted-foreground">
                         {textoPlano(subtitulo, fila, "")}
                       </small>
                     )}
                   </CabeceraFicha>
+                  {insignia && (
+                    <span className="shrink-0">
+                      {insignia.celda ? insignia.celda(fila) : String(insignia.valor?.(fila) ?? "")}
+                    </span>
+                  )}
                 </div>
-                {(insignia || resto.length > 0) && (
-                  <dl className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-border/60 pt-2 mt-1">
-                    {insignia && (
-                      <dd className="mr-1 m-0">
-                        {insignia.celda ? insignia.celda(fila) : String(insignia.valor?.(fila) ?? "")}
-                      </dd>
-                    )}
+                {resto.length > 0 && (
+                  <dl className="m-0 grid grid-cols-2 gap-x-3 gap-y-2 border-t border-border/60 pt-2">
                     {resto.map((columna) => (
-                      <div key={columna.clave} className="flex min-w-0 max-w-full items-baseline gap-1.5">
-                        <dt className="shrink-0 text-[10.5px] font-bold uppercase tracking-[0.06em] text-muted-foreground">
+                      <div key={columna.clave} className="min-w-0">
+                        <dt className="text-[13px] font-medium text-muted-foreground">
                           {columna.titulo}
                         </dt>
-                        <dd className="min-w-0 text-[12.5px] text-foreground [&_*]:whitespace-normal m-0">
+                        <dd className="m-0 min-w-0 truncate text-[13px] text-foreground [&_*]:max-w-full [&_*]:truncate">
                           {columna.celda ? columna.celda(fila) : String(columna.valor?.(fila) ?? "")}
                         </dd>
                       </div>
                     ))}
                   </dl>
+                )}
+                {accionesMovil && (
+                  <div className="flex justify-end [&_a]:!size-11 [&_a]:!min-h-11 [&_a]:!min-w-11 [&_button]:min-h-11">
+                    {accionesMovil.celda ? accionesMovil.celda(fila) : String(accionesMovil.valor?.(fila) ?? "")}
+                  </div>
                 )}
               </div>
             </li>

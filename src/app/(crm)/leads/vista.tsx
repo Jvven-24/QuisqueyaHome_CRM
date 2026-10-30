@@ -346,19 +346,20 @@ export function LeadsVista({
         title={isBroker ? "Mis leads calificados" : "Bandeja de leads patrimoniales"}
         subtitle="Monitoreo de prospectos, canal de origen y asignación."
         action={
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:items-center">
             <button
               type="button"
               onClick={() => setCreandoPorVoz(true)}
-              className="min-h-12 px-4 inline-flex items-center gap-2 rounded-xl border border-gold-500/50 bg-gold-50/40 hover:bg-gold-100/60 text-navy-950 text-[13.5px] font-bold shadow-2xs transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
+              aria-label="Registrar lead con nota de voz IA"
+              className="min-h-12 px-4 inline-flex justify-center items-center gap-2 rounded-xl border border-gold-500/50 bg-gold-50/40 hover:bg-gold-100/60 text-navy-950 text-[13.5px] font-bold shadow-2xs transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
             >
               <Mic className="size-4 text-gold-600" />
-              <span>Nota de voz IA</span>
+              <span>Nota de voz</span>
             </button>
             <button
               type="button"
               onClick={() => setCreando(true)}
-              className="min-h-12 px-5 inline-flex items-center gap-2.5 rounded-xl bg-navy-950 hover:bg-navy-900 text-white text-[13.5px] font-bold shadow-sm transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
+              className="min-h-12 px-5 inline-flex justify-center items-center gap-2.5 rounded-xl bg-navy-950 hover:bg-navy-900 text-white text-[13.5px] font-bold shadow-sm transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
             >
               <Plus className="size-4 text-gold-500" />
               <span>Registrar lead</span>
@@ -370,7 +371,8 @@ export function LeadsVista({
       <RouteModuleTabs label="Gestión de leads" items={[{href:cola?"/leads":"/leads?cola=1",label:cola?"Todos los leads":"Cola de primer contacto"},{href:"/leads/asignacion",label:"Asignación y distribución",match:"prefix"},{href:"/leads/importaciones",label:"Importación y migración",match:"prefix"},{href:"/leads/duplicados",label:"Duplicados y fusión",match:"prefix"}]} className="mb-4" />
       {cola && <SlaPolicyPreview />}
       {/* Franja de métricas / KPIs del universo de leads */}
-      <div className="grid grid-cols-2 gap-3 mb-6 xl:grid-cols-4">
+      {/* KPIs: en móvil los cuentan las pestañas de estado; en escritorio, franja compacta */}
+      <div className="mb-4 hidden grid-cols-2 gap-3 sm:grid xl:grid-cols-4">
         <ResumenCompacto etiqueta="Total Leads" valor={kpis.total} detalle="Universo calificado" icono={<Users className="size-4 text-gold-600" />} onClick={() => irCon({ status: undefined, page: undefined, lead: undefined })} pressed={!filtros.status} className={!filtros.status ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30" : ""} />
         <ResumenCompacto etiqueta="Nuevos" valor={kpis.new} detalle="Pendientes de atención" icono={<Sparkles className="size-4 text-rose-700" />} onClick={() => irCon({ status: "new", page: undefined, lead: undefined })} pressed={filtros.status === "new"} className={filtros.status === "new" ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30" : ""} />
         <ResumenCompacto etiqueta="Contactados" valor={kpis.contacted} detalle="En conversación activa" icono={<MessageSquare className="size-4 text-emerald-700" />} onClick={() => irCon({ status: "contacted", page: undefined, lead: undefined })} pressed={filtros.status === "contacted"} className={filtros.status === "contacted" ? "border-gold-600 bg-gold-50/20 ring-1 ring-gold-600/30" : ""} />
@@ -399,12 +401,12 @@ export function LeadsVista({
         />
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-surface border border-line rounded-xl mb-4 shadow-xs">
-        <form action={pathname} method="get" autoComplete="off" role="search" aria-label="Buscar leads" className="flex flex-wrap items-center gap-2 flex-1 min-w-0 w-full max-w-md">
+      <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-surface border border-line rounded-xl mb-4 shadow-xs sm:gap-3">
+        <form action={pathname} method="get" autoComplete="off" role="search" aria-label="Buscar leads" className="flex items-center gap-2 flex-1 min-w-0 w-full max-w-md sm:flex-wrap">
           {filtros.sourceId && <input type="hidden" name="source_id" value={filtros.sourceId} />}
           {filtros.status && <input type="hidden" name="status" value={filtros.status} />}
           {cola && <input type="hidden" name="cola" value="1" />}
-          <div className="relative flex items-center w-full">
+          <div className="relative flex min-w-0 flex-1 items-center">
             <Search className="absolute left-3.5 size-4 text-muted pointer-events-none" />
             <input
               type="search"
@@ -417,16 +419,16 @@ export function LeadsVista({
               className="w-full min-h-12 pl-10 pr-3.5 text-[13.5px] bg-surface border border-input-line rounded-lg text-ink placeholder:text-muted focus:outline-none focus:border-gold-700 focus:ring-2 focus:ring-gold-700/20 transition-all"
             />
           </div>
-          <button type="submit" className="button min-h-12 px-4">Buscar</button>
-          <span className="text-[13px] text-ink-muted">Pulsa Enter para buscar</span>
+          <button type="submit" className="button min-h-12 shrink-0 px-4">Buscar</button>
+          <span className="hidden text-[13px] text-ink-muted sm:inline">Pulsa Enter para buscar</span>
         </form>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="grid w-full grid-cols-2 items-center gap-2 sm:flex sm:w-auto sm:flex-wrap sm:gap-2.5">
           <select
             aria-label="Filtrar por origen"
             value={filtros.sourceId ?? ""}
             onChange={(event) => irCon({ source_id: event.target.value || undefined, page: undefined })}
-            className="min-h-12 px-3.5 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer"
+            className="min-h-12 w-full min-w-0 px-3 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer sm:w-auto"
           >
             <option value="">Todos los canales</option>
             {canales.map((canal) => (
@@ -440,7 +442,7 @@ export function LeadsVista({
             aria-label="Filtrar por estado"
             value={filtros.status ?? ""}
             onChange={(event) => irCon({ status: event.target.value || undefined, page: undefined })}
-            className="min-h-12 px-3.5 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer"
+            className="min-h-12 w-full min-w-0 px-3 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer sm:w-auto"
           >
             <option value="">Todos los estados</option>
             {LEAD_STATUSES.map((estado) => (
@@ -461,7 +463,7 @@ export function LeadsVista({
             </button>
           )}
 
-          <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-gold-100 text-gold-900 text-[13px] font-bold tabular-nums border border-gold-300/60 ml-1">
+          <span className="col-span-2 inline-flex w-fit items-center px-3 py-1 rounded-full bg-gold-100 text-gold-900 text-[13px] font-bold tabular-nums border border-gold-300/60 sm:ml-1">
             {total} prospectos
           </span>
         </div>
@@ -471,20 +473,40 @@ export function LeadsVista({
         <div className="table-wrap min-w-0 overflow-x-auto" style={{ minWidth: 0, overflowX: "auto" }} tabIndex={0} aria-label="Tabla de leads con desplazamiento horizontal">
           {leads.length > 0 && (
             <ul aria-label="Leads en tarjetas" className="grid list-none gap-3 p-3 m-0 xl:hidden">
-              {leads.map((lead) => (
-                <li key={lead.id} className="min-w-0 rounded-lg border border-line p-3">
-                  <a href={`/leads/${lead.id}`} className="flex min-h-12 items-center font-bold break-words text-ink">{lead.contactName}</a>
-                  <p className="break-words text-sm">{lead.contactPhoneDisplay ?? lead.contactPhone ?? "Sin teléfono"}</p>
-                  <dl className="grid gap-2 text-sm">
-                    {columnasTabla.filter((columna) => columna.clave !== "lead").map((columna) => (
-                      <div key={columna.clave} className="min-w-0">
-                        <dt className="font-semibold">{columna.titulo}</dt>
-                        <dd className="m-0 break-words [&_*]:whitespace-normal [&_*]:max-w-full">{columna.celda?.(lead)}</dd>
+              {leads.map((lead) => {
+                // Tarjeta compacta: identidad + estado arriba, dos datos clave y
+                // acciones de contacto abajo. El detalle completo vive en la ficha.
+                const celda = (clave: string) => columnasTabla.find((columna) => columna.clave === clave)?.celda?.(lead);
+                return (
+                <li key={lead.id} className={`min-w-0 rounded-xl border bg-surface p-3 shadow-xs ${leadSeleccionado?.id === lead.id ? "border-gold-600" : "border-line"}`}>
+                  <div className="flex items-start gap-3">
+                    <span className="mt-1 shrink-0"><Avatar name={lead.contactName} small /></span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <a href={`/leads/${lead.id}`} className="flex min-h-12 min-w-0 items-center text-[15px] font-bold leading-tight break-words text-ink">{lead.contactName}</a>
+                        <dl className="m-0 mt-2.5 shrink-0"><dt className="sr-only">Estado</dt><dd className="m-0">{celda("estado")}</dd></dl>
                       </div>
-                    ))}
+                      <p className="m-0 truncate text-[13px] text-ink-muted">
+                        {lead.projectName ?? lead.projectInterestText ?? lead.zoneInterest ?? "Por definir"}
+                        <span aria-hidden="true"> · </span>
+                        {lead.contactPhoneDisplay ?? lead.contactPhone ?? "Sin teléfono"}
+                      </p>
+                    </div>
+                  </div>
+                  <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 border-t border-line/70 pt-2 text-[13px]">
+                    <div className="min-w-0"><dt className="text-[13px] text-ink-muted">Presupuesto</dt><dd className="m-0 truncate font-semibold tabular-nums text-ink">{formatoPresupuesto(lead)}</dd></div>
+                    <div className="min-w-0"><dt className="text-[13px] text-ink-muted">Responsable</dt><dd className="m-0 truncate [&_*]:max-w-full [&_*]:truncate">{celda("responsable")}</dd></div>
                   </dl>
+                  <div className="mt-2 flex items-center justify-between gap-2">
+                    <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-ink-muted">
+                      {celda("origen")}
+                      <span className="truncate">{leadWaitingLabel(lead, ahora)}</span>
+                    </div>
+                    <div className="shrink-0 [&_a]:!size-12 [&_a]:!min-h-12 [&_a]:!min-w-12">{celda("acciones")}</div>
+                  </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           )}
           <div className={leads.length > 0 ? "hidden xl:block" : ""}>
