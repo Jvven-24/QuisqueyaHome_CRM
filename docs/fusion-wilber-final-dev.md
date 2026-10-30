@@ -35,3 +35,14 @@ Ninguno en las fusiones 2 y 3. No hubo que resolver nada ni renumerar nada.
 
 ## Migraciones drizzle
 Ninguna nueva (`drizzle/` termina en `0017_rbac_supervision.sql`, ya aplicada). La rama `integraciones-oauth` trae una 0018 sin aplicar, pero no está en esta fusión. No hace falta `pg_dump` para desplegar esta rama.
+
+---
+# Segunda fusión: `orq/viltrum-code/integraciones-oauth` (30-oct-2026 11:18 AM RD)
+Rama `orq/viltrum-code/integraciones-oauth` @ `9de514a` (10 commits de Grok Bot, 30-oct 10:18–11:03 AM RD), fusionada con `--no-ff` sobre la rama que ya traía el rediseño móvil p1.
+
+## Conflictos y decisiones
+- **Conflictos de git: ninguno.** Se revisó a mano el único archivo tocado por ambas ramas: `src/app/(crm)/leads/vista.tsx`. P1 compactó la tarjeta y el encabezado de Leads; OAuth solo añadió la pestaña «Origen y enlaces» (`/leads/origen`) al `ModuleTabs`. Decisión: se conservan las dos cosas (la fusión automática dejó la pestaña dentro del `ModuleTabs` compacto de P1; no se duplicó ni se tocó el componente).
+- **Tokens y componentes compartidos:** OAuth no modifica ningún `*.css` ni nada en `src/components/`; P1 sí modifica `tokens.css`, `globals.css`, `page-header`, `data-table`, `dialog`. No hay solape, así que las pantallas nuevas (Conexiones, Origen, Enlaces) heredan los cambios móviles de P1 sin cambios.
+- **Migraciones drizzle:** la base termina en `0017`; OAuth añade `0018_oauth_conexiones` y `0019_seguimiento_origen` (journal idx 18 y 19, sin choque). No hubo que renumerar. **Son nuevas: requieren `pg_dump` y OK de Wilber antes de aplicarse en producción.** Ambas son reejecutables (`IF NOT EXISTS`). Solo se aplicaron en la BD local de pruebas (127.0.0.1:55432).
+- **Dependencias:** `package-lock.json` idéntico al de la rama OAuth; sin paquetes nuevos.
+- **Variables de entorno nuevas** (solo nombres; los valores los configura Wilber): ver `.env.example` y el README de conexiones. `PORTAL_SYNC_ENABLED` deja la sincronización portal↔CRM apagada por defecto.
