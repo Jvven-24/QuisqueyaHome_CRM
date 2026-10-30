@@ -51,4 +51,4 @@
 .skeleton { background:#e8ecf4; border-radius:7px; height:60px; margin:12px 0; animation:pulse 1.5s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity:.45; } }
 @media(prefers-reduced-motion:reduce) { .desk * { animation:none!important; transition:none!important; } }
-@media(max-width:640px) { .nav .link { flex:1 1 130px; } .toolbar > * { flex:1 1 100%; } .header .actions { width:100%; } }
+@media(max-width:640px) { .nav { flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; } .nav .link { flex:0 0 auto; white-space:nowrap; } .toolbar > * { flex:1 1 100%; } .header .actions { width:100%; } }

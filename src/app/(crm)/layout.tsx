@@ -5,7 +5,7 @@
  * Integra la nueva arquitectura de navegación:
  *  - Sidebar agrupado por Espacios de Trabajo (Workspaces) con búsqueda rápida y colapsado.
  *  - Cabecera Superior con Command Palette (Ctrl+K), Notificaciones y Acciones Rápidas.
- *  - Mobile PWA Dock inferior de 5 accesos táctiles y Drawer para uso en smartphones.
+ *  - Mobile PWA Dock inferior de 5 accesos táctiles y hoja «Más» deslizable (vaul).
  */
 
 import { redirect } from "next/navigation";
@@ -100,16 +100,18 @@ export default async function CrmLayout({
         <a href="#crm-main" className="skip-link">Saltar al contenido</a>
         <CrmHeader etiquetaRol={etiquetaRol} modulosVisibles={visibles} />
         <SectionNavigation entries={[...n1Visibles, ...pieVisibles]} modules={visibles} />
-        {((showPreview || actor.viewingAs) && <VerComoBroker activeName={actor.viewingAs?.brokerName} />)}
+        {/* Vista prestada activa: franja fina de aviso. Inactiva: botón flotante
+            en escritorio y sección dentro de «Más» en móvil (sin robar altura). */}
+        {actor.viewingAs ? <VerComoBroker activeName={actor.viewingAs.brokerName} /> : showPreview && <VerComoBroker modo="flotante" />}
         <ConnectionStatus />
 
-        {/* Viewport Content Container (with pb-24 on mobile to prevent dock collision) */}
-        <main id="crm-main" tabIndex={-1} className="page private-workspace flex-1 pb-24 md:pb-12">
+        {/* Viewport Content Container (pb-24 en móvil por el dock; pb-20 en escritorio por el botón flotante «Ver como broker») */}
+        <main id="crm-main" tabIndex={-1} className="page private-workspace flex-1 pb-24 md:pb-20">
           {children}
         </main>
 
         {/* Mobile PWA Dock for smartphones (<768px) */}
-        <MobileDock modulosVisibles={visibles} etiquetaRol={etiquetaRol} />
+        <MobileDock modulosVisibles={visibles} etiquetaRol={etiquetaRol} extra={showPreview && !actor.viewingAs ? <VerComoBroker modo="panel" /> : null} />
       </div>
 
       <Toaster />

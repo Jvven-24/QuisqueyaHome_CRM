@@ -172,19 +172,19 @@ export function NotaDeVozLeadModal({
       <section
         ref={modalRef}
         tabIndex={-1}
-        className="modal bg-surface border border-line rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 outline-none"
+        className="modal p-0 bg-surface border border-line rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="voz-lead-title"
       >
-        <div className="drawer-head flex items-center justify-between px-6 py-4 border-b border-line bg-surface-alt sticky top-0 z-10">
+        <div className="drawer-head flex items-center justify-between gap-2 px-4 py-3 sm:px-6 sm:py-4 border-b border-line bg-surface-alt sticky top-0 z-10">
           <div>
-            <span className="inline-flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider text-gold-700">
+            <span className="hidden items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:inline-flex">
               <Sparkles className="size-3.5 text-gold-600" />
               Copiloto Inmobiliario · Human-in-the-Loop
             </span>
-            <h2 id="voz-lead-title" className="font-heading font-bold text-lg text-navy-950 m-0">
-              Ingesta inteligente por nota de voz o transcripción de WhatsApp
+            <h2 id="voz-lead-title" className="font-heading font-bold text-base sm:text-lg text-navy-950 m-0">
+              Lead por nota de voz<span className="hidden sm:inline"> o transcripción de WhatsApp</span>
             </h2>
           </div>
           <button
@@ -196,7 +196,7 @@ export function NotaDeVozLeadModal({
           </button>
         </div>
 
-        <div className="p-6 grid gap-5">
+        <div className="p-4 sm:p-6 grid gap-4 sm:gap-5">
           {error && <AlertaErrorFormulario mensaje={error} esErrorRed={false} />}
 
           {/* Paso 1: Entrada de nota de voz o transcripción */}

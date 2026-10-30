@@ -143,13 +143,13 @@ export function ContactosVista({
       },
       {
         clave: "canal",
-        titulo: "Canal de captación",
+        titulo: "Canal",
         celda: (c) => <CanalChip nombre={c.sourceName} />,
         valor: (c) => c.sourceName ?? "",
       },
       {
         clave: "broker",
-        titulo: "Asesor Patrimonial",
+        titulo: "Asesor",
         celda: (c) => (
           <span className="text-[13.5px] font-medium text-foreground flex items-center gap-1.5">
             {c.brokerName ? (
@@ -167,7 +167,7 @@ export function ContactosVista({
       },
       {
         clave: "interaccion",
-        titulo: "Última Interacción",
+        titulo: "Última interacción",
         celda: (c) => (
           <span className="text-[13px] text-muted-foreground font-medium">
             {c.lastInteractionAt
@@ -257,7 +257,7 @@ export function ContactosVista({
       <EstadoConexion />
       <PageHeader
         eyebrow="Private Desk · Directorio"
-        title="Directorio de Contactos"
+        title="Contactos"
         subtitle="Relación patrimonial consolidada, inversionistas, clientes calificados e historial 360."
         action={
           <button
