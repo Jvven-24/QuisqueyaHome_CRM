@@ -34,6 +34,8 @@ function cargar(opciones: { creado?: boolean } = {}) {
     },
     "@/domain/catalogs": { OPERATION_TYPES: ["sale", "rent"] },
     "@/infrastructure/contenedor/leads": { leadsParaEscritura: () => ({}) },
+    // Seguimiento de origen: mejor esfuerzo, sin clic ni código no cambia nada (lo prueba seguimiento/rutas.test.ts).
+    "@/infrastructure/seguimiento/captura": { toquesDeCaptura: async () => null, conOrigen: <T,>(entrada: T) => entrada, guardarAtribucion: async () => {} },
     "@/infrastructure/env": { leadsWebhookToken: () => TOKEN },
     "@/infrastructure/limites": limites,
     "@/infrastructure/http": {

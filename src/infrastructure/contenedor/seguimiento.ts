@@ -2,10 +2,12 @@
 import type { Enriquecedor } from "../../application/seguimiento/casos-de-uso";
 import type { RepoSeguimiento } from "../../application/seguimiento/puertos";
 import { enriquecerAnuncioMeta } from "../db/repos/oauth-conexiones";
-import { repoSeguimiento } from "../db/repos/seguimiento";
+import { datosAnaliticaOrigen, repoSeguimiento } from "../db/repos/seguimiento";
 
 export function seguimientoParaEscritura(): { repo: RepoSeguimiento; enriquecer: Enriquecedor } {
   return { repo: repoSeguimiento(), enriquecer: enriquecerAnuncioMeta };
 }
 
 export const seguimientoParaLectura = (): RepoSeguimiento => repoSeguimiento();
+
+export const analiticaOrigenDatos = datosAnaliticaOrigen;

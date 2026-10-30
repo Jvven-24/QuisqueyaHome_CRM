@@ -1,7 +1,10 @@
 /** Repositorio de seguimiento de origen (enlaces, clics, atribución). Implementa el puerto de la capa application. */
-import { and, count, countDistinct, desc, eq, gte } from "drizzle-orm";
+import { and, count, countDistinct, desc, eq, gte, lte } from "drizzle-orm";
 import type { Atribucion, Toque } from "../../../application/seguimiento/atribucion";
 import type { Enlace, EnlaceConConteos, NuevoEnlace, RepoSeguimiento } from "../../../application/seguimiento/puertos";
+import type { Actor, PermissionScope } from "../../../domain/rbac";
+import type { ClicsEnlace, FilaOrigen } from "../../../application/seguimiento/analitica";
+import { visibleRows } from "../../rbac-filter";
 import { getDb } from "../client";
 import { leadAttributions, leads, trackingClicks, trackingLinks } from "../schema";
 
@@ -85,4 +88,38 @@ export function repoSeguimiento(): RepoSeguimiento {
       }
     },
   };
+}
+
+/**
+ * Datos para la analítica de origen. Los leads se filtran con el alcance del actor (un broker con alcance «own»
+ * solo ve su propio origen); los clics son del enlace, no de una persona, y se muestran solo a quien ve todo.
+ * Sin fila de atribución se usan los campos de origen del propio lead (leads antiguos o cargados a mano).
+ */
+export async function datosAnaliticaOrigen(p: { actor: Actor; alcance: Exclude<PermissionScope, "none">; modelo: "first" | "last"; desde: Date; hasta: Date }): Promise<{ filas: FilaOrigen[]; clics: ClicsEnlace[] }> {
+  const db = getDb();
+  const filas = await db.select({
+    leadId: leads.id, receivedAt: leads.receivedAt, firstContactedAt: leads.firstContactedAt, status: leads.status,
+    leadVideo: leads.sourceVideoUrl, leadCampaign: leads.campaign, leadSource: leads.utmSource, leadMedium: leads.utmMedium, leadUtmCampaign: leads.utmCampaign,
+    linkId: leadAttributions.linkId, linkName: trackingLinks.name, linkVideoTitle: trackingLinks.videoTitle,
+    aVideo: leadAttributions.videoUrl, aCampaign: leadAttributions.campaign, aSource: leadAttributions.utmSource, aMedium: leadAttributions.utmMedium,
+    aAd: leadAttributions.adId, aId: leadAttributions.id,
+  }).from(leads)
+    .leftJoin(leadAttributions, and(eq(leadAttributions.leadId, leads.id), eq(leadAttributions.model, p.modelo)))
+    .leftJoin(trackingLinks, eq(trackingLinks.id, leadAttributions.linkId))
+    .where(and(visibleRows(p.actor, p.alcance, leads.brokerId, leads.deletedAt), gte(leads.receivedAt, p.desde), lte(leads.receivedAt, p.hasta)))
+    .orderBy(leads.receivedAt);
+  const salida: FilaOrigen[] = filas.map((r) => ({
+    leadId: r.leadId, receivedAt: r.receivedAt, firstContactedAt: r.firstContactedAt, status: r.status,
+    linkId: r.linkId, linkName: r.linkName, videoTitle: r.linkVideoTitle,
+    videoUrl: r.aId ? r.aVideo : r.leadVideo, campaign: r.aId ? r.aCampaign ?? r.leadCampaign : r.leadCampaign,
+    utmSource: r.aId ? r.aSource : r.leadSource, utmMedium: r.aId ? r.aMedium : r.leadMedium, adId: r.aAd, atribuido: r.aId != null,
+  }));
+  let clics: ClicsEnlace[] = [];
+  if (p.alcance === "all") {
+    const enlaces = await db.select({ id: trackingLinks.id, name: trackingLinks.name }).from(trackingLinks);
+    const c = await db.select({ id: trackingClicks.linkId, clics: count(), visitantes: countDistinct(trackingClicks.visitorId) }).from(trackingClicks)
+      .where(and(eq(trackingClicks.isBot, false), gte(trackingClicks.clickedAt, p.desde), lte(trackingClicks.clickedAt, p.hasta))).groupBy(trackingClicks.linkId);
+    clics = enlaces.map((e) => ({ linkId: e.id, nombre: e.name, clics: c.find((x) => x.id === e.id)?.clics ?? 0, visitantes: c.find((x) => x.id === e.id)?.visitantes ?? 0 }));
+  }
+  return { filas: salida, clics };
 }
