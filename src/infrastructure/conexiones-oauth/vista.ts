@@ -18,6 +18,9 @@ export type ConexionVista = {
   conectadaEn: string;
   /** Capacidades extra ya concedidas (p. ej. "enviar" en Gmail). */
   extras: string[];
+  /** Solo Calendar: cuenta del propio administrador (única que puede desconectar aquí) y su dueño. */
+  propia?: boolean;
+  propietario?: string;
 };
 
 export function estadoDeFila(status: string): EstadoConexion {
@@ -44,4 +47,18 @@ export const MOTIVOS_CALLBACK: Record<string, string> = {
   "permisos-incompletos": "Faltaron permisos obligatorios al autorizar. Conéctala de nuevo y marca todos.",
   "sin-configurar": "Faltan variables de entorno para este proveedor.",
   fallo: "No se pudo completar la conexión. Revisa los registros del servidor.",
+};
+
+export type EstadoTarjeta = "sin_conectar" | EstadoConexion;
+
+/** Estado de la tarjeta de un servicio: gana lo que más urgente es (reconectar > error > conectado). */
+export function estadoTarjeta(conexiones: readonly { estado: EstadoConexion }[]): EstadoTarjeta {
+  if (conexiones.length === 0) return "sin_conectar";
+  if (conexiones.some((c) => c.estado === "reconectar")) return "reconectar";
+  if (conexiones.some((c) => c.estado === "error")) return "error";
+  return "conectado";
+}
+
+export const ETIQUETA_TARJETA: Record<EstadoTarjeta, string> = {
+  sin_conectar: "Sin conectar", conectado: "Conectado", error: "Con error", reconectar: "Reconectar",
 };

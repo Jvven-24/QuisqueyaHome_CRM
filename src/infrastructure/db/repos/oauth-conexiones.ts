@@ -2,7 +2,7 @@
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { NotFoundError } from "../../../domain/errors";
 import { getDb } from "../client";
-import { oauthConnections } from "../schema";
+import { googleAccounts, oauthConnections, users } from "../schema";
 import { cifrar, descifrar } from "../../conexiones-oauth/cripto";
 import * as G from "../../conexiones-oauth/google";
 import * as M from "../../conexiones-oauth/meta";
@@ -98,4 +98,16 @@ export async function desconectarConexion(id: number): Promise<{ revocado: boole
   // Se borran los tokens aunque el proveedor no responda: el CRM deja de poder usarlos.
   await getDb().update(oauthConnections).set({ accessTokenEnc: "", refreshTokenEnc: null, status: "error", lastError: null, revokedAt: new Date(), updatedAt: new Date() }).where(eq(oauthConnections.id, id));
   return { revocado };
+}
+
+/** Cuentas de Google Calendar (por usuario, flujo existente) presentadas como conexiones de solo lectura. */
+export async function listarCalendarioComoConexiones(actorUserId: number): Promise<ConexionVista[]> {
+  const filas = await getDb().select({ a: googleAccounts, dueno: users.fullName }).from(googleAccounts)
+    .innerJoin(users, eq(users.id, googleAccounts.userId)).where(isNull(googleAccounts.revokedAt)).orderBy(googleAccounts.id);
+  return filas.map(({ a, dueno }) => ({
+    origen: "calendar", id: a.id, servicio: "calendar", proveedor: "google", cuenta: a.email,
+    estado: a.refreshTokenEnc ? "conectado" : "reconectar", mensaje: a.refreshTokenEnc ? null : "Falta el permiso de acceso continuo. Vuelve a conectar la cuenta.",
+    resumen: a.active ? "Activa para agendar visitas" : "Desactivada en Agenda", verificadoEn: null, conectadaEn: a.createdAt.toISOString(),
+    extras: [], propia: a.userId === actorUserId, propietario: dueno,
+  }));
 }
