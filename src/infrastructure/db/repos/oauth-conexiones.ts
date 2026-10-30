@@ -1,4 +1,5 @@
 /** Persistencia de conexiones OAuth de la organización. Ninguna lectura devuelve tokens. */
+import { leerAnuncioMeta } from "../../conexiones-oauth/meta-anuncios";
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { NotFoundError } from "../../../domain/errors";
 import { getDb } from "../client";
@@ -110,4 +111,17 @@ export async function listarCalendarioComoConexiones(actorUserId: number): Promi
     resumen: a.active ? "Activa para agendar visitas" : "Desactivada en Agenda", verificadoEn: null, conectadaEn: a.createdAt.toISOString(),
     extras: [], propia: a.userId === actorUserId, propietario: dueno,
   }));
+}
+
+/** Enriquecedor de enlaces de seguimiento: usa la conexión «Meta Ads» más reciente si existe. */
+export async function enriquecerAnuncioMeta(adId: string): Promise<{ creativeId?: string; adName?: string; campaign?: string } | null> {
+  const [c] = await getDb().select({ id: oauthConnections.id }).from(oauthConnections)
+    .where(and(eq(oauthConnections.service, "meta_ads"), eq(oauthConnections.status, "connected"), isNull(oauthConnections.revokedAt)))
+    .orderBy(desc(oauthConnections.id)).limit(1);
+  if (!c) return null;
+  try {
+    return await leerAnuncioMeta(adId, await accessTokenDe(c.id));
+  } catch {
+    return null;
+  }
 }

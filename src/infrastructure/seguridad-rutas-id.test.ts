@@ -45,6 +45,7 @@ const REVISADAS: Record<string, Garantia> = {
   "brokers/[id]/proyectos/route.ts": caso("brokers", /alcance !== "all"/),
   "catalogos/[tipo]/[id]/route.ts": global("catalogos/[tipo]/[id]/route.ts", "settings:edit"),
   "catalogos/[tipo]/route.ts": global("catalogos/[tipo]/route.ts", "settings:create"),
+  "seguimiento/enlaces/[id]/route.ts": global("seguimiento/enlaces/[id]/route.ts", "integrations:edit"),
   "integraciones/conexiones/[id]/route.ts": global("integraciones/conexiones/[id]/route.ts", "settings:edit"),
   "integraciones/conexiones/[id]/verificar/route.ts": global("integraciones/conexiones/[id]/verificar/route.ts", "settings:edit"),
   "integraciones/oauth/[proveedor]/conectar/route.ts": global("integraciones/oauth/[proveedor]/conectar/route.ts", "settings:edit"),

@@ -28,6 +28,7 @@
 import { z } from "zod";
 import { capturarLeadExterno } from "@/application/leads/casos-de-uso";
 import { OPERATION_TYPES } from "@/domain/catalogs";
+import { conOrigen, guardarAtribucion, toquesDeCaptura } from "@/infrastructure/seguimiento/captura";
 import { leadsParaEscritura } from "@/infrastructure/contenedor/leads";
 import { leadsWebhookToken } from "@/infrastructure/env";
 import { demasiadasPeticiones, ipCliente, leerJsonLimitado, limiteLeadsExterno } from "@/infrastructure/limites";
@@ -55,6 +56,10 @@ const LeadExternoInput = z.object({
   utmCampaign: z.string().optional(),
   originalMessage: z.string().optional(),
   sourceVideoUrl: z.string().optional(),
+
+  /** Seguimiento de origen (opcionales): `qh_c` y `qh_v` que el portal recibió en la URL de `/v/<codigo>`. */
+  trackingCode: z.string().max(40).optional(),
+  visitorId: z.string().max(64).optional(),
 });
 
 /**
@@ -89,7 +94,11 @@ export async function POST(request: Request) {
     const datos = parseInput(LeadExternoInput, cuerpo);
 
     // Campo por campo, nunca `...datos`.
-    const resultado = await capturarLeadExterno(leadsParaEscritura(), {
+    const toques = await toquesDeCaptura({
+      canal: datos.trackingCode || datos.visitorId ? "portal" : "otro", codigo: datos.trackingCode, visitorId: datos.visitorId,
+      texto: datos.originalMessage, utm: { source: datos.utmSource, medium: datos.utmMedium, campaign: datos.utmCampaign },
+    });
+    const resultado = await capturarLeadExterno(leadsParaEscritura(), conOrigen({
       externalId: datos.externalId,
       fullName: datos.fullName,
       phone: datos.phone,
@@ -108,7 +117,8 @@ export async function POST(request: Request) {
       utmCampaign: datos.utmCampaign,
       originalMessage: datos.originalMessage,
       sourceVideoUrl: datos.sourceVideoUrl,
-    });
+    }, toques));
+    await guardarAtribucion(resultado.lead, toques);
 
     // `leadId` es ADITIVO: el Portal lee `result.leadId` como acuse (D19, 2026-10-14);
     // `lead` y `creado` se conservan tal cual para no romper a nadie más.

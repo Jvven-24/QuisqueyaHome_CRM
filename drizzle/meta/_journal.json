@@ -134,6 +134,13 @@
       "when": 1792381003000,
       "tag": "0018_oauth_conexiones",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1792381004000,
+      "tag": "0019_seguimiento_origen",
+      "breakpoints": true
     }
   ]
 }

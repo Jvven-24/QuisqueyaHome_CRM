@@ -2128,6 +2128,75 @@ export const oauthConnections = pgTable("oauth_connections", {
   index("oauth_connections_service_idx").on(t.service),
 ]).enableRLS();
 
+/** Enlaces de seguimiento por video/anuncio: `/v/<code>` registra el clic y lleva al portal o a WhatsApp. */
+export const trackingLinks = pgTable("tracking_links", {
+  id: serial("id").primaryKey(),
+  code: text("code").notNull(),
+  name: text("name").notNull(),
+  destination: text("destination", { enum: ["portal", "whatsapp"] }).notNull(),
+  portalPath: text("portal_path"),
+  whatsappPhone: text("whatsapp_phone"),
+  whatsappText: text("whatsapp_text"),
+  videoUrl: text("video_url"),
+  videoTitle: text("video_title"),
+  campaign: text("campaign"),
+  utmSource: text("utm_source").notNull().default("facebook"),
+  utmMedium: text("utm_medium").notNull().default("video"),
+  utmCampaign: text("utm_campaign"),
+  utmContent: text("utm_content"),
+  utmTerm: text("utm_term"),
+  /** Con Meta Ads conectado: anuncio y creativo de origen. */
+  adId: text("ad_id"),
+  creativeId: text("creative_id"),
+  adName: text("ad_name"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: instant("created_at").notNull().defaultNow(),
+  updatedAt: instant("updated_at").notNull().defaultNow(),
+}, (t) => [
+  uniqueIndex("tracking_links_code_unq").on(t.code),
+  index("tracking_links_ad_idx").on(t.adId),
+  check("tracking_links_whatsapp_check", sql`${t.destination} <> 'whatsapp' or ${t.whatsappPhone} is not null`),
+]).enableRLS();
+
+export const trackingClicks = pgTable("tracking_clicks", {
+  id: serial("id").primaryKey(),
+  linkId: integer("link_id").notNull().references(() => trackingLinks.id, { onDelete: "cascade" }),
+  visitorId: text("visitor_id").notNull(),
+  clickedAt: instant("clicked_at").notNull().defaultNow(),
+  referrer: text("referrer"),
+  userAgent: text("user_agent"),
+  /** Pre-visualizadores (Facebook, WhatsApp…): se guardan pero no cuentan. */
+  isBot: boolean("is_bot").notNull().default(false),
+}, (t) => [
+  index("tracking_clicks_link_idx").on(t.linkId, t.clickedAt),
+  index("tracking_clicks_visitor_idx").on(t.visitorId, t.clickedAt),
+]).enableRLS();
+
+/** Atribución de cada lead: un primer toque y un último toque (instantánea de video/campaña/UTM/anuncio). */
+export const leadAttributions = pgTable("lead_attributions", {
+  id: serial("id").primaryKey(),
+  leadId: integer("lead_id").notNull().references(() => leads.id, { onDelete: "cascade" }),
+  model: text("model", { enum: ["first", "last"] }).notNull(),
+  linkId: integer("link_id").references(() => trackingLinks.id, { onDelete: "set null" }),
+  code: text("code"),
+  videoUrl: text("video_url"),
+  campaign: text("campaign"),
+  utmSource: text("utm_source"),
+  utmMedium: text("utm_medium"),
+  utmCampaign: text("utm_campaign"),
+  utmContent: text("utm_content"),
+  adId: text("ad_id"),
+  creativeId: text("creative_id"),
+  channel: text("channel", { enum: ["portal", "whatsapp", "meta_lead_ads", "otro"] }).notNull(),
+  matchedBy: text("matched_by", { enum: ["codigo_whatsapp", "clic_visitante", "meta_form", "utm"] }).notNull(),
+  touchedAt: instant("touched_at").notNull(),
+  createdAt: instant("created_at").notNull().defaultNow(),
+}, (t) => [
+  uniqueIndex("lead_attributions_lead_model_unq").on(t.leadId, t.model),
+  index("lead_attributions_link_idx").on(t.linkId),
+]).enableRLS();
+
 
 /** Fase 3: excepciones explícitas, también denegaciones (none). */
 export const userPermissionOverrides = pgTable("user_permission_overrides", {

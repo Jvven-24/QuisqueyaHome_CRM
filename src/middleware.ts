@@ -34,6 +34,8 @@ const PUBLIC_PATHS = [
   "/api/auth",
   "/api/leads/externo",
   "/api/integraciones/webhooks",
+  // Redirector de enlaces de seguimiento (/v/<codigo>): lo abre cualquiera desde un anuncio.
+  "/v",
   // Login con Google: el callback decide por el state; conectar calendario sigue exigiendo sesión.
   "/api/integraciones/google/login",
   "/api/integraciones/google/callback",
