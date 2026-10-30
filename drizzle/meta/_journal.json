@@ -127,6 +127,13 @@
       "when": 1792381002000,
       "tag": "0017_rbac_supervision",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1792381003000,
+      "tag": "0018_oauth_conexiones",
+      "breakpoints": true
     }
   ]
 }

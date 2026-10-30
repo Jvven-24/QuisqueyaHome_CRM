@@ -2099,6 +2099,35 @@ export const googleCalendars = pgTable("google_calendars", {
   defaultForVisits: boolean("default_for_visits").notNull().default(false),
 }, (t) => [uniqueIndex("google_calendars_account_cal_unq").on(t.accountId, t.calendarId)]).enableRLS();
 
+/**
+ * Conexiones OAuth de la organización (Search Console, GA4, Gmail, Meta Ads…). Varias cuentas por
+ * servicio. Tokens cifrados AES-256-GCM; al desconectar se borran y queda `revoked_at`.
+ * Google Calendar por usuario sigue en `google_accounts`.
+ */
+export const oauthConnections = pgTable("oauth_connections", {
+  id: serial("id").primaryKey(),
+  service: text("service", { enum: ["search_console", "analytics", "gmail", "calendar", "meta_ads"] }).notNull(),
+  provider: text("provider", { enum: ["google", "meta"] }).notNull(),
+  externalAccountId: text("external_account_id").notNull(),
+  accountLabel: text("account_label").notNull(),
+  connectedBy: integer("connected_by").notNull().references(() => users.id),
+  accessTokenEnc: text("access_token_enc").notNull(),
+  refreshTokenEnc: text("refresh_token_enc"),
+  /** null = el proveedor no fija vencimiento. */
+  expiresAt: instant("expires_at"),
+  scopes: text("scopes").notNull().default(""),
+  status: text("status", { enum: ["connected", "error", "reauth"] }).notNull().default("connected"),
+  lastError: text("last_error"),
+  summary: text("summary"),
+  lastCheckedAt: instant("last_checked_at"),
+  createdAt: instant("created_at").notNull().defaultNow(),
+  updatedAt: instant("updated_at").notNull().defaultNow(),
+  revokedAt: instant("revoked_at"),
+}, (t) => [
+  uniqueIndex("oauth_connections_service_account_unq").on(t.service, t.externalAccountId).where(sql`${t.revokedAt} is null`),
+  index("oauth_connections_service_idx").on(t.service),
+]).enableRLS();
+
 
 /** Fase 3: excepciones explícitas, también denegaciones (none). */
 export const userPermissionOverrides = pgTable("user_permission_overrides", {

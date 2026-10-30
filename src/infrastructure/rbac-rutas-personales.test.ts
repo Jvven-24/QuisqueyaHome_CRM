@@ -101,7 +101,7 @@ test("migración de RBAC conserva RLS, unicidad, denegación none, seed idempote
   assert.match(migration, /'manager', 'Gerente\/Supervisor'/);
   assert.doesNotMatch(migration, /\('(?:users|roles|settings)'/);
   const journal = JSON.parse(readFileSync(new URL("../../drizzle/meta/_journal.json", import.meta.url), "utf8"));
-  assert.equal(journal.entries.at(-1).tag, "0017_rbac_supervision");
+  assert.ok(journal.entries.some((e: { idx: number; tag: string }) => e.idx === 17 && e.tag === "0017_rbac_supervision"));
 });
 
 
