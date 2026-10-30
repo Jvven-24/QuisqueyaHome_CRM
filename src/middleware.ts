@@ -34,6 +34,8 @@ const PUBLIC_PATHS = [
   "/api/auth",
   "/api/leads/externo",
   "/api/integraciones/webhooks",
+  // Trabajo de la VPS: firma HMAC en la propia ruta (ver portal-sync/cron/route.ts).
+  "/api/portal-sync/cron",
   // Redirector de enlaces de seguimiento (/v/<codigo>): lo abre cualquiera desde un anuncio.
   "/v",
   // Login con Google: el callback decide por el state; conectar calendario sigue exigiendo sesión.
