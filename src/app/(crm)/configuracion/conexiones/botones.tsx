@@ -3,7 +3,7 @@
  * - Google (Identity branding guidelines, tema claro): fondo #FFFFFF, borde 1 px #747775, texto #1F1F1F 14/20 Medium,
  *   «G» multicolor de 20 px, alto 40 px, relleno 12 px, separación 10 px. Estados: hover 8 % y foco 12 % de #303030.
  *   Se usa Roboto/Arial porque Google Sans es propietaria; el texto se traduce («Continuar con Google»), permitido por las guías.
- * - Facebook Login: azul #1877F2, texto blanco, logotipo «f» blanco.
+ * - Facebook Login: azul Meta #0866FF (4,8:1 con texto blanco; el #1877F2 clásico daba 4,2:1 y no cumple AA), texto blanco, logotipo «f» blanco.
  * En móvil el alto sube a 44 px (objetivo táctil mínimo) sin deformar el logotipo.
  */
 import { FacebookF, GoogleG } from "./logos";
@@ -31,13 +31,13 @@ export function BotonGoogle({ href, texto, deshabilitado, describe }: Props) {
 export function BotonFacebook({ href, texto, deshabilitado, describe }: Props) {
   if (deshabilitado) {
     return (
-      <button type="button" disabled aria-describedby={describe} className={`${COMUN} ${ALTO} cursor-not-allowed bg-[#1877F2]/40 text-white/90`}>
+      <button type="button" disabled aria-describedby={describe} className={`${COMUN} ${ALTO} cursor-not-allowed bg-[#0866FF]/40 text-white/90`}>
         <FacebookF /><span>{texto}</span>
       </button>
     );
   }
   return (
-    <a href={href} className={`${COMUN} ${ALTO} bg-[#1877F2] text-white hover:bg-[#166FE5] active:bg-[#1465D0]`}>
+    <a href={href} className={`${COMUN} ${ALTO} bg-[#0866FF] text-white hover:bg-[#0757D9] active:bg-[#0950C4]`}>
       <FacebookF /><span>{texto}</span>
     </a>
   );

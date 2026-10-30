@@ -131,10 +131,10 @@ export function ConfiguracionVista(props: {
 
       {/* Layout con Navegación Lateral Interna */}
       <div
-        className="settings-layout"
+        className={tab === "conexiones" ? "settings-layout grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]" : "settings-layout"}
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+          gridTemplateColumns: tab === "conexiones" ? undefined : "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
           gap: "24px",
           marginTop: "20px",
           alignItems: "start",

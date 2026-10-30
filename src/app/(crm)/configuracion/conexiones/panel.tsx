@@ -61,7 +61,7 @@ function Cuenta({ c, s, ocupado, onVerificar, onDesconectar }: { c: ConexionVist
   const puedeActuar = c.origen === "oauth" || c.propia;
   const extraEnviar = c.extras.includes("enviar");
   return (
-    <li className="grid gap-2 rounded-lg border border-line bg-surface-alt p-3">
+    <li className="m-0 grid list-none gap-2 rounded-lg border border-line bg-surface-alt p-3">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="break-words text-sm font-bold text-ink">{c.cuenta}</p>
@@ -111,7 +111,7 @@ function Tarjeta({ s, lista, faltan, ocupado, onVerificar, onDesconectar }: {
   const texto = conectadas ? "Añadir otra cuenta de Google" : "Continuar con Google";
   const textoFb = conectadas ? "Añadir otra cuenta de Facebook" : "Continuar con Facebook";
   return (
-    <li className="flex min-w-0 flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5" aria-labelledby={`${uid}-t`}>
+    <li className="m-0 flex min-w-0 list-none flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5" aria-labelledby={`${uid}-t`}>
       <div className="flex items-start gap-3">
         <span className="flex size-12 flex-none items-center justify-center rounded-xl border border-line bg-surface-alt"><MarcaServicio id={s.id} size={30} /></span>
         <div className="min-w-0 flex-1">
@@ -122,7 +122,7 @@ function Tarjeta({ s, lista, faltan, ocupado, onVerificar, onDesconectar }: {
       <p className="text-sm leading-relaxed text-ink-muted">{s.uso}</p>
 
       {conectadas && (
-        <ul className="grid gap-2" aria-label={`Cuentas de ${s.nombre}`}>
+        <ul className="m-0 grid list-none gap-2 p-0" aria-label={`Cuentas de ${s.nombre}`}>
           {lista.map((c) => (
             <Cuenta key={`${c.origen}-${c.id}`} c={c} s={s} ocupado={ocupado} onVerificar={() => onVerificar(c.id)} onDesconectar={() => onDesconectar(c)} />
           ))}
@@ -131,7 +131,7 @@ function Tarjeta({ s, lista, faltan, ocupado, onVerificar, onDesconectar }: {
 
       <details className="text-sm text-ink-muted">
         <summary className={`min-h-11 cursor-pointer select-none rounded-md py-2 font-semibold text-ink ${FOCO}`}>Permisos que se piden</summary>
-        <ul className="mt-1 grid gap-1.5 pl-1">
+        <ul className="m-0 mt-1 grid list-none gap-1.5 p-0 pl-1">
           {[...s.scopes, ...(s.extras ?? []).filter((e) => extras.includes(e.id)).flatMap((e) => e.scopes)].map((sc) => (
             <li key={sc} className="break-all font-mono text-xs">{sc.replace("https://www.googleapis.com/auth/", "")}</li>
           ))}
@@ -187,7 +187,7 @@ export function ConexionesPanel({ datos }: { datos: DatosConexiones }) {
       {mensaje && (
         <p role={mensaje.tipo === "error" ? "alert" : "status"} className={`rounded-lg border p-3 text-sm font-semibold ${mensaje.tipo === "ok" ? "border-success/30 bg-success-bg text-success" : "border-danger/30 bg-danger-bg text-danger"}`}>{mensaje.texto}</p>
       )}
-      <ul className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))" }}>
+      <ul className="m-0 grid list-none gap-4 p-0" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))" }}>
         {SERVICIOS.map((s) => (
           <Tarjeta
             key={s.id} s={s} ocupado={ocupado}
