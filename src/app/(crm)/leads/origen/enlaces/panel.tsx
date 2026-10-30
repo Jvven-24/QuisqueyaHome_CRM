@@ -46,7 +46,7 @@ function BotonCopiar({ url, etiqueta, onCopiado }: { url: string; etiqueta: stri
   );
 }
 
-export function EnlacesPanel({ permitido, enlaces, puedeCrear, portalConfigurado, urlPublicaConfigurada }: { permitido: boolean; enlaces: EnlaceFila[]; puedeCrear: boolean; portalConfigurado: boolean; urlPublicaConfigurada: boolean }) {
+export function EnlacesPanel({ permitido, enlaces, puedeCrear, puedeEditar, portalConfigurado, urlPublicaConfigurada }: { permitido: boolean; enlaces: EnlaceFila[]; puedeCrear: boolean; puedeEditar: boolean; portalConfigurado: boolean; urlPublicaConfigurada: boolean }) {
   const router = useRouter();
   const uid = useId();
   const [destino, setDestino] = useState<"portal" | "whatsapp">("whatsapp");
@@ -139,7 +139,7 @@ export function EnlacesPanel({ permitido, enlaces, puedeCrear, portalConfigurado
         ) : (
           <ul className="m-0 grid list-none gap-3 p-0">
             {enlaces.map((e) => (
-              <li key={e.id} className="grid min-w-0 gap-3 rounded-xl border border-line bg-surface p-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_auto] lg:items-center" style={{ opacity: e.activo ? 1 : 0.75 }}>
+              <li key={e.id} className="grid min-w-0 gap-3 rounded-xl border border-line bg-surface p-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_auto] lg:items-center">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <h3 className="m-0 break-words font-heading text-base font-bold text-navy-900">{e.nombre}</h3>
@@ -155,7 +155,7 @@ export function EnlacesPanel({ permitido, enlaces, puedeCrear, portalConfigurado
                 </dl>
                 <div className="flex flex-wrap items-center gap-2 lg:justify-end">
                   <BotonCopiar url={e.urlCorta} etiqueta={e.nombre} onCopiado={setAviso} />
-                  {puedeCrear && <label className="flex min-h-11 cursor-pointer items-center gap-0.5 text-sm text-ink"><Switch checked={e.activo} onCheckedChange={(on) => activar(e, on)} aria-label={`Enlace ${e.nombre} activo`} />{e.activo ? "Activo" : "Apagado"}</label>}
+                  {puedeEditar && <label className="flex min-h-11 cursor-pointer items-center gap-0.5 text-sm text-ink"><Switch checked={e.activo} onCheckedChange={(on) => activar(e, on)} aria-label={`Enlace ${e.nombre} activo`} />{e.activo ? "Activo" : "Apagado"}</label>}
                 </div>
               </li>
             ))}

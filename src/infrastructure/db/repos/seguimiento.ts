@@ -77,15 +77,18 @@ export function repoSeguimiento(): RepoSeguimiento {
         .where(eq(leads.contactId, contactId)).orderBy(leadAttributions.touchedAt);
       const first = todas.filter((t) => t.a.model === "first")[0]?.a;
       const last = [...todas.filter((t) => t.a.model === "last")].reverse()[0]?.a;
-      return first && last ? { first: aToque(first), last: aToque(last) } : null;
+      return first ? { first: aToque(first), last: aToque(last ?? first) } : null;
     },
     async guardarAtribucion(leadId, a: Atribucion) {
-      for (const [model, t] of [["first", a.first], ["last", a.last]] as const) {
-        const v = deToque(leadId, model, t);
-        // El primer toque no se reescribe una vez guardado; el último sí.
-        if (model === "first") await db().insert(leadAttributions).values(v).onConflictDoNothing({ target: [leadAttributions.leadId, leadAttributions.model] });
-        else await db().insert(leadAttributions).values(v).onConflictDoUpdate({ target: [leadAttributions.leadId, leadAttributions.model], set: { ...v } });
-      }
+      // El par se guarda junto: nunca queda un primer toque sin último toque.
+      await db().transaction(async (tx) => {
+        for (const [model, t] of [["first", a.first], ["last", a.last]] as const) {
+          const v = deToque(leadId, model, t);
+          // El primer toque no se reescribe una vez guardado; el último solo avanza (no retrocede por un escritor lento).
+          if (model === "first") await tx.insert(leadAttributions).values(v).onConflictDoNothing({ target: [leadAttributions.leadId, leadAttributions.model] });
+          else await tx.insert(leadAttributions).values(v).onConflictDoUpdate({ target: [leadAttributions.leadId, leadAttributions.model], set: { ...v }, setWhere: lte(leadAttributions.touchedAt, v.touchedAt) });
+        }
+      });
     },
   };
 }
@@ -95,13 +98,13 @@ export function repoSeguimiento(): RepoSeguimiento {
  * solo ve su propio origen); los clics son del enlace, no de una persona, y se muestran solo a quien ve todo.
  * Sin fila de atribución se usan los campos de origen del propio lead (leads antiguos o cargados a mano).
  */
-export async function datosAnaliticaOrigen(p: { actor: Actor; alcance: Exclude<PermissionScope, "none">; modelo: "first" | "last"; desde: Date; hasta: Date }): Promise<{ filas: FilaOrigen[]; clics: ClicsEnlace[] }> {
+export async function datosAnaliticaOrigen(p: { actor: Actor; alcance: Exclude<PermissionScope, "none">; modelo: "first" | "last"; desde: Date; hasta: Date }): Promise<{ filas: FilaOrigen[]; clics: ClicsEnlace[] | null }> {
   const db = getDb();
   const filas = await db.select({
     leadId: leads.id, receivedAt: leads.receivedAt, firstContactedAt: leads.firstContactedAt, status: leads.status,
     leadVideo: leads.sourceVideoUrl, leadCampaign: leads.campaign, leadSource: leads.utmSource, leadMedium: leads.utmMedium, leadUtmCampaign: leads.utmCampaign,
     linkId: leadAttributions.linkId, linkName: trackingLinks.name, linkVideoTitle: trackingLinks.videoTitle,
-    aVideo: leadAttributions.videoUrl, aCampaign: leadAttributions.campaign, aSource: leadAttributions.utmSource, aMedium: leadAttributions.utmMedium,
+    aVideo: leadAttributions.videoUrl, aCampaign: leadAttributions.campaign, aUtmCampaign: leadAttributions.utmCampaign, aSource: leadAttributions.utmSource, aMedium: leadAttributions.utmMedium,
     aAd: leadAttributions.adId, aId: leadAttributions.id,
   }).from(leads)
     .leftJoin(leadAttributions, and(eq(leadAttributions.leadId, leads.id), eq(leadAttributions.model, p.modelo)))
@@ -111,10 +114,10 @@ export async function datosAnaliticaOrigen(p: { actor: Actor; alcance: Exclude<P
   const salida: FilaOrigen[] = filas.map((r) => ({
     leadId: r.leadId, receivedAt: r.receivedAt, firstContactedAt: r.firstContactedAt, status: r.status,
     linkId: r.linkId, linkName: r.linkName, videoTitle: r.linkVideoTitle,
-    videoUrl: r.aId ? r.aVideo : r.leadVideo, campaign: r.aId ? r.aCampaign ?? r.leadCampaign : r.leadCampaign,
+    videoUrl: r.aId ? r.aVideo : r.leadVideo, campaign: (r.aId ? r.aCampaign ?? r.aUtmCampaign ?? r.leadCampaign : r.leadCampaign) ?? r.leadUtmCampaign,
     utmSource: r.aId ? r.aSource : r.leadSource, utmMedium: r.aId ? r.aMedium : r.leadMedium, adId: r.aAd, atribuido: r.aId != null,
   }));
-  let clics: ClicsEnlace[] = [];
+  let clics: ClicsEnlace[] | null = null; // null = este alcance no ve los clics (no es lo mismo que cero)
   if (p.alcance === "all") {
     const enlaces = await db.select({ id: trackingLinks.id, name: trackingLinks.name }).from(trackingLinks);
     const c = await db.select({ id: trackingClicks.linkId, clics: count(), visitantes: countDistinct(trackingClicks.visitorId) }).from(trackingClicks)

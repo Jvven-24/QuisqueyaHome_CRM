@@ -66,3 +66,16 @@ test("filtros de fecha: por defecto 30 días, valores inválidos ignorados, orde
   const largo = rangoDeFiltros({ desde: "2020-01-01", hasta: "2026-10-07" }, ahora);
   assert.ok(largo.hasta.getTime() - largo.desde.getTime() <= 367 * 86400000);
 });
+
+test("sin alcance sobre los clics no se inventa la etapa de visitantes en cero; los sin contactar se cuentan aparte", () => {
+  const f = (id: number, extra: Partial<FilaOrigen> = {}): FilaOrigen => ({ leadId: id, receivedAt: new Date("2026-10-01T15:00:00Z"), firstContactedAt: null, status: "new", linkId: 1, linkName: "A", videoTitle: null, videoUrl: null, campaign: "c", utmSource: "facebook", utmMedium: "video", adId: null, atribuido: true, ...extra });
+  const filas = [f(1, { firstContactedAt: new Date("2026-10-01T15:01:00Z"), status: "contacted" }), f(2), f(3, { atribuido: false, linkId: null })];
+  const rango = { desde: new Date("2026-10-01T04:00:00Z"), hasta: new Date("2026-10-02T03:59:59Z") };
+  const parcial = analizar(filas, null, rango);
+  assert.deepEqual(parcial.embudo.map((e) => e.etapa), ["Leads", "Contactados", "Convertidos"]);
+  assert.equal(parcial.resumen.sinContactar, 2);
+  assert.equal(parcial.resumen.stlEnMetaPct, 100, "100 % de los contactados… pero hay 2 sin contactar a la vista");
+  const total = analizar(filas, [{ linkId: 1, nombre: "A", clics: 4, visitantes: 3 }], rango);
+  assert.deepEqual(total.embudo.map((e) => e.etapa), ["Visitantes", "Leads", "Contactados", "Convertidos"]);
+  assert.match(total.embudo[1]!.detalle, /2 con enlace/);
+});

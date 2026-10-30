@@ -39,3 +39,8 @@ Saber de qué video o anuncio llegó cada lead, y qué tan rápido lo contactamo
 ## Analítica
 
 `/leads/origen`: por video, fuente/medio, campaña y día; embudo visitantes → leads → contactados → convertidos; conversión y Speed To Lead (mediana y % contactado en ≤ 5 min). Filtros de fecha y modelo (primer / último toque). Los días se cortan en hora de República Dominicana (UTC−4). Respeta el alcance RBAC de leads; los clics solo los ve quien tiene acceso total.
+
+## Limitaciones conocidas (revisión cruzada)
+
+- **Idempotencia del origen en la captura externa:** el marcador se aplica antes de calcular la huella de idempotencia del lead; un reintento con el mismo cuerpo puede, en casos límite, no coincidir con el primero. Los reintentos con `creado: false` ya no mueven el último toque.
+- **Atomicidad:** el par primer/último toque se guarda en una transacción y el último toque solo avanza en el tiempo. El lead y su atribución aún no comparten transacción (la atribución es de mejor esfuerzo y no bloquea la captura).

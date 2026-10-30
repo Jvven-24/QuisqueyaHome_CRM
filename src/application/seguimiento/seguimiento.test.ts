@@ -168,3 +168,32 @@ test("enriquecer con Meta Ads: completa creativo y campaña; si falla, el enlace
   const f = await crearEnlace(repo, { ...base, adId: "120000000002" }, { origenPortal: PORTAL, creadoPor: 1, codigo: () => "bcd3456", enriquecer: async () => { throw new Error("boom"); } });
   assert.equal(f.creativeId, null);
 });
+
+// ---------- Correcciones de la revisión cruzada ----------
+test("destino del portal: caracteres de control y espacios no convierten «/\\n/host» en redirección externa", () => {
+  for (const mala of ["/\n/evil.example", "/\t/evil.example", "/\r\n/evil.example", "/ /evil.example", "/\u0000/evil.example", "//evil.example", "/\\evil.example"]) {
+    assert.throws(() => validarDestinoPortal(mala, PORTAL), /no es válida/, JSON.stringify(mala));
+  }
+  const l = { code: "abc2345", destination: "portal" as const, portalPath: "/proyectos/torre", whatsappPhone: null, whatsappText: null, utmSource: "facebook", utmMedium: "video", utmCampaign: null, utmContent: null, utmTerm: null, adId: null, creativeId: null };
+  assert.ok(construirDestino(l, { origenPortal: PORTAL, visitorId: "v" }).startsWith(`${PORTAL}/proyectos/torre?`));
+  // Aunque una fila vieja de la base de datos trajera una ruta peligrosa, el destino final se comprueba contra el origen.
+  assert.throws(() => construirDestino({ ...l, portalPath: "/\n/evil.example" }, { origenPortal: PORTAL, visitorId: "v" }));
+});
+
+test("último toque: un clic antiguo no hace retroceder el último toque ya registrado", () => {
+  const toque = (n: number, code: string): Toque => ({ linkId: 1, code, videoUrl: null, campaign: null, utmSource: null, utmMedium: null, utmCampaign: null, utmContent: null, adId: null, creativeId: null, canal: "portal", via: "clic_visitante", en: dia(n) });
+  const previa: Atribucion = { first: toque(-30, "primero"), last: toque(20, "reciente") };
+  const r = decidirAtribucion({ previa, clics: [toque(15, "viejo")] })!;
+  assert.equal(r.last.code, "reciente");
+  assert.equal(r.first.code, "primero");
+  assert.equal(decidirAtribucion({ previa, clics: [toque(25, "nuevo")] })!.last.code, "nuevo");
+  assert.equal(decidirAtribucion({ previa, clics: [toque(15, "viejo")], directo: toque(22, "directo") })!.last.code, "directo");
+});
+
+test("clic: si falla el registro de analítica la persona llega igual a su destino", async () => {
+  const repo = new Memoria();
+  await crearEnlace(repo, { name: "Video", destination: "portal", portalPath: "/p" }, { origenPortal: PORTAL, creadoPor: 1 });
+  repo.registrarClic = async () => { throw new Error("base de datos caída"); };
+  const r = await resolverClic(repo, { codigo: repo.enlaces[0]!.code, visitorId: null, referrer: null, userAgent: "Mozilla/5.0", origenPortal: PORTAL, ahora: T0 });
+  assert.ok(r && r.destino.startsWith(`${PORTAL}/p?`));
+});

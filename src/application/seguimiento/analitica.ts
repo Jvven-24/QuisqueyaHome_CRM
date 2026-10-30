@@ -15,7 +15,7 @@ export type ClicsEnlace = { linkId: number; nombre: string; clics: number; visit
 
 export type Grupo = { clave: string; etiqueta: string; leads: number; contactados: number; convertidos: number; descartados: number; conversion: number; stlMedianaMin: number | null; stlEnMetaPct: number | null; clics: number | null; visitantes: number | null };
 export type Analitica = {
-  resumen: { leads: number; contactados: number; convertidos: number; descartados: number; conversion: number; sinAtribucion: number; stlMedianaMin: number | null; stlEnMetaPct: number | null; clics: number; visitantes: number };
+  resumen: { leads: number; contactados: number; convertidos: number; descartados: number; conversion: number; sinAtribucion: number; stlMedianaMin: number | null; stlEnMetaPct: number | null; sinContactar: number; clics: number; visitantes: number };
   embudo: { etapa: string; valor: number; detalle: string }[];
   porVideo: Grupo[]; porFuente: Grupo[]; porCampana: Grupo[];
   porDia: { dia: string; leads: number }[];
@@ -59,10 +59,12 @@ const dia = (d: Date) => new Date(d.getTime() - DESFASE_RD_MS).toISOString().sli
 /** Inicio (00:00 hora RD) del día que contiene `d`. */
 const inicioDia = (d: Date) => new Date(Math.floor((d.getTime() - DESFASE_RD_MS) / DIA_MS) * DIA_MS + DESFASE_RD_MS);
 
-export function analizar(filas: FilaOrigen[], clics: ClicsEnlace[], rango: { desde: Date; hasta: Date }): Analitica {
+export function analizar(filas: FilaOrigen[], clicsOpt: ClicsEnlace[] | null, rango: { desde: Date; hasta: Date }): Analitica {
+  const clics = clicsOpt ?? [];
   const stl = filas.map(minutosHastaContacto).filter((x): x is number => x != null);
   const conv = filas.filter((f) => f.status === "converted").length;
   const contactados = filas.filter(contactado).length;
+  const sinAtribucion = filas.filter((f) => !f.atribuido).length;
   const totalClics = clics.reduce((a, c) => a + c.clics, 0);
   const totalVis = clics.reduce((a, c) => a + c.visitantes, 0);
   const porClave = new Map(clics.map((c) => [`enlace:${c.linkId}`, { clics: c.clics, visitantes: c.visitantes }]));
@@ -78,10 +80,11 @@ export function analizar(filas: FilaOrigen[], clics: ClicsEnlace[], rango: { des
   for (const f of filas) { const k = dia(f.receivedAt); if (dias.has(k)) dias.set(k, dias.get(k)! + 1); }
 
   return {
-    resumen: { leads: filas.length, contactados, convertidos: conv, descartados: filas.filter((f) => f.status === "discarded").length, conversion: pct(conv, filas.length), sinAtribucion: filas.filter((f) => !f.atribuido).length, stlMedianaMin: mediana(stl), stlEnMetaPct: stl.length ? pct(stl.filter((x) => x <= UMBRAL_STL_MINUTOS).length, stl.length) : null, clics: totalClics, visitantes: totalVis },
+    resumen: { leads: filas.length, contactados, convertidos: conv, descartados: filas.filter((f) => f.status === "discarded").length, conversion: pct(conv, filas.length), sinAtribucion, stlMedianaMin: mediana(stl), stlEnMetaPct: stl.length ? pct(stl.filter((x) => x <= UMBRAL_STL_MINUTOS).length, stl.length) : null, sinContactar: filas.length - contactados, clics: totalClics, visitantes: totalVis },
     embudo: [
-      { etapa: "Visitantes", valor: totalVis, detalle: `${totalClics} clics en enlaces` },
-      { etapa: "Leads", valor: filas.length, detalle: totalVis ? `${pct(filas.length, totalVis)} % de los visitantes` : "Sin clics registrados" },
+      // Sin alcance sobre los clics no se inventa una etapa en cero. Visitantes = suma por enlace (quien abre dos enlaces cuenta en cada uno).
+      ...(clicsOpt ? [{ etapa: "Visitantes", valor: totalVis, detalle: `${totalClics} clics en enlaces` }] : []),
+      { etapa: "Leads", valor: filas.length, detalle: clicsOpt && totalVis ? `${filas.length - sinAtribucion} con enlace · ${pct(filas.length - sinAtribucion, totalVis)} % de los visitantes` : clicsOpt ? "Sin clics registrados" : `${filas.length - sinAtribucion} con enlace de seguimiento` },
       { etapa: "Contactados", valor: contactados, detalle: `${pct(contactados, filas.length)} % de los leads` },
       { etapa: "Convertidos", valor: conv, detalle: `${pct(conv, filas.length)} % de los leads` },
     ],

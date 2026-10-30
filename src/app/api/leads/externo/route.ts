@@ -118,7 +118,8 @@ export async function POST(request: Request) {
       originalMessage: datos.originalMessage,
       sourceVideoUrl: datos.sourceVideoUrl,
     }, toques));
-    await guardarAtribucion(resultado.lead, toques);
+    // Un reintento idempotente (creado: false) no es un toque nuevo: no mueve el último toque.
+    if (resultado.creado) await guardarAtribucion(resultado.lead, toques);
 
     // `leadId` es ADITIVO: el Portal lee `result.leadId` como acuse (D19, 2026-10-14);
     // `lead` y `creado` se conservan tal cual para no romper a nadie más.

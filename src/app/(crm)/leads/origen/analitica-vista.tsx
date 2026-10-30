@@ -65,7 +65,7 @@ function Tabla({ titulo, grupos, conClics }: { titulo: string; grupos: Grupo[]; 
               <td className="px-2 py-2 text-right tabular-nums">{g.contactados}</td>
               <td className="px-2 py-2 text-right tabular-nums">{g.convertidos}</td>
               <td className="px-2 py-2 text-right tabular-nums">{g.leads ? `${g.conversion} %` : "—"}</td>
-              <td className="py-2 pl-2 text-right tabular-nums" title={g.stlEnMetaPct != null ? `${g.stlEnMetaPct} % contactado en ≤ ${UMBRAL_STL_MINUTOS} min` : undefined}>{formatoMinutos(g.stlMedianaMin)}</td>
+              <td className="py-2 pl-2 text-right tabular-nums" title={g.stlEnMetaPct != null ? `${g.stlEnMetaPct} % de los contactados, en ≤ ${UMBRAL_STL_MINUTOS} min` : undefined}>{formatoMinutos(g.stlMedianaMin)}</td>
             </tr>
           ))}
         </tbody>
@@ -111,7 +111,7 @@ export function AnaliticaOrigen({ datos, modelo, desde, hasta, veClics, hoy }: {
       <dl className="m-0 grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(min(100%,11.5rem),1fr))]">
         <Tarjeta titulo="Leads" valor={r.leads.toLocaleString("es-DO")} nota={r.sinAtribucion ? `${r.sinAtribucion} sin atribución por enlace` : "Todos con atribución"} />
         <Tarjeta titulo="Conversión" valor={r.leads ? `${r.conversion} %` : "—"} nota={`${r.convertidos} convertidos`} />
-        <Tarjeta titulo="Primer contacto (mediana)" valor={formatoMinutos(r.stlMedianaMin)} nota={r.stlEnMetaPct != null ? `${r.stlEnMetaPct} % en ≤ ${UMBRAL_STL_MINUTOS} min (Speed To Lead)` : "Aún sin contactos"} />
+        <Tarjeta titulo="Primer contacto (mediana)" valor={formatoMinutos(r.stlMedianaMin)} nota={`${r.stlEnMetaPct != null ? `${r.stlEnMetaPct} % de los contactados en ≤ ${UMBRAL_STL_MINUTOS} min` : "Aún sin contactos"} · ${r.sinContactar} sin contactar`} />
         {veClics && <Tarjeta titulo="Visitantes por enlace" valor={r.visitantes.toLocaleString("es-DO")} nota={`${r.clics.toLocaleString("es-DO")} clics, sin bots`} />}
       </dl>
 

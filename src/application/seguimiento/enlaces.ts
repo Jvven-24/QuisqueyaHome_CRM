@@ -46,7 +46,8 @@ export function validarDestinoPortal(ruta: string | undefined, origenPortal: str
   if (!origenPortal) throw new Error("Falta configurar PORTAL_PUBLIC_URL para crear enlaces hacia el portal.");
   const base = new URL(origenPortal);
   if (!ruta) return "/";
-  if (ruta.startsWith("//") || ruta.includes("\\")) throw new Error("La ruta del portal no es válida.");
+  // Los caracteres de control y los espacios se eliminan al normalizar la URL: «/\n/host» pasaba por ruta relativa y terminaba en «//host».
+  if (/[\u0000-\u0020\u007f-\u009f]/.test(ruta) || ruta.startsWith("//") || ruta.includes("\\")) throw new Error("La ruta del portal no es válida.");
   if (ruta.startsWith("/")) return ruta;
   const u = new URL(ruta);
   if (u.host !== base.host || u.protocol !== base.protocol) throw new Error("El destino debe estar en el dominio del portal.");
@@ -73,6 +74,8 @@ export function textoWhatsApp(l: Pick<EnlaceDestino, "code" | "whatsappText">): 
 export function construirDestino(l: EnlaceDestino, p: { origenPortal: string; visitorId: string }): string {
   if (l.destination === "whatsapp") return `https://wa.me/${l.whatsappPhone}?text=${encodeURIComponent(textoWhatsApp(l))}`;
   const url = new URL(validarDestinoPortal(l.portalPath ?? undefined, p.origenPortal), p.origenPortal);
+  // Defensa en profundidad: pase lo que pase con la ruta, el destino final es el origen del portal.
+  if (url.origin !== new URL(p.origenPortal).origin) throw new Error("El destino debe estar en el dominio del portal.");
   const q = url.searchParams;
   q.set("utm_source", l.utmSource); q.set("utm_medium", l.utmMedium);
   if (l.utmCampaign) q.set("utm_campaign", l.utmCampaign);

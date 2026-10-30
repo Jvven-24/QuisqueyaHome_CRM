@@ -47,7 +47,9 @@ export async function resolverClic(
   if (!enlace || !enlace.isActive) return null;
   const nuevoVisitante = !p.visitorId || !/^[0-9a-f-]{36}$/.test(p.visitorId);
   const visitorId = nuevoVisitante ? randomUUID() : p.visitorId!;
-  await repo.registrarClic({ linkId: enlace.id, visitorId, referrer: p.referrer?.slice(0, 300) ?? null, userAgent: p.userAgent?.slice(0, 200) ?? null, esBot: esRastreador(p.userAgent), en: p.ahora ?? new Date() });
+  // Si falla la analítica, la persona llega igual a su destino (WhatsApp o portal).
+  await repo.registrarClic({ linkId: enlace.id, visitorId, referrer: p.referrer?.slice(0, 300) ?? null, userAgent: p.userAgent?.slice(0, 200) ?? null, esBot: esRastreador(p.userAgent), en: p.ahora ?? new Date() })
+    .catch((e: unknown) => console.error("seguimiento: no se pudo registrar el clic:", e instanceof Error ? e.message : "desconocido"));
   return { destino: construirDestino(enlace, { origenPortal: p.origenPortal, visitorId }), visitorId, nuevoVisitante };
 }
 

@@ -61,10 +61,15 @@ export async function accessTokenDe(id: number): Promise<string> {
       { proveedor: f.provider, accessToken: descifrar(f.accessTokenEnc), refreshToken: f.refreshTokenEnc ? descifrar(f.refreshTokenEnc) : null, expiresAt: f.expiresAt, scopes: f.scopes },
       { refrescarGoogle: (r) => G.refrescar(r), renovarMeta: (t, s) => M.renovar(t, s) },
     );
-    if (renovado) await getDb().update(oauthConnections).set({ accessTokenEnc: cifrar(renovado.accessToken), expiresAt: renovado.expiresAt, scopes: renovado.scopes, updatedAt: new Date() }).where(eq(oauthConnections.id, id));
+    if (renovado) {
+      // Si la cuenta se desconectó mientras se renovaba, no se reescriben tokens y el token renovado no se entrega.
+      const filas = await getDb().update(oauthConnections).set({ accessTokenEnc: cifrar(renovado.accessToken), expiresAt: renovado.expiresAt, scopes: renovado.scopes, updatedAt: new Date() })
+        .where(and(eq(oauthConnections.id, id), isNull(oauthConnections.revokedAt))).returning({ id: oauthConnections.id });
+      if (filas.length === 0) throw new ReconectarError("La cuenta se desconectó mientras se renovaba el acceso.");
+    }
     return accessToken;
   } catch (e) {
-    if (e instanceof ReconectarError) await getDb().update(oauthConnections).set({ status: "reauth", lastError: e.message, updatedAt: new Date() }).where(eq(oauthConnections.id, id));
+    if (e instanceof ReconectarError) await getDb().update(oauthConnections).set({ status: "reauth", lastError: e.message, updatedAt: new Date() }).where(and(eq(oauthConnections.id, id), isNull(oauthConnections.revokedAt)));
     throw e;
   }
 }

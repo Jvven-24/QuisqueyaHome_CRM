@@ -28,8 +28,10 @@ export function decidirAtribucion(p: {
   const todos = [...(p.previa ? [p.previa.first] : []), ...p.clics, ...(p.directo ? [p.directo] : [])];
   if (todos.length === 0) return null;
   const first = todos.reduce((a, b) => (b.en < a.en ? b : a));
-  // Último toque: la señal directa de esta captura gana; si no hay, el clic más reciente; si no, el último previo.
-  const last = p.directo ?? [...p.clics].sort((a, b) => b.en.getTime() - a.en.getTime())[0] ?? p.previa!.last;
+  // Último toque: la señal directa de esta captura gana; si no hay, el más reciente entre los clics y el último previo
+  // (un clic viejo no puede hacer retroceder el último toque ya registrado).
+  const candidatos = [...p.clics, ...(p.previa ? [p.previa.last] : [])].sort((a, b) => b.en.getTime() - a.en.getTime());
+  const last = p.directo ?? candidatos[0]!;
   return { first, last };
 }
 

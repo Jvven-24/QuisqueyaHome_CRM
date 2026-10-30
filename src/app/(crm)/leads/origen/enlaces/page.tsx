@@ -12,7 +12,7 @@ export default async function EnlacesPage() {
   const actor = await requireActor();
   requireScopeInPage(actor, "leads", "view");
   const alcance = scopeFor(actor, "integrations", "view");
-  if (alcance !== "all") return <EnlacesPanel permitido={false} enlaces={[]} puedeCrear={false} portalConfigurado={false} urlPublicaConfigurada={false} />;
+  if (alcance !== "all") return <EnlacesPanel permitido={false} enlaces={[]} puedeCrear={false} puedeEditar={false} portalConfigurado={false} urlPublicaConfigurada={false} />;
   const origen = urlPublica();
   const enlaces: EnlaceFila[] = (await seguimientoParaLectura().listarEnlaces()).map((e) => ({
     id: e.id, nombre: e.name, codigo: e.code, urlCorta: origen ? urlCorta(origen, e.code) : `/v/${e.code}`, destino: e.destination,
@@ -22,5 +22,7 @@ export default async function EnlacesPage() {
   }));
   let puedeCrear = true;
   try { requireFullScope(actor, "integrations", "create"); } catch { puedeCrear = false; }
-  return <EnlacesPanel permitido enlaces={enlaces} puedeCrear={puedeCrear} portalConfigurado={Boolean(process.env.PORTAL_PUBLIC_URL?.trim())} urlPublicaConfigurada={Boolean(origen)} />;
+  let puedeEditar = true;
+  try { requireFullScope(actor, "integrations", "edit"); } catch { puedeEditar = false; }
+  return <EnlacesPanel permitido enlaces={enlaces} puedeCrear={puedeCrear} puedeEditar={puedeEditar} portalConfigurado={Boolean(process.env.PORTAL_PUBLIC_URL?.trim())} urlPublicaConfigurada={Boolean(origen)} />;
 }

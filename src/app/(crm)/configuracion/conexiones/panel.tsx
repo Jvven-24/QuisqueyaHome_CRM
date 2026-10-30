@@ -165,7 +165,7 @@ function Tarjeta({ s, lista, faltan, ocupado, onVerificar, onDesconectar }: {
 export function ConexionesPanel({ datos }: { datos: DatosConexiones }) {
   const router = useRouter();
   const [ocupado, setOcupado] = useState(false);
-  const [mensaje, setMensaje] = useState<{ tipo: "ok" | "error"; texto: string } | null>(
+  const [mensaje, setMensaje] = useState<{ tipo: "ok" | "error" | "aviso"; texto: string } | null>(
     datos.aviso ? { tipo: datos.aviso === "conectada" ? "ok" : "error", texto: MOTIVOS_CALLBACK[datos.aviso] ?? "No se pudo completar la conexión." } : null,
   );
 
@@ -173,7 +173,11 @@ export function ConexionesPanel({ datos }: { datos: DatosConexiones }) {
     setOcupado(true); setMensaje(null);
     const r = await fetch(url, { method }).catch(() => null);
     setOcupado(false);
-    setMensaje(r?.ok ? { tipo: "ok", texto: ok } : { tipo: "error", texto: "No se pudo completar. Inténtalo de nuevo." });
+    const j = r?.ok ? ((await r.json().catch(() => null)) as { revocado?: boolean } | null) : null;
+    // El borrado local siempre ocurre; la revocación en el proveedor solo se afirma si el proveedor la confirmó.
+    setMensaje(!r?.ok ? { tipo: "error", texto: "No se pudo completar. Inténtalo de nuevo." }
+      : j?.revocado === false ? { tipo: "aviso", texto: "Cuenta desconectada del CRM y tokens borrados, pero el proveedor no confirmó la revocación. Revoca el acceso desde la cuenta de Google (Seguridad → Acceso de terceros) o de Facebook (Configuración → Integraciones comerciales)." }
+      : { tipo: "ok", texto: ok });
     router.refresh();
   }
 
@@ -186,7 +190,7 @@ export function ConexionesPanel({ datos }: { datos: DatosConexiones }) {
         </p>
       </header>
       {mensaje && (
-        <p role={mensaje.tipo === "error" ? "alert" : "status"} className={`rounded-lg border p-3 text-sm font-semibold ${mensaje.tipo === "ok" ? "border-success/30 bg-success-bg text-success" : "border-danger/30 bg-danger-bg text-danger"}`}>{mensaje.texto}</p>
+        <p role={mensaje.tipo === "ok" ? "status" : "alert"} className={`rounded-lg border p-3 text-sm font-semibold ${mensaje.tipo === "ok" ? "border-success/30 bg-success-bg text-success" : mensaje.tipo === "aviso" ? "border-warning/30 bg-warning-bg text-warning" : "border-danger/30 bg-danger-bg text-danger"}`}>{mensaje.texto}</p>
       )}
       <ul className="m-0 grid list-none gap-4 p-0" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))" }}>
         {SERVICIOS.map((s) => (
