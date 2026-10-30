@@ -10,6 +10,7 @@ import { AlertTriangle, CheckCircle2, CircleDashed, Plus, RefreshCw, ShieldCheck
 import { SERVICIOS, type ServicioDef } from "@/infrastructure/conexiones-oauth/servicios";
 import { ETIQUETA_TARJETA, estadoTarjeta, MOTIVOS_CALLBACK, type ConexionVista, type EstadoTarjeta } from "@/infrastructure/conexiones-oauth/vista";
 import { BotonFacebook, BotonGoogle } from "./botones";
+import { Switch } from "@/components/ui/switch";
 import { MarcaServicio } from "./logos";
 
 export type DatosConexiones = {
@@ -141,9 +142,9 @@ function Tarjeta({ s, lista, faltan, ocupado, onVerificar, onDesconectar }: {
 
       <div className="mt-auto grid gap-3">
         {(s.extras ?? []).map((e) => (
-          <label key={e.id} className="flex min-h-11 cursor-pointer items-start gap-2.5 text-sm text-ink">
-            <input type="checkbox" className={`mt-0.5 size-5 flex-none accent-[var(--color-navy-900)] ${FOCO}`} checked={extras.includes(e.id)} onChange={(ev) => setExtras(ev.target.checked ? [...extras, e.id] : extras.filter((x) => x !== e.id))} />
-            <span><strong className="font-semibold">{e.etiqueta}.</strong> {e.descripcion} <span className="text-ink-muted">({(SENSIBILIDAD[e.sensibilidad] ?? "").split(":")[0]!.toLowerCase()})</span></span>
+          <label key={e.id} className="flex min-h-11 cursor-pointer items-start gap-1 text-sm text-ink">
+            <Switch checked={extras.includes(e.id)} onCheckedChange={(on) => setExtras(on ? [...extras, e.id] : extras.filter((x) => x !== e.id))} aria-label={e.etiqueta} className="-mt-1.5 -ml-1.5" />
+            <span className="pt-0.5"><strong className="font-semibold">{e.etiqueta}.</strong> {e.descripcion} <span className="text-ink-muted">({(SENSIBILIDAD[e.sensibilidad] ?? "").split(":")[0]!.toLowerCase()})</span></span>
           </label>
         ))}
         {bloqueado ? (

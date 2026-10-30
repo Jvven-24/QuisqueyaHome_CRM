@@ -24,6 +24,9 @@ test("auditoría: settings all no sustituye audit_log:view all; permiso se verif
     "@/application/configuracion/integraciones-catalogo": {},
     "@/application/configuracion/auditoria": {},
     "@/infrastructure/db/repos/configuracion-auditoria": {},
+    "@/infrastructure/conexiones-oauth/acceso": { puedeAdministrarConexiones: () => false },
+    "@/infrastructure/conexiones-oauth/servicios": {},
+    "@/infrastructure/db/repos/oauth-conexiones": {},
     "./vista": {},
   };
   const code = ts.transpileModule(readFileSync(new URL("./page.tsx", import.meta.url), "utf8"), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText;
