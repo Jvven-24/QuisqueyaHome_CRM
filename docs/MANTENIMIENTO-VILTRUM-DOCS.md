@@ -44,3 +44,4 @@ El tablero y las ramas `orq/*` los mantiene otro proceso: **no modificarlos**.
 ## 6. Reglas
 - Nunca escribir secretos, claves ni client secrets en docs ni en Drive.
 - No tocar el deploy (`remoto.sh`), ni `main`, ni force-push.
+- Viltrum Code ayuda a mantener esta documentación (prueba 2026-10-27).
