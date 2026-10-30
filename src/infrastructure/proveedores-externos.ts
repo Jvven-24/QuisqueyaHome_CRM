@@ -75,11 +75,11 @@ export function verificarRetoMeta(params: URLSearchParams, env: Env = process.en
   return token && params.get("hub.mode") === "subscribe" && params.get("hub.verify_token") === token ? params.get("hub.challenge") : null;
 }
 
-export function leadgenIds(body: unknown): { leadId: string; formId?: string; pageId?: string }[] {
-  const out: { leadId: string; formId?: string; pageId?: string }[] = [];
+export function leadgenIds(body: unknown): { leadId: string; formId?: string; pageId?: string; adId?: string }[] {
+  const out: { leadId: string; formId?: string; pageId?: string; adId?: string }[] = [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   for (const e of (body as any)?.entry ?? []) for (const c of e.changes ?? [])
-    if (c.field === "leadgen" && c.value?.leadgen_id) out.push({ leadId: String(c.value.leadgen_id), formId: c.value.form_id, pageId: c.value.page_id });
+    if (c.field === "leadgen" && c.value?.leadgen_id) out.push({ leadId: String(c.value.leadgen_id), formId: c.value.form_id, pageId: c.value.page_id, adId: c.value.ad_id ? String(c.value.ad_id) : undefined });
   return out;
 }
 

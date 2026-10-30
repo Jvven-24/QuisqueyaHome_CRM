@@ -41,10 +41,13 @@ import { estadoProveedores } from "@/infrastructure/proveedores-externos";
 import { consultarAuditoriaConfiguracion } from "@/application/configuracion/auditoria";
 import { repositorioAuditoriaConfiguracion } from "@/infrastructure/db/repos/configuracion-auditoria";
 import { ConfiguracionVista, type Tab } from "./vista";
+import { puedeAdministrarConexiones } from "@/infrastructure/conexiones-oauth/acceso";
+import { variablesFaltantes } from "@/infrastructure/conexiones-oauth/servicios";
+import { listarCalendarioComoConexiones, listarConexiones } from "@/infrastructure/db/repos/oauth-conexiones";
 
 export const metadata = { title: "Configuración · CRM Quisqueya Home" };
 
-const TABS: Tab[] = ["centro", "seo", "capacidad", "auditoria", "usuarios", "permisos", "etapas", "catalogos", "papelera", "integraciones"];
+const TABS: Tab[] = ["centro", "seo", "capacidad", "auditoria", "usuarios", "permisos", "etapas", "catalogos", "papelera", "integraciones", "conexiones"];
 
 function primero(valor: string | string[] | undefined): string | undefined {
   return Array.isArray(valor) ? valor[0] : valor;
@@ -140,6 +143,20 @@ export default async function ConfiguracionPage({
       ...usuariosBorrados.map((f) => ({ entityType: "user" as const, id: f.id, nombre: f.nombre, borradoEn: f.borradoEn })),
     ].sort((a, b) => (b.borradoEn?.getTime() ?? 0) - (a.borradoEn?.getTime() ?? 0));
     return <ConfiguracionVista tab={tab} puedeEditar={puedeEditar} papelera={papelera} />;
+  }
+
+  if (tab === "conexiones") {
+    // Solo el administrador ve y gestiona las conexiones (tokens de la organización).
+    if (!puedeAdministrarConexiones(actor, scopeFor(actor, "settings", "edit"))) forbidden();
+    const [oauth, calendario] = await Promise.all([listarConexiones(), listarCalendarioComoConexiones(actor.userId)]);
+    const aviso = primero(params.conexion) ?? null;
+    return (
+      <ConfiguracionVista
+        tab={tab}
+        puedeEditar={puedeEditar}
+        conexiones={{ conexiones: [...oauth, ...calendario], faltan: { google: variablesFaltantes("google"), meta: variablesFaltantes("meta") }, aviso, servicioAviso: primero(params.servicio) ?? null }}
+      />
+    );
   }
 
   // tab === "integraciones"

@@ -41,6 +41,7 @@ const RUTAS_PUBLICAS: Record<string, RegExp> = {
   "integraciones/google/login/route.ts": /crearState\(0\)/, // solo redirige a Google con state firmado
   "auth/demo/route.ts": /qh_dev_role/,
   "leads/externo/route.ts": /coincideToken\(/,
+  "portal-sync/cron/route.ts": /verificarFirma\(/, // HMAC con PORTAL_SYNC_SECRET + ventana de 5 min; idempotente
   "health/route.ts": /select 1/, // solo responde ok/503, sin datos ni sesión
   "integraciones/webhooks/meta/route.ts": /firmaMetaValida\(/, // firma HMAC del app secret
   "integraciones/webhooks/whatsapp/route.ts": /firmaYCloudValida\(/, // firma YCloud o Meta

@@ -54,7 +54,7 @@ test("reto Meta y leadgen", () => {
   const q = new URLSearchParams({ "hub.mode": "subscribe", "hub.verify_token": "v", "hub.challenge": "42" });
   assert.equal(P.verificarRetoMeta(q, { META_WEBHOOK_VERIFY_TOKEN: "v" }), "42");
   assert.equal(P.verificarRetoMeta(q, { META_WEBHOOK_VERIFY_TOKEN: "x" }), null);
-  assert.deepEqual(P.leadgenIds({ entry: [{ changes: [{ field: "leadgen", value: { leadgen_id: 7, form_id: "f" } }] }] }), [{ leadId: "7", formId: "f", pageId: undefined }]);
+  assert.deepEqual(P.leadgenIds({ entry: [{ changes: [{ field: "leadgen", value: { leadgen_id: 7, form_id: "f" } }] }] }), [{ leadId: "7", formId: "f", pageId: undefined, adId: undefined }]);
 });
 
 test("CAPI: hashea PII e incluye test_event_code", async () => {

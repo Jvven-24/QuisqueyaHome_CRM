@@ -368,7 +368,7 @@ export function LeadsVista({
         }
       />
 
-      <RouteModuleTabs label="Gestión de leads" items={[{href:cola?"/leads":"/leads?cola=1",label:cola?"Todos los leads":"Cola de primer contacto"},{href:"/leads/asignacion",label:"Asignación y distribución",match:"prefix"},{href:"/leads/importaciones",label:"Importación y migración",match:"prefix"},{href:"/leads/duplicados",label:"Duplicados y fusión",match:"prefix"}]} className="mb-4" />
+      <RouteModuleTabs label="Gestión de leads" items={[{href:cola?"/leads":"/leads?cola=1",label:cola?"Todos los leads":"Cola de primer contacto"},{href:"/leads/asignacion",label:"Asignación y distribución",match:"prefix"},{href:"/leads/importaciones",label:"Importación y migración",match:"prefix"},{href:"/leads/duplicados",label:"Duplicados y fusión",match:"prefix"},{href:"/leads/origen",label:"Origen y enlaces",match:"prefix"}]} className="mb-4" />
       {cola && <SlaPolicyPreview />}
       {/* Franja de métricas / KPIs del universo de leads */}
       {/* KPIs: en móvil los cuentan las pestañas de estado; en escritorio, franja compacta */}

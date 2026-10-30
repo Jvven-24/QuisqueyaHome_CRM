@@ -17,6 +17,7 @@ import {
   Network,
   ChevronRight,
   ShieldAlert,
+  Plug,
 } from "lucide-react";
 import type { EstadoOutbox } from "@/application/compartido/outbox-estado";
 import { PageHeader } from "../_ui/prototipo-ui";
@@ -26,8 +27,9 @@ import { EtapasPanel, type EtapaFila } from "./_etapas";
 import { CatalogosPanel, type CatalogoFila } from "./_catalogos";
 import { PapeleraPanel, type PapeleraFila } from "./_papelera";
 import { IntegracionesPanel, type IntegracionFila } from "./_integraciones";
+import { ConexionesPanel, type DatosConexiones } from "./conexiones/panel";
 
-export type Tab = "centro" | "seo" | "capacidad" | "auditoria" | "usuarios" | "permisos" | "etapas" | "catalogos" | "papelera" | "integraciones";
+export type Tab = "centro" | "seo" | "capacidad" | "auditoria" | "usuarios" | "permisos" | "etapas" | "catalogos" | "papelera" | "integraciones" | "conexiones";
 
 type ItemNavegacion = {
   id: Tab;
@@ -77,6 +79,12 @@ const ITEMS_NAVEGACION: ItemNavegacion[] = [
     subtitulo: "Conectores externos y Outbox",
     icono: Network,
   },
+  {
+    id: "conexiones",
+    titulo: "Conexiones",
+    subtitulo: "Google, Gmail y Meta Ads por cuenta",
+    icono: Plug,
+  },
 ];
 
 export function ConfiguracionVista(props: {
@@ -96,6 +104,7 @@ export function ConfiguracionVista(props: {
   proveedores?: import("./_proveedores").EstadoProveedor[];
   auditoria?: EventoAuditoria[];
   puedeExportarAuditoria?: boolean;
+  conexiones?: DatosConexiones;
 }) {
   const { tab, puedeEditar } = props;
   const online = useOnline();
@@ -122,10 +131,10 @@ export function ConfiguracionVista(props: {
 
       {/* Layout con Navegación Lateral Interna */}
       <div
-        className="settings-layout"
+        className={tab === "conexiones" ? "settings-layout grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]" : "settings-layout"}
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+          gridTemplateColumns: tab === "conexiones" ? undefined : "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
           gap: "24px",
           marginTop: "20px",
           alignItems: "start",
@@ -268,6 +277,7 @@ export function ConfiguracionVista(props: {
           {tab === "papelera" && props.papelera && (
             <PapeleraPanel filas={props.papelera} puedeEditar={puedeEditar} />
           )}
+          {tab === "conexiones" && props.conexiones && <ConexionesPanel datos={props.conexiones} />}
           {tab === "integraciones" && props.integraciones && (
             <IntegracionesPanel
               integraciones={props.integraciones}
