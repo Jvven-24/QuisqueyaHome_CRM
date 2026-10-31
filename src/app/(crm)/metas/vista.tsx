@@ -11,6 +11,7 @@ import { FijarMetaInput, leerObjetivoFormulario } from "@/application/metas/vali
 import type { BrokerLevel } from "@/domain/catalogs";
 import { cumplimientoPorcentaje, diagnosticarRitmo, formatoPeriodo, nombreMes } from "@/domain/metas";
 import { cumplimientoMonto, estadoAvance, logradoEnMoneda, type LogroPorMoneda } from "@/domain/metas-alcances";
+import { fechaHoraLegible } from "@/domain/zona-horaria";
 import { Modal, PageHeader } from "../_ui/prototipo-ui";
 import { AvisoPermiso, Vacio } from "../_ui/estados";
 import { DataTable, type Columna } from "@/components/ui/data-table";
@@ -27,7 +28,6 @@ export type ReglaVista = { version: number; scope: string; rule: string; equipo:
 
 const primario = boton + " bg-gold-600 text-navy-950";
 const peligro = boton + " border-danger text-danger";
-const fecha = new Intl.DateTimeFormat("es-DO", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Santo_Domingo" });
 const textoEquipo: Record<string, string> = { equipo_del_broker_al_cierre: "Equipo del broker en el momento del cierre", sin_equipo: "Sin atribución por equipo" };
 
 type Resultado = { ok: true; data: Record<string, unknown> } | { ok: false; fields: Record<string, string> };
@@ -139,7 +139,7 @@ export function MetasVista(p: Props) {
     { clave: "broker", titulo: "Asesor", movil: "titulo", celda: (r) => <strong>#{ranking.indexOf(r) + 1} · {r.fullName}</strong> },
     { clave: "cierres", titulo: "Cierres / objetivo", movil: "subtitulo", celda: (r) => r.achievedDeals + " / " + (r.targetDeals > 0 ? r.targetDeals : "Sin meta") },
     { clave: "logro", titulo: "Logrado por moneda", celda: (r) => <Desglose logro={r.logro} vacio="Sin cierres" /> },
-    { clave: "objetivo", titulo: "Objetivo de monto", celda: (r) => (r.currency && r.targetAmountCents !== null ? <span className="tabular-nums">{montoExacto(r.targetAmountCents, r.currency)}{(() => { const c = cumplimientoMonto(logradoEnMoneda(r.logro, r.currency), r.targetAmountCents); return c === null ? null : <small className="block">{c}% logrado</small>; })()}</span> : "Sin objetivo de monto") },
+    { clave: "objetivo", titulo: "Objetivo de monto", celda: (r) => (r.currency && r.targetAmountCents !== null ? <span className="tabular-nums">{montoExacto(r.targetAmountCents, r.currency)}{(() => { const c = cumplimientoMonto(logradoEnMoneda(r.logro, r.currency), r.targetAmountCents); return c === null ? null : <small className="block text-xs">{c}% logrado</small>; })()}</span> : "Sin objetivo de monto") },
     { clave: "cumplimiento", titulo: "Cumplimiento", movil: "insignia", celda: (r) => { const pct = cumplimientoPorcentaje(r.achievedDeals, r.targetDeals); return <div className="grid min-w-24 gap-1"><span>{pct === null ? "Sin meta" : pct + "%"}</span><Barra valor={pct} etiqueta={"Cumplimiento de " + r.fullName} /></div>; } },
     { clave: "accion", titulo: "Acción", celda: (r) => puedeEditar ? <div className="flex flex-wrap gap-2"><button type="button" className={boton} aria-label={"Editar meta de " + r.fullName} onClick={() => setEditing({ id: r.userId, name: r.fullName, target: r.targetDeals, currency: r.currency ?? "USD" })}>Editar</button>{puedeAdministrar && r.tieneMeta && r.targetDeals > 0 && <button type="button" className={peligro} aria-label={"Reiniciar meta de " + r.fullName} onClick={() => setReinicio({ id: r.userId, name: r.fullName })}>Reiniciar</button>}</div> : "Consulta" },
   ];
@@ -148,7 +148,7 @@ export function MetasVista(p: Props) {
     { clave: "nombre", titulo: "Proyecto / equipo", movil: "titulo", celda: (r) => <strong>{r.nombre}</strong> },
     { clave: "tipo", titulo: "Tipo", movil: "insignia", celda: (r) => (r.scopeType === "project" ? "Proyecto" : "Equipo") },
     { clave: "cierres", titulo: "Cierres / objetivo", movil: "subtitulo", celda: (r) => { const n = r.logro.reduce((s, l) => s + l.deals, 0); const pct = cumplimientoPorcentaje(n, r.targetDeals); const e = estadoAvance(n, r.targetDeals); return <div className="grid min-w-28 gap-1"><span>{n} / {r.targetDeals > 0 ? r.targetDeals : "Sin meta"}{e === "cumplida" ? " · Cumplida" : ""}</span><Barra valor={pct} etiqueta={"Avance de " + r.nombre} /></div>; } },
-    { clave: "monto", titulo: "Monto logrado / objetivo", celda: (r) => <div className="tabular-nums"><span>{montoExacto(logradoEnMoneda(r.logro, r.currency), r.currency)}</span><small className="block">{r.targetAmountCents === null ? "Sin objetivo de monto" : "de " + montoExacto(r.targetAmountCents, r.currency)}</small>{r.logro.some((l) => l.currency !== r.currency) && <small className="block text-muted-foreground">Otras monedas: {r.logro.filter((l) => l.currency !== r.currency).map((l) => montoExacto(l.amountCents, l.currency)).join(" · ")}</small>}</div> },
+    { clave: "monto", titulo: "Monto logrado / objetivo", celda: (r) => <div className="tabular-nums"><span>{montoExacto(logradoEnMoneda(r.logro, r.currency), r.currency)}</span><small className="block text-xs">{r.targetAmountCents === null ? "Sin objetivo de monto" : "de " + montoExacto(r.targetAmountCents, r.currency)}</small>{r.logro.some((l) => l.currency !== r.currency) && <small className="block text-xs text-muted-foreground">Otras monedas: {r.logro.filter((l) => l.currency !== r.currency).map((l) => montoExacto(l.amountCents, l.currency)).join(" · ")}</small>}</div> },
     { clave: "accion", titulo: "Acción", celda: (r) => puedeAdministrar ? <div className="flex flex-wrap gap-2"><button type="button" className={boton} aria-label={"Editar meta de " + r.nombre} onClick={() => setAlcance(r)}>Editar</button><button type="button" className={peligro} aria-label={"Eliminar meta de " + r.nombre} onClick={() => setBorrar(r)}>Eliminar</button></div> : "Consulta" },
   ];
 
@@ -230,7 +230,7 @@ export function MetasVista(p: Props) {
             <p><strong>Alcance:</strong> {activa.scope}</p>
             <p>{activa.rule}</p>
             <p><strong>Proyecto:</strong> propiedad principal del negocio · <strong>Equipo:</strong> {textoEquipo[activa.equipo] ?? activa.equipo}</p>
-            <p className="text-[13px] text-muted-foreground">Aprobada {activa.aprobadaEn ? fecha.format(new Date(activa.aprobadaEn)) : "sin fecha"}{activa.aprobadaPor ? " por " + activa.aprobadaPor : " (migración inicial)"}. Se congela en cada negocio al cerrarlo como ganado.</p>
+            <p className="text-[13px] text-muted-foreground">Aprobada {activa.aprobadaEn ? fechaHoraLegible(new Date(activa.aprobadaEn)) : "sin fecha"}{activa.aprobadaPor ? " por " + activa.aprobadaPor : " (migración inicial)"}. Se congela en cada negocio al cerrarlo como ganado.</p>
           </div>
         ) : <Vacio titulo="Sin regla aprobada" texto="Mientras no haya una regla activa, los cierres no quedan atribuidos a proyecto ni equipo." />}
         {reglas.length > 1 && (

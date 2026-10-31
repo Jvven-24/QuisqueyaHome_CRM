@@ -636,9 +636,9 @@ export function ComunicacionesVista({
                 key={ch}
                 type="button"
                 onClick={() => setFiltroCanal(ch)}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors min-h-[34px] ${
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider transition-colors min-h-[44px] ${
                   filtroCanal === ch
-                    ? "bg-gold-600 text-white"
+                    ? "bg-gold-600 text-navy-950"
                     : "bg-slate-50 text-slate-500 border border-slate-200 hover:bg-slate-100"
                 }`}
               >
@@ -673,7 +673,7 @@ export function ComunicacionesVista({
                         {item.name}
                       </strong>
                       <div className="flex items-center gap-1 shrink-0">
-                        <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+                        <span className="text-[11px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
                           {cat}
                         </span>
                         <Badge

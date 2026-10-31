@@ -94,7 +94,7 @@ export function FichaConPestanas({
               key={index}
               className="flex flex-col justify-center px-3 py-1 border-r border-border last:border-r-0"
             >
-              <span className="text-[10.5px] uppercase font-semibold text-muted-foreground tracking-wider">
+              <span className="text-[11px] uppercase font-semibold text-muted-foreground tracking-wider">
                 {item.etiqueta}
               </span>
               <div className="flex items-baseline gap-1.5">
@@ -102,7 +102,7 @@ export function FichaConPestanas({
                   {item.valor}
                 </strong>
                 {item.nota && (
-                  <span className="text-[10px] text-muted-foreground truncate">
+                  <span className="text-[11px] text-muted-foreground truncate">
                     {item.nota}
                   </span>
                 )}

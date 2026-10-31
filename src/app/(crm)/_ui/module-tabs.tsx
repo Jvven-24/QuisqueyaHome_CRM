@@ -47,7 +47,7 @@ export function ModuleTabs({
                 <span>{tab.label}</span>
                 {tab.count !== undefined && (
                   <span
-                    className={`inline-flex items-center justify-center px-1.5 py-0.2 text-[10px] font-mono rounded-full font-bold tabular-nums ${
+                    className={`inline-flex items-center justify-center px-1.5 py-0.2 text-[11px] font-mono rounded-full font-bold tabular-nums ${
                       isActive
                         ? "bg-gold-100 text-gold-800 border border-gold-600/30"
                         : "bg-surface-alt text-muted-foreground border border-border"
@@ -89,7 +89,7 @@ export function ModuleTabs({
               <span>{tab.label}</span>
               {tab.count !== undefined && (
                 <span
-                  className={`inline-flex items-center justify-center px-1.5 py-0.2 text-[10px] font-mono rounded-full font-bold tabular-nums ${
+                  className={`inline-flex items-center justify-center px-1.5 py-0.2 text-[11px] font-mono rounded-full font-bold tabular-nums ${
                     isActive
                       ? "bg-gold-100 text-gold-800"
                       : "bg-surface text-muted-foreground border border-border/50"

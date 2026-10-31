@@ -125,7 +125,7 @@ export function ListaConFiltros({
                   >
                     <span>{vg.etiqueta}</span>
                     {vg.conteo !== undefined && (
-                      <span className="ml-1 text-[10px] font-mono opacity-70">
+                      <span className="ml-1 text-[11px] font-mono opacity-70">
                         ({vg.conteo})
                       </span>
                     )}

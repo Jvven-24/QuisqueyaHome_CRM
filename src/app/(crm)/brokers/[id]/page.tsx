@@ -131,7 +131,7 @@ const resolverFicha = cache(async (idParam: string) => {
               <Avatar name={broker.fullName} />
               {esElite && (
                 <span
-                  className="absolute -bottom-1 -right-1 size-6 rounded-full bg-gold-600 text-white flex items-center justify-center border-2 border-white shadow-2xs"
+                  className="absolute -bottom-1 -right-1 size-6 rounded-full bg-gold-600 text-navy-950 flex items-center justify-center border-2 border-white shadow-2xs"
                   title="Asesor Élite"
                 >
                   <Sparkles className="size-3" />

@@ -41,7 +41,7 @@ export function Preview({ falta, children }: {
     <p role="note" className={s.preview}>
     <strong>Vista previa · datos de ejemplo — falta: {falta}</strong>. Los cambios de esta vista no se guardan en el CRM.</p>
     <details className={s.panel}>
-    <summary>Revisar los estados de esta vista previa</summary>
+    <summary className="min-h-11 cursor-pointer py-2">Revisar los estados de esta vista previa</summary>
     {mostrarDemo() && <label>Estado de demostración<select aria-label="Estado de demostración" value={state} onChange={e => setState(e.target.value)}>{[["datos", "Con datos"], ["carga", "Cargando"], ["vacio", "Vacío"], ["error", "Error"], ["offline", "Sin conexión"], ["permiso", "Sin permiso"]].map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>}
     </details>{state === "datos" ? children : state === "carga" ? <div className={s.panel} role="status" aria-busy="true">Cargando registros de ejemplo…</div> : state === "vacio" ? <div className={s.empty}>
         <h2>No hay registros en esta demostración</h2>

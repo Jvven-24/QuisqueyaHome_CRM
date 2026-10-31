@@ -7,6 +7,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  fechaHoraLegible,
   fechaSantoDomingo,
   horaSantoDomingo,
   lunesDeLaSemana,
@@ -23,6 +24,14 @@ test("las 21:00 del 31 de enero en Santo Domingo dan 2026-01-31, no 2026-02-01",
 test("una hora que ya cae del lado de Santo Domingo no cambia de día", () => {
   // 15:00 UTC = 11:00 local, mismo día en las dos zonas.
   assert.equal(fechaSantoDomingo(new Date("2026-07-24T15:00:00.000Z")), "2026-07-24");
+});
+
+test("fechaHoraLegible usa hora de Santo Domingo y solo espacios simples", () => {
+  const texto = fechaHoraLegible(new Date("2026-10-31T04:38:00.000Z"));
+  assert.match(texto, /31/);
+  assert.match(texto, /2026/);
+  assert.match(texto, /12:38/);
+  assert.doesNotMatch(texto, /[  ]/);
 });
 
 test("medianoche UTC del día 1 todavía es el día anterior en Santo Domingo", () => {

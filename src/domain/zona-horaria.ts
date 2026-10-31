@@ -61,6 +61,24 @@ export function sumarDias(fechaISO: string, dias: number): string {
   return fecha.toISOString().slice(0, 10);
 }
 
+/**
+ * Fecha y hora legibles de un instante (`31 oct 2026, 12:38 a. m.`).
+ *
+ * Node y el navegador no escriben igual el espacio de «a. m.» (U+202F o U+00A0
+ * en uno, U+0020 en el otro), y esa diferencia invisible rompía la hidratación
+ * de `/reportes` y `/metas`. Se normaliza a espacio simple para que servidor y
+ * cliente produzcan exactamente la misma cadena.
+ */
+export function fechaHoraLegible(fecha: Date): string {
+  return new Intl.DateTimeFormat("es-DO", {
+    timeZone: "America/Santo_Domingo",
+    dateStyle: "medium",
+    timeStyle: "short",
+  })
+    .format(fecha)
+    .replace(/[  ]/g, " ");
+}
+
 /** Fecha de calendario o instante en el formato del producto, sin desplazar fechas puras. */
 export function fechaLocal(valor: Date | string | null | undefined): string {
   if (!valor) return "Sin fecha";

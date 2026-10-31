@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ReactNode, useEffect, useMemo, useReducer, useRef, useState, useTransition } from "react";
 import { AlertCircle, BarChart3, Check, Kanban as KanbanIcon, List as ListIcon, WifiOff, X } from "lucide-react";
+import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { CatalogosNegocios, CursorNegocios, ResumenEtapaNegocio } from "@/application/pipeline/puertos";
 import { formatearMonto } from "../_ui/formato";
@@ -191,7 +192,12 @@ export function PipelineVista({
     setOcupado(false);
     if (!respuesta.ok) {
       dispatch({ tipo: "revertir", dealId: negocio.id });
-      setAviso(perdida || cierreSolicitado ? null : { tipo: "error", texto: respuesta.error });
+      const enDialogo = Boolean(perdida || cierreSolicitado);
+      setAviso(enDialogo ? null : { tipo: "error", texto: respuesta.error });
+      // El aviso de arriba queda fuera de vista cuando el usuario está bajando en una columna: el toast sí se ve.
+      if (!enDialogo) {
+        toast.error(respuesta.error, respuesta.requisito ? { duration: 12000, action: { label: "Abrir negocio", onClick: () => abrirFicha(negocio) } } : undefined);
+      }
       return respuesta;
     }
     dispatch({ tipo: "confirmar", dealId: negocio.id });

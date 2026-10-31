@@ -202,7 +202,7 @@ export function BrokersVista({
                   onClick={() => setNivelSeleccionado(nivel)}
                   className={`px-3.5 min-h-[44px] rounded-xl text-[13px] font-semibold border whitespace-nowrap transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 ${
                     activo
-                      ? "bg-gold-600 text-white border-gold-600 shadow-xs"
+                      ? "bg-gold-600 text-navy-950 border-gold-600 shadow-xs"
                       : "bg-surface-alt hover:bg-navy-100 text-ink-muted border-line"
                   }`}
                 >
@@ -433,7 +433,7 @@ export function BrokersVista({
                         <Avatar name={broker.fullName} />
                         {esElite && (
                           <span
-                            className="absolute -bottom-1 -right-1 size-5 rounded-full bg-gold-600 text-white flex items-center justify-center border-2 border-white shadow-2xs"
+                            className="absolute -bottom-1 -right-1 size-5 rounded-full bg-gold-600 text-navy-950 flex items-center justify-center border-2 border-white shadow-2xs"
                             title="Asesor Élite"
                           >
                             <Sparkles className="size-2.5" />

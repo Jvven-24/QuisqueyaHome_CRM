@@ -523,7 +523,7 @@ export function AvancesVista({
                       <div
                         className={`size-10 rounded-full flex items-center justify-center font-bold text-sm transition-transform group-hover:scale-105 shadow-xs ${
                           esCompletada
-                            ? "bg-gold-600 text-white ring-4 ring-gold-100"
+                            ? "bg-gold-600 text-navy-950 ring-4 ring-gold-100"
                             : esActiva
                             ? "bg-gold-500 text-navy-950 font-extrabold ring-4 ring-gold-500/30"
                             : enProgreso
@@ -1274,7 +1274,7 @@ function EditorFase({
                   onClick={() => actualizarProgresoConEstado(valor)}
                   className={`min-h-[44px] flex-1 text-[13px] font-semibold rounded-lg border transition-colors ${
                     progreso === valor
-                      ? "bg-gold-600 text-white border-gold-600 shadow-xs"
+                      ? "bg-gold-600 text-navy-950 border-gold-600 shadow-xs"
                       : "bg-surface hover:bg-surface-hover text-ink border-line"
                   }`}
                 >

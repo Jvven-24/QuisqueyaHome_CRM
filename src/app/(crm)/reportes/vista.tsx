@@ -11,6 +11,7 @@ import {
   Building2,
 } from "lucide-react";
 import { generarCsv } from "@/domain/csv";
+import { fechaHoraLegible } from "@/domain/zona-horaria";
 import type { ReportesBiData } from "@/application/reportes/puertos";
 import { ChartCard } from "@/components/ui/chart-card";
 import { ResumenCompacto } from "@/components/ui/resumen-compacto";
@@ -202,11 +203,7 @@ export function ReportesVista({
     window.print();
   };
 
-  const fechaFormateada = new Intl.DateTimeFormat("es-DO", {
-    timeZone: "America/Santo_Domingo",
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(metricas.asOf));
+  const fechaFormateada = fechaHoraLegible(new Date(metricas.asOf));
 
   return (
     <div className="analytics-page analytics-reportes">

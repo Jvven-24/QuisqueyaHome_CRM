@@ -15,7 +15,7 @@ import { formatearMonto } from "../_ui/formato";
 import { Avatar, Badge } from "../_ui/prototipo-ui";
 import { calcularAntiguedad, tipoAntiguedad } from "./antiguedad";
 import type { EstadoPendiente } from "./kanban-estado";
-import type { Etapa, NegocioFila } from "./logica";
+import { requisitoDeEtapa, type Etapa, type NegocioFila } from "./logica";
 import { PREFERENCIAS_INICIALES, type CampoTarjeta } from "./preferencias";
 
 const formateadorFecha = new Intl.DateTimeFormat("es-DO", { day: "2-digit", month: "short" });
@@ -238,8 +238,7 @@ export function TarjetaNegocio({
                       >
                         <span className="flex flex-col">
                           <span>{etapa.name}</span>
-                          {etapa.kind === "won" && <span className="text-[13px] text-ink-muted">Pide unidad y monto</span>}
-                          {etapa.kind === "lost" && <span className="text-[13px] text-ink-muted">Pide motivo y comentario</span>}
+                          {requisitoDeEtapa(etapa) && <span className="text-[13px] text-ink-muted">{requisitoDeEtapa(etapa)}</span>}
                         </span>
                         {actual && <Badge tone="neutral">Actual</Badge>}
                       </DropdownMenuItem>

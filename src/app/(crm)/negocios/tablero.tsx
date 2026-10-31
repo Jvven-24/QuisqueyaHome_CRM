@@ -109,7 +109,7 @@ function TarjetaOrdenable({ negocio, acciones, presentacion, pendiente }: {
       onKeyDown={(e) => listeners?.onKeyDown?.(e)}
       aria-roledescription="negocio arrastrable"
       aria-label={`Arrastrar el negocio de ${negocio.contactName}`}
-      className="-ml-1.5 inline-flex min-h-12 w-8 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-ink-muted hover:bg-navy-100 hover:text-navy-950 focus-visible:outline-2 focus-visible:outline-gold-700 active:cursor-grabbing"
+      className="-ml-1.5 inline-flex min-h-12 w-11 shrink-0 cursor-grab sm:w-8 touch-none items-center justify-center rounded-md text-ink-muted hover:bg-navy-100 hover:text-navy-950 focus-visible:outline-2 focus-visible:outline-gold-700 active:cursor-grabbing"
     >
       <GripVertical className="size-4" aria-hidden="true" />
     </button>
@@ -412,6 +412,7 @@ export function Tablero({
     return (
       <MotionConfig reducedMotion="user">
         <DndContext
+          id="tablero-negocios"
           sensors={sensores}
           collisionDetection={deteccion}
           onDragStart={alEmpezar}

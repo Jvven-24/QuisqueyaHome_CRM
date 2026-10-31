@@ -367,7 +367,7 @@ export function AcademyAdministracionVista({
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 href="/academy"
-                className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200"
+                className="inline-flex min-h-11 items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 Volver a Academy (UI-065)

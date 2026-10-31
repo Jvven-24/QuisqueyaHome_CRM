@@ -325,8 +325,8 @@
     color: #10172D;
   }
   .analytics-tabs-scroll { min-width: 0; max-width: 100%; overflow-x: auto; padding: 2px; }
-  .analytics-tabs { display: inline-flex; width: max-content; height: auto; min-height: 36px; gap: 4px; background: #EEF2F6; border: 1px solid var(--border); border-radius: 6px; padding: 2px; box-shadow: none; }
-  .analytics-tab { min-height: 32px; min-width: 36px; height: auto; padding: 6px 12px; font-size: 13px; font-weight: 600; color: #64748B; border-radius: 4px; box-shadow: none; transition: background 140ms ease, color 140ms ease; }
+  .analytics-tabs { display: inline-flex; width: max-content; height: auto; min-height: 48px; gap: 4px; background: #EEF2F6; border: 1px solid var(--border); border-radius: 6px; padding: 2px; box-shadow: none; }
+  .analytics-tab { min-height: 44px; min-width: 44px; height: auto; padding: 6px 12px; font-size: 13px; font-weight: 600; color: #64748B; border-radius: 4px; box-shadow: none; transition: background 140ms ease, color 140ms ease; }
   .analytics-tab[data-state=active] { background: #10172D; color: #FFFFFF; box-shadow: none; }
   .analytics-tab::after { display: none; }
   .analytics-main-tabs { gap: 16px; min-width: 0; }

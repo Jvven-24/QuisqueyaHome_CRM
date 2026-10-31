@@ -185,7 +185,7 @@ export function DataTable<F>({
                         type="button"
                         onClick={() => ordenarPor(columna.clave)}
                         className={cn(
-                          "inline-flex items-center gap-1 transition-colors hover:text-foreground cursor-pointer",
+                          "inline-flex min-h-8 items-center gap-1 transition-colors hover:text-foreground cursor-pointer",
                           orden?.clave === columna.clave && "text-foreground font-black"
                         )}
                       >

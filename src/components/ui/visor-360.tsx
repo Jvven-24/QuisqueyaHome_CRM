@@ -112,7 +112,7 @@ export function Visor360({
                 }}
                 className={`min-h-[36px] px-3 rounded-lg text-xs font-semibold transition-colors ${
                   idx === escenaIndex
-                    ? "bg-gold-600 text-white"
+                    ? "bg-gold-600 text-navy-950"
                     : "bg-white/10 text-white/80 hover:bg-white/20"
                 }`}
               >

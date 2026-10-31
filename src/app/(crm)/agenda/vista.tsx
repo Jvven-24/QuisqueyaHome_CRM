@@ -995,7 +995,7 @@ export function AgendaVista({
                 >
                   <div className="text-[14px] font-bold text-navy-950">{etiquetaDia(dia)}</div>
                   {esHoy && (
-                    <span className="inline-block mt-1 px-2.5 py-0.5 text-[13px] font-extrabold uppercase tracking-wider rounded-full bg-gold-600 text-white">
+                    <span className="inline-block mt-1 px-2.5 py-0.5 text-[13px] font-extrabold uppercase tracking-wider rounded-full bg-gold-600 text-navy-950">
                       Hoy
                     </span>
                   )}

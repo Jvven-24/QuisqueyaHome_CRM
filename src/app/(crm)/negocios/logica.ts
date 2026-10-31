@@ -18,6 +18,24 @@ export type ColumnaEtapa = {
   totales: TotalDivisa[];
 };
 
+/**
+ * Qué pide cada etapa destino antes de aceptar un negocio. Espejo corto de
+ * `validarTransicion` (`domain/transicion-etapa.ts`) para avisar ANTES de
+ * mover; el servidor sigue siendo quien decide.
+ */
+const REQUISITO_POR_SLUG: Record<string, string> = {
+  contactado: "Pide una actividad de contacto",
+  presentacion: "Pide próxima acción con responsable y fecha",
+  preseleccion: "Pide una propiedad de interés",
+  negociacion: "Pide monto, probabilidad, comisión y fecha de cierre",
+};
+
+export function requisitoDeEtapa(etapa: Pick<Etapa, "slug" | "kind">): string | null {
+  if (etapa.kind === "won") return "Pide unidad y monto";
+  if (etapa.kind === "lost") return "Pide motivo y comentario";
+  return REQUISITO_POR_SLUG[etapa.slug] ?? null;
+}
+
 /** Tarjetas visibles por etapa antes de «Ver más». */
 export const LIMITE_POR_ETAPA = 20;
 

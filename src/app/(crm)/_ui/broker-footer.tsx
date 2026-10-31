@@ -54,7 +54,7 @@ export function BrokerFooter({ usuario }: BrokerFooterProps) {
               <span className="truncate text-[12px] font-medium text-slate-200 group-hover:text-white transition-colors">
                 {usuario.fullName}
               </span>
-              <span className="truncate text-[10px] text-slate-400">
+              <span className="truncate text-[11px] text-slate-400">
                 {usuario.jobTitle || usuario.roleLabel}
               </span>
             </div>
@@ -73,7 +73,7 @@ export function BrokerFooter({ usuario }: BrokerFooterProps) {
             <ShieldCheck className="size-3.5 text-gold-500/90 shrink-0" />
             <div className="flex flex-col min-w-0">
               <span className="text-xs font-semibold text-white truncate">{usuario.fullName}</span>
-              <span className="text-[10px] text-slate-400 font-mono truncate">{usuario.email}</span>
+              <span className="text-[11px] text-slate-400 font-mono truncate">{usuario.email}</span>
             </div>
           </div>
         </DropdownMenuLabel>

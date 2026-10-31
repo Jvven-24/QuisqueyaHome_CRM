@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
-  antiguedadPorEtapa, armarColumnas, conteoPorEtapa, estadoContenido, monedasDelResumen, resultadosDelResumen,
+  antiguedadPorEtapa, armarColumnas, conteoPorEtapa, estadoContenido, monedasDelResumen, requisitoDeEtapa, resultadosDelResumen,
   siguienteOrden, totalNegocios, totalesPorEtapa, valorActivoPorDivisa, valorPonderado, valorPorEtapa,
   type Etapa,
 } from "./logica.ts";
@@ -23,6 +23,16 @@ const resumen = [
   { stageId: 3, kind: "won", currency: "USD", count: 4, amountCents: 90000 },
   { stageId: 4, kind: "lost", currency: "USD", count: 1, amountCents: 1000 },
 ] as never[];
+
+test("cada etapa avisa antes de mover qué pide el servidor", () => {
+  assert.equal(requisitoDeEtapa({ slug: "nuevo", kind: "open" }), null);
+  assert.match(requisitoDeEtapa({ slug: "contactado", kind: "open" }) ?? "", /actividad de contacto/);
+  assert.match(requisitoDeEtapa({ slug: "presentacion", kind: "open" }) ?? "", /próxima acción/);
+  assert.match(requisitoDeEtapa({ slug: "preseleccion", kind: "open" }) ?? "", /propiedad/);
+  assert.match(requisitoDeEtapa({ slug: "negociacion", kind: "open" }) ?? "", /monto/);
+  assert.match(requisitoDeEtapa({ slug: "cierre", kind: "won" }) ?? "", /unidad y monto/);
+  assert.match(requisitoDeEtapa({ slug: "perdido", kind: "lost" }) ?? "", /motivo/);
+});
 
 test("totales por etapa suman por divisa sin mezclar monedas", () => {
   assert.deepEqual(totalesPorEtapa(resumen, 1), [
