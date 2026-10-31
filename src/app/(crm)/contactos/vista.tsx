@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, type ReactNode, useMemo, useRef, useState } from "react";
@@ -273,32 +272,44 @@ export function ContactosVista({
 
       <ModuleTabs label="Gestión de contactos" items={[{href:"/contactos",label:"Personas"},{href:"/contactos/empresas",label:"Empresas y representantes",match:"prefix"},{href:"/contactos/demandas",label:"Demandas y matching",match:"prefix"}]} className="mb-4" />
       {/* Franja de búsqueda y filtros ejecutivos */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-surface border border-line rounded-xl mb-4 shadow-xs">
-        <div className="flex items-center gap-2 flex-1 min-w-0 w-full max-w-md">
-          <div className="relative flex items-center w-full">
+      <div className="mb-4 grid min-w-0 gap-3 rounded-xl border border-line bg-surface p-3 lg:grid-cols-[minmax(16rem,1fr)_auto] lg:items-end">
+        <form
+          role="search"
+          aria-label="Buscar contactos"
+          className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-2"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const q = new FormData(event.currentTarget).get("q")?.toString().trim();
+            irCon({ q: q || undefined, page: undefined, contacto: undefined });
+          }}
+        >
+          <label className="min-w-0 text-[13px] font-semibold text-ink" htmlFor="contactos-busqueda">Buscar contacto
+          <span className="relative flex min-w-0 items-center w-full">
             <Search className="absolute left-3.5 size-4 text-muted pointer-events-none" />
             <input
+              id="contactos-busqueda"
+              key={filtros.q}
+              name="q"
               type="search"
               aria-label="Buscar contactos; pulsa Enter para buscar"
               title="Pulsa Enter para buscar"
               placeholder="Buscar por nombre, teléfono o correo…"
               defaultValue={filtros.q}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  irCon({ q: event.currentTarget.value.trim() || undefined, page: undefined, contacto: undefined });
-                }
-              }}
-              className="w-full min-h-12 pl-10 pr-3.5 text-[13.5px] bg-surface border border-input-line rounded-lg text-ink placeholder:text-muted focus:outline-none focus:border-gold-700 focus:ring-2 focus:ring-gold-700/20 transition-all"
+              className="w-full min-h-12 pl-10 pr-3.5 text-[14px] font-medium bg-canvas border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-gold-700 focus:ring-2 focus:ring-gold-700/20 transition-all"
             />
-          </div>
-        </div>
+          </span>
+          </label>
+          <button type="submit" className="button secondary min-h-12 shrink-0 px-4">Buscar</button>
+        </form>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        <div className="grid min-w-0 grid-cols-1 items-end gap-2 sm:grid-cols-[minmax(10rem,1fr)_auto] lg:flex lg:flex-wrap">
+          <label className="min-w-0 text-[13px] font-semibold text-ink" htmlFor="contactos-canal">Canal de origen
           <select
+            id="contactos-canal"
             aria-label="Filtrar por canal"
             value={filtros.sourceId ?? ""}
             onChange={(event) => irCon({ source_id: event.target.value || undefined, page: undefined })}
-            className="min-h-12 px-3.5 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer"
+            className="min-h-12 w-full min-w-0 px-3.5 text-[13.5px] font-medium text-ink bg-surface border border-input-line rounded-lg focus:outline-none focus:border-gold-700 cursor-pointer lg:max-w-60"
           >
             <option value="">Todos los canales</option>
             {canales.map((canal) => (
@@ -307,22 +318,21 @@ export function ContactosVista({
               </option>
             ))}
           </select>
+          </label>
 
           {hayFiltro && (
             <button
               type="button"
               onClick={() => irCon({ q: undefined, source_id: undefined, page: undefined })}
-              className="min-h-12 px-4 inline-flex items-center gap-2 text-[13.5px] font-semibold text-ink-muted hover:text-ink bg-surface border border-input-line rounded-lg transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
+              className="min-h-12 px-4 inline-flex items-center justify-center gap-2 text-[13.5px] font-semibold text-ink-muted hover:text-ink bg-surface border border-input-line rounded-lg transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
             >
               <X className="size-4" />
               <span>Limpiar filtros</span>
             </button>
           )}
 
-          <span className="inline-flex items-center px-3.5 py-2 rounded-full bg-gold-100 text-gold-900 text-[13px] font-bold tabular-nums border border-gold-300/60 ml-1">
-            {total} contactos registrados
-          </span>
         </div>
+        <p className="m-0 border-t border-line pt-2 text-[13px] text-ink-muted lg:col-span-2"><strong className="font-semibold tabular-nums text-ink">{total}</strong> contactos registrados{hayFiltro ? " · Filtros activos" : ""}</p>
       </div>
 
       <div className={contactoSeleccionado ? "split-view inspector-open" : "split-view"}>
@@ -453,18 +463,18 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
 
   return (
     <div
-      className="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 backdrop-blur-xs p-4 animate-in fade-in"
+      className="modal-backdrop crm-modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 p-4 animate-in fade-in"
       role="presentation"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <section
-        className="modal bg-surface border border-line rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in zoom-in-95 duration-200 outline-none"
+        className="modal crm-modal flex min-h-0 w-full max-w-lg flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-md outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="nuevo-contacto-title"
         ref={modalRef}
       >
-        <div className="drawer-head flex items-center justify-between px-6 py-4 border-b border-line bg-surface-alt">
+        <div className="drawer-head flex shrink-0 items-center justify-between gap-3 border-b border-line bg-surface-alt px-4 py-3 sm:px-6">
           <h2 id="nuevo-contacto-title" className="font-heading font-bold text-lg text-navy-950 m-0">
             Nuevo contacto patrimonial
           </h2>
@@ -472,7 +482,8 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
             <X size={20} />
           </button>
         </div>
-        <form noValidate className="form-grid p-6" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
+        <form noValidate className="flex min-h-0 flex-1 flex-col overflow-hidden" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
+          <div className="form-grid min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6">
           {errorRed && (
             <div className="span-2">
               <AlertaErrorFormulario
@@ -558,7 +569,8 @@ function FormularioContacto({ canales, onClose }: { canales: Canal[]; onClose: (
             </div>
           )}
 
-          <div className="form-actions span-2 pt-2">
+          </div>
+          <div className="form-actions !grid shrink-0 grid-cols-2 gap-2 border-t border-line bg-surface !p-4">
             <button
               className="button min-h-12 px-5 text-[13.5px]"
               type="button"

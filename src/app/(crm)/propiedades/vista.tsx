@@ -149,7 +149,7 @@ export function PropiedadesVista({
           <Search className="absolute left-3.5 size-4 text-muted-foreground pointer-events-none" />
           <input
             type="search"
-            className="w-full min-h-[44px] pl-10 pr-4 text-[13px] rounded-lg border border-line bg-canvas focus:bg-surface focus:border-gold-600 focus:outline-none transition-colors"
+            className="w-full min-h-[44px] pl-10 pr-24 text-[13px] rounded-lg border border-line bg-canvas focus:bg-surface focus:border-gold-600 focus:outline-none transition-colors"
             placeholder="Buscar por zona (Bávaro, Cap Cana…)"
             aria-label="Buscar proyectos por zona"
             value={terminoBusqueda}
@@ -211,7 +211,7 @@ export function PropiedadesVista({
                 className="group relative flex flex-col justify-between rounded-2xl border border-line/90 bg-surface shadow-xs hover:border-gold-500/50 hover:shadow-xl transition-all duration-300 overflow-hidden"
               >
                 {/* Portada en Navy profundo */}
-                <div className="relative min-h-[132px] bg-[#0c1322] p-4 flex flex-col justify-between overflow-hidden text-white border-b border-navy-900">
+                <div className="relative bg-[#0c1322] p-3 sm:min-h-[132px] sm:p-4 flex flex-col justify-between overflow-hidden text-white border-b border-navy-900">
                   {/* Gradiente sutil y patrón visual */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#101b33] via-[#0c1322] to-[#080d18] opacity-95" />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-gold-500/10 via-transparent to-transparent pointer-events-none" />
@@ -224,7 +224,7 @@ export function PropiedadesVista({
                         alt="Quisqueya Home"
                         width={36}
                         height={36}
-                        className="size-9 rounded-xl object-contain shadow-md border border-gold-500/40 bg-navy-950 p-0.5"
+                        className="hidden sm:block size-9 rounded-xl object-contain shadow-md border border-gold-500/40 bg-navy-950 p-0.5"
                       />
                       {esConfotur && (
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-950/90 text-emerald-300 border border-emerald-500/40 px-3 py-1 text-[13px] font-semibold tracking-wide backdrop-blur-xs shadow-xs">
@@ -240,7 +240,7 @@ export function PropiedadesVista({
                   </div>
 
                   {/* Fila inferior de portada: Nombre y ubicación */}
-                  <div className="relative z-10 pt-3">
+                  <div className="relative z-10 pt-2 sm:pt-3">
                     <div className="flex items-center gap-2 mb-1.5">
                       <Badge tone="gold">
                         {ETIQUETAS_TIPO[proyecto.projectType] ?? proyecto.projectType}
@@ -252,7 +252,7 @@ export function PropiedadesVista({
                         </span>
                       )}
                     </div>
-                    <h2 className="text-xl font-bold tracking-tight text-white group-hover:text-gold-300 transition-colors line-clamp-1">
+                    <h2 className="text-base sm:text-xl font-bold tracking-tight text-white group-hover:text-gold-300 transition-colors break-words">
                       {proyecto.name}
                     </h2>
                     <div className="flex items-center gap-1 text-[13px] text-slate-300 mt-1">
@@ -263,7 +263,7 @@ export function PropiedadesVista({
                 </div>
 
                 {/* Cuerpo de la tarjeta Bento */}
-                <div className="p-4 flex-1 flex flex-col justify-between gap-3">
+                <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between gap-3">
                   {/* Barra de absorción de unidades */}
                   <div className="space-y-1.5">
                     <div className="flex justify-between items-center text-[13px]">

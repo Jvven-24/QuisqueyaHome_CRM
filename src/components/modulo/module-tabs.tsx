@@ -37,6 +37,7 @@ export function ModuleTabs({ items, label, className = "", queryParam, activeTab
     const tabs = Array.from(event.currentTarget.parentElement?.querySelectorAll<HTMLAnchorElement>('[role="tab"]') ?? []);
     const current = tabs.indexOf(event.currentTarget);
     const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1 : (current + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    tabs[next]?.focus();
     tabs[next]?.click();
   }
   return <div className={`relative min-w-0 ${className}`}>

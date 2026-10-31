@@ -303,7 +303,7 @@ export function AvancesVista({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-4">
       <PageHeader
         eyebrow="Supervisión Constructiva · Private Desk"
         title="Avances de obra"
@@ -379,15 +379,15 @@ export function AvancesVista({
 
       {/* Selector de proyecto de lujo con barra de avance global y selector de vistas */}
       {proyectos.length > 0 && (
-        <Section className="flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
-          <div className="flex items-center gap-3">
+        <Section className="flex min-w-0 flex-col justify-between gap-3 xl:flex-row xl:items-center">
+          <div className="flex min-w-0 items-center gap-3">
             <div className="size-11 rounded-xl bg-navy-950 text-gold-400 flex items-center justify-center shrink-0 border border-gold-500/30">
               <HardHat className="size-5" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="text-[13px] font-medium text-muted-foreground">Proyecto en supervisión</div>
-              <div className="text-base font-bold text-ink flex items-center gap-2">
-                <span>{proyecto?.name}</span>
+              <div className="text-base font-semibold text-ink flex min-w-0 flex-wrap items-center gap-2">
+                <span className="min-w-0 break-words">{proyecto?.name}</span>
                 {fasesRetrasadas > 0 && (
                   <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800 border border-red-200">
                     {fasesRetrasadas} con retraso
@@ -397,17 +397,17 @@ export function AvancesVista({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="grid min-w-0 grid-cols-1 items-center gap-3 sm:grid-cols-2 xl:max-w-xl">
             {/* Barra de progreso global del proyecto */}
-            <div className="flex items-center gap-3 bg-surface-alt px-3.5 py-2 rounded-xl border border-line">
-              <div className="space-y-1">
+            <div className="flex min-w-0 flex-wrap items-center justify-between gap-2 bg-surface-alt px-3 py-2 rounded-lg">
+              <div className="min-w-0 flex-1 space-y-1">
                 <div className="flex justify-between items-center text-[13px] gap-4">
                   <span className="text-muted-foreground font-medium">Avance global</span>
                   <span className="font-bold text-ink tabular-nums text-sm">{porcentajeCalculado}%</span>
                 </div>
-                <div className="w-28 h-2 rounded-full bg-line overflow-hidden">
+                <div role="progressbar" aria-label="Avance global del proyecto" aria-valuemin={0} aria-valuemax={100} aria-valuenow={porcentajeCalculado} className="w-full min-w-24 h-2 rounded-full bg-line overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-gold-600 to-amber-500 rounded-full transition-all duration-500"
+                    className="h-full bg-gold-600 rounded-full transition-[width] duration-200 motion-reduce:transition-none"
                     style={{ width: `${porcentajeCalculado}%` }}
                   />
                 </div>
@@ -421,7 +421,7 @@ export function AvancesVista({
             {proyectos.length > 1 && (
               <select
                 aria-label="Seleccionar proyecto en supervisión"
-                className="max-w-full min-w-0 min-h-[44px] px-3.5 text-[13px] rounded-xl border border-line bg-canvas focus:bg-surface focus:border-gold-600 focus:outline-none transition-colors"
+                className="w-full max-w-full min-w-0 min-h-12 px-3 text-[13px] rounded-lg border border-line bg-surface focus:border-gold-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 transition-colors"
                 value={proyecto?.slug ?? ""}
                 onChange={(event) => irCon({ proyecto: event.target.value, fase: undefined })}
               >
@@ -461,8 +461,8 @@ export function AvancesVista({
         <>
           {/* Línea de tiempo constructiva de 8 fases con nodos dorados */}
           <Section className="space-y-4 overflow-hidden">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="min-w-0 space-y-0.5">
                 <h2 className="text-lg font-bold text-ink flex items-center gap-2">
                   <Layers className="size-4 text-gold-600" />
                   Línea de Tiempo Constructiva
@@ -486,7 +486,7 @@ export function AvancesVista({
 
             {/* Nodos de la línea de tiempo */}
             <div className="relative pt-3 pb-2 overflow-x-auto">
-              <div className="flex items-start gap-3 min-w-max pb-2">
+              <div className="flex items-stretch gap-2 min-w-max pb-2">
                 {fases.map((fase) => {
                   const esCompletada = fase.status === "completed";
                   const esActiva = fase.id === faseSeleccionadaId;
@@ -499,9 +499,9 @@ export function AvancesVista({
                       type="button"
                       aria-current={esActiva ? "true" : undefined}
                       onClick={() => irCon({ fase: String(fase.id) })}
-                      className={`group relative flex flex-col items-center text-center p-3.5 rounded-xl border transition-all duration-200 min-w-[135px] max-w-[155px] min-h-[115px] justify-between ${
+                      className={`group relative flex flex-col items-center text-center gap-1 p-3 rounded-lg border transition-colors duration-150 w-[124px] sm:w-[144px] min-h-[104px] justify-between ${
                         esActiva
-                          ? "bg-navy-950 text-white border-gold-500 shadow-lg ring-2 ring-gold-500/20"
+                          ? "bg-navy-950 text-white border-navy-950"
                           : esCompletada
                           ? "bg-surface hover:bg-gold-50/30 border-gold-400/60 shadow-xs"
                           : retrasada
@@ -521,7 +521,7 @@ export function AvancesVista({
 
                       {/* Nodo circular */}
                       <div
-                        className={`size-10 rounded-full flex items-center justify-center font-bold text-sm transition-transform group-hover:scale-105 shadow-xs ${
+                        className={`size-9 rounded-full flex items-center justify-center font-semibold text-sm ${
                           esCompletada
                             ? "bg-gold-600 text-navy-950 ring-4 ring-gold-100"
                             : esActiva
@@ -533,17 +533,17 @@ export function AvancesVista({
                             : "bg-surface-alt text-muted-foreground border border-line"
                         }`}
                       >
-                        {esCompletada ? "✓" : fase.position}
+                        {esCompletada ? <CheckCircle2 className="size-5" aria-hidden="true" /> : fase.position}
                       </div>
 
                       {/* Título de la fase */}
-                      <span className={`text-[13px] font-bold mt-2 line-clamp-1 ${esActiva ? "text-white" : "text-ink"}`}>
+                      <span className={`w-full break-words text-[13px] font-semibold mt-1 leading-snug ${esActiva ? "text-white" : "text-ink"}`}>
                         {fase.title}
                       </span>
 
                       {/* Porcentaje en vivo o etiqueta */}
                       <span
-                        className={`text-[12px] font-semibold mt-1 px-2 py-0.5 rounded-md ${
+                        className={`text-[13px] font-medium mt-1 px-2 py-0.5 rounded-md ${
                           esCompletada
                             ? "text-gold-800 bg-gold-100"
                             : esActiva
@@ -584,13 +584,13 @@ export function AvancesVista({
                 </div>
 
                 {fotosConUrl.length >= 2 && (
-                  <div className="flex flex-wrap items-center gap-2 text-xs">
-                    <label className="flex items-center gap-1.5 font-semibold text-ink">
+                  <div className="grid w-full min-w-0 grid-cols-1 gap-3 text-[13px] sm:grid-cols-2">
+                    <label className="grid min-w-0 gap-1 font-medium text-ink">
                       <span>Antes:</span>
                       <select
                         value={indiceFotoAntes}
                         onChange={(e) => setIndiceFotoAntes(Number(e.target.value))}
-                        className="min-h-[44px] px-2.5 rounded-lg border border-line bg-canvas"
+                        className="w-full min-w-0 min-h-12 px-3 rounded-lg border border-line bg-surface"
                       >
                         {fotosConUrl.map((f, i) => (
                           <option key={f.id} value={i}>
@@ -599,12 +599,12 @@ export function AvancesVista({
                         ))}
                       </select>
                     </label>
-                    <label className="flex items-center gap-1.5 font-semibold text-ink">
+                    <label className="grid min-w-0 gap-1 font-medium text-ink">
                       <span>Después:</span>
                       <select
                         value={indiceFotoDespues}
                         onChange={(e) => setIndiceFotoDespues(Number(e.target.value))}
-                        className="min-h-[44px] px-2.5 rounded-lg border border-line bg-canvas"
+                        className="w-full min-w-0 min-h-12 px-3 rounded-lg border border-line bg-surface"
                       >
                         {fotosConUrl.map((f, i) => (
                           <option key={f.id} value={i}>
@@ -632,9 +632,9 @@ export function AvancesVista({
           {modoVista === "recorrido360" && <Section title="Inspección 360° · vista previa"><p role="note" className="text-sm">Falta: activos panorámicos verificados, fecha de captura, licencia y acceso aprobado. Una foto ordinaria de obra no se presenta como recorrido 360°.</p><button type="button" className="button min-h-11" onClick={()=>setDialogoError("No se ha solicitado un recorrido real. Falta el servicio de activos panorámicos y revisión de publicación.")}>Solicitar recorrido · vista previa</button></Section>}
 
           {modoVista === "edicion" && faseSeleccionada && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-4 items-start">
               {/* Editor de fase de obra con Guía de Requisitos */}
-              <div className="lg:col-span-7">
+              <div className="min-w-0 lg:col-span-7">
                 <EditorFase
                   key={faseSeleccionada.id}
                   proyectoId={proyecto.id}
@@ -650,13 +650,10 @@ export function AvancesVista({
               </div>
 
               {/* Bóveda fotográfica de evidencia + Video embebido */}
-              <div className="lg:col-span-5 space-y-4">
+              <div className="min-w-0 lg:col-span-5 space-y-4">
                 <Section className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-[13px] font-semibold text-gold-800 uppercase tracking-wider">
-                        Bóveda de Evidencia
-                      </p>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="min-w-0">
                       <h2 className="text-lg font-bold text-ink flex items-center gap-2">
                         <Camera className="size-5 text-gold-600" />
                         Fotografías de Obra
@@ -670,13 +667,18 @@ export function AvancesVista({
                   {/* Dropzone de subida accesible con drag and drop */}
                   {puedeEditar && (
                     <div
+                      role="button"
+                      tabIndex={ocupada ? -1 : 0}
+                      aria-disabled={ocupada}
+                      aria-label="Seleccionar fotografías de obra para subir"
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
-                      onClick={() => fileInputRef.current?.click()}
-                      className={`border-2 border-dashed rounded-xl p-5 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-2 ${
+                      onClick={() => { if (!ocupada) fileInputRef.current?.click(); }}
+                      onKeyDown={event => { if (!ocupada && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); fileInputRef.current?.click(); } }}
+                      className={`border border-dashed rounded-lg p-4 text-center transition-colors cursor-pointer flex flex-col items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-gold-700 ${
                         arrastrandoSobre
-                          ? "border-gold-500 bg-gold-50/40 scale-102"
+                          ? "border-gold-700 bg-gold-100"
                           : "border-line hover:border-gold-500/60 bg-canvas hover:bg-gold-50/10"
                       }`}
                     >
@@ -731,7 +733,7 @@ export function AvancesVista({
                             <img
                               src={foto.url}
                               alt={foto.name}
-                              className="size-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              className="size-full object-cover"
                             />
                           ) : (
                             <div className="size-full flex items-center justify-center p-2 text-center text-[13px] text-muted-foreground">
@@ -740,13 +742,13 @@ export function AvancesVista({
                           )}
 
                           {/* Overlay de acciones en miniatura */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 transition-opacity flex flex-col justify-between p-1.5">
                             <div className="flex justify-end gap-1">
                               {foto.url && (
                                 <button
                                   type="button"
                                   onClick={() => setFotoLightbox(foto)}
-                                  className="size-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors"
+                                  className="size-11 sm:size-12 rounded-lg bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition-colors"
                                   aria-label={`Ver foto ${foto.name}`}
                                 >
                                   <ZoomIn className="size-4" />
@@ -756,7 +758,7 @@ export function AvancesVista({
                                 <button
                                   type="button"
                                   onClick={() => setFotoAEliminar(foto)}
-                                  className="size-8 rounded-lg bg-red-600/80 hover:bg-red-600 text-white flex items-center justify-center transition-colors"
+                                  className="size-11 sm:size-12 rounded-lg bg-danger hover:bg-danger/90 text-white flex items-center justify-center transition-colors"
                                   aria-label={`Eliminar foto ${foto.name}`}
                                 >
                                   <Trash2 className="size-4" />
@@ -774,7 +776,7 @@ export function AvancesVista({
 
                   {/* Metadatos de la fase */}
                   <div className="pt-3 border-t border-line space-y-2 text-[13px]">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="text-muted-foreground flex items-center gap-1.5">
                         <User className="size-4 text-gold-600" />
                         Supervisor asignado:
@@ -783,7 +785,7 @@ export function AvancesVista({
                         {faseSeleccionada.responsableNombre ?? "Sin asignar"}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="text-muted-foreground flex items-center gap-1.5">
                         <Calendar className="size-4 text-gold-600" />
                         Última actualización:

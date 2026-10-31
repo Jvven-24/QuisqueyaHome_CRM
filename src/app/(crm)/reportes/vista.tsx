@@ -14,6 +14,7 @@ import { generarCsv } from "@/domain/csv";
 import { fechaHoraLegible } from "@/domain/zona-horaria";
 import type { ReportesBiData } from "@/application/reportes/puertos";
 import { ChartCard } from "@/components/ui/chart-card";
+import { PageHeader } from "@/components/modulo";
 import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { analyticsCopy, inventoryLabels, reportTabs } from "../_ui/analitica-copy";
@@ -207,7 +208,6 @@ export function ReportesVista({
 
   return (
     <div className="analytics-page analytics-reportes">
-      <OperacionesReportes metricas={metricas} canExport={canExport} />
       {/* Estilos para impresión limpia de informe ejecutivo */}
       <style>{`
         @media print {
@@ -285,61 +285,29 @@ export function ReportesVista({
       </header>
 
       {/* Cabecera Interactiva de Pantalla */}
-      <header className="analytics-page-header">
-        <div>
-          <h1 style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.03em" }}>{c.title}</h1>
-          <p style={{ fontSize: "14px", color: "var(--muted)", margin: "4px 0 0" }}>{c.subtitle}</p>
-        </div>
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" }}>
+      <div className="non-printable">
+        <PageHeader title={c.title} description={c.subtitle} actions={<>
           <button
-            className="analytics-button"
+            className="button primary min-h-12 gap-2 whitespace-normal text-center"
             type="button"
             onClick={imprimirInforme}
-            style={{
-              minHeight: "44px",
-              padding: "10px 16px",
-              fontSize: "13px",
-              fontWeight: 700,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              backgroundColor: "var(--navy-950)",
-              color: "#ffffff",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
             title="Imprimir informe ejecutivo o guardar en PDF"
           >
-            <Printer size={16} />
-            <span>Imprimir Informe Ejecutivo (PDF)</span>
+            <Printer size={16} className="shrink-0" aria-hidden="true" />
+            <span>Imprimir / PDF</span>
           </button>
 
           <button
-            className="analytics-button"
+            className="button secondary min-h-12 gap-2 whitespace-normal text-center disabled:cursor-not-allowed disabled:opacity-60"
             type="button"
             disabled={!canExport} aria-describedby={!canExport ? "report-export-permission" : undefined}
             onClick={exportarCsv}
-            style={{
-              minHeight: "44px",
-              padding: "10px 16px",
-              fontSize: "13px",
-              fontWeight: 700,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              backgroundColor: "var(--surface)",
-              color: "var(--ink)",
-              border: "1px solid var(--line)",
-              borderRadius: "8px",
-              cursor: canExport ? "pointer" : "not-allowed",
-            }}
           >
-            <FileSpreadsheet size={16} />
+            <FileSpreadsheet size={16} className="shrink-0" aria-hidden="true" />
             <span>{common.export}</span>
           </button>
-          {!canExport && <p className="analytics-context" style={{ fontSize: "13px" }}>{common.exportDenied}</p>}
-        </div>
-      </header>
+        </>} />
+      </div>
 
       <p className="analytics-context" style={{ fontSize: "13px", marginTop: "4px" }}>
         {common.received}: <time dateTime={metricas.asOf}>{fechaFormateada}</time> · {common.scope}
@@ -370,6 +338,8 @@ export function ReportesVista({
           online={online}
         />
       </section>
+
+      <OperacionesReportes metricas={metricas} canExport={canExport} />
 
       <Tabs value={tab} onValueChange={setTab} className="analytics-main-tabs">
         <div className="non-printable">

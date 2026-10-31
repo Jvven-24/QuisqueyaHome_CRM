@@ -160,7 +160,7 @@ export function BrokersVista({
       />
 
       {/* KPI Maestros del Equipo Comercial */}
-      <section aria-label="Indicadores del equipo comercial" className="grid grid-cols-2 gap-3 mb-6 xl:grid-cols-4">
+      <section aria-label="Indicadores del equipo comercial" className="grid grid-cols-2 gap-2 mb-4 xl:grid-cols-4">
         <ResumenCompacto etiqueta="Fuerza Comercial" valor={resumen.totalBrokers} detalle="Asesores activos en roster" icono={<Users className="size-5 text-navy-800" />} />
         <ResumenCompacto etiqueta="Cartera en Gestión" valor={resumen.carteraTotal} detalle="Negocios activos asignados" icono={<Briefcase className="size-5 text-blue-700" />} />
         <ResumenCompacto etiqueta="Volumen Acumulado" valor={formatearMonto(resumen.volumenTotalCents, "USD")} detalle="Ventas cerradas del año (USD)" icono={<DollarSign className="size-5 text-gold-800" />} />
@@ -168,22 +168,30 @@ export function BrokersVista({
       </section>
 
       {/* Escala Interactiva de Carrera */}
-      <div className="bg-surface border border-line/80 rounded-2xl p-4 md:p-5 mb-6 shadow-xs">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <section aria-label="Filtrar por nivel de carrera" className="bg-surface border border-line rounded-xl p-3 sm:p-4 mb-4">
+        <div className="flex min-w-0 flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Award className="size-5 text-gold-600 shrink-0" />
             <div>
-              <h2 className="text-[14px] font-bold text-navy-950 m-0">Niveles de Carrera y Escalamiento</h2>
-              <p className="text-[13px] text-ink-muted m-0">
+              <h2 className="text-[14px] font-bold text-navy-950 m-0">Nivel de carrera</h2>
+              <p className="hidden sm:block text-[13px] text-ink-muted m-0">
                 Filtra por jerarquía para evaluar la distribución del talento.
               </p>
             </div>
           </div>
 
-          <div className="flex min-w-0 max-w-full items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+          <label className="sm:hidden min-w-0 text-[13px]" htmlFor="broker-career-level">
+            Filtrar asesores
+            <select id="broker-career-level" value={nivelSeleccionado} onChange={event => setNivelSeleccionado(event.target.value as BrokerLevel | "todos")} className="min-h-12 w-full rounded-lg border border-line bg-surface px-3 font-medium text-navy-950">
+              <option value="todos">Todos los niveles ({brokers.length})</option>
+              {LEVEL_ORDER.map(nivel => <option key={nivel} value={nivel}>{BROKER_LEVEL_LABELS[nivel]} ({brokers.filter(broker => broker.level === nivel).length})</option>)}
+            </select>
+          </label>
+          <div className="hidden sm:flex min-w-0 max-w-full flex-wrap items-center gap-1.5">
             <button
               type="button"
               onClick={() => setNivelSeleccionado("todos")}
+              aria-pressed={nivelSeleccionado === "todos"}
               className={`px-3.5 min-h-[44px] rounded-xl text-[13px] font-semibold border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 ${
                 nivelSeleccionado === "todos"
                   ? "bg-navy-950 text-white border-navy-950 shadow-xs"
@@ -200,6 +208,7 @@ export function BrokersVista({
                   key={nivel}
                   type="button"
                   onClick={() => setNivelSeleccionado(nivel)}
+                  aria-pressed={activo}
                   className={`px-3.5 min-h-[44px] rounded-xl text-[13px] font-semibold border whitespace-nowrap transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold-700 ${
                     activo
                       ? "bg-gold-600 text-navy-950 border-gold-600 shadow-xs"
@@ -212,14 +221,15 @@ export function BrokersVista({
             })}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Barra de Búsqueda, Selector de Vista y Filtros Rápidos */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-3 mb-6">
+      <div className="flex min-w-0 flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
         <div className="relative w-full md:max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-ink-muted pointer-events-none" />
           <input
             type="text"
+            aria-label="Buscar asesor por nombre, especialidad o cargo"
             value={filtroTexto}
             onChange={(e) => setFiltroTexto(e.target.value)}
             placeholder="Buscar asesor por nombre, especialidad o cargo…"
@@ -227,12 +237,13 @@ export function BrokersVista({
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-          <div className="inline-flex rounded-xl bg-surface-alt p-1 border border-line">
+        <div className="flex min-w-0 flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 w-full lg:w-auto sm:justify-between lg:justify-end">
+          <div role="group" aria-label="Vista del equipo comercial" className="grid w-full grid-cols-3 rounded-lg bg-surface-alt p-1 border border-line sm:inline-flex sm:w-auto">
             <button
               type="button"
               onClick={() => setModoRoster("tarjetas")}
-              className={`min-h-[38px] px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
+              aria-pressed={modoRoster === "tarjetas"}
+              className={`min-h-12 sm:min-h-11 px-2 sm:px-3 rounded-md text-[13px] font-semibold inline-flex items-center justify-center gap-1.5 transition-colors ${
                 modoRoster === "tarjetas" ? "bg-navy-950 text-white" : "text-ink-muted hover:text-navy-950"
               }`}
             >
@@ -242,7 +253,8 @@ export function BrokersVista({
             <button
               type="button"
               onClick={() => setModoRoster("tabla")}
-              className={`min-h-[38px] px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
+              aria-pressed={modoRoster === "tabla"}
+              className={`min-h-12 sm:min-h-11 px-2 sm:px-3 rounded-md text-[13px] font-semibold inline-flex items-center justify-center gap-1.5 transition-colors ${
                 modoRoster === "tabla" ? "bg-navy-950 text-white" : "text-ink-muted hover:text-navy-950"
               }`}
             >
@@ -252,12 +264,13 @@ export function BrokersVista({
             <button
               type="button"
               onClick={() => setModoRoster("leaderboard")}
-              className={`min-h-[38px] px-3 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 transition-colors ${
+              aria-pressed={modoRoster === "leaderboard"}
+              className={`min-h-12 sm:min-h-11 px-2 sm:px-3 rounded-md text-[13px] font-semibold inline-flex items-center justify-center gap-1.5 transition-colors ${
                 modoRoster === "leaderboard" ? "bg-navy-950 text-white" : "text-ink-muted hover:text-navy-950"
               }`}
             >
               <Trophy className="size-3.5 text-gold-500" />
-              Leaderboard
+              Ranking
             </button>
           </div>
 
@@ -385,24 +398,24 @@ export function BrokersVista({
           {/* Lista completa de clasificación */}
           <div className="bg-surface border border-line rounded-2xl divide-y divide-line">
             {rankingHonor.map((b, idx) => (
-              <div key={b.userId} className="p-4 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
+              <div key={b.userId} className="p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex min-w-0 flex-1 basis-52 items-center gap-3">
                   <span className="w-7 text-xs font-extrabold text-ink-muted tabular-nums">#{idx + 1}</span>
                   <Avatar name={b.fullName} small />
-                  <div>
-                    <div className="font-bold text-sm text-navy-950">{b.fullName}</div>
+                  <div className="min-w-0">
+                    <div className="break-words font-semibold text-sm text-navy-950">{b.fullName}</div>
                     <div className="text-xs text-ink-muted">
                       {b.negociosActivos} negocios activos · Meta mensual {b.porcentajeMeta === null ? "sin asignar" : `${b.porcentajeMeta}%`}
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex w-full items-center justify-between gap-3 sm:w-auto">
                   <strong className="font-black text-sm text-navy-950 tabular-nums">
                     {formatearMonto(b.annualSalesCents, "USD")}
                   </strong>
                   <Link
                     href={`/brokers/${b.userId}`}
-                    className="text-xs font-bold text-gold-700 hover:underline"
+                    className="inline-flex min-h-12 items-center text-[13px] font-semibold text-gold-700 hover:underline"
                   >
                     Perfil →
                   </Link>
@@ -412,7 +425,7 @@ export function BrokersVista({
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid min-w-0 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
           {brokersFiltrados.map((broker) => {
             const nivelInfo = LEVEL_STYLES[broker.level];
             const esElite = broker.level === "top_producer" || broker.level === "top_leader";
@@ -420,15 +433,15 @@ export function BrokersVista({
 
             return (
               <article
-                className={`group relative bg-surface border rounded-2xl p-6 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between ${
+                className={`group relative min-w-0 bg-surface border rounded-xl p-4 transition-colors duration-150 flex flex-col justify-between ${
                   esElite ? "border-gold-400/70 hover:border-gold-500" : "border-line/80 hover:border-gold-500/50"
                 }`}
                 key={broker.userId}
               >
                 {/* Cabecera de la tarjeta con foto/avatar y nivel */}
                 <div>
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <div className="flex items-center gap-3.5">
+                  <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
+                    <div className="flex min-w-0 flex-1 basis-40 items-center gap-3">
                       <div className="relative">
                         <Avatar name={broker.fullName} />
                         {esElite && (
@@ -440,8 +453,8 @@ export function BrokersVista({
                           </span>
                         )}
                       </div>
-                      <div>
-                        <h2 className="font-heading font-bold text-lg text-navy-950 leading-snug group-hover:text-gold-700 transition-colors m-0">
+                      <div className="min-w-0">
+                        <h2 className="font-heading font-semibold text-base text-navy-950 leading-snug break-words m-0">
                           {broker.fullName}
                         </h2>
                         <p className="text-[13px] text-ink-muted leading-tight mt-0.5 mb-0">
@@ -450,19 +463,19 @@ export function BrokersVista({
                       </div>
                     </div>
                     <span
-                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-[13px] border ${nivelInfo.badgeCls}`}
+                      className={`inline-flex shrink-0 items-center px-2.5 py-1 rounded-full text-[13px] border ${nivelInfo.badgeCls}`}
                     >
                       {nivelInfo.label}
                     </span>
                   </div>
 
                   {/* Cuadrícula de detalles y métricas clave */}
-                  <div className="grid grid-cols-2 gap-2.5 bg-surface-alt/70 border border-line/60 rounded-xl p-3.5 mb-4">
+                  <dl className="grid grid-cols-2 gap-x-3 gap-y-3 bg-surface-alt rounded-lg p-3 mb-3 [&>div]:min-w-0 [&_dd]:ml-0 [&_dd]:break-words">
                     <div>
                       <dt className="text-[13px] font-semibold text-ink-muted flex items-center gap-1">
                         Especialidad
                       </dt>
-                      <dd className="text-[13.5px] font-medium text-navy-950 mt-0.5 truncate">
+                      <dd className="text-[13.5px] font-medium text-navy-950 mt-0.5">
                         {broker.specialty ?? "General"}
                       </dd>
                     </div>
@@ -500,11 +513,11 @@ export function BrokersVista({
                         )}
                       </dd>
                     </div>
-                  </div>
+                  </dl>
 
                   {/* Barra de Progreso hacia la Meta */}
-                  <div className="mb-5">
-                    <div className="flex items-center justify-between text-[13px] text-ink-muted mb-1.5">
+                  <div className="mb-3">
+                    <div className="flex flex-wrap items-center justify-between gap-1 text-[13px] text-ink-muted mb-1.5">
                       <span>Progreso del mes</span>
                       <span className="font-semibold tabular-nums text-navy-950">
                         {broker.achievedDeals ?? 0} / {broker.targetDeals ?? 0} logrados
@@ -514,8 +527,8 @@ export function BrokersVista({
                       <div
                         className={`h-full rounded-full transition-all duration-300 ${
                           porcentaje >= 100
-                            ? "bg-gradient-to-r from-emerald-500 to-teal-400"
-                            : "bg-gradient-to-r from-gold-600 to-amber-400"
+                            ? "bg-success"
+                            : "bg-gold-600"
                         }`}
                         style={{ width: `${Math.min(porcentaje, 100)}%` }}
                       />
@@ -524,16 +537,16 @@ export function BrokersVista({
                 </div>
 
                 {/* Acciones principales con controles >= 44px */}
-                <footer className="pt-3 border-t border-line/70 flex items-center justify-between gap-2">
+                <footer className="pt-3 border-t border-line grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-between">
                   <Link
-                    className="inline-flex items-center justify-center min-h-[44px] px-4 rounded-xl border border-line bg-surface hover:bg-surface-alt text-navy-950 text-[13px] font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700"
+                    className="inline-flex items-center justify-center min-h-12 px-4 rounded-lg border border-line bg-surface hover:bg-surface-alt text-navy-950 text-[13px] font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700"
                     href={`/brokers/${broker.userId}`}
                   >
                     Ver perfil
                   </Link>
                   {puedeAsignar && (
                     <button
-                      className="inline-flex items-center justify-center gap-1.5 min-h-[44px] px-3.5 rounded-xl text-[13px] font-semibold text-gold-700 hover:text-gold-800 hover:bg-gold-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700 cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1.5 min-h-12 px-3.5 rounded-lg text-[13px] font-semibold text-gold-700 hover:text-gold-800 hover:bg-gold-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-700 cursor-pointer"
                       type="button"
                       onClick={() => setAsignando(broker)}
                     >

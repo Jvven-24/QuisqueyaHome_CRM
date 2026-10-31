@@ -74,15 +74,9 @@ const ITEMS_NAVEGACION: ItemNavegacion[] = [
     icono: Trash2,
   },
   {
-    id: "integraciones",
-    titulo: "Integraciones",
-    subtitulo: "Conectores externos y Outbox",
-    icono: Network,
-  },
-  {
     id: "conexiones",
-    titulo: "Conexiones",
-    subtitulo: "Google, Gmail y Meta Ads por cuenta",
+    titulo: "Conexiones e Integraciones",
+    subtitulo: "Google, Meta, Outbox y conectores comerciales",
     icono: Plug,
   },
 ];
@@ -120,6 +114,8 @@ export function ConfiguracionVista(props: {
     router.push(`${pathname}?${params.toString()}`);
   }
 
+  const esPestanaConexiones = tab === "conexiones" || tab === "integraciones";
+
   return (
     <div style={{ width: "100%", maxWidth: "1400px", minWidth: 0, margin: "0 auto" }}>
       {!online && <p role="status">Sin conexión. Consulta los datos cargados y vuelve a conectarte antes de guardar.</p>}
@@ -131,10 +127,10 @@ export function ConfiguracionVista(props: {
 
       {/* Layout con Navegación Lateral Interna */}
       <div
-        className={tab === "conexiones" ? "settings-layout grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]" : "settings-layout"}
+        className={esPestanaConexiones ? "settings-layout grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]" : "settings-layout"}
         style={{
           display: "grid",
-          gridTemplateColumns: tab === "conexiones" ? undefined : "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+          gridTemplateColumns: esPestanaConexiones ? undefined : "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
           gap: "24px",
           marginTop: "20px",
           alignItems: "start",
@@ -155,10 +151,21 @@ export function ConfiguracionVista(props: {
             gap: "6px",
           }}
         >
-          <label className="grid gap-1 p-2 text-sm">Buscar sección<input className="min-h-12 rounded-lg border border-line px-3" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} /></label>
-          {ITEMS_NAVEGACION.filter((item) => (item.titulo + " " + item.subtitulo).toLocaleLowerCase("es").includes(busqueda.toLocaleLowerCase("es"))).map((item) => {
+          <label className="grid gap-1 p-2 text-sm font-medium text-ink">
+            Buscar sección
+            <input
+              type="search"
+              placeholder="Buscar sección…"
+              className="min-h-12 rounded-lg border border-line bg-canvas px-3 text-sm focus:outline-none focus:border-gold-600"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+            />
+          </label>
+          {ITEMS_NAVEGACION.filter((item) =>
+            (item.titulo + " " + item.subtitulo).toLocaleLowerCase("es").includes(busqueda.toLocaleLowerCase("es")),
+          ).map((item) => {
             const Icono = item.icono;
-            const esActivo = tab === item.id;
+            const esActivo = tab === item.id || (item.id === "conexiones" && tab === "integraciones");
             return (
               <button
                 key={item.id}
@@ -259,7 +266,9 @@ export function ConfiguracionVista(props: {
             minHeight: "560px",
           }}
         >
-          {["centro", "seo", "capacidad", "auditoria"].includes(tab) && <ConfiguracionAvanzada tab={tab} puedeEditar={puedeEditar} auditoria={props.auditoria} puedeExportar={props.puedeExportarAuditoria} />}
+          {["centro", "seo", "capacidad", "auditoria"].includes(tab) && (
+            <ConfiguracionAvanzada tab={tab} puedeEditar={puedeEditar} auditoria={props.auditoria} puedeExportar={props.puedeExportarAuditoria} />
+          )}
           {tab === "permisos" && props.permisos && <SimuladorPermisos permisos={props.permisos.permisos} rol={props.permisos.rolSeleccionado?.name ?? "Sin rol"} />}
           {tab === "usuarios" && props.usuarios && (
             <UsuariosPanel {...props.usuarios} puedeEditar={puedeEditar} />
@@ -278,14 +287,18 @@ export function ConfiguracionVista(props: {
             <PapeleraPanel filas={props.papelera} puedeEditar={puedeEditar} />
           )}
           {tab === "conexiones" && props.conexiones && <ConexionesPanel datos={props.conexiones} />}
-          {tab === "integraciones" && props.integraciones && (
-            <IntegracionesPanel
-              integraciones={props.integraciones}
-              presencias={props.presencias}
-              proveedores={props.proveedores}
-              puedeEditar={puedeEditar}
-              estadoOutbox={props.estadoOutbox ?? null}
-            />
+          {tab === "integraciones" && (
+            props.conexiones ? (
+              <ConexionesPanel datos={props.conexiones} />
+            ) : props.integraciones ? (
+              <IntegracionesPanel
+                integraciones={props.integraciones}
+                presencias={props.presencias}
+                proveedores={props.proveedores}
+                puedeEditar={puedeEditar}
+                estadoOutbox={props.estadoOutbox ?? null}
+              />
+            ) : null
           )}
         </section>
       </div>

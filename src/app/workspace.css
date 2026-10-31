@@ -1,0 +1,57 @@
+/* Shared operating surfaces. Keep business views in control of their layout. */
+  .private-workspace.page {
+    padding-top: 24px;
+    padding-inline: 24px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+  .module-page-header > div:first-child > .module-page-description {
+    font-size: 14px;
+    line-height: 1.55;
+    margin-top: 6px;
+    max-width: 72ch;
+  }
+  .private-workspace .badge {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.35;
+  }
+  /* Every legacy modal must cover the fixed mobile dock (z-index: 40). */
+  .modal-backdrop { z-index: 50; }
+  .crm-modal-backdrop { isolation: isolate; }
+  .crm-modal {
+    min-height: 0;
+    padding: 0;
+    max-height: calc(100dvh - 32px);
+  }
+  .crm-modal .drawer-head { align-items: center; }
+  .crm-modal-body { scrollbar-gutter: stable; }
+  .crm-modal-body .form-actions {
+    position: sticky;
+    bottom: -16px;
+    background: var(--surface);
+    margin: 16px -16px -16px;
+    padding: 12px 16px max(12px, env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--line);
+    z-index: 1;
+  }
+  [data-slot="dialog-content"], [data-slot="sheet-content"] { overflow-wrap: anywhere; }
+  .private-workspace :is(input, select, textarea):disabled { cursor: not-allowed; }
+  .private-workspace :is(input, select, textarea)[aria-invalid="true"] { border-color: var(--danger); }
+
+  @media (max-width: 767px) {
+    .private-workspace.page { padding-top: 16px; padding-inline: 16px; }
+    .private-workspace .metrics-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .private-workspace .metrics-row > .metric { min-width: 0; padding: 12px; }
+    .private-workspace .metrics-row > .metric:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .private-workspace .metrics-row > .metric + .metric::before { display: none; }
+    .private-workspace .metrics-row .metric strong { font-size: 24px; overflow-wrap: anywhere; }
+    .private-workspace .metrics-row .metric small { line-height: 1.45; }
+    .crm-modal-backdrop { align-items: flex-end; }
+    .crm-modal { max-height: calc(100dvh - max(12px, env(safe-area-inset-top, 0px))); border-radius: 16px 16px 0 0; }
+    .crm-modal-body { padding-bottom: max(16px, env(safe-area-inset-bottom, 0px)); }
+    .private-workspace .filter-bar { flex-wrap: wrap; overflow-x: visible; gap: 8px; }
+    .private-workspace .filter-bar > :is(select, input) { flex: 1 1 140px; min-width: 0; }
+  }

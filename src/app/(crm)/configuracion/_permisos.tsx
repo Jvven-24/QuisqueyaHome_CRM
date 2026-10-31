@@ -170,48 +170,49 @@ export function PermisosPanel({
         )}
       </div>
 
-      {/* Selector de Roles */}
-      <div
-        className="segmented"
-        style={{
-          display: "flex",
-          gap: "8px",
-          flexWrap: "wrap",
-          padding: "6px",
-          background: "#F8FAFC",
-          borderRadius: "10px",
-          border: "1px solid var(--line)",
-          marginBottom: "16px",
-        }}
-      >
-        {roles.map((rol) => {
-          const esActivo = rol.id === rolSeleccionado?.id;
-          return (
-            <button
-              key={rol.id}
-              type="button"
-              onClick={() => irARol(rol.id)}
-              style={{
-                minHeight: "44px",
-                padding: "8px 16px",
-                borderRadius: "8px",
-                border: esActivo ? "1px solid var(--gold-600)" : "1px solid transparent",
-                background: esActivo ? "var(--navy-950)" : "transparent",
-                color: esActivo ? "#FFFFFF" : "var(--ink)",
-                fontWeight: esActivo ? 800 : 600,
-                fontSize: "13px",
-                cursor: "pointer",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                transition: "all 140ms ease",
-              }}
-            >
-              {rol.isProtected && <Lock size={14} color={esActivo ? "var(--gold-500)" : "#94A3B8"} />}
-              <span>{rol.name}</span>
-            </button>
-          );
-        })}
+      {/* Selector de Roles Ejecutivo */}
+      <div className="p-2.5 rounded-xl border border-line bg-surface-alt mb-4 shadow-2xs">
+        <div className="flex items-center justify-between gap-2 px-1 mb-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-ink-muted">
+            Perfiles y Roles del Sistema ({roles.length})
+          </span>
+          {rolSeleccionado && (
+            <span className="text-xs text-gold-700 dark:text-gold-400 font-semibold">
+              Rol activo: <strong>{rolSeleccionado.name}</strong>
+            </span>
+          )}
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          {roles.map((rol) => {
+            const esActivo = rol.id === rolSeleccionado?.id;
+            return (
+              <button
+                key={rol.id}
+                type="button"
+                onClick={() => irARol(rol.id)}
+                className={`min-h-11 px-4 py-2 rounded-xl text-xs font-bold transition-all inline-flex items-center gap-2 border cursor-pointer ${
+                  esActivo
+                    ? "bg-navy-950 text-white border-gold-600 shadow-sm"
+                    : "bg-surface text-ink hover:bg-surface-hover border-line"
+                }`}
+              >
+                {rol.isProtected ? (
+                  <Lock size={13} className={esActivo ? "text-gold-400" : "text-amber-600"} />
+                ) : (
+                  <ShieldCheck size={13} className={esActivo ? "text-gold-400" : "text-slate-400"} />
+                )}
+                <span>{rol.name}</span>
+                {rol.isProtected && (
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                    esActivo ? "bg-white/20 text-white" : "bg-surface-alt text-ink-muted border border-line"
+                  }`}>
+                    Protegido
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Nota de Protección / Solo Lectura */}

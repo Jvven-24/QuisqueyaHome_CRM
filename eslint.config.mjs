@@ -16,6 +16,8 @@ const eslintConfig = [
       "referencia-prototipo/**",
       ".next/**",
       ".next-prod/**",
+      ".next-review/**",
+      ".next-premium/**",
       // Evidencia de agentes (scripts de captura del QA), no código del producto.
       ".viltrum/**",
       // Worktrees de agentes: no forman parte del código del producto.

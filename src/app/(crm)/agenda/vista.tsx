@@ -14,6 +14,8 @@ import {
   AlertTriangle,
   Building2,
   Calendar,
+  ChevronLeft,
+  ChevronRight,
   CheckCircle2,
   ClipboardCheck,
   Clock,
@@ -426,18 +428,19 @@ export function AgendaVista({
       />
 
       {/* Barra de navegación de semanas, selector de vista y filtros REA (Broker / Proyecto / Tipo) */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2 p-3 mb-4 bg-white border border-slate-200 rounded-xl shadow-xs sm:gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="segmented flex w-full p-1 bg-slate-100 rounded-lg sm:inline-flex sm:w-auto [&>button]:flex-1 sm:[&>button]:flex-none">
+      <section aria-label="Navegación y filtros de agenda" className="min-w-0 space-y-3 p-3 mb-4 bg-surface border border-line rounded-xl sm:p-4">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <div role="group" aria-label="Cambiar semana" className="segmented flex w-full p-1 bg-surface-alt rounded-lg sm:inline-flex sm:w-auto">
             <button
               type="button"
-              className="min-h-[44px] px-3 py-1.5 text-[13px] font-semibold text-slate-700 hover:text-slate-900 rounded-md transition-colors"
+              aria-label="Semana anterior"
+              className="inline-flex min-h-12 min-w-12 items-center justify-center gap-1 rounded-md px-2 py-1.5 text-[13px] font-semibold text-ink-muted hover:text-navy-950 transition-colors sm:px-3"
               onClick={() => irASemana(sumarDias(lunes, -7))}
             >
-              ← Anterior
+              <ChevronLeft className="size-4" aria-hidden="true" /><span className="hidden sm:inline">Anterior</span>
             </button>
             <button
-              className="min-h-[44px] px-3.5 py-1.5 text-[13px] font-bold text-slate-900 bg-white shadow-xs rounded-md"
+              className="min-h-12 flex-1 px-3 py-1.5 text-[13px] font-semibold text-navy-950 bg-surface rounded-md sm:flex-none"
               type="button"
               onClick={() => irASemana(fechaSantoDomingo(new Date()))}
             >
@@ -445,22 +448,32 @@ export function AgendaVista({
             </button>
             <button
               type="button"
-              className="min-h-[44px] px-3 py-1.5 text-[13px] font-semibold text-slate-700 hover:text-slate-900 rounded-md transition-colors"
+              aria-label="Semana siguiente"
+              className="inline-flex min-h-12 min-w-12 items-center justify-center gap-1 rounded-md px-2 py-1.5 text-[13px] font-semibold text-ink-muted hover:text-navy-950 transition-colors sm:px-3"
               onClick={() => irASemana(sumarDias(lunes, 7))}
             >
-              Siguiente →
+              <span className="hidden sm:inline">Siguiente</span><ChevronRight className="size-4" aria-hidden="true" />
             </button>
           </div>
 
-          <Link className="button secondary hidden min-h-[44px] text-[13px] sm:inline-flex" href="/agenda/calendario">
+          <Link className="button secondary inline-flex min-h-12 w-full text-[13px] sm:w-auto" href="/agenda/calendario">
             Mes y disponibilidad
           </Link>
 
           {/* Selector de vista: Semana / Día / Por Broker / Lista */}
-          <div className="flex w-full overflow-x-auto p-1 bg-slate-100 rounded-lg border border-slate-200 no-scrollbar sm:inline-flex sm:w-auto sm:flex-wrap [&>button]:shrink-0 [&>button]:whitespace-nowrap">
+          <label className="sm:hidden w-full text-[13px]" htmlFor="agenda-view-mode">Vista de agenda
+            <select id="agenda-view-mode" value={modoAgenda} onChange={event => setModoAgenda(event.target.value as typeof modoAgenda)} className="min-h-12 w-full rounded-lg border border-line bg-surface px-3">
+              <option value="semana">Semana (Lun–Dom)</option>
+              <option value="dia">Vista Día</option>
+              <option value="brokers">Por Broker ({personas.length})</option>
+              <option value="lista">Lista ({citasFiltradas.length})</option>
+            </select>
+          </label>
+          <div role="group" aria-label="Vista de agenda" className="hidden min-w-0 max-w-full p-1 bg-surface-alt rounded-lg border border-line sm:flex sm:flex-wrap [&>button]:shrink-0 [&>button]:whitespace-nowrap">
             <button
               type="button"
               onClick={() => setModoAgenda("semana")}
+              aria-pressed={modoAgenda === "semana"}
               className={`min-h-[44px] px-3 py-1.5 text-[13px] font-bold rounded-md transition-colors ${
                 modoAgenda === "semana"
                   ? "bg-navy-950 text-white"
@@ -472,6 +485,7 @@ export function AgendaVista({
             <button
               type="button"
               onClick={() => setModoAgenda("dia")}
+              aria-pressed={modoAgenda === "dia"}
               className={`min-h-[44px] px-3 py-1.5 text-[13px] font-bold rounded-md transition-colors ${
                 modoAgenda === "dia"
                   ? "bg-navy-950 text-white"
@@ -483,6 +497,7 @@ export function AgendaVista({
             <button
               type="button"
               onClick={() => setModoAgenda("brokers")}
+              aria-pressed={modoAgenda === "brokers"}
               className={`min-h-[44px] px-3 py-1.5 text-[13px] font-bold rounded-md inline-flex items-center gap-1.5 transition-colors ${
                 modoAgenda === "brokers"
                   ? "bg-navy-950 text-white"
@@ -495,6 +510,7 @@ export function AgendaVista({
             <button
               type="button"
               onClick={() => setModoAgenda("lista")}
+              aria-pressed={modoAgenda === "lista"}
               className={`min-h-[44px] px-3 py-1.5 text-[13px] font-bold rounded-md inline-flex items-center gap-1.5 transition-colors ${
                 modoAgenda === "lista"
                   ? "bg-navy-950 text-white"
@@ -507,16 +523,16 @@ export function AgendaVista({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="grid min-w-0 grid-cols-1 gap-3 border-t border-line pt-3 sm:grid-cols-2 xl:grid-cols-3">
           {/* Filtro por Broker */}
           {(muestraEquipo || personas.length > 1) && (
-            <select
+            <label className="min-w-0 text-[13px]">Broker<select
               aria-label="Filtrar agenda por Broker"
               value={filtroBroker === "todos" ? "todos" : String(filtroBroker)}
               onChange={(e) =>
                 setFiltroBroker(e.target.value === "todos" ? "todos" : Number(e.target.value))
               }
-              className="min-h-[44px] px-3 text-[13px] font-semibold rounded-lg border border-slate-200 bg-slate-50 text-slate-900"
+              className="min-h-12 min-w-0 w-full px-3 text-[13px] font-medium rounded-lg border border-line bg-surface text-navy-950"
             >
               <option value="todos">Todos los Brokers ({personas.length})</option>
               {personas.map((p) => (
@@ -524,18 +540,18 @@ export function AgendaVista({
                   Broker: {p.fullName}
                 </option>
               ))}
-            </select>
+            </select></label>
           )}
 
           {/* Filtro por Proyecto REA */}
           {proyectos.length > 0 && (
-            <select
+            <label className="min-w-0 text-[13px]">Proyecto<select
               aria-label="Filtrar agenda por Proyecto"
               value={filtroProyecto === "todos" ? "todos" : String(filtroProyecto)}
               onChange={(e) =>
                 setFiltroProyecto(e.target.value === "todos" ? "todos" : Number(e.target.value))
               }
-              className="min-h-[44px] px-3 text-[13px] font-semibold rounded-lg border border-slate-200 bg-slate-50 text-slate-900"
+              className="min-h-12 min-w-0 w-full px-3 text-[13px] font-medium rounded-lg border border-line bg-surface text-navy-950"
             >
               <option value="todos">Todos los Proyectos</option>
               {proyectos.map((p) => (
@@ -543,21 +559,23 @@ export function AgendaVista({
                   {p.name}
                 </option>
               ))}
-            </select>
+            </select></label>
           )}
 
-          <select
+          <label className="min-w-0 text-[13px]">Tipo de cita<select
             aria-label="Filtrar por tipo de cita"
             value={filtroTipo}
             onChange={(e) => setFiltroTipo(e.target.value)}
-            className="min-h-[44px] px-3 text-[13px] font-semibold rounded-lg border border-slate-200 bg-slate-50 text-slate-900"
+            className="min-h-12 min-w-0 w-full px-3 text-[13px] font-medium rounded-lg border border-line bg-surface text-navy-950"
           >
             <option value="all">Todos los tipos ({citas.length})</option>
             <option value="meeting">Reuniones</option>
             <option value="task">Visitas a proyecto</option>
             <option value="call">Llamadas</option>
             <option value="whatsapp">WhatsApp</option>
-          </select>
+          </select></label>
+
+          <div className="flex flex-wrap items-center justify-between gap-2 sm:col-span-2 xl:col-span-3">
 
           {(filtroBroker !== "todos" || filtroProyecto !== "todos" || filtroTipo !== "all") && (
             <button
@@ -574,7 +592,7 @@ export function AgendaVista({
             </button>
           )}
 
-          <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-slate-600 tabular-nums">
+          <span className="inline-flex flex-wrap items-center gap-1.5 text-[13px] font-medium text-slate-600 tabular-nums">
             <Calendar className="w-4 h-4 text-gold-700" />
             <span>
               {etiquetaDia(lunes)} al {etiquetaDia(dias[dias.length - 1] ?? lunes)}
@@ -583,8 +601,9 @@ export function AgendaVista({
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[13px] font-bold tabular-nums bg-gold-100 text-gold-800 border border-gold-300">
             {citasDeHoy.length} {citasDeHoy.length === 1 ? "cita hoy" : "citas hoy"}
           </span>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Selector de día rápido cuando está en modo Día */}
       {modoAgenda === "dia" && (

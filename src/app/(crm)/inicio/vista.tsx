@@ -51,7 +51,7 @@ export function InicioVista({
     <div className="min-w-0 space-y-4 sm:space-y-6 animate-in fade-in duration-300">
       <EstadoConexion />
       {/* ── CABECERA COMPACTA: fecha, título y acciones primarias ─────────── */}
-      <header className="flex flex-col gap-3 border-b border-line/70 pb-4 sm:flex-row sm:items-end sm:justify-between">
+      <header className="flex flex-col gap-3 border-b border-line pb-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <div className="min-w-0">
           <p className="m-0 text-[13px] font-semibold text-ink-muted">{metricas.fechaTexto || "Jornada actual"}</p>
           <h1 className="m-0 font-heading text-xl font-bold tracking-tight text-navy-950 sm:text-2xl">
@@ -85,7 +85,7 @@ export function InicioVista({
       </header>
 
       {/* ── HOY: accesos a la carga del día, sin texto de relleno ─────────── */}
-      <nav aria-label="Pendientes de hoy" className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 no-scrollbar">
+      <nav aria-label="Pendientes de hoy" className="flex gap-2 overflow-x-auto overscroll-x-contain pb-1">
         {permissions.leads && <Link className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-navy-950 hover:bg-surface-alt" href="/leads?cola=1" prefetch={false}><Users className="size-4 text-gold-700" aria-hidden="true" />Primer contacto</Link>}
         {permissions.activities && <Link className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-navy-950 hover:bg-surface-alt" href="/tareas" prefetch={false}>Tareas <span className="rounded-full bg-surface-alt px-2 tabular-nums">{metricas.tareasPendientesCount}</span></Link>}
         {permissions.activities && <Link className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-line bg-surface px-4 text-[13px] font-semibold text-navy-950 hover:bg-surface-alt" href="/agenda" prefetch={false}><Clock className="size-4 text-gold-700" aria-hidden="true" />Citas hoy <span className="rounded-full bg-surface-alt px-2 tabular-nums">{metricas.citasHoyCount}</span></Link>}
@@ -115,23 +115,20 @@ export function InicioVista({
       </section>
 
       {/* ── CUADRÍCULA PRINCIPAL DE TRABAJO (2 Columnas) ───────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+      <div className="grid min-w-0 grid-cols-1 gap-4 xl:grid-cols-12">
         {/* COLUMNA IZQUIERDA (7 Columnas): Leads Prioritarios y Embudo */}
-        <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+        <div className="min-w-0 space-y-4 xl:col-span-7">
           {/* PANEL 1: LEADS QUE REQUIEREN ATENCIÓN INMEDIATA */}
-          <div className="bg-surface border border-line rounded-2xl p-4 sm:p-6 shadow-xs">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b border-line mb-3">
-              <div className="space-y-0.5">
-                <span className="hidden text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:block">
-                  Acción Inmediata
-                </span>
+          <div className="min-w-0 rounded-xl border border-line bg-surface p-4 sm:p-5">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line pb-3">
+              <div className="min-w-0 flex-1">
                 <h2 className="m-0 text-base sm:text-xl font-bold font-heading text-navy-950">
                   {isBroker ? "Mis leads prioritarios" : "Leads que requieren atención"}
                 </h2>
               </div>
               <Link
                 href="/leads"
-                className="inline-flex min-h-12 items-center gap-1.5 px-3 rounded-lg text-[13px] font-bold text-navy-900 hover:text-gold-700 transition-colors"
+                className="inline-flex min-h-12 shrink-0 items-center gap-1.5 rounded-lg px-2 text-[13px] font-semibold text-navy-900 transition-colors hover:bg-surface-alt"
               >
                 <span className="whitespace-nowrap">Ver todos ({leads.length})</span>
                 <ArrowRight className="size-4" />
@@ -166,28 +163,28 @@ export function InicioVista({
                   return (
                     <div
                       key={lead.id}
-                      className="py-2.5 flex items-center justify-between gap-3 hover:bg-surface-alt/70 px-1 rounded-xl transition-colors group"
+                      className="grid min-w-0 gap-2 rounded-lg px-1 py-3 transition-colors hover:bg-surface-alt/70 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-3"
                     >
-                      <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex min-w-0 items-center gap-3">
                         <div className="size-10 rounded-full bg-navy-950 text-white font-bold font-heading text-xs flex items-center justify-center shrink-0 border border-gold-500/40 shadow-xs">
                           {iniciales}
                         </div>
                         <div className="min-w-0">
                           <Link
                             href={`/leads/${lead.id}`} prefetch={false}
-                            className="font-bold text-sm text-navy-950 hover:text-gold-700 transition-colors block break-words"
+                            className="flex min-h-11 items-center break-words text-sm font-semibold text-navy-950 transition-colors hover:text-gold-700"
                           >
                             {lead.name}
                           </Link>
-                          <p className="text-[13px] text-ink-muted truncate">
+                          <p className="m-0 break-words text-[13px] text-ink-muted">
                             {lead.project} <span className="text-line-strong">·</span> {lead.source}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                      <div className="flex min-w-0 flex-wrap items-center justify-between gap-2 pl-[52px] sm:justify-end sm:pl-0">
                         <span
-                          className={`text-[13px] font-bold px-2.5 py-1 rounded-full border ${
+                          className={`max-w-full rounded-full border px-2.5 py-1 text-[13px] font-semibold ${
                             isNuevo
                               ? "bg-gold-50 text-gold-800 border-gold-600/30"
                               : isContactado
@@ -198,7 +195,7 @@ export function InicioVista({
                           {etapa}
                         </span>
 
-                        <span className="hidden sm:inline-block text-[13px] text-slate-700 bg-slate-100 px-2.5 py-1.5 rounded-md font-medium max-w-[150px] truncate">
+                        <span className="hidden max-w-[150px] break-words rounded-md bg-surface-alt px-2.5 py-1.5 text-[13px] font-medium text-ink-muted sm:inline-block">
                           {lead.next}
                         </span>
 
@@ -208,6 +205,7 @@ export function InicioVista({
                           rel="noreferrer"
                           className="inline-flex min-h-12 min-w-12 items-center justify-center rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition-colors"
                           title={`Chatear con ${lead.name} por WhatsApp`}
+                          aria-label={`Chatear con ${lead.name} por WhatsApp`}
                         >
                           <MessageCircle className="size-4.5" />
                         </a>
@@ -220,12 +218,9 @@ export function InicioVista({
           </div>
 
           {/* PANEL 2: EMBUDO COMERCIAL POR ETAPA (Visual Sales Funnel) */}
-          <div className="bg-surface border border-line rounded-2xl p-4 sm:p-6 shadow-xs">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b border-line mb-4">
-              <div className="space-y-0.5">
-                <span className="hidden text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:block">
-                  Embudo de Ventas
-                </span>
+          <div className="min-w-0 rounded-xl border border-line bg-surface p-4 sm:p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line pb-3">
+              <div className="min-w-0 flex-1">
                 <h2 className="m-0 text-base sm:text-xl font-bold font-heading text-navy-950">
                   Conversión de negocios
                 </h2>
@@ -249,7 +244,7 @@ export function InicioVista({
 
                   return (
                     <div key={etapa.stageId} className="space-y-1">
-                      <div className="flex items-center justify-between text-[13px] font-semibold">
+                      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[13px] font-semibold">
                         <span className="text-navy-950 font-bold">{etapa.label}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-ink-muted tabular-nums">{count}<span className="hidden sm:inline"> alcanzaron esta etapa</span></span>
@@ -262,7 +257,7 @@ export function InicioVista({
                       </div>
                       <div className="w-full bg-slate-100 rounded-lg h-3 overflow-hidden p-0.5">
                         <div
-                          className="bg-gradient-to-r from-navy-900 via-navy-800 to-gold-600 h-full rounded-md transition-all duration-500"
+                          className="h-full rounded-md bg-navy-900 transition-[width] duration-200 motion-reduce:transition-none"
                           style={{ width: `${porcentajeAncho}%` }}
                         />
                       </div>
@@ -275,14 +270,11 @@ export function InicioVista({
         </div>
 
         {/* COLUMNA DERECHA (5 Columnas): Agenda, Demanda & Formación */}
-        <div className="lg:col-span-5 space-y-4 sm:space-y-6">
+        <div className="min-w-0 space-y-4 xl:col-span-5">
           {/* PANEL 3: AGENDA DE HOY Y ACTIVIDADES */}
-          <div className="bg-surface border border-line rounded-2xl p-4 sm:p-6 shadow-xs">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b border-line mb-3">
-              <div className="space-y-0.5">
-                <span className="hidden text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:block">
-                  Agenda del Día
-                </span>
+          <div className="min-w-0 rounded-xl border border-line bg-surface p-4 sm:p-5">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line pb-3">
+              <div className="min-w-0 flex-1">
                 <h2 className="m-0 text-base sm:text-xl font-bold font-heading text-navy-950">
                   Próximas actividades
                 </h2>
@@ -313,15 +305,15 @@ export function InicioVista({
 
                   return (
                     <div key={cita.id} className="relative group">
-                      <div className="absolute -left-[27px] top-1 size-3 rounded-full bg-gold-600 border-2 border-white shadow-xs group-hover:scale-125 transition-transform" />
+                      <div className="absolute -left-[27px] top-1 size-3 rounded-full border-2 border-white bg-gold-600" />
                       
                       <div className="bg-surface-alt/80 hover:bg-surface-alt border border-line/80 rounded-xl p-3.5 transition-colors">
-                        <div className="flex items-center justify-between gap-2 mb-1">
+                        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                           <span className="inline-flex items-center gap-1 text-[13px] font-bold text-gold-900 bg-gold-50 px-2.5 py-0.5 rounded-md border border-gold-200 tabular-nums">
                             <Clock className="size-3.5 text-gold-700" />
                             {hora}
                           </span>
-                          <span className="text-[13px] text-ink-muted">
+                          <span className="min-w-0 break-words text-[13px] text-ink-muted">
                             {cita.location || "Sin ubicación registrada"}
                           </span>
                         </div>
@@ -337,12 +329,9 @@ export function InicioVista({
           </div>
 
           {/* PANEL 4: DEMANDA INMOBILIARIA Y RANKING */}
-          <div className="bg-surface border border-line rounded-2xl p-4 sm:p-6 shadow-xs">
-            <div className="flex items-center justify-between gap-2 pb-3 border-b border-line mb-3">
-              <div className="space-y-0.5">
-                <span className="hidden text-[13px] font-bold uppercase tracking-wider text-gold-700 sm:block">
-                  {isBroker ? "Formación Continua" : "Demanda de Proyectos"}
-                </span>
+          <div className="min-w-0 rounded-xl border border-line bg-surface p-4 sm:p-5">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line pb-3">
+              <div className="min-w-0 flex-1">
                 <h2 className="m-0 text-base sm:text-xl font-bold font-heading text-navy-950">
                   {isBroker ? "Quisqueya Academy" : "Proyectos más cotizados"}
                 </h2>
@@ -390,14 +379,14 @@ export function InicioVista({
                 {proyectos.map((proyecto, idx) => (
                   <div
                     key={proyecto.id}
-                    className="flex items-center justify-between p-3 rounded-xl border border-line bg-surface-alt/40 hover:bg-surface-alt transition-colors"
+                    className="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-line bg-surface-alt/40 p-3 transition-colors hover:bg-surface-alt"
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="size-8 rounded-lg bg-gold-100 text-gold-900 font-black text-[13px] flex items-center justify-center font-heading">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-gold-100 font-heading text-[13px] font-bold text-gold-900">
                         #{idx + 1}
                       </span>
-                      <div>
-                        <h4 className="font-bold text-sm text-navy-950">
+                      <div className="min-w-0">
+                        <h4 className="m-0 break-words text-sm font-semibold text-navy-950">
                           {proyecto.name}
                         </h4>
                         <span className="text-[13px] text-ink-muted tabular-nums">
@@ -407,8 +396,9 @@ export function InicioVista({
                     </div>
                     <Link
                       href={`/propiedades`} prefetch={false}
-                      className="inline-flex min-h-12 min-w-12 rounded-xl bg-white border border-line items-center justify-center text-slate-600 hover:text-navy-950 hover:border-gold-600 transition-colors shadow-2xs"
+                      className="inline-flex min-h-12 min-w-12 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-ink-muted transition-colors hover:border-gold-600 hover:text-navy-950"
                       title="Ver proyecto"
+                      aria-label={`Ver catálogo de proyectos · ${proyecto.name}`}
                     >
                       <ArrowUpRight className="size-4.5" />
                     </Link>

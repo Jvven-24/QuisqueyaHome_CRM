@@ -15,6 +15,7 @@ import { fechaHoraLegible } from "@/domain/zona-horaria";
 import { Modal, PageHeader } from "../_ui/prototipo-ui";
 import { AvisoPermiso, Vacio } from "../_ui/estados";
 import { DataTable, type Columna } from "@/components/ui/data-table";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { montoExacto, centavosEntrada } from "../reservas/_finanzas/calculos";
 import { boton, control, Panel } from "../reservas/_finanzas/controles";
 
@@ -157,25 +158,28 @@ export function MetasVista(p: Props) {
       <PageHeader
         title={esVistaCompleta ? "Metas y rendimiento" : "Mis metas y rendimiento"}
         subtitle="Objetivos mensuales; lo logrado sale solo de negocios cerrados como ganados."
-        action={<label className="grid gap-1">Periodo<select className={control} value={formatoPeriodo(periodo)} onChange={(e) => { if (navigator.onLine) router.push(path + "?periodo=" + e.target.value); else setMessage("Sin conexión. Reconecta antes de cambiar el periodo."); }}>{opcionesPeriodo.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label>}
+        action={<label className="grid min-w-0 gap-1 text-[13px]">Periodo<select className={control + " min-h-12"} value={formatoPeriodo(periodo)} onChange={(e) => { if (navigator.onLine) router.push(path + "?periodo=" + e.target.value); else setMessage("Sin conexión. Reconecta antes de cambiar el periodo."); }}>{opcionesPeriodo.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label>}
       />
       <p role="status" aria-live="polite" className={message ? "mb-2 rounded border border-success/40 bg-success/10 p-2" : "sr-only"}>{message}</p>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Panel title={(esVistaCompleta ? "Meta de compañía · " : "Meta personal · ") + etiquetaPeriodo}>
           {heroMeta && heroMeta.targetDeals > 0 ? (
-            <div className="grid gap-3">
-              <p className="font-heading text-2xl font-bold tabular-nums text-navy-900">{heroMeta.achievedDeals} / {heroMeta.targetDeals} cierres{pctHero !== null && <span className="ml-2 text-base font-semibold">({pctHero}%)</span>}</p>
+            <div className="grid min-w-0 gap-2 text-sm">
+              <p className="m-0 flex flex-wrap items-baseline gap-x-2 font-heading text-2xl font-semibold tabular-nums text-navy-900"><span>{heroMeta.achievedDeals} / {heroMeta.targetDeals} cierres</span>{pctHero !== null && <span className="text-base font-semibold">({pctHero}%)</span>}</p>
               <Barra valor={pctHero} etiqueta="Cumplimiento de cierres" />
-              <p>{diagnostic.enRitmo ? "En ritmo para cumplir." : "Faltan " + diagnostic.faltantes + " cierres para ir en ritmo."}</p>
-              <p className="tabular-nums">Monto logrado ({heroMeta.currency}): <strong>{montoExacto(montoHero, heroMeta.currency)}</strong>{" · "}Objetivo: {heroMeta.targetAmountCents === null ? "sin objetivo de monto" : montoExacto(heroMeta.targetAmountCents, heroMeta.currency)}</p>
+              <p className="m-0">{diagnostic.enRitmo ? "En ritmo para cumplir." : "Faltan " + diagnostic.faltantes + " cierres para ir en ritmo."}</p>
+              <dl className="m-0 grid grid-cols-1 gap-2 border-t border-line pt-3 sm:grid-cols-2 [&>div]:min-w-0 [&_dd]:m-0 [&_dd]:break-words [&_dd]:tabular-nums">
+                <div><dt className="text-[13px] text-muted-foreground">Monto logrado ({heroMeta.currency})</dt><dd className="font-semibold">{montoExacto(montoHero, heroMeta.currency)}</dd></div>
+                <div><dt className="text-[13px] text-muted-foreground">Objetivo de monto</dt><dd>{heroMeta.targetAmountCents === null ? "Sin objetivo de monto" : montoExacto(heroMeta.targetAmountCents, heroMeta.currency)}</dd></div>
+              </dl>
             </div>
           ) : (
             <Vacio titulo="Sin meta fijada para este mes" texto={puedeEditar ? "Asigna un objetivo de cierres para empezar el seguimiento." : "Pide a la administración que asigne tu meta del mes."} />
           )}
           <p className="my-3 text-[13px] text-muted-foreground">Corte {fechaEvaluacion} (hora de Santo Domingo)</p>
           {puedeEditar ? (
-            <div className="flex flex-wrap gap-2">
+            <div className="grid gap-2 sm:flex sm:flex-wrap [&>button]:min-h-12 [&>button]:whitespace-normal [&>button]:text-center">
               <button type="button" className={primario} onClick={() => setEditing({ id: esVistaCompleta ? null : brokers[0]?.userId ?? null, name: esVistaCompleta ? "Compañía" : brokers[0]?.fullName ?? "Meta personal", target: heroMeta?.targetDeals ?? 0, currency: heroMeta?.currency ?? "USD" })}>{heroMeta && heroMeta.targetDeals > 0 ? "Editar meta" : "Asignar meta"} {esVistaCompleta ? "de la compañía" : "personal"}</button>
               {puedeAdministrar && esVistaCompleta && heroMeta && heroMeta.targetDeals > 0 && <button type="button" className={peligro} onClick={() => setReinicio({ id: null, name: "Compañía" })}>Reiniciar meta</button>}
             </div>
@@ -189,10 +193,6 @@ export function MetasVista(p: Props) {
           <p className="mt-3 text-[13px] text-muted-foreground">Cada moneda se suma por separado; no se convierten USD y DOP entre sí.</p>
         </Panel>
       </div>
-
-      <Panel title={"Línea base · " + nombreMes(periodo.month) + " " + (periodo.year - 1)}>
-        {baseline ? <><p>{baseline.achievedDeals} cierres / {baseline.targetDeals} objetivo</p>{heroMeta && <p>Diferencia de cierres frente al año anterior: {heroMeta.achievedDeals - baseline.achievedDeals >= 0 ? "+" : ""}{heroMeta.achievedDeals - baseline.achievedDeals}</p>}</> : <Vacio titulo="Sin línea base registrada" texto="No hay meta registrada para el mismo mes del año anterior dentro de tu alcance." />}
-      </Panel>
 
       <Panel title="Ranking por asesor">
         {ranking.length ? <DataTable filas={ranking} columnas={cols} idDe={(r) => String(r.userId)} etiqueta="Rendimiento por asesor" medioMovil={(r) => <Desglose logro={r.logro} vacio="Sin cierres" />} /> : <Vacio titulo="Sin asesores visibles" texto="No hay asesores activos dentro de tu alcance." />}
@@ -210,7 +210,7 @@ export function MetasVista(p: Props) {
             <ul className="grid gap-3 md:grid-cols-2">
               {equipos.map((e) => (
                 <li key={e.id} className="rounded-md border border-line p-3">
-                  <div className="flex items-start justify-between gap-2"><strong>{e.name}</strong>{puedeAdministrar && <button type="button" className={boton} aria-label={"Editar equipo " + e.name} onClick={() => setEquipo(e)}>Editar</button>}</div>
+                  <div className="flex min-w-0 flex-wrap items-start justify-between gap-2"><strong className="min-w-0 break-words">{e.name}</strong>{puedeAdministrar && <button type="button" className={boton} aria-label={"Editar equipo " + e.name} onClick={() => setEquipo(e)}>Editar</button>}</div>
                   <p className="text-[13px]">Líder: {e.leader ?? "Sin líder"}</p>
                   <p className="text-[13px]">{e.miembros.length ? e.miembros.map((m) => m.nombre).join(", ") : "Sin miembros"}</p>
                 </li>
@@ -220,9 +220,20 @@ export function MetasVista(p: Props) {
         </Panel>
       )}
 
-      <Panel title="Comparativa mensual">
+      <Accordion type="multiple" className="my-4 rounded-xl border border-line bg-surface px-4">
+        <AccordionItem value="baseline">
+          <AccordionTrigger className="text-sm">Línea base · {nombreMes(periodo.month)} {periodo.year - 1}</AccordionTrigger>
+          <AccordionContent>
+            {baseline ? <div className="space-y-2 text-sm"><p>{baseline.achievedDeals} cierres / {baseline.targetDeals} objetivo</p>{heroMeta && <p>Diferencia de cierres frente al año anterior: {heroMeta.achievedDeals - baseline.achievedDeals >= 0 ? "+" : ""}{heroMeta.achievedDeals - baseline.achievedDeals}</p>}</div> : <Vacio titulo="Sin línea base registrada" texto="No hay meta registrada para el mismo mes del año anterior dentro de tu alcance." />}
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="monthly-history" className="border-0">
+          <AccordionTrigger className="text-sm">Comparativa mensual</AccordionTrigger>
+          <AccordionContent>
         {filasDelAnio.length ? <DataTable filas={filasDelAnio} columnas={[{ clave: "mes", titulo: "Mes", movil: "titulo", celda: (r) => <button type="button" className={boton} onClick={() => { if (navigator.onLine) router.push(path + "?periodo=" + formatoPeriodo({ year: periodo.year, month: r.month })); }}>{nombreMes(r.month)}</button> }, { clave: "logro", titulo: "Cierres logrados", movil: "subtitulo", celda: (r) => r.achievedDeals }, { clave: "meta", titulo: "Objetivo", celda: (r) => (r.targetDeals > 0 ? r.targetDeals : "Sin meta") }]} idDe={(r) => String(r.month)} etiqueta="Historial real de metas" /> : <Vacio titulo="Sin historial de metas" texto="No hay metas registradas para este año." />}
-      </Panel>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       <Panel title={activa ? "Regla de atribución · versión " + activa.version + " (activa)" : "Regla de atribución"}>
         {activa ? (

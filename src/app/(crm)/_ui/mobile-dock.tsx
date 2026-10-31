@@ -93,7 +93,7 @@ export function MobileDock({
               </Drawer.Close>
             </div>
 
-            <div className={`flex-1 space-y-4 px-4 pb-[max(2rem,env(safe-area-inset-bottom))] ${completa ? "overflow-y-auto" : "overflow-hidden"}`}>
+            <div style={{ maxHeight: completa ? "calc(94dvh - 80px)" : "calc(60dvh - 80px)" }} className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain px-4 pb-[max(2rem,env(safe-area-inset-bottom))]">
               <button type="button" onClick={() => { abrirHoja(false); setCommandOpen(true); }} className="min-h-11 w-full flex items-center gap-2 rounded-xl border border-line bg-surface-alt px-4 text-sm text-ink-muted" aria-label="Abrir buscador global de CRM"><Search className="size-5" />Buscar en el CRM</button>
 
               {(() => {
@@ -116,7 +116,7 @@ export function MobileDock({
                       {workspace.nombre}
                       <small className="text-[13px] font-normal text-ink-muted">{modulesInWs.length}</small>
                     </h4>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 gap-2 min-[390px]:grid-cols-2">
                       {modulesInWs.map((modulo) => {
                         const active = isActive(modulo.ruta);
                         return (
@@ -125,14 +125,14 @@ export function MobileDock({
                             href={modulo.ruta}
                             onClick={() => abrirHoja(false)}
                             aria-current={active ? "page" : undefined}
-                            className={`flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-xl border p-2 text-center transition-colors ${
+                            className={`flex min-h-12 min-w-0 items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors ${
                               active
                                 ? "bg-navy-950 text-white border-navy-950"
                                 : "bg-surface-alt/70 hover:bg-surface-alt text-ink border-line"
                             }`}
                           >
-                            <ModuloIcon name={modulo.icono} className={`size-5 ${active ? "text-gold-400" : "text-navy-900"}`} />
-                            <span className="line-clamp-2 text-[13px] font-semibold leading-tight">{modulo.nombre}</span>
+                            <ModuloIcon name={modulo.icono} className={`size-5 shrink-0 ${active ? "text-gold-400" : "text-navy-900"}`} />
+                            <span className="min-w-0 break-words text-[13px] font-semibold leading-snug">{modulo.nombre}</span>
                           </Link>
                         );
                       })}

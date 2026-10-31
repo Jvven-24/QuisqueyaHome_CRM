@@ -15,6 +15,6 @@ if (archivos.length === 0) {
   console.error("No se encontraron pruebas .test.ts bajo src/.");
   process.exitCode = 1;
 } else {
-  const resultado = spawnSync(process.execPath, ["--test", ...archivos], { stdio: "inherit" });
+  const resultado = spawnSync(process.execPath, ["--test", ...process.argv.slice(2), ...archivos], { stdio: "inherit" });
   process.exitCode = resultado.status ?? 1;
 }

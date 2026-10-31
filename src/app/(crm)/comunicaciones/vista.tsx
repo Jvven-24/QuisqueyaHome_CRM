@@ -1,5 +1,6 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -448,20 +449,16 @@ export function ComunicacionesVista({
       )}
 
       {/* Monitor de Estado de Salud de Canales */}
-      <section className="mb-6 p-4 rounded-2xl border border-slate-200 bg-white shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
-          <div className="flex items-center gap-2.5">
-            <div className="size-9 rounded-lg bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-800">
-              <Activity className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-navy-950 m-0">
-                Configuración de canales · salud sin medición
-              </h2>
-              <p className="text-[13px] text-slate-500 m-0">
-                Configuración disponible en el CRM. Disponibilidad del proveedor y costos no verificados.
-              </p>
-            </div>
+      <Accordion type="single" collapsible className="mb-4 rounded-xl border border-line bg-surface px-4">
+        <AccordionItem value="channel-configuration" className="border-0">
+          <AccordionTrigger className="text-sm">
+            <span className="flex min-w-0 items-center gap-2"><Activity className="size-4 shrink-0 text-ink-muted" /><span>Configuración de canales <span className="font-normal text-ink-muted">· {canales.length} registrados</span></span></span>
+          </AccordionTrigger>
+          <AccordionContent>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-3 border-b border-line">
+          <div className="min-w-0">
+            <h2 className="text-sm font-semibold text-navy-950 m-0">Salud sin medición</h2>
+            <p className="text-[13px] text-ink-muted m-0">Configuración disponible en el CRM. Disponibilidad del proveedor y costos no verificados.</p>
           </div>
           <button
             type="button"
@@ -474,7 +471,7 @@ export function ComunicacionesVista({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid min-w-0 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-3">
           {canales.map((c) => {
             const esTelegram = c.canal === "telegram";
             const esWhatsApp = c.canal === "whatsapp";
@@ -484,7 +481,7 @@ export function ComunicacionesVista({
             return (
               <div
                 key={c.canal}
-                className={`p-3.5 rounded-xl border flex flex-col justify-between transition-all ${
+                className={`min-w-0 p-3 rounded-lg border flex flex-col justify-between transition-colors ${
                   esWhatsApp
                     ? "bg-emerald-50/50 border-emerald-200 text-emerald-950"
                     : esEmail
@@ -494,10 +491,10 @@ export function ComunicacionesVista({
                     : "bg-slate-50/70 border-slate-200 text-slate-900"
                 }`}
               >
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                  <div className="flex min-w-0 items-center gap-2">
                     <div
-                      className={`size-8 rounded-lg flex items-center justify-center text-white ${
+                      className={`size-8 shrink-0 rounded-lg flex items-center justify-center text-white ${
                         esWhatsApp
                           ? "bg-emerald-600"
                           : esTelegram
@@ -517,15 +514,15 @@ export function ComunicacionesVista({
                         <Activity className="w-4 h-4" />
                       )}
                     </div>
-                    <div>
-                      <strong className="text-[14px] font-bold capitalize block">
+                    <div className="min-w-0">
+                      <strong className="text-[14px] font-semibold capitalize block break-words">
                         {c.canal === "whatsapp"
                           ? "WhatsApp (wa.me)"
                           : c.canal === "email"
                           ? "Correo (Email)"
                           : c.canal}
                       </strong>
-                      <span className="text-[11px] text-slate-500 font-mono">
+                      <span className="text-[13px] text-ink-muted break-words">
                         {c.detalles.nombreIdentificador ||
                           (esWhatsApp ? "Web & API" : esEmail ? "SMTP Base" : "Oficial")}
                       </span>
@@ -533,7 +530,7 @@ export function ComunicacionesVista({
                   </div>
 
                   <span
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold border ${
+                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[13px] font-medium border ${
                       activo
                         ? "bg-emerald-100 text-emerald-800 border-emerald-300"
                         : "bg-slate-200 text-slate-700 border-slate-300"
@@ -541,19 +538,19 @@ export function ComunicacionesVista({
                   >
                     <span
                       className={`size-1.5 rounded-full ${
-                        activo ? "bg-emerald-600 animate-pulse" : "bg-slate-500"
+                        activo ? "bg-emerald-600" : "bg-slate-500"
                       }`}
                     />
                     {activo ? "Configurado · sin medición" : "Sin configurar"}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between text-[12px] pt-2 border-t border-slate-200/60 text-slate-600">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[13px] pt-2 border-t border-slate-200/60 text-slate-600">
                   <span className="flex items-center gap-1 font-medium">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
                     <span>{c.activo ? "Habilitado en configuración" : "Deshabilitado en configuración"}</span>
                   </span>
-                  <span className="font-bold text-navy-950 font-mono">
+                  <span className="font-medium text-navy-950">
                     Costo no medido
                   </span>
                 </div>
@@ -561,17 +558,16 @@ export function ComunicacionesVista({
             );
           })}
         </div>
-      </section>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       {/* Disposición Principal: Catálogo, Editor y Simulador */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pb-20">
+      <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* Columna Izquierda (lg: 4 cols): Catálogo de Plantillas */}
-        <section className="panel lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+        <section className="panel min-w-0 lg:col-span-4 2xl:col-span-3 bg-surface border border-line rounded-xl p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-line">
             <div>
-              <p className="eyebrow text-gold-700 text-[11px] font-bold uppercase tracking-wider m-0">
-                Catálogo Oficial
-              </p>
               <h2 className="text-base font-bold text-navy-950 m-0">
                 Plantillas ({plantillasFiltradas.length})
               </h2>
@@ -604,6 +600,7 @@ export function ComunicacionesVista({
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
+              aria-label="Buscar plantillas por texto o nombre"
               placeholder="Buscar por texto o nombre..."
               value={busquedaPlantilla}
               onChange={(e) => setBusquedaPlantilla(e.target.value)}
@@ -702,22 +699,20 @@ export function ComunicacionesVista({
         </section>
 
         {/* Columna Central (lg: 4 cols): Editor Dinámico y Variables */}
-        <section className="panel lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+        <section className="panel min-w-0 lg:col-span-8 2xl:col-span-5 bg-surface border border-line rounded-xl p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-line">
             <div>
-              <p className="eyebrow text-gold-700 text-[11px] font-bold uppercase tracking-wider m-0">
-                Edición de Mensaje
-              </p>
               <h2 className="text-base font-bold text-navy-950 m-0">
                 Editor Dinámico
               </h2>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[12px] text-slate-500 font-semibold">Canal:</span>
+            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+              <label htmlFor="plantilla-canal" className="text-[13px] text-ink-muted font-medium">Canal</label>
               <select
+                id="plantilla-canal"
                 value={canalActivo}
                 onChange={(e) => setCanalActivo(e.target.value as CanalComunicacion)}
-                className="text-[13px] border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white font-bold text-navy-950 min-h-[44px]"
+                className="w-full sm:w-auto text-[13px] border border-line rounded-lg px-2.5 py-1.5 bg-surface font-medium text-navy-950 min-h-12"
               >
                 <option value="whatsapp">WhatsApp</option>
                 <option value="email">Correo (Email)</option>
@@ -883,14 +878,11 @@ export function ComunicacionesVista({
         </section>
 
         {/* Columna Derecha (lg: 4 cols): Simulador de Smartphone y Despacho */}
-        <section className="panel lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs flex flex-col items-center">
-          <div className="w-full flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
-            <div className="flex items-center gap-2">
+        <section className="panel min-w-0 lg:col-span-8 lg:col-start-5 2xl:col-span-4 2xl:col-start-auto bg-surface border border-line rounded-xl p-4 flex flex-col items-center">
+          <div className="w-full flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-line">
+            <div className="flex min-w-0 items-center gap-2">
               <Smartphone className="w-5 h-5 text-gold-700" />
               <div>
-                <p className="eyebrow text-gold-700 text-[11px] font-bold uppercase tracking-wider m-0">
-                  Simulador en Pantalla
-                </p>
                 <h2 className="text-base font-bold text-navy-950 m-0">
                   {canalActivo === "email" ? "Vista Previa de Correo" : "Vista Previa Móvil"}
                 </h2>
@@ -916,7 +908,7 @@ export function ComunicacionesVista({
           {/* Renderizado de Previsualización según Canal */}
           {canalActivo === "email" ? (
             /* Tarjeta de Previsualización de Correo Electrónico */
-            <div className="w-full max-w-[340px] bg-white rounded-2xl border-2 border-indigo-200 shadow-md p-4 flex flex-col space-y-3">
+            <div className="w-full min-w-0 max-w-[340px] bg-surface rounded-xl border border-line p-3 flex flex-col space-y-3 [&_span]:break-words">
               <div className="border-b border-slate-100 pb-2.5">
                 <div className="flex items-center gap-2 text-[12px] text-slate-500 mb-1">
                   <span className="font-semibold text-slate-700">De:</span>
@@ -945,14 +937,14 @@ export function ComunicacionesVista({
             </div>
           ) : (
             /* Chasis Realista de Smartphone para WhatsApp y Telegram */
-            <div className="w-full max-w-[320px] bg-slate-900 rounded-[38px] p-3 shadow-2xl border-4 border-slate-800 ring-1 ring-slate-950 relative">
+            <div className="w-full min-w-0 max-w-[320px] rounded-xl border border-line bg-surface sm:rounded-[32px] sm:border-4 sm:border-slate-800 sm:bg-slate-900 sm:p-2 relative">
               {/* Dynamic Island / Parlante */}
-              <div className="absolute top-4 inset-x-0 mx-auto w-24 h-4 bg-black rounded-full z-20 flex items-center justify-center">
+              <div className="absolute hidden sm:flex top-4 inset-x-0 mx-auto w-24 h-4 bg-black rounded-full z-20 items-center justify-center">
                 <div className="size-2 rounded-full bg-slate-800 ml-auto mr-3" />
               </div>
 
               {/* Pantalla Interna */}
-              <div className="w-full bg-[#E5DDD5] rounded-[28px] overflow-hidden flex flex-col min-h-[500px] border border-slate-700/60 relative">
+              <div className="w-full bg-[#E5DDD5] rounded-xl sm:rounded-[24px] overflow-hidden flex flex-col min-h-[360px] sm:min-h-[440px] relative">
                 {/* Barra de Estado del Teléfono */}
                 <div
                   className={`text-white px-4 pt-4 pb-1.5 flex items-center justify-between text-[11px] font-mono ${
@@ -1046,7 +1038,7 @@ export function ComunicacionesVista({
           )}
 
           {/* Formulario de Destinatario y Despacho */}
-          <div className="w-full mt-4 space-y-2.5">
+          <div className="w-full min-w-0 max-w-xl mt-4 space-y-3">
             <div>
               {canalActivo === "email" ? (
                 <div className="space-y-2">
@@ -1141,7 +1133,7 @@ export function ComunicacionesVista({
             <label className="flex min-h-11 items-center gap-3 text-sm"><Checkbox checked={revisionHumana} onCheckedChange={checked=>setRevisionHumana(checked)} />He revisado destinatario, consentimiento, ventana aplicable y contenido. Esta confirmación local no acredita consentimiento en servidor.</label>
             {!puedeDespachar && <p className="text-sm">Sin permiso de despacho con alcance total; puedes revisar el borrador sin enviar.</p>}
             {/* Alternativa: Despacho Directo por API Oficial / SMTP */}
-            <div className="flex items-center gap-2 pt-1">
+            <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto] items-center gap-2 pt-1">
               <button
                 type="button"
                 disabled={despachando || guardando || estaOffline || !puedeDespachar || !revisionHumana || esContenidoFiscal}

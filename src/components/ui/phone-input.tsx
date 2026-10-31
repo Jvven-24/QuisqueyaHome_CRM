@@ -99,15 +99,15 @@ export function PhoneInput({
   }
 
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
+    <div className={`min-w-0 flex flex-col gap-1.5 ${className}`}>
       <input type="hidden" name={name} value={valorCompleto} />
-      <div className="flex items-stretch gap-1.5">
+      <div className="flex min-w-0 items-stretch gap-1.5">
         <select
           aria-label="País del teléfono"
           value={pais}
           disabled={disabled}
           onChange={(e) => manejarCambioPais(e.target.value as CodigoPaisTelefono)}
-          className="min-h-12 shrink-0 cursor-pointer rounded-lg border border-input-line bg-surface-alt px-2.5 text-[13.5px] font-semibold text-navy-950 transition-colors hover:border-gold-500/60 focus-visible:outline-2 focus-visible:outline-gold-700"
+          className="min-h-12 w-28 max-w-[40%] min-w-0 shrink-0 cursor-pointer rounded-lg border border-input-line bg-surface-alt px-2.5 text-[13.5px] font-semibold text-navy-950 transition-colors hover:border-gold-500/60 focus-visible:outline-2 focus-visible:outline-gold-700"
         >
           {PAISES_TELEFONO.map((item) => (
             <option key={item.iso} value={item.iso}>
@@ -116,7 +116,7 @@ export function PhoneInput({
           ))}
         </select>
 
-        <div className="relative flex-1">
+        <div className="relative min-w-0 flex-1">
           <input
             id={id}
             type="tel"
@@ -136,21 +136,21 @@ export function PhoneInput({
       </div>
 
       {mostrarGuia && (
-        <div className="flex items-center justify-between gap-2 text-[13px]" aria-live="polite">
+        <div className="min-w-0 break-words text-[13px] leading-relaxed" aria-live="polite">
           {digitos.length === 0 ? (
-            <span className="text-muted">
-              Formato {config.nombre}: <span className="font-mono text-ink-soft">{config.prefijo} {config.ejemplo}</span>
+            <span className="text-muted-foreground">
+              Formato {config.nombre}: <span className="font-mono text-ink">{config.prefijo} {config.ejemplo}</span>
             </span>
           ) : areaInvalidaRD ? (
             <span className="text-warning font-medium">
               En RD usa 809, 829 u 849 — o cambia el país a 🇺🇸 US (+1) si es de EE.UU.
             </span>
           ) : normalizado.phone ? (
-            <span className="text-ok font-medium">
+            <span className="text-success font-medium">
               WhatsApp y llamadas listas ({normalizado.phone})
             </span>
           ) : (
-            <span className={tocado ? "text-danger font-medium" : "text-muted"}>
+            <span className={tocado ? "text-danger font-medium" : "text-muted-foreground"}>
               Faltan {faltanDigitos} {faltanDigitos === 1 ? "dígito" : "dígitos"} para completar el formato de {config.nombre} ({config.prefijo})
             </span>
           )}

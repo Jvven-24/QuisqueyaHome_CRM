@@ -263,18 +263,20 @@ export function CrmHeader({
                 type="button"
                 className="relative flex size-11 items-center justify-center rounded-md border border-border bg-surface hover:bg-surface-hover text-muted-foreground transition-colors shadow-none cursor-pointer"
                 aria-label="Notificaciones del sistema"
+                aria-describedby={unreadNotifications > 0 ? "unread-notifications-count" : undefined}
               >
                 <Bell className="size-3.5" />
                 {unreadNotifications > 0 && (
-                  <span className="absolute -top-1 -right-1 flex size-3.5 items-center justify-center rounded-full bg-gold-600 text-[9px] font-bold text-navy-950 border border-white">
-                    {unreadNotifications}
+                  <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full border border-white bg-gold-600 px-0.5 text-[9px] font-bold text-navy-950">
+                    <span aria-hidden="true">{unreadNotifications > 99 ? "99+" : unreadNotifications}</span>
                   </span>
                 )}
+                {unreadNotifications > 0 && <span id="unread-notifications-count" className="sr-only">{unreadNotifications} sin leer</span>}
               </button>
             </PopoverTrigger>
-            <PopoverContent align="end" className="w-80 bg-surface border border-border shadow-md rounded-lg p-0 overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 bg-slate-50/70">
-                <span className="text-xs font-semibold text-slate-900">
+            <PopoverContent align="end" className="w-80 max-w-[calc(100vw-2rem)] bg-surface border border-border shadow-md rounded-lg p-0 overflow-hidden">
+              <div className="flex items-center justify-between gap-3 px-4 py-2 border-b border-slate-100 bg-slate-50/70">
+                <span className="text-sm font-semibold text-slate-900">
                   Notificaciones
                 </span>
                 {unreadNotifications > 0 && (
@@ -283,18 +285,18 @@ export function CrmHeader({
                     onClick={marcarTodasLeidas}
                     disabled={marcando}
                     aria-busy={marcando}
-                    className="text-[11px] font-medium text-slate-500 hover:text-slate-800 cursor-pointer"
+                    className="min-h-11 text-xs font-medium text-slate-600 hover:text-slate-900 cursor-pointer"
                   >
                     {marcando ? "Marcando…" : "Marcar leídas"}
                   </button>
                 )}
               </div>
               {errorMarcado && <p role="alert" className="px-4 py-2 text-xs text-red-700">{errorMarcado}</p>}
-              <div className="max-h-72 overflow-y-auto divide-y divide-slate-100">
+              <div className="max-h-[min(18rem,50vh)] overflow-y-auto overscroll-contain divide-y divide-slate-100">
                 {errorNotificaciones ? (
                   <div className="p-4 text-center text-xs text-red-700">
                     <p role="alert">{errorNotificaciones}</p>
-                    <button type="button" className="mt-2 underline" onClick={() => setIntentoCarga((prev) => prev + 1)}>
+                    <button type="button" className="mt-2 min-h-11 underline" onClick={() => setIntentoCarga((prev) => prev + 1)}>
                       Reintentar
                     </button>
                   </div>
@@ -333,11 +335,11 @@ export function CrmHeader({
                           }`}
                         />
                         <div className="min-w-0 flex-1">
-                          <strong className="text-xs text-slate-900 block font-medium truncate">
+                          <strong className="text-xs text-slate-900 block font-medium break-words">
                             {n.title}
                           </strong>
                           {n.body && (
-                            <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-2">
+                            <p className="text-xs text-slate-600 mt-0.5 break-words line-clamp-2">
                               {n.body}
                             </p>
                           )}
@@ -356,7 +358,7 @@ export function CrmHeader({
               {modulosVisibles.some(item => item.ruta === "/aprobaciones") && <div className="p-2 border-t border-slate-100 text-center bg-slate-50/50">
                 <Link
                   href="/aprobaciones"
-                  className="text-xs font-medium text-slate-600 hover:text-slate-900 transition-colors"
+                  className="inline-flex min-h-11 items-center justify-center text-xs font-medium text-slate-600 hover:text-slate-900 transition-colors"
                 >
                   Abrir centro de aprobaciones
                 </Link>

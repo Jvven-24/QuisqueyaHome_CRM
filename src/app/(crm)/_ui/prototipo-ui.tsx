@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useId, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { PageHeader as SharedPageHeader } from "@/components/modulo";
 
@@ -90,6 +90,9 @@ export function Metric({ label, value, note }: { label: string; value: string; n
 
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 
+let openModals = 0;
+let previousBodyOverflow = "";
+
 export function Modal({
   title,
   children,
@@ -100,10 +103,20 @@ export function Modal({
   onClose: () => void;
 }) {
   const containerRef = useFocusTrap<HTMLElement>({ onClose });
+  const titleId = useId();
+  useEffect(() => {
+    if (openModals++ === 0) {
+      previousBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      if (--openModals === 0) document.body.style.overflow = previousBodyOverflow;
+    };
+  }, []);
 
   return (
     <div
-      className="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 p-4 animate-in fade-in duration-150"
+      className="modal-backdrop crm-modal-backdrop fixed inset-0 z-50 flex items-end justify-center bg-navy-950/60 p-0 md:items-center md:p-4 animate-in fade-in duration-150"
       role="presentation"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
@@ -112,25 +125,25 @@ export function Modal({
       <section
         ref={containerRef}
         tabIndex={-1}
-        className="modal bg-surface border border-border rounded-lg shadow-md max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-150 outline-none"
+        className="modal crm-modal bg-surface border border-border rounded-t-2xl md:rounded-xl shadow-md max-w-lg w-full max-h-[90dvh] overflow-hidden flex flex-col animate-in fade-in duration-150 outline-none"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="modal-title"
+        aria-labelledby={titleId}
       >
-        <div className="drawer-head flex items-center justify-between px-4 py-3 border-b border-border bg-surface-alt shrink-0">
-          <h2 id="modal-title" className="font-heading font-bold text-base text-navy-950 m-0">
+        <div className="drawer-head flex items-center justify-between gap-3 px-4 py-2 border-b border-border bg-surface shrink-0">
+          <h2 id={titleId} className="min-w-0 break-words font-heading font-bold text-base text-navy-950 m-0">
             {title}
           </h2>
           <button
             type="button"
-            className="icon-button flex items-center justify-center size-7 rounded-md text-muted-foreground hover:text-navy-950 hover:bg-navy-100 transition-colors"
+            className="icon-button flex shrink-0 items-center justify-center min-h-11 min-w-11 rounded-lg text-muted-foreground hover:text-navy-950 hover:bg-navy-100 transition-colors"
             onClick={onClose}
             aria-label="Cerrar"
           >
             <X className="size-4" />
           </button>
         </div>
-        <div className="p-4 overflow-y-auto flex-1">{children}</div>
+        <div className="crm-modal-body min-h-0 p-4 overflow-y-auto overscroll-contain flex-1">{children}</div>
       </section>
     </div>
   );

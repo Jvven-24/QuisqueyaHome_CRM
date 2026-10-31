@@ -1,17 +1,40 @@
 "use client";
 /**
- * Conexiones: una tarjeta por servicio (Search Console, GA4, Gmail, Calendar, Meta Ads) con varias
+ * Conexiones e Integraciones: una tarjeta por servicio (Search Console, GA4, Gmail, Calendar, Meta Ads) con varias
  * cuentas, estados (conectado / sin conectar / con error / reconectar) y alta incremental de permisos.
+ * Unificado con el ecosistema de conectores (Outbox, Webhooks, CRM externo, Moodle).
  * Estilo Viltrum v2.1: tokens de tokens.css, contraste AA, foco visible, objetivos ≥ 44 px en móvil.
  */
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
-import { AlertTriangle, CheckCircle2, CircleDashed, Plus, RefreshCw, ShieldCheck, Trash2, Unplug } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  CircleDashed,
+  Key,
+  Network,
+  Plus,
+  RefreshCw,
+  Settings,
+  ShieldCheck,
+  Trash2,
+  Unplug,
+} from "lucide-react";
 import { SERVICIOS, type ServicioDef } from "@/infrastructure/conexiones-oauth/servicios";
-import { ETIQUETA_TARJETA, estadoTarjeta, MOTIVOS_CALLBACK, type ConexionVista, type EstadoTarjeta } from "@/infrastructure/conexiones-oauth/vista";
+import {
+  ETIQUETA_TARJETA,
+  estadoTarjeta,
+  MOTIVOS_CALLBACK,
+  type ConexionVista,
+  type EstadoTarjeta,
+} from "@/infrastructure/conexiones-oauth/vista";
 import { BotonFacebook, BotonGoogle } from "./botones";
 import { Switch } from "@/components/ui/switch";
 import { MarcaServicio } from "./logos";
+import {
+  ConfiguradorCredencialesModal,
+  type ProveedorClaves,
+} from "./configurador-credenciales-modal";
 
 export type DatosConexiones = {
   conexiones: ConexionVista[];
@@ -100,9 +123,22 @@ function Cuenta({ c, s, ocupado, onVerificar, onDesconectar }: { c: ConexionVist
   );
 }
 
-function Tarjeta({ s, lista, faltan, ocupado, onVerificar, onDesconectar }: {
-  s: ServicioDef; lista: ConexionVista[]; faltan: string[]; ocupado: boolean;
-  onVerificar: (id: number) => void; onDesconectar: (c: ConexionVista) => void;
+function Tarjeta({
+  s,
+  lista,
+  faltan,
+  ocupado,
+  onVerificar,
+  onDesconectar,
+  onConfigurar,
+}: {
+  s: ServicioDef;
+  lista: ConexionVista[];
+  faltan: string[];
+  ocupado: boolean;
+  onVerificar: (id: number) => void;
+  onDesconectar: (c: ConexionVista) => void;
+  onConfigurar: (p: ProveedorClaves) => void;
 }) {
   const uid = useId();
   const [extras, setExtras] = useState<string[]>([]);
@@ -147,11 +183,24 @@ function Tarjeta({ s, lista, faltan, ocupado, onVerificar, onDesconectar }: {
             <span className="pt-0.5"><strong className="font-semibold">{e.etiqueta}.</strong> {e.descripcion} <span className="text-ink-muted">({(SENSIBILIDAD[e.sensibilidad] ?? "").split(":")[0]!.toLowerCase()})</span></span>
           </label>
         ))}
+
         {bloqueado ? (
-          <p className="rounded-lg border border-warning/30 bg-warning-bg p-3 text-sm text-ink" id={`${uid}-f`}>
-            Falta configurar el servidor: <span className="font-mono text-xs">{faltan.join(", ")}</span>. Ver README de integraciones.
-          </p>
+          <div className="flex items-center justify-between gap-2 p-2.5 rounded-xl border border-amber-300/80 bg-amber-50/40 dark:bg-amber-950/20 text-xs" id={`${uid}-f`}>
+            <span className="font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-1.5 min-w-0">
+              <AlertTriangle size={14} className="shrink-0" />
+              <span className="truncate">Requiere claves ({faltan.length} pendientes)</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => onConfigurar(s.proveedor)}
+              className="inline-flex shrink-0 items-center gap-1 px-2.5 py-1 rounded-lg bg-surface text-amber-900 dark:text-amber-200 border border-amber-300/90 font-bold hover:bg-surface-hover shadow-2xs transition-colors"
+            >
+              <Settings size={12} />
+              Configurar
+            </button>
+          </div>
         ) : null}
+
         <div>
           {s.proveedor === "google"
             ? <BotonGoogle href={urlConectar(s, extras)} texto={texto} deshabilitado={bloqueado} describe={bloqueado ? `${uid}-f` : undefined} />
@@ -165,6 +214,7 @@ function Tarjeta({ s, lista, faltan, ocupado, onVerificar, onDesconectar }: {
 export function ConexionesPanel({ datos }: { datos: DatosConexiones }) {
   const router = useRouter();
   const [ocupado, setOcupado] = useState(false);
+  const [configuradorAbierto, setConfiguradorAbierto] = useState<ProveedorClaves | null>(null);
   const [mensaje, setMensaje] = useState<{ tipo: "ok" | "error" | "aviso"; texto: string } | null>(
     datos.aviso ? { tipo: datos.aviso === "conectada" ? "ok" : "error", texto: MOTIVOS_CALLBACK[datos.aviso] ?? "No se pudo completar la conexión." } : null,
   );
@@ -181,28 +231,157 @@ export function ConexionesPanel({ datos }: { datos: DatosConexiones }) {
     router.refresh();
   }
 
+  const totalFaltan = datos.faltan.google.length + datos.faltan.meta.length;
+
   return (
-    <div className="grid gap-5">
-      <header>
-        <h2 className="font-heading text-xl font-bold text-ink">Conexiones</h2>
-        <p className="mt-1 max-w-3xl text-sm leading-relaxed text-ink-muted">
-          Conecta las cuentas de Google y Meta que alimentan el origen de los leads. Solo administradores. Los permisos son de solo lectura salvo que actives uno extra, y puedes desconectar en cualquier momento.
-        </p>
+    <div className="grid gap-6">
+      <header className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-line/60">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400">
+            <Network className="size-4" />
+            <span>Ecosistema de Conexiones e Integraciones</span>
+          </div>
+          <h2 className="font-heading text-xl sm:text-2xl font-bold text-ink mt-0.5">
+            Conexiones y Servicios Externos
+          </h2>
+          <p className="mt-1 max-w-3xl text-sm leading-relaxed text-ink-muted">
+            Gestiona de forma unificada las cuentas autorizadas de Google, Meta, Outbox y conectores comerciales.
+            Los permisos se solicitan con scopes mínimos de solo lectura salvo activación explícita.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setConfiguradorAbierto("google")}
+          className="inline-flex items-center gap-2 min-h-11 px-4 rounded-xl border border-line bg-surface hover:bg-surface-alt transition-colors shadow-2xs text-xs font-bold text-ink cursor-pointer"
+        >
+          <Settings size={15} className="text-gold-600" />
+          <span>Configurar Claves y APIs</span>
+          {totalFaltan > 0 && (
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-300/80">
+              {totalFaltan} por revisar
+            </span>
+          )}
+        </button>
       </header>
+
       {mensaje && (
         <p role={mensaje.tipo === "ok" ? "status" : "alert"} className={`rounded-lg border p-3 text-sm font-semibold ${mensaje.tipo === "ok" ? "border-success/30 bg-success-bg text-success" : mensaje.tipo === "aviso" ? "border-warning/30 bg-warning-bg text-warning" : "border-danger/30 bg-danger-bg text-danger"}`}>{mensaje.texto}</p>
       )}
-      <ul className="m-0 grid list-none gap-4 p-0" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))" }}>
-        {SERVICIOS.map((s) => (
-          <Tarjeta
-            key={s.id} s={s} ocupado={ocupado}
-            lista={datos.conexiones.filter((c) => c.servicio === s.id)}
-            faltan={datos.faltan[s.proveedor]}
-            onVerificar={(id) => void llamar(`/api/integraciones/conexiones/${id}/verificar`, "POST", "Conexión comprobada.")}
-            onDesconectar={(c) => void llamar(c.origen === "calendar" ? `/api/integraciones/google/cuentas/${c.id}` : `/api/integraciones/conexiones/${c.id}`, "DELETE", "Cuenta desconectada y acceso revocado.")}
-          />
-        ))}
-      </ul>
+
+      {/* Grid de Servicios Principales OAuth */}
+      <div>
+        <h3 className="text-xs font-bold uppercase tracking-wider text-ink-muted mb-3">
+          Conexiones Oficiales por Cuenta (OAuth 2.0)
+        </h3>
+        <ul className="m-0 grid list-none gap-4 p-0" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))" }}>
+          {SERVICIOS.map((s) => (
+            <Tarjeta
+              key={s.id} s={s} ocupado={ocupado}
+              lista={datos.conexiones.filter((c) => c.servicio === s.id)}
+              faltan={datos.faltan[s.proveedor]}
+              onConfigurar={(p) => setConfiguradorAbierto(p)}
+              onVerificar={(id) => void llamar(`/api/integraciones/conexiones/${id}/verificar`, "POST", "Conexión comprobada.")}
+              onDesconectar={(c) => void llamar(c.origen === "calendar" ? `/api/integraciones/google/cuentas/${c.id}` : `/api/integraciones/conexiones/${c.id}`, "DELETE", "Cuenta desconectada y acceso revocado.")}
+            />
+          ))}
+        </ul>
+      </div>
+
+      {/* Ecosistema de Conectores Empresariales Integrados */}
+      <div className="pt-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-ink-muted mb-3">
+          Conectores y Automatizaciones del Ecosistema
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Outbox & Webhooks */}
+          <article className="p-4 rounded-2xl border border-line bg-surface shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <span className="text-xs font-bold text-navy-950 dark:text-foreground">Eventos del Outbox</span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  <CheckCircle2 size={12} />
+                  Activo
+                </span>
+              </div>
+              <p className="text-xs text-ink-muted leading-relaxed">
+                Despachador asíncrono y resiliente de notificaciones, correos y sincronizaciones hacia servicios de mensajería.
+              </p>
+            </div>
+            <div className="pt-4 mt-2 border-t border-line/60 flex items-center justify-between">
+              <span className="text-[11px] text-ink-muted font-mono">Worker transaccional</span>
+              <a
+                href="/automatizaciones"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-gold-700 hover:text-gold-800 underline underline-offset-4"
+              >
+                Abrir monitor
+              </a>
+            </div>
+          </article>
+
+          {/* Conector CRM Externo */}
+          <article className="p-4 rounded-2xl border border-line bg-surface shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <span className="text-xs font-bold text-navy-950 dark:text-foreground">Conector CRM Secundario</span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-surface-alt text-ink-muted border border-line">
+                  <CircleDashed size={12} />
+                  Configurable
+                </span>
+              </div>
+              <p className="text-xs text-ink-muted leading-relaxed">
+                Sincronización bidireccional de objetos estándar (personas, organizaciones y oportunidades comerciales) vía API GraphQL.
+              </p>
+            </div>
+            <div className="pt-4 mt-2 border-t border-line/60 flex items-center justify-between">
+              <span className="text-[11px] text-ink-muted font-mono">CRM_EXTERNAL_API_KEY</span>
+              <button
+                type="button"
+                onClick={() => setConfiguradorAbierto("google")}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-ink hover:text-gold-700"
+              >
+                <Key size={13} />
+                Revisar clave
+              </button>
+            </div>
+          </article>
+
+          {/* Moodle Academy */}
+          <article className="p-4 rounded-2xl border border-line bg-surface shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <span className="text-xs font-bold text-navy-950 dark:text-foreground">Moodle Academy</span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-surface-alt text-ink-muted border border-line">
+                  <CircleDashed size={12} />
+                  Configurable
+                </span>
+              </div>
+              <p className="text-xs text-ink-muted leading-relaxed">
+                Matriculación automática de asesores e inmobiliarias en los programas de capacitación y constancias oficiales.
+              </p>
+            </div>
+            <div className="pt-4 mt-2 border-t border-line/60 flex items-center justify-between">
+              <span className="text-[11px] text-ink-muted font-mono">MOODLE_WS_TOKEN</span>
+              <button
+                type="button"
+                onClick={() => setConfiguradorAbierto("google")}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-ink hover:text-gold-700"
+              >
+                <Key size={13} />
+                Revisar clave
+              </button>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      {/* Modal de Configuración de Claves con Nombres Humanos */}
+      <ConfiguradorCredencialesModal
+        abierto={Boolean(configuradorAbierto)}
+        onCerrar={() => setConfiguradorAbierto(null)}
+        proveedorInicial={configuradorAbierto ?? "google"}
+        faltan={datos.faltan}
+      />
     </div>
   );
 }

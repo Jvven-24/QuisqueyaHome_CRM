@@ -1,5 +1,13 @@
 # R · Relevo
 
+## Relevo local del worktree · 31/10/2026
+
+En `E:\.viltrum-worktrees\crm-integracion-premium`, rama `codex/integracion-premium` basada en `156e1fb`, se ha refinado el sistema de diseño compartido y once módulos. Esta es una entrega local de UI; el estado histórico de `develop` debajo no describe este checkpoint. No hay merge al checkout principal ni push.
+
+Ver `docs/ui-premium-2026-10-31/ENTREGA.md`, contrato `TAREA.md` y `AUDITORIA-FINAL.md` para archivos, comandos, evidencia, límites de cobertura y revisión pendiente de otro proveedor. Se preservaron los cambios locales previos de Configuración/Empresas/Catálogo. Sin cambios a datos, API o esquema. La compilación de producción local usa salida aislada; no reutilizar `.next` del desarrollo para validar esta entrega.
+
+---
+
 <!-- rediseno-movil-p1:start -->
 ## Rediseño móvil · pasada 1 de 2 — 2026-10-30
 

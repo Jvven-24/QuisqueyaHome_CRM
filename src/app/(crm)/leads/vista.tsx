@@ -171,6 +171,7 @@ export function LeadsVista({
   const searchParams = useSearchParams();
   const [creando, setCreando] = useState(() => searchParams.get("crear") === "1");
   const [creandoPorVoz, setCreandoPorVoz] = useState(() => searchParams.get("voz") === "1");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   function irCon(cambios: Record<string, string | undefined>) {
     const params = new URLSearchParams(searchParams.toString());
@@ -401,14 +402,16 @@ export function LeadsVista({
         />
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-surface border border-line rounded-xl mb-4 shadow-xs sm:gap-3">
-        <form action={pathname} method="get" autoComplete="off" role="search" aria-label="Buscar leads" className="flex items-center gap-2 flex-1 min-w-0 w-full max-w-md sm:flex-wrap">
+      <div className="mb-4 grid min-w-0 gap-3 rounded-xl border border-line bg-surface p-3 xl:grid-cols-[minmax(16rem,1fr)_auto] xl:items-end">
+        <form action={pathname} method="get" autoComplete="off" role="search" aria-label="Buscar leads" className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-2">
           {filtros.sourceId && <input type="hidden" name="source_id" value={filtros.sourceId} />}
           {filtros.status && <input type="hidden" name="status" value={filtros.status} />}
           {cola && <input type="hidden" name="cola" value="1" />}
-          <div className="relative flex min-w-0 flex-1 items-center">
+          <label className="min-w-0 text-[13px] font-semibold text-ink" htmlFor="leads-busqueda">Buscar prospecto
+          <span className="relative flex min-w-0 items-center">
             <Search className="absolute left-3.5 size-4 text-muted pointer-events-none" />
             <input
+              id="leads-busqueda"
               type="search"
               key={filtros.q}
               name="q"
@@ -418,13 +421,15 @@ export function LeadsVista({
               defaultValue={filtros.q}
               className="w-full min-h-12 pl-10 pr-3.5 text-[13.5px] bg-surface border border-input-line rounded-lg text-ink placeholder:text-muted focus:outline-none focus:border-gold-700 focus:ring-2 focus:ring-gold-700/20 transition-all"
             />
-          </div>
-          <button type="submit" className="button min-h-12 shrink-0 px-4">Buscar</button>
-          <span className="hidden text-[13px] text-ink-muted sm:inline">Pulsa Enter para buscar</span>
+          </span>
+          </label>
+          <button type="submit" className="button secondary min-h-12 shrink-0 px-4">Buscar</button>
         </form>
 
-        <div className="grid w-full grid-cols-2 items-center gap-2 sm:flex sm:w-auto sm:flex-wrap sm:gap-2.5">
+        <div id="leads-filtros" className={`${filtersOpen ? "grid" : "hidden"} min-w-0 grid-cols-1 items-end gap-2 min-[390px]:grid-cols-2 sm:grid xl:flex xl:flex-wrap`}>
+          <label className="min-w-0 text-[13px] font-semibold text-ink" htmlFor="leads-origen">Canal de origen
           <select
+            id="leads-origen"
             aria-label="Filtrar por origen"
             value={filtros.sourceId ?? ""}
             onChange={(event) => irCon({ source_id: event.target.value || undefined, page: undefined })}
@@ -437,8 +442,11 @@ export function LeadsVista({
               </option>
             ))}
           </select>
+          </label>
 
+          <label className="min-w-0 text-[13px] font-semibold text-ink" htmlFor="leads-estado">Estado
           <select
+            id="leads-estado"
             aria-label="Filtrar por estado"
             value={filtros.status ?? ""}
             onChange={(event) => irCon({ status: event.target.value || undefined, page: undefined })}
@@ -451,21 +459,23 @@ export function LeadsVista({
               </option>
             ))}
           </select>
+          </label>
 
           {hayFiltro && (
             <button
               type="button"
               onClick={() => irCon({ q: undefined, source_id: undefined, status: undefined, page: undefined })}
-              className="min-h-12 px-4 inline-flex items-center gap-2 text-[13.5px] font-semibold text-ink-muted hover:text-ink bg-surface border border-input-line rounded-lg transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
+              className="min-h-12 px-4 inline-flex items-center justify-center gap-2 text-[13.5px] font-semibold text-ink-muted hover:text-ink bg-surface border border-input-line rounded-lg transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-700"
             >
               <X className="size-4" />
               <span>Limpiar filtros</span>
             </button>
           )}
 
-          <span className="col-span-2 inline-flex w-fit items-center px-3 py-1 rounded-full bg-gold-100 text-gold-900 text-[13px] font-bold tabular-nums border border-gold-300/60 sm:ml-1">
-            {total} prospectos
-          </span>
+        </div>
+        <div className="flex items-center justify-between gap-2 border-t border-line pt-2 xl:col-span-2">
+          <p className="m-0 text-[13px] text-ink-muted"><strong className="font-semibold tabular-nums text-ink">{total}</strong> prospectos{hayFiltro ? " · Filtros activos" : ""}</p>
+          <button type="button" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-line px-3 text-[13px] font-semibold text-navy-900 sm:hidden" aria-controls="leads-filtros" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(!filtersOpen)}>{filtersOpen ? "Ocultar filtros" : "Filtros"}</button>
         </div>
       </div>
 
@@ -482,11 +492,11 @@ export function LeadsVista({
                   <div className="flex items-start gap-3">
                     <span className="mt-1 shrink-0"><Avatar name={lead.contactName} small /></span>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-start justify-between gap-2">
-                        <a href={`/leads/${lead.id}`} className="flex min-h-12 min-w-0 items-center text-[15px] font-bold leading-tight break-words text-ink">{lead.contactName}</a>
-                        <dl className="m-0 mt-2.5 shrink-0"><dt className="sr-only">Estado</dt><dd className="m-0">{celda("estado")}</dd></dl>
+                      <div className="flex min-w-0 items-center justify-between gap-2">
+                        <Link href={`/leads/${lead.id}`} className="flex min-h-12 min-w-0 items-center text-[15px] font-bold leading-tight break-words text-ink">{lead.contactName}</Link>
+                        <dl className="m-0 min-w-0 max-w-full"><dt className="sr-only">Estado</dt><dd className="m-0 [&_*]:max-w-full [&_*]:whitespace-normal">{celda("estado")}</dd></dl>
                       </div>
-                      <p className="m-0 truncate text-[13px] text-ink-muted">
+                      <p className="m-0 break-words text-[13px] text-ink-muted">
                         {lead.projectName ?? lead.projectInterestText ?? lead.zoneInterest ?? "Por definir"}
                         <span aria-hidden="true"> · </span>
                         {lead.contactPhoneDisplay ?? lead.contactPhone ?? "Sin teléfono"}
@@ -494,13 +504,13 @@ export function LeadsVista({
                     </div>
                   </div>
                   <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 border-t border-line/70 pt-2 text-[13px]">
-                    <div className="min-w-0"><dt className="text-[13px] text-ink-muted">Presupuesto</dt><dd className="m-0 truncate font-semibold tabular-nums text-ink">{formatoPresupuesto(lead)}</dd></div>
-                    <div className="min-w-0"><dt className="text-[13px] text-ink-muted">Responsable</dt><dd className="m-0 truncate [&_*]:max-w-full [&_*]:truncate">{celda("responsable")}</dd></div>
+                    <div className="min-w-0"><dt className="text-[13px] text-ink-muted">Presupuesto</dt><dd className="m-0 break-words font-semibold tabular-nums text-ink">{formatoPresupuesto(lead)}</dd></div>
+                    <div className="min-w-0"><dt className="text-[13px] text-ink-muted">Responsable</dt><dd className="m-0 break-words [&_*]:max-w-full [&_*]:whitespace-normal">{celda("responsable")}</dd></div>
                   </dl>
-                  <div className="mt-2 flex items-center justify-between gap-2">
-                    <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-ink-muted">
+                  <div className="mt-2 flex items-center justify-between gap-3 border-t border-line/70 pt-2">
+                    <div className="grid min-w-0 flex-1 gap-1 text-[13px] text-ink-muted [&>span]:max-w-full [&>span>span]:min-w-0 [&>span>span]:max-w-full">
                       {celda("origen")}
-                      <span className="truncate">{leadWaitingLabel(lead, ahora)}</span>
+                      <span className="break-words">{leadWaitingLabel(lead, ahora)}</span>
                     </div>
                     <div className="shrink-0 [&_a]:!size-12 [&_a]:!min-h-12 [&_a]:!min-w-12">{celda("acciones")}</div>
                   </div>
@@ -647,19 +657,19 @@ function FormularioLead({ canales, proyectos, onClose }: { canales: Canal[]; pro
 
   return (
     <div
-      className="modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 backdrop-blur-xs p-4 animate-in fade-in"
+      className="modal-backdrop crm-modal-backdrop fixed inset-0 z-50 flex items-center justify-center bg-navy-950/60 p-4 animate-in fade-in"
       role="presentation"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <section
         ref={modalRef}
         tabIndex={-1}
-        className="modal bg-surface border border-line rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in zoom-in-95 duration-200 outline-none"
+        className="modal crm-modal flex min-h-0 w-full max-w-lg flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-md outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="nuevo-lead-title"
       >
-        <div className="drawer-head flex items-center justify-between px-6 py-4 border-b border-line bg-surface-alt">
+        <div className="drawer-head flex shrink-0 items-center justify-between gap-3 border-b border-line bg-surface-alt px-4 py-3 sm:px-6">
           <h2 id="nuevo-lead-title" className="font-heading font-bold text-lg text-navy-950 m-0">
             Registrar lead patrimonial
           </h2>
@@ -667,7 +677,8 @@ function FormularioLead({ canales, proyectos, onClose }: { canales: Canal[]; pro
             <X size={20} />
           </button>
         </div>
-        <form noValidate className="form-grid p-6" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
+        <form noValidate className="flex min-h-0 flex-1 flex-col overflow-hidden" ref={formRef} onSubmit={alEnviar} aria-busy={enviando}>
+          <div className="form-grid min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-6">
           {errorRed && (
             <AlertaErrorFormulario
               mensaje={errorRed}
@@ -772,7 +783,8 @@ function FormularioLead({ canales, proyectos, onClose }: { canales: Canal[]; pro
             </div>
           )}
 
-          <div className="form-actions span-2 pt-2">
+          </div>
+          <div className="form-actions !grid shrink-0 grid-cols-2 gap-2 border-t border-line bg-surface !p-4">
             <button
               className="button min-h-12 px-5 text-[13.5px]"
               type="button"

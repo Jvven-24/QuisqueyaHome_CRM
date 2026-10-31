@@ -13,6 +13,7 @@ import {
   BookPlus,
   Building2,
   CheckCircle2,
+  ChevronDown,
   ClipboardCheck,
   Clock,
   ExternalLink,
@@ -411,11 +412,11 @@ export function AcademyVista({
   }
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="min-w-0 space-y-4 pb-4 [&_p]:break-words">
       {/* Encabezado ejecutivo con identidad real y enlaces a Moodle / Administración UI-066 */}
-      <div className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="space-y-1.5">
+      <div className="min-w-0 rounded-xl border border-line bg-surface p-4 sm:p-5">
+        <div className="flex min-w-0 flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+          <div className="min-w-0 space-y-1.5 xl:flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-900">
                 <Sparkles className="w-3.5 h-3.5 text-amber-600" />
@@ -435,24 +436,25 @@ export function AcademyVista({
                 </span>
               )}
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-              Ruta de Formación y Certificación — {usuarioNombre}
+            <h1 className="m-0 break-words font-heading text-xl font-bold tracking-tight text-navy-950 sm:text-2xl">
+              Ruta de formación y certificación
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="m-0 text-sm font-semibold text-ink">{usuarioNombre}</p>
+            <p className="m-0 max-w-3xl text-[13px] leading-relaxed text-ink-muted">
               {usuarioEmail ? `${usuarioEmail} · ` : ""}
               Moodle 4.5 LTS aporta el avance real y las calificaciones de cuestionarios; el CRM
               gobierna la revisión administrativa y las constancias con huella SHA-256 (Regla Q-C1-03).
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 xl:w-72 xl:shrink-0 xl:grid-cols-1">
             {esAdmin ? (
               <>
                 <a
                   href={saludLms.urlCrearCurso || `${saludLms.url}/course/edit.php?category=1`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 transition-colors"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-line bg-surface px-3 py-2.5 text-[13px] font-semibold text-navy-900 transition-colors hover:bg-surface-alt"
                 >
                   <BookPlus className="w-4 h-4 text-amber-600" />
                   <span>Crear curso en Moodle</span>
@@ -460,7 +462,7 @@ export function AcademyVista({
                 </a>
                 <Link
                   href="/academy/administracion"
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 transition-colors"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-navy-950 px-3 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-navy-900"
                 >
                   <Settings className="w-4 h-4 text-amber-400" />
                   <span>Administración de Cursos y Matrículas (UI-066)</span>
@@ -479,16 +481,14 @@ export function AcademyVista({
         </div>
 
         {/* Proyectos asignados al broker en el CRM */}
-        <div className="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700">
-            <Building2 className="w-3.5 h-3.5 text-slate-500" />
-            Proyectos asignados en CRM:
-          </span>
+        <details className="group mt-4 min-w-0 border-t border-line pt-2">
+          <summary className="flex min-h-12 cursor-pointer items-center gap-2 text-[13px] font-semibold text-navy-900"><Building2 className="size-4 shrink-0" aria-hidden="true" /><span className="min-w-0 flex-1">Proyectos asignados en CRM ({proyectosAsignados.length})</span><ChevronDown className="size-4 shrink-0 transition-transform duration-150 group-open:rotate-180 motion-reduce:transition-none" aria-hidden="true" /></summary>
+          <div className="flex min-w-0 flex-wrap items-center gap-2 pt-2">
           {proyectosAsignados.length > 0 ? (
             proyectosAsignados.map((p) => (
               <span
                 key={p.id}
-                className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-800"
+                className="inline-flex max-w-full flex-wrap items-center gap-1 rounded-lg border border-line bg-surface-alt px-2.5 py-1 text-[13px] font-medium text-ink"
               >
                 {p.name}
                 {p.zone ? <span className="text-slate-500">({p.zone})</span> : null}
@@ -499,7 +499,8 @@ export function AcademyVista({
               Sin proyectos asignados directamente a este usuario.
             </span>
           )}
-        </div>
+          </div>
+        </details>
       </div>
 
       {/* Estado Sin Conexión (Red del navegador o Moodle local caído) */}
@@ -571,35 +572,35 @@ export function AcademyVista({
       )}
 
       {/* Tarjetas de métricas reales */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
-          <p className="text-xs font-medium text-slate-500">Cursos Asignados (Moodle)</p>
-          <p className="mt-1 text-2xl font-bold text-slate-900">{cursosAsignados.length}</p>
-          <p className="mt-1 text-xs text-slate-600">
+      <div className="grid min-w-0 grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
+        <div className="min-w-0 rounded-xl border border-line bg-surface p-3">
+          <p className="m-0 text-[13px] font-medium text-ink-muted">Cursos asignados (Moodle)</p>
+          <p className="m-0 mt-1 text-2xl font-bold tabular-nums text-navy-950">{cursosAsignados.length}</p>
+          <p className="m-0 mt-1 text-[13px] text-ink-muted">
             Avance medio LMS: <strong>{promedioAvanceLms} %</strong>
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
-          <p className="text-xs font-medium text-slate-500">Estado LMS (Moodle 4.5)</p>
-          <p className="mt-1 text-sm font-bold text-slate-900 truncate">{saludLms.version}</p>
-          <p className="mt-1 text-xs text-slate-600 truncate">
+        <div className="min-w-0 rounded-xl border border-line bg-surface p-3">
+          <p className="m-0 text-[13px] font-medium text-ink-muted">Estado LMS (Moodle 4.5)</p>
+          <p className="m-0 mt-1 break-words text-sm font-semibold text-navy-950">{saludLms.version}</p>
+          <p className="m-0 mt-1 text-[13px] text-ink-muted">
             {saludLms.disponible ? "Conectado a 127.0.0.1:9330" : "Sin conexión con LMS"}
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
-          <p className="text-xs font-medium text-slate-500">Solicitudes en Revisión</p>
-          <p className="mt-1 text-2xl font-bold text-amber-700">{solicitudesPendientes}</p>
-          <p className="mt-1 text-xs text-slate-600">
+        <div className="min-w-0 rounded-xl border border-line bg-surface p-3">
+          <p className="m-0 text-[13px] font-medium text-ink-muted">Solicitudes en revisión</p>
+          <p className="m-0 mt-1 text-2xl font-bold tabular-nums text-warning">{solicitudesPendientes}</p>
+          <p className="m-0 mt-1 text-[13px] text-ink-muted">
             Total histórico: {solicitudes.length}
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm">
-          <p className="text-xs font-medium text-slate-500">Constancias Vigentes (SHA-256)</p>
-          <p className="mt-1 text-2xl font-bold text-emerald-700">{constanciasVigentes}</p>
-          <p className="mt-1 text-xs text-slate-600">
+        <div className="min-w-0 rounded-xl border border-line bg-surface p-3">
+          <p className="m-0 text-[13px] font-medium text-ink-muted">Constancias vigentes (SHA-256)</p>
+          <p className="m-0 mt-1 text-2xl font-bold tabular-nums text-success">{constanciasVigentes}</p>
+          <p className="m-0 mt-1 text-[13px] text-ink-muted">
             Emitidas por Administración en CRM
           </p>
         </div>
@@ -676,7 +677,15 @@ export function AcademyVista({
         )}
       </div>
 
-      {tabActiva === "cursos" && <section className="mb-4 rounded-xl border border-slate-200 bg-white p-4"><div className="flex flex-wrap gap-3"><label className="grid gap-1 text-sm">Buscar curso<input className="min-h-11 rounded border border-slate-300 p-2" type="search" value={busquedaCurso} onChange={event=>setBusquedaCurso(event.target.value)}/></label><label className="grid gap-1 text-sm">Categoría<select className="min-h-11 rounded border border-slate-300 p-2" value={categoriaCurso} onChange={event=>setCategoriaCurso(event.target.value)}><option value="">Todas las categorías</option>{Array.from(new Set(cursosAsignados.map(c=>c.categoria))).map(c=><option key={c}>{c}</option>)}</select></label><label className="flex min-h-11 items-center gap-2 text-sm"><Checkbox checked={soloMatriculados} onCheckedChange={checked=>setSoloMatriculados(checked)} />Sólo matriculados</label></div><p className="mt-2 text-sm text-slate-600">La evidencia procede del LMS; completar un curso no emite una constancia automáticamente. La decisión independiente permanece en el CRM.</p>{cursosAsignados.length>0&&cursosVisibles.length===0&&<p role="status">Sin cursos para estos filtros. Limpia la búsqueda o cambia categoría.</p>}</section>}
+      {tabActiva === "cursos" && <section className="min-w-0 rounded-xl border border-line bg-surface p-3 sm:p-4" aria-label="Biblioteca de cursos">
+        <div className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(12rem,auto)_auto] xl:items-end">
+          <label className="grid min-w-0 gap-1 text-[13px] font-semibold text-ink">Buscar curso<input className="min-h-12 min-w-0 rounded-lg border border-input-line p-2" type="search" placeholder="Nombre o contenido del curso" value={busquedaCurso} onChange={event=>setBusquedaCurso(event.target.value)}/></label>
+          <label className="grid min-w-0 gap-1 text-[13px] font-semibold text-ink">Categoría<select className="min-h-12 min-w-0 rounded-lg border border-input-line p-2" value={categoriaCurso} onChange={event=>setCategoriaCurso(event.target.value)}><option value="">Todas las categorías</option>{Array.from(new Set(cursosAsignados.map(c=>c.categoria))).map(c=><option key={c}>{c}</option>)}</select></label>
+          <label className="flex min-h-12 min-w-0 items-center gap-2 text-[13px] font-medium text-ink"><Checkbox checked={soloMatriculados} onCheckedChange={checked=>setSoloMatriculados(checked)} />Sólo matriculados</label>
+        </div>
+        <p className="mb-0 mt-3 border-t border-line pt-3 text-[13px] leading-relaxed text-ink-muted">La evidencia procede del LMS; completar un curso no emite una constancia automáticamente. La decisión independiente permanece en el CRM.</p>
+        {cursosAsignados.length>0&&cursosVisibles.length===0&&<p role="status" className="mb-0 mt-3 text-sm">Sin cursos para estos filtros. Limpia la búsqueda o cambia categoría.</p>}
+      </section>}
       {tabActiva === "cursos" && (
         <section
           aria-labelledby="rutas-formacion"
@@ -743,10 +752,10 @@ export function AcademyVista({
                 return (
                   <div
                     key={String(curso.id)}
-                    className="rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-6 shadow-sm space-y-4"
+                    className="min-w-0 rounded-xl border border-line bg-surface p-4 sm:p-5 space-y-4"
                   >
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                      <div className="space-y-1.5">
+                    <div className="flex min-w-0 flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                      <div className="min-w-0 space-y-1.5 xl:flex-1">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="rounded-md bg-slate-900 px-2.5 py-0.5 text-xs font-mono font-semibold text-amber-300">
                             {curso.codigo}
@@ -763,7 +772,7 @@ export function AcademyVista({
                             </span>
                           )}
                         </div>
-                        <h2 className="text-base sm:text-lg font-bold text-slate-900">
+                        <h2 className="m-0 break-words text-base font-semibold text-navy-950 sm:text-lg">
                           {curso.nombre}
                         </h2>
                         {curso.resumen && (
@@ -773,7 +782,7 @@ export function AcademyVista({
                         )}
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-2 shrink-0">
+                      <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 xl:w-64 xl:shrink-0 xl:grid-cols-1 [&>a]:justify-center [&>button]:justify-center [&>span]:justify-center">
                         {esAdmin && (
                           <a
                             href={

@@ -179,8 +179,87 @@ export function UsuariosPanel({
       {lista.length === 0 ? (
         <Vacio titulo="Sin usuarios todavía" texto="Invita al primero con “Invitar usuario”." />
       ) : (
-        <div className="table-wrap" style={{ border: "1px solid var(--line)", borderRadius: "10px", overflowX: "auto", maxWidth: "100%" }}>
-          <table style={{ width: "100%", fontSize: "13px" }}>
+        <div className="space-y-4">
+          {/* Vista Adaptada a Móvil y Tablet (Cero Scroll Lateral) */}
+          <div className="grid grid-cols-1 gap-3 md:hidden">
+            {lista.map((usuario) => (
+              <article key={usuario.id} className="p-4 rounded-xl border border-line bg-surface shadow-xs space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Avatar name={usuario.fullName} small />
+                    <div className="min-w-0">
+                      <strong className="block text-sm font-bold text-navy-950 truncate">
+                        {usuario.fullName}
+                      </strong>
+                      <small className="text-xs text-muted-foreground block truncate">
+                        {usuario.email}
+                      </small>
+                    </div>
+                  </div>
+                  <Badge tone={usuario.isActive ? "green" : "neutral"}>
+                    {usuario.isActive ? "Activo" : "Inactivo"}
+                  </Badge>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-line text-xs">
+                  <span className="font-semibold text-ink flex items-center gap-1.5">
+                    <span className="text-muted-foreground">Rol:</span> {usuario.roleName}
+                  </span>
+                  <div>
+                    {usuario.authUserId ? (
+                      <Badge tone="green">Aceptada</Badge>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5">
+                        <Badge tone="gold">Pendiente</Badge>
+                        {puedeEditar && (
+                          <button
+                            type="button"
+                            disabled={ocupado === usuario.id}
+                            onClick={() => void reenviarInvitacion(usuario)}
+                            className="min-h-11 px-2 text-xs font-bold text-gold-700 underline"
+                          >
+                            Reenviar
+                          </button>
+                        )}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {puedeEditar && (
+                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-line">
+                    <button
+                      type="button"
+                      onClick={() => setEditando(usuario)}
+                      className="min-h-11 px-3 text-xs font-bold rounded-lg border border-line bg-surface hover:bg-surface-alt text-ink"
+                    >
+                      Editar perfil
+                    </button>
+                    <button
+                      type="button"
+                      disabled={ocupado === usuario.id}
+                      onClick={() => void alternarActivo(usuario)}
+                      className="min-h-11 px-3 text-xs font-bold rounded-lg border border-line bg-surface hover:bg-surface-alt text-ink"
+                    >
+                      {usuario.isActive ? "Pausar" : "Activar"}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={ocupado === usuario.id}
+                      onClick={() => setUsuarioPorEliminar(usuario)}
+                      className="min-h-11 px-2.5 text-xs font-bold rounded-lg border border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+
+          {/* Vista Tabla de Escritorio */}
+          <div className="table-wrap hidden md:block" style={{ border: "1px solid var(--line)", borderRadius: "10px", overflowX: "auto", maxWidth: "100%" }}>
+            <table style={{ width: "100%", fontSize: "13px" }}>
             <thead>
               <tr>
                 <th style={{ fontSize: "12px" }}>Usuario</th>
@@ -272,6 +351,7 @@ export function UsuariosPanel({
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 

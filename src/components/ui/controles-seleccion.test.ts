@@ -39,7 +39,7 @@ test("DataTable comunica selección parcial como estado indeterminado", () => {
 test("las vistas CRM fuera de Metas y tareas no conservan checkbox o radio nativo", () => {
   const crmFiles = archivos(join(process.cwd(), "src/app/(crm)"));
   const prohibidos = crmFiles.filter((ruta) =>
-    !/(^|\/)metas\/|(^|\/)tareas\/|(^|\/)auth\/|login|correo/.test(ruta)
+    !/(^|\/)metas\/|(^|\/)tareas\/|(^|\/)auth\/|login|correo/.test(ruta.replaceAll("\\", "/"))
   );
   const encontrados = prohibidos.flatMap((ruta) => {
     const source = readFileSync(ruta, "utf8");

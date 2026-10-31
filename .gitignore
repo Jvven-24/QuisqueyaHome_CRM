@@ -4,6 +4,8 @@
 # next.js
 /.next/
 /.next-prod/
+/.next-review/
+/.next-premium/
 /out/
 
 # production

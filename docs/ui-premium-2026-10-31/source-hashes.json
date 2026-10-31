@@ -1,0 +1,134 @@
+[
+  {
+    "path": "src/app/(crm)/_ui/crm-header.tsx",
+    "sha256": "316AB59B9B4029E78FADC1E966E12DF0B5D519A6B921C3ABACF043DECD1E46D6"
+  },
+  {
+    "path": "src/app/(crm)/_ui/mobile-dock.tsx",
+    "sha256": "8F6B3EBE3BFF1FED96901B0FC1B638B2688A1EF2591674B7DC0AAEC08168F83E"
+  },
+  {
+    "path": "src/app/(crm)/_ui/prototipo-ui.tsx",
+    "sha256": "944F595311813F8087F882610BF4CD004913430B6F8D4AB75AF655B92A6A4878"
+  },
+  {
+    "path": "src/app/(crm)/academy/vista.tsx",
+    "sha256": "80108871AF45256B94F753A6F3DD12CDD36EE964DCD47C81A23FC19B7B0F6E76"
+  },
+  {
+    "path": "src/app/(crm)/agenda/vista.tsx",
+    "sha256": "8326C45C4B890E01C83AAFE6C3051424EBF45FF4E07A0733AFA9545CFEAF45EC"
+  },
+  {
+    "path": "src/app/(crm)/aprobaciones/vista.tsx",
+    "sha256": "9E593B78B0CA193B997D8D3BAC143E06C50F8A44A566E96BF6C4CF7A371AE175"
+  },
+  {
+    "path": "src/app/(crm)/avances/vista.tsx",
+    "sha256": "82B3046035A218E43C3B20F7D8B052E6A02F9C4ABB00B33C9AEF3FFC1A506C61"
+  },
+  {
+    "path": "src/app/(crm)/brokers/vista.tsx",
+    "sha256": "E0F8B9224D04536F2291B05A64DC161DE56DFD1CA99C25CC25F6E5D34688B008"
+  },
+  {
+    "path": "src/app/(crm)/comunicaciones/vista.tsx",
+    "sha256": "7338F7300299555F1E61B04FE030FCB6A93931A484DE60F8C2CAEB072642BF91"
+  },
+  {
+    "path": "src/app/(crm)/configuracion/_permisos.tsx",
+    "sha256": "662977290B4018459BDF9C0079C2EBEA72E3A1DF8D500360CF4ADA34595C5411"
+  },
+  {
+    "path": "src/app/(crm)/configuracion/_usuarios.tsx",
+    "sha256": "1388B75C76440C284A81EF0F90019EE44B38631AF8CA3AE07F1B4BED9224C405"
+  },
+  {
+    "path": "src/app/(crm)/configuracion/conexiones/configurador-credenciales-modal.tsx",
+    "sha256": "DD447F5BCB9837C6C44EF606E825234B8E67719B430DA2389F2E7A0F515268D8"
+  },
+  {
+    "path": "src/app/(crm)/configuracion/conexiones/panel.tsx",
+    "sha256": "C55523524045E9C96EA1CD3B1EE1D921B2157BF1363958A6DC34FA884E9F9353"
+  },
+  {
+    "path": "src/app/(crm)/configuracion/vista.tsx",
+    "sha256": "1DCFBD848D14E6A7223E9AF3208863725588BB0795D1718FB249767754F66E4C"
+  },
+  {
+    "path": "src/app/(crm)/contactos/empresas/vista.tsx",
+    "sha256": "439F09E7A32C4774DA1DAFB99CE1A646184660C68CF5C2E9ACEDD162A9B30409"
+  },
+  {
+    "path": "src/app/(crm)/contactos/vista.tsx",
+    "sha256": "C46C88B4371321C06C9113FF3160A577154D0B22D0AFBA0A376BE22D1094F04D"
+  },
+  {
+    "path": "src/app/(crm)/inicio/vista.tsx",
+    "sha256": "320269F6821A3E467DCC54BA040100BFCC25ABB5CCFB193AE0EDA2A3BD77F2C7"
+  },
+  {
+    "path": "src/app/(crm)/leads/vista.tsx",
+    "sha256": "DDA681A98667741243FB1237A88BC2B55088E3D6CC71C2611B1DA69D16897AD9"
+  },
+  {
+    "path": "src/app/(crm)/metas/vista.tsx",
+    "sha256": "E07CB6EB1451D4190336402BCE5529EBF02D92CDE8226A40D44D97FD98D8C2BD"
+  },
+  {
+    "path": "src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx",
+    "sha256": "83CD733991DD2A861BD1208765033C06D5EB294365D7BFD8C936CB18F89B5D7C"
+  },
+  {
+    "path": "src/app/(crm)/propiedades/vista.tsx",
+    "sha256": "5AAE1B434E82EB93848E4039E300C9DC33B21961A71D87B8B7FBE5CC0C60A456"
+  },
+  {
+    "path": "src/app/(crm)/reportes/vista.tsx",
+    "sha256": "9A9B8667D08A2A615A3C15D23063FFCDCB8F9BBC2A18AF065C53EFE04030B19E"
+  },
+  {
+    "path": "src/app/globals.css",
+    "sha256": "83B8E15D85C6FC21FDE15F0F16C81B24D99974282B90C73FCFA76B2D700C7D9A"
+  },
+  {
+    "path": "src/app/tokens.css",
+    "sha256": "2FC0913756BE125D727071A9C50DC8BB8F469FA8E8FBD465F5D7936805C0A0A4"
+  },
+  {
+    "path": "src/app/workspace.css",
+    "sha256": "4D2D42287E9B0DA248617D9368CEBCD0811B26AEE3D2ED94C0EF1AC56FD0783E"
+  },
+  {
+    "path": "src/components/modulo/module-tabs.tsx",
+    "sha256": "60A6D92CC3DF979BE76846D6B6295430B1382C32DE20BA5BE084F4F104EE4474"
+  },
+  {
+    "path": "src/components/modulo/page-header.tsx",
+    "sha256": "189CD52BE888A67F6037AB42768619DF33A397691BAF51714E3220DD0F26FBD3"
+  },
+  {
+    "path": "src/components/ui/controles-seleccion.test.ts",
+    "sha256": "CB9DB0C1913D76ECC015C3B95D3C7F941686D91E362849C86B53EE2D38346683"
+  },
+  {
+    "path": "src/components/ui/dialog.tsx",
+    "sha256": "9B62C0F3E3FE121D32F80EC72F270F3B9BA0794AE147B50ABB803D5EBCD0A915"
+  },
+  {
+    "path": "src/components/ui/phone-input.tsx",
+    "sha256": "F890D58FDC3EC2FE683FF82643E7B3C78A89BA8FC46981B4B8A76150CD5517A2"
+  },
+  {
+    "path": "src/components/ui/resumen-compacto.tsx",
+    "sha256": "6EE883298E8525AE5BFEF3842103470AEED98CA7EC098DBE5F724388FD27069F"
+  },
+  {
+    "path": "src/components/ui/run-src-tests.mjs",
+    "sha256": "710C5D19615EF135DFF68495386F5B36F0152BF95C8777019A349EB20A78E034"
+  },
+  {
+    "path": "src/components/ui/sheet.tsx",
+    "sha256": "71E699DC3913C749044371C3FC665D057E6B571920D3410514C22D49AE43D802"
+  }
+]

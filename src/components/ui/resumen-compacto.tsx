@@ -49,7 +49,7 @@ export function ResumenCompacto({
           {variacion.periodo && <span>{variacion.periodo}</span>}
         </span>
       )}
-      {detalle && <span className="mt-1 line-clamp-2 max-sm:line-clamp-1 block min-w-0 break-words text-[13px] leading-snug text-ink-muted dark:text-slate-300">{detalle}</span>}
+      {detalle && <span className="mt-1 block min-w-0 break-words text-[13px] leading-snug text-ink-muted dark:text-slate-300">{detalle}</span>}
       {pie && <span className="mt-1 block">{pie}</span>}
     </>
   );

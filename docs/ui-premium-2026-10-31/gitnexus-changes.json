@@ -1,0 +1,373 @@
+{
+  "indexNote": "Registered CRM graph with target worktree diff; index may omit or map outdated JSX ranges. Does not prove isolation.",
+  "summary": {
+    "changed_count": 46,
+    "affected_count": 7,
+    "changed_files": 52,
+    "risk_level": "high"
+  },
+  "changed_symbols": [
+    {
+      "id": "Const:eslint.config.mjs:eslintConfig",
+      "name": "eslintConfig",
+      "filePath": "eslint.config.mjs",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/crm-header.tsx:CrmHeader",
+      "name": "CrmHeader",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/mobile-dock.tsx:MobileDock",
+      "name": "MobileDock",
+      "filePath": "src/app/(crm)/_ui/mobile-dock.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/prototipo-ui.tsx:Metric",
+      "name": "Metric",
+      "filePath": "src/app/(crm)/_ui/prototipo-ui.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/prototipo-ui.tsx:Modal",
+      "name": "Modal",
+      "filePath": "src/app/(crm)/_ui/prototipo-ui.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/academy/vista.tsx:AcademyVista",
+      "name": "AcademyVista",
+      "filePath": "src/app/(crm)/academy/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/agenda/vista.tsx:AgendaVista",
+      "name": "AgendaVista",
+      "filePath": "src/app/(crm)/agenda/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/aprobaciones/vista.tsx:ApprovalsPreview",
+      "name": "ApprovalsPreview",
+      "filePath": "src/app/(crm)/aprobaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/avances/vista.tsx:AvancesVista",
+      "name": "AvancesVista",
+      "filePath": "src/app/(crm)/avances/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/brokers/vista.tsx:cant",
+      "name": "cant",
+      "filePath": "src/app/(crm)/brokers/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/brokers/vista.tsx:activo",
+      "name": "activo",
+      "filePath": "src/app/(crm)/brokers/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/brokers/vista.tsx:BrokersVista",
+      "name": "BrokersVista",
+      "filePath": "src/app/(crm)/brokers/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/comunicaciones/vista.tsx:esEmail",
+      "name": "esEmail",
+      "filePath": "src/app/(crm)/comunicaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/comunicaciones/vista.tsx:activa",
+      "name": "activa",
+      "filePath": "src/app/(crm)/comunicaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/comunicaciones/vista.tsx:cat",
+      "name": "cat",
+      "filePath": "src/app/(crm)/comunicaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/comunicaciones/vista.tsx:ComunicacionesVista",
+      "name": "ComunicacionesVista",
+      "filePath": "src/app/(crm)/comunicaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/configuracion/_permisos.tsx:esActivo",
+      "name": "esActivo",
+      "filePath": "src/app/(crm)/configuracion/_permisos.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/configuracion/_permisos.tsx:PermisosPanel",
+      "name": "PermisosPanel",
+      "filePath": "src/app/(crm)/configuracion/_permisos.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/configuracion/_usuarios.tsx:UsuariosPanel",
+      "name": "UsuariosPanel",
+      "filePath": "src/app/(crm)/configuracion/_usuarios.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/configuracion/_usuarios.tsx:FormularioUsuario",
+      "name": "FormularioUsuario",
+      "filePath": "src/app/(crm)/configuracion/_usuarios.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/configuracion/_usuarios.tsx:enviar",
+      "name": "enviar",
+      "filePath": "src/app/(crm)/configuracion/_usuarios.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/configuracion/vista.tsx:ConfiguracionVista",
+      "name": "ConfiguracionVista",
+      "filePath": "src/app/(crm)/configuracion/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/contactos/empresas/vista.tsx:rows",
+      "name": "rows",
+      "filePath": "src/app/(crm)/contactos/empresas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/contactos/empresas/vista.tsx:EmpresasVista",
+      "name": "EmpresasVista",
+      "filePath": "src/app/(crm)/contactos/empresas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/contactos/vista.tsx:ContactosVista",
+      "name": "ContactosVista",
+      "filePath": "src/app/(crm)/contactos/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/contactos/vista.tsx:FormularioContacto",
+      "name": "FormularioContacto",
+      "filePath": "src/app/(crm)/contactos/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/inicio/vista.tsx:count",
+      "name": "count",
+      "filePath": "src/app/(crm)/inicio/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/inicio/vista.tsx:InicioVista",
+      "name": "InicioVista",
+      "filePath": "src/app/(crm)/inicio/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/vista.tsx:respuesta",
+      "name": "respuesta",
+      "filePath": "src/app/(crm)/leads/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/leads/vista.tsx:LeadsVista",
+      "name": "LeadsVista",
+      "filePath": "src/app/(crm)/leads/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/leads/vista.tsx:irCon",
+      "name": "irCon",
+      "filePath": "src/app/(crm)/leads/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/leads/vista.tsx:FormularioLead",
+      "name": "FormularioLead",
+      "filePath": "src/app/(crm)/leads/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/leads/vista.tsx:enviar",
+      "name": "enviar",
+      "filePath": "src/app/(crm)/leads/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/metas/vista.tsx:MetasVista",
+      "name": "MetasVista",
+      "filePath": "src/app/(crm)/metas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx:zones",
+      "name": "zones",
+      "filePath": "src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx:CatalogExplorer",
+      "name": "CatalogExplorer",
+      "filePath": "src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx:compare",
+      "name": "compare",
+      "filePath": "src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx:share",
+      "name": "share",
+      "filePath": "src/app/(crm)/propiedades/_componentes/catalog-explorer.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/vista.tsx:PropiedadesVista",
+      "name": "PropiedadesVista",
+      "filePath": "src/app/(crm)/propiedades/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/reportes/vista.tsx:ReportesVista",
+      "name": "ReportesVista",
+      "filePath": "src/app/(crm)/reportes/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/dialog.tsx:DialogContent",
+      "name": "DialogContent",
+      "filePath": "src/components/ui/dialog.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/dialog.tsx:DialogHeader",
+      "name": "DialogHeader",
+      "filePath": "src/components/ui/dialog.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/dialog.tsx:DialogFooter",
+      "name": "DialogFooter",
+      "filePath": "src/components/ui/dialog.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/phone-input.tsx:PhoneInput",
+      "name": "PhoneInput",
+      "filePath": "src/components/ui/phone-input.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/sheet.tsx:SheetContent",
+      "name": "SheetContent",
+      "filePath": "src/components/ui/sheet.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/sheet.tsx:SheetHeader",
+      "name": "SheetHeader",
+      "filePath": "src/components/ui/sheet.tsx",
+      "change_type": "touched"
+    }
+  ],
+  "affected_processes": [
+    {
+      "id": "proc_8_propiedadesvista",
+      "name": "PropiedadesVista → TipoAntiguedad",
+      "process_type": "cross_community",
+      "step_count": 7,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadesVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_15_academyvista",
+      "name": "AcademyVista → TipoAntiguedad",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "AcademyVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_16_propiedadesvista",
+      "name": "PropiedadesVista → Normalizar",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadesVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_17_propiedadesvista",
+      "name": "PropiedadesVista → Entero",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadesVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_29_academyvista",
+      "name": "AcademyVista → Normalizar",
+      "process_type": "cross_community",
+      "step_count": 5,
+      "changed_steps": [
+        {
+          "symbol": "AcademyVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_30_academyvista",
+      "name": "AcademyVista → Entero",
+      "process_type": "cross_community",
+      "step_count": 5,
+      "changed_steps": [
+        {
+          "symbol": "AcademyVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_128_permisospanel",
+      "name": "PermisosPanel → Clave",
+      "process_type": "intra_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "PermisosPanel",
+          "step": 1
+        }
+      ]
+    }
+  ]
+}
