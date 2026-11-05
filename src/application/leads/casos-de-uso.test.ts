@@ -301,6 +301,57 @@ test("M41: reasignacion no cambia leads terminales", async () => {
   }
 });
 
+// --- gerente: reasigna dentro de su equipo --------------------------------------
+
+const gerente: Actor = { userId: 3, roleSlug: "manager", permissions: [], teamUserIds: [5, 6] };
+
+test("gerente (alcance team): reasigna un lead de su equipo a otro broker de su equipo y audita", async () => {
+  const propio = lead({ id: 1, brokerId: 5 });
+  const { deps, leads, auditoria } = montar({ leads: [propio] });
+  const fila = await asignarResponsableDeLead(deps, gerente, "team", 1, { brokerId: 6, reason: "Carga" });
+  assert.equal(fila.brokerId, 6);
+  assert.equal(leads.leads[0]!.brokerId, 6);
+  assert.equal(auditoria.registros.length, 1);
+  assert.equal(auditoria.registros[0]!.actorId, 3);
+});
+
+test("gerente (alcance team): puede asignar un lead de la cola sin responsable a un broker de su equipo", async () => {
+  const { deps, leads } = montar({ leads: [lead({ id: 1, brokerId: null })] });
+  const fila = await asignarResponsableDeLead(deps, gerente, "team", 1, { brokerId: 5 });
+  assert.equal(fila.brokerId, 5);
+  assert.equal(leads.leads[0]!.brokerId, 5);
+});
+
+test("gerente (alcance team): no asigna a un broker fuera de su equipo (Forbidden, nada escrito)", async () => {
+  const { deps, leads, auditoria } = montar({ leads: [lead({ id: 1, brokerId: 5 })] });
+  await assert.rejects(asignarResponsableDeLead(deps, gerente, "team", 1, { brokerId: 9 }), (error) => {
+    assert.ok(error instanceof ForbiddenError);
+    assert.equal(error.message, "Solo puedes asignar leads a brokers de tu equipo.");
+    return true;
+  });
+  assert.equal(leads.leads[0]!.brokerId, 5);
+  assert.deepEqual(auditoria.registros, []);
+});
+
+test("gerente (alcance team): un lead de un broker ajeno a su equipo responde como inexistente", async () => {
+  const { deps, leads, auditoria } = montar({ leads: [lead({ id: 1, brokerId: 9 })] });
+  await assert.rejects(asignarResponsableDeLead(deps, gerente, "team", 1, { brokerId: 5 }), NotFoundError);
+  assert.equal(leads.leads[0]!.brokerId, 9);
+  assert.deepEqual(auditoria.registros, []);
+});
+
+test("gerente en solo lectura (ver como): no reasigna", async () => {
+  const { deps, leads } = montar({ leads: [lead({ id: 1, brokerId: 5 })] });
+  await assert.rejects(asignarResponsableDeLead(deps, { ...gerente, readOnly: true, visibilityOwnerIds: [3, 5, 6] }, "team", 1, { brokerId: 6 }), ForbiddenError);
+  assert.equal(leads.leads[0]!.brokerId, 5);
+});
+
+test("alcance team de quien no es gerente: sigue sin reasignar", async () => {
+  const { deps, leads } = montar({ leads: [lead({ id: 1, brokerId: 5 })] });
+  await assert.rejects(asignarResponsableDeLead(deps, { ...broker, teamUserIds: [5, 6] }, "team", 1, { brokerId: 6 }), ForbiddenError);
+  assert.equal(leads.leads[0]!.brokerId, 5);
+});
+
 // --- descartar ----------------------------------------------------------------
 
 test("descartar: marca discarded con el motivo y audita descartar", async () => {

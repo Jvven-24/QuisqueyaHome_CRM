@@ -3,8 +3,8 @@
  *
  * Ruta delgada: valida el id y el cuerpo, exige el permiso y delega en
  * `asignarResponsableDeLead` (`application/leads`), que valida que el broker sea
- * un candidato activo, aplica el alcance con `reaches` y audita. Fase 3: reasignar exige
- * edición de leads con alcance `all`, concedida por el administrador.
+ * un candidato activo, aplica el alcance con `reaches` y audita. Reasignar exige edición de
+ * leads con alcance `all`; el gerente (alcance `team`) puede reasignar solo hacia brokers de su equipo.
  */
 
 import { z } from "zod";

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { NotFoundError, ValidationError } from "../../domain/errors.ts";
+import { ForbiddenError, NotFoundError, ValidationError } from "../../domain/errors.ts";
 import type { Actor } from "../../domain/rbac.ts";
 import { auditoriaEnMemoria } from "../testing/auditoria-en-memoria.ts";
 import { unidadDeTrabajoEnMemoria } from "../testing/unidad-de-trabajo-en-memoria.ts";
@@ -51,6 +51,28 @@ test("crear: inserta, audita y actualiza la próxima acción del negocio", async
   assert.equal(fila.assigneeId, 5);
   assert.deepEqual(actividades.proximas, [{ dealId: 7, actividadId: fila.id }]);
   assert.deepEqual(auditoria.registros, [{ accion: "crear", entidad: "activity", entidadId: fila.id, despues: fila, actorId: 5 }]);
+});
+
+const gerente: Actor = { userId: 3, roleSlug: "manager", permissions: [], teamUserIds: [5, 6] };
+const tareaPara = (assigneeId: number) => ({ activityType: "task" as const, title: "Dar seguimiento", description: null, contactId: null, dealId: null, projectId: null, assigneeId, startsAt: null, endsAt: null, isAllDay: false, location: null, meetingUrl: null, priority: "normal" as const, status: "pending" as const });
+
+test("crear: el gerente (alcance team) asigna una tarea a un broker de su equipo", async () => {
+  const { deps, actividades } = montar();
+  const fila = await crearActividad(deps, gerente, "team", tareaPara(6));
+  assert.equal(fila.assigneeId, 6);
+  assert.equal(actividades.filas.length, 1);
+});
+
+test("crear: el gerente no asigna a quien está fuera de su equipo", async () => {
+  const { deps, actividades } = montar();
+  await assert.rejects(crearActividad(deps, gerente, "team", tareaPara(9)), ForbiddenError);
+  assert.deepEqual(actividades.filas, []);
+});
+
+test("crear: un broker (alcance own) sigue sin asignar a otra persona, aunque tenga equipo", async () => {
+  const { deps, actividades } = montar();
+  await assert.rejects(crearActividad(deps, { ...broker, teamUserIds: [5, 6] }, "own", tareaPara(6)), ForbiddenError);
+  assert.deepEqual(actividades.filas, []);
 });
 
 test("crear: una actividad completada no reemplaza la próxima acción", async () => {

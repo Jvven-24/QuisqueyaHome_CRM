@@ -194,7 +194,7 @@ export async function crearLead(deps: DepsLeads, actor: Actor, entrada: EntradaC
 export async function asignarResponsableDeLead(
   deps: DepsLeads,
   actor: Actor,
-  alcance: PermissionScope,
+  alcanceConcedido: PermissionScope,
   id: number,
   entrada: { brokerId: number; reason?: string },
 ): Promise<Lead> {
@@ -205,13 +205,25 @@ export async function asignarResponsableDeLead(
     });
   }
 
+  // Supervisión: el gerente con alcance de equipo coordina a sus brokers. Puede reasignar los leads de su
+  // equipo y repartir la cola sin responsable, pero solo hacia brokers de su equipo. Con "ver como"
+  // (solo lectura) y para cualquier otro rol con alcance de equipo rige la regla anterior (alcance total).
+  const esSupervisor = alcanceConcedido === "team" && actor.roleSlug === "manager" && !actor.readOnly;
+
   return deps.unidad.ejecutar(async ({ leads, auditoria }) => {
+    // El supervisor lee con alcance total para poder ver la cola sin responsable; el alcance real se aplica abajo.
+    const alcance: PermissionScope = esSupervisor ? "all" : alcanceConcedido;
     const lead = await leads.buscarLeadParaConversion(id, actor, alcance);
     if (!lead || lead.deletedAt) throw new NotFoundError();
     // El `SELECT` ya ocurrió por `id`: el alcance se comprueba en memoria con
     // `reaches`. Fuera de alcance responde igual que inexistente.
-    if (!reaches(actor, alcance, lead.brokerId)) throw new NotFoundError();
-    if (alcance !== "all" || actor.readOnly) {
+    const alcanzable = esSupervisor ? lead.brokerId === null || reaches(actor, "team", lead.brokerId) : reaches(actor, alcance, lead.brokerId);
+    if (!alcanzable) throw new NotFoundError();
+    if (esSupervisor) {
+      if (!(actor.teamUserIds ?? []).includes(entrada.brokerId)) {
+        throw new ForbiddenError("Solo puedes asignar leads a brokers de tu equipo.");
+      }
+    } else if (alcance !== "all" || actor.readOnly) {
       throw new ForbiddenError("Se requiere permiso total de edición de leads para reasignar el responsable.");
     }
     if (lead.status === "converted" || lead.status === "discarded") {
