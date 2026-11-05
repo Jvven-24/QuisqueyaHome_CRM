@@ -5,7 +5,8 @@ import { AlertTriangle } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { centavosAUnidad, unidadACentavos } from "../_ui/formato";
-import type { MotivoPerdida, NegocioFila, PropiedadDeal, ProyectoOpcion } from "./logica";
+import { enviarJson, type RespuestaApi } from "./api";
+import type { EtapaConRequisito, MotivoPerdida, NegocioFila, PropiedadDeal, ProyectoOpcion } from "./logica";
 
 export type ResultadoEnvio = { ok: true } | { ok: false; error: string };
 
@@ -274,6 +275,218 @@ export function DialogoRetiro({ descripcionInteres, onConfirmar, onCancelar }: {
           <button type="submit" className={BOTON_PRIMARIO} aria-busy={enviando} disabled={enviando}>{enviando ? "Retirando…" : "Retirar interés"}</button>
         </DialogFooter>
       </form>
+    </Marco>
+  );
+}
+
+/* --------------- Completar el requisito de una etapa y mover --------------- */
+
+const TIPOS_CONTACTO: { valor: "call" | "whatsapp" | "email" | "meeting"; etiqueta: string }[] = [
+  { valor: "call", etiqueta: "Llamada" },
+  { valor: "whatsapp", etiqueta: "WhatsApp" },
+  { valor: "email", etiqueta: "Correo" },
+  { valor: "meeting", etiqueta: "Reunión" },
+];
+
+async function guardarActividad(cuerpo: Record<string, unknown>): Promise<ResultadoEnvio> {
+  if (typeof navigator !== "undefined" && !navigator.onLine) return { ok: false, error: "Sin conexión a internet. No se guardó nada; lo que escribiste sigue aquí." };
+  try {
+    const respuesta = await fetch("/api/actividades", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(cuerpo) });
+    if (respuesta.ok) return { ok: true };
+    const datos = (await respuesta.json().catch(() => ({}))) as { error?: string };
+    if (respuesta.status === 403) return { ok: false, error: "Tu rol no tiene permiso para registrar actividades." };
+    return { ok: false, error: datos.error ?? "No se pudo guardar la actividad. Revisa los datos." };
+  } catch {
+    return { ok: false, error: "No se pudo contactar al servidor. No se confirmó ningún cambio; reintenta." };
+  }
+}
+
+function aResultado(r: RespuestaApi): ResultadoEnvio {
+  return r.ok ? { ok: true } : { ok: false, error: r.error };
+}
+
+export function DialogoRequisito({ slug, nombreEtapa, negocio, proyectos, onGuardado, onCancelar, onAbrirNegocio }: {
+  slug: EtapaConRequisito;
+  nombreEtapa: string;
+  negocio: NegocioFila;
+  proyectos: ProyectoOpcion[];
+  /** Se llama tras guardar el dato: reintenta el movimiento y devuelve su resultado. */
+  onGuardado: () => Promise<ResultadoEnvio>;
+  onCancelar: () => void;
+  onAbrirNegocio: () => void;
+}) {
+  const { enviando, error, ejecutar, estaEnviando } = useEnvio();
+  const [intentado, setIntentado] = useState(false);
+  // contactado
+  const [tipo, setTipo] = useState<(typeof TIPOS_CONTACTO)[number]["valor"]>("call");
+  const [asunto, setAsunto] = useState("");
+  // presentacion
+  const [fecha, setFecha] = useState("");
+  // preseleccion
+  const [proyectoId, setProyectoId] = useState(proyectos[0] ? String(proyectos[0].id) : "");
+  const [unidadId, setUnidadId] = useState("");
+  // negociacion
+  const [monto, setMonto] = useState(String(centavosAUnidad(negocio.amountCents ?? null)));
+  const [probabilidad, setProbabilidad] = useState(negocio.probability === null ? "" : String(negocio.probability));
+  const [comision, setComision] = useState(negocio.commissionBasisPoints == null ? "" : String(negocio.commissionBasisPoints / 100));
+  const [cierre, setCierre] = useState(negocio.expectedCloseDate ?? "");
+
+  const centavos = unidadACentavos(monto);
+  const prob = probabilidad.trim() === "" ? null : Number(probabilidad);
+  const com = comision.trim() === "" ? null : Number(comision);
+  const errores: Record<string, string | undefined> = {};
+  if (slug === "contactado" && !asunto.trim()) errores.asunto = "Escribe de qué trató el contacto.";
+  if (slug === "presentacion") {
+    if (!asunto.trim()) errores.asunto = "Escribe cuál es la próxima acción.";
+    if (!fecha) errores.fecha = "Indica la fecha y hora de la próxima acción.";
+    else if (Number.isNaN(new Date(fecha).getTime())) errores.fecha = "La fecha no es válida.";
+  }
+  if (slug === "preseleccion" && !proyectoId) errores.proyecto = "Elige el proyecto de interés.";
+  if (slug === "negociacion") {
+    if (centavos === null || centavos <= 0) errores.monto = "Indica el monto comercial.";
+    if (prob === null || !Number.isInteger(prob) || prob < 0 || prob > 100) errores.probabilidad = "Indica un porcentaje entero entre 0 y 100.";
+    if (com === null || !Number.isFinite(com) || com < 0 || com > 100) errores.comision = "Indica la comisión como porcentaje, de 0 a 100.";
+    if (!cierre) errores.cierre = "Indica la fecha estimada de cierre.";
+  }
+  const hayErrores = Object.values(errores).some(Boolean);
+  const unidades = proyectos.find((p) => String(p.id) === proyectoId)?.unidades ?? [];
+  const sinProyectos = slug === "preseleccion" && proyectos.length === 0;
+
+  async function guardar(): Promise<ResultadoEnvio> {
+    let guardado: ResultadoEnvio;
+    if (slug === "contactado") {
+      guardado = await guardarActividad({ activityType: tipo, title: asunto.trim(), dealId: negocio.id, contactId: negocio.contactId, status: "completed" });
+    } else if (slug === "presentacion") {
+      guardado = await guardarActividad({
+        activityType: "task", title: asunto.trim(), dealId: negocio.id, contactId: negocio.contactId, status: "pending", priority: "high",
+        startsAt: new Date(fecha).toISOString(), ...(negocio.brokerId ? { assigneeId: negocio.brokerId } : {}),
+      });
+    } else if (slug === "preseleccion") {
+      guardado = aResultado(await enviarJson(`${negocio.id}/propiedades`, "POST", { projectId: Number(proyectoId), ...(unidadId ? { unitId: Number(unidadId) } : {}), isPrimary: true }));
+    } else {
+      guardado = aResultado(await enviarJson(`${negocio.id}`, "PATCH", { amountCents: centavos, probability: prob, commissionBasisPoints: Math.round((com ?? 0) * 100), expectedCloseDate: cierre }));
+    }
+    if (!guardado.ok) return guardado;
+    return onGuardado();
+  }
+
+  function enviar(evento: FormEvent) {
+    evento.preventDefault();
+    setIntentado(true);
+    if (hayErrores || sinProyectos) return;
+    void ejecutar(guardar);
+  }
+
+  const mostrar = (campo: string) => (intentado ? errores[campo] : undefined);
+  const textos: Record<EtapaConRequisito, { titulo: string; que: string; boton: string }> = {
+    contactado: { titulo: "Registrar el contacto", que: "Para pasar a Contactado hace falta registrar al menos una actividad de contacto ya realizada.", boton: "Registrar y mover" },
+    presentacion: { titulo: "Agendar la próxima acción", que: "Para pasar a Presentación hace falta una próxima acción con responsable y fecha.", boton: "Agendar y mover" },
+    preseleccion: { titulo: "Elegir la propiedad de interés", que: "Para pasar a Preselección hace falta al menos una propiedad de interés.", boton: "Agregar y mover" },
+    negociacion: { titulo: "Completar los datos de la negociación", que: "Para pasar a Negociación hacen falta el monto, la probabilidad, la comisión y la fecha estimada de cierre.", boton: "Guardar y mover" },
+  };
+  const t = textos[slug];
+
+  return (
+    <Marco titulo={t.titulo} descripcion={`${negocio.contactName} · se moverá a ${nombreEtapa} al guardar. ${t.que}`} onCancelar={onCancelar} enviando={enviando} estaEnviando={estaEnviando}>
+      {sinProyectos ? (
+        <div className="grid gap-4">
+          <p role="alert" className="m-0 rounded-lg border border-warning/40 bg-warning-bg p-3 text-sm text-warning">
+            Abre el negocio, agrega una propiedad de interés en la pestaña Propiedades y vuelve a moverlo.
+          </p>
+          <DialogFooter>
+            <button type="button" className={BOTON_SECUNDARIO} onClick={onCancelar}>Cancelar</button>
+            <button type="button" className={BOTON_PRIMARIO} onClick={onAbrirNegocio}>Abrir negocio</button>
+          </DialogFooter>
+        </div>
+      ) : (
+        <form onSubmit={enviar} className="grid gap-4" noValidate aria-busy={enviando}>
+          <BloqueError texto={error} />
+          {slug === "contactado" && (
+            <>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Tipo de contacto<Obligatorio /></span>
+                <select value={tipo} onChange={(e) => setTipo(e.target.value as typeof tipo)} className={CAMPO} autoFocus>
+                  {TIPOS_CONTACTO.map((x) => <option key={x.valor} value={x.valor}>{x.etiqueta}</option>)}
+                </select>
+              </label>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Qué se habló<Obligatorio /></span>
+                <input value={asunto} onChange={(e) => setAsunto(e.target.value)} className={CAMPO} placeholder="Ej. Primera llamada: quiere ver unidades de 2 habitaciones"
+                  aria-required="true" aria-invalid={Boolean(mostrar("asunto"))} aria-describedby={mostrar("asunto") ? "req-asunto-error" : undefined} />
+                <ErrorCampo id="req-asunto-error" texto={mostrar("asunto")} />
+              </label>
+            </>
+          )}
+          {slug === "presentacion" && (
+            <>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Próxima acción<Obligatorio /></span>
+                <input value={asunto} onChange={(e) => setAsunto(e.target.value)} className={CAMPO} placeholder="Ej. Presentar el proyecto en la sala de ventas" autoFocus
+                  aria-required="true" aria-invalid={Boolean(mostrar("asunto"))} aria-describedby={mostrar("asunto") ? "req-asunto-error" : undefined} />
+                <ErrorCampo id="req-asunto-error" texto={mostrar("asunto")} />
+              </label>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Fecha y hora<Obligatorio /></span>
+                <input type="datetime-local" value={fecha} onChange={(e) => setFecha(e.target.value)} className={CAMPO}
+                  aria-required="true" aria-invalid={Boolean(mostrar("fecha"))} aria-describedby={mostrar("fecha") ? "req-fecha-error" : undefined} />
+                <ErrorCampo id="req-fecha-error" texto={mostrar("fecha")} />
+              </label>
+              <p className="m-0 text-[13px] text-ink-muted">Responsable: {negocio.brokerName ?? "tú, que estás agendándola"}.</p>
+            </>
+          )}
+          {slug === "preseleccion" && (
+            <>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Proyecto<Obligatorio /></span>
+                <select value={proyectoId} onChange={(e) => { setProyectoId(e.target.value); setUnidadId(""); }} className={CAMPO} autoFocus
+                  aria-required="true" aria-invalid={Boolean(mostrar("proyecto"))} aria-describedby={mostrar("proyecto") ? "req-proyecto-error" : undefined}>
+                  {proyectos.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+                <ErrorCampo id="req-proyecto-error" texto={mostrar("proyecto")} />
+              </label>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Unidad (opcional)</span>
+                <select value={unidadId} onChange={(e) => setUnidadId(e.target.value)} className={CAMPO}>
+                  <option value="">Interés general en el proyecto</option>
+                  {unidades.map((u) => <option key={u.id} value={u.id}>{u.code}</option>)}
+                </select>
+              </label>
+            </>
+          )}
+          {slug === "negociacion" && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Monto comercial ({negocio.currency})<Obligatorio /></span>
+                <input type="number" min="0" step="1" inputMode="numeric" value={monto} onChange={(e) => setMonto(e.target.value)} className={CAMPO} autoFocus
+                  aria-required="true" aria-invalid={Boolean(mostrar("monto"))} aria-describedby={mostrar("monto") ? "req-monto-error" : undefined} />
+                <ErrorCampo id="req-monto-error" texto={mostrar("monto")} />
+              </label>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Probabilidad de cierre (%)<Obligatorio /></span>
+                <input type="number" min="0" max="100" step="1" inputMode="numeric" value={probabilidad} onChange={(e) => setProbabilidad(e.target.value)} className={CAMPO}
+                  aria-required="true" aria-invalid={Boolean(mostrar("probabilidad"))} aria-describedby={mostrar("probabilidad") ? "req-prob-error" : undefined} />
+                <ErrorCampo id="req-prob-error" texto={mostrar("probabilidad")} />
+              </label>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Comisión (%)<Obligatorio /></span>
+                <input type="number" min="0" max="100" step="0.01" inputMode="decimal" value={comision} onChange={(e) => setComision(e.target.value)} className={CAMPO}
+                  aria-required="true" aria-invalid={Boolean(mostrar("comision"))} aria-describedby={mostrar("comision") ? "req-com-error" : undefined} />
+                <ErrorCampo id="req-com-error" texto={mostrar("comision")} />
+              </label>
+              <label className="grid gap-1.5 text-sm font-bold text-ink">
+                <span>Fecha estimada de cierre<Obligatorio /></span>
+                <input type="date" value={cierre} onChange={(e) => setCierre(e.target.value)} className={CAMPO}
+                  aria-required="true" aria-invalid={Boolean(mostrar("cierre"))} aria-describedby={mostrar("cierre") ? "req-cierre-error" : undefined} />
+                <ErrorCampo id="req-cierre-error" texto={mostrar("cierre")} />
+              </label>
+            </div>
+          )}
+          <DialogFooter>
+            <button type="button" className={BOTON_SECUNDARIO} onClick={() => { if (!estaEnviando()) onCancelar(); }} disabled={enviando}>Cancelar</button>
+            <button type="submit" className={BOTON_PRIMARIO} aria-busy={enviando} disabled={enviando}>{enviando ? "Guardando…" : t.boton}</button>
+          </DialogFooter>
+        </form>
+      )}
     </Marco>
   );
 }

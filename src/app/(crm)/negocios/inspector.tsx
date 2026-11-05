@@ -67,9 +67,10 @@ export function DealInspector({
   const [errorEtapa, setErrorEtapa] = useState<string | null>(null);
   const [cotizando, setCotizando] = useState(false);
   const [mostrandoActividad, setMostrandoActividad] = useState(false);
-  const [tipoActividad, setTipoActividad] = useState<"task" | "call" | "visit" | "meeting">("task");
+  const [tipoActividad, setTipoActividad] = useState<"task" | "call" | "whatsapp" | "email" | "meeting">("task");
   const [estadoActividad, setEstadoActividad] = useState<"pending" | "completed">("pending");
   const [tituloActividad, setTituloActividad] = useState("");
+  const [fechaActividad, setFechaActividad] = useState("");
   const [guardandoActividad, setGuardandoActividad] = useState(false);
   const [errorActividad, setErrorActividad] = useState<string | null>(null);
 
@@ -109,6 +110,10 @@ export function DealInspector({
   async function guardarActividadNegocio(e: FormEvent) {
     e.preventDefault();
     if (!tituloActividad.trim() || guardandoActividad) return;
+    if (estadoActividad === "pending" && !fechaActividad) {
+      setErrorActividad("Indica la fecha y hora de la próxima acción.");
+      return;
+    }
     setGuardandoActividad(true);
     setErrorActividad(null);
     try {
@@ -123,6 +128,8 @@ export function DealInspector({
           projectId: propiedadPrincipal?.projectId,
           status: estadoActividad,
           priority: "high",
+          ...(estadoActividad === "pending" ? { startsAt: new Date(fechaActividad).toISOString() } : {}),
+          ...(estadoActividad === "pending" && negocio.brokerId ? { assigneeId: negocio.brokerId } : {}),
         }),
       });
       const cuerpo = await res.json().catch(() => ({}));
@@ -248,7 +255,8 @@ export function DealInspector({
                   <select className={CAMPO} value={tipoActividad} onChange={(e) => setTipoActividad(e.target.value as typeof tipoActividad)}>
                     <option value="task">Próxima tarea</option>
                     <option value="call">Llamada</option>
-                    <option value="visit">Visita a proyecto</option>
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="email">Correo</option>
                     <option value="meeting">Reunión</option>
                   </select>
                 </label>
@@ -270,6 +278,13 @@ export function DealInspector({
                   placeholder="Ej. Enviar propuesta Confotur 20/30/50"
                 />
               </label>
+              {estadoActividad === "pending" && (
+                <label className="grid gap-1 text-[13px] font-bold text-ink">
+                  <span>Fecha y hora de la próxima acción</span>
+                  <input type="datetime-local" required className={CAMPO} value={fechaActividad} onChange={(e) => setFechaActividad(e.target.value)} />
+                  <span className="text-[13px] font-normal text-ink-muted">Sin fecha la acción no cuenta como «próxima acción» y no permite pasar a Presentación.</span>
+                </label>
+              )}
               <button
                 type="submit"
                 disabled={guardandoActividad || !tituloActividad.trim()}

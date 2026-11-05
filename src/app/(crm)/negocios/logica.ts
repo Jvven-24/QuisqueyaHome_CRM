@@ -30,6 +30,13 @@ const REQUISITO_POR_SLUG: Record<string, string> = {
   negociacion: "Pide monto, probabilidad, comisión y fecha de cierre",
 };
 
+/** Etapas intermedias cuyo requisito se resuelve en el diálogo «Completar y mover» (el resto tiene su propio diálogo o ninguno). */
+export const ETAPAS_CON_REQUISITO = ["contactado", "presentacion", "preseleccion", "negociacion"] as const;
+export type EtapaConRequisito = (typeof ETAPAS_CON_REQUISITO)[number];
+export function esEtapaConRequisito(slug: string | undefined | null): slug is EtapaConRequisito {
+  return (ETAPAS_CON_REQUISITO as readonly string[]).includes(slug ?? "");
+}
+
 export function requisitoDeEtapa(etapa: Pick<Etapa, "slug" | "kind">): string | null {
   if (etapa.kind === "won") return "Pide unidad y monto";
   if (etapa.kind === "lost") return "Pide motivo y comentario";
