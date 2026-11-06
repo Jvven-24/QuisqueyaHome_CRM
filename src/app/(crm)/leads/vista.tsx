@@ -728,7 +728,7 @@ function FormularioLead({ canales, proyectos, onClose }: { canales: Canal[]; pro
             Proyecto de interés
             <select name="projectId" defaultValue="" className="min-h-12 w-full rounded-lg border border-input-line px-3.5 text-[13.5px]">
               <option value="">Sin especificar</option>
-              {proyectos.map(proyecto => <option key={proyecto.id} value={proyecto.id}>{proyecto.name}</option>)}
+              {proyectos.map(proyecto => <option key={proyecto.id} value={proyecto.id}>{proyecto.name}{/<\/?[a-z][^>]*>/i.test(proyecto.name) ? " · revisar dato" : ""}</option>)}
             </select>
             {proyectos.length === 0 && <small>No hay proyectos disponibles para tu usuario.</small>}
           </label>

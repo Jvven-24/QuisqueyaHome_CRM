@@ -248,6 +248,7 @@ export function PropiedadesVista({
                     <h2 className="text-base sm:text-xl font-bold tracking-tight text-white group-hover:text-gold-300 transition-colors break-words">
                       {proyecto.name}
                     </h2>
+                    {/<\/?[a-z][^>]*>/i.test(proyecto.name) && <span className="mt-1 inline-flex min-h-7 items-center rounded border border-amber-300 bg-amber-50 px-2 text-[13px] font-semibold text-amber-950">Dato de nombre por revisar</span>}
                     <div className="flex items-center gap-1 text-[13px] text-slate-300 mt-1">
                       <MapPin className="size-3.5 text-gold-400 shrink-0" />
                       <span>{proyecto.zone ?? "Ubicación sin especificar"}</span>

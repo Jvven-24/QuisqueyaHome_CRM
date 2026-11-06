@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft,  } from "lucide-react";
 import { PreviewWorkspace } from "../propiedades/_componentes/preview-workspace";
@@ -12,7 +12,19 @@ import {
 import { PageHeader } from "../_ui/prototipo-ui";
 
 export function AftersalesWorkspace() {
-  const [section, setSection] = useState<AftersalesSection>("casos");
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedSection = searchParams.get("tab");
+  const section: AftersalesSection = AFTERSALES_SECTIONS.some((item) => item.id === requestedSection)
+    ? requestedSection as AftersalesSection
+    : "casos";
+
+  function selectSection(next: AftersalesSection) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", next);
+    router.push(`${pathname}?${params.toString()}`);
+  }
 
   return (
     <div className="space-y-6 min-w-0">
@@ -48,7 +60,7 @@ export function AftersalesWorkspace() {
                   : "text-muted-foreground hover:text-ink hover:bg-surface/60"
               }`}
               aria-pressed={isSelected}
-              onClick={() => setSection(item.id)}
+              onClick={() => selectSection(item.id)}
             >
               <span>{item.label}</span>
             </button>
