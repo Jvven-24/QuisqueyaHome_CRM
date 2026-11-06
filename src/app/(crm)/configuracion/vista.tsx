@@ -2,7 +2,7 @@
 
 import { PermisosPersonales } from "./permisos-personales";
 import type { PermissionAdminData } from "@/application/permisos/administracion";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import type { PresenciaIntegraciones } from "@/application/configuracion/integraciones-catalogo";
 import { ConfiguracionAvanzada, type EventoAuditoria } from "./avanzada";
 import { SimuladorPermisos } from "./simulador-permisos";
@@ -107,12 +107,19 @@ export function ConfiguracionVista(props: {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const [destino, setDestino] = useState<Tab | null>(null);
+  const [navegando, iniciarNavegacion] = useTransition();
+
   function irATab(nuevoTab: Tab) {
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", nuevoTab);
     if (nuevoTab !== "permisos") params.delete("rol");
-    router.push(`${pathname}?${params.toString()}`);
+    setDestino(nuevoTab);
+    // La sección pide sus datos al servidor: mientras llegan, la barra ya marca la elegida.
+    iniciarNavegacion(() => router.push(`${pathname}?${params.toString()}`, { scroll: false }));
   }
+
+  const tabMarcada: Tab = navegando && destino ? destino : tab;
 
   const esPestanaConexiones = tab === "conexiones" || tab === "integraciones";
 
@@ -165,11 +172,12 @@ export function ConfiguracionVista(props: {
             (item.titulo + " " + item.subtitulo).toLocaleLowerCase("es").includes(busqueda.toLocaleLowerCase("es")),
           ).map((item) => {
             const Icono = item.icono;
-            const esActivo = tab === item.id || (item.id === "conexiones" && tab === "integraciones");
+            const esActivo = tabMarcada === item.id || (item.id === "conexiones" && tabMarcada === "integraciones");
             return (
               <button
                 key={item.id}
                 type="button"
+                aria-current={esActivo ? "page" : undefined}
                 onClick={() => irATab(item.id)}
                 style={{
                   display: "flex",
@@ -254,7 +262,10 @@ export function ConfiguracionVista(props: {
         {/* Panel de Contenido Principal */}
         <section
           className="panel settings-content"
+          aria-busy={navegando}
           style={{
+            opacity: navegando ? 0.6 : 1,
+            transition: "opacity 140ms ease",
             background: "var(--surface)",
             border: "1px solid var(--line)",
             borderRadius: "14px",
@@ -266,6 +277,7 @@ export function ConfiguracionVista(props: {
             minHeight: "560px",
           }}
         >
+          {navegando && <p role="status">Cargando sección…</p>}
           {["centro", "seo", "capacidad", "auditoria"].includes(tab) && (
             <ConfiguracionAvanzada tab={tab} puedeEditar={puedeEditar} auditoria={props.auditoria} puedeExportar={props.puedeExportarAuditoria} />
           )}

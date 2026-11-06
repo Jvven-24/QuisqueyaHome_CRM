@@ -14,6 +14,7 @@ import { generarCsv } from "@/domain/csv";
 import { fechaHoraLegible } from "@/domain/zona-horaria";
 import type { ReportesBiData } from "@/application/reportes/puertos";
 import { ChartCard } from "@/components/ui/chart-card";
+import { mostrarToast } from "@/components/ui/toast";
 import { PageHeader } from "@/components/modulo";
 import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -193,15 +194,22 @@ export function ReportesVista({
       link.click();
       link.remove();
       setExportMessage(common.exportDone);
+      mostrarToast("success", `${common.exportDone} (${metricas.funnel.length} etapas del embudo)`);
     } catch {
       setExportMessage(common.exportError);
+      mostrarToast("error", common.exportError);
     } finally {
       if (url) URL.revokeObjectURL(url);
     }
   };
 
   const imprimirInforme = () => {
-    window.print();
+    try {
+      mostrarToast("info", "Abriendo la vista de impresión. Elige «Guardar como PDF» como destino para obtener el archivo.");
+      window.print();
+    } catch {
+      mostrarToast("error", "Este navegador no permite imprimir desde la página. Usa Ctrl+P / ⌘P.");
+    }
   };
 
   const fechaFormateada = fechaHoraLegible(new Date(metricas.asOf));

@@ -42,6 +42,8 @@ export function CatalogosPanel({
   );
 }
 
+const normalizar = (nombre: string) => nombre.trim().toLocaleLowerCase("es");
+
 function ListaCatalogo({
   tipo,
   titulo,
@@ -62,6 +64,8 @@ function ListaCatalogo({
   const [editando, setEditando] = useState<number | null>(null);
   const [creando, setCreando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const conteoNombres = new Map<string, number>();
+  for (const fila of filas) conteoNombres.set(normalizar(fila.name), (conteoNombres.get(normalizar(fila.name)) ?? 0) + 1);
 
   async function guardar(form: HTMLFormElement, id?: number) {
     await enviarUnico(async () => {
@@ -271,6 +275,7 @@ function ListaCatalogo({
                 </span>
                 <strong style={{ minWidth: 0, overflowWrap: "anywhere", color: "var(--navy-950)" }}>{fila.name}</strong>
                 {!fila.isActive && <Badge tone="neutral">Inactivo</Badge>}
+                {(conteoNombres.get(normalizar(fila.name)) ?? 0) > 1 && <Badge tone="gold">Nombre repetido</Badge>}
               </div>
               {puedeEditar && (
                 <button

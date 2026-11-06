@@ -17,7 +17,8 @@ export function RelacionesVista({ id, name, phone, email, historial }: {
     <h2>Identidad real</h2>
     <p>{name} · {phone ?? "Sin teléfono"} · {email ?? "Sin correo"}</p>
     <div className={s.toolbar}>
-    <Link className={s.button} href={"/contactos/" + id}>Editar ficha</Link>
+    <Link className={s.button} href={"/contactos/" + id}>Volver a la ficha de {name}</Link>
+    <Link className={s.button} href="/contactos">Lista de contactos</Link>
     <Link className={s.button} href={"/contactos/" + id + "/privacidad"}>Privacidad y preferencias</Link>
     </div>
     </section>

@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState, useTransition } from "react";
 import { prepararReparto } from "@/application/comisiones/reparto";
 import { ValidationError } from "@/domain/errors";
 import type { CommissionStatus } from "@/domain/catalogs";
@@ -141,14 +141,19 @@ export function ComisionesVista({
   const esAdmin = scope === "all";
 
 
+  const [filtrando, iniciarFiltrado] = useTransition();
+  const [periodoElegido, setPeriodoElegido] = useState<string | null>(null);
+
   function irCon(cambios: Record<string, string | undefined>) {
-    if (!navigator.onLine) return;
+    if (!navigator.onLine) { mostrarToast("error", "Sin conexión. Reconecta antes de cambiar el filtro."); return; }
     const params = new URLSearchParams(searchParams.toString());
     for (const [clave, valor] of Object.entries(cambios)) {
       if (valor) params.set(clave, valor);
       else params.delete(clave);
     }
-    router.push(`${pathname}?${params.toString()}`);
+    if (cambios.periodo) setPeriodoElegido(cambios.periodo);
+    // El selector muestra lo elegido de inmediato; la tabla cambia cuando llega la consulta.
+    iniciarFiltrado(() => router.push(`${pathname}?${params.toString()}`));
   }
 
   const aplicar = useCallback(
@@ -464,7 +469,7 @@ export function ComisionesVista({
           <div className="w-full sm:w-56">
             <Combobox
               options={opcionesPeriodoCombobox}
-              value={periodoSeleccionado}
+              value={filtrando && periodoElegido ? periodoElegido : periodoSeleccionado}
               onChange={(val) => irCon({ periodo: val || "todos" })}
               aria-label="Periodo" placeholder="Todos los periodos"
               searchPlaceholder="Buscar periodo..."
@@ -476,7 +481,7 @@ export function ComisionesVista({
 
       {/* Tabla Interactiva de Comisiones */}
       <Panel className="overflow-hidden p-0">
-      <div id="comisiones-panel" role="tabpanel" aria-labelledby={`comisiones-panel-tab-${estadoSeleccionado}`} tabIndex={0} className="overflow-hidden focus-visible:outline-2 focus-visible:outline-gold-700">
+      <div id="comisiones-panel" aria-busy={filtrando} role="tabpanel" aria-labelledby={`comisiones-panel-tab-${estadoSeleccionado}`} tabIndex={0} className="overflow-hidden focus-visible:outline-2 focus-visible:outline-gold-700">
         <DataTable
           filas={filasFiltradas}
           columnas={columnasTabla}
