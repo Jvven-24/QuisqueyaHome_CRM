@@ -78,13 +78,15 @@ function campana(peticion: typeof fetch) {
     "next/navigation": { usePathname: () => "/leads" },
     "@/components/ui/sidebar": {}, "@/components/ui/dropdown-menu": {}, "@/components/ui/popover": {},
     "../modulos": { MODULOS: [], WORKSPACES: [] }, "./command-palette": {},
+    "sonner": { toast: { info() {} } },
   });
   const render = () => env.render(modulo.CrmHeader as Componente, { etiquetaRol: "Administrador" });
   render();
   return { ...env, render };
 }
-const notificaciones = [1, 2].map((id) => ({ id, title: `Aviso ${id}`, body: null, notificationType: "lead", isRead: false, createdAt: "2026-10-18T12:00:00Z" }));
+const notificaciones = [1, 2].map((id) => ({ id, title: `Aviso ${id}`, body: null, notificationType: "lead", entityType: null, entityId: null, isRead: false, createdAt: "2026-10-18T12:00:00Z" }));
 const cargaCorrecta = () => Response.json({ ok: true, notificaciones, unreadCount: 2 });
+const accionesSinLeer = (arbol: Nodo) => nodos(arbol).filter((n) => n.type === "button" && /^Marcar como leída:/.test(String(n.props["aria-label"])));
 
 for (const fallo of ["red", "http", "contrato", "json"] as const) {
   test(`R3 G1-03: GET ${fallo} muestra error y permite reintentar hasta un vacío confirmado`, async () => {
@@ -98,11 +100,11 @@ for (const fallo of ["red", "http", "contrato", "json"] as const) {
     await vista.efectos();
     const error = vista.render();
     assert.match(texto(error), /No se pudieron cargar/);
-    assert.doesNotMatch(texto(error), /No tienes notificaciones/);
+    assert.doesNotMatch(texto(error), /Tu bandeja está vacía/);
     assert.ok(nodos(error).some((n) => n.props.role === "alert"));
     (boton(error, "Reintentar").props.onClick as () => void)();
     vista.render(); await vista.efectos();
-    assert.match(texto(vista.render()), /No tienes notificaciones pendientes/);
+    assert.match(texto(vista.render()), /Tu bandeja está vacía/);
     assert.equal(solicitudes, 2);
   });
 }
@@ -116,11 +118,11 @@ for (const individual of [false, true]) {
       });
       await vista.efectos();
       const antes = vista.render();
-      const accion = individual ? nodos(antes).find((n) => n.type === "div" && typeof n.props.onClick === "function")! : boton(antes, "Marcar leídas");
+      const accion = individual ? accionesSinLeer(antes)[0]! : boton(antes, "Marcar leídas");
       await (accion.props.onClick as () => Promise<void>)();
       const despues = vista.render();
       assert.match(texto(despues), /Se conserva el estado anterior/);
-      assert.equal(nodos(despues).filter((n) => n.type === "div" && String(n.props.className).includes("bg-gold-50/20")).length, 2);
+      assert.equal(accionesSinLeer(despues).length, 2);
       assert.ok(nodos(despues).some((n) => n.type === "span" && n.props.children === 2));
     });
   }
@@ -133,17 +135,52 @@ for (const individual of [false, true]) {
     });
     await vista.efectos();
     const arbol = vista.render();
-    const accion = individual ? nodos(arbol).find((n) => n.type === "div" && typeof n.props.onClick === "function")! : boton(arbol, "Marcar leídas");
+    const accion = individual ? accionesSinLeer(arbol)[0]! : boton(arbol, "Marcar leídas");
     const clic = accion.props.onClick as () => Promise<void>;
     const pendiente = clic(); await clic();
     assert.equal(envios, 1);
-    assert.equal(nodos(vista.render()).filter((n) => n.type === "div" && String(n.props.className).includes("bg-gold-50/20")).length, 2);
+    assert.equal(accionesSinLeer(vista.render()).length, 2);
     resolver(Response.json({ ok: true })); await pendiente;
     const final = vista.render();
-    assert.equal(nodos(final).filter((n) => n.type === "div" && String(n.props.className).includes("bg-gold-50/20")).length, individual ? 1 : 0);
+    assert.equal(accionesSinLeer(final).length, individual ? 1 : 0);
     assert.doesNotMatch(texto(final), /No se pudieron marcar/);
   });
 }
+
+test("UX2 notificaciones: un aviso JSON malformado se rechaza y permite recuperar sin pantalla vacía engañosa", async () => {
+  let solicitudes = 0;
+  const vista = campana(async () => ++solicitudes === 1
+    ? Response.json({ ok: true, notificaciones: [{ id: 1, title: "Sin tipo ni estado" }], unreadCount: 1 })
+    : cargaCorrecta());
+  await vista.efectos();
+  const error = vista.render();
+  assert.match(texto(error), /No se pudieron cargar/);
+  assert.doesNotMatch(texto(error), /Tu bandeja está vacía/);
+  (boton(error, "Reintentar").props.onClick as () => void)();
+  vista.render(); await vista.efectos();
+  assert.equal(accionesSinLeer(vista.render()).length, 2);
+  assert.equal(solicitudes, 2);
+});
+
+test("UX2 notificaciones: un GET antiguo fallido no reemplaza el marcado confirmado con error obsoleto", async () => {
+  let solicitudes = 0;
+  let rechazar!: (error: Error) => void;
+  const vista = campana(async (_url, opciones) => {
+    if (opciones?.method === "PATCH") return Response.json({ ok: true });
+    if (++solicitudes === 1) return cargaCorrecta();
+    return new Promise<Response>((_resolve, reject) => { rechazar = reject; });
+  });
+  await vista.efectos();
+  const actualizar = nodos(vista.render()).find((n) => n.type === "button" && n.props["aria-label"] === "Actualizar notificaciones")!;
+  (actualizar.props.onClick as () => void)();
+  vista.render(); await vista.efectos();
+  await (boton(vista.render(), "Marcar leídas").props.onClick as () => Promise<void>)();
+  rechazar(new Error("Respuesta antigua fuera de orden")); await turno(); await turno();
+  const final = vista.render();
+  assert.equal(accionesSinLeer(final).length, 0);
+  assert.doesNotMatch(texto(final), /No se pudieron cargar|No se pudieron marcar/);
+  assert.equal(solicitudes, 2);
+});
 
 for (const editar of [false, true]) {
   test(`R3 G4-01: ${editar ? "edición" : "alta"} confirma con nombre solo tras guardar y sin insertar banner`, async () => {

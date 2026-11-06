@@ -5,6 +5,7 @@ const require=createRequire('C:/Users/wilbe/package.json');
 const {chromium}=require('playwright');
 const base=process.argv[2]||'http://127.0.0.1:3000';
 const phase=process.argv[3]||'baseline';
+const widths=(process.argv[5]||'390,320,1440').split(',').map(Number);
 if(!/^http:\/\/127\.0\.0\.1:\d+$/.test(base))throw Error('local only');
 const output=path.resolve('output/playwright/premium-'+phase);
 await fs.mkdir(output,{recursive:true});
@@ -28,7 +29,7 @@ try{
  }else console.log('LOCAL_EVALUATION_SESSION_PRESENT');
  for(const route of routes){
   current=route;
-  for(const width of [390,320,1440]){
+  for(const width of widths){
    await page.setViewportSize({width,height:width<768?844:900});
    try{
     const started=Date.now();

@@ -2,15 +2,14 @@
 
 import { TableroTareas, type TableroTareaItem } from "./_componentes/tablero";
 import { toast } from "sonner";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useMemo, useRef, useState } from "react";
 import {
   AlertCircle,
-  AlertTriangle,
   ArrowRightLeft,
   Building2,
-  Calendar,
   Check,
   CheckCircle2,
   CheckSquare,
@@ -18,7 +17,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  ClipboardList,
   Flame,
   FolderKanban,
   Layers,
@@ -28,7 +26,6 @@ import {
   Plus,
   RotateCcw,
   Search,
-  ShieldCheck,
   Sparkles,
   Square,
   Trash2,
@@ -531,7 +528,7 @@ export function TareasVista({
     return c;
   }, [tareasPendientes, tareasCompletadas]);
 
-  // Resumen detallado por Broker (Matriz REA de Agentes + cruce con cargaEquipo de BD)
+  // Resumen detallado por Broker (Matriz  de Agentes + cruce con cargaEquipo de BD)
   const resumenPorBroker = useMemo(() => {
     const mapaCargaGlobal = new Map<number | null, number>(
       cargaEquipo.map((fila) => [fila.assigneeId, fila.total]),
@@ -841,477 +838,94 @@ export function TareasVista({
   }, [tareasFiltradas, tareasCompletadas, hoy]);
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-4">
       <PageHeader
-        eyebrow="Centro de Ejecución Comercial · Modelo REA (Resources · Events · Agents)"
-        title="Tareas por broker"
-        subtitle="Asigna tareas individuales o planes de acción inmobiliarios (KYC Ley 155-17, Reserva 48h, Promesa 10/40/50, Confotur, Tours VIP y Snag List) a cada broker, con sub-checklists interactivos y trazabilidad."
+        title="Tareas"
+        subtitle="Organiza pendientes, responsables y próximos pasos de la operación comercial."
         action={
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Conmutador de las 4 Vistas Operativas */}
-            <div
-              className="col-span-2 flex max-w-full overflow-x-auto rounded-xl border border-[#cbd5e1] bg-[#f8fafc] p-1 no-scrollbar sm:inline-flex sm:flex-wrap"
-              role="tablist"
-              aria-label="Modo de visualización de tareas"
-            >
-              <button
-                type="button"
-                role="tab"
-                aria-selected={modoVista === "lista"}
-                onClick={() => setModoVista("lista")}
-                className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
-                  modoVista === "lista"
-                    ? "bg-[#0f172a] text-white shadow-xs"
-                    : "text-[#475569] hover:text-[#0f172a]"
-                }`}
-              >
-                <ListChecks className="size-4" aria-hidden="true" />
-                <span>Lista To-Do</span>
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={modoVista === "brokers"}
-                onClick={() => setModoVista("brokers")}
-                className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
-                  modoVista === "brokers"
-                    ? "bg-[#0f172a] text-white shadow-xs"
-                    : "text-[#475569] hover:text-[#0f172a]"
-                }`}
-              >
-                <Users className="size-4" aria-hidden="true" />
-                <span>Por Broker ({personas.length})</span>
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={modoVista === "tablero"}
-                onClick={() => setModoVista("tablero")}
-                className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
-                  modoVista === "tablero"
-                    ? "bg-[#0f172a] text-white shadow-xs"
-                    : "text-[#475569] hover:text-[#0f172a]"
-                }`}
-              >
-                <Layers className="size-4" aria-hidden="true" />
-                <span>Tablero Kanban</span>
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={modoVista === "playbooks"}
-                onClick={() => setModoVista("playbooks")}
-                className={`inline-flex min-h-[44px] shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3.5 text-[13px] font-semibold transition-colors ${
-                  modoVista === "playbooks"
-                    ? "bg-[#0f172a] text-white shadow-xs"
-                    : "text-[#475569] hover:text-[#0f172a]"
-                }`}
-              >
-                <Sparkles className="size-4 text-[#d97706]" aria-hidden="true" />
-                <span>Playbooks REA ({PLAYBOOKS_INMOBILIARIOS.length})</span>
-              </button>
-            </div>
-
-            <button
-              type="button"
-              onClick={() =>
-                setModalPackBroker({
-                  abierto: true,
-                  brokerId: typeof filtroBroker === "number" ? filtroBroker : actorId ?? personas[0]?.id ?? null,
-                  playbookId: PLAYBOOKS_INMOBILIARIOS[0]!.id,
-                })
-              }
-              className="inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-[#fde68a] bg-[#fffbeb] px-4 py-2 text-[13px] font-bold text-[#92400e] shadow-2xs transition-colors hover:bg-[#fef3c7]"
-            >
-              <Sparkles className="size-4 shrink-0 text-[#d97706]" aria-hidden="true" />
-              <span>Asignar pack</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <button type="button" onClick={() => setModalPackBroker({ abierto: true, brokerId: typeof filtroBroker === "number" ? filtroBroker : actorId ?? personas[0]?.id ?? null, playbookId: PLAYBOOKS_INMOBILIARIOS[0]!.id })} className="button secondary min-h-12 gap-2">
+              <Sparkles className="size-4 shrink-0" aria-hidden="true" /><span>Asignar plan</span>
             </button>
-
-            <button
-              type="button"
-              onClick={() =>
-                abrirNuevaTareaParaBroker(typeof filtroBroker === "number" ? filtroBroker : null, null)
-              }
-              className="btn btn-primary min-h-[44px] gap-2 px-4 text-[14px]"
-            >
-              <Plus className="size-4" aria-hidden="true" />
-              <span>Nueva tarea</span>
+            <button type="button" onClick={() => abrirNuevaTareaParaBroker(typeof filtroBroker === "number" ? filtroBroker : null, null)} className="button primary min-h-12 gap-2">
+              <Plus className="size-4 shrink-0" aria-hidden="true" /><span>Nueva tarea</span>
             </button>
           </div>
         }
       />
 
-      {/* Semáforo Ejecutivo de Urgencia + Métricas REA */}
-      <div
-        className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-5"
-        role="region"
-        aria-label="Semáforo de urgencia y métricas de ejecución"
-      >
-        <button
-          type="button"
-          onClick={() => {
-            setFiltroEstado("pending");
-            cambiarFiltroUrgencia("todas");
-          }}
-          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
-            filtroEstado === "pending" && filtroUrgencia === "todas"
-              ? "border-[#0f172a] bg-[#0f172a] text-white shadow-sm"
-              : "border-[#e2e8f0] bg-white text-[#0f172a] hover:border-[#cbd5e1]"
-          }`}
-        >
-          <div>
-            <div
-              className={`text-[13px] font-semibold tracking-wider uppercase ${
-                filtroEstado === "pending" && filtroUrgencia === "todas" ? "text-[#cbd5e1]" : "text-[#64748b]"
-              }`}
-            >
-              Cola To-Do Activa
-            </div>
-            <div className="mt-1 text-2xl font-bold tabular-nums">{conteos.totalPendientes}</div>
-            <div
-              className={`mt-0.5 text-[13px] ${
-                filtroEstado === "pending" && filtroUrgencia === "todas" ? "text-[#94a3b8]" : "text-[#64748b]"
-              }`}
-            >
-              {conteos.altaPrioridad} de alta prioridad
-            </div>
-          </div>
-          <ClipboardList
-            className={`size-6 ${
-              filtroEstado === "pending" && filtroUrgencia === "todas" ? "text-[#e2e8f0]" : "text-[#64748b]"
-            }`}
-            aria-hidden="true"
-          />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setFiltroEstado("pending");
-            cambiarFiltroUrgencia(filtroUrgencia === "vencidas" ? "todas" : "vencidas");
-          }}
-          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
-            filtroUrgencia === "vencidas"
-              ? "border-[#dc2626] bg-[#fef2f2] text-[#991b1b] shadow-sm ring-1 ring-[#dc2626]"
-              : "border-[#fecaca] bg-white text-[#0f172a] hover:bg-[#fef2f2]/40"
-          }`}
-        >
-          <div>
-            <div className="text-[13px] font-semibold tracking-wider text-[#b91c1c] uppercase">
-              Vencidas (SLA)
-            </div>
-            <div className="mt-1 text-2xl font-bold tabular-nums text-[#dc2626]">{conteos.vencidas}</div>
-            <div className="mt-0.5 text-[13px] text-[#991b1b]">Atención inmediata</div>
-          </div>
-          <AlertTriangle className="size-6 text-[#dc2626]" aria-hidden="true" />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setFiltroEstado("pending");
-            cambiarFiltroUrgencia(filtroUrgencia === "hoy" ? "todas" : "hoy");
-          }}
-          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
-            filtroUrgencia === "hoy"
-              ? "border-[#d97706] bg-[#fffbeb] text-[#92400e] shadow-sm ring-1 ring-[#d97706]"
-              : "border-[#fde68a] bg-white text-[#0f172a] hover:bg-[#fffbeb]/40"
-          }`}
-        >
-          <div>
-            <div className="text-[13px] font-semibold tracking-wider text-[#b45309] uppercase">
-              Para Hoy
-            </div>
-            <div className="mt-1 text-2xl font-bold tabular-nums text-[#d97706]">{conteos.hoy}</div>
-            <div className="mt-0.5 text-[13px] text-[#92400e]">Cierres del día</div>
-          </div>
-          <Flame className="size-6 text-[#d97706]" aria-hidden="true" />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setFiltroEstado("pending");
-            cambiarFiltroUrgencia(filtroUrgencia === "proximas" ? "todas" : "proximas");
-          }}
-          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
-            filtroUrgencia === "proximas"
-              ? "border-[#059669] bg-[#ecfdf5] text-[#065f46] shadow-sm ring-1 ring-[#059669]"
-              : "border-[#a7f3d0] bg-white text-[#0f172a] hover:bg-[#ecfdf5]/40"
-          }`}
-        >
-          <div>
-            <div className="text-[13px] font-semibold tracking-wider text-[#047857] uppercase">
-              Próximas
-            </div>
-            <div className="mt-1 text-2xl font-bold tabular-nums text-[#059669]">{conteos.proximas}</div>
-            <div className="mt-0.5 text-[13px] text-[#065f46]">Planificadas</div>
-          </div>
-          <Calendar className="size-6 text-[#059669]" aria-hidden="true" />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setFiltroEstado(filtroEstado === "completed" ? "pending" : "completed");
-            setFiltroUrgencia("todas");
-            setPagina(1);
-          }}
-          className={`flex min-h-[72px] items-center justify-between rounded-xl border p-3 sm:min-h-[84px] sm:p-4 text-left transition-all ${
-            filtroEstado === "completed"
-              ? "border-[#2563eb] bg-[#eff6ff] text-[#1e40af] shadow-sm ring-1 ring-[#2563eb]"
-              : "border-[#bfdbfe] bg-white text-[#0f172a] hover:bg-[#eff6ff]/40"
-          }`}
-        >
-          <div>
-            <div className="text-[13px] font-semibold tracking-wider text-[#1d4ed8] uppercase">
-              Completadas
-            </div>
-            <div className="mt-1 text-2xl font-bold tabular-nums text-[#2563eb]">
-              {conteos.totalCompletadas}
-            </div>
-            <div className="mt-0.5 text-[13px] text-[#1e40af]">Con evidencia REA</div>
-          </div>
-          <ShieldCheck className="size-6 text-[#2563eb]" aria-hidden="true" />
-        </button>
+      <div role="group" aria-label="Vista de tareas" className="grid grid-cols-4 gap-1 rounded-xl border border-line bg-surface-alt p-1">
+        {([{ id: "lista", label: "Lista", icon: ListChecks }, { id: "tablero", label: "Tablero", icon: Layers }, { id: "brokers", label: "Equipo", icon: Users }, { id: "playbooks", label: "Plantillas", icon: Sparkles }] as const).map(view => {
+          const Icon = view.icon;
+          return <button key={view.id} type="button" aria-pressed={modoVista === view.id} onClick={() => setModoVista(view.id)} className={"inline-flex min-h-12 min-w-0 items-center justify-center gap-2 rounded-lg px-1 text-[13px] font-semibold transition-colors sm:px-3 " + (modoVista === view.id ? "bg-navy-950 text-white" : "text-ink-muted hover:bg-surface hover:text-ink")}><Icon className="hidden size-4 shrink-0 sm:block" aria-hidden="true" />{view.label}</button>;
+        })}
       </div>
 
-      {/* Cinta de Asignación Rápida y Balance de Carga por Broker */}
-      {muestraCargaEquipo && personas.length > 0 && (
-        <section
-          className="rounded-xl border border-[#e2e8f0] bg-white p-4 shadow-2xs"
-          aria-label="Asignación y filtro por Broker"
-        >
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Users className="size-4 text-[#0f172a]" aria-hidden="true" />
-              <h2 className="text-[14px] font-bold text-[#0f172a]">
-                Bandejas por Broker · Filtra o asigna tareas directamente a un asesor
-              </h2>
-            </div>
-            <div className="flex items-center gap-2">
-              {filtroBroker !== "todos" && (
-                <button
-                  type="button"
-                  onClick={() => cambiarFiltroBroker("todos")}
-                  className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-[#cbd5e1] bg-[#f8fafc] px-3 text-[13px] font-semibold text-[#334155] hover:bg-[#f1f5f9]"
-                >
-                  <RotateCcw className="size-3.5" aria-hidden="true" />
-                  <span>Ver todos los brokers</span>
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setModoVista(modoVista === "brokers" ? "lista" : "brokers")}
-                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-[#cbd5e1] bg-white px-3 text-[13px] font-semibold text-[#0f172a] hover:bg-[#f8fafc]"
-              >
-                <UserCheck className="size-4 text-[#059669]" aria-hidden="true" />
-                <span>{modoVista === "brokers" ? "Volver a Lista To-Do" : "Abrir Matriz Completa por Broker"}</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => cambiarFiltroBroker("todos")}
-              className={`inline-flex min-h-[44px] items-center gap-2 rounded-lg border px-3.5 py-2 text-[13px] font-semibold transition-all ${
-                filtroBroker === "todos"
-                  ? "border-[#0f172a] bg-[#0f172a] text-white shadow-xs"
-                  : "border-[#e2e8f0] bg-[#f8fafc] text-[#334155] hover:border-[#cbd5e1]"
-              }`}
-            >
-              <span>Equipo Completo</span>
-              <span className="rounded-full bg-white/20 px-2 py-0.5 text-[13px] font-bold tabular-nums">
-                {conteos.totalPendientes}
-              </span>
-            </button>
-
-            {resumenPorBroker.map((b) => {
-              const clave = b.brokerId ?? "sin_asignar";
-              const activo = filtroBroker === clave;
-              const sobrecargado = b.pendientes.length >= 8 || b.vencidas >= 3;
-              return (
-                <div
-                  key={String(clave)}
-                  className={`inline-flex min-h-[44px] items-center rounded-lg border transition-all ${
-                    activo
-                      ? "border-[#0f172a] bg-[#0f172a] text-white shadow-xs"
-                      : sobrecargado
-                        ? "border-[#fecaca] bg-[#fef2f2]/60 text-[#0f172a]"
-                        : "border-[#e2e8f0] bg-white text-[#0f172a] hover:border-[#cbd5e1]"
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => cambiarFiltroBroker(activo ? "todos" : clave)}
-                    className="inline-flex min-h-[44px] items-center gap-2 px-3 py-1.5 text-left text-[13px] font-semibold"
-                  >
-                    <Avatar name={b.brokerName} small />
-                    <span>{b.brokerName}</span>
-                    <span
-                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[13px] font-bold tabular-nums ${
-                        activo
-                          ? "bg-white text-[#0f172a]"
-                          : b.vencidas > 0
-                            ? "bg-[#fef2f2] text-[#b91c1c]"
-                            : "bg-[#f1f5f9] text-[#334155]"
-                      }`}
-                    >
-                      {b.pendientes.length}
-                      {b.vencidas > 0 ? ` (${b.vencidas} venc.)` : ""}
-                    </span>
-                  </button>
-                  {b.brokerId !== null && (
-                    <button
-                      type="button"
-                      onClick={() => abrirNuevaTareaParaBroker(b.brokerId, null)}
-                      title={`Asignar nueva tarea a ${b.brokerName}`}
-                      aria-label={`Asignar nueva tarea a ${b.brokerName}`}
-                      className={`inline-flex min-h-[44px] min-w-[40px] items-center justify-center border-l px-2.5 transition-colors ${
-                        activo
-                          ? "border-white/20 text-white hover:bg-white/10"
-                          : "border-[#e2e8f0] text-[#059669] hover:bg-[#ecfdf5]"
-                      }`}
-                    >
-                      <Plus className="size-4" aria-hidden="true" />
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* Barra de Herramientas y Filtros REA (Recurso / Prioridad / Estado / Búsqueda) */}
-      <div className="flex flex-col gap-3 rounded-xl border border-[#e2e8f0] bg-white p-4 shadow-2xs lg:flex-row lg:items-center lg:justify-between">
-        <div className="relative flex-1">
-          <Search
-            className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-[#64748b]"
-            aria-hidden="true"
-          />
-          <input
-            type="search"
-            value={busqueda}
-            onChange={(e) => {
-              setBusqueda(e.target.value);
-              setPagina(1);
-            }}
-            placeholder="Buscar por tarea, broker, proyecto, negocio, cliente o ubicación..."
-            aria-label="Buscar tareas"
-            className="min-h-[44px] w-full rounded-lg border border-[#cbd5e1] bg-[#f8fafc] pr-9 pl-10 text-[14px] text-[#0f172a] placeholder-[#64748b] transition-colors focus:border-[#0f172a] focus:bg-white focus:outline-none"
-          />
-          {busqueda && (
-            <button
-              type="button"
-              onClick={() => {
-                setBusqueda("");
-                setPagina(1);
-              }}
-              aria-label="Limpiar búsqueda"
-              className="absolute top-1/2 right-1.5 flex size-9 -translate-y-1/2 items-center justify-center rounded-md text-[#64748b] hover:bg-[#e2e8f0] hover:text-[#0f172a]"
-            >
-              <X className="size-4" aria-hidden="true" />
-            </button>
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Selector de Proyecto REA */}
-          {proyectos.length > 0 && (
-            <select
-              value={filtroProyecto === "todos" ? "todos" : String(filtroProyecto)}
-              onChange={(e) => {
-                setFiltroProyecto(e.target.value === "todos" ? "todos" : Number(e.target.value));
-                setPagina(1);
-              }}
-              aria-label="Filtrar por Proyecto Inmobiliario"
-              className="min-h-[44px] rounded-lg border border-[#cbd5e1] bg-white px-3 text-[13px] font-semibold text-[#0f172a] focus:border-[#0f172a] focus:outline-none"
-            >
-              <option value="todos">Todos los Proyectos ({proyectos.length})</option>
-              {proyectos.map((p) => (
-                <option key={p.id} value={String(p.id)}>
-                  {p.name} {p.zone ? `· ${p.zone}` : ""}
-                </option>
-              ))}
+      <section aria-label="Buscar y filtrar tareas" className="min-w-0 rounded-xl border border-line bg-surface p-3 sm:p-4">
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_7.5rem] items-end gap-3 lg:grid-cols-[minmax(0,1fr)_240px]">
+          <label className="min-w-0 text-[13px]" htmlFor="tareas-search">Buscar tareas
+            <span className="relative block min-w-0">
+              <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-muted" aria-hidden="true" />
+              <input id="tareas-search" type="search" value={busqueda} onChange={event => { setBusqueda(event.target.value); setPagina(1); }} placeholder="Tarea, broker, proyecto o cliente…" className="min-h-12 w-full min-w-0 rounded-lg border border-line bg-surface pr-12 pl-10 text-sm" />
+              {busqueda && <button type="button" onClick={() => { setBusqueda(""); setPagina(1); }} aria-label="Limpiar búsqueda" className="absolute top-1/2 right-0 inline-flex size-12 -translate-y-1/2 items-center justify-center rounded-lg text-ink-muted hover:bg-surface-alt"><X className="size-4" aria-hidden="true" /></button>}
+            </span>
+          </label>
+          <label className="min-w-0 text-[13px]" htmlFor="tareas-state">Estado
+            <select id="tareas-state" value={filtroEstado} onChange={event => { setFiltroEstado(event.target.value as FiltroEstado); setPagina(1); }} className="min-h-12 w-full min-w-0 rounded-lg border border-line bg-surface px-3 text-sm">
+              <option value="pending">Pendientes ({conteos.totalPendientes})</option><option value="completed">Completadas ({conteos.totalCompletadas})</option><option value="all">Todas ({tareasConUrgencia.length})</option>
             </select>
-          )}
-
-          {/* Selector de Prioridad */}
-          <select
-            value={filtroPrioridad}
-            onChange={(e) => {
-              setFiltroPrioridad(e.target.value as "todas" | "high" | "normal" | "low");
-              setPagina(1);
-            }}
-            aria-label="Filtrar por Prioridad"
-            className="min-h-[44px] rounded-lg border border-[#cbd5e1] bg-white px-3 text-[13px] font-semibold text-[#0f172a] focus:border-[#0f172a] focus:outline-none"
-          >
-            <option value="todas">Todas las Prioridades</option>
-            <option value="high">Alta Prioridad</option>
-            <option value="normal">Prioridad Normal</option>
-            <option value="low">Baja Prioridad</option>
-          </select>
-
-          {/* Selector de Estado */}
-          <select
-            value={filtroEstado}
-            onChange={(e) => {
-              setFiltroEstado(e.target.value as FiltroEstado);
-              setPagina(1);
-            }}
-            aria-label="Filtrar por Estado de Tarea"
-            className="min-h-[44px] rounded-lg border border-[#cbd5e1] bg-white px-3 text-[13px] font-semibold text-[#0f172a] focus:border-[#0f172a] focus:outline-none"
-          >
-            <option value="pending">Pendientes ({conteos.totalPendientes})</option>
-            <option value="completed">Completadas ({conteos.totalCompletadas})</option>
-            <option value="all">Todas ({tareasConUrgencia.length})</option>
-          </select>
-
-          {hayFiltrosActivos && (
-            <button
-              type="button"
-              onClick={() => {
-                setFiltroEstado("pending");
-                setFiltroUrgencia("todas");
-                setFiltroBroker("todos");
-                setFiltroProyecto("todos");
-                setFiltroPrioridad("todas");
-                setBusqueda("");
-                setPagina(1);
-              }}
-              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-[#cbd5e1] bg-[#f8fafc] px-3.5 text-[13px] font-semibold text-[#334155] transition-colors hover:bg-[#e2e8f0]"
-            >
-              <RotateCcw className="size-4" aria-hidden="true" />
-              <span>Limpiar filtros</span>
-            </button>
-          )}
+          </label>
         </div>
-      </div>
+        <Accordion type="single" collapsible className="mt-3 border-t border-line">
+          <AccordionItem value="task-filters" className="border-0">
+            <AccordionTrigger className="text-[13px]">Filtros <span className="ml-auto font-normal text-ink-muted">{hayFiltrosActivos ? "Filtros activos" : <><span className="sm:hidden">Opciones</span><span className="hidden sm:inline">Responsable, proyecto y prioridad</span></>}</span></AccordionTrigger>
+            <AccordionContent className="pb-0">
+              <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <label className="min-w-0 text-[13px]">Responsable
+                  <select value={String(filtroBroker)} onChange={event => cambiarFiltroBroker(event.target.value === "todos" || event.target.value === "sin_asignar" ? event.target.value : Number(event.target.value))} className="min-h-12 w-full min-w-0 rounded-lg border border-line bg-surface px-3 text-sm">
+                    <option value="todos">Todo el equipo</option><option value="sin_asignar">Sin asignar</option>{personas.map(persona => <option key={persona.id} value={persona.id}>{persona.fullName}</option>)}
+                  </select>
+                </label>
+                {proyectos.length > 0 && <label className="min-w-0 text-[13px]">Proyecto
+                  <select value={String(filtroProyecto)} onChange={event => { setFiltroProyecto(event.target.value === "todos" ? "todos" : Number(event.target.value)); setPagina(1); }} className="min-h-12 w-full min-w-0 rounded-lg border border-line bg-surface px-3 text-sm">
+                    <option value="todos">Todos los proyectos ({proyectos.length})</option>{proyectos.map(proyecto => <option key={proyecto.id} value={proyecto.id}>{proyecto.name}{proyecto.zone ? ` · ${proyecto.zone}` : ""}</option>)}
+                  </select>
+                </label>}
+                <label className="min-w-0 text-[13px]">Prioridad
+                  <select value={filtroPrioridad} onChange={event => { setFiltroPrioridad(event.target.value as "todas" | "high" | "normal" | "low"); setPagina(1); }} className="min-h-12 w-full min-w-0 rounded-lg border border-line bg-surface px-3 text-sm"><option value="todas">Todas las prioridades</option><option value="high">Alta</option><option value="normal">Normal</option><option value="low">Baja</option></select>
+                </label>
+                <label className="min-w-0 text-[13px]">Vencimiento
+                  <select value={filtroUrgencia} onChange={event => cambiarFiltroUrgencia(event.target.value as "todas" | Urgencia)} className="min-h-12 w-full min-w-0 rounded-lg border border-line bg-surface px-3 text-sm"><option value="todas">Cualquier fecha</option><option value="vencidas">Vencidas</option><option value="hoy">Para hoy</option><option value="proximas">Próximas</option></select>
+                </label>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+        {hayFiltrosActivos && <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-2"><span className="text-[13px] text-ink-muted" role="status">{tareasFiltradas.length} tareas coinciden con la búsqueda y los filtros.</span><button type="button" onClick={() => { setFiltroEstado("pending"); setFiltroUrgencia("todas"); setFiltroBroker("todos"); setFiltroProyecto("todos"); setFiltroPrioridad("todas"); setBusqueda(""); setPagina(1); }} className="inline-flex min-h-12 items-center gap-2 rounded-lg px-3 text-[13px] font-semibold text-navy-900 hover:bg-surface-alt"><RotateCcw className="size-4" aria-hidden="true" />Limpiar filtros</button></div>}
+      </section>
 
       {/* Barra de Acción Masiva (Bulk Assignment / Handover por Broker) */}
       {seleccionadasIds.length > 0 && (
         <div
           role="region"
           aria-label="Acciones en lote para tareas seleccionadas"
-          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#0f172a] bg-[#0f172a] px-4 py-3 text-white shadow-md"
+          className="grid min-w-0 gap-3 rounded-xl border border-navy-950 bg-navy-950 px-4 py-3 text-white"
         >
           <div className="flex items-center gap-2.5">
             <span className="inline-flex size-7 items-center justify-center rounded-full bg-[#d97706] text-[13px] font-bold tabular-nums text-white">
               {seleccionadasIds.length}
             </span>
             <span className="text-[14px] font-semibold">
-              tarea(s) seleccionada(s) para asignación o relevo por broker
+              tareas seleccionadas
             </span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="grid min-w-0 grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:items-center">
             <select
               value={brokerDestinoLote}
               onChange={(e) => setBrokerDestinoLote(e.target.value)}
               aria-label="Seleccionar broker destino para las tareas marcadas"
-              className="min-h-[44px] rounded-lg border border-white/25 bg-white px-3 text-[13px] font-semibold text-[#0f172a]"
+              className="min-h-12 min-w-0 w-full rounded-lg border border-white/25 bg-white px-3 text-[13px] font-medium text-navy-950 sm:w-auto sm:flex-1"
             >
               <option value="">Elegir Broker Destino...</option>
               {personas.map((p) => (
@@ -1349,9 +963,9 @@ export function TareasVista({
           role="alert"
           className="flex items-center justify-between gap-3 rounded-xl border border-[#fecaca] bg-[#fef2f2] px-4 py-3 text-[14px] text-[#991b1b]"
         >
-          <div className="flex items-center gap-2.5">
+          <div className="flex min-w-0 items-center gap-2.5">
             <AlertCircle className="size-4 shrink-0 text-[#dc2626]" aria-hidden="true" />
-            <span>{errorAccion}</span>
+            <span className="min-w-0 break-words">{errorAccion}</span>
           </div>
           <button
             type="button"
@@ -1365,7 +979,7 @@ export function TareasVista({
       )}
 
       {/* ===================================================================== */}
-      {/* VISTA 1: LISTA TO-DO INTELIGENTE CON SUB-CHECKLISTS Y VÍNCULOS REA    */}
+      {/* VISTA 1: LISTA TO-DO INTELIGENTE CON SUB-CHECKLISTS Y VÍNCULOS     */}
       {/* ===================================================================== */}
       {modoVista === "lista" && (
         <>
@@ -1380,7 +994,7 @@ export function TareasVista({
                 texto={
                   hayFiltrosActivos
                     ? "Prueba limpiando los filtros de broker, proyecto o prioridad para ver toda la operación."
-                    : "Asigna una tarea individual o despliega un Pack Operativo REA (KYC, Reserva 48h, Promesa 10/40/50 o Tour VIP) a cualquier broker."
+                    : "Asigna una tarea individual o despliega un plan de trabajo (KYC, Reserva 48h, Promesa 10/40/50 o Tour VIP) a cualquier broker."
                 }
                 accion={
                   <div className="flex flex-wrap items-center justify-center gap-2.5">
@@ -1449,7 +1063,7 @@ export function TareasVista({
                 const esCompletada = t.status === "completed";
                 const seleccionada = seleccionadasIds.includes(t.id);
                 const tieneChecklist = t.checklistTotal > 0;
-                const checklistAbierto = checklistsAbiertos[t.id] ?? (tieneChecklist && !esCompletada);
+                const checklistAbierto = checklistsAbiertos[t.id] ?? false;
                 const pctChecklist = tieneChecklist
                   ? Math.round((t.checklistCompletados / t.checklistTotal) * 100)
                   : 0;
@@ -1457,25 +1071,27 @@ export function TareasVista({
                 return (
                   <article
                     key={t.id}
-                    className={`rounded-xl border bg-white p-4 shadow-2xs transition-all hover:shadow-sm ${
+                    className={`min-w-0 rounded-xl border bg-surface p-3 sm:p-4 transition-colors ${
                       seleccionada
                         ? "border-[#0f172a] ring-1 ring-[#0f172a]"
                         : esCompletada
                           ? "border-[#a7f3d0] bg-[#f8fafc]/70"
                           : esVencida
-                            ? "border-l-4 border-[#fecaca] border-l-[#dc2626]"
+                            ? "border-danger/40"
                             : esHoy
-                              ? "border-l-4 border-[#fde68a] border-l-[#d97706]"
+                              ? "border-warning/40"
                               : "border-[#e2e8f0]"
                     }`}
                   >
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                      {/* Columna izquierda: Selección + Check de completado + Contenido REA */}
+                    <div className="flex min-w-0 flex-col gap-3">
+                      {/* Columna izquierda: Selección + Check de completado + Contenido  */}
                       <div className="flex flex-1 items-start gap-3 min-w-0">
+                        <div className="flex shrink-0 flex-col gap-1 sm:flex-row">
                         {/* Casilla de selección en lote */}
                         <button
                           type="button"
                           onClick={() => toggleSeleccionTarea(t.id)}
+                          aria-pressed={seleccionada}
                           aria-label={`Seleccionar tarea ${t.title} para acción en lote`}
                           className="mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-lg border border-[#cbd5e1] bg-[#f8fafc] text-[#334155] transition-colors hover:border-[#0f172a] hover:bg-white"
                         >
@@ -1521,6 +1137,7 @@ export function TareasVista({
                         >
                           <Check className="size-5" aria-hidden="true" />
                         </button>
+                        </div>
 
                         <div className="min-w-0 flex-1 space-y-2">
                           {/* Título y Badges de Estado / SLA / Prioridad */}
@@ -1530,7 +1147,7 @@ export function TareasVista({
                                 esCompletada ? "line-through opacity-75" : ""
                               }`}
                             >
-                              {t.title}
+                              <button type="button" onClick={() => setTareaEditando(t)} className="min-w-0 break-words text-left hover:underline underline-offset-4">{t.title}</button>
                             </h3>
                             <span
                               className={`inline-flex items-center rounded-md border px-2.5 py-0.5 text-[13px] font-semibold ${pri.bg} ${pri.text} ${pri.border}`}
@@ -1547,7 +1164,7 @@ export function TareasVista({
                             )}
                           </div>
 
-                          {/* Etiquetas de la Tríada REA (Recurso: Proyecto / Negocio / Cliente / Ubicación) */}
+                          {/* Etiquetas de la Tríada  (Recurso: Proyecto / Negocio / Cliente / Ubicación) */}
                           {(t.projectName || t.dealTitle || t.contactName || t.location) && (
                             <div className="flex flex-wrap items-center gap-2 pt-0.5">
                               {t.projectName && (
@@ -1593,6 +1210,8 @@ export function TareasVista({
                               <div className="flex flex-wrap items-center justify-between gap-2">
                                 <button
                                   type="button"
+                                  aria-expanded={checklistAbierto}
+                                  aria-controls={`tarea-checklist-${t.id}`}
                                   onClick={() =>
                                     setChecklistsAbiertos((prev) => ({
                                       ...prev,
@@ -1603,8 +1222,7 @@ export function TareasVista({
                                 >
                                   <ListChecks className="size-4 text-[#059669]" aria-hidden="true" />
                                   <span>
-                                    Checklist Operativo To-Do ({t.checklistCompletados} de {t.checklistTotal}{" "}
-                                    completados · {pctChecklist}%)
+                                    Pasos ({t.checklistCompletados}/{t.checklistTotal} · {pctChecklist}%)
                                   </span>
                                   {checklistAbierto ? (
                                     <ChevronUp className="size-4 text-[#64748b]" aria-hidden="true" />
@@ -1622,7 +1240,7 @@ export function TareasVista({
                               </div>
 
                               {checklistAbierto && (
-                                <ul className="mt-2 space-y-1.5 border-t border-[#e2e8f0] pt-2.5">
+                                <ul id={`tarea-checklist-${t.id}`} className="mt-2 space-y-1.5 border-t border-line pt-2.5">
                                   {t.parsedChecklist.items.map((paso, idxPaso) => (
                                     <li key={idxPaso}>
                                       <button
@@ -1660,9 +1278,14 @@ export function TareasVista({
                       </div>
 
                       {/* Columna derecha: Asignación de Broker Inline + Prioridad + Acciones Rápidas */}
-                      <div className="flex flex-wrap items-center gap-2 border-t border-[#f1f5f9] pt-3 lg:shrink-0 lg:border-t-0 lg:pt-0">
+                      <details className="min-w-0 rounded-lg border border-line bg-surface-alt px-3">
+                        <summary className="flex min-h-12 cursor-pointer list-none flex-wrap items-center justify-between gap-2 text-[13px]">
+                          <span className="flex min-w-0 items-center gap-2"><Avatar name={t.assigneeName ?? "?"} small /><span className="min-w-0 break-words font-medium text-ink">{t.assigneeName ?? "Sin responsable asignado"}</span></span>
+                          <span className="inline-flex items-center gap-1 font-semibold text-navy-900">Gestionar<ChevronDown className="size-4" aria-hidden="true" /></span>
+                        </summary>
+                        <div className="flex min-w-0 flex-wrap items-center gap-2 border-t border-line py-3">
                         {/* Selector directo de Broker responsable */}
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex min-w-0 w-full items-center gap-1.5 sm:w-auto">
                           <Avatar name={t.assigneeName ?? "?"} small />
                           <select
                             aria-label={`Broker asignado a ${t.title}`}
@@ -1680,7 +1303,7 @@ export function TareasVista({
                                 `Tarea asignada a ${nombre}`,
                               );
                             }}
-                            className="min-h-[44px] max-w-[185px] rounded-lg border border-[#cbd5e1] bg-[#f8fafc] px-2.5 text-[13px] font-semibold text-[#0f172a] hover:border-[#94a3b8] focus:border-[#0f172a] focus:bg-white focus:outline-none disabled:opacity-50"
+                            className="min-h-12 min-w-0 flex-1 rounded-lg border border-line bg-surface px-3 text-[13px] font-medium text-ink focus-visible:outline-2 focus-visible:outline-gold-700 disabled:opacity-50 sm:max-w-xs"
                           >
                             <option value="">Sin broker asignado</option>
                             {personas.map((p) => (
@@ -1703,7 +1326,7 @@ export function TareasVista({
                               "Prioridad actualizada",
                             )
                           }
-                          className="min-h-[44px] rounded-lg border border-[#cbd5e1] bg-[#f8fafc] px-2.5 text-[13px] font-semibold text-[#334155] hover:border-[#94a3b8] focus:border-[#0f172a] focus:bg-white focus:outline-none disabled:opacity-50"
+                          className="min-h-12 min-w-0 w-full rounded-lg border border-line bg-surface px-3 text-[13px] font-medium text-ink focus-visible:outline-2 focus-visible:outline-gold-700 disabled:opacity-50 sm:w-auto"
                         >
                           <option value="high">Alta</option>
                           <option value="normal">Normal</option>
@@ -1770,7 +1393,8 @@ export function TareasVista({
                         >
                           <Trash2 className="size-4" aria-hidden="true" />
                         </button>
-                      </div>
+                        </div>
+                      </details>
                     </div>
                   </article>
                 );
@@ -1823,7 +1447,7 @@ export function TareasVista({
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="text-[16px] font-bold text-[#0f172a]">
-                  Matriz de Ejecución y Asignación por Broker (REA · Agents)
+                  Carga y asignación por broker
                 </h2>
                 <p className="text-[13px] text-[#475569]">
                   Supervisa la cola individual de cada broker, asigna tareas puntuales, despliega Playbooks Inmobiliarios completos o ejecuta un relevo de cartera cuando un asesor esté de guardia o sobrecargado.
@@ -1841,7 +1465,7 @@ export function TareasVista({
                 className="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-[#0f172a] px-4 text-[13px] font-bold text-white hover:bg-[#1e293b]"
               >
                 <Sparkles className="size-4 text-[#fbbf24]" aria-hidden="true" />
-                <span>Desplegar Playbook a un Broker</span>
+                <span>Asignar plan a un broker</span>
               </button>
             </div>
           </div>
@@ -1860,11 +1484,11 @@ export function TareasVista({
               return (
                 <article
                   key={String(col.brokerId ?? "sin_asignar")}
-                  className="flex flex-col justify-between rounded-xl border border-[#e2e8f0] bg-white p-4 shadow-2xs"
+                  className="flex min-w-0 flex-col justify-between rounded-xl border border-line bg-surface p-4"
                 >
                   <div>
                     {/* Cabecera del Broker */}
-                    <header className="flex items-start justify-between gap-3 border-b border-[#f1f5f9] pb-3.5">
+                    <header className="flex flex-wrap items-start justify-between gap-3 border-b border-line pb-3">
                       <div className="flex items-center gap-3 min-w-0">
                         <Avatar name={col.brokerName} />
                         <div className="min-w-0">
@@ -2035,7 +1659,7 @@ export function TareasVista({
                         className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-[#fde68a] bg-[#fffbeb] px-3 text-[13px] font-bold text-[#92400e] transition-colors hover:bg-[#fef3c7]"
                       >
                         <Sparkles className="size-4 text-[#d97706]" aria-hidden="true" />
-                        <span>Asignar Pack REA</span>
+                        <span>Asignar plan</span>
                       </button>
                     )}
                   </div>
@@ -2064,16 +1688,16 @@ export function TareasVista({
       )}
 
       {/* ===================================================================== */}
-      {/* VISTA 4: CATÁLOGO DE PLAYBOOKS & PACKS INMOBILIARIOS REA              */}
+      {/* VISTA 4: CATÁLOGO DE PLAYBOOKS & PACKS INMOBILIARIOS               */}
       {/* ===================================================================== */}
       {modoVista === "playbooks" && (
         <section
-          aria-label="Catálogo de Playbooks Inmobiliarios REA"
+          aria-label="Plantillas de trabajo inmobiliario"
           className="space-y-4"
         >
           <div className="rounded-xl border border-[#e2e8f0] bg-white p-4 shadow-2xs">
             <h2 className="text-[16px] font-bold text-[#0f172a]">
-              Biblioteca de Playbooks Inmobiliarios REA (República Dominicana)
+              Plantillas de trabajo inmobiliario
             </h2>
             <p className="mt-1 text-[13px] text-[#475569]">
               Cada Playbook contempla el flujo completo de corretaje inmobiliario (KYC Ley 155-17, Reserva 48h, Promesa 10/40/50, Exención CONFOTUR Ley 158-01, Tour VIP, Inversor Diáspora, Snag List y Onboarding). Puedes asignarlo a un broker como una tarea con sub-checklist To-Do o desplegar la secuencia escalonada de múltiples tareas.
@@ -2084,7 +1708,7 @@ export function TareasVista({
             {PLAYBOOKS_INMOBILIARIOS.map((pb) => (
               <article
                 key={pb.id}
-                className="flex flex-col justify-between rounded-xl border border-[#e2e8f0] bg-white p-5 shadow-2xs"
+                className="flex min-w-0 flex-col justify-between rounded-xl border border-line bg-surface p-4"
               >
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -2100,11 +1724,11 @@ export function TareasVista({
                   <h3 className="mt-2.5 text-[15px] font-bold text-[#0f172a]">{pb.titulo}</h3>
                   <p className="mt-1 text-[13px] leading-relaxed text-[#475569]">{pb.resumen}</p>
 
-                  <div className="mt-3 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-3">
-                    <div className="mb-1.5 text-[13px] font-bold text-[#334155]">
-                      Sub-Checklist To-Do incluido ({pb.pasosChecklist.length} pasos):
-                    </div>
-                    <ul className="space-y-1 text-[13px] text-[#475569]">
+                  <details className="mt-3 rounded-lg border border-line bg-surface-alt px-3">
+                    <summary className="flex min-h-12 cursor-pointer items-center text-[13px] font-semibold text-ink">
+                      Ver los {pb.pasosChecklist.length} pasos de la plantilla
+                    </summary>
+                    <ul className="space-y-1 pb-3 text-[13px] text-ink-muted">
                       {pb.pasosChecklist.map((paso, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2
@@ -2115,7 +1739,7 @@ export function TareasVista({
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </details>
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#f1f5f9] pt-3.5">
@@ -2130,7 +1754,7 @@ export function TareasVista({
                     className="inline-flex min-h-[44px] flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#cbd5e1] bg-white px-3 text-[13px] font-bold text-[#0f172a] hover:bg-[#f8fafc]"
                   >
                     <Plus className="size-4 text-[#059669]" aria-hidden="true" />
-                    <span>Crear Tarea con este Checklist</span>
+                    <span>Crear tarea con pasos</span>
                   </button>
                   <button
                     type="button"
@@ -2156,7 +1780,128 @@ export function TareasVista({
         </section>
       )}
 
-      {/* Modal Crear / Editar Tarea con Checklist To-Do y Vínculo REA */}
+      <Accordion type="multiple" className="rounded-xl border border-line bg-surface px-3 sm:px-4">
+        <AccordionItem value="task-summary" className={muestraCargaEquipo && personas.length > 0 ? "" : "border-0"}>
+          <AccordionTrigger className="text-sm">Resumen operativo <span className="ml-auto text-[13px] font-normal text-ink-muted">{conteos.totalPendientes} pendientes · {conteos.vencidas} vencidas</span></AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-2 gap-2 lg:grid-cols-5" role="group" aria-label="Filtrar por urgencia de tareas">
+              <button type="button" aria-pressed={filtroEstado === "pending" && filtroUrgencia === "todas"} onClick={() => { setFiltroEstado("pending"); cambiarFiltroUrgencia("todas"); }} className="min-h-16 rounded-lg border border-line bg-surface-alt p-3 text-left text-sm hover:border-navy-900"><strong className="block text-lg tabular-nums text-navy-900">{conteos.totalPendientes}</strong>Pendientes <small className="block text-[13px] text-ink-muted">{conteos.altaPrioridad} de alta prioridad</small></button>
+              <button type="button" aria-pressed={filtroUrgencia === "vencidas"} onClick={() => { setFiltroEstado("pending"); cambiarFiltroUrgencia(filtroUrgencia === "vencidas" ? "todas" : "vencidas"); }} className="min-h-16 rounded-lg border border-danger/30 bg-danger-bg p-3 text-left text-sm text-danger"><strong className="block text-lg tabular-nums">{conteos.vencidas}</strong>Vencidas</button>
+              <button type="button" aria-pressed={filtroUrgencia === "hoy"} onClick={() => { setFiltroEstado("pending"); cambiarFiltroUrgencia(filtroUrgencia === "hoy" ? "todas" : "hoy"); }} className="min-h-16 rounded-lg border border-warning/30 bg-warning-bg p-3 text-left text-sm text-warning"><strong className="block text-lg tabular-nums">{conteos.hoy}</strong>Para hoy</button>
+              <button type="button" aria-pressed={filtroUrgencia === "proximas"} onClick={() => { setFiltroEstado("pending"); cambiarFiltroUrgencia(filtroUrgencia === "proximas" ? "todas" : "proximas"); }} className="min-h-16 rounded-lg border border-line bg-surface-alt p-3 text-left text-sm text-ink"><strong className="block text-lg tabular-nums">{conteos.proximas}</strong>Próximas</button>
+              <button type="button" aria-pressed={filtroEstado === "completed"} onClick={() => { setFiltroEstado(filtroEstado === "completed" ? "pending" : "completed"); setFiltroUrgencia("todas"); setPagina(1); }} className="min-h-16 rounded-lg border border-success/30 bg-success-bg p-3 text-left text-sm text-success"><strong className="block text-lg tabular-nums">{conteos.totalCompletadas}</strong>Completadas <small className="block text-[13px]">Con evidencia</small></button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        {muestraCargaEquipo && personas.length > 0 && <AccordionItem value="team-load" className="border-0"><AccordionTrigger className="text-sm">Carga y asignación por broker <span className="ml-auto font-normal text-ink-muted">{personas.length} asesores</span></AccordionTrigger><AccordionContent>
+<section
+          className="rounded-xl border border-[#e2e8f0] bg-white p-4 shadow-2xs"
+          aria-label="Asignación y filtro por Broker"
+        >
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Users className="size-4 text-[#0f172a]" aria-hidden="true" />
+              <h2 className="text-[14px] font-bold text-[#0f172a]">
+                Carga y asignación por broker
+              </h2>
+            </div>
+            <div className="flex items-center gap-2">
+              {filtroBroker !== "todos" && (
+                <button
+                  type="button"
+                  onClick={() => cambiarFiltroBroker("todos")}
+                  className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-[#cbd5e1] bg-[#f8fafc] px-3 text-[13px] font-semibold text-[#334155] hover:bg-[#f1f5f9]"
+                >
+                  <RotateCcw className="size-3.5" aria-hidden="true" />
+                  <span>Ver todos los brokers</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setModoVista(modoVista === "brokers" ? "lista" : "brokers")}
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-[#cbd5e1] bg-white px-3 text-[13px] font-semibold text-[#0f172a] hover:bg-[#f8fafc]"
+              >
+                <UserCheck className="size-4 text-[#059669]" aria-hidden="true" />
+                <span>{modoVista === "brokers" ? "Volver a la lista" : "Abrir vista de equipo"}</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => cambiarFiltroBroker("todos")}
+              className={`inline-flex min-h-[44px] items-center gap-2 rounded-lg border px-3.5 py-2 text-[13px] font-semibold transition-all ${
+                filtroBroker === "todos"
+                  ? "border-[#0f172a] bg-[#0f172a] text-white shadow-xs"
+                  : "border-[#e2e8f0] bg-[#f8fafc] text-[#334155] hover:border-[#cbd5e1]"
+              }`}
+            >
+              <span>Equipo Completo</span>
+              <span className="rounded-full bg-white/20 px-2 py-0.5 text-[13px] font-bold tabular-nums">
+                {conteos.totalPendientes}
+              </span>
+            </button>
+
+            {resumenPorBroker.map((b) => {
+              const clave = b.brokerId ?? "sin_asignar";
+              const activo = filtroBroker === clave;
+              const sobrecargado = b.pendientes.length >= 8 || b.vencidas >= 3;
+              return (
+                <div
+                  key={String(clave)}
+                  className={`inline-flex min-h-[44px] items-center rounded-lg border transition-all ${
+                    activo
+                      ? "border-[#0f172a] bg-[#0f172a] text-white shadow-xs"
+                      : sobrecargado
+                        ? "border-[#fecaca] bg-[#fef2f2]/60 text-[#0f172a]"
+                        : "border-[#e2e8f0] bg-white text-[#0f172a] hover:border-[#cbd5e1]"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => cambiarFiltroBroker(activo ? "todos" : clave)}
+                    className="inline-flex min-h-[44px] items-center gap-2 px-3 py-1.5 text-left text-[13px] font-semibold"
+                  >
+                    <Avatar name={b.brokerName} small />
+                    <span>{b.brokerName}</span>
+                    <span
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[13px] font-bold tabular-nums ${
+                        activo
+                          ? "bg-white text-[#0f172a]"
+                          : b.vencidas > 0
+                            ? "bg-[#fef2f2] text-[#b91c1c]"
+                            : "bg-[#f1f5f9] text-[#334155]"
+                      }`}
+                    >
+                      {b.pendientes.length}
+                      {b.vencidas > 0 ? ` (${b.vencidas} venc.)` : ""}
+                    </span>
+                  </button>
+                  {b.brokerId !== null && (
+                    <button
+                      type="button"
+                      onClick={() => abrirNuevaTareaParaBroker(b.brokerId, null)}
+                      title={`Asignar nueva tarea a ${b.brokerName}`}
+                      aria-label={`Asignar nueva tarea a ${b.brokerName}`}
+                      className={`inline-flex min-h-[44px] min-w-[40px] items-center justify-center border-l px-2.5 transition-colors ${
+                        activo
+                          ? "border-white/20 text-white hover:bg-white/10"
+                          : "border-[#e2e8f0] text-[#059669] hover:bg-[#ecfdf5]"
+                      }`}
+                    >
+                      <Plus className="size-4" aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+        </AccordionContent></AccordionItem>}
+      </Accordion>
+
+      {/* Modal Crear / Editar Tarea con Checklist To-Do y Vínculo  */}
       {(modalNueva || tareaEditando) && (
         <ModalFormularioTarea
           key={
@@ -2188,7 +1933,7 @@ export function TareasVista({
         />
       )}
 
-      {/* Modal Desplegar Pack / Secuencia Operativa REA a un Broker */}
+      {/* Modal Desplegar Pack / Secuencia Operativa  a un Broker */}
       {modalPackBroker.abierto && (
         <ModalDesplegarPackBroker
           personas={personas}
@@ -2253,7 +1998,7 @@ export function TareasVista({
 }
 
 /* -------------------------------------------------------------------------- */
-/* Modal Crear / Editar Tarea con Checklist To-Do Interactivo y Tríada REA    */
+/* Modal Crear / Editar Tarea con Checklist To-Do Interactivo y Tríada     */
 /* -------------------------------------------------------------------------- */
 
 function ModalFormularioTarea({
@@ -2318,7 +2063,7 @@ function ModalFormularioTarea({
           : "",
   );
 
-  // Vínculos REA (Recurso: Proyecto, Negocio, Contacto)
+  // Vínculos  (Recurso: Proyecto, Negocio, Contacto)
   const [projectId, setProjectId] = useState<string>(
     tarea?.projectId != null ? String(tarea.projectId) : "",
   );
@@ -2416,7 +2161,7 @@ function ModalFormularioTarea({
   return (
     <Modal
       onClose={onClose}
-      title={esEdicion ? "Editar Tarea & Checklist To-Do" : "Nueva Tarea Inmobiliaria (Modelo REA)"}
+      title={esEdicion ? "Editar Tarea & Checklist To-Do" : "Nueva tarea"}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && <AlertaErrorFormulario mensaje={error} />}
@@ -2426,7 +2171,7 @@ function ModalFormularioTarea({
           <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-3">
             <div className="mb-2 flex items-center gap-1.5 text-[13px] font-bold text-[#334155]">
               <Sparkles className="size-4 text-[#d97706]" aria-hidden="true" />
-              <span>Cargar Plantilla Inmobiliaria REA (incluye pasos To-Do):</span>
+              <span>Cargar plantilla con lista de pasos:</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {PLAYBOOKS_INMOBILIARIOS.map((pb) => (
@@ -2464,7 +2209,7 @@ function ModalFormularioTarea({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <label className="mb-1.5 block text-[13px] font-bold text-[#0f172a]">
-              Broker Responsable (Agente REA)
+              Broker responsable
             </label>
             <select
               value={assigneeId}
@@ -2496,10 +2241,10 @@ function ModalFormularioTarea({
           </div>
         </div>
 
-        {/* Vínculo REA con Recursos Inmobiliarios (Proyecto / Negocio / Cliente) */}
+        {/* Vínculo  con Recursos Inmobiliarios (Proyecto / Negocio / Cliente) */}
         <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-3.5 space-y-3">
           <div className="text-[13px] font-bold text-[#0f172a]">
-            Vínculo Inmobiliario REA (Recurso · Negocio · Cliente)
+            Vincular proyecto, negocio y cliente
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div>
@@ -2787,7 +2532,7 @@ function ModalDesplegarPackBroker({
         const fechaTarea = sumarDias(fechaBase || hoy, etapa.offsetDias);
         const startsAtIso = new Date(`${fechaTarea}T09:30:00-04:00`).toISOString();
         const descripcion = serializarDescripcionChecklist(
-          `Pack Operativo REA: ${playbook.etiqueta} · ${playbook.resumen}`,
+          `Plan de trabajo: ${playbook.etiqueta} · ${playbook.resumen}`,
           etapa.pasos.map((texto) => ({ texto, completado: false })),
         );
 
@@ -2837,14 +2582,14 @@ function ModalDesplegarPackBroker({
   return (
     <Modal
       onClose={onClose}
-      title="Asignar Pack Operativo Inmobiliario (Multi-Tarea por Broker)"
+      title="Asignar plan de trabajo a un broker"
     >
       <form onSubmit={handleDesplegar} className="space-y-4">
         {error && <AlertaErrorFormulario mensaje={error} />}
 
         <div>
           <label className="mb-1.5 block text-[13px] font-bold text-[#0f172a]">
-            1. Selecciona el Playbook / Escenario Inmobiliario REA
+            1. Selecciona la plantilla de trabajo
           </label>
           <select
             value={playbookId}
@@ -2862,7 +2607,7 @@ function ModalDesplegarPackBroker({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <label className="mb-1.5 block text-[13px] font-bold text-[#0f172a]">
-              2. Broker Responsable (Agente REA) *
+              2. Broker responsable *
             </label>
             <select
               required
@@ -2892,7 +2637,7 @@ function ModalDesplegarPackBroker({
           </div>
         </div>
 
-        {/* Recursos REA */}
+        {/* Recursos  */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div>
             <label className="mb-1 block text-[13px] font-semibold text-[#334155]">
@@ -3079,7 +2824,7 @@ function ModalRelevoColaBroker({
     >
       <form onSubmit={handleTransferir} className="space-y-4">
         <p className="text-[14px] text-[#475569]">
-          Transfiere las tareas pendientes de <strong>{origenNombre}</strong> a otro broker activo conservando íntegros los sub-checklists To-Do, vínculos REA y huso horario America/Santo_Domingo.
+          Transfiere las tareas pendientes de <strong>{origenNombre}</strong> a otro broker activo conservando íntegros los sub-checklists To-Do, vínculos operativos y huso horario America/Santo_Domingo.
         </p>
 
         <div>

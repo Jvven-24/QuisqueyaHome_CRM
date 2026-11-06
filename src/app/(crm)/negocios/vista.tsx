@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ReactNode, useEffect, useMemo, useReducer, useRef, useState, useTransition } from "react";
-import { AlertCircle, BarChart3, Check, Kanban as KanbanIcon, List as ListIcon, WifiOff, X } from "lucide-react";
+import { AlertCircle, BarChart3, Check, Kanban as KanbanIcon, List as ListIcon, Search, WifiOff, X } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { CatalogosNegocios, CursorNegocios, ResumenEtapaNegocio } from "@/application/pipeline/puertos";
@@ -166,7 +166,7 @@ export function PipelineVista({
     navegar({ [clave]: valor || undefined });
   }
   function limpiarFiltros() {
-    navegar({ resultado: undefined, brokerId: undefined, projectId: undefined, stageId: undefined });
+    navegar({ resultado: undefined, brokerId: undefined, projectId: undefined, stageId: undefined, q: undefined, origen: undefined, diasMin: undefined, probMin: undefined, sinAccion: undefined });
   }
   function ordenar(campo: CampoOrden, direccion?: "asc" | "desc") {
     const nuevo = direccion ? { campo, direccion } : siguienteOrden(orden, campo);
@@ -347,7 +347,7 @@ export function PipelineVista({
         title="Negocios"
         subtitle="Mueve cada oportunidad y mantén visible la siguiente acción."
         action={
-          valorActivo.length > 0 ? (
+          valorActivo.length > 0 && !esMovil ? (
             <div className="pipeline-total" aria-label="Resumen de valor activo">
               <span>Valor activo</span>
               <strong>{valorActivo.map((v) => formatearMonto(v.amountCents, v.currency)).join(" · ")}</strong>
@@ -355,6 +355,7 @@ export function PipelineVista({
           ) : undefined
         }
       />
+      {esMovil && valorActivo.length > 0 && <p className="-mt-2 mb-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[13px] text-ink-muted"><span>Valor activo</span><strong className="font-semibold tabular-nums text-navy-950">{valorActivo.map((v) => formatearMonto(v.amountCents, v.currency)).join(" · ")}</strong></p>}
 
       <Tabs value={modo} onValueChange={cambiarModo}>
         <TabsList aria-label="Vistas de negocios" className="group-data-[orientation=horizontal]/tabs:h-12! w-full justify-start md:w-fit">
@@ -399,25 +400,43 @@ export function PipelineVista({
           )}
         </div>
 
-        {!soloFicha && <HerramientasNegocios filas={filasVisibles} etapas={etapas} preferencias={preferencias} onPreferencias={guardarPreferencias} puedeEditar={puedeEditar} puedeExportar={puedeExportar} sinConexion={sinConexion} ocupado={ocupado} consulta={searchParams.toString()} onNavegar={(consulta) => { if (!enCurso.current) iniciarTransicion(() => router.push(`/negocios?${consulta}`)); }} />}
-        {conFiltrosCliente && <p role="status" className="text-sm text-ink-muted">Filtros avanzados aplicados a esta página: {filasVisibles.length} resultados. Los totales globales conservan los filtros del servidor.</p>}
-        <div className="mt-3">
+        <div className={`grid min-w-0 gap-2 ${!soloFicha && modo !== "analisis" ? "xl:grid-cols-[minmax(16rem,1fr)_minmax(0,2fr)]" : ""}`}>
+        {!soloFicha && modo !== "analisis" && <form
+          key={filtrosCliente.q}
+          role="search"
+          aria-label="Buscar negocios en esta página"
+          className="mt-1 grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-x-2 gap-y-1 rounded-xl border border-line bg-surface p-2"
+          onSubmit={(event) => { event.preventDefault(); const q = String(new FormData(event.currentTarget).get("q") ?? "").trim(); navegar({ q: q || undefined }); }}
+        >
+          <label className="grid min-w-0 text-[13px] font-semibold text-ink" htmlFor="negocios-busqueda"><span className="sr-only">Buscar en esta página</span>
+            <span className="relative flex min-w-0 items-center"><Search className="pointer-events-none absolute left-3 size-4 text-ink-muted" aria-hidden="true" /><input id="negocios-busqueda" name="q" type="search" defaultValue={filtrosCliente.q} maxLength={64} placeholder="Contacto, proyecto o teléfono" className="min-h-12 min-w-0 w-full rounded-lg border border-input-line bg-surface pl-10 pr-3 text-sm" disabled={pendiente || ocupado} /></span>
+          </label>
+          <button type="submit" disabled={pendiente || ocupado} className="min-h-12 rounded-lg border border-input-line bg-surface px-4 text-sm font-semibold text-navy-900 hover:bg-navy-100 disabled:opacity-50">Buscar</button>
+          <p className="col-span-2 m-0 text-[13px] text-ink-muted" title="Esta búsqueda se aplica solo a los negocios cargados en la página. Los totales por etapa incluyen todos los resultados del servidor.">{filasVisibles.length} de {negocios.length} cargados · búsqueda en esta página</p>
+        </form>}
+
+
+        <div>
           <BarraFiltros
             valores={valores}
             catalogos={catalogos}
             conEtapa={modo === "lista"}
             esMovil={esMovil}
-            deshabilitado={pendiente}
+            deshabilitado={pendiente || ocupado}
+            activosAdicionales={[filtrosCliente.q.trim(), filtrosCliente.origen, filtrosCliente.sinAccion, filtrosCliente.diasMin !== null, filtrosCliente.probMin !== null].filter(Boolean).length}
             onCambiar={filtrar}
             onLimpiar={limpiarFiltros}
           />
         </div>
 
+        </div>
+        {!soloFicha && <HerramientasNegocios esMovil={esMovil} filas={filasVisibles} etapas={etapas} preferencias={preferencias} onPreferencias={guardarPreferencias} puedeEditar={puedeEditar} puedeExportar={puedeExportar} sinConexion={sinConexion} ocupado={ocupado || pendiente} consulta={searchParams.toString()} onNavegar={(consulta) => { if (!enCurso.current) iniciarTransicion(() => router.push(`/negocios?${consulta}`)); }} />}
+        {conFiltrosCliente && <p role="status" className="text-sm text-ink-muted">Filtros avanzados aplicados a esta página: {filasVisibles.length} resultados. Los totales globales conservan los filtros del servidor.</p>}
         <TabsContent value={modo} className="min-w-0" aria-busy={pendiente}>
           {pendiente && (
             <p role="status" className="m-0 mb-2 text-sm font-medium text-ink-muted">Actualizando…</p>
           )}
-          {conFiltrosCliente && filasVisibles.length === 0 && <p role="status">Ningún negocio de esta página coincide con los filtros avanzados.</p>}
+          {conFiltrosCliente && filasVisibles.length === 0 && <div role="status" className="mb-3 rounded-xl border border-line bg-surface p-4 text-sm"><p className="m-0">Ningún negocio de esta página coincide con los filtros avanzados.</p><button type="button" className="mt-2 inline-flex min-h-12 items-center rounded-lg border border-input-line px-3 font-semibold text-navy-900" onClick={limpiarFiltros}>Limpiar todos los filtros</button></div>}
           <div className={pendiente ? "opacity-60 transition-opacity" : "transition-opacity"}>{contenido}</div>
 
           {hayPaginacion && (

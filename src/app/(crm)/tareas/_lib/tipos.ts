@@ -55,8 +55,8 @@ export type FiltroEstado = "pending" | "completed" | "all";
 export const TAMANO_PAGINA = 25;
 
 /**
- * Catálogo REA (Resources · Events · Agents) de Playbooks Inmobiliarios
- * inspirado en el modelo contable-operativo REA, prolinkinfo/RealEstateCRM y Follow Up Boss Action Plans.
+ * Catálogo de planes de acción inmobiliarios
+ * con secuencias de tareas y listas de comprobación por responsable.
  */
 export type PlaybookInmobiliario = {
   id: string;

@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { Building2, Calendar, CheckCircle2, Clock, Flame, FolderKanban, MapPin, Pencil, User } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { Building2, CheckCircle2, Clock, Flame, FolderKanban, MapPin, Pencil, User } from "lucide-react";
 
 export type TableroTareaItem = {
   id: number;
@@ -36,6 +36,8 @@ export function TableroTareas({
   onEditar?: (id: number) => void;
   accionExtra?: (item: TableroTareaItem) => ReactNode;
 }) {
+  const [grupoMovil, setGrupoMovil] = useState(grupos[0]?.id ?? "");
+  const grupoActivo = grupos.some(grupo => grupo.id === grupoMovil) ? grupoMovil : grupos[0]?.id ?? "";
   const estilosColumna: Record<string, { borde: string; cabeceraBg: string; punto: string }> = {
     red: {
       borde: "border-[#fecaca]",
@@ -65,8 +67,14 @@ export function TableroTareas({
   };
 
   return (
+    <div className="min-w-0 space-y-3">
+      <label className="grid min-w-0 gap-1 text-[13px] font-medium md:hidden" htmlFor="task-board-column">Columna del tablero
+        <select id="task-board-column" value={grupoActivo} onChange={event => setGrupoMovil(event.target.value)} className="min-h-12 min-w-0 w-full rounded-lg border border-line bg-surface px-3 text-sm">
+          {grupos.map(grupo => <option key={grupo.id} value={grupo.id}>{grupo.titulo} ({grupo.filas.length})</option>)}
+        </select>
+      </label>
     <div
-      className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+      className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-4"
       role="region"
       aria-label="Tablero Kanban de tareas por estado de ejecución"
     >
@@ -75,7 +83,7 @@ export function TableroTareas({
         return (
           <section
             key={grupo.id}
-            className={`flex flex-col rounded-xl border ${estilo.borde} bg-[#f8fafc]/80 p-3 shadow-xs`}
+            className={`min-w-0 flex-col rounded-xl border ${estilo.borde} bg-surface-alt p-3 ${grupo.id === grupoActivo ? "flex" : "hidden md:flex"}`}
           >
             <header
               className={`mb-3 flex items-center justify-between rounded-lg px-3 py-2.5 ${estilo.cabeceraBg}`}
@@ -83,9 +91,9 @@ export function TableroTareas({
               <div className="flex items-center gap-2 min-w-0">
                 <span className={`size-2.5 shrink-0 rounded-full ${estilo.punto}`} aria-hidden="true" />
                 <div className="min-w-0">
-                  <h3 className="truncate text-[14px] font-bold tracking-tight">{grupo.titulo}</h3>
+                  <h3 className="m-0 break-words text-[14px] font-semibold tracking-tight">{grupo.titulo}</h3>
                   {grupo.subtitulo && (
-                    <p className="truncate text-[13px] opacity-80">{grupo.subtitulo}</p>
+                    <p className="m-0 break-words text-[13px] opacity-80">{grupo.subtitulo}</p>
                   )}
                 </div>
               </div>
@@ -111,16 +119,16 @@ export function TableroTareas({
                   return (
                     <article
                       key={item.id}
-                      className={`group flex flex-col justify-between rounded-xl border bg-white p-3.5 shadow-2xs transition-all hover:shadow-md ${
+                      className={`group min-w-0 flex flex-col justify-between rounded-lg border bg-surface p-3 transition-colors ${
                         esCompletada
                           ? "border-[#a7f3d0] bg-[#f8fafc]"
                           : esAlta
-                            ? "border-l-4 border-[#e2e8f0] border-l-[#dc2626]"
+                            ? "border-danger/40"
                             : "border-[#e2e8f0]"
                       }`}
                     >
                       <div>
-                        <div className="mb-2 flex items-start justify-between gap-2">
+                        <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
                           <span
                             className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[13px] font-semibold ${
                               esCompletada
@@ -151,16 +159,16 @@ export function TableroTareas({
                         </div>
 
                         <h4
-                          className={`text-[14px] font-bold leading-snug text-[#0f172a] ${
+                          className={`break-words text-[14px] font-semibold leading-snug text-ink ${
                             esCompletada ? "line-through opacity-75" : ""
                           }`}
                         >
                           {item.title}
                         </h4>
 
-                        {/* Tríada REA: Recurso + Cliente + Ubicación */}
+                        {/* Tríada : Recurso + Cliente + Ubicación */}
                         {(item.projectName || item.dealTitle || item.contactName || item.location) && (
-                          <div className="mt-2.5 flex flex-wrap gap-1.5">
+                          <div className="mt-2.5 flex min-w-0 flex-wrap gap-1.5 [&>span]:max-w-full">
                             {item.projectName && (
                               <span className="inline-flex items-center gap-1 rounded-md border border-[#bfdbfe] bg-[#eff6ff] px-2 py-0.5 text-[13px] font-medium text-[#1e40af]">
                                 <Building2 className="size-3.5 shrink-0" aria-hidden="true" />
@@ -191,7 +199,7 @@ export function TableroTareas({
                         {/* Barra de progreso de sub-checklist To-Do */}
                         {tieneChecklist && (
                           <div className="mt-3 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-2">
-                            <div className="mb-1 flex items-center justify-between text-[13px] font-semibold text-[#334155]">
+                            <div className="mb-1 flex flex-wrap items-center justify-between gap-1 text-[13px] font-medium text-ink">
                               <span>Sub-tareas To-Do</span>
                               <span className="tabular-nums">
                                 {item.checklistCompletados}/{item.checklistTotal} ({pctChecklist}%)
@@ -207,13 +215,13 @@ export function TableroTareas({
                         )}
                       </div>
 
-                      <div className="mt-3 flex items-center justify-between gap-2 border-t border-[#f1f5f9] pt-2.5">
+                      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-2.5">
                         <div className="flex items-center gap-1.5 min-w-0 text-[13px] font-semibold text-[#334155]">
-                          <Calendar className="size-3.5 shrink-0 text-[#64748b]" aria-hidden="true" />
+                          <User className="size-3.5 shrink-0 text-ink-muted" aria-hidden="true" />
                           <span className="truncate">{item.assigneeName ?? "Sin broker asignado"}</span>
                         </div>
 
-                        <div className="flex items-center gap-1.5 shrink-0">
+                        <div className="flex w-full flex-wrap items-center justify-end gap-1.5">
                           {accionExtra?.(item)}
                           {onEditar && (
                             <button
@@ -246,6 +254,7 @@ export function TableroTareas({
           </section>
         );
       })}
+    </div>
     </div>
   );
 }

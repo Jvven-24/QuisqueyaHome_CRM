@@ -1,0 +1,66 @@
+[
+  {
+    "path": "src/app/(crm)/_ui/crm-header.tsx",
+    "sha256": "21486F3737604DF4415DFD5A566BD526F9D914B9B17A0F5A40D047EF738AEEF7"
+  },
+  {
+    "path": "src/app/(crm)/_ui/metric-chart.tsx",
+    "sha256": "6397EC5CF35C96FBAF5AB77EB6299E3010EC2CB2C042D43B154E4AC79684D370"
+  },
+  {
+    "path": "src/app/(crm)/agenda/vista.tsx",
+    "sha256": "A886A20BA84BDEF0E5330643A0B91C75B9894BF1BABE3A1EB3E79A119C27A194"
+  },
+  {
+    "path": "src/app/(crm)/leads/vista.tsx",
+    "sha256": "EF856612DC2D656681F6CB3AD2C6217BA39DD1227DF3E2D0105C83C112C49E69"
+  },
+  {
+    "path": "src/app/(crm)/negocios/filtros.tsx",
+    "sha256": "B189D90DA2D88F832F8411D56C9B2C594746CA99812E058AAC400F6EEBD49E84"
+  },
+  {
+    "path": "src/app/(crm)/negocios/herramientas.tsx",
+    "sha256": "9A0B65878E2652C7EB379FF6DC990506C5FF442EEAF858E527513D6A0A2F42A4"
+  },
+  {
+    "path": "src/app/(crm)/negocios/lista.tsx",
+    "sha256": "942B3CADD70E39E7753903009C1DC183D90C9BE7D93B92E432A6059A9167C426"
+  },
+  {
+    "path": "src/app/(crm)/negocios/tablero.tsx",
+    "sha256": "385687118F0476A30A19C2CA85E33AD2A098749B7B4B5DCFB9E1CABC0E12CC95"
+  },
+  {
+    "path": "src/app/(crm)/negocios/tarjeta-negocio.tsx",
+    "sha256": "CFE39650DD4F0EA5BA3377A4F0E3A46B578801C7A44E1E4FED00392EA86606C2"
+  },
+  {
+    "path": "src/app/(crm)/negocios/vista.tsx",
+    "sha256": "7B89A56540C72A8B82C69FCC67955AAEA0CF254562C6CA8B80DE79DC05D59340"
+  },
+  {
+    "path": "src/app/(crm)/tareas/_componentes/tablero.tsx",
+    "sha256": "936F9320FBAA4A6F471797350A29F5B1E99199361AD1C9C5EBDCBDA67F386F1B"
+  },
+  {
+    "path": "src/app/(crm)/tareas/_lib/tipos.ts",
+    "sha256": "2AE310213AB4F273F9DA4D48E34EE468B83CB005896049BF84B32855F3744E70"
+  },
+  {
+    "path": "src/app/(crm)/tareas/vista.tsx",
+    "sha256": "2C52356F34602A3D16435623E2514826A039A04D6B126F9122CF493817D14540"
+  },
+  {
+    "path": "src/app/workspace.css",
+    "sha256": "9F90EC98EE1435CF715B86B22B7CD70D9EF13F57F31637D4B7A57F1E4E52A219"
+  },
+  {
+    "path": "src/components/ui/select.tsx",
+    "sha256": "9F6CE0DA0B51C2B91C9E36CE7F9655B18A8A3EB1970F091DD8A14289C5EDAE02"
+  },
+  {
+    "path": "src/components/ui/sonner.tsx",
+    "sha256": "383E2044598D85AD181638D4AAEAB6748254A9F10DE10728D7F740004110AEE8"
+  }
+]

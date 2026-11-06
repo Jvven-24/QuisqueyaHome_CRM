@@ -82,7 +82,7 @@ export function TarjetaNegocio({
   const bloqueado = ocupado || sinConexion || enCurso;
 
   const clases = [
-    "deal-card group/tarjeta relative",
+    "deal-card group/tarjeta relative min-w-0",
     "transition-[border-color,box-shadow,opacity] duration-150",
     compacta ? "gap-1.5! py-2.5!" : "",
     arrastre?.fantasma ? "border-dashed! border-gold-600! bg-gold-50/40! opacity-60 shadow-none!" : "",
@@ -101,20 +101,20 @@ export function TarjetaNegocio({
       data-pendiente={pendiente}
     >
       <div className="flex items-start justify-between gap-1.5">
-        <div className="flex min-w-0 items-start gap-0.5">
+        <div className="flex min-w-0 flex-1 items-start gap-0.5">
           {arrastre?.asa}
           <button
             type="button"
             {...SIN_ARRASTRE}
             onClick={onVerFicha}
             aria-label={`Abrir ficha del negocio de ${negocio.contactName}`}
-            className="min-h-12 min-w-12 inline-flex items-center text-left text-sm font-bold text-navy-950 hover:text-gold-700 cursor-pointer rounded focus-visible:outline-2 focus-visible:outline-gold-700 transition-colors"
+            className="min-h-12 min-w-12 inline-flex min-w-0! flex-1 items-center text-left text-sm font-bold text-navy-950 hover:text-gold-700 cursor-pointer rounded focus-visible:outline-2 focus-visible:outline-gold-700 transition-colors"
           >
-            <span className="line-clamp-2 font-heading">{negocio.contactName}</span>
+            <span className="break-words font-heading">{negocio.contactName}</span>
           </button>
         </div>
         {campos.origen && (
-          <span className="mt-3 shrink-0 rounded-full border border-line bg-surface-alt px-2.5 py-0.5 text-[13px] font-semibold text-ink-muted">
+          <span className="mt-3 max-w-[42%] break-words rounded-md border border-line bg-surface-alt px-2 py-0.5 text-[13px] font-medium text-ink-muted">
             {negocio.sourceName ?? "Directo"}
           </span>
         )}
@@ -128,7 +128,7 @@ export function TarjetaNegocio({
       )}
 
       {campos.proyecto && (
-        <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-line bg-surface-alt/70 px-2.5 py-1.5 text-[13px] font-medium text-navy-950">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5 text-[13px] font-medium text-navy-950">
           <Building2 className="size-4 shrink-0 text-gold-700" aria-hidden="true" />
           <span className="min-w-0 break-words font-semibold text-navy-950">
             {negocio.proyectoPrincipal?.projectName ?? "Interés general"}
@@ -176,7 +176,7 @@ export function TarjetaNegocio({
       {campos.proxima && (
         <div className={`flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-[13px] ${negocio.nextActivityTitle ? "border-line bg-surface-alt/80 text-ink" : abierto ? "border-warning/40 bg-warning-bg text-warning" : "border-line bg-surface-alt/80 text-ink-muted"}`}>
           <Calendar className="size-4 shrink-0" aria-hidden="true" />
-          <span className="truncate font-medium">
+          <span className="min-w-0 break-words font-medium">
             {negocio.nextActivityTitle ? `${negocio.nextActivityTitle}${proximaFecha ? ` · ${proximaFecha}` : ""}` : "Sin próxima acción"}
           </span>
         </div>
@@ -187,26 +187,26 @@ export function TarjetaNegocio({
           {campos.broker && (
             <div className="flex min-w-0 items-center gap-2">
               <Avatar name={negocio.brokerName ?? "Sin asignar"} small />
-              <div className="flex flex-col min-w-0">
-                <span className="max-w-[140px] truncate text-[13px] font-bold text-navy-950 leading-tight">
-                  {negocio.brokerName?.split(" ")[0] ?? "Sin asignar"}
+              <div className="flex min-w-0 flex-col">
+                <span className="break-words text-[13px] font-semibold text-navy-950 leading-tight">
+                  {negocio.brokerName ?? "Sin asignar"}
                 </span>
                 <span className="text-[13px] text-ink-muted leading-none">Broker</span>
               </div>
             </div>
           )}
-          <div className="flex w-full flex-wrap items-center gap-2">
+          <div className={`grid w-full min-w-0 items-center gap-2 ${enlaceWa && abierto && puedeMover ? "grid-cols-[48px_minmax(0,1fr)]" : "grid-cols-1"}`}>
             {enlaceWa && (
               <a
                 href={enlaceWa}
                 {...SIN_ARRASTRE}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-12 min-w-12 items-center justify-center gap-1.5 rounded-xl border border-emerald-300 bg-emerald-50 px-3 text-[13px] font-bold text-emerald-800 hover:bg-emerald-100 transition-colors"
+                className="inline-flex min-h-12 min-w-12 w-fit items-center justify-center gap-1.5 rounded-lg border border-success/30 bg-success-bg px-3 text-[13px] font-semibold text-success hover:bg-success-bg transition-colors"
                 aria-label={`Contactar a ${negocio.contactName} por WhatsApp`}
               >
                 <MessageCircle className="size-4 shrink-0 text-emerald-600" aria-hidden="true" />
-                <span className="hidden sm:inline">WhatsApp</span>
+                <span className="sr-only">WhatsApp</span>
               </a>
             )}
             {abierto && puedeMover && (
@@ -217,14 +217,14 @@ export function TarjetaNegocio({
                     {...SIN_ARRASTRE}
                     disabled={bloqueado}
                     aria-label={`Mover el negocio de ${negocio.contactName} a otra etapa`}
-                    className="inline-flex shrink-0 min-h-12 min-w-12 items-center justify-center gap-1.5 rounded-xl border border-input-line bg-surface px-3 text-[13px] font-bold text-navy-950 hover:bg-navy-100 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
+                    className="inline-flex shrink-0 min-h-12 min-w-12 items-center justify-center gap-1.5 rounded-lg border border-input-line bg-surface px-3 text-[13px] font-semibold text-navy-950 hover:bg-navy-100 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 transition-colors"
                   >
                     <ArrowRightLeft className="size-4 shrink-0 text-gold-700" aria-hidden="true" />
                     <span className="whitespace-nowrap">Mover a etapa</span>
                     <ChevronDown className="size-3.5 text-ink-muted" aria-hidden="true" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-64">
+                <DropdownMenuContent align="end" className="w-72 max-w-[calc(100vw-32px)]">
                   <DropdownMenuLabel className="text-[13px] text-ink-muted">Mover a…</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {etapas.filter(etapa => etapa.isActive !== false).map((etapa) => {

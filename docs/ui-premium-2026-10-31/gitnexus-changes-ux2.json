@@ -1,0 +1,661 @@
+{
+  "indexNote": "Registered CRM graph with target worktree diff; index may omit or map outdated JSX ranges. Does not prove isolation.",
+  "summary": {
+    "changed_count": 86,
+    "affected_count": 11,
+    "changed_files": 18,
+    "risk_level": "high"
+  },
+  "changed_symbols": [
+    {
+      "id": "Const:src/app/(crm)/_ui/crm-header.tsx:prefixAt",
+      "name": "prefixAt",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/_ui/crm-header.tsx:target",
+      "name": "target",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/_ui/crm-header.tsx:currentWorkspace",
+      "name": "currentWorkspace",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/crm-header.tsx:CrmHeader",
+      "name": "CrmHeader",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/crm-header.tsx:marcarTodasLeidas",
+      "name": "marcarTodasLeidas",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/crm-header.tsx:marcarUnaLeida",
+      "name": "marcarUnaLeida",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/crm-header.tsx:marcarLeidas",
+      "name": "marcarLeidas",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/crm-header.tsx:handleShortcut",
+      "name": "handleShortcut",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Interface:src/app/(crm)/_ui/crm-header.tsx:NotificacionItem",
+      "name": "NotificacionItem",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Interface:src/app/(crm)/_ui/crm-header.tsx:CrmHeaderProps",
+      "name": "CrmHeaderProps",
+      "filePath": "src/app/(crm)/_ui/crm-header.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/_ui/metric-chart.tsx:labelById",
+      "name": "labelById",
+      "filePath": "src/app/(crm)/_ui/metric-chart.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/_ui/metric-chart.tsx:label",
+      "name": "label",
+      "filePath": "src/app/(crm)/_ui/metric-chart.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/_ui/metric-chart.tsx:id",
+      "name": "id",
+      "filePath": "src/app/(crm)/_ui/metric-chart.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/_ui/metric-chart.tsx:MetricChart",
+      "name": "MetricChart",
+      "filePath": "src/app/(crm)/_ui/metric-chart.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/agenda/vista.tsx:AgendaVista",
+      "name": "AgendaVista",
+      "filePath": "src/app/(crm)/agenda/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/agenda/vista.tsx:ModalCita",
+      "name": "ModalCita",
+      "filePath": "src/app/(crm)/agenda/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/m41-r3.test.ts:render",
+      "name": "render",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/m41-r3.test.ts:refrescos",
+      "name": "refrescos",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/m41-r3.test.ts:panel",
+      "name": "panel",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/m41-r3.test.ts:lista",
+      "name": "lista",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/m41-r3.test.ts:formulario",
+      "name": "formulario",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/m41-r3.test.ts:guardado",
+      "name": "guardado",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/leads/m41-r3.test.ts:campana",
+      "name": "campana",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/leads/m41-r3.test.ts:render",
+      "name": "render",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Method:src/app/(crm)/leads/m41-r3.test.ts:refresh#0",
+      "name": "refresh",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Method:src/app/(crm)/leads/m41-r3.test.ts:success#1",
+      "name": "success",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Method:src/app/(crm)/leads/m41-r3.test.ts:preventDefault#0",
+      "name": "preventDefault",
+      "filePath": "src/app/(crm)/leads/m41-r3.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/leads/vista.tsx:LeadsVista",
+      "name": "LeadsVista",
+      "filePath": "src/app/(crm)/leads/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/filtros.tsx:campo",
+      "name": "campo",
+      "filePath": "src/app/(crm)/negocios/filtros.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/filtros.tsx:botonLimpiar",
+      "name": "botonLimpiar",
+      "filePath": "src/app/(crm)/negocios/filtros.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/filtros.tsx:Campos",
+      "name": "Campos",
+      "filePath": "src/app/(crm)/negocios/filtros.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/filtros.tsx:campo",
+      "name": "campo",
+      "filePath": "src/app/(crm)/negocios/filtros.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/filtros.tsx:BarraFiltros",
+      "name": "BarraFiltros",
+      "filePath": "src/app/(crm)/negocios/filtros.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/filtros.tsx:botonLimpiar",
+      "name": "botonLimpiar",
+      "filePath": "src/app/(crm)/negocios/filtros.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/herramientas.tsx:v",
+      "name": "v",
+      "filePath": "src/app/(crm)/negocios/herramientas.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/herramientas.tsx:q",
+      "name": "q",
+      "filePath": "src/app/(crm)/negocios/herramientas.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/herramientas.tsx:datos",
+      "name": "datos",
+      "filePath": "src/app/(crm)/negocios/herramientas.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/herramientas.tsx:HerramientasNegocios",
+      "name": "HerramientasNegocios",
+      "filePath": "src/app/(crm)/negocios/herramientas.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/lista.tsx:ListaNegocios",
+      "name": "ListaNegocios",
+      "filePath": "src/app/(crm)/negocios/lista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/tablero.tsx:esMovil",
+      "name": "esMovil",
+      "filePath": "src/app/(crm)/negocios/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/tablero.tsx:expandida",
+      "name": "expandida",
+      "filePath": "src/app/(crm)/negocios/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/tablero.tsx:TarjetaOrdenable",
+      "name": "TarjetaOrdenable",
+      "filePath": "src/app/(crm)/negocios/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/tablero.tsx:ColumnaEscritorio",
+      "name": "ColumnaEscritorio",
+      "filePath": "src/app/(crm)/negocios/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/tablero.tsx:SeccionMovil",
+      "name": "SeccionMovil",
+      "filePath": "src/app/(crm)/negocios/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/tablero.tsx:Tablero",
+      "name": "Tablero",
+      "filePath": "src/app/(crm)/negocios/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/tablero.tsx:envolver",
+      "name": "envolver",
+      "filePath": "src/app/(crm)/negocios/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/tarjeta-negocio.tsx:clases",
+      "name": "clases",
+      "filePath": "src/app/(crm)/negocios/tarjeta-negocio.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/tarjeta-negocio.tsx:TarjetaNegocio",
+      "name": "TarjetaNegocio",
+      "filePath": "src/app/(crm)/negocios/tarjeta-negocio.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/vista.tsx:nuevo",
+      "name": "nuevo",
+      "filePath": "src/app/(crm)/negocios/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/vista.tsx:PipelineVista",
+      "name": "PipelineVista",
+      "filePath": "src/app/(crm)/negocios/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/vista.tsx:ordenar",
+      "name": "ordenar",
+      "filePath": "src/app/(crm)/negocios/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/_componentes/tablero.tsx:estilosColumna",
+      "name": "estilosColumna",
+      "filePath": "src/app/(crm)/tareas/_componentes/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/_componentes/tablero.tsx:estilo",
+      "name": "estilo",
+      "filePath": "src/app/(crm)/tareas/_componentes/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/_componentes/tablero.tsx:TableroTareas",
+      "name": "TableroTareas",
+      "filePath": "src/app/(crm)/tareas/_componentes/tablero.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:res",
+      "name": "res",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:msg",
+      "name": "msg",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:itemsActualizados",
+      "name": "itemsActualizados",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:nuevaDescripcion",
+      "name": "nuevaDescripcion",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:completadosAhora",
+      "name": "completadosAhora",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:baseFecha",
+      "name": "baseFecha",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:baseHora",
+      "name": "baseHora",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:destinoFecha",
+      "name": "destinoFecha",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:nuevoIso",
+      "name": "nuevoIso",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:nuevoAssigneeId",
+      "name": "nuevoAssigneeId",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:nombreBroker",
+      "name": "nombreBroker",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:exitos",
+      "name": "exitos",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:gruposTablero",
+      "name": "gruposTablero",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:activo",
+      "name": "activo",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:sobrecargado",
+      "name": "sobrecargado",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:val",
+      "name": "val",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:nombre",
+      "name": "nombre",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:totalPend",
+      "name": "totalPend",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/tareas/vista.tsx:payload",
+      "name": "payload",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:etiquetaFecha",
+      "name": "etiquetaFecha",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:TareasVista",
+      "name": "TareasVista",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:actualizarCampoRapido",
+      "name": "actualizarCampoRapido",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:togglePasoSubChecklist",
+      "name": "togglePasoSubChecklist",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:reprogramarRapido",
+      "name": "reprogramarRapido",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:reasignarLotePorBroker",
+      "name": "reasignarLotePorBroker",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:ModalFormularioTarea",
+      "name": "ModalFormularioTarea",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:handleSubmit",
+      "name": "handleSubmit",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/select.tsx:SelectTrigger",
+      "name": "SelectTrigger",
+      "filePath": "src/components/ui/select.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/select.tsx:SelectContent",
+      "name": "SelectContent",
+      "filePath": "src/components/ui/select.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/select.tsx:SelectItem",
+      "name": "SelectItem",
+      "filePath": "src/components/ui/select.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/components/ui/sonner.tsx:Toaster",
+      "name": "Toaster",
+      "filePath": "src/components/ui/sonner.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/components/ui/sonner.tsx:Toaster",
+      "name": "Toaster",
+      "filePath": "src/components/ui/sonner.tsx",
+      "change_type": "touched"
+    }
+  ],
+  "affected_processes": [
+    {
+      "id": "proc_2_tablero",
+      "name": "Tablero → TipoAntiguedad",
+      "process_type": "cross_community",
+      "step_count": 7,
+      "changed_steps": [
+        {
+          "symbol": "Tablero",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_10_tablero",
+      "name": "Tablero → Normalizar",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "Tablero",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_11_tablero",
+      "name": "Tablero → Entero",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "Tablero",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_33_listanegocios",
+      "name": "ListaNegocios → TipoAntiguedad",
+      "process_type": "cross_community",
+      "step_count": 5,
+      "changed_steps": [
+        {
+          "symbol": "ListaNegocios",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_106_tarjetanegocio",
+      "name": "TarjetaNegocio → TipoAntiguedad",
+      "process_type": "intra_community",
+      "step_count": 4,
+      "changed_steps": [
+        {
+          "symbol": "TarjetaNegocio",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_115_tareasvista",
+      "name": "TareasVista → FechaSantoDomingo",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "TareasVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_116_pipelinevista",
+      "name": "PipelineVista → Booleanos",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "PipelineVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_117_pipelinevista",
+      "name": "PipelineVista → NormalizarOrdenColumnas",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "PipelineVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_118_pipelinevista",
+      "name": "PipelineVista → Entero",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "PipelineVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_149_tablero",
+      "name": "Tablero → NegocioDe",
+      "process_type": "intra_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "Tablero",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_150_tablero",
+      "name": "Tablero → LeerId",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "Tablero",
+          "step": 1
+        }
+      ]
+    }
+  ]
+}

@@ -407,6 +407,7 @@ export function LeadsVista({
           {filtros.sourceId && <input type="hidden" name="source_id" value={filtros.sourceId} />}
           {filtros.status && <input type="hidden" name="status" value={filtros.status} />}
           {cola && <input type="hidden" name="cola" value="1" />}
+          {Array.from(searchParams.entries()).filter(([clave]) => !["q", "page", "lead", "crear", "voz", "source_id", "status", "cola"].includes(clave)).map(([clave, valor], indice) => <input key={`${clave}-${indice}`} type="hidden" name={clave} value={valor} />)}
           <label className="min-w-0 text-[13px] font-semibold text-ink" htmlFor="leads-busqueda">Buscar prospecto
           <span className="relative flex min-w-0 items-center">
             <Search className="absolute left-3.5 size-4 text-muted pointer-events-none" />
@@ -473,6 +474,12 @@ export function LeadsVista({
           )}
 
         </div>
+        {hayFiltro && <div className="flex min-w-0 flex-wrap gap-2 border-t border-line pt-3 xl:col-span-2" aria-label="Filtros de leads activos">
+          {filtros.q && <button type="button" onClick={() => irCon({ q: undefined, page: undefined, lead: undefined })} aria-label={`Quitar búsqueda ${filtros.q}`} className="inline-flex min-h-12 max-w-full items-center gap-2 rounded-lg border border-gold-600/40 bg-gold-100 px-3 text-left text-[13px] font-semibold text-gold-800"><span className="min-w-0 break-words">Búsqueda: {filtros.q}</span><X className="size-3.5 shrink-0" aria-hidden="true" /></button>}
+          {filtros.sourceId && <button type="button" onClick={() => irCon({ source_id: undefined, page: undefined, lead: undefined })} aria-label="Quitar filtro de canal" className="inline-flex min-h-12 max-w-full items-center gap-2 rounded-lg border border-gold-600/40 bg-gold-100 px-3 text-left text-[13px] font-semibold text-gold-800"><span className="min-w-0 break-words">Canal: {canales.find(canal => canal.id === filtros.sourceId)?.name ?? "Seleccionado"}</span><X className="size-3.5 shrink-0" aria-hidden="true" /></button>}
+          {filtros.status && <button type="button" onClick={() => irCon({ status: undefined, page: undefined, lead: undefined })} aria-label="Quitar filtro de estado" className="inline-flex min-h-12 max-w-full items-center gap-2 rounded-lg border border-gold-600/40 bg-gold-100 px-3 text-left text-[13px] font-semibold text-gold-800"><span className="min-w-0 break-words">Estado: {ETIQUETAS_ESTADO[filtros.status]}</span><X className="size-3.5 shrink-0" aria-hidden="true" /></button>}
+          <button type="button" onClick={() => irCon({ q: undefined, source_id: undefined, status: undefined, page: undefined, lead: undefined })} className="inline-flex min-h-12 items-center rounded-lg px-3 text-[13px] font-semibold text-navy-900 underline underline-offset-4">Limpiar todos</button>
+        </div>}
         <div className="flex items-center justify-between gap-2 border-t border-line pt-2 xl:col-span-2">
           <p className="m-0 text-[13px] text-ink-muted"><strong className="font-semibold tabular-nums text-ink">{total}</strong> prospectos{hayFiltro ? " · Filtros activos" : ""}</p>
           <button type="button" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-line px-3 text-[13px] font-semibold text-navy-900 sm:hidden" aria-controls="leads-filtros" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(!filtersOpen)}>{filtersOpen ? "Ocultar filtros" : "Filtros"}</button>

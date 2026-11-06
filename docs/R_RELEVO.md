@@ -1,5 +1,11 @@
 # R · Relevo
 
+## Consolidación autorizada · 05/11/2026
+
+Wilber pidió combinar los worktrees y publicar el resultado en `orq/wilber-final-dev`. Se conserva primero UX2 en la rama `codex/integracion-premium`, sobre `790e794`, para fusionarlo con los commits recientes de embudo y gerente (`43341de`, `a36ef48`). Mandato: `specs/integracion-worktrees-20261105/spec.md`. No se modifica el checkout principal ni se despliegan servicios remotos.
+
+UX2 cambia Tareas, Negocios, filtros de Leads, Agenda (retirada REA), selectores, gráficos y notificaciones. Evidencia de la pasada: `docs/ui-premium-2026-10-31/ENTREGA-UX2.md`. Corrida observada previa: 1285 pruebas, 1283 correctas y 2 omitidas; build y tipos correctos, lint0errores/17avisos. Estos resultados no reemplazan los checks de la fusión, que se registrarán en este relevo antes del push.
+
 ## Relevo local del worktree · 31/10/2026
 
 En `E:\.viltrum-worktrees\crm-integracion-premium`, rama `codex/integracion-premium` basada en `156e1fb`, se ha refinado el sistema de diseño compartido y once módulos. Esta es una entrega local de UI; el estado histórico de `develop` debajo no describe este checkpoint. No hay merge al checkout principal ni push.

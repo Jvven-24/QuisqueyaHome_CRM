@@ -392,7 +392,7 @@ export function AgendaVista({
   return (
     <>
       <PageHeader
-        eyebrow="Seguimiento comercial & Visitas REA · 7 días"
+        eyebrow="Seguimiento comercial & Visitas · 7 días"
         title="Agenda de visitas y citas"
         subtitle="Control integral de visitas a obra, recorridos VIP, cierres Confotur y videollamadas con compradores locales y de diáspora, vinculadas por Broker, Proyecto y Negocio."
         action={
@@ -427,7 +427,7 @@ export function AgendaVista({
         }
       />
 
-      {/* Barra de navegación de semanas, selector de vista y filtros REA (Broker / Proyecto / Tipo) */}
+      {/* Barra de navegación de semanas, selector de vista y filtros  (Broker / Proyecto / Tipo) */}
       <section aria-label="Navegación y filtros de agenda" className="min-w-0 space-y-3 p-3 mb-4 bg-surface border border-line rounded-xl sm:p-4">
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           <div role="group" aria-label="Cambiar semana" className="segmented flex w-full p-1 bg-surface-alt rounded-lg sm:inline-flex sm:w-auto">
@@ -543,7 +543,7 @@ export function AgendaVista({
             </select></label>
           )}
 
-          {/* Filtro por Proyecto REA */}
+          {/* Filtro por Proyecto  */}
           {proyectos.length > 0 && (
             <label className="min-w-0 text-[13px]">Proyecto<select
               aria-label="Filtrar agenda por Proyecto"
@@ -691,7 +691,7 @@ export function AgendaVista({
                       {cita.title}
                     </strong>
 
-                    {/* Etiquetas REA (Proyecto / Negocio / Cliente) */}
+                    {/* Etiquetas  (Proyecto / Negocio / Cliente) */}
                     {(cita.projectName || cita.dealTitle || cita.contactName) && (
                       <div className="mb-2 flex flex-wrap gap-1.5">
                         {cita.projectName && (
@@ -1165,7 +1165,7 @@ export function AgendaVista({
         </div>
       )}
 
-      {/* Modal unificado y pulido de creación y edición con Detector de Choques, REA y Conversor Diáspora */}
+      {/* Modal unificado y pulido de creación y edición con Detector de Choques,  y Conversor Diáspora */}
       {modalAbierto && (
         <ModalCita
           cita={citaSeleccionada}
@@ -1429,7 +1429,7 @@ function ModalCita({
   }
 
   return (
-    <Modal title={esEdicion ? "Editar cita / visita" : "Nueva cita o visita inmobiliaria (REA)"} onClose={onClose}>
+    <Modal title={esEdicion ? "Editar cita / visita" : "Nueva cita o visita"} onClose={onClose}>
       <form noValidate className="form-grid" ref={formRef} onSubmit={guardar} aria-busy={enviando || eliminando}>
         {errorRed && (
           <div className="span-2">
@@ -1447,12 +1447,12 @@ function ModalCita({
           </p>
         )}
 
-        {/* Plantillas Rápidas de Visita Inmobiliaria REA */}
+        {/* Plantillas Rápidas de Visita Inmobiliaria  */}
         {!esEdicion && (
           <div className="span-2 rounded-xl border border-slate-200 bg-slate-50 p-3">
             <div className="mb-2 flex items-center gap-1.5 text-[13px] font-bold text-navy-950">
               <Sparkles className="size-4 text-amber-600" />
-              <span>Plantillas de Visita / Cita Inmobiliaria REA:</span>
+              <span>Plantillas de visita y cita:</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {PLANTILLAS_VISITAS_REA.map((pl) => (
@@ -1601,7 +1601,7 @@ function ModalCita({
         )}
 
         <label className="span-2">
-          Broker Responsable (Agente REA)
+          Broker responsable
           <select
             name="assigneeId"
             value={asignadoId}
@@ -1618,10 +1618,10 @@ function ModalCita({
           </select>
         </label>
 
-        {/* Vínculos REA (Proyecto / Negocio / Contacto) */}
+        {/* Vínculos  (Proyecto / Negocio / Contacto) */}
         <div className="span-2 rounded-xl border border-slate-200 bg-slate-50 p-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           <label className="text-[13px] font-semibold text-slate-700">
-            Proyecto (Recurso REA)
+            Proyecto
             <select
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}

@@ -24,7 +24,7 @@ import {
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MotionConfig, motion, useReducedMotion } from "motion/react";
-import { ChevronRight, GripVertical } from "lucide-react";
+import { ChevronLeft, ChevronRight, GripVertical } from "lucide-react";
 import { formatearMonto } from "../_ui/formato";
 import { TarjetaNegocio } from "./tarjeta-negocio";
 import { moverEnLista, previsualizarArrastre, type Arrastre, type MovimientoPendiente } from "./kanban-estado";
@@ -41,7 +41,7 @@ export type AccionesTablero = {
   onMover: (negocio: NegocioFila, etapaId: number) => void;
 };
 
-type Presentacion = { campos: Record<CampoTarjeta, boolean>; compacta: boolean };
+type Presentacion = { campos: Record<CampoTarjeta, boolean>; compacta: boolean; sinArrastre?: boolean };
 
 /* ---------------------------- identificadores ---------------------------- */
 
@@ -94,7 +94,7 @@ function TarjetaOrdenable({ negocio, acciones, presentacion, pendiente }: {
   presentacion: Presentacion;
   pendiente: MovimientoPendiente | undefined;
 }) {
-  const arrastrable = acciones.puedeMover && negocio.stageKind === "open" && !pendiente && !acciones.ocupado && !acciones.sinConexion;
+  const arrastrable = !presentacion.sinArrastre && acciones.puedeMover && negocio.stageKind === "open" && !pendiente && !acciones.ocupado && !acciones.sinConexion;
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({
     id: idTarjeta(negocio.id),
     disabled: !arrastrable,
@@ -215,19 +215,20 @@ function ColumnaEscritorio({ columna, destacada, children }: { columna: ColumnaE
   const montos = resumenMontos(columna.totales);
   return (
     <section ref={setNodeRef} className={`kanban-column ${destacada ? "drag-over" : ""}`} aria-label={`Etapa ${columna.etapa.name}`}>
-      <header className="flex flex-col gap-1.5 border-b border-line bg-surface px-4 py-3">
+      <header className="flex flex-col items-stretch! justify-start! gap-2 border-b border-line bg-surface px-4 py-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <span className={`size-2 shrink-0 rounded-full ${puntoEtapa(columna.etapa.kind)}`} aria-hidden="true" />
-            <h3 className="m-0 truncate text-sm font-bold font-heading text-navy-950">{columna.etapa.name}</h3>
+            <h3 className="m-0 break-words text-sm font-bold font-heading text-navy-950">{columna.etapa.name}</h3>
           </div>
           <Contador valor={columna.total} />
         </div>
         {montos && (
-          <div className="flex items-center justify-end">
-            <span className="rounded-md bg-gold-50/80 px-2 py-0.5 text-[13px] font-bold tabular-nums text-gold-900 border border-gold-200/60">{montos}</span>
+          <div className="flex min-w-0 flex-wrap gap-1" aria-label="Valor por moneda">
+            {montos.split(" · ").map((monto) => <span key={monto} className="max-w-full break-words rounded-md border border-line bg-surface-alt px-2 py-0.5 text-[13px] font-semibold tabular-nums text-navy-950">{monto}</span>)}
           </div>
         )}
+        <p className="m-0 text-[13px] leading-snug text-ink-muted">{columna.filas.length} cargados · {columna.total} en total</p>
         {destacada && <AvisoDestino etapa={columna.etapa} />}
       </header>
       <div className="kanban-column-body">{children}</div>
@@ -235,11 +236,9 @@ function ColumnaEscritorio({ columna, destacada, children }: { columna: ColumnaE
   );
 }
 
-function SeccionMovil({ columna, expandida, destacada, onAlternar, children }: {
+function SeccionMovil({ columna, destacada, children }: {
   columna: ColumnaEtapa;
-  expandida: boolean;
   destacada: boolean;
-  onAlternar: () => void;
   children: ReactNode;
 }) {
   const { setNodeRef } = useDroppable({ disabled: columna.etapa.isActive === false, id: idEtapa(columna.etapa.id), data: { tipo: "etapa" } });
@@ -247,25 +246,17 @@ function SeccionMovil({ columna, expandida, destacada, onAlternar, children }: {
   const montos = resumenMontos(columna.totales);
   return (
     <section ref={setNodeRef} className={`rounded-xl border bg-surface-alt shadow-2xs transition-colors ${destacada ? "border-gold-600 ring-1 ring-gold-600" : "border-line"}`}>
-      <h3 className="m-0">
-        <button
-          type="button"
-          onClick={onAlternar}
-          aria-expanded={expandida}
-          aria-controls={`etapa-movil-${id}`}
-          className="flex min-h-12 w-full cursor-pointer items-center justify-between gap-2 rounded-xl bg-surface px-4 py-3 text-left transition-colors hover:bg-surface-alt"
-        >
-          <span className="flex min-w-0 items-center gap-2.5">
-            <ChevronRight className={`size-4 shrink-0 text-ink-muted transition-transform duration-200 ${expandida ? "rotate-90 text-gold-700" : ""}`} aria-hidden="true" />
+      <header className="grid min-w-0 gap-2 rounded-t-xl border-b border-line bg-surface p-3">
+          <div className="flex min-w-0 items-center gap-2.5">
             <span className={`size-2 shrink-0 rounded-full ${puntoEtapa(columna.etapa.kind)}`} aria-hidden="true" />
-            <span className="truncate text-sm font-bold text-navy-950 font-heading">{columna.etapa.name}</span>
+            <h3 className="m-0 min-w-0 flex-1 break-words font-heading text-base font-bold text-navy-950">{columna.etapa.name}</h3>
             <Contador valor={columna.total} />
-          </span>
-          {montos && <span className="shrink-0 rounded-md bg-gold-50/80 px-2 py-0.5 text-[13px] font-bold tabular-nums text-gold-900 border border-gold-200/60">{montos}</span>}
-        </button>
-      </h3>
+          </div>
+          {montos && <div className="flex min-w-0 flex-wrap gap-1" aria-label="Valor por moneda">{montos.split(" · ").map((monto) => <span key={monto} className="max-w-full break-words rounded-md border border-line bg-surface-alt px-2 py-0.5 text-[13px] font-semibold tabular-nums text-navy-950">{monto}</span>)}</div>}
+          {columna.filas.length !== columna.total && <p className="m-0 text-[13px] text-ink-muted">{columna.filas.length} cargados de {columna.total} negocios</p>}
+      </header>
       {destacada && <div className="px-3 pt-2"><AvisoDestino etapa={columna.etapa} /></div>}
-      {expandida && <div id={`etapa-movil-${id}`} className="flex flex-col gap-3 p-3">{children}</div>}
+      <div id={`etapa-movil-${id}`} className="flex flex-col gap-3 p-3">{children}</div>
     </section>
   );
 }
@@ -274,9 +265,9 @@ function SeccionMovil({ columna, expandida, destacada, onAlternar, children }: {
 
 /**
  * Tablero por etapas con arrastre real (@dnd-kit). Se monta UN solo diseño
- * según el ancho: escritorio = columnas; móvil = acordeón vertical sin
- * desplazamiento anidado. Arrastre con ratón, pulsación larga en táctil y
- * teclado (asa + flechas), con anuncios para lector de pantalla. Soltar
+ * según el ancho: escritorio = columnas; móvil = una etapa seleccionable sin
+ * desplazamiento anidado. En escritorio admite ratón y teclado (asa + flechas),
+ * con anuncios para lector de pantalla. En teléfono se usa «Mover a etapa». Soltar
  * pide al padre el movimiento: él lo aplica de forma optimista y lo revierte
  * si el servidor lo rechaza. «Mover a etapa» sigue disponible en cada tarjeta.
  */
@@ -297,12 +288,14 @@ export function Tablero({
 }) {
   const esMovil = useMediaQuery("(max-width: 767px)");
   const reducido = useReducedMotion();
-  const [abiertas, setAbiertas] = useState<Record<number, boolean>>({});
+  const [etapaMovilId, setEtapaMovilId] = useState<number | null>(null);
   const [activo, setActivo] = useState<number | null>(null);
   const [arrastre, setArrastre] = useState<Arrastre | null>(null);
   const [sobreEtapa, setSobreEtapa] = useState<number | null>(null);
   const vista = useMemo(() => previsualizarArrastre(columnas, arrastre), [columnas, arrastre]);
   const primeraConDatos = columnas.find((c) => c.total > 0)?.etapa.id;
+  const indiceMovil = Math.max(0, vista.findIndex((c) => c.etapa.id === (etapaMovilId ?? primeraConDatos)));
+  const columnaMovil = vista[indiceMovil];
 
   const sensores = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
@@ -451,17 +444,22 @@ export function Tablero({
 
   if (esMovil) {
     return envolver(
-      <div className="flex w-full flex-col gap-3">
-        {vista.map((columna) => {
-          const id = columna.etapa.id;
-          const expandida = abiertas[id] ?? id === primeraConDatos;
-          return (
-            <SeccionMovil key={id} columna={columna} expandida={expandida} destacada={destaca(id)}
-              onAlternar={() => setAbiertas((previo) => ({ ...previo, [id]: !expandida }))}>
-              <EtapaContenido columna={columna} acciones={acciones} presentacion={presentacion} pendientes={pendientes} activo={activo} />
-            </SeccionMovil>
-          );
-        })}
+      <div className="grid min-w-0 w-full gap-3">
+        {columnaMovil ? <>
+          <div className="grid min-w-0 grid-cols-[48px_minmax(0,1fr)_48px] items-center gap-1 rounded-xl border border-line bg-surface p-2">
+            <button type="button" disabled={indiceMovil === 0} onClick={() => { const anterior = vista[indiceMovil - 1]; if (anterior) setEtapaMovilId(anterior.etapa.id); }} aria-label="Etapa anterior" className="inline-flex min-h-12 min-w-12 items-center justify-center rounded-lg border border-line text-navy-900 disabled:opacity-40"><ChevronLeft className="size-4" aria-hidden="true" /></button>
+            <label className="grid min-w-0 text-[13px] font-semibold text-ink" htmlFor="negocios-etapa-movil"><span className="sr-only">Etapa del negocio · {indiceMovil + 1} de {vista.length}</span>
+              <select id="negocios-etapa-movil" value={columnaMovil.etapa.id} onChange={(event) => setEtapaMovilId(Number(event.target.value))} className="min-h-12 min-w-0 w-full rounded-lg border border-input-line bg-surface px-3 text-sm">
+                {vista.map((columna) => <option key={columna.etapa.id} value={columna.etapa.id}>{columna.etapa.name} · {columna.total}</option>)}
+              </select>
+            </label>
+            <button type="button" disabled={indiceMovil === vista.length - 1} onClick={() => { const siguiente = vista[indiceMovil + 1]; if (siguiente) setEtapaMovilId(siguiente.etapa.id); }} aria-label="Etapa siguiente" className="inline-flex min-h-12 min-w-12 items-center justify-center rounded-lg border border-line text-navy-900 disabled:opacity-40"><ChevronRight className="size-4" aria-hidden="true" /></button>
+          </div>
+          <p className="sr-only">{acciones.puedeMover ? "Usa «Mover a etapa» en cada negocio para cambiarlo de etapa." : "Abre un negocio para consultar su contexto y próxima acción."}</p>
+          <SeccionMovil key={columnaMovil.etapa.id} columna={columnaMovil} destacada={destaca(columnaMovil.etapa.id)}>
+            <EtapaContenido columna={columnaMovil} acciones={acciones} presentacion={{ ...presentacion, sinArrastre: true }} pendientes={pendientes} activo={activo} />
+          </SeccionMovil>
+        </> : <p className="rounded-xl border border-line bg-surface p-4 text-sm">No hay etapas visibles. Activa una etapa desde las opciones de presentación.</p>}
       </div>,
     );
   }
