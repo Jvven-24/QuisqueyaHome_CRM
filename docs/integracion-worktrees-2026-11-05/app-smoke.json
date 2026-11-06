@@ -1,0 +1,28 @@
+{
+  "rows": [
+    {
+      "route": "/login",
+      "width": 320,
+      "status": 200,
+      "passed": true
+    },
+    {
+      "route": "/login",
+      "width": 390,
+      "status": 200,
+      "passed": true
+    },
+    {
+      "route": "/login",
+      "width": 1440,
+      "status": 200,
+      "passed": true
+    },
+    {
+      "route": "/negocios",
+      "redirectedToLogin": true,
+      "status": 200
+    }
+  ],
+  "errors": []
+}

@@ -17,7 +17,7 @@ for(const editing of [false,true])test("S4: handler real de "+(editing?"edición
  const mocks:Record<string,unknown>={react,"next/navigation":{useRouter:()=>({refresh(){refreshed++;}})},"@/hooks/use-focus-trap":{useFocusTrap:()=>({current:null})},
   "../presentacion":{unitFormPayload,availabilitySummary},"../_componentes/project-dossier":{},"../_componentes/unit-inspector":{},"../_componentes/floor-matrix":{},
   "@/domain/unidades":{},"@/application/proyectos/validacion":{},"@/domain/zona-horaria":{},"@/domain/catalogs":{OPERATION_TYPES,PRICE_PERIODS,UNIT_STATUSES},
-  "../../_ui/prototipo-ui":{},"../../_ui/alerta-error-formulario":{},"../../_ui/formato":{centavosAUnidad:(value:number)=>value/100},"../../_ui/estados":{},"../_formulario-proyecto":{},"@/components/ui/cotizador-confotur-modal":{},"@/components/ui/dialog":{},"@/components/ui/button":{}};
+  "../../_ui/prototipo-ui":{},"../../_ui/alerta-error-formulario":{},"../../_ui/formato":{centavosAUnidad:(value:number)=>value/100},"../../_ui/estados":{},"../_formulario-proyecto":{},"@/components/ui/combobox": {}, "@/components/ui/cotizador-confotur-modal":{},"@/components/ui/dialog":{},"@/components/ui/button":{}};
  const source=readFileSync(new URL("./[slug]/vista.tsx",import.meta.url),"utf8")+"\nexport { FormularioUnidad };";
  const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText;
  const exports:Record<string,(props:Record<string,unknown>)=>unknown>={};

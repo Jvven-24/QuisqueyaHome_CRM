@@ -1,0 +1,219 @@
+[
+  {
+    "target": "Combobox",
+    "error": "Target 'Combobox' not found"
+  },
+  {
+    "target": "ViewSegmented",
+    "error": "Target 'ViewSegmented' not found"
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:FloorMatrix",
+      "name": "FloorMatrix",
+      "type": "Function",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/preview-workspace.tsx:PreviewWorkspace",
+      "name": "PreviewWorkspace",
+      "type": "Function",
+      "filePath": "src/app/(crm)/propiedades/_componentes/preview-workspace.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/posventa/vista.tsx:AftersalesWorkspace",
+      "name": "AftersalesWorkspace",
+      "type": "Function",
+      "filePath": "src/app/(crm)/posventa/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/automatizaciones/vista.tsx:AutomatizacionesVista",
+      "name": "AutomatizacionesVista",
+      "type": "Function",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/avances/vista.tsx:AvancesVista",
+      "name": "AvancesVista",
+      "type": "Function",
+      "filePath": "src/app/(crm)/avances/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/comisiones/vista.tsx:ComisionesVista",
+      "name": "ComisionesVista",
+      "type": "Function",
+      "filePath": "src/app/(crm)/comisiones/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/comunicaciones/vista.tsx:ComunicacionesVista",
+      "name": "ComunicacionesVista",
+      "type": "Function",
+      "filePath": "src/app/(crm)/comunicaciones/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/metas/vista.tsx:MetasVista",
+      "name": "MetasVista",
+      "type": "Function",
+      "filePath": "src/app/(crm)/metas/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/propiedades/[slug]/vista.tsx:PropiedadDetalleVista",
+      "name": "PropiedadDetalleVista",
+      "type": "Function",
+      "filePath": "src/app/(crm)/propiedades/[slug]/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/propiedades/vista.tsx:PropiedadesVista",
+      "name": "PropiedadesVista",
+      "type": "Function",
+      "filePath": "src/app/(crm)/propiedades/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  },
+  {
+    "target": {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:TareasVista",
+      "name": "TareasVista",
+      "type": "Function",
+      "filePath": "src/app/(crm)/tareas/vista.tsx"
+    },
+    "direction": "upstream",
+    "impactedCount": 0,
+    "risk": "LOW",
+    "summary": {
+      "direct": 0,
+      "processes_affected": 0,
+      "modules_affected": 0
+    },
+    "affected_processes": [],
+    "affected_modules": [],
+    "byDepth": {}
+  }
+]

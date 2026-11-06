@@ -1,4 +1,5 @@
 "use client";
+import { Combobox } from "@/components/ui/combobox";
 
 import { TableroTareas, type TableroTareaItem } from "./_componentes/tablero";
 import { toast } from "sonner";
@@ -887,9 +888,10 @@ export function TareasVista({
                   </select>
                 </label>
                 {proyectos.length > 0 && <label className="min-w-0 text-[13px]">Proyecto
-                  <select value={String(filtroProyecto)} onChange={event => { setFiltroProyecto(event.target.value === "todos" ? "todos" : Number(event.target.value)); setPagina(1); }} className="min-h-12 w-full min-w-0 rounded-lg border border-line bg-surface px-3 text-sm">
-                    <option value="todos">Todos los proyectos ({proyectos.length})</option>{proyectos.map(proyecto => <option key={proyecto.id} value={proyecto.id}>{proyecto.name}{proyecto.zone ? ` · ${proyecto.zone}` : ""}</option>)}
-                  </select>
+                  <Combobox aria-label="Proyecto"
+                    options={[{ value: "todos", label: "Todos los proyectos" }, ...proyectos.map(p => ({ value: String(p.id), label: p.name + (p.zone ? ` · ${p.zone}` : "") }))]}
+                    value={String(filtroProyecto)} onChange={value => { setFiltroProyecto(value === "todos" || !value ? "todos" : Number(value)); setPagina(1); }}
+                    searchPlaceholder="Buscar proyecto..." />
                 </label>}
                 <label className="min-w-0 text-[13px]">Prioridad
                   <select value={filtroPrioridad} onChange={event => { setFiltroPrioridad(event.target.value as "todas" | "high" | "normal" | "low"); setPagina(1); }} className="min-h-12 w-full min-w-0 rounded-lg border border-line bg-surface px-3 text-sm"><option value="todas">Todas las prioridades</option><option value="high">Alta</option><option value="normal">Normal</option><option value="low">Baja</option></select>

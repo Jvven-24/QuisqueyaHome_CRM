@@ -145,7 +145,9 @@ export async function borrarActividad(deps: { unidad: UnidadDeTrabajo<ReposActiv
 }
 
 async function validarReferencias(repo: RepositorioActividades, actor: Actor, alcance: PermissionScope, entrada: { assigneeId?: number; title?: string; contactId?: number | null; projectId?: number | null; startsAt?: Date | null; endsAt?: Date | null }): Promise<void> {
-  if (entrada.assigneeId !== undefined && entrada.assigneeId !== actor.userId && alcance !== "all") throw new ForbiddenError("No tienes permiso para asignar esta actividad a otra persona.");
+  // Asignar a otra persona: alcance total, o alcance de equipo hacia alguien de su propio equipo (el gerente coordina a sus brokers).
+  const puedeAsignarA = (assigneeId: number) => alcance === "all" || (alcance === "team" && (actor.teamUserIds ?? []).includes(assigneeId));
+  if (entrada.assigneeId !== undefined && entrada.assigneeId !== actor.userId && !puedeAsignarA(entrada.assigneeId)) throw new ForbiddenError("No tienes permiso para asignar esta actividad a otra persona.");
   if (entrada.title !== undefined && !tituloActividad.safeParse(entrada.title).success) throw new ValidationError("Escribe el título.", { title: "Escribe el título." });
   for (const [recurso, id] of [["contacts", entrada.contactId], ["projects", entrada.projectId]] as const) {
     if (id != null && !await repo.referenciaVisible(actor, requireScope(actor, recurso, "view"), recurso, id)) throw new NotFoundError();

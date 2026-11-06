@@ -62,7 +62,9 @@ export default async function LeadsPage({
   const brokerSugerido = alias(users, "broker_sugerido");
 
   const puedeTomarCola = actor.roleSlug === "broker" && scopeFor(actor,"leads","edit") !== "none";
-  const disponibilidad = puedeTomarCola ? and(isNull(leads.brokerId), or(eq(leads.status,"new"),eq(leads.status,"assigned")), visibleRows(actor,"all",leads.brokerId,leads.deletedAt)) : undefined;
+  // El gerente supervisa la misma cola (leads nuevos sin responsable) para repartirla entre los brokers de su equipo.
+  const puedeSupervisarCola = actor.roleSlug === "manager" && !actor.readOnly && scopeFor(actor,"leads","edit") === "team";
+  const disponibilidad = puedeTomarCola || puedeSupervisarCola ? and(isNull(leads.brokerId), or(eq(leads.status,"new"),eq(leads.status,"assigned")), visibleRows(actor,"all",leads.brokerId,leads.deletedAt)) : undefined;
   const filasVisibles = or(visibleRows(actor, scope, leads.brokerId, leads.deletedAt), disponibilidad);
 
   const condiciones = and(
@@ -181,7 +183,13 @@ export default async function LeadsPage({
 
   if (params.lead !== undefined && !leadSeleccionado) notFound();
 
-  if (primero(params.vista) === "asignacion") return <AsignacionVista key={[pagina,q].join(":")} leads={filas} brokers={brokers} total={totales[0]?.total ?? 0} page={pagina} q={q} canAssign={scopeFor(actor,"leads","edit") === "all"} />;
+  // Reasignar: alcance total, o el gerente hacia los brokers de su equipo (el servidor lo vuelve a comprobar).
+  const puedeAsignar = scopeFor(actor, "leads", "edit") === "all" || puedeSupervisarCola;
+  const brokersAsignables = puedeSupervisarCola && scopeFor(actor, "leads", "edit") !== "all"
+    ? brokers.filter((b) => (actor.teamUserIds ?? []).includes(b.userId))
+    : brokers;
+
+  if (primero(params.vista) === "asignacion") return <AsignacionVista key={[pagina,q].join(":")} leads={filas} brokers={brokersAsignables} total={totales[0]?.total ?? 0} page={pagina} q={q} canAssign={puedeAsignar} />;
 
   return (
     <LeadsVista
@@ -189,7 +197,7 @@ export default async function LeadsPage({
       leads={filas}
       canales={canales}
       proyectos={proyectos}
-      brokers={brokers}
+      brokers={brokersAsignables}
       total={totales[0]?.total ?? 0}
       metricas={metricasLeads}
       tamanioPagina={TAMANIO_PAGINA}
@@ -199,7 +207,7 @@ export default async function LeadsPage({
       historial={leadSeleccionado ? <Historial entidad="lead" entidadId={leadSeleccionado.id} /> : null}
       ahora={Date.now()}
       cola={primero(params.cola) === "1"}
-      canAssign={scopeFor(actor, "leads", "edit") === "all"}
+      canAssign={puedeAsignar}
       roleSlug={actor.roleSlug}
       actorId={actor.userId}
     />

@@ -8,6 +8,7 @@ import { PHASE_STATUSES, type PhaseStatus } from "@/domain/catalogs";
 import { evaluarAptitudPublicacionFase, PHASE_STATUS_LABELS } from "@/domain/avance-obra";
 import type { constructionPhases } from "@/infrastructure/db/schema";
 import { ModuleTabs, PageHeader, Section } from "@/components/modulo";
+import { Combobox } from "@/components/ui/combobox";
 import { Vacio } from "../_ui/estados";
 import { BeforeAfterSlider } from "@/components/ui/before-after-slider";
 import { MilestoneTimeline } from "./_componentes/milestone-timeline";
@@ -417,20 +418,20 @@ export function AvancesVista({
               </span>
             </div>
 
-            {/* Selector de proyecto */}
+            {/* Selector de proyecto con Combobox */}
             {proyectos.length > 1 && (
-              <select
-                aria-label="Seleccionar proyecto en supervisión"
-                className="w-full max-w-full min-w-0 min-h-12 px-3 text-[13px] rounded-lg border border-line bg-surface focus:border-gold-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-700 transition-colors"
-                value={proyecto?.slug ?? ""}
-                onChange={(event) => irCon({ proyecto: event.target.value, fase: undefined })}
-              >
-                {proyectos.map((p) => (
-                  <option key={p.slug} value={p.slug}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
+              <div className="w-full sm:w-64">
+                <Combobox
+                  options={proyectos.map((p) => ({ value: p.slug, label: p.name }))}
+                  value={proyecto?.slug ?? ""}
+                  onChange={(val) => {
+                    if (val) irCon({ proyecto: val, fase: undefined });
+                  }}
+                  aria-label="Seleccionar proyecto en supervisión" placeholder="Seleccionar proyecto..."
+                  searchPlaceholder="Buscar proyecto en supervisión..."
+                  className="w-full"
+                />
+              </div>
             )}
           </div>
         </Section>

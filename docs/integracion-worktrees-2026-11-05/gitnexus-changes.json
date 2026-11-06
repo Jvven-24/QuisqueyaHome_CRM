@@ -1,0 +1,505 @@
+{
+  "indexNote": "Registered graph with target diff; JSX range coverage incomplete.",
+  "summary": {
+    "changed_count": 58,
+    "affected_count": 12,
+    "changed_files": 35,
+    "risk_level": "high"
+  },
+  "changed_symbols": [
+    {
+      "id": "Const:src/app/(crm)/automatizaciones/vista.tsx:CAMPO",
+      "name": "CAMPO",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/automatizaciones/vista.tsx:online",
+      "name": "online",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/automatizaciones/vista.tsx:router",
+      "name": "router",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/automatizaciones/vista.tsx:bloqueado",
+      "name": "bloqueado",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/automatizaciones/vista.tsx:r",
+      "name": "r",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/automatizaciones/vista.tsx:p",
+      "name": "p",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/automatizaciones/vista.tsx:AutomatizacionesVista",
+      "name": "AutomatizacionesVista",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/automatizaciones/vista.tsx:guardar",
+      "name": "guardar",
+      "filePath": "src/app/(crm)/automatizaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/avances/vista.tsx:AvancesVista",
+      "name": "AvancesVista",
+      "filePath": "src/app/(crm)/avances/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/comisiones/vista.tsx:envioEnCurso",
+      "name": "envioEnCurso",
+      "filePath": "src/app/(crm)/comisiones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/comisiones/vista.tsx:esAdmin",
+      "name": "esAdmin",
+      "filePath": "src/app/(crm)/comisiones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/comisiones/vista.tsx:params",
+      "name": "params",
+      "filePath": "src/app/(crm)/comisiones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/comisiones/vista.tsx:ComisionesVista",
+      "name": "ComisionesVista",
+      "filePath": "src/app/(crm)/comisiones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/comisiones/vista.tsx:irCon",
+      "name": "irCon",
+      "filePath": "src/app/(crm)/comisiones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/comunicaciones/vista.tsx:plantillaInicial",
+      "name": "plantillaInicial",
+      "filePath": "src/app/(crm)/comunicaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/comunicaciones/vista.tsx:ComunicacionesVista",
+      "name": "ComunicacionesVista",
+      "filePath": "src/app/(crm)/comunicaciones/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/page.tsx:filasVisibles",
+      "name": "filasVisibles",
+      "filePath": "src/app/(crm)/leads/page.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/leads/page.tsx:condiciones",
+      "name": "condiciones",
+      "filePath": "src/app/(crm)/leads/page.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/leads/page.tsx:LeadsPage",
+      "name": "LeadsPage",
+      "filePath": "src/app/(crm)/leads/page.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/metas/vista.tsx:MetasVista",
+      "name": "MetasVista",
+      "filePath": "src/app/(crm)/metas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/inspector.tsx:abierto",
+      "name": "abierto",
+      "filePath": "src/app/(crm)/negocios/inspector.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/inspector.tsx:res",
+      "name": "res",
+      "filePath": "src/app/(crm)/negocios/inspector.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/inspector.tsx:DealInspector",
+      "name": "DealInspector",
+      "filePath": "src/app/(crm)/negocios/inspector.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/inspector.tsx:guardarActividadNegocio",
+      "name": "guardarActividadNegocio",
+      "filePath": "src/app/(crm)/negocios/inspector.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/negocios/logica.ts:totales",
+      "name": "totales",
+      "filePath": "src/app/(crm)/negocios/logica.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/logica.ts:totalesPorEtapa",
+      "name": "totalesPorEtapa",
+      "filePath": "src/app/(crm)/negocios/logica.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/logica.ts:armarColumnas",
+      "name": "armarColumnas",
+      "filePath": "src/app/(crm)/negocios/logica.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/vista.tsx:PipelineVista",
+      "name": "PipelineVista",
+      "filePath": "src/app/(crm)/negocios/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/negocios/vista.tsx:cambiarEtapa",
+      "name": "cambiarEtapa",
+      "filePath": "src/app/(crm)/negocios/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/posventa/vista.tsx:AftersalesWorkspace",
+      "name": "AftersalesWorkspace",
+      "filePath": "src/app/(crm)/posventa/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/[slug]/vista.tsx:precioCotizar",
+      "name": "precioCotizar",
+      "filePath": "src/app/(crm)/propiedades/[slug]/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/[slug]/vista.tsx:PropiedadDetalleVista",
+      "name": "PropiedadDetalleVista",
+      "filePath": "src/app/(crm)/propiedades/[slug]/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:TONES",
+      "name": "TONES",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:router",
+      "name": "router",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:levels",
+      "name": "levels",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:filtered",
+      "name": "filtered",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:now",
+      "name": "now",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:url",
+      "name": "url",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:link",
+      "name": "link",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:group",
+      "name": "group",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:FloorMatrix",
+      "name": "FloorMatrix",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/floor-matrix.tsx:exportSnapshot",
+      "name": "exportSnapshot",
+      "filePath": "src/app/(crm)/propiedades/_componentes/floor-matrix.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/preview-workspace.tsx:PREVIEW_STATES",
+      "name": "PREVIEW_STATES",
+      "filePath": "src/app/(crm)/propiedades/_componentes/preview-workspace.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/preview-workspace.tsx:rows",
+      "name": "rows",
+      "filePath": "src/app/(crm)/propiedades/_componentes/preview-workspace.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/preview-workspace.tsx:categories",
+      "name": "categories",
+      "filePath": "src/app/(crm)/propiedades/_componentes/preview-workspace.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/_componentes/preview-workspace.tsx:reset",
+      "name": "reset",
+      "filePath": "src/app/(crm)/propiedades/_componentes/preview-workspace.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/preview-workspace.tsx:PreviewWorkspace",
+      "name": "PreviewWorkspace",
+      "filePath": "src/app/(crm)/propiedades/_componentes/preview-workspace.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/preview-workspace.tsx:openAction",
+      "name": "openAction",
+      "filePath": "src/app/(crm)/propiedades/_componentes/preview-workspace.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/_componentes/preview-workspace.tsx:reset",
+      "name": "reset",
+      "filePath": "src/app/(crm)/propiedades/_componentes/preview-workspace.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/app/(crm)/propiedades/unit-form.test.ts:source",
+      "name": "source",
+      "filePath": "src/app/(crm)/propiedades/unit-form.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/propiedades/vista.tsx:PropiedadesVista",
+      "name": "PropiedadesVista",
+      "filePath": "src/app/(crm)/propiedades/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:TareasVista",
+      "name": "TareasVista",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:reprogramarRapido",
+      "name": "reprogramarRapido",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/app/(crm)/tareas/vista.tsx:reasignarLotePorBroker",
+      "name": "reasignarLotePorBroker",
+      "filePath": "src/app/(crm)/tareas/vista.tsx",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/application/leads/casos-de-uso.test.ts:original",
+      "name": "original",
+      "filePath": "src/application/leads/casos-de-uso.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/application/leads/casos-de-uso.test.ts:entradaExterna",
+      "name": "entradaExterna",
+      "filePath": "src/application/leads/casos-de-uso.test.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Const:src/application/leads/casos-de-uso.ts:actualizado",
+      "name": "actualizado",
+      "filePath": "src/application/leads/casos-de-uso.ts",
+      "change_type": "touched"
+    },
+    {
+      "id": "Function:src/application/leads/casos-de-uso.ts:asignarResponsableDeLead",
+      "name": "asignarResponsableDeLead",
+      "filePath": "src/application/leads/casos-de-uso.ts",
+      "change_type": "touched"
+    }
+  ],
+  "affected_processes": [
+    {
+      "id": "proc_8_propiedadesvista",
+      "name": "PropiedadesVista → TipoAntiguedad",
+      "process_type": "cross_community",
+      "step_count": 7,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadesVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_9_propiedaddetallevist",
+      "name": "PropiedadDetalleVista → TipoAntiguedad",
+      "process_type": "cross_community",
+      "step_count": 7,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadDetalleVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_16_propiedadesvista",
+      "name": "PropiedadesVista → Normalizar",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadesVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_17_propiedadesvista",
+      "name": "PropiedadesVista → Entero",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadesVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_18_propiedaddetallevist",
+      "name": "PropiedadDetalleVista → Normalizar",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadDetalleVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_19_propiedaddetallevist",
+      "name": "PropiedadDetalleVista → Entero",
+      "process_type": "cross_community",
+      "step_count": 6,
+      "changed_steps": [
+        {
+          "symbol": "PropiedadDetalleVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_61_dealinspector",
+      "name": "DealInspector → At",
+      "process_type": "cross_community",
+      "step_count": 4,
+      "changed_steps": [
+        {
+          "symbol": "DealInspector",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_62_dealinspector",
+      "name": "DealInspector → TipoAntiguedad",
+      "process_type": "cross_community",
+      "step_count": 4,
+      "changed_steps": [
+        {
+          "symbol": "DealInspector",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_115_tareasvista",
+      "name": "TareasVista → FechaSantoDomingo",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "TareasVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_116_pipelinevista",
+      "name": "PipelineVista → Booleanos",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "PipelineVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_117_pipelinevista",
+      "name": "PipelineVista → NormalizarOrdenColumnas",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "PipelineVista",
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "proc_118_pipelinevista",
+      "name": "PipelineVista → Entero",
+      "process_type": "cross_community",
+      "step_count": 3,
+      "changed_steps": [
+        {
+          "symbol": "PipelineVista",
+          "step": 1
+        }
+      ]
+    }
+  ]
+}

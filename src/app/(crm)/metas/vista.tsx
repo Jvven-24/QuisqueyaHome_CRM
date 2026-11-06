@@ -13,6 +13,7 @@ import { cumplimientoPorcentaje, diagnosticarRitmo, formatoPeriodo, nombreMes } 
 import { cumplimientoMonto, estadoAvance, logradoEnMoneda, type LogroPorMoneda } from "@/domain/metas-alcances";
 import { fechaHoraLegible } from "@/domain/zona-horaria";
 import { Modal, PageHeader } from "../_ui/prototipo-ui";
+import { Combobox } from "@/components/ui/combobox";
 import { AvisoPermiso, Vacio } from "../_ui/estados";
 import { DataTable, type Columna } from "@/components/ui/data-table";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -158,7 +159,23 @@ export function MetasVista(p: Props) {
       <PageHeader
         title={esVistaCompleta ? "Metas y rendimiento" : "Mis metas y rendimiento"}
         subtitle="Objetivos mensuales; lo logrado sale solo de negocios cerrados como ganados."
-        action={<label className="grid min-w-0 gap-1 text-[13px]">Periodo<select className={control + " min-h-12"} value={formatoPeriodo(periodo)} onChange={(e) => { if (navigator.onLine) router.push(path + "?periodo=" + e.target.value); else setMessage("Sin conexión. Reconecta antes de cambiar el periodo."); }}>{opcionesPeriodo.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</select></label>}
+        action={
+          <div className="flex items-center gap-2 w-full sm:w-64">
+            <Combobox
+              options={opcionesPeriodo.map((o) => ({ value: o.value, label: o.label }))}
+              value={formatoPeriodo(periodo)}
+              onChange={(val) => {
+                if (!val) return;
+                if (navigator.onLine) router.push(path + "?periodo=" + val);
+                else setMessage("Sin conexión. Reconecta antes de cambiar el periodo.");
+              }}
+              aria-label="Periodo" placeholder="Seleccionar periodo"
+              searchPlaceholder="Buscar periodo..."
+              emptyText="No se encontró periodo"
+              className="w-full"
+            />
+          </div>
+        }
       />
       <p role="status" aria-live="polite" className={message ? "mb-2 rounded border border-success/40 bg-success/10 p-2" : "sr-only"}>{message}</p>
 

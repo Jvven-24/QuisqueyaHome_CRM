@@ -220,7 +220,7 @@ test("R3 G2-19: ficha muestra estados comerciales separados y enlaces de obra co
     "@/domain/unidades": { absorcionUnidades }, "@/application/proyectos/validacion": { descripcionComercial: () => null },
     "@/domain/zona-horaria": {}, "@/domain/catalogs": {}, "../../_ui/prototipo-ui": {},
     "../../_ui/alerta-error-formulario": {}, "../../_ui/formato": {}, "../../_ui/estados": {},
-    "../_formulario-proyecto": { ETIQUETAS_TIPO: {} }, "@/components/ui/cotizador-confotur-modal": {},
+    "../_formulario-proyecto": { ETIQUETAS_TIPO: {} }, "@/components/ui/combobox": {}, "@/components/ui/cotizador-confotur-modal": {},
     "@/components/ui/dialog": {}, "@/components/ui/button": {},
   });
   const arbol = env.render(modulo.PropiedadDetalleVista as Componente, {

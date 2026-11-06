@@ -24,6 +24,7 @@ import {
   WifiOff,
 } from "lucide-react";
 import { Badge, PageHeader } from "../_ui/prototipo-ui";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   generarEnlaceTelegram,
   generarEnlaceWhatsApp,
@@ -85,6 +86,22 @@ const VARIABLES_DISPONIBLES = [
   { clave: "{fecha_cita}", etiqueta: "Fecha Cita", valorDefault: "" },
   { clave: "{hora_cita}", etiqueta: "Hora Cita", valorDefault: "" },
   { clave: "{telefono}", etiqueta: "Teléfono", valorDefault: "" },
+];
+
+const OPCIONES_CANAL: ComboboxOption[] = [
+  { value: "whatsapp", label: "WhatsApp" },
+  { value: "email", label: "Correo (Email)" },
+  { value: "telegram", label: "Telegram" },
+  { value: "sms", label: "SMS" },
+  { value: "webhook", label: "Webhook" },
+];
+
+const OPCIONES_CATEGORIA: ComboboxOption[] = [
+  { value: "Bienvenida", label: "Bienvenida a prospecto" },
+  { value: "Cita", label: "Confirmación / Recordatorio de Cita" },
+  { value: "Oferta", label: "Oferta / Oportunidad de Inversión" },
+  { value: "Seguimiento", label: "Seguimiento Post-Visita" },
+  { value: "General", label: "General / Informativo" },
 ];
 
 export function ComunicacionesVista({
@@ -706,20 +723,18 @@ export function ComunicacionesVista({
                 Editor Dinámico
               </h2>
             </div>
-            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-              <label htmlFor="plantilla-canal" className="text-[13px] text-ink-muted font-medium">Canal</label>
-              <select
-                id="plantilla-canal"
-                value={canalActivo}
-                onChange={(e) => setCanalActivo(e.target.value as CanalComunicacion)}
-                className="w-full sm:w-auto text-[13px] border border-line rounded-lg px-2.5 py-1.5 bg-surface font-medium text-navy-950 min-h-12"
-              >
-                <option value="whatsapp">WhatsApp</option>
-                <option value="email">Correo (Email)</option>
-                <option value="telegram">Telegram</option>
-                <option value="sms">SMS</option>
-                <option value="webhook">Webhook</option>
-              </select>
+            <div className="flex items-center gap-2">
+              <span className="text-[12.5px] text-slate-500 font-semibold">Canal:</span>
+              <div className="w-44">
+                <Combobox
+                  options={OPCIONES_CANAL}
+                  value={canalActivo}
+                  onChange={(val) => { if (val) setCanalActivo(val as CanalComunicacion); }}
+                  id="plantilla-canal" aria-label="Canal" placeholder="Canal..."
+                  size="sm"
+                  className="w-full"
+                />
+              </div>
             </div>
           </div>
 
@@ -754,17 +769,14 @@ export function ComunicacionesVista({
               <label className="block text-[13px] font-bold text-slate-700 mb-1">
                 Categoría oficial
               </label>
-              <select
+              <Combobox
+                options={OPCIONES_CATEGORIA}
                 value={categoriaTemplate}
-                onChange={(e) => setCategoriaTemplate(e.target.value)}
-                className="w-full px-3 py-2 text-[13px] border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold-700 min-h-[44px] bg-white font-medium"
-              >
-                <option value="Bienvenida">Bienvenida a prospecto</option>
-                <option value="Cita">Confirmación / Recordatorio de Cita</option>
-                <option value="Oferta">Oferta / Oportunidad de Inversión</option>
-                <option value="Seguimiento">Seguimiento Post-Visita</option>
-                <option value="General">General / Informativo</option>
-              </select>
+                onChange={(val) => { if (val) setCategoriaTemplate(val); }}
+                aria-label="Categoría oficial" placeholder="Seleccionar categoría..."
+                searchPlaceholder="Buscar categoría..."
+                className="w-full"
+              />
             </div>
 
             {/* Píldoras de Variables Dinámicas */}

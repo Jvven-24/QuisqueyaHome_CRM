@@ -14,6 +14,7 @@ import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { OPERATION_TYPES, PRICE_PERIODS, UNIT_STATUSES } from "@/domain/catalogs";
 import type { projects, units } from "@/infrastructure/db/schema";
 import { Badge, PageHeader } from "../../_ui/prototipo-ui";
+import { Combobox } from "@/components/ui/combobox";
 import { AlertaErrorFormulario } from "../../_ui/alerta-error-formulario";
 import { centavosAUnidad } from "../../_ui/formato";
 import { Vacio } from "../../_ui/estados";
@@ -508,16 +509,18 @@ export function PropiedadDetalleVista({
               )}
             </div>
             <div className="sm:col-span-4">
-              <select
-                className="w-full min-h-[44px] px-3 text-[13px] rounded-lg border border-line bg-canvas focus:bg-surface focus:border-gold-600 focus:outline-none transition-colors"
+              <Combobox
+                options={[
+                  { value: "todas", label: "Todas las habitaciones" },
+                  { value: "1", label: "1 habitación" },
+                  { value: "2", label: "2 habitaciones" },
+                  { value: "3+", label: "3 o más habitaciones" },
+                ]}
                 value={filtroHabitaciones}
-                onChange={(e) => setFiltroHabitaciones(e.target.value)}
-              >
-                <option value="todas">Todas las habitaciones</option>
-                <option value="1">1 habitación</option>
-                <option value="2">2 habitaciones</option>
-                <option value="3+">3 o más habitaciones</option>
-              </select>
+                onChange={setFiltroHabitaciones}
+                aria-label="Filtrar por habitaciones" placeholder="Todas las habitaciones"
+                size="default"
+              />
             </div>
           </div>
         </div>
@@ -544,7 +547,7 @@ export function PropiedadDetalleVista({
             )}
           </div>
         ) : vistaInventario === "matriz" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-3.5">
             {unidadesFiltradas.map((unidad) => {
               const estado = ETIQUETAS_ESTADO[unidad.status] ?? { texto: unidad.status, tono: "neutral" as const };
               const precioCotizar =

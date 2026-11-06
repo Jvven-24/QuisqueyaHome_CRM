@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
-  antiguedadPorEtapa, armarColumnas, conteoPorEtapa, estadoContenido, monedasDelResumen, requisitoDeEtapa, resultadosDelResumen,
+  antiguedadPorEtapa, armarColumnas, conteoPorEtapa, esEtapaConRequisito, estadoContenido, monedasDelResumen, requisitoDeEtapa, resultadosDelResumen,
   siguienteOrden, totalNegocios, totalesPorEtapa, valorActivoPorDivisa, valorPonderado, valorPorEtapa,
   type Etapa,
 } from "./logica.ts";
@@ -119,4 +119,9 @@ test("orden: repetir columna invierte; columna nueva usa su dirección natural",
   assert.deepEqual(siguienteOrden({ campo: "createdAt", direccion: "desc" }, "createdAt"), { campo: "createdAt", direccion: "asc" });
   assert.deepEqual(siguienteOrden({ campo: "createdAt", direccion: "desc" }, "amountCents"), { campo: "amountCents", direccion: "desc" });
   assert.deepEqual(siguienteOrden({ campo: "amountCents", direccion: "desc" }, "id"), { campo: "id", direccion: "asc" });
+});
+
+test("el diálogo «Completar y mover» cubre solo las cuatro etapas intermedias con requisito", () => {
+  for (const slug of ["contactado", "presentacion", "preseleccion", "negociacion"]) assert.equal(esEtapaConRequisito(slug), true, slug);
+  for (const slug of ["nuevo", "cierre", "perdido", "otra", "", undefined, null]) assert.equal(esEtapaConRequisito(slug as string | undefined | null), false, String(slug));
 });

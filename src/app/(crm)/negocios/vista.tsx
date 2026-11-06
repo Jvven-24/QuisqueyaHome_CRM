@@ -12,17 +12,19 @@ import { PageHeader } from "../_ui/prototipo-ui";
 import { AvisoPermiso, SinResultados, Vacio } from "../_ui/estados";
 import { AnalisisNegocios } from "./analisis";
 import { enviarJson } from "./api";
-import { DialogoCierre, DialogoPerdida, type DatosCierre, type ResultadoEnvio } from "./dialogos";
+import { DialogoCierre, DialogoPerdida, DialogoRequisito, type DatosCierre, type ResultadoEnvio } from "./dialogos";
 import { BarraFiltros, type ClaveFiltro } from "./filtros";
 import { DealInspector } from "./inspector";
 import { ListaNegocios } from "./lista";
 import {
+  esEtapaConRequisito,
   estadoContenido,
   siguienteOrden,
   totalNegocios,
   valorActivoPorDivisa,
   type CampoOrden,
   type Etapa,
+  type EtapaConRequisito,
   type MotivoPerdida,
   type NegocioFila,
   type PropiedadDeal,
@@ -106,6 +108,7 @@ export function PipelineVista({
   }, []);
   const [aviso, setAviso] = useState<Aviso | null>(null);
   const [perdida, setPerdida] = useState<{ negocio: NegocioFila; etapaId: number } | null>(null);
+  const [requisito, setRequisito] = useState<{ negocio: NegocioFila; etapaId: number; slug: EtapaConRequisito } | null>(null);
 
   useEffect(() => {
     if (aviso?.tipo !== "exito") return;
@@ -192,7 +195,14 @@ export function PipelineVista({
     setOcupado(false);
     if (!respuesta.ok) {
       dispatch({ tipo: "revertir", dealId: negocio.id });
-      const enDialogo = Boolean(perdida || cierreSolicitado);
+      const slugDestino = etapaPorId.get(stageId)?.slug;
+      // Un requisito pendiente de una etapa intermedia se resuelve ahí mismo: se pide el dato y se reintenta el movimiento.
+      if (respuesta.requisito && puedeEditar && !requisito && esEtapaConRequisito(slugDestino)) {
+        setAviso(null);
+        setRequisito({ negocio, etapaId: stageId, slug: slugDestino });
+        return respuesta;
+      }
+      const enDialogo = Boolean(perdida || cierreSolicitado || requisito);
       setAviso(enDialogo ? null : { tipo: "error", texto: respuesta.error });
       // El aviso de arriba queda fuera de vista cuando el usuario está bajando en una columna: el toast sí se ve.
       if (!enDialogo) {
@@ -466,6 +476,21 @@ export function PipelineVista({
 
       {perdida && (
         <DialogoPerdida contacto={perdida.negocio.contactName} motivos={motivos} onConfirmar={confirmarPerdida} onCancelar={() => { if (enCurso.current) return; dispatch({ tipo: "revertir", dealId: perdida.negocio.id }); setPerdida(null); }} />
+      )}
+      {requisito && (
+        <DialogoRequisito
+          slug={requisito.slug}
+          nombreEtapa={etapaPorId.get(requisito.etapaId)?.name ?? "la etapa elegida"}
+          negocio={requisito.negocio}
+          proyectos={proyectosDisponibles}
+          onGuardado={async () => {
+            const r = await cambiarEtapa(requisito.negocio, requisito.etapaId);
+            if (r.ok) setRequisito(null);
+            return r;
+          }}
+          onCancelar={() => { if (enCurso.current) return; setRequisito(null); }}
+          onAbrirNegocio={() => { const n = requisito.negocio; setRequisito(null); abrirFicha(n); }}
+        />
       )}
       {negocioSeleccionado && cierreSolicitado && (
         <DialogoCierre

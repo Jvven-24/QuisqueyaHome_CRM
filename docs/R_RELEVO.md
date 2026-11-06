@@ -1,10 +1,12 @@
 # R · Relevo
 
-## Consolidación autorizada · 05/11/2026
+## Consolidación en orq/wilber-final-dev · 05/11/2026
 
-Wilber pidió combinar los worktrees y publicar el resultado en `orq/wilber-final-dev`. Se conserva primero UX2 en la rama `codex/integracion-premium`, sobre `790e794`, para fusionarlo con los commits recientes de embudo y gerente (`43341de`, `a36ef48`). Mandato: `specs/integracion-worktrees-20261105/spec.md`. No se modifica el checkout principal ni se despliegan servicios remotos.
+Por orden directa de Wilber, fusión de la versión completa `a36ef48` con premium `790e794`, UX2 `34e02c6` y mejoras seleccionadas del checkout principal. Se publica en `orq/wilber-final-dev`; los worktrees fuente y `develop` permanecen intactos. Contrato `specs/integracion-worktrees-20261105/spec.md`; alcance, inventario y límites en `docs/integracion-worktrees-2026-11-05/ENTREGA.md` e `INVENTARIO.md`.
 
-UX2 cambia Tareas, Negocios, filtros de Leads, Agenda (retirada REA), selectores, gráficos y notificaciones. Evidencia de la pasada: `docs/ui-premium-2026-10-31/ENTREGA-UX2.md`. Corrida observada previa: 1285 pruebas, 1283 correctas y 2 omitidas; build y tipos correctos, lint0errores/17avisos. Estos resultados no reemplazan los checks de la fusión, que se registrarán en este relevo antes del push.
+Validación observada: typecheck y build aislado correctos; lint 0 errores/17 advertencias previas; 1295 pruebas, 1293 correctas/2 omitidas/0 fallos. Combobox verificado con Playwright a 320/390/768/1440 y login compilado a 320/390/1440 sin desbordes. El recorrido autenticado/BD de la fusión queda pendiente: Docker/Supabase Auth local no arranca (socket dockerInference). Sin reset, migraciones, cambios de secretos ni despliegue. La evidencia histórica de UX2 no se atribuye a este recorrido pendiente. Revisión formal de otro proveedor pendiente; no se cierran issues.
+
+La aplicación compilada de esta integración está en `E:\.viltrum-worktrees\crm-integracion-premium`, salida `.next-prod`, puerto 9303. La rama final del checkout `quisqueya-crm-b7cee93` avanza al mismo commit antes de publicar. No confundir las copias antiguas de `develop` con esta entrega.
 
 ## Relevo local del worktree · 31/10/2026
 

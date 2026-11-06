@@ -12,6 +12,7 @@ import { montoExacto as formatearMonto } from "../reservas/_finanzas/calculos";
 import { Modal } from "../_ui/prototipo-ui";
 import { ModuleTabs, PageHeader, Section as Panel } from "@/components/modulo";
 import { DataTable, type Columna } from "@/components/ui/data-table";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { Insignia } from "@/components/ui/bits";
 import { ResumenCompacto } from "@/components/ui/resumen-compacto";
 import { type Tone } from "@/components/ui/tone";
@@ -110,6 +111,22 @@ export function ComisionesVista({
   filas: FilaComisionVista[];
 }) {
   const router = useRouter();
+
+  const opcionesBrokerCombobox: ComboboxOption[] = useMemo(
+    () => [
+      { value: "", label: "Todos los brokers" },
+      ...brokers.map((b) => ({ value: String(b.id), label: b.fullName })),
+    ],
+    [brokers],
+  );
+
+  const opcionesPeriodoCombobox: ComboboxOption[] = useMemo(
+    () => [
+      { value: "todos", label: "Todos los periodos" },
+      ...opcionesPeriodo.map((o) => ({ value: o.value, label: o.label })),
+    ],
+    [opcionesPeriodo],
+  );
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -431,35 +448,30 @@ export function ComisionesVista({
 
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           {esAdmin && (
-            <select
-              className="min-h-[46px] px-3.5 rounded-xl border border-line bg-surface text-navy-950 text-[13.5px] font-semibold focus:outline-none focus:ring-2 focus:ring-gold-700 shadow-2xs cursor-pointer w-full sm:w-auto"
-              aria-label="Broker"
-              value={brokerIdSeleccionado ?? ""}
-              onChange={(event) => irCon({ broker: event.target.value || undefined })}
-            >
-              <option value="">Todos los brokers</option>
-              {brokers.map((broker) => (
-                <option key={broker.id} value={broker.id}>
-                  {broker.fullName}
-                </option>
-              ))}
-            </select>
+            <div className="w-full sm:w-60">
+              <Combobox
+                options={opcionesBrokerCombobox}
+                value={brokerIdSeleccionado ? String(brokerIdSeleccionado) : ""}
+                onChange={(val) => irCon({ broker: val || undefined })}
+                aria-label="Broker" placeholder="Todos los brokers"
+                searchPlaceholder="Buscar broker..."
+                emptyText="No se encontraron brokers"
+                className="w-full"
+              />
+            </div>
           )}
 
-          <select
-            className="min-h-[46px] px-3.5 rounded-xl border border-line bg-surface text-navy-950 text-[13.5px] font-semibold focus:outline-none focus:ring-2 focus:ring-gold-700 shadow-2xs cursor-pointer w-full sm:w-auto"
-            aria-label="Periodo"
-            value={periodoSeleccionado}
-            onChange={(event) => irCon({ periodo: event.target.value })}
-          >
-            <option value="todos">Todos los periodos</option>
-            {opcionesPeriodo.map((opcion) => (
-              <option key={opcion.value} value={opcion.value}>
-                {opcion.label}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="w-full sm:w-56">
+            <Combobox
+              options={opcionesPeriodoCombobox}
+              value={periodoSeleccionado}
+              onChange={(val) => irCon({ periodo: val || "todos" })}
+              aria-label="Periodo" placeholder="Todos los periodos"
+              searchPlaceholder="Buscar periodo..."
+              emptyText="No se encontraron periodos"
+              className="w-full"
+            />
+          </div>        </div>
       </div>
 
       {/* Tabla Interactiva de Comisiones */}

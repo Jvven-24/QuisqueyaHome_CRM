@@ -1,5 +1,7 @@
 "use client";
 
+import { Combobox } from "@/components/ui/combobox";
+
 import { CatalogExplorer } from "./_componentes/catalog-explorer";
 import { filtrarProyectos } from "@/application/proyectos/filtros";
 import { absorcionUnidades } from "@/domain/unidades";
@@ -169,19 +171,10 @@ export function PropiedadesVista({
           )}
         </div>
         <div className="sm:col-span-4">
-          <select
-            aria-label="Filtrar por tipo de desarrollo"
-            className="w-full min-h-[44px] px-3 text-[13px] rounded-lg border border-line bg-canvas focus:bg-surface focus:border-gold-600 focus:outline-none transition-colors"
-            value={filtros.type ?? ""}
-            onChange={(event) => irCon({ type: event.target.value || undefined, zone: terminoBusqueda.trim() || undefined })}
-          >
-            <option value="">Todos los tipos de desarrollo</option>
-            {PROJECT_TYPES.map((tipo) => (
-              <option key={tipo} value={tipo}>
-                {ETIQUETAS_TIPO[tipo]}
-              </option>
-            ))}
-          </select>
+          <Combobox aria-label="Filtrar por tipo de desarrollo"
+            options={[{ value: "", label: "Todos los tipos" }, ...PROJECT_TYPES.map(tipo => ({ value: tipo, label: ETIQUETAS_TIPO[tipo] ?? tipo }))]}
+            value={filtros.type ?? ""} onChange={value => irCon({ type: value || undefined })}
+            placeholder="Todos los tipos" searchPlaceholder="Buscar tipo de proyecto..." />
         </div>
       </div>
 
